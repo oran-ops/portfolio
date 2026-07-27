@@ -1,0 +1,141 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>Oran Carmon &mdash; The Commercial Systems Builder</title>
+<meta name="description" content="Executive portfolio of Oran Carmon — Commercial Growth Leader. Four case files: XTIX, Oasis, Eventer, Medcoin.">
+<link rel="stylesheet" href="fonts/fonts_dossier.css">
+<style>
+:root{--bg:#191A1F;--card:#202127;--card2:#25262D;--ink:#F2F1ED;--mut:#8E8E93;--lbl:#A6A7AC;
+--grid:#33353C;--grid2:#4B4E55;--hair:rgba(255,255,255,.09);--emb:#2FB380;--brass:#E0A458;--ice:#5E8FBF}
+*{margin:0;padding:0;box-sizing:border-box}
+html{background:var(--bg)}
+body{background:var(--bg);color:var(--ink);font-family:Inter,-apple-system,sans-serif;
+min-height:100vh;padding:34px 26px 30px;position:relative;overflow-x:hidden}
+.brk{position:absolute;width:24px;height:24px;border:2px solid var(--grid2)}
+.brk.tl{top:22px;left:22px;border-right:0;border-bottom:0}
+.brk.tr{top:22px;right:22px;border-left:0;border-bottom:0}
+.brk.bl{bottom:22px;left:22px;border-right:0;border-top:0}
+.brk.br{bottom:22px;right:22px;border-left:0;border-top:0}
+.ghost{position:absolute;font-weight:800;letter-spacing:-.03em;color:transparent;
+-webkit-text-stroke:1.1px rgba(255,255,255,.05);white-space:nowrap;line-height:1;
+font-size:clamp(120px,22vw,270px);pointer-events:none;user-select:none}
+.ghost.g1{top:-30px;left:-30px}
+.ghost.g2{bottom:-46px;right:-40px}
+.wrap{position:relative;max-width:1000px;margin:0 auto}
+.crumb{font-family:'JetBrains Mono',monospace;font-weight:600;font-size:10.5px;
+letter-spacing:.2em;color:var(--mut);margin-bottom:30px}
+.crumb b{color:var(--emb);font-weight:600}
+
+.folder{position:relative;background:var(--emb);border-radius:0 18px 18px 18px;
+padding:44px 44px 40px;margin-top:34px}
+.lip{position:absolute;top:-38px;left:0;height:38px;background:var(--emb);
+border-radius:10px 18px 0 0;display:flex;align-items:center;gap:12px;padding:0 22px}
+.lip .nm{font-family:'Fraunces',serif;font-weight:600;font-size:17px;color:#191A1F}
+.lip .fl{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:8.5px;
+letter-spacing:.2em;color:rgba(25,26,31,.8)}
+.hole{position:absolute;left:20px;width:13px;height:13px;border:2px solid rgba(25,26,31,.38);border-radius:50%}
+.folder .kick{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:10px;
+letter-spacing:.42em;color:rgba(25,26,31,.72);margin-bottom:14px}
+.folder h1{font-weight:800;font-size:clamp(30px,6.4vw,60px);line-height:1.03;
+letter-spacing:-.028em;color:#191A1F}
+.folder .sub{margin-top:12px;font-family:'Fraunces',serif;font-style:italic;
+font-weight:500;font-size:clamp(16px,2.4vw,22px);color:rgba(25,26,31,.9)}
+.caps{display:flex;flex-wrap:wrap;gap:10px 26px;margin-top:26px;
+padding-top:20px;border-top:1px solid rgba(25,26,31,.22)}
+.caps span{display:flex;align-items:center;gap:9px;font-family:'JetBrains Mono',monospace;
+font-weight:700;font-size:10px;letter-spacing:.18em;color:#191A1F}
+.caps i{width:8px;height:8px;transform:rotate(45deg);flex:none}
+
+.stmt{margin-top:48px;max-width:640px}
+.stmt .l1{font-weight:800;font-size:clamp(19px,3.1vw,27px);line-height:1.28;color:var(--ink)}
+.stmt .l2{font-weight:800;font-size:clamp(19px,3.1vw,27px);line-height:1.28;color:var(--emb);margin-top:5px}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(232px,1fr));gap:14px;margin-top:44px}
+a.card{display:block;background:var(--card);border:1px solid var(--hair);border-radius:12px;
+padding:20px 22px 18px;text-decoration:none;color:var(--ink);position:relative}
+a.card:hover{background:var(--card2);border-color:var(--grid2)}
+a.card .n{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:9px;
+letter-spacing:.22em;color:var(--emb);display:flex;align-items:center;gap:8px}
+a.card .n i{width:7px;height:7px;background:var(--emb);transform:rotate(45deg)}
+a.card .t{margin-top:12px;font-family:'Fraunces',serif;font-weight:600;font-size:19px}
+a.card .d{margin-top:7px;font-size:12.5px;line-height:1.5;color:var(--lbl)}
+a.card .go{margin-top:14px;font-family:'JetBrains Mono',monospace;font-weight:700;
+font-size:9px;letter-spacing:.2em;color:var(--mut)}
+
+.files{margin-top:40px;border-top:1px solid var(--grid);padding-top:18px;
+display:flex;flex-wrap:wrap;gap:10px}
+.files .tab{display:flex;align-items:center;gap:8px;border-radius:8px 12px 0 0;padding:8px 15px}
+.files .tab .nm{font-family:'Fraunces',serif;font-weight:600;font-size:13.5px;color:#191A1F}
+.files .tab .fl{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:7.5px;
+letter-spacing:.16em;color:rgba(25,26,31,.78)}
+
+.ftr{margin-top:46px;border-top:1px solid var(--grid);padding-top:16px;
+display:flex;flex-wrap:wrap;gap:8px 22px;align-items:center;
+font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.18em;color:var(--mut)}
+.ftr a{color:var(--emb);text-decoration:none}
+.ftr a:hover{text-decoration:underline}
+.ftr .d{width:7px;height:7px;background:var(--emb);transform:rotate(45deg)}
+@media (max-width:680px){
+  body{padding:30px 18px 26px}
+  .folder{padding:32px 24px 28px;border-radius:0 14px 14px 14px}
+  .lip{padding:0 16px;height:34px;top:-34px}
+  .hole{display:none}
+  .caps{gap:9px 18px}
+}
+</style></head><body>
+<span class="brk tl"></span><span class="brk tr"></span><span class="brk bl"></span><span class="brk br"></span>
+<div class="ghost g1">COMMERCIAL</div>
+<div class="ghost g2">SYSTEMS</div>
+
+<div class="wrap">
+  <div class="crumb">ARCHIVE://COMMERCIAL/2026 <b>&#8250;</b> ORAN_CARMON <b>&#8250;</b> MASTER_FILE</div>
+
+  <div class="folder">
+    <div class="lip"><span class="nm">Oran Carmon</span><span class="fl">MASTER FILE</span></div>
+    <span class="hole" style="top:52px"></span><span class="hole" style="top:88px"></span>
+    <div class="kick">C O M M E R C I A L &nbsp; G R O W T H &nbsp; L E A D E R</div>
+    <h1>THE COMMERCIAL<br>SYSTEMS BUILDER</h1>
+    <div class="sub">From Vision to Measurable Growth</div>
+    <div class="caps">
+      <span><i style="background:#191A1F"></i>LEADERSHIP</span>
+      <span><i style="background:var(--brass)"></i>ALIGNMENT</span>
+      <span><i style="background:var(--ice)"></i>KNOWLEDGE</span>
+      <span><i style="background:var(--ink)"></i>PROCESS</span>
+    </div>
+  </div>
+
+  <div class="stmt">
+    <div class="l1">One intelligence built the world.</div>
+    <div class="l2">Two will build the next.</div>
+  </div>
+
+  <div class="grid">
+    <a class="card" href="dossier.html">
+      <div class="n"><i></i>EXHIBIT 01</div>
+      <div class="t">The Dossier</div>
+      <div class="d">The full executive portfolio &mdash; 13 sections, four case files, evidence and lessons.</div>
+      <div class="go">OPEN &#8250;</div>
+    </a>
+    <a class="card" href="assets/ORAN_CARMON_Portfolio.pdf">
+      <div class="n"><i></i>EXHIBIT 02</div>
+      <div class="t">PDF Edition</div>
+      <div class="d">Print-ready portfolio, identical to the dossier. Built for sharing and boardrooms.</div>
+      <div class="go">DOWNLOAD &#8250;</div>
+    </a>
+  </div>
+
+  <div class="files">
+    <div class="tab" style="background:var(--emb)"><span class="nm">XTIX</span><span class="fl">FILE 01</span></div>
+    <div class="tab" style="background:var(--brass)"><span class="nm">Oasis</span><span class="fl">FILE 02</span></div>
+    <div class="tab" style="background:var(--ice)"><span class="nm">Eventer</span><span class="fl">FILE 03</span></div>
+    <div class="tab" style="background:var(--ink)"><span class="nm">Medcoin</span><span class="fl">FILE 04</span></div>
+  </div>
+
+  <div class="ftr">
+    <span class="d"></span>
+    <span>ORAN CARMON</span>
+    <span><a href="mailto:oran@xtix.ai">ORAN@XTIX.AI</a></span>
+    <span>EXECUTIVE PORTFOLIO &middot; 2026</span>
+  </div>
+</div>
+</body></html>

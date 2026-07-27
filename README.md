@@ -10,7 +10,9 @@ charcoal, emerald folders, no gradients or glows.
 
 | Path | What it is |
 |---|---|
-| `index.html` | Landing page — the master file cover |
+| `index.html` | **The living site** — animated dossier: desk reveal, folder opening, investigator arc. Self-contained (fonts inlined) |
+| `src_site.html` | The same site without the html/head wrapper — the file to edit, then re-wrap into `index.html` |
+| `cover.html` | Static cover page — fallback for anywhere motion isn't wanted |
 | `dossier.html` | The full 13-section portfolio, readable in the browser |
 | `assets/ORAN_CARMON_Portfolio.pdf` | Print edition of the same dossier |
 | `assets/linkedin_cover.png` | LinkedIn cover, 3168×792 |
