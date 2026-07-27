@@ -40,3 +40,11 @@ Then open http://localhost:8080/
 ## Contact
 
 oran@xtix.ai
+
+## Build history
+
+`build/` holds every generator and patch script that produced these files, in the
+order they ran (`_replay_ops.json` is the recorded sequence). The site was rebuilt
+from exactly this chain after its working copy was lost; the casebook rebuilt in the
+same run came out byte-identical to the delivered file, which is how the recovery
+was verified.
