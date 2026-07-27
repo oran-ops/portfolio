@@ -1,7 +1,7 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="color-scheme" content="dark">
-<title>Motion Lab — six candidates for the living layer</title>
+<title>Motion Lab — round 2, after your notes</title>
 <link rel="stylesheet" href="fonts/fonts_dossier.css">
 <style>
 :root{--bg:#191A1F;--card:#202127;--card2:#25262D;--ink:#F2F1ED;--mut:#B6B7BB;--lbl:#CFD0D4;
@@ -25,75 +25,69 @@ body{background:var(--bg);color:var(--ink);font-family:Inter,-apple-system,sans-
 .ptag{margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.2em;
 color:#191A1F;background:var(--emb);border-radius:5px;padding:4px 9px}
 .ptag.opt{background:var(--grid2);color:var(--ink)}
-.pd{margin-top:10px;font-size:14px;line-height:1.7;color:var(--mut);max-width:760px}
+.ptag.no{background:transparent;color:var(--mut);border:1px solid var(--grid2)}
+.pd{margin-top:10px;font-size:14px;line-height:1.7;color:var(--mut);max-width:780px}
 .stage{margin-top:22px;border:1px solid var(--hair);border-radius:16px;background:#15161A;
-padding:38px 30px;position:relative;overflow:hidden;min-height:260px;
-display:flex;align-items:center;justify-content:center;gap:38px;flex-wrap:wrap}
+padding:44px 30px;position:relative;min-height:270px;
+display:flex;align-items:center;justify-content:center;gap:44px;flex-wrap:wrap}
 .hint{position:absolute;left:16px;top:14px;font-family:'JetBrains Mono',monospace;font-size:9px;
 letter-spacing:.2em;color:var(--grid2)}
-.btn{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:10px;letter-spacing:.2em;
-color:#191A1F;background:var(--emb);border:0;border-radius:8px;padding:10px 16px;cursor:pointer}
-.btn.g{background:transparent;color:var(--emb);border:1px solid var(--emb)}
+.cap{margin-top:20px;text-align:center;font-family:'JetBrains Mono',monospace;font-size:9px;
+letter-spacing:.2em;color:var(--mut)}
+.dead{opacity:.5}
 
-/* ---------- shared folder object ---------- */
-.folder{position:relative;width:290px;height:186px;background:var(--emb);border-radius:0 16px 14px 14px;
-padding:22px 20px;color:#191A1F}
-.folder .lip{position:absolute;top:-27px;left:0;height:28px;background:var(--emb);border-radius:8px 16px 0 0;
-display:flex;align-items:center;gap:10px;padding:0 14px}
-.folder .lip .nm{font-family:'Fraunces',serif;font-weight:700;font-size:15px}
-.folder .lip .fl{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:8px;letter-spacing:.18em}
-.folder .cat{font-weight:800;font-size:25px;letter-spacing:-.02em;line-height:1.05}
-.folder .ln{margin-top:10px;font-family:'JetBrains Mono',monospace;font-size:10.5px;line-height:1.7;opacity:.85}
-.folder .hole{position:absolute;left:12px;width:11px;height:11px;border:2px solid rgba(25,26,31,.35);border-radius:50%}
+/* ---------- the folder object ---------- */
+.fw{position:relative;width:290px}
+.fw .lip{position:absolute;top:-28px;left:0;height:29px;background:var(--emb);border-radius:8px 16px 0 0;
+display:flex;align-items:center;gap:10px;padding:0 14px;z-index:3}
+.fw .lip .nm{font-family:'Fraunces',serif;font-weight:700;font-size:15px;color:#191A1F}
+.fw .lip .fl{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:8px;letter-spacing:.18em;color:#191A1F}
+.fw .body{position:relative;height:186px;background:var(--emb);border-radius:0 16px 14px 14px;
+padding:22px 20px;color:#191A1F;z-index:2}
+.fw .cat{font-weight:800;font-size:25px;letter-spacing:-.02em;line-height:1.05;margin-left:32px}
+.fw .ln{margin-top:10px;margin-left:32px;font-family:'JetBrains Mono',monospace;font-size:10.5px;line-height:1.7;opacity:.85}
+.fw .hole{position:absolute;left:12px;width:11px;height:11px;border:2px solid rgba(25,26,31,.35);border-radius:50%;z-index:3}
 
-/* 01 — depth + cursor */
-.d3{perspective:900px}
-.d3 .rig{position:relative;transform-style:preserve-3d;transform:rotateX(6deg) rotateY(-9deg);will-change:transform}
-.d3 .shadow{position:absolute;inset:8px -6px -14px 6px;background:#0E0F12;border-radius:0 16px 14px 14px;
-transform:translateZ(-40px)}
-.flat .folder{box-shadow:none}
+/* 01 — volume, straight on */
+.vol .edge{position:absolute;left:0;right:0;bottom:-7px;height:7px;background:rgba(25,26,31,.34);
+border-radius:0 0 14px 14px;z-index:1}
+.vol .sheet{position:absolute;background:#EDECE6;border-radius:2px 8px 0 0;z-index:1}
+.vol .s1{left:16px;right:34px;top:-11px;height:16px;opacity:.9}
+.vol .s2{left:26px;right:22px;top:-6px;height:12px;background:#DAD8D0}
+.vol .cast{position:absolute;left:10px;right:-12px;top:16px;bottom:-18px;background:#0D0E11;
+border-radius:0 18px 16px 16px;z-index:0}
 
-/* 02 — the stamp */
-.sealbox{position:relative;width:min(620px,100%);border:1px solid rgba(47,179,128,.34);border-radius:16px;
-background:rgba(47,179,128,.05);padding:34px 40px 28px;text-align:center;overflow:hidden}
-.sealbox .vb{position:absolute;width:15px;height:15px;border:2px solid var(--emb);opacity:0}
-.sealbox.on .vb{animation:vbin .45s ease both}
-@keyframes vbin{from{opacity:0}to{opacity:1}}
-.vb.tl{top:11px;left:11px;border-right:0;border-bottom:0}
-.vb.tr{top:11px;right:11px;border-left:0;border-bottom:0}
-.vb.bl{bottom:11px;left:11px;border-right:0;border-top:0}
-.vb.br{bottom:11px;right:11px;border-left:0;border-top:0}
-.sealbox .vq{font-family:'Fraunces',serif;font-style:italic;font-size:19px;line-height:1.5;color:var(--ink);opacity:0}
-.sealbox.on .vq{animation:vqin .75s var(--ease) .2s both}
-@keyframes vqin{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
-.sealbox .vq b{color:var(--emb);font-weight:600}
-.stamp{position:absolute;right:26px;bottom:20px;font-family:'JetBrains Mono',monospace;font-weight:700;
-font-size:12px;letter-spacing:.26em;color:var(--emb);border:2px solid var(--emb);border-radius:7px;
-padding:8px 14px;opacity:0}
-.sealbox.on .stamp{animation:slam .8s cubic-bezier(.3,1.35,.45,1) .95s both}
-@keyframes slam{0%{opacity:0;transform:scale(2.4) rotate(-18deg)}60%{opacity:1;transform:scale(.94) rotate(-7deg)}
-100%{opacity:1;transform:scale(1) rotate(-6deg)}}
-.dust{position:absolute;width:5px;height:5px;background:var(--emb);border-radius:50%;opacity:0;pointer-events:none}
-.sealbox.on .dust{animation:puff .9s ease-out 1.05s both}
-@keyframes puff{0%{opacity:.85;transform:translate(0,0) scale(1)}100%{opacity:0;transform:translate(var(--dx),var(--dy)) scale(.2)}}
-
-/* 03 — living micro-motion */
+/* 03 — packet hops line to line */
+.chainw{width:min(560px,100%)}
+.seg{stroke:#2FB380;stroke-width:1.6;opacity:.5}
+.chip{fill:#25262D;stroke:#2FB380;stroke-width:1.6}
+.clbl{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:1.1px;fill:#F2F1ED}
+.hop{fill:#2FB380;opacity:0}
+.h1{animation:hop1 2.7s cubic-bezier(.5,0,.5,1) infinite}
+.h2{animation:hop2 2.7s cubic-bezier(.5,0,.5,1) infinite}
+.h3{animation:hop3 2.7s cubic-bezier(.5,0,.5,1) infinite}
+@keyframes hop1{0%{opacity:0;transform:translateX(0)}3%{opacity:1}
+22%{opacity:1;transform:translateX(28px)}26%{opacity:0;transform:translateX(28px)}100%{opacity:0}}
+@keyframes hop2{0%,30%{opacity:0;transform:translateX(0)}33%{opacity:1}
+52%{opacity:1;transform:translateX(28px)}56%{opacity:0;transform:translateX(28px)}100%{opacity:0}}
+@keyframes hop3{0%,60%{opacity:0;transform:translateX(0)}63%{opacity:1}
+82%{opacity:1;transform:translateX(28px)}86%{opacity:0;transform:translateX(28px)}100%{opacity:0}}
+.lit1{animation:lit 2.7s linear infinite}
+.lit2{animation:lit 2.7s linear infinite;animation-delay:.81s}
+.lit3{animation:lit 2.7s linear infinite;animation-delay:1.62s}
+@keyframes lit{0%,2%{opacity:.5}6%{opacity:1}26%{opacity:1}30%,100%{opacity:.5}}
 .rail{display:flex;flex-direction:column;gap:14px}
 .rail i{width:9px;height:9px;background:var(--grid2);transform:rotate(45deg);display:block}
 .rail i.lit{animation:twk 1.4s ease-in-out}
 @keyframes twk{0%,100%{background:var(--grid2);transform:rotate(45deg) scale(1)}
 45%{background:var(--emb);transform:rotate(45deg) scale(1.5)}}
-.chainw{flex:1;min-width:320px}
-.chip{fill:#25262D;stroke:#2FB380;stroke-width:1.6}
-.clbl{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:1.1px;fill:#F2F1ED}
-.pkt{r:4;fill:#2FB380}
 .tab{display:inline-flex;align-items:center;gap:9px;background:var(--emb);color:#191A1F;
 border-radius:8px 14px 0 0;padding:8px 14px;font-family:'Fraunces',serif;font-weight:700;font-size:15px;
 animation:breathe 4.5s ease-in-out infinite}
 .tab span{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:8px;letter-spacing:.18em}
 @keyframes breathe{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
 
-/* 04 — parallax layers */
+/* 04 — parallax */
 .px{position:relative;width:100%;height:230px;overflow:hidden;border-radius:12px}
 .px .gh{position:absolute;white-space:nowrap;font-weight:800;letter-spacing:-.03em;color:transparent;
 -webkit-text-stroke:1.1px rgba(255,255,255,.07);line-height:1;will-change:transform}
@@ -104,19 +98,19 @@ animation:breathe 4.5s ease-in-out infinite}
 .px .front .t{font-weight:800;font-size:26px;letter-spacing:-.02em}
 .px .front .s{margin-top:6px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.28em;color:var(--emb)}
 
-/* 05 — hero object */
-.hero3{perspective:1000px}
-.hero3 .rig{transform-style:preserve-3d;animation:float 7s ease-in-out infinite}
-@keyframes float{0%,100%{transform:rotateX(6deg) rotateY(-7deg) translateY(0)}
-50%{transform:rotateX(4deg) rotateY(-4deg) translateY(-12px)}}
-.hero3 .tabs{position:absolute;right:16px;bottom:-14px;display:flex;gap:8px;transform-style:preserve-3d}
-.hero3 .tabs i{display:block;width:52px;height:22px;border-radius:6px 10px 0 0}
-.hero3 .tabs i:nth-child(1){background:var(--emb);transform:translateZ(26px)}
-.hero3 .tabs i:nth-child(2){background:var(--brass);transform:translateZ(16px)}
-.hero3 .tabs i:nth-child(3){background:var(--ice);transform:translateZ(8px)}
-.hero3 .tabs i:nth-child(4){background:var(--ink);transform:translateZ(0)}
+/* 05 — the cover breathes, straight on */
+.hero .rig{animation:hover 7s ease-in-out infinite}
+@keyframes hover{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
+.hero .cast{animation:castb 7s ease-in-out infinite}
+@keyframes castb{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(.94);opacity:.72}}
+.hero .tabs{position:absolute;right:14px;bottom:-16px;display:flex;gap:8px;z-index:1}
+.hero .tabs i{display:block;width:54px;height:24px;border-radius:6px 10px 0 0}
+.hero .tabs i:nth-child(1){background:var(--emb)}
+.hero .tabs i:nth-child(2){background:var(--brass);animation:hover 7s ease-in-out infinite;animation-delay:.12s}
+.hero .tabs i:nth-child(3){background:var(--ice);animation:hover 7s ease-in-out infinite;animation-delay:.24s}
+.hero .tabs i:nth-child(4){background:var(--ink);animation:hover 7s ease-in-out infinite;animation-delay:.36s}
 
-/* 06 — case turn */
+/* 06 — case turns */
 .turn{perspective:1200px;width:min(560px,100%)}
 .turn .deck{position:relative;height:200px;transform-style:preserve-3d}
 .turn .cardx{position:absolute;inset:0;border-radius:0 16px 14px 14px;padding:20px 22px;
@@ -125,79 +119,70 @@ transform-origin:left center;backface-visibility:hidden}
 .turn .c2{background:var(--brass);color:#191A1F;z-index:1}
 .turn .cardx .t{font-weight:800;font-size:22px;letter-spacing:-.02em}
 .turn .cardx .m{margin-top:8px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.16em;opacity:.85}
-input[type=range]{width:min(560px,100%);accent-color:var(--emb)}
+input[type=range]{width:min(560px,100%);accent-color:var(--emb);margin-top:26px}
 
-/* 07 — the sweep question */
-.sweep{position:relative;overflow:hidden}
-.sweep::after{content:"";position:absolute;top:-60%;bottom:-60%;width:70px;left:-120px;
-background:rgba(255,255,255,.16);transform:skewX(-18deg);animation:sw 6s ease-in-out infinite}
-@keyframes sw{0%{left:-120px}55%{left:118%}100%{left:118%}}
-.cmp{display:flex;gap:34px;flex-wrap:wrap;justify-content:center}
-.cap{margin-top:12px;text-align:center;font-family:'JetBrains Mono',monospace;font-size:9px;
-letter-spacing:.2em;color:var(--mut)}
+/* 07 — the sweep, lip included */
+.sw{overflow:hidden;position:relative}
+.sw::after{content:"";position:absolute;top:-70%;bottom:-70%;width:78px;left:-140px;
+background:rgba(255,255,255,.15);transform:skewX(-18deg);animation:sw 6.5s ease-in-out infinite}
+.swl{overflow:hidden;position:relative}
+.swl::after{content:"";position:absolute;top:-70%;bottom:-70%;width:78px;left:-140px;
+background:rgba(255,255,255,.15);transform:skewX(-18deg);animation:swl 6.5s ease-in-out infinite}
+@keyframes sw{0%{left:-140px}52%{left:120%}100%{left:120%}}
+@keyframes swl{0%{left:-140px}30%{left:220%}100%{left:220%}}
 .foot{margin-top:70px;border-top:1px solid var(--grid);padding-top:18px;
 font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.18em;color:var(--mut)}
-@media (max-width:680px){.stage{padding:26px 16px;gap:26px}.folder{width:250px;height:170px}}
+@media (max-width:680px){.stage{padding:30px 16px;gap:30px}.fw{width:250px}.fw .body{height:170px}}
 </style></head>
 <body>
 <div class="wrap">
   <div class="top">
-    <div class="crumb">ARCHIVE://COMMERCIAL/2026 <b>&#8250;</b> MOTION LAB <b>&#8250;</b> CANDIDATES</div>
-    <h1>The living layer &mdash; six candidates</h1>
-    <div class="sub">Each panel is the real effect, running. Nothing here is a picture.</div>
-    <div class="he" dir="rtl">כל פאנל הוא האפקט האמיתי, חי. הזז עכבר, לחץ, גרור &mdash; ואז תגיד לי מה נכנס לאתר. <b>אין כאן שום תוכן חדש</b>, רק שדרוג של מה שכבר קיים.</div>
+    <div class="crumb">ARCHIVE://COMMERCIAL/2026 <b>&#8250;</b> MOTION LAB <b>&#8250;</b> ROUND 2</div>
+    <h1>After your notes</h1>
+    <div class="sub">Volume instead of tilt. Hops instead of a glide. The tab head, kept.</div>
+    <div class="he" dir="rtl">עדכנתי לפי ההערות: <b>נפח במקום הטיה</b>, <b>קפיצות רק על הקווים</b>, והלשונית נשמרת בהבזק. פאנל 02 ירד.</div>
   </div>
 
   <!-- 01 -->
   <div class="panel">
-    <div class="phead"><span class="pn">01</span><span class="pt">Depth &mdash; folders become objects</span>
-      <span class="ptag">RECOMMENDED</span></div>
-    <div class="pd">A 3D stage, a shadow plane sitting behind the folder in space, and a card that turns toward your cursor. Left is today. Right is the proposal.</div>
-    <div class="pd" dir="rtl">עומק אמיתי: התיקייה יושבת במרחב עם מישור צל מאחוריה, ופונה אחרי הסמן. משמאל &mdash; מה שיש היום. מימין &mdash; ההצעה.</div>
+    <div class="phead"><span class="pn">01</span><span class="pt">Volume &mdash; the folder is a real object</span>
+      <span class="ptag">REVISED</span></div>
+    <div class="pd">No tilt. Instead the folder gets what a folder actually has: paper sheets peeking out of it, a thickness edge along the bottom, and a shadow cast on the desk behind it.</div>
+    <div class="pd" dir="rtl">בלי הטיה. במקום זה התיקייה מקבלת מה שיש לתיקייה אמיתית: דפים שמציצים מתוכה, שפת עובי בתחתית, וצל שנופל על השולחן מאחוריה. משמאל היום, מימין ההצעה.</div>
     <div class="stage">
-      <span class="hint">MOVE THE CURSOR OVER THE RIGHT CARD</span>
-      <div class="flat">
-        <div class="folder"><div class="lip"><span class="nm">XTIX</span><span class="fl">FILE 01</span></div>
-          <span class="hole" style="top:44px"></span><span class="hole" style="top:70px"></span>
-          <div class="cat" style="margin-left:34px">BUILT FROM ZERO</div>
-          <div class="ln" style="margin-left:34px">&gt; commercial function from zero</div></div>
+      <div>
+        <div class="fw"><div class="lip"><span class="nm">XTIX</span><span class="fl">FILE 01</span></div>
+          <div class="body"><span class="hole" style="top:16px"></span><span class="hole" style="top:42px"></span>
+            <div class="cat">BUILT FROM ZERO</div><div class="ln">&gt; commercial function from zero</div></div></div>
         <div class="cap">TODAY &mdash; FLAT</div>
       </div>
-      <div class="d3" id="d3">
-        <div class="rig" id="d3rig">
-          <div class="shadow"></div>
-          <div class="folder"><div class="lip"><span class="nm">XTIX</span><span class="fl">FILE 01</span></div>
-            <span class="hole" style="top:44px"></span><span class="hole" style="top:70px"></span>
-            <div class="cat" style="margin-left:34px">BUILT FROM ZERO</div>
-            <div class="ln" style="margin-left:34px">&gt; commercial function from zero</div></div>
+      <div>
+        <div class="fw vol">
+          <div class="cast"></div>
+          <div class="sheet s1"></div><div class="sheet s2"></div>
+          <div class="lip"><span class="nm">XTIX</span><span class="fl">FILE 01</span></div>
+          <div class="body"><span class="hole" style="top:16px"></span><span class="hole" style="top:42px"></span>
+            <div class="cat">BUILT FROM ZERO</div><div class="ln">&gt; commercial function from zero</div>
+            <div class="edge"></div></div>
         </div>
-        <div class="cap">PROPOSED &mdash; DEPTH + CURSOR</div>
+        <div class="cap">PROPOSED &mdash; REAL VOLUME</div>
       </div>
     </div>
   </div>
 
-  <!-- 02 -->
-  <div class="panel">
-    <div class="phead"><span class="pn">02</span><span class="pt">The closing lands like a stamp</span>
-      <span class="ptag">RECOMMENDED</span></div>
-    <div class="pd">The frame corners appear, the statement rises, then the seal slams in at an angle and throws dust.</div>
-    <div class="pd" dir="rtl">הפינות נדלקות, המשפט עולה, ואז החותמת נוחתת בזווית ומפזרת אבק. סוף עם נקודה.</div>
-    <div class="stage" style="flex-direction:column">
-      <div class="sealbox" id="seal">
-        <span class="vb tl"></span><span class="vb tr"></span><span class="vb bl"></span><span class="vb br"></span>
-        <div class="vq">I enjoy building commercial organizations <b>from zero</b>. I believe <b>systems scale better than heroes</b>.</div>
-        <div class="stamp">END OF FILE</div>
-      </div>
-      <button class="btn" onclick="playSeal()">REPLAY</button>
-    </div>
+  <!-- 02 dropped -->
+  <div class="panel dead">
+    <div class="phead"><span class="pn">02</span><span class="pt">The stamp finale</span>
+      <span class="ptag no">DROPPED</span></div>
+    <div class="pd" dir="rtl">ירד לפי החלטתך.</div>
   </div>
 
   <!-- 03 -->
   <div class="panel">
-    <div class="phead"><span class="pn">03</span><span class="pt">Quiet motion that never stops</span>
-      <span class="ptag">RECOMMENDED</span></div>
-    <div class="pd">Diamonds on the rail twinkle as the page passes them, a packet of light runs the AI chain, the case tab breathes.</div>
-    <div class="pd" dir="rtl">היהלומים בפס הצד מנצנצים כשעוברים לידם, פקט אור רץ על שרשרת ה-AI, ולשונית הקייס נושמת. תנועה שקטה שרצה תמיד.</div>
+    <div class="phead"><span class="pn">03</span><span class="pt">The signal hops the wires</span>
+      <span class="ptag">REVISED</span></div>
+    <div class="pd">The packet now lives only on the connectors: it crosses one wire, disappears at the box, then the next wire fires. The wire it is crossing lights up with it.</div>
+    <div class="pd" dir="rtl">הפקט רץ עכשיו <b>רק על הקווים</b>: חוצה קו אחד, נעלם בכניסה לרובריקה, ואז הקו הבא נדלק. הקו שעליו הוא רץ מתחזק איתו.</div>
     <div class="stage">
       <div class="rail" id="rail"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
       <div class="chainw">
@@ -206,11 +191,14 @@ font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.18em;colo
           <rect class="chip" x="126" y="16" width="96" height="28" rx="8"/><text class="clbl" x="174" y="34" text-anchor="middle">AI RESEARCH</text>
           <rect class="chip" x="250" y="16" width="96" height="28" rx="8"/><text class="clbl" x="298" y="34" text-anchor="middle">DECISION</text>
           <rect class="chip" x="374" y="16" width="94" height="28" rx="8"/><text class="clbl" x="421" y="34" text-anchor="middle">OUTREACH</text>
-          <path id="ln" d="M98 30 H126 M222 30 H250 M346 30 H374" stroke="#2FB380" stroke-width="1.6" fill="none"/>
-          <circle class="pkt" r="4" fill="#2FB380"><animateMotion dur="3.4s" repeatCount="indefinite"
-            path="M50 30 H421"/></circle>
+          <line class="seg lit1" x1="98" y1="30" x2="126" y2="30"/>
+          <line class="seg lit2" x1="222" y1="30" x2="250" y2="30"/>
+          <line class="seg lit3" x1="346" y1="30" x2="374" y2="30"/>
+          <circle class="hop h1" cx="98" cy="30" r="3.6"/>
+          <circle class="hop h2" cx="222" cy="30" r="3.6"/>
+          <circle class="hop h3" cx="346" cy="30" r="3.6"/>
         </svg>
-        <div class="cap" style="text-align:left">PACKET RUNS THE CHAIN</div>
+        <div class="cap" style="text-align:left">HOPS &mdash; WIRE BY WIRE</div>
       </div>
       <div><div class="tab">Oasis <span>FILE 02</span></div><div class="cap">TAB BREATHES</div></div>
     </div>
@@ -218,9 +206,8 @@ font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.18em;colo
 
   <!-- 04 -->
   <div class="panel">
-    <div class="phead"><span class="pn">04</span><span class="pt">Background parallax</span><span class="ptag opt">OPTIONAL</span></div>
-    <div class="pd">The ghost type and grid drift at three different depths as you move. No new content &mdash; the background simply stops being a flat wall.</div>
-    <div class="pd" dir="rtl">טיפוגרפיית הרפאים נעה בשלוש מהירויות שונות לפי תנועת העכבר. הרקע מפסיק להיות קיר שטוח.</div>
+    <div class="phead"><span class="pn">04</span><span class="pt">Background parallax</span><span class="ptag">APPROVED</span></div>
+    <div class="pd" dir="rtl">אושר. הרקע נע בשלוש שכבות בעומקים שונים.</div>
     <div class="stage">
       <span class="hint">MOVE THE CURSOR INSIDE THIS PANEL</span>
       <div class="px" id="px">
@@ -234,26 +221,27 @@ font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.18em;colo
 
   <!-- 05 -->
   <div class="panel">
-    <div class="phead"><span class="pn">05</span><span class="pt">The cover as a living object</span><span class="ptag opt">OPTIONAL</span></div>
-    <div class="pd">The master folder floats in a slow loop and the four tabs sit at different depths behind it.</div>
-    <div class="pd" dir="rtl">תיקיית האב מרחפת בלולאה איטית, וארבע הלשוניות יושבות בעומקים שונים מאחוריה.</div>
-    <div class="stage hero3">
-      <div class="rig">
-        <div class="folder" style="width:330px;height:200px">
-          <div class="lip"><span class="nm">Oran Carmon</span><span class="fl">MASTER FILE</span></div>
-          <span class="hole" style="top:44px"></span><span class="hole" style="top:70px"></span>
-          <div class="cat" style="margin-left:34px;font-size:22px">THE COMMERCIAL<br>SYSTEMS BUILDER</div>
-          <div class="tabs"><i></i><i></i><i></i><i></i></div>
-        </div>
+    <div class="phead"><span class="pn">05</span><span class="pt">The cover breathes &mdash; straight on</span>
+      <span class="ptag">REVISED</span></div>
+    <div class="pd">No tilt here either. The folder simply rises and settles, its shadow tightening as it lifts, and the four tabs follow a beat later.</div>
+    <div class="pd" dir="rtl">בלי הטיה. התיקייה עולה ויורדת, הצל מתכווץ כשהיא מתרוממת, וארבע הלשוניות עוקבות אחריה בפיגור קל. זה מה שנותן את תחושת החפץ &mdash; לא הזווית.</div>
+    <div class="stage hero">
+      <div class="fw vol rig" style="width:340px">
+        <div class="cast"></div>
+        <div class="sheet s1"></div><div class="sheet s2"></div>
+        <div class="lip"><span class="nm">Oran Carmon</span><span class="fl">MASTER FILE</span></div>
+        <div class="body" style="height:200px"><span class="hole" style="top:16px"></span><span class="hole" style="top:42px"></span>
+          <div class="cat" style="font-size:22px">THE COMMERCIAL<br>SYSTEMS BUILDER</div>
+          <div class="edge"></div></div>
+        <div class="tabs"><i></i><i></i><i></i><i></i></div>
       </div>
     </div>
   </div>
 
   <!-- 06 -->
   <div class="panel">
-    <div class="phead"><span class="pn">06</span><span class="pt">Case turns like a page</span><span class="ptag opt">HEAVIEST</span></div>
-    <div class="pd">Drag the slider: the finished case rotates away on its spine while the next one rises. On the site this would be driven by scroll.</div>
-    <div class="pd" dir="rtl">גרור את הסליידר: הקייס שסיימת מסתובב ונסגר כמו דף, והבא עולה. באתר זה יונע מהגלילה.</div>
+    <div class="phead"><span class="pn">06</span><span class="pt">Case turns like a page</span><span class="ptag">APPROVED</span></div>
+    <div class="pd" dir="rtl">אושר. גרור את הסליידר &mdash; באתר זה יונע מהגלילה.</div>
     <div class="stage" style="flex-direction:column">
       <div class="turn"><div class="deck">
         <div class="cardx c2"><div class="t">Oasis &mdash; LEADERSHIP</div><div class="m">FILE 02 &middot; COMMAND</div></div>
@@ -265,55 +253,33 @@ font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.18em;colo
 
   <!-- 07 -->
   <div class="panel">
-    <div class="phead"><span class="pn">07</span><span class="pt">Light sweep &mdash; your call</span><span class="ptag opt">DECISION</span></div>
-    <div class="pd">enso runs a slow highlight across its surfaces. It looks expensive, but it breaks our own rule: flat matte, no gradients. Left without, right with.</div>
-    <div class="pd" dir="rtl">ל-enso יש הבזק אור שעובר על המשטחים. יפה מאוד &mdash; אבל סותר את הכלל שקבענו: שטוח מאט, בלי גרדיאנטים. משמאל בלי, מימין עם. ההחלטה שלך.</div>
+    <div class="phead"><span class="pn">07</span><span class="pt">Light sweep &mdash; tab head included</span>
+      <span class="ptag">APPROVED</span></div>
+    <div class="pd">The sweep now crosses the tab head first and then the body, so the folder reads as one surface. Left without, right with.</div>
+    <div class="pd" dir="rtl">ההבזק עובר עכשיו קודם על ראש הלשונית ואז על הגוף &mdash; הלשונית נראית בדיוק כמו קודם. משמאל בלי, מימין עם.</div>
     <div class="stage">
-      <div class="cmp">
-        <div><div class="folder" style="width:240px;height:150px"><div class="lip"><span class="nm">Eventer</span><span class="fl">FILE 03</span></div>
-          <div class="cat" style="font-size:20px">ALIGNMENT</div></div><div class="cap">MATTE &mdash; AS TODAY</div></div>
-        <div><div class="folder sweep" style="width:240px;height:150px"><div class="lip"><span class="nm">Eventer</span><span class="fl">FILE 03</span></div>
-          <div class="cat" style="font-size:20px">ALIGNMENT</div></div><div class="cap">WITH SWEEP</div></div>
+      <div>
+        <div class="fw vol" style="width:250px"><div class="cast"></div>
+          <div class="sheet s1"></div><div class="sheet s2"></div>
+          <div class="lip"><span class="nm">Eventer</span><span class="fl">FILE 03</span></div>
+          <div class="body" style="height:150px"><div class="cat" style="font-size:20px">ALIGNMENT</div><div class="edge"></div></div></div>
+        <div class="cap">MATTE &mdash; AS TODAY</div>
+      </div>
+      <div>
+        <div class="fw vol" style="width:250px"><div class="cast"></div>
+          <div class="sheet s1"></div><div class="sheet s2"></div>
+          <div class="lip swl"><span class="nm">Eventer</span><span class="fl">FILE 03</span></div>
+          <div class="body sw" style="height:150px"><div class="cat" style="font-size:20px">ALIGNMENT</div><div class="edge"></div></div></div>
+        <div class="cap">WITH SWEEP</div>
       </div>
     </div>
   </div>
 
-  <div class="foot">MOTION LAB &middot; ORAN CARMON &middot; 2026 &mdash; NOTHING HERE IS LIVE ON THE SITE YET</div>
+  <div class="foot">MOTION LAB &middot; ROUND 2 &middot; NOTHING HERE IS LIVE ON THE SITE YET</div>
 </div>
 
 <script>
-/* 01 — cursor-follow tilt with easing */
-(function(){
-  var box=document.getElementById('d3'), rig=document.getElementById('d3rig');
-  var tx=0,ty=0,cx=0,cy=0,raf=null;
-  function loop(){cx+=(tx-cx)*.12;cy+=(ty-cy)*.12;
-    rig.style.transform='rotateX('+(6+cy).toFixed(2)+'deg) rotateY('+(-9+cx).toFixed(2)+'deg)';
-    if(Math.abs(tx-cx)>.05||Math.abs(ty-cy)>.05){raf=requestAnimationFrame(loop)}else{raf=null}}
-  function kick(){if(!raf)raf=requestAnimationFrame(loop)}
-  box.addEventListener('pointermove',function(e){var r=box.getBoundingClientRect();
-    tx=((e.clientX-r.left)/r.width-.5)*16; ty=-((e.clientY-r.top)/r.height-.5)*12; kick()});
-  box.addEventListener('pointerleave',function(){tx=0;ty=0;kick()});
-  rig.style.transform='rotateX(6deg) rotateY(-9deg)';
-})();
-
-/* 02 — seal + dust */
-function playSeal(){
-  var s=document.getElementById('seal');
-  s.querySelectorAll('.dust').forEach(function(d){d.remove()});
-  s.classList.remove('on'); void s.offsetWidth;
-  for(var i=0;i<14;i++){
-    var d=document.createElement('span'); d.className='dust';
-    var a=Math.random()*Math.PI*2, dist=30+Math.random()*70;
-    d.style.right=(30+Math.random()*40)+'px'; d.style.bottom=(24+Math.random()*30)+'px';
-    d.style.setProperty('--dx',(Math.cos(a)*dist).toFixed(0)+'px');
-    d.style.setProperty('--dy',(Math.sin(a)*dist-20).toFixed(0)+'px');
-    s.appendChild(d);
-  }
-  s.classList.add('on');
-}
-setTimeout(playSeal,700);
-
-/* 03 — travelling twinkle */
+/* 03 — travelling twinkle on the rail */
 (function(){
   var ds=[].slice.call(document.querySelectorAll('#rail i')), k=0;
   setInterval(function(){ds.forEach(function(d){d.classList.remove('lit')});
