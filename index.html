@@ -1753,6 +1753,13 @@ body.static .hfolder,body.static #hero .mfold{--sx:-320px}
   transform-origin:left center;backface-visibility:hidden}
 @media (max-width:860px){.hfolder{transform:scale(var(--sc,1))!important}}
 
+
+/* R10e — the turn rides `rotate`, not `transform` */
+.hfolder{transform:scale(var(--sc,.94))!important;rotate:y var(--ry,0deg);
+  transform-origin:left center;backface-visibility:hidden}
+@media (max-width:860px){.hfolder{rotate:none!important}}
+@media (prefers-reduced-motion:reduce){.hfolder{rotate:none!important}}
+
 </style>
 <section class="sec" id="leadership" style="--fc:var(--emb)">
   <div class="secnum" aria-hidden="true">07</div>
@@ -2377,7 +2384,7 @@ function frame(){
         var d=Math.abs(r.left+r.width/2-cx)/window.innerWidth;
         hcards[i].style.setProperty('--sc',String(1.02-Math.min(.1,d*.22)));
         var sd=(r.left+r.width/2-cx)/window.innerWidth;
-        var ry=sd<-.12?Math.max(-68,(sd+.12)*190):0;
+        var ry=sd<-.12?Math.max(-54,(sd+.12)*150):0;
         hcards[i].style.setProperty('--ry',ry.toFixed(1)+'deg');
       }
     }
