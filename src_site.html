@@ -1648,6 +1648,95 @@ body.static .hhint .har,body.failsafe .hhint .har{animation:none!important}
   #final .vseal .vq{font-size:15.5px}
 }
 
+
+/* ============ R10 — VOLUME: folders behave like physical objects ============ */
+@property --sx{syntax:'<length>';inherits:true;initial-value:-320px}
+.hfolder,#hero .mfold{filter:drop-shadow(13px 17px 0 rgba(9,10,13,.55))}
+/* paper peeking out of the folder, clear of the tab head */
+.hfolder::before,#hero .mfold::before{content:"";position:absolute;top:-13px;left:38%;right:7%;height:15px;
+  background:#EDECE6;border-top:5px solid #D6D4CC;border-radius:3px 9px 0 0;z-index:0}
+/* the thickness of the card itself */
+.hfolder::after,#hero .mfold::after{content:"";position:absolute;left:0;right:0;bottom:-7px;height:7px;
+  background:rgba(25,26,31,.34);border-radius:0 0 20px 20px;z-index:0}
+#hero .mfold::after{bottom:-8px;height:8px;border-radius:0 0 22px 22px}
+#hero .mfold::before{left:52%;right:9%}
+/* one sweep, one clock: the tab head and the body read the same position */
+.hfolder,.hfolder .hlip,#hero .mfold{
+  background-image:linear-gradient(104deg,transparent 42%,rgba(255,255,255,.13) 50%,transparent 58%);
+  background-repeat:no-repeat;background-size:200px 320%;background-position:var(--sx) center}
+.hfolder,#hero .mfold{animation:sweepx 7.5s ease-in-out infinite}
+@keyframes sweepx{0%{--sx:-320px}46%{--sx:1500px}100%{--sx:1500px}}
+#hero .mfold{animation-delay:1.2s}
+.hcard:nth-child(2) .hfolder{animation-delay:.9s}
+.hcard:nth-child(3) .hfolder{animation-delay:1.8s}
+.hcard:nth-child(4) .hfolder{animation-delay:2.7s}
+
+
+/* ============ R10 — the cover is an object on a desk ============ */
+#hero .mfold.on{animation:sweepx 7.5s ease-in-out 1.2s infinite,hfloat 7.5s ease-in-out infinite}
+@keyframes hfloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-13px)}}
+#hero .itab{animation:hfloat 7.5s ease-in-out infinite}
+#hero .itab:nth-child(2){animation-delay:.12s}
+#hero .itab:nth-child(3){animation-delay:.24s}
+#hero .itab:nth-child(4){animation-delay:.36s}
+
+
+/* ============ R10 — a case turns away as it leaves ============ */
+.hcard{perspective:1500px}
+.hfolder{transform-origin:left center;
+  transform:rotateY(var(--ry,0deg)) scale(var(--sc,.94));backface-visibility:hidden}
+
+
+/* ============ R10 — the signal hops wire to wire ============ */
+#tech .hop{opacity:0}
+#tech .h0{animation:hopx 5s cubic-bezier(.5,0,.5,1) infinite}
+#tech .h1{animation:hopx 5s cubic-bezier(.5,0,.5,1) .62s infinite}
+#tech .h2{animation:hopx 5s cubic-bezier(.5,0,.5,1) 1.24s infinite}
+#tech .h3{animation:hopx 5s cubic-bezier(.5,0,.5,1) 1.86s infinite}
+#tech .h4{animation:hopx 5s cubic-bezier(.5,0,.5,1) 2.48s infinite}
+@keyframes hopx{0%{opacity:0;transform:translateX(0)}
+  3%{opacity:1;transform:translateX(0)}
+  11%{opacity:1;transform:translateX(22px)}
+  13%{opacity:0;transform:translateX(22px)}
+  100%{opacity:0;transform:translateX(22px)}}
+#tech .archw .pdraw{transition:opacity .3s linear}
+
+
+/* ============ R10 — the background sits behind the page, not on it ============ */
+.secnum,#heromq{transform:translate3d(var(--pxx,0px),var(--pyy,0px),0);will-change:transform}
+
+
+/* R10 — kill switches keep working */
+body.static .hfolder,body.static #hero .mfold,body.static #hero .mfold.on,body.static #hero .itab,
+body.failsafe .hfolder,body.failsafe #hero .mfold,body.failsafe #hero .mfold.on,body.failsafe #hero .itab,
+body.static #tech .hop,body.failsafe #tech .hop{animation:none!important}
+body.static .hfolder,body.static #hero .mfold{--sx:-320px}
+@media (prefers-reduced-motion:reduce){
+  .hfolder,#hero .mfold,#hero .mfold.on,#hero .itab,#tech .hop{animation:none!important}
+  .secnum,#heromq{transform:none!important}
+}
+@media (max-width:860px){
+  .hfolder,#hero .mfold{filter:none}
+  .hfolder::before,#hero .mfold::before{display:none}
+  .hcard{perspective:none}
+  .hfolder{transform:scale(var(--sc,1))!important}
+}
+
+
+/* R10b — the paper reads as paper, and the hero keeps its clean top edge */
+.hfolder::before{top:-11px;left:47%;right:14%;height:11px;background:#E4E2DA;
+  border-top:4px solid #C7C5BD;border-radius:2px 7px 0 0}
+#hero .mfold::before{display:none}
+
+
+/* R10c — the sweep is measured from the same edge on the tab head and the body,
+   and runs straight so its position never depends on an element's height */
+.hfolder,.hfolder .hlip,#hero .mfold{
+  background-origin:border-box!important;background-clip:border-box!important;
+  background-image:linear-gradient(90deg,transparent 34%,rgba(255,255,255,.14) 50%,transparent 66%)!important;
+  background-size:230px 100%!important;background-position:var(--sx) 0!important;
+  background-repeat:no-repeat!important}
+
 </style>
 <section class="sec" id="leadership" style="--fc:var(--emb)">
   <div class="secnum" aria-hidden="true">07</div>
@@ -1690,7 +1779,7 @@ body.static .hhint .har,body.failsafe .hhint .har{animation:none!important}
     <div class="sttl rv" style="--i:1">How I use technology to improve<br>commercial decisions.</div>
     <div class="lead rv" style="--i:2;margin-top:22px">Technology should never replace commercial thinking &mdash; <b>it should amplify it</b>. I don't collect tools; I build systems. This is the commercial intelligence platform I designed &amp; implemented:</div>
     <div class="intb rv" style="--i:3">AI BUILT FOR INTERNAL COMMERCIAL OPERATIONS &mdash; NOT A SELLABLE PRODUCT</div>
-    <div class="archw u" style="margin-top:40px"><div class="zr"><b>A</b><span class="d2"></span>COMMERCIAL INTELLIGENCE PLATFORM &mdash; SYSTEM ARCHITECTURE</div><svg viewBox="0 0 872 124" style="width:100%;height:auto"><rect class="ndot" style="--i:0" x="4" y="30" width="112" height="30" rx="9" fill="#25262D" stroke="#2FB380" stroke-width="1.6"/><text x="60.0" y="49" text-anchor="middle" font-size="9.4" letter-spacing="1.2" fill="#F2F1ED">LEAD SOURCES</text><rect class="ndot" style="--i:1" x="148" y="30" width="104" height="30" rx="9" fill="#25262D" stroke="#2FB380" stroke-width="1.6"/><text x="200.0" y="49" text-anchor="middle" font-size="9.4" letter-spacing="1.2" fill="#F2F1ED">AI RESEARCH</text><rect class="ndot" style="--i:2" x="284" y="30" width="128" height="30" rx="9" fill="#25262D" stroke="#2FB380" stroke-width="1.6"/><text x="348.0" y="49" text-anchor="middle" font-size="9.4" letter-spacing="1.2" fill="#F2F1ED">KNOWLEDGE BASE</text><rect class="ndot" style="--i:3" x="444" y="30" width="130" height="30" rx="9" fill="#25262D" stroke="#2FB380" stroke-width="1.6"/><text x="509.0" y="49" text-anchor="middle" font-size="9.4" letter-spacing="1.2" fill="#F2F1ED">DECISION ENGINE</text><rect class="ndot" style="--i:4" x="606" y="30" width="172" height="30" rx="9" fill="#25262D" stroke="#2FB380" stroke-width="1.6"/><text x="692.0" y="49" text-anchor="middle" font-size="9.4" letter-spacing="1.2" fill="#F2F1ED">PERSONALIZED OUTREACH</text><rect class="ndot" style="--i:5" x="810" y="30" width="58" height="30" rx="9" fill="#25262D" stroke="#2FB380" stroke-width="1.6"/><text x="839.0" y="49" text-anchor="middle" font-size="9.4" letter-spacing="1.2" fill="#F2F1ED">CRM</text><line class="pdraw" pathLength="1" style="--i:0" x1="118" y1="45" x2="140" y2="45" stroke="#2FB380" stroke-width="1.6"/><path d="M147 45 l-6.5 -3.8 v7.6 z" fill="#2FB380"/><line class="pdraw" pathLength="1" style="--i:1" x1="254" y1="45" x2="276" y2="45" stroke="#2FB380" stroke-width="1.6"/><path d="M283 45 l-6.5 -3.8 v7.6 z" fill="#2FB380"/><line class="pdraw" pathLength="1" style="--i:2" x1="414" y1="45" x2="436" y2="45" stroke="#2FB380" stroke-width="1.6"/><path d="M443 45 l-6.5 -3.8 v7.6 z" fill="#2FB380"/><line class="pdraw" pathLength="1" style="--i:3" x1="576" y1="45" x2="598" y2="45" stroke="#2FB380" stroke-width="1.6"/><path d="M605 45 l-6.5 -3.8 v7.6 z" fill="#2FB380"/><line class="pdraw" pathLength="1" style="--i:4" x1="780" y1="45" x2="802" y2="45" stroke="#2FB380" stroke-width="1.6"/><path d="M809 45 l-6.5 -3.8 v7.6 z" fill="#2FB380"/><path class="crawlp" d="M839.0 60 C 839.0 94, 200.0 94, 200.0 62" fill="none" stroke="#B6B7BB" stroke-width="1.2" stroke-dasharray="3 4"/><path d="M200.0 60 l-4.5 9 h9 z" fill="#B6B7BB"/><text x="519.5" y="114" text-anchor="middle" font-size="7.6" letter-spacing="2" fill="#CFD0D4">LEARNING FEEDBACK &mdash; EVERY INTERACTION IMPROVES THE SYSTEM</text></svg></div>
+    <div class="archw u" style="margin-top:40px"><div class="zr"><b>A</b><span class="d2"></span>COMMERCIAL INTELLIGENCE PLATFORM &mdash; SYSTEM ARCHITECTURE</div><svg viewBox="0 0 872 124" style="width:100%;height:auto"><rect class="ndot" style="--i:0" x="4" y="30" width="112" height="30" rx="9" fill="#25262D" stroke="#2FB380" stroke-width="1.6"/><text x="60.0" y="49" text-anchor="middle" font-size="9.4" letter-spacing="1.2" fill="#F2F1ED">LEAD SOURCES</text><rect class="ndot" style="--i:1" x="148" y="30" width="104" height="30" rx="9" fill="#25262D" stroke="#2FB380" stroke-width="1.6"/><text x="200.0" y="49" text-anchor="middle" font-size="9.4" letter-spacing="1.2" fill="#F2F1ED">AI RESEARCH</text><rect class="ndot" style="--i:2" x="284" y="30" width="128" height="30" rx="9" fill="#25262D" stroke="#2FB380" stroke-width="1.6"/><text x="348.0" y="49" text-anchor="middle" font-size="9.4" letter-spacing="1.2" fill="#F2F1ED">KNOWLEDGE BASE</text><rect class="ndot" style="--i:3" x="444" y="30" width="130" height="30" rx="9" fill="#25262D" stroke="#2FB380" stroke-width="1.6"/><text x="509.0" y="49" text-anchor="middle" font-size="9.4" letter-spacing="1.2" fill="#F2F1ED">DECISION ENGINE</text><rect class="ndot" style="--i:4" x="606" y="30" width="172" height="30" rx="9" fill="#25262D" stroke="#2FB380" stroke-width="1.6"/><text x="692.0" y="49" text-anchor="middle" font-size="9.4" letter-spacing="1.2" fill="#F2F1ED">PERSONALIZED OUTREACH</text><rect class="ndot" style="--i:5" x="810" y="30" width="58" height="30" rx="9" fill="#25262D" stroke="#2FB380" stroke-width="1.6"/><text x="839.0" y="49" text-anchor="middle" font-size="9.4" letter-spacing="1.2" fill="#F2F1ED">CRM</text><line class="pdraw" pathLength="1" style="--i:0" x1="118" y1="45" x2="140" y2="45" stroke="#2FB380" stroke-width="1.6"/><path d="M147 45 l-6.5 -3.8 v7.6 z" fill="#2FB380"/><line class="pdraw" pathLength="1" style="--i:1" x1="254" y1="45" x2="276" y2="45" stroke="#2FB380" stroke-width="1.6"/><path d="M283 45 l-6.5 -3.8 v7.6 z" fill="#2FB380"/><line class="pdraw" pathLength="1" style="--i:2" x1="414" y1="45" x2="436" y2="45" stroke="#2FB380" stroke-width="1.6"/><path d="M443 45 l-6.5 -3.8 v7.6 z" fill="#2FB380"/><line class="pdraw" pathLength="1" style="--i:3" x1="576" y1="45" x2="598" y2="45" stroke="#2FB380" stroke-width="1.6"/><path d="M605 45 l-6.5 -3.8 v7.6 z" fill="#2FB380"/><line class="pdraw" pathLength="1" style="--i:4" x1="780" y1="45" x2="802" y2="45" stroke="#2FB380" stroke-width="1.6"/><path d="M809 45 l-6.5 -3.8 v7.6 z" fill="#2FB380"/><path class="crawlp" d="M839.0 60 C 839.0 94, 200.0 94, 200.0 62" fill="none" stroke="#B6B7BB" stroke-width="1.2" stroke-dasharray="3 4"/><path d="M200.0 60 l-4.5 9 h9 z" fill="#B6B7BB"/><text x="519.5" y="114" text-anchor="middle" font-size="7.6" letter-spacing="2" fill="#CFD0D4">LEARNING FEEDBACK &mdash; EVERY INTERACTION IMPROVES THE SYSTEM</text><circle class="hop h0" cx="118" cy="45" r="3.4" fill="#2FB380"/><circle class="hop h1" cx="254" cy="45" r="3.4" fill="#2FB380"/><circle class="hop h2" cx="414" cy="45" r="3.4" fill="#2FB380"/><circle class="hop h3" cx="576" cy="45" r="3.4" fill="#2FB380"/><circle class="hop h4" cx="780" cy="45" r="3.4" fill="#2FB380"/></svg></div>
     <div class="bot">
       <div class="rv"><div class="zr"><b>B</b><span class="d2"></span>WHAT THE SYSTEM DOES</div><div class="list"><div class="lg"><span class="c">&#10003;</span>Researching prospects</div><div class="lg"><span class="c">&#10003;</span>Enriching leads</div><div class="lg"><span class="c">&#10003;</span>Personalizing outreach</div><div class="lg"><span class="c">&#10003;</span>Automating commercial workflows</div><div class="lg"><span class="c">&#10003;</span>Learning from previous interactions</div><div class="lg"><span class="c">&#10003;</span>Improving commercial recommendations over time</div></div><div class="phil">MY PHILOSOPHY: TECHNOLOGY SHOULD AUTOMATE EXECUTION. PEOPLE SHOULD MAKE DECISIONS.</div></div>
       <div class="rv" style="--i:1"><div class="zr"><b>C</b><span class="d2"></span>UNDERLYING STACK</div><div class="stackr"><span><b>HubSpot</b> CRM</span><span><b>Zapier</b> &middot; Webhooks</span><span>Google Workspace</span><span>API Integrations</span><span><b>GPT</b></span><span><b>Claude</b></span><span><b>Gemini</b></span><span><b>Clay</b></span><span><b>Apollo</b></span><span><b>Hunter</b></span><span>Custom AI Workflows</span><span>Lead Intelligence</span><span>Lead Enrichment</span><span>Competitive Intelligence</span></div></div>
@@ -2271,6 +2360,9 @@ function frame(){
         var r=hcards[i].getBoundingClientRect();
         var d=Math.abs(r.left+r.width/2-cx)/window.innerWidth;
         hcards[i].style.setProperty('--sc',String(1.02-Math.min(.1,d*.22)));
+        var sd=(r.left+r.width/2-cx)/window.innerWidth;
+        var ry=sd<-.12?Math.max(-68,(sd+.12)*190):0;
+        hcards[i].style.setProperty('--ry',ry.toFixed(1)+'deg');
       }
     }
     /* section covers */
@@ -3083,5 +3175,33 @@ window.__acts3OK=true;
     });
   }catch(e){}
 }
+})();
+</script>
+<script>
+/* R10 — pointer parallax, eased in a single frame loop (no jitter) */
+(function(){
+  if(matchMedia('(prefers-reduced-motion:reduce)').matches)return;
+  if(document.body.classList.contains('static'))return;
+  var layers=[];
+  [['#heromq',18],['.secnum',30]].forEach(function(p){
+    [].forEach.call(document.querySelectorAll(p[0]),function(el){layers.push({el:el,d:p[1],x:0,y:0})});
+  });
+  if(!layers.length)return;
+  var tx=0,ty=0,run=false;
+  addEventListener('pointermove',function(e){
+    tx=(e.clientX/innerWidth-.5); ty=(e.clientY/innerHeight-.5);
+    if(!run){run=true;requestAnimationFrame(loop)}
+  },{passive:true});
+  function loop(){
+    var moving=false;
+    for(var i=0;i<layers.length;i++){
+      var L=layers[i], gx=-tx*L.d, gy=-ty*L.d*.42;
+      L.x+=(gx-L.x)*.075; L.y+=(gy-L.y)*.075;
+      if(Math.abs(gx-L.x)>.06||Math.abs(gy-L.y)>.06)moving=true;
+      L.el.style.setProperty('--pxx',L.x.toFixed(2)+'px');
+      L.el.style.setProperty('--pyy',L.y.toFixed(2)+'px');
+    }
+    if(moving){requestAnimationFrame(loop)}else{run=false}
+  }
 })();
 </script>
