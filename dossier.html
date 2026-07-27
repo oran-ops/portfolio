@@ -1,0 +1,1188 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<title>The Commercial Systems Builder &mdash; Executive Portfolio</title>
+<link rel="stylesheet" href="fonts/fonts_dossier.css">
+<style>
+:root{--bg:#191A1F;--card:#202127;--card2:#25262D;--ink:#F2F1ED;--mut:#8E8E93;--dim:#8E8E93;--lbl:#A6A7AC;--grid:#33353C;--grid2:#4B4E55;
+--hair:rgba(255,255,255,.09);--emb:#2FB380;--emb-dim:rgba(47,179,128,.10);--brass:#E0A458;--ice:#5E8FBF;--ice-dim:rgba(94,143,191,.14)}
+*{margin:0;padding:0;box-sizing:border-box}
+@page{size:1280px 720px;margin:0}
+html,body{background:#000}
+.page{position:relative;width:1280px;height:720px;overflow:hidden;background:var(--bg);color:var(--ink);
+font-family:'Inter',system-ui,sans-serif;-webkit-font-smoothing:antialiased;page-break-after:always}
+.page:last-child{page-break-after:auto}
+.mono{font-family:'JetBrains Mono',monospace}
+svg{display:block}
+svg text{font-family:'JetBrains Mono',monospace}
+
+/* chrome */
+.brk{position:absolute;width:20px;height:20px;z-index:9;border:0 solid rgba(242,241,237,.38)}
+.brk.tl{top:26px;left:26px;border-top-width:1.5px;border-left-width:1.5px}
+.brk.tr{top:26px;right:26px;border-top-width:1.5px;border-right-width:1.5px}
+.brk.bl{bottom:26px;left:26px;border-bottom-width:1.5px;border-left-width:1.5px}
+.brk.br{bottom:26px;right:26px;border-bottom-width:1.5px;border-right-width:1.5px}
+.ftr{position:absolute;left:72px;right:72px;bottom:44px;z-index:9;display:flex;align-items:center;justify-content:space-between;
+font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.18em;color:var(--dim)}
+.ftr .mid{display:flex;align-items:center;gap:14px;position:absolute;left:50%;transform:translateX(-50%)}
+.ftr .d{width:7px;height:7px;background:var(--fc,var(--emb));transform:rotate(45deg)}
+.ftr b{color:var(--mut);font-weight:600}
+
+/* ============ PAGE 03 — PHILOSOPHY ============ */
+.p03 .hd{position:absolute;top:50px;left:72px;right:72px;display:flex;justify-content:space-between;align-items:center;z-index:5}
+.p03 .rub{display:flex;align-items:center;gap:11px;font-family:'JetBrains Mono',monospace;font-weight:700;font-size:10.5px;letter-spacing:.26em;color:var(--ink)}
+.p03 .rub .d{width:7px;height:7px;background:var(--emb);transform:rotate(45deg)}
+.p03 .tok{display:inline-flex;align-items:center;gap:8px;font-family:'JetBrains Mono',monospace;font-weight:600;font-size:9.5px;letter-spacing:.16em;
+border:1px solid var(--grid);border-radius:7px;padding:6px 12px;color:var(--emb)}
+.p03 .title{position:absolute;top:96px;left:72px;font-weight:800;font-size:37px;letter-spacing:-.03em;line-height:1.12}
+.p03 .title .g{color:var(--emb)}
+.p03 .grid{position:absolute;top:236px;left:72px;right:72px;display:grid;grid-template-columns:repeat(4,1fr);column-gap:30px;row-gap:34px}
+.p03 .cellrow{position:relative}
+.p03 .rowline{position:absolute;left:100px;right:20px;top:28px;height:1px;background:repeating-linear-gradient(90deg,var(--grid2) 0 5px,transparent 5px 11px);z-index:1}
+.p03 .step{position:relative;z-index:2}
+.p03 .node{width:57px;height:57px;border-radius:50%;background:var(--card);border:1.5px solid var(--grid2);display:flex;align-items:center;justify-content:center}
+.p03 .node svg{width:34px;height:34px;fill:none;stroke:#F2F1ED;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.p03 .node svg .f{fill:var(--emb);stroke:none}
+.p03 .node svg .dsh{stroke-dasharray:2.2 2.8;stroke:#8E8E93}
+.p03 .node svg .em{stroke:var(--emb)}
+.p03 .snum{margin-top:12px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.2em;color:var(--dim)}
+.p03 .snum b{color:var(--emb);font-weight:700}
+.p03 .sname{margin-top:4px;font-weight:700;font-size:15.5px;letter-spacing:-.01em;color:var(--ink)}
+.p03 .sdesc{margin-top:5px;font-weight:400;font-size:11.5px;line-height:1.45;color:var(--mut);max-width:230px}
+.p03 .qt{position:absolute;left:50%;transform:translateX(-50%);bottom:76px;padding:14px 26px;text-align:center}
+.p03 .qt::before,.p03 .qt::after{content:"";position:absolute;width:17px;height:17px;border:0 solid var(--emb)}
+.p03 .qt::before{top:0;left:0;border-top-width:2px;border-left-width:2px}
+.p03 .qt::after{bottom:0;right:0;border-bottom-width:2px;border-right-width:2px}
+.p03 .qt .qx{font-family:'Fraunces',serif;font-style:italic;font-weight:500;font-size:19px;color:var(--ink)}
+.p03 .qt .qx b{color:var(--emb);font-weight:600}
+.p03 .qt .who{margin-top:7px;font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.24em;color:var(--dim)}
+
+/* folder DNA on pages 1-3 */
+.p01 .quote{top:576px;bottom:auto}
+.p01 .drawer{position:absolute;left:72px;right:72px;bottom:78px;display:flex;gap:10px;border-bottom:1px solid var(--grid2);padding:0 6px}
+.p01 .dtab{flex:1;height:38px;border-radius:9px 20px 0 0;display:flex;align-items:center;padding:0 16px}
+.p01 .dtab .nm{font-family:'Fraunces',serif;font-weight:500;font-size:15px;color:#191A1F}
+.p01 .dtab .meta{margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.14em;color:rgba(25,26,31,.65)}
+.p01 .dlabel{position:absolute;left:78px;bottom:124px;font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.24em;color:var(--dim)}
+
+.p02 .memo{display:inline-flex;align-items:center;gap:9px;background:var(--emb);color:#191A1F;border-radius:7px 16px 0 0;
+padding:8px 16px;font-family:'JetBrains Mono',monospace;font-weight:700;font-size:9px;letter-spacing:.22em;margin-bottom:30px}
+
+.p03 .title{top:92px}
+.p03 .folder{position:absolute;top:238px;left:72px;right:72px;background:var(--card);border:1px solid var(--hair);
+border-radius:0 16px 16px 16px;padding:24px 28px 20px}
+.p03 .flip{position:absolute;top:-30px;left:-1px;height:30px;background:var(--emb);border-radius:8px 18px 0 0;
+display:flex;align-items:center;gap:10px;padding:0 16px;font-family:'JetBrains Mono',monospace;font-weight:700;font-size:9px;letter-spacing:.22em;color:#191A1F}
+.p03 .flip .sq{width:6px;height:6px;background:#191A1F;transform:rotate(45deg)}
+.p03 .grid2{display:grid;grid-template-columns:repeat(4,1fr);column-gap:28px;row-gap:26px}
+.p03 .node{width:54px;height:54px}
+.p03 .node svg{width:32px;height:32px}
+.p03 .snum{margin-top:10px}
+.p03 .sname{font-size:15px}
+.p03 .sdesc{font-size:11px;line-height:1.4}
+.p03 .qt{bottom:58px;padding:12px 24px}
+.p03 .qt .qx{font-size:17.5px}
+
+/* ============ PAGE 04 - THE CASE FILES (DIVIDER) ============ */
+.p04 .title{position:absolute;top:58px;left:72px;font-weight:800;font-size:54px;line-height:1;letter-spacing:-.03em;text-transform:uppercase;color:var(--ink)}
+.p04 .meta{position:absolute;top:76px;right:74px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.2em;color:var(--mut)}
+.p04 .stack{position:absolute;top:214px;left:72px;right:72px}
+.p04 .tab{position:relative}
+.p04 .lip{height:34px;border-radius:9px 22px 0 0;display:flex;align-items:center;padding:0 18px;position:relative;top:1px;z-index:2}
+.p04 .lip .nm{font-family:'Fraunces',serif;font-weight:500;font-size:17px;color:#191A1F}
+.p04 .lip .meta2{margin-left:auto;font-family:'JetBrains Mono',monospace;font-weight:600;font-size:9px;letter-spacing:.16em;color:#191A1F}
+.p04 .body{position:relative;height:54px}
+.p04 .cat{position:absolute;right:26px;top:50%;transform:translateY(-50%);font-family:'JetBrains Mono',monospace;font-weight:700;font-size:10px;letter-spacing:.16em;color:#191A1F}
+.p04 .tab.open .body{height:102px;border-radius:0 14px 14px 14px;padding:16px 22px}
+.p04 .tab.open .cat{top:18px;transform:none}
+.p04 .dossier{font-family:'JetBrains Mono',monospace;font-size:12.5px;line-height:1.8;color:rgba(25,26,31,.85)}
+
+/* ============ SHARED CASE-FILE KIT ============ */
+.casef .hd{position:absolute;top:48px;left:72px;right:72px;display:flex;justify-content:space-between;align-items:center;z-index:5}
+.casef .rub{display:flex;align-items:center;gap:11px;font-family:'JetBrains Mono',monospace;font-weight:700;font-size:10.5px;letter-spacing:.26em;color:var(--ink)}
+.casef .rub .d{width:7px;height:7px;background:var(--fc);transform:rotate(45deg)}
+.casef .tok{display:inline-flex;align-items:center;gap:8px;font-family:'JetBrains Mono',monospace;font-weight:600;font-size:9.5px;letter-spacing:.16em;
+border:1px solid var(--grid);border-radius:7px;padding:6px 12px;color:var(--fc)}
+.casef .ttl{position:absolute;top:88px;left:72px;font-weight:800;font-size:30px;letter-spacing:-.025em;color:var(--ink)}
+.casef .meta{position:absolute;top:132px;left:72px;font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.22em;color:var(--mut)}
+.casef .folder{position:absolute;top:172px;left:72px;right:72px;height:474px;background:var(--card);border:1px solid var(--hair);
+border-radius:0 16px 16px 16px;padding:22px 26px}
+.casef .flip{position:absolute;top:-30px;left:-1px;height:30px;background:var(--fc);border-radius:8px 18px 0 0;
+display:flex;align-items:center;gap:12px;padding:0 16px}
+.casef .flip .nm{font-family:'Fraunces',serif;font-weight:500;font-size:15px;color:#191A1F}
+.casef .flip .fl{font-family:'JetBrains Mono',monospace;font-weight:600;font-size:8.5px;letter-spacing:.16em;color:#191A1F}
+.casef .zr{display:flex;align-items:center;gap:9px;font-family:'JetBrains Mono',monospace;font-weight:700;font-size:10px;letter-spacing:.22em;color:var(--ink)}
+.casef .zr b{color:var(--fc);font-weight:700}
+.casef .zr .d2{width:5px;height:5px;background:var(--fc);transform:rotate(45deg)}
+.casef .para{font-size:12px;line-height:1.55;color:var(--mut)}
+.casef .para b{color:var(--ink);font-weight:600}
+.casef .subl{font-family:'JetBrains Mono',monospace;font-weight:600;font-size:8.5px;letter-spacing:.24em;color:var(--dim)}
+.casef .mi{display:flex;align-items:center;gap:9px;font-size:11.5px;color:var(--mut)}
+.casef .mi .o{flex:none;width:13px;height:13px;border:1.5px solid var(--fc);border-radius:50%;position:relative}
+.casef .mi .o::after{content:"";position:absolute;left:2.5px;right:2.5px;top:50%;height:1.5px;margin-top:-1px;background:var(--fc)}
+.casef .lg{display:flex;align-items:center;gap:8px;font-size:11.8px;font-weight:600;color:var(--ink)}
+.casef .lg .n{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:.1em;color:var(--dim);width:34px;flex:none}
+.casef .lg .c{flex:none;width:11px;height:11px;background:var(--fc);color:#191A1F;font-size:9px;font-weight:800;line-height:11px;text-align:center}
+.casef .dash{display:flex;align-items:center;gap:9px;font-size:11.8px;color:var(--mut)}
+.casef .dash::before{content:"";flex:none;width:9px;height:2px;background:var(--fc)}
+.casef .sig{position:absolute;left:50%;transform:translateX(-50%);bottom:54px;padding:10px 24px;text-align:center;white-space:nowrap}
+.casef .sig::before,.casef .sig::after{content:"";position:absolute;width:15px;height:15px;border:0 solid var(--fc)}
+.casef .sig::before{top:0;left:0;border-top-width:2px;border-left-width:2px}
+.casef .sig::after{bottom:0;right:0;border-bottom-width:2px;border-right-width:2px}
+.casef .sig .qx{font-family:'Fraunces',serif;font-style:italic;font-weight:500;font-size:16.5px;color:var(--ink)}
+.casef .sig .qx b{color:var(--fc);font-weight:600}
+.casef .sig .who{margin-top:5px;font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:.26em;color:var(--dim)}
+
+/* ============ PAGE 05 - XTIX INTAKE ============ */
+.p05 .cols{display:grid;grid-template-columns:1fr 1fr;column-gap:30px;height:100%;position:relative}
+.p05 .cols::before{content:"";position:absolute;left:50%;top:4px;bottom:4px;width:1px;background:repeating-linear-gradient(180deg,var(--grid) 0 5px,transparent 5px 11px)}
+.p05 .z{margin-bottom:16px}
+.p05 .z .zr{margin-bottom:8px}
+.p05 .reality{margin-top:10px;border:1px solid var(--grid);border-radius:10px;padding:11px 14px;background:var(--card2)}
+.p05 .reality .subl{display:block;margin-bottom:8px}
+.p05 .rgrid{display:grid;grid-template-columns:1fr 1fr;gap:6px 14px}
+.p05 .agrid{display:grid;grid-template-columns:1fr 1fr;gap:6px 14px;margin-top:8px}
+.p05 .then{margin-top:9px;font-family:'Fraunces',serif;font-style:italic;font-size:12.5px;color:var(--fc)}
+.p05 .bgrid{display:grid;grid-template-columns:1fr 1fr;gap:7px 16px;margin-top:8px}
+
+.p05 .cols{height:auto}
+.p05 .fz{position:absolute;left:64px;right:26px;bottom:16px;border-top:1px solid var(--grid);padding-top:12px;display:flex;align-items:center;gap:22px}
+.p05 .fz .lab{font-family:'JetBrains Mono',monospace;font-weight:600;font-size:9.5px;letter-spacing:.24em;color:var(--lbl);white-space:nowrap}
+.p05 .fz .lab b{color:var(--emb);font-weight:700}
+.p05 .fz svg{flex:1;height:64px}
+
+/* ============ PAGE 06 - XTIX EVIDENCE ============ */
+.p06 .folder{padding:20px 26px 16px}
+.p06 .inner{display:grid;grid-template-columns:46fr 54fr;column-gap:28px}
+.p06 .zr{margin-bottom:9px}
+.p06 .tbl{width:100%;border-collapse:collapse}
+.p06 .tbl td{border-top:1px solid var(--grid);padding:6.5px 2px;vertical-align:middle}
+.p06 .tbl tr:first-child td{border-top:none}
+.p06 .tbl .k{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.14em;color:var(--lbl);line-height:1.5}
+.p06 .tbl .v{text-align:right;font-weight:700;font-size:14.5px;color:var(--ink);white-space:nowrap}
+.p06 .tbl .v.em{color:var(--emb)}
+.p06 .gaug{display:flex;justify-content:space-between;margin-top:14px;padding-top:12px;border-top:1px solid var(--grid)}
+.p06 .g1{text-align:center;width:88px}
+.p06 .g1 .gl{margin-top:4px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.14em;color:var(--lbl);line-height:1.6}
+.p06 .ops .lg{margin-bottom:6px;font-size:11.4px}
+.p06 .tech{margin-top:12px;border:1px solid var(--grid);border-radius:10px;background:var(--card2);padding:12px 14px}
+.p06 .tech .para{font-size:11.3px;line-height:1.5}
+.p06 .tech .dash{font-size:11px;margin-top:5px}
+.p06 .tech .pur{margin-top:8px;font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.1em;color:var(--emb);line-height:1.6}
+.p06 .band{margin-top:14px;padding-top:14px;border-top:1px solid var(--grid);display:grid;grid-template-columns:56fr 44fr;column-gap:28px}
+.p06 .band .dash{font-size:11px;margin-bottom:5px}
+.p06 .lesson{border-left:2px solid var(--emb);padding:2px 0 2px 18px}
+.p06 .lesson .qx{font-family:'Fraunces',serif;font-style:italic;font-weight:500;font-size:15.5px;line-height:1.45;color:var(--ink)}
+.p06 .lesson .qx b{color:var(--emb);font-weight:600}
+.p06 .lesson .who{margin-top:6px;font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:.24em;color:var(--dim)}
+
+.p06 .folder{height:490px;padding:18px 26px 14px}
+.p06 .tbl td{padding:5px 2px}
+.p06 .tbl .v{font-size:13.5px}
+.p06 .gaug{margin-top:10px;padding-top:9px}
+.p06 .g1 svg{width:56px!important;height:56px!important}
+.p06 .ops .lg{margin-bottom:4.5px;font-size:10.8px}
+.p06 .tech{margin-top:10px;padding:10px 13px}
+.p06 .tech .para{font-size:10.8px}
+.p06 .tech .dash{font-size:10.4px;margin-top:4px}
+.p06 .tech .pur{margin-top:7px;font-size:8px}
+.p06 .band{margin-top:11px;padding-top:11px}
+.p06 .refl2{display:grid;grid-template-columns:1fr 1fr;gap:4px 18px}
+.p06 .band .dash{font-size:10.6px;margin-bottom:0}
+.p06 .lesson .qx{font-size:14px}
+
+/* ============ PAGE 07 - OASIS COMMAND ============ */
+.p07 .folder{padding:20px 26px 16px}
+.p07 .inner{display:grid;grid-template-columns:1fr 1fr;column-gap:30px;position:relative}
+.p07 .inner::before{content:"";position:absolute;left:50%;top:2px;bottom:2px;width:1px;background:repeating-linear-gradient(180deg,var(--grid) 0 5px,transparent 5px 11px)}
+.p07 .zr{margin-bottom:8px}
+.p07 .z{margin-bottom:15px}
+.p07 .rgrid{display:grid;grid-template-columns:1fr 1fr;gap:5.5px 16px;margin-top:2px}
+.p07 .dash{font-size:11.2px}
+.p07 .lg{margin-bottom:5.5px;font-size:11.6px}
+.p07 .model{margin-top:4px;padding-top:13px;border-top:1px solid var(--grid)}
+.p07 .chips{display:flex;flex-wrap:nowrap;gap:8px;margin-top:10px}
+.p07 .chip{flex:1;border:1px solid var(--grid);border-radius:8px;padding:8px 6px;text-align:center;
+font-family:'JetBrains Mono',monospace;font-weight:600;font-size:7.8px;letter-spacing:.1em;color:var(--mut);line-height:1.5}
+.p07 .chip b{display:block;color:var(--brass);font-size:8.6px;letter-spacing:.16em;margin-bottom:3px}
+.p07 .insight{margin-top:15px;text-align:center;position:relative;padding:9px 0 7px}
+.p07 .insight .qx{font-family:'Fraunces',serif;font-style:italic;font-weight:500;font-size:17px;color:var(--ink)}
+.p07 .insight .qx b{color:var(--brass);font-weight:600}
+.p07 .insight .who{margin-top:5px;font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:.26em;color:var(--dim)}
+
+.p07 .folder{padding:28px 30px 20px}
+.p07 .z{margin-bottom:22px}
+.p07 .zr{margin-bottom:11px}
+.p07 .para{font-size:12.6px;line-height:1.62}
+.p07 .rgrid{gap:8px 16px}
+.p07 .dash{font-size:11.8px}
+.p07 .lg{margin-bottom:9px;font-size:12.2px}
+.p07 .model{margin-top:10px;padding-top:18px}
+.p07 .chips{margin-top:13px}
+.p07 .chip{padding:12px 6px;font-size:9px}
+.p07 .chip b{font-size:9.6px;margin-bottom:4px}
+.p07 .insight{margin-top:26px}
+.p07 .insight .qx{font-size:17.5px}
+
+/* ============ PAGE 08 - OASIS EVIDENCE ============ */
+.p08 .folder{padding:22px 28px 16px}
+.p08 .inner{display:grid;grid-template-columns:1fr 1fr 1fr;column-gap:28px}
+.p08 .zr{margin-bottom:10px}
+.p08 .stat{border:1px solid var(--grid);border-radius:0 12px 12px 12px;background:var(--card2);position:relative;margin-top:30px;padding:16px 18px 14px}
+.p08 .stat .slip{position:absolute;top:-24px;left:-1px;height:24px;background:var(--brass);border-radius:7px 15px 0 0;
+display:flex;align-items:center;padding:0 12px;font-family:'JetBrains Mono',monospace;font-weight:700;font-size:7.5px;letter-spacing:.2em;color:#191A1F}
+.p08 .stat .num{font-weight:800;font-size:46px;letter-spacing:-.02em;color:var(--ink);line-height:1}
+.p08 .stat .num b{color:var(--brass);font-weight:800;margin-right:7px}
+.p08 .stat .lbl{margin-top:6px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.22em;color:var(--lbl)}
+.p08 .perf{margin-top:14px}
+.p08 .dash{font-size:11.2px;margin-bottom:7px}
+.p08 .lg{margin-bottom:8.5px;font-size:11.6px}
+.p08 .ringwrap{text-align:center}
+.p08 .ringlbl{margin-top:2px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.18em;color:var(--lbl)}
+.p08 .band{margin-top:12px;padding-top:14px;border-top:1px solid var(--grid);display:grid;grid-template-columns:58fr 42fr;column-gap:28px}
+.p08 .band .para{font-size:11.4px;line-height:1.55}
+.p08 .lesson{border-left:2px solid var(--brass);padding:2px 0 2px 18px}
+.p08 .lesson .qx{font-family:'Fraunces',serif;font-style:italic;font-weight:500;font-size:14.5px;line-height:1.45;color:var(--ink)}
+.p08 .lesson .qx b{color:var(--brass);font-weight:600}
+.p08 .lesson .who{margin-top:6px;font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:.24em;color:var(--dim)}
+
+.p08 .folder{padding:26px 30px 20px}
+.p08 .stat{margin-top:34px;padding:20px 20px 16px}
+.p08 .stat .num{font-size:54px}
+.p08 .perf{margin-top:18px}
+.p08 .dash{margin-bottom:9px;font-size:11.6px}
+.p08 .lg{margin-bottom:11px;font-size:12px}
+.p08 .band{margin-top:20px;padding-top:18px}
+.p08 .band .para{font-size:12px;line-height:1.62}
+.p08 .lesson .qx{font-size:15.5px}
+
+/* ============ PAGE 09 - EVENTER SYNC ============ */
+.p09 .folder{padding:26px 30px 20px}
+.p09 .inner{display:grid;grid-template-columns:47fr 53fr;column-gap:32px;position:relative}
+.p09 .inner::before{content:"";position:absolute;left:44.5%;top:2px;bottom:2px;width:1px;background:repeating-linear-gradient(180deg,var(--grid) 0 5px,transparent 5px 11px)}
+.p09 .z{margin-bottom:17px}
+.p09 .zr{margin-bottom:9px}
+.p09 .para{font-size:11.9px;line-height:1.58}
+.p09 .lg{margin-bottom:8px;font-size:11.6px}
+.p09 .conv{margin:2px 0 14px}
+.p09 .band{margin-top:6px;padding-top:15px;border-top:1px solid var(--grid);display:grid;grid-template-columns:1fr 1fr;column-gap:32px}
+.p09 .band .para{font-size:11.6px}
+.p09 .insight{border-left:2px solid var(--ice);padding:2px 0 2px 18px}
+.p09 .insight .qx{font-family:'Fraunces',serif;font-style:italic;font-weight:500;font-size:15px;line-height:1.45;color:var(--ink)}
+.p09 .insight .qx b{color:var(--ice);font-weight:600}
+.p09 .insight .who{margin-top:6px;font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:.24em;color:var(--dim)}
+
+.p09 .z{margin-bottom:13px}
+.p09 .para{font-size:11.3px;line-height:1.5}
+.p09 .lg{margin-bottom:6px;font-size:11px}
+.p09 .conv{margin:0 0 10px}
+.p09 .band{margin-top:2px;padding-top:12px}
+.p09 .band .para{font-size:11px}
+.p09 .insight .qx{font-size:13.8px}
+.p09 .zr{margin-bottom:7px}
+
+/* ============ PAGE 11 - LEADERSHIP ============ */
+.p11 .folder{padding:24px 30px 18px}
+.p11 .lead{font-family:'Fraunces',serif;font-style:italic;font-weight:500;font-size:15px;line-height:1.5;color:var(--mut);max-width:1020px}
+.p11 .lead b{color:var(--ink);font-weight:500}
+.p11 .cols{display:grid;grid-template-columns:59fr 41fr;column-gap:34px;margin-top:18px;position:relative}
+.p11 .cols::before{content:"";position:absolute;left:57.2%;top:2px;bottom:2px;width:1px;background:repeating-linear-gradient(180deg,var(--grid) 0 5px,transparent 5px 11px)}
+.p11 .zr{margin-bottom:12px}
+.p11 .pr{display:flex;gap:14px;margin-bottom:13px}
+.p11 .pr .n{flex:none;width:30px;height:30px;border:1.5px solid var(--emb);border-radius:8px;display:flex;align-items:center;justify-content:center;
+font-family:'JetBrains Mono',monospace;font-weight:700;font-size:11px;color:var(--emb)}
+.p11 .pr .nm2{font-weight:700;font-size:13.2px;color:var(--ink);letter-spacing:-.01em}
+.p11 .pr .ds{margin-top:3px;font-size:10.8px;line-height:1.45;color:var(--mut)}
+.p11 .tools{display:grid;grid-template-columns:1fr 1fr;gap:7px 14px}
+.p11 .lg{font-size:11px}
+.p11 .sigq{margin-top:16px;padding-top:14px;border-top:1px solid var(--grid);text-align:center}
+.p11 .sigq .qx{font-family:'Fraunces',serif;font-style:italic;font-weight:500;font-size:17.5px;color:var(--ink)}
+.p11 .sigq .qx b{color:var(--emb);font-weight:600}
+.p11 .sigq .who{margin-top:5px;font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:.26em;color:var(--dim)}
+
+/* ============ PAGE 13 - FINAL THOUGHTS + CONTACT ============ */
+.p13 .folder{padding:26px 30px 20px}
+.p13 .inner{display:grid;grid-template-columns:62fr 38fr;column-gap:34px;position:relative;height:100%}
+.p13 .inner::before{content:"";position:absolute;left:60.4%;top:2px;bottom:2px;width:1px;background:repeating-linear-gradient(180deg,var(--grid) 0 5px,transparent 5px 11px)}
+.p13 .zr{margin-bottom:14px}
+.p13 .pgrid{display:grid;grid-template-columns:1fr 1fr;gap:13px 26px}
+.p13 .pi{display:flex;gap:11px;align-items:flex-start}
+.p13 .pi .n{flex:none;font-family:'JetBrains Mono',monospace;font-weight:700;font-size:10px;color:var(--emb);
+border:1.5px solid var(--emb);border-radius:7px;width:26px;height:26px;display:flex;align-items:center;justify-content:center}
+.p13 .pi .t{font-size:11.8px;line-height:1.42;color:var(--ink);font-weight:600;padding-top:4px}
+.p13 .pi.vision .t{font-family:'Fraunces',serif;font-style:italic;font-weight:500;font-size:12.6px;color:var(--emb)}
+.p13 .card{position:relative;border:1px solid var(--grid);border-radius:0 12px 12px 12px;background:var(--card2);margin-top:26px;padding:16px 18px 14px}
+.p13 .card .clip{position:absolute;top:-26px;left:-1px;height:26px;background:var(--ink);border-radius:7px 16px 0 0;
+display:flex;align-items:center;gap:10px;padding:0 13px}
+.p13 .card .clip .nm{font-family:'Fraunces',serif;font-weight:500;font-size:13.5px;color:#191A1F}
+.p13 .card .clip .fl{font-family:'JetBrains Mono',monospace;font-weight:600;font-size:7.5px;letter-spacing:.16em;color:#191A1F}
+.p13 .crow{display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--grid);padding:9px 0}
+.p13 .crow:first-of-type{border-top:none}
+.p13 .crow .k{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.2em;color:var(--lbl)}
+.p13 .crow .v{font-family:'JetBrains Mono',monospace;font-weight:600;font-size:10.5px;letter-spacing:.04em;color:var(--ink)}
+.p13 .closeline{margin-top:16px;font-family:'Fraunces',serif;font-style:italic;font-weight:500;font-size:14px;line-height:1.5;color:var(--mut);text-align:center}
+.p13 .closeline b{color:var(--emb);font-weight:600}
+.p13 .endrow{margin-top:16px;display:flex;align-items:center;justify-content:space-between}
+.p13 .stamp2{transform:rotate(-6deg);border:2px solid var(--emb);border-radius:6px;padding:6px 14px;
+font-family:'JetBrains Mono',monospace;font-weight:700;font-size:11px;letter-spacing:.3em;color:var(--emb)}
+.p13 .bc{display:flex;flex-direction:column;align-items:flex-end;gap:3px}
+.p13 .bc svg{height:26px}
+.p13 .bc .yr{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:.3em;color:var(--dim)}
+.p13 .minidrawer{display:flex;gap:5px;margin-top:18px}
+.p13 .md{flex:1;height:11px;border-radius:3px 7px 0 0;opacity:.92}
+.p13 .mdl{border-bottom:1px solid var(--grid2);height:1px;margin-top:0}
+
+.p13 .zr{margin-bottom:20px}
+.p13 .pgrid{gap:24px 28px}
+.p13 .pi{gap:13px}
+.p13 .pi .n{width:30px;height:30px;font-size:11px}
+.p13 .pi .t{font-size:12.8px;line-height:1.5;padding-top:5px}
+.p13 .pi.vision .t{font-size:13.8px}
+.p13 .card{margin-top:30px;padding:18px 20px 16px}
+.p13 .crow{padding:11px 0}
+.p13 .endrow{margin-top:22px}
+.p13 .minidrawer{margin-top:24px}
+.p13 .closeline{margin-top:20px;font-size:15px}
+
+/* polish pass */
+.casef .ttl{top:82px}
+.casef .meta{top:124px}
+.casef .folder{top:184px;height:462px}
+.p06 .folder{height:472px}
+.p09 .folder{height:472px}
+.p12 .folder{height:476px}
+.p11 .pr{margin-bottom:16px}
+.p11 .cols{margin-top:22px}
+.p11 .sigq{margin-top:22px}
+
+/* ============ PAGE 10B - MEDCOIN ORIGIN (DARK, WHITE FILE) ============ */
+.p10b .folder{padding:22px 28px 16px}
+.p10b .inner{display:grid;grid-template-columns:53fr 47fr;column-gap:30px}
+.p10b .zr{margin-bottom:7px}
+.p10b .z{margin-bottom:12px}
+.p10b .para{font-size:11.4px;line-height:1.5}
+.p10b .bgrid{display:grid;grid-template-columns:1fr 1fr;gap:5.5px 14px}
+.p10b .lg2 .c2{flex:none;width:11px;height:11px;background:var(--ink);color:#191A1F;font-size:9px;font-weight:800;line-height:11px;text-align:center;margin-right:8px}
+.p10b .lg2{display:flex;align-items:center;font-size:10.7px;font-weight:600;color:var(--ink)}
+.p10b .outs{position:relative;border:1px solid var(--grid);border-radius:0 12px 12px 12px;background:var(--card2);padding:4px 16px 6px}
+.p10b .outs table{width:100%;border-collapse:collapse}
+.p10b .outs td{border-top:1px solid var(--grid);padding:7px 0;vertical-align:middle}
+.p10b .outs tr:first-child td{border-top:none}
+.p10b .outs .k{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.16em;color:var(--lbl)}
+.p10b .outs .v{text-align:right;font-weight:700;font-size:12px;color:var(--ink)}
+.p10b .outs .v.em{color:var(--emb)}
+.p10b .stamp{position:absolute;top:-14px;right:14px;transform:rotate(-6deg);border:2px solid var(--emb);border-radius:6px;
+padding:5px 12px;font-family:'JetBrains Mono',monospace;font-weight:700;font-size:11px;letter-spacing:.3em;color:var(--emb);background:var(--bg)}
+.p10b .tl2{margin-top:11px;padding-top:11px;border-top:1px solid var(--grid)}
+.p10b .band2{margin-top:9px;padding-top:11px;border-top:1px solid var(--grid);display:grid;grid-template-columns:56fr 44fr;column-gap:30px}
+.p10b .para3{font-size:10.7px;line-height:1.46;color:var(--mut)}
+.p10b .para3 b{color:var(--ink);font-weight:600}
+.p10b .lessq2{border-left:2px solid var(--ink);padding:2px 0 2px 16px}
+.p10b .lessq2 .qx{font-family:'Fraunces',serif;font-style:italic;font-weight:500;font-size:13.6px;line-height:1.42;color:var(--ink)}
+.p10b .lessq2 .qx b{color:var(--emb);font-weight:600}
+.p10b .lessq2 .who{margin-top:5px;font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:.24em;color:var(--dim)}
+
+.p10b .z{margin-bottom:10px}
+.p10b .para{font-size:11px;line-height:1.46}
+.p10b .lg2{font-size:10.4px}
+.p10b .bgrid{gap:4.5px 14px}
+.p10b .outs td{padding:6px 0}
+.p10b .tl2{margin-top:9px;padding-top:8px}
+.p10b .band2{margin-top:7px;padding-top:8px}
+.p10b .para3{font-size:10.3px;line-height:1.4}
+.p10b .lessq2 .qx{font-size:12.8px}
+.p10b .zr{margin-bottom:6px}
+
+.p09 .etr{display:flex;gap:10px;margin-top:16px}
+.p09 .et{flex:1;border:1px solid var(--grid);border-radius:10px;padding:10px 12px;background:var(--card2)}
+.p09 .et .en{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:19px;color:var(--ice);line-height:1}
+.p09 .et .el{margin-top:5px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.16em;color:var(--lbl);line-height:1.6}
+.p10b .why{margin-top:12px;border:1px solid var(--grid);border-radius:10px;padding:10px 14px;background:var(--card2)}
+.p10b .why .wl{display:block;font-family:'JetBrains Mono',monospace;font-weight:600;font-size:9px;letter-spacing:.24em;color:var(--lbl);margin-bottom:5px}
+.p10b .why .wt{font-size:10.6px;line-height:1.5;color:var(--lbl)}
+.p13 .ich{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:18px}
+.p13 .ich span{border:1px solid var(--grid);border-radius:7px;padding:5px 11px;font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.12em;color:var(--mut)}
+/* ============ PAGE 12B - COMMERCIAL INTELLIGENCE PLATFORM ============ */
+.p12b .folder{padding:24px 30px 18px}
+.p12b .lead{font-family:'Fraunces',serif;font-style:italic;font-weight:500;font-size:13.5px;line-height:1.5;color:var(--mut)}
+.p12b .lead b{color:var(--ink);font-weight:500}
+.p12b .archw{margin:16px 0 4px}
+.p12b .bot2{display:grid;grid-template-columns:46fr 54fr;column-gap:32px;margin-top:12px;padding-top:16px;border-top:1px solid var(--grid)}
+.p12b .zr{margin-bottom:10px}
+.p12b .lg{margin-bottom:7px;font-size:11.4px}
+.p12b .stackr{display:flex;flex-wrap:wrap;gap:7px}
+.p12b .stackr span{border:1px solid var(--grid);border-radius:7px;padding:5px 10px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.12em;color:var(--mut)}
+.p12b .stackr span b{color:var(--ink);font-weight:600}
+.p12b .phil{margin-top:12px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.14em;color:var(--emb);line-height:1.7}
+.p12b .quote2{margin-top:11px;border-left:2px solid var(--emb);padding:2px 0 2px 16px}
+.p12b .quote2 .qx{font-family:'Fraunces',serif;font-style:italic;font-weight:500;font-size:14px;line-height:1.45;color:var(--ink)}
+.p12b .quote2 .qx b{color:var(--emb);font-weight:600}
+
+.p06 .tech svg{width:172px!important;margin-top:4px!important}
+.p06 .tech{padding:9px 13px}
+.p06 .tech .pur{margin-top:5px;font-size:9px}
+.p06 .gaug{margin-top:8px;padding-top:8px}
+.p06 .ops .lg{margin-bottom:3px}
+.p06 .band{margin-top:8px;padding-top:9px}
+.p06 .band .dash{font-size:10.2px}
+.p06 .lesson .qx{font-size:13.4px}
+
+.p13 .ich{margin-bottom:14px;gap:6px}
+.p13 .ich span{padding:4px 10px;font-size:7.6px}
+.p13 .card{margin-top:26px;padding:14px 18px 12px}
+.p13 .crow{padding:9px 0}
+.p13 .endrow{margin-top:14px}
+.p13 .minidrawer{margin-top:14px}
+.p13 .closeline{margin-top:12px;font-size:14px}
+
+.p06 .cosb{display:flex;align-items:center;gap:8px;margin-top:9px;font-family:'JetBrains Mono',monospace;font-weight:700;font-size:9px;letter-spacing:.22em;color:var(--emb)}
+.p06 .cosb .sq2{width:6px;height:6px;background:var(--emb)}
+.p12b .intb{display:inline-flex;margin-top:10px;border:1px solid rgba(47,179,128,.45);border-radius:7px;padding:6px 13px;
+font-family:'JetBrains Mono',monospace;font-weight:600;font-size:9.5px;letter-spacing:.18em;color:var(--emb)}
+.p13 .abt{font-family:'Fraunces',serif;font-style:italic;font-size:13px;line-height:1.7;color:var(--mut)}
+.p13 .abt b{color:var(--ink);font-weight:500}
+.p13 .pgrid{gap:20px 28px}
+.p06 .gaug{margin-top:7px;padding-top:7px}
+
+.p13 .pgrid{gap:16px 26px}
+.p13 .pi .t{font-size:12.4px;line-height:1.42}
+.p13 .abt{font-size:12.2px;line-height:1.55}
+.p13 .zr{margin-bottom:12px}
+
+/* ============ DOSSIER V2 — COVER ============ */
+.p01b .idx{position:absolute;top:44px;left:64px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.22em;color:var(--mut);line-height:2.2}
+.p01b .idx .k{color:var(--dim)}
+.p01b .idx .em{color:var(--emb);font-weight:600}
+.p01b .idx .br2{color:var(--brass);font-weight:600}
+.p01b .crumb{position:absolute;top:118px;left:64px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.16em;color:var(--dim)}
+.p01b .crumb b{color:var(--emb);font-weight:600}
+.p01b .barc{position:absolute;top:44px;right:64px;text-align:center}
+.p01b .barc .yr{margin-top:4px;font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.3em;color:var(--dim)}
+.p01b .folder{position:absolute;top:196px;left:64px;right:64px;bottom:52px;background:var(--emb);border-radius:0 26px 22px 22px;overflow:hidden}
+.p01b .flip{position:absolute;top:156px;left:64px;height:40px;background:var(--emb);border-radius:11px 24px 0 0;display:flex;align-items:center;gap:15px;padding:0 22px}
+.p01b .flip .nm{font-family:'Fraunces',serif;font-weight:600;font-size:19px;color:#191A1F}
+.p01b .flip .fl{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:9px;letter-spacing:.2em;color:#191A1F}
+.p01b .hole{position:absolute;left:24px;width:15px;height:15px;border:2px solid rgba(25,26,31,.38);border-radius:50%}
+.p01b .kick{position:absolute;top:46px;left:0;right:0;text-align:center;font-family:'JetBrains Mono',monospace;font-weight:700;font-size:10.5px;letter-spacing:.5em;color:rgba(25,26,31,.78)}
+.p01b h1{position:absolute;top:80px;left:0;right:0;text-align:center;font-weight:800;font-size:64px;line-height:1.04;letter-spacing:-.03em;color:#191A1F}
+.p01b .sub{position:absolute;top:236px;left:0;right:0;text-align:center;font-family:'Fraunces',serif;font-style:italic;font-weight:500;font-size:22px;color:rgba(25,26,31,.82)}
+.p01b .rule{position:absolute;top:286px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:12px}
+.p01b .rule .ln{width:64px;height:1px;background:rgba(25,26,31,.35)}
+.p01b .rule .d{width:7px;height:7px;background:#191A1F;transform:rotate(45deg)}
+.p01b .by{position:absolute;top:308px;left:0;right:0;text-align:center;font-family:'JetBrains Mono',monospace;font-weight:600;font-size:10px;letter-spacing:.3em;color:rgba(25,26,31,.8)}
+.p01b .by b{color:#191A1F;font-weight:800}
+.p01b .qq{position:absolute;top:338px;left:0;right:0;text-align:center;font-family:'Fraunces',serif;font-style:italic;font-size:13.5px;color:rgba(25,26,31,.8)}
+.p01b .stamp{position:absolute;top:30px;right:34px;transform:rotate(6deg);border:2px solid #191A1F;border-radius:7px;
+padding:7px 14px;font-family:'JetBrains Mono',monospace;font-weight:700;font-size:10px;letter-spacing:.26em;color:rgba(25,26,31,.85)}
+.p01b .tagl{position:absolute;left:30px;bottom:22px;font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.2em;color:rgba(25,26,31,.8)}
+.p01b .innerw{position:absolute;inset:0;border-radius:0 26px 22px 22px;overflow:hidden;pointer-events:none}
+.p01b .inner{position:absolute;right:30px;bottom:0;display:flex;gap:10px;align-items:flex-end}
+.p01b .itab{height:34px;border-radius:8px 16px 0 0;display:flex;align-items:center;gap:10px;padding:0 14px}
+.p01b .itab .nm2{font-family:'Fraunces',serif;font-weight:500;font-size:13.5px;color:#191A1F}
+.p01b .itab .fl2{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:.14em;color:#191A1F}
+
+/* ============ DOSSIER V2 — STATEMENT ============ */
+.p02b .spine{position:absolute;top:0;bottom:0;left:0;width:112px;display:flex;flex-direction:column}
+.p02b .sp{flex:1;position:relative}
+.p02b .sp span{position:absolute;top:14px;left:50%;transform:translateX(-50%);writing-mode:vertical-rl;
+font-family:'JetBrains Mono',monospace;font-weight:700;font-size:9px;letter-spacing:.3em;color:#191A1F}
+.p02b .rub{position:absolute;top:48px;left:170px;display:flex;align-items:center;gap:11px;font-family:'JetBrains Mono',monospace;font-weight:700;font-size:10.5px;letter-spacing:.26em;color:var(--ink)}
+.p02b .rub .d{width:7px;height:7px;background:var(--emb);transform:rotate(45deg)}
+.p02b .tok{position:absolute;top:49px;right:73px;font-family:'JetBrains Mono',monospace;font-weight:600;font-size:9.5px;letter-spacing:.16em;
+border:1px solid var(--grid);border-radius:7px;padding:6px 12px;color:var(--emb)}
+.p02b .in{position:absolute;left:112px;right:0;top:50%;transform:translateY(-52%);text-align:center;padding:0 70px}
+.p02b .memo{display:inline-flex;background:var(--emb);color:#191A1F;border-radius:7px 16px 0 0;
+padding:9px 17px;font-family:'JetBrains Mono',monospace;font-weight:700;font-size:9.5px;letter-spacing:.22em;margin-bottom:34px}
+.p02b .l1{font-weight:800;font-size:45px;letter-spacing:-.03em;line-height:1.16;color:var(--ink)}
+.p02b .l2{font-weight:800;font-size:45px;letter-spacing:-.03em;line-height:1.16;color:var(--emb);margin-top:26px}
+.p02b .sig{margin-top:38px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.26em;color:var(--dim)}
+.p02b .pn{position:absolute;right:64px;bottom:44px;font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.18em;color:var(--dim)}
+.p02b .pn b{color:var(--mut);font-weight:600}
+
+/* ============ DOSSIER V2 — CASE KIT ============ */
+.casef .folder{padding-left:64px}
+.casef .tabrow{position:absolute;top:-34px;left:-1px;display:flex;gap:8px;align-items:flex-end;z-index:4}
+.casef .tA{height:34px;background:var(--fc);border-radius:9px 20px 0 0;display:flex;align-items:center;gap:12px;padding:0 18px}
+.casef .tA .nm{font-family:'Fraunces',serif;font-weight:500;font-size:15px;color:#191A1F}
+.casef .tA .fl{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:8.5px;letter-spacing:.16em;color:#191A1F}
+.casef .tB{height:27px;border:1.5px dashed var(--grid2);border-bottom:0;border-radius:9px 18px 0 0;display:flex;align-items:center;padding:0 15px;
+font-family:'JetBrains Mono',monospace;font-weight:600;font-size:8px;letter-spacing:.18em;color:var(--dim)}
+.casef .rail{position:absolute;left:0;top:0;bottom:0;width:46px;border-right:1px dashed var(--grid)}
+.casef .rail .hole{position:absolute;left:15px;width:15px;height:15px;border:2px solid var(--grid2);border-radius:50%}
+.casef .rail .vlab{position:absolute;top:60%;left:50%;transform:translate(-50%,-50%) rotate(180deg);writing-mode:vertical-rl;
+font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:.28em;color:var(--dim);white-space:nowrap}
+.casef .rstamp{position:absolute;top:-13px;right:20px;transform:rotate(-6deg);border:2px solid var(--fc);border-radius:6px;
+padding:4px 11px;font-family:'JetBrains Mono',monospace;font-weight:700;font-size:9px;letter-spacing:.22em;color:var(--fc);background:var(--bg);z-index:6}
+.p03 .folder{padding-left:64px}
+
+/* field report (p05) */
+.p05 .reality{padding:10px 14px 6px}
+.p05 .fh{display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-weight:600;font-size:9px;letter-spacing:.2em;color:var(--lbl);margin-bottom:6px}
+.p05 .fh b{color:var(--emb)}
+.p05 .frow{display:flex;align-items:center;gap:9px;padding:4px 0;border-bottom:1px dotted var(--grid2);font-size:10.8px;color:var(--mut)}
+.p05 .frow:last-child{border-bottom:0}
+.p05 .frow .o{flex:none;width:12px;height:12px;border:1.5px solid var(--emb);border-radius:50%;position:relative}
+.p05 .frow .o::after{content:"";position:absolute;left:2.5px;right:2.5px;top:50%;height:1.5px;margin-top:-1px;background:var(--emb)}
+.p05 .frow .st2{margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.12em;color:var(--lbl)}
+.p06 .g1 svg{width:60px!important;height:60px!important}
+.p04 .crumb2{position:absolute;top:176px;left:72px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.16em;color:var(--dim)}
+.p04 .crumb2 b{color:var(--emb)}
+
+/* p03 kit copy */
+.p03 .tabrow{position:absolute;top:-34px;left:-1px;display:flex;gap:8px;align-items:flex-end;z-index:4}
+.p03 .tA{height:34px;background:var(--emb);border-radius:9px 20px 0 0;display:flex;align-items:center;gap:10px;padding:0 16px}
+.p03 .tA .fl{font-family:'JetBrains Mono',monospace;font-weight:700;letter-spacing:.16em;color:#191A1F}
+.p03 .tB{height:27px;border:1.5px dashed var(--grid2);border-bottom:0;border-radius:9px 18px 0 0;display:flex;align-items:center;padding:0 15px;
+font-family:'JetBrains Mono',monospace;font-weight:600;font-size:8px;letter-spacing:.18em;color:var(--dim)}
+.p03 .rail{position:absolute;left:0;top:0;bottom:0;width:46px;border-right:1px dashed var(--grid)}
+.p03 .rail .hole{position:absolute;left:15px;width:15px;height:15px;border:2px solid var(--grid2);border-radius:50%}
+.p03 .rail .vlab{position:absolute;top:64%;left:50%;transform:translate(-50%,-50%) rotate(180deg);writing-mode:vertical-rl;
+font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:.28em;color:var(--dim);white-space:nowrap}
+.p03 .node{width:50px;height:50px}
+.p03 .node svg{width:30px;height:30px}
+.p03 .snum{margin-top:7px}
+.p03 .sdesc{font-size:10.5px;line-height:1.35}
+.p03 .grid2{row-gap:22px;column-gap:24px}
+.p03 .qt{bottom:44px}
+.p03 .qt .qx{font-size:16.5px}
+
+/* supervisor fixes */
+.p06 .folder{height:462px}
+.p06 .tech svg{width:176px!important;margin-top:2px!important}
+.p06 .band{margin-top:6px;padding-top:7px}
+.p09 .folder{height:462px}
+.p09 .conv{margin:0 0 6px}
+.p09 .z{margin-bottom:11px}
+.p09 .lg{margin-bottom:5px}
+.p09 .band{padding-top:10px}
+.p09 .inner::before{left:47.2%}
+.p10b .stamp{top:-22px}
+.p10b .tl2{margin-top:6px;padding-top:6px}
+.p10b .band2{margin-top:5px;padding-top:6px}
+.p10b .para3{font-size:10px;line-height:1.35}
+.p10b .lessq2 .qx{font-size:12.4px}
+.p10b .outs td{padding:5.5px 0}
+.p10b .lg2 .n2{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:.1em;color:var(--dim);width:34px;flex:none}
+.p12b .archw{margin:10px 0 2px}
+.p12b .bot2{margin-top:6px;padding-top:10px}
+.p12b .quote2{margin-top:6px}
+.p12b .phil{margin-top:5px}
+.p12b .lead{font-size:12.5px}
+
+.p10b .bgrid{grid-auto-rows:1fr;align-items:center;gap:4px 14px}
+.p10b .para3{font-size:10.5px;line-height:1.5}
+
+.p11 .tools{grid-auto-rows:1fr;align-items:center;gap:5px 18px}
+.p11 .sigq .who{margin-top:10px}
+
+.p12b .quote2{margin-top:5px}
+.p12b .quote2 .qx{font-size:13.4px}
+
+.p13 .card{margin-top:34px}
+
+/* audit round overrides (must be last) */
+.p10b .band2{margin-top:5px;padding-top:6px}
+.p10b .tl2{margin-top:7px;padding-top:6px}
+.p10b .para3{font-size:10.1px;line-height:1.38}
+.p10b .lessq2 .qx{font-size:12.4px}
+.p10b .lessq2 .who{margin-top:3px}
+.p10b .why{margin-top:8px}
+.p10b .outs td{padding:5px 0}
+.p10b .zr{margin-bottom:5px}
+.p10b .tl2{margin-top:5px;padding-top:4px}
+.p10b .band2{margin-top:3px;padding-top:4px}
+.p12b .bot2{margin-top:4px;padding-top:7px}
+.p12b .quote2{margin-top:3px}
+.p12b .quote2 .qx{font-size:13px;line-height:1.4}
+.p06 .band{margin-top:8px;padding-top:8px}
+.p06 .band .dash{font-size:10px;gap:7px}
+.p06 .band .lesson{margin-top:7px}
+.p13 .ich span{font-size:9px;padding:5px 10px;color:var(--lbl)}
+.p10b .para3{font-size:10.7px;line-height:1.38}
+.p10b .list .lg{font-size:10.9px}
+.p10b .lg2 .n2{font-size:7.5px}
+.p10b .tl2{margin-top:3px;padding-top:3px}
+.p10b .z{margin-bottom:7px}
+.p10b .why{margin-top:6px}
+.p06 .band{margin-top:3px;padding-top:3px}
+.p06 .band .dash{font-size:10.7px}
+.p06 .band .lesson{margin-top:0}
+.p06 .lesson .qx{line-height:1.38}
+.p06 .lesson .who{margin-top:3px}
+.p10b .lessq2 .qx{font-size:13.8px}
+.p12b .quote2 .qx{font-size:13.8px;line-height:1.36}
+.p12b .quote2{margin-top:0}
+.p12b .bot2{margin-top:3px;padding-top:4px}
+.p07 .list .lg{font-size:11.8px}
+.p10b .list{grid-auto-rows:auto;row-gap:6px}
+.p10b .list .lg{height:auto;align-items:flex-start}
+.p11 .tools{grid-auto-rows:auto;align-items:start;gap:8px 18px}
+.p13 .pgrid{grid-auto-rows:auto;row-gap:13px}
+.p10b .lessq2{padding-left:18px}
+.p12b .quote2{padding-left:18px}
+.p03 .sig{margin-bottom:14px}
+.p10b .outs .k{padding-left:0}
+.p06 .mrow td:first-child{padding-left:0}
+.p06 .band{column-gap:16px}
+
+/* FINALE LADDER — distinct closing geometry */
+.p13 .pgrid{display:block}
+.p13 .pi{display:flex;align-items:baseline;gap:14px;border-top:1px solid var(--grid);padding:4px 0 3.5px;position:relative}
+.p13 .pgrid .pi:first-child{border-top:none;padding-top:0}
+.p13 .pi .n{border:none;border-radius:0;width:36px;height:auto;justify-content:flex-start;
+font-family:Inter,sans-serif;font-weight:800;font-size:17px;letter-spacing:-.02em;
+color:transparent;-webkit-text-stroke:1.1px var(--emb);background:transparent}
+.p13 .pi .t{padding-top:0;font-size:11px;line-height:1.3}
+.p13 .pi.vision{border-top:1.5px solid var(--emb);margin-top:3px;padding-top:6px}
+.p13 .pi.vision .n{-webkit-text-stroke:1.1px var(--emb)}
+.p13 .pi.vision .t{font-size:13.2px}
+.p13 .zr{margin-bottom:9px}
+.p04 .tab:not(.open) .dossier{padding-left:22px}
+
+/* p04 manifest aligned to cat line */
+.p04 .tab:not(.open) .dossier{position:absolute;left:26px;top:50%;transform:translateY(-50%);padding-left:0}
+.p04 .tab.open .dossier{position:absolute;left:22px;top:14px;line-height:1.5}
+/* footer diamond takes the case color */
+
+/* case quotes: quieter (-2pt) */
+.p06 .lesson .qx{font-size:10.7px}
+.p07 .insight .qx{font-size:14.8px}
+.p08 .lessq .qx{font-size:12.8px}
+.p09 .insight .qx{font-size:11.1px}
+.p10b .lessq2 .qx{font-size:11.1px}
+</style></head><body>
+
+<section class="page p01b">
+  <span class="brk tl"></span><span class="brk tr"></span><span class="brk bl"></span><span class="brk br"></span>
+  <div class="idx">
+    <span class="k">ARCHIVE N&deg;</span> 2026-04<br>
+    <span class="k">CLASSIFICATION:</span> <span class="em">COMMERCIAL</span><br>
+    <span class="k">STATUS:</span> <span class="br2">ACTIVE</span>
+  </div>
+  <div class="crumb">ARCHIVE://COMMERCIAL/2026 <b>&#8250;</b> ORAN_CARMON <b>&#8250;</b> MASTER_FILE</div>
+  <div class="flip"><span class="nm">Oran Carmon</span></div>
+  <div class="folder">
+    <span class="hole" style="top:74px"></span><span class="hole" style="top:108px"></span>
+    <div class="kick">E X E C U T I V E &nbsp; P O R T F O L I O</div>
+    <h1>THE COMMERCIAL<br>SYSTEMS BUILDER</h1>
+    <div class="sub">From Vision to Measurable Growth</div>
+    <div class="by">BY <b>ORAN CARMON</b></div>
+    <div class="qq">&ldquo;If you connect to the vision, you'll always know where you're going.&rdquo;</div>
+    <div class="innerw"><div class="inner">
+      <div class="itab" style="background:#191A1F;height:26px;border-radius:8px 8px 0 0"><span class="nm2" style="color:var(--emb)">XTIX</span><span class="fl2" style="color:rgba(242,241,237,.8)">FILE 01</span></div>
+      <div class="itab" style="background:var(--brass);height:32px"><span class="nm2">Oasis</span><span class="fl2">FILE 02</span></div>
+      <div class="itab" style="background:var(--ice);height:38px"><span class="nm2">Eventer</span><span class="fl2">FILE 03</span></div>
+      <div class="itab" style="background:var(--ink);height:44px"><span class="nm2">Medcoin</span><span class="fl2">FILE 04</span></div>
+    </div></div>
+  </div>
+</section>
+
+
+<section class="page p02b">
+  <span class="brk tr"></span><span class="brk br"></span>
+  <div class="spine">
+    <div class="sp" style="background:var(--emb)"><span>FILE 01 &mdash; XTIX</span></div>
+    <div class="sp" style="background:var(--brass)"><span>FILE 02 &mdash; OASIS</span></div>
+    <div class="sp" style="background:var(--ice)"><span>FILE 03 &mdash; EVENTER</span></div>
+    <div class="sp" style="background:var(--ink)"><span>FILE 04 &mdash; MEDCOIN</span></div>
+  </div>
+  <div class="rub"><span class="d"></span>MEMO 001</div>
+  <div class="tok">CLASSIFICATION: COMMERCIAL</div>
+  <div class="in">
+    <div class="memo">MEMO &middot; FROM THE ARCHIVE</div>
+    <div class="l1">One intelligence built the world.</div>
+    <div class="l2">Two will build the next.</div>
+    <div class="sig">FOR INTERNAL REVIEW</div>
+  </div>
+  <div class="pn"><b>P.02</b> &mdash; 13</div>
+</section>
+
+
+<!-- ================= PAGE 03 · PHILOSOPHY ================= -->
+<section class="page p03">
+  <span class="brk tl"></span><span class="brk tr"></span><span class="brk bl"></span><span class="brk br"></span>
+  <div class="hd">
+    <div class="rub"><span class="d"></span>MY COMMERCIAL PHILOSOPHY</div>
+    <div class="tok">THE OPERATING SYSTEM &#8250;</div>
+  </div>
+  <div class="title">Every Business Is Different.<br><span class="g">The Principles of Growth Are Not.</span></div>
+  <div class="folder">
+    <div class="tabrow"><div class="tA" style="background:var(--emb)"><span class="fl" style="color:#191A1F">&#9670;</span><span class="fl" style="font-size:9px">MASTER FILE &middot; THE 8 PRINCIPLES</span></div></div>
+    <div class="rail"><span class="hole" style="top:70px"></span><span class="hole" style="top:104px"></span></div>
+    <div class="grid2">
+      <div class="step"><div class="node"><svg viewBox="0 0 48 48"><path d="M6 40h36"/><path d="M6 40c6-1.5 9-5 10-9"/><circle cx="14.5" cy="15.5" r="3.4"/><path d="M14.5 18.9v7.6"/><path d="M14.5 21.5l4.4-2.2"/><path d="M14.5 21.5l-4 3"/><path d="M14.5 26.5l3.2 5.5"/><path d="M14.5 26.5l-2.6 6"/><path class="dsh" d="M21.5 14.5h14"/><circle class="f" cx="40" cy="14.5" r="2.6"/></svg></div><div class="snum">STEP 01</div><div class="sname">Vision</div><div class="sdesc">Define where the business is going.</div></div>
+      <div class="step"><div class="node"><svg viewBox="0 0 48 48"><path d="M10 22l14-8 14 8"/><path d="M13 20.5V34c0 1.4 4.9 4 11 4s11-2.6 11-4V20.5"/><path d="M13 27c0 1.4 4.9 4 11 4s11-2.6 11-4"/><circle class="f" cx="24" cy="22.5" r="2"/><path class="dsh" d="M24 14V7"/></svg></div><div class="snum">STEP 02</div><div class="sname">Business Understanding</div><div class="sdesc">Understand the business before improving it.</div></div>
+      <div class="step"><div class="node"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="17"/><circle class="dsh" cx="24" cy="24" r="9.5"/><path d="M24 24L35.5 12.5"/><circle class="f" cx="17" cy="28.5" r="2"/><circle class="f" cx="30" cy="31" r="2"/><circle class="f" cx="19" cy="15.5" r="2"/></svg></div><div class="snum">STEP 03</div><div class="sname">Market Understanding</div><div class="sdesc">Understand the customer before creating the message.</div></div>
+      <div class="step"><div class="node"><svg viewBox="0 0 48 48"><path d="M8 40h32"/><rect x="11" y="30" width="9" height="10"/><rect x="21.5" y="24" width="9" height="16"/><path d="M37 40V12h-13"/><path d="M26 12l2.5 3.4"/><path class="dsh" d="M28.5 12v6"/><rect class="em" x="25.8" y="18" width="5.4" height="5"/></svg></div><div class="snum">STEP 04</div><div class="sname">Commercial Architecture</div><div class="sdesc">Build the commercial engine before scaling it.</div></div>
+      <div class="step"><div class="node"><svg viewBox="0 0 48 48"><path d="M8 39.5h32"/><circle cx="13" cy="19" r="3.2"/><path d="M8.6 32c0-4 2-6.6 4.4-6.6s4.4 2.6 4.4 6.6"/><circle class="em" cx="24" cy="13.5" r="3.6"/><path class="em" d="M19 28c0-4.6 2.2-7.4 5-7.4s5 2.8 5 7.4"/><circle cx="35" cy="19" r="3.2"/><path d="M30.6 32c0-4 2-6.6 4.4-6.6s4.4 2.6 4.4 6.6"/><path class="dsh" d="M18.5 34.5h11"/></svg></div><div class="snum">STEP 05</div><div class="sname">People &amp; Leadership</div><div class="sdesc">Create ownership, not dependency.</div></div>
+      <div class="step"><div class="node"><svg viewBox="0 0 48 48"><path class="dsh" d="M7 32c4 2 9 .8 9.8-2.4.6-2.6-3.4-3.4-4-.8-.7 3 4.6 4.6 9.2 2.8"/><path d="M24 30L42 11l-6.2 21-4.6-6.4-7.2 4.4z"/><path class="em" d="M31.2 25.6L42 11"/></svg></div><div class="snum">STEP 06</div><div class="sname">Execution</div><div class="sdesc">Turn strategy into consistent execution.</div></div>
+      <div class="step"><div class="node"><svg viewBox="0 0 48 48"><path d="M9 39V9"/><path d="M9 39h30"/><path d="M9 31h3M9 23h3M9 15h3"/><path d="M14 33l7-6 6 3.6 10-11"/><circle class="f" cx="37" cy="19.6" r="2.4"/><path class="dsh" d="M37 17V9.5"/></svg></div><div class="snum">STEP 07</div><div class="sname">Measurement</div><div class="sdesc">Measure decisions, not assumptions.</div></div>
+      <div class="step"><div class="node"><svg viewBox="0 0 48 48"><path d="M37 27a13 13 0 1 1-4.6-9.9"/><path class="em" d="M31 9.5L39.5 9l.5 8.5"/><path class="em" d="M39.5 9L31.8 16.8"/><circle class="f" cx="24" cy="27" r="1.8"/></svg></div><div class="snum">STEP 08</div><div class="sname">Continuous Improvement</div><div class="sdesc">Learn faster than the market evolves.</div></div>
+    </div>
+  </div>
+  <div class="qt">
+    <div class="qx">First build a system that works. <b>Then build a business that scales.</b></div>
+    
+  </div>
+  <div class="ftr">
+    <span></span>
+    <span><b>P.03</b> &mdash; 13</span>
+  </div>
+</section>
+
+
+
+
+<!-- ================= PAGE 04 . THE CASE FILES ================= -->
+<section class="page p04">
+  <span class="brk tl"></span><span class="brk tr"></span><span class="brk bl"></span><span class="brk br"></span>
+  <div class="title">THE CASE<br>FILES</div>
+  <div class="meta">EXECUTIVE PORTFOLIO &middot; 04 DOSSIERS &middot; 2018&ndash;2026</div>
+  <div class="crumb2">ARCHIVE://COMMERCIAL/2026 <b>&#8250;</b> ORAN_CARMON <b>&#8250;</b> CASE_FILES</div>
+  <div class="stack">
+    <div class="tab open"><div class="lip" style="background:var(--emb);width:250px;margin-left:0px"><span class="nm">XTIX</span><span class="meta2">FILE 01</span></div><div class="body" style="background:var(--emb)"><div class="cat">BUILT FROM ZERO &#8250;</div><div class="dossier">&gt; Built the commercial function from zero</div></div></div>
+    <div class="tab"><div class="lip" style="background:var(--brass);width:300px;margin-left:46px"><span class="nm">Oasis</span><span class="meta2">FILE 02</span></div><div class="body" style="background:var(--brass);border-radius:0 12px 0 0"><div class="cat">LEADERSHIP &#8250;</div><div class="dossier">&gt; CEO &mdash; built a profitable, scalable commercial organization</div></div></div>
+    <div class="tab"><div class="lip" style="background:var(--ice);width:350px;margin-left:92px"><span class="nm">Eventer</span><span class="meta2">FILE 03</span></div><div class="body" style="background:var(--ice);border-radius:0 12px 0 0"><div class="cat">ALIGNMENT &#8250;</div><div class="dossier">&gt; Aligned commercial execution across teams</div></div></div>
+    <div class="tab"><div class="lip" style="background:var(--ink);width:400px;margin-left:138px"><span class="nm">Medcoin</span><span class="meta2">FILE 04</span></div><div class="body" style="background:var(--ink);border-radius:0 12px 12px 12px"><div class="cat">FOUNDER &#8250;</div><div class="dossier">&gt; Founder &mdash; built the business from vision</div></div></div>
+  </div>
+  <div class="ftr">
+    <span></span>
+    <span class="mid"><span class="d"></span>THE CASE FILES</span>
+    <span><b>P.04</b> &mdash; 13</span>
+  </div>
+</section>
+
+
+<!-- ================= PAGE 05 . XTIX INTAKE ================= -->
+<section class="page casef p05" style="--fc:var(--emb)">
+  <span class="brk tl"></span><span class="brk tr"></span><span class="brk bl"></span><span class="brk br"></span>
+  <div class="hd">
+    <div class="rub"><span class="d"></span>CASE STUDY 01</div>
+    <div class="tok">FILE 01 &middot; INTAKE</div>
+  </div>
+  <div class="ttl">Building a Commercial Function From Zero</div>
+  <div class="meta">XTIX &middot; FINTECH SAAS &middot; EARLY-STAGE STARTUP</div>
+  <div class="folder">
+    <div class="tabrow"><div class="tA"><span class="nm">XTIX</span><span class="fl">&#9656; INTAKE</span></div></div>
+    <div class="rail"><span class="hole" style="top:70px"></span><span class="hole" style="top:104px"></span></div>
+    <div class="cols">
+      <div>
+        <div class="z">
+          <div class="zr"><b>01</b><span class="d2"></span>THE SITUATION</div>
+          <div class="para">Strong vision. Strong product. <b>Zero commercial infrastructure.</b></div>
+          <div class="reality"><div class="fh"><span><b>FIELD REPORT</b> &middot; BEFORE &middot; COMMERCIAL REALITY AT INTAKE</span><span>07 GAPS</span></div><div class="frow"><span class="o"></span>No CRM</div><div class="frow"><span class="o"></span>No Business Development function</div><div class="frow"><span class="o"></span>No sales methodology</div><div class="frow"><span class="o"></span>No outbound process</div><div class="frow"><span class="o"></span>No pipeline management</div><div class="frow"><span class="o"></span>No KPI framework</div><div class="frow"><span class="o"></span>No reporting structure</div></div>
+        </div>
+        <div class="z">
+          <div class="zr"><b>02</b><span class="d2"></span>MISSION OBJECTIVE</div>
+          <div class="para">Build a <b>commercial operating system</b> for predictable growth &mdash; Israel first, then global.</div>
+        </div>
+      </div>
+      <div>
+        <div class="z">
+          <div class="zr"><b>03</b><span class="d2"></span>MY APPROACH</div>
+          <div class="para"><b>Understanding before outbound:</b></div>
+          <div class="agrid"><div class="dash">Business &amp; product analysis</div><div class="dash">Market research</div><div class="dash">Competitive analysis</div><div class="dash">ICP definition</div><div class="dash">Customer segmentation</div><div class="dash">Commercial positioning</div></div>
+          <div class="then">Only then did execution begin.</div>
+        </div>
+        <div class="z">
+          <div class="zr"><b>04</b><span class="d2"></span>WHAT I BUILT &middot; AFTER</div>
+          <div class="bgrid"><div class="lg"><span class="c">&#10003;</span>Commercial Strategy</div><div class="lg"><span class="c">&#10003;</span>HubSpot CRM Infrastructure</div><div class="lg"><span class="c">&#10003;</span>Business Development Process</div><div class="lg"><span class="c">&#10003;</span>Sales Pipeline</div><div class="lg"><span class="c">&#10003;</span>ICP Framework</div><div class="lg"><span class="c">&#10003;</span>Outbound Sequences</div><div class="lg"><span class="c">&#10003;</span>KPI Framework</div><div class="lg"><span class="c">&#10003;</span>Forecasting Structure</div><div class="lg"><span class="c">&#10003;</span>Reporting Dashboards</div><div class="lg"><span class="c">&#10003;</span>AI-Powered Outbound Engine</div></div>
+        </div>
+      </div>
+    </div>
+  <div class="fz"><span class="lab">BEFORE &middot; &#8709; NOTHING</span><svg viewBox="0 0 760 86" preserveAspectRatio="xMidYMid meet" style="width:100%;height:78px"><line x1="24" y1="66" x2="736" y2="66" stroke="#4B4E55" stroke-width="1.2"/><rect x="40" y="50" width="30" height="16" rx="2" fill="none" stroke="#4B4E55" stroke-width="1.2" stroke-dasharray="3 3"/><text x="55" y="79" text-anchor="middle" font-size="8" letter-spacing="1" fill="#A6A7AC">&#8709;</text><rect x="86" y="50" width="30" height="16" rx="2" fill="none" stroke="#4B4E55" stroke-width="1.2" stroke-dasharray="3 3"/><text x="101" y="79" text-anchor="middle" font-size="8" letter-spacing="1" fill="#A6A7AC">&#8709;</text><rect x="132" y="50" width="30" height="16" rx="2" fill="none" stroke="#4B4E55" stroke-width="1.2" stroke-dasharray="3 3"/><text x="147" y="79" text-anchor="middle" font-size="8" letter-spacing="1" fill="#A6A7AC">&#8709;</text><line x1="176" y1="10" x2="176" y2="70" stroke="#4B4E55" stroke-width="1" stroke-dasharray="2 4"/><g><rect x="194" y="50" width="30" height="16" rx="1.5" fill="#2FB380"/><rect x="194" y="50" width="30" height="3" rx="1.5" fill="rgba(25,26,31,.4)"/></g><text x="209" y="79" text-anchor="middle" font-size="8" letter-spacing="1" fill="#A6A7AC">01</text><g><rect x="240" y="45" width="30" height="21" rx="1.5" fill="#2FB380"/><rect x="240" y="45" width="30" height="3" rx="1.5" fill="rgba(25,26,31,.4)"/></g><text x="255" y="79" text-anchor="middle" font-size="8" letter-spacing="1" fill="#A6A7AC">02</text><g><rect x="286" y="40" width="30" height="26" rx="1.5" fill="#2FB380"/><rect x="286" y="40" width="30" height="3" rx="1.5" fill="rgba(25,26,31,.4)"/></g><text x="301" y="79" text-anchor="middle" font-size="8" letter-spacing="1" fill="#A6A7AC">03</text><g><rect x="332" y="35" width="30" height="31" rx="1.5" fill="#2FB380"/><rect x="332" y="35" width="30" height="3" rx="1.5" fill="rgba(25,26,31,.4)"/></g><text x="347" y="79" text-anchor="middle" font-size="8" letter-spacing="1" fill="#A6A7AC">04</text><g><rect x="378" y="30" width="30" height="36" rx="1.5" fill="#2FB380"/><rect x="378" y="30" width="30" height="3" rx="1.5" fill="rgba(25,26,31,.4)"/></g><text x="393" y="79" text-anchor="middle" font-size="8" letter-spacing="1" fill="#A6A7AC">05</text><g><rect x="424" y="25" width="30" height="41" rx="1.5" fill="#2FB380"/><rect x="424" y="25" width="30" height="3" rx="1.5" fill="rgba(25,26,31,.4)"/></g><text x="439" y="79" text-anchor="middle" font-size="8" letter-spacing="1" fill="#A6A7AC">06</text><g><rect x="470" y="20" width="30" height="46" rx="1.5" fill="#2FB380"/><rect x="470" y="20" width="30" height="3" rx="1.5" fill="rgba(25,26,31,.4)"/></g><text x="485" y="79" text-anchor="middle" font-size="8" letter-spacing="1" fill="#A6A7AC">07</text><g><rect x="516" y="15" width="30" height="51" rx="1.5" fill="#2FB380"/><rect x="516" y="15" width="30" height="3" rx="1.5" fill="rgba(25,26,31,.4)"/></g><text x="531" y="79" text-anchor="middle" font-size="8" letter-spacing="1" fill="#A6A7AC">08</text><g><rect x="562" y="10" width="30" height="56" rx="1.5" fill="#2FB380"/><rect x="562" y="10" width="30" height="3" rx="1.5" fill="rgba(25,26,31,.4)"/></g><text x="577" y="79" text-anchor="middle" font-size="8" letter-spacing="1" fill="#A6A7AC">09</text><g><rect x="608" y="6" width="30" height="60" rx="1.5" fill="#2FB380"/><rect x="608" y="6" width="30" height="3" rx="1.5" fill="rgba(25,26,31,.4)"/></g><text x="623" y="79" text-anchor="middle" font-size="8" letter-spacing="1" fill="#A6A7AC">10</text><path d="M742 66 l9 -5 v10 z" fill="#2FB380" transform="rotate(180 742 66)"/></svg><span class="lab">AFTER &middot; <b>10 SYSTEMS LIVE</b></span></div>
+  </div>
+  <div class="ftr">
+    <span></span>
+    <span class="mid"><span class="d"></span>CASE STUDY &mdash; XTIX</span>
+    <span><b>P.05</b> &mdash; 13</span>
+  </div>
+</section>
+
+
+<!-- ================= PAGE 06 . XTIX EVIDENCE ================= -->
+<section class="page casef p06" style="--fc:var(--emb)">
+  <span class="brk tl"></span><span class="brk tr"></span><span class="brk bl"></span><span class="brk br"></span>
+  <div class="hd">
+    <div class="rub"><span class="d"></span>CASE STUDY 01 &middot; XTIX</div>
+    <div class="tok">&#10003; EVIDENCE LOGGED</div>
+  </div>
+  <div class="ttl">Evidence &mdash; From Infrastructure to Execution</div>
+  <div class="meta">XTIX &middot; FINTECH SAAS &middot; EARLY-STAGE STARTUP</div>
+  <div class="folder">
+    <div class="tabrow"><div class="tA"><span class="nm">XTIX</span><span class="fl">&#9656; EVIDENCE</span></div></div>
+    <div class="rail"><span class="hole" style="top:70px"></span><span class="hole" style="top:104px"></span></div>
+    <div class="inner">
+      <div>
+        <div class="zr"><b>A</b><span class="d2"></span>PERFORMANCE</div>
+        <table class="tbl"><tr><td class="k">PIPELINE MANAGED</td><td class="v em">&euro;3M+ ARR</td></tr><tr><td class="k">QUALIFIED MEETINGS</td><td class="v">~6 per week</td></tr><tr><td class="k">NEW OPPORTUNITIES</td><td class="v">~20 per week</td></tr></table>
+        <div class="cosb"><span class="sq2"></span>COMMERCIAL OPERATING SYSTEM &mdash; BUILT</div>
+        <div class="gaug">
+<div class="g1"><svg viewBox="0 0 72 72" style="width:64px;height:64px;margin:0 auto"><circle cx="36" cy="36" r="27" fill="none" stroke="#33353C" stroke-width="3.4"/><circle cx="36" cy="36" r="27" fill="none" stroke="#2FB380" stroke-width="4" stroke-linecap="butt" stroke-dasharray="33.9 135.7" transform="rotate(-90 36 36)"/><text x="36" y="40.5" text-anchor="middle" font-size="14" font-weight="700" fill="#F2F1ED">~20%</text></svg><div class="gl">OUTBOUND<br>REPLY RATE</div></div><div class="g1"><svg viewBox="0 0 72 72" style="width:64px;height:64px;margin:0 auto"><circle cx="36" cy="36" r="27" fill="none" stroke="#33353C" stroke-width="3.4"/><circle cx="36" cy="36" r="27" fill="none" stroke="#2FB380" stroke-width="4" stroke-linecap="butt" stroke-dasharray="12.7 156.9" transform="rotate(-90 36 36)"/><text x="36" y="40.5" text-anchor="middle" font-size="14" font-weight="700" fill="#F2F1ED">7&ndash;8%</text></svg><div class="gl">OUTBOUND<br>CONVERSION</div></div><div class="g1"><svg viewBox="0 0 72 72" style="width:64px;height:64px;margin:0 auto"><circle cx="36" cy="36" r="27" fill="none" stroke="#33353C" stroke-width="3.4"/><circle cx="36" cy="36" r="27" fill="none" stroke="#2FB380" stroke-width="4" stroke-linecap="butt" stroke-dasharray="84.8 84.8" transform="rotate(-90 36 36)"/><text x="36" y="40.5" text-anchor="middle" font-size="14" font-weight="700" fill="#F2F1ED">50%+</text></svg><div class="gl">INBOUND<br>CONVERSION</div></div>
+        </div>
+      </div>
+      <div>
+        <div class="zr"><b>B</b><span class="d2"></span>OPERATIONS</div>
+        <div class="ops"><div class="lg"><span class="c">&#10003;</span>Built the company's commercial reporting structure</div><div class="lg"><span class="c">&#10003;</span>Implemented forecasting methodology</div><div class="lg"><span class="c">&#10003;</span>Designed KPI framework</div><div class="lg"><span class="c">&#10003;</span>Established pipeline management</div><div class="lg"><span class="c">&#10003;</span>Standardized outbound methodology</div><div class="lg"><span class="c">&#10003;</span>Supported international commercial expansion</div></div>
+        <div class="tech">
+          <div class="zr" style="margin-bottom:7px"><b>C</b><span class="d2"></span>TECHNOLOGY</div>
+          <div class="para">Built an in-house <b>AI commercial intelligence platform</b>.</div><svg viewBox="0 0 224 188" style="width:214px;height:auto;margin:6px auto 0;display:block"><rect x="6" y="8" width="150" height="19" rx="6" fill="#202127" stroke="#4B4E55" stroke-width="1.1"/><text x="81" y="20" text-anchor="middle" font-size="10.2" letter-spacing="1.2" fill="#F2F1ED">LEAD</text><line x1="81" y1="27" x2="81" y2="37" stroke="#2FB380" stroke-width="1.4"/><path d="M81 38 l-3.6 -5 h7.2 z" fill="#2FB380"/><rect x="6" y="38" width="150" height="19" rx="6" fill="#202127" stroke="#4B4E55" stroke-width="1.1"/><text x="81" y="50" text-anchor="middle" font-size="10.2" letter-spacing="1.2" fill="#F2F1ED">RESEARCH</text><line x1="81" y1="57" x2="81" y2="67" stroke="#2FB380" stroke-width="1.4"/><path d="M81 68 l-3.6 -5 h7.2 z" fill="#2FB380"/><rect x="6" y="68" width="150" height="19" rx="6" fill="#202127" stroke="#4B4E55" stroke-width="1.1"/><text x="81" y="80" text-anchor="middle" font-size="10.2" letter-spacing="1.2" fill="#F2F1ED">AI BRAIN</text><line x1="81" y1="87" x2="81" y2="97" stroke="#2FB380" stroke-width="1.4"/><path d="M81 98 l-3.6 -5 h7.2 z" fill="#2FB380"/><rect x="6" y="98" width="150" height="19" rx="6" fill="#202127" stroke="#4B4E55" stroke-width="1.1"/><text x="81" y="110" text-anchor="middle" font-size="10.2" letter-spacing="1.2" fill="#F2F1ED">KNOWLEDGE BASE</text><line x1="81" y1="117" x2="81" y2="127" stroke="#2FB380" stroke-width="1.4"/><path d="M81 128 l-3.6 -5 h7.2 z" fill="#2FB380"/><rect x="6" y="128" width="150" height="19" rx="6" fill="#202127" stroke="#4B4E55" stroke-width="1.1"/><text x="81" y="140" text-anchor="middle" font-size="10.2" letter-spacing="1.2" fill="#F2F1ED">DECISION</text><line x1="81" y1="147" x2="81" y2="157" stroke="#2FB380" stroke-width="1.4"/><path d="M81 158 l-3.6 -5 h7.2 z" fill="#2FB380"/><rect x="6" y="158" width="150" height="19" rx="6" fill="#202127" stroke="#4B4E55" stroke-width="1.1"/><text x="81" y="170" text-anchor="middle" font-size="10.2" letter-spacing="1.2" fill="#F2F1ED">OUTREACH</text><path d="M162 165 C 208 150, 208 40, 162 22" fill="none" stroke="#8E8E93" stroke-width="1.1" stroke-dasharray="3 4"/><path d="M160 20 l8.5 -1 l-3.4 7.6 z" fill="#8E8E93"/><text x="204" y="97" text-anchor="middle" font-size="7.8" letter-spacing="1.3" fill="#A6A7AC" transform="rotate(90 204 97)">LEARNING LOOP</text></svg>
+          <div class="pur" style="text-align:center">PURPOSE: BETTER COMMERCIAL DECISIONS &middot; GREATER EXECUTION CAPACITY.</div>
+        </div>
+      </div>
+    </div>
+    <div class="band">
+      <div>
+        <div class="zr"><b>D</b><span class="d2"></span>REFLECTION &mdash; IF I WERE REBUILDING XTIX TODAY</div>
+        <div class="refl2"><div class="dash">Differentiate the product earlier against competitors</div><div class="dash">Accelerate enterprise positioning</div><div class="dash">Invest in strategic partnerships sooner</div><div class="dash">Expand the AI platform even earlier</div><div class="dash">Build the Israeli operation in parallel with global activity</div></div>
+      </div>
+      <div class="lesson">
+        <div class="qx">Commercial growth doesn't begin when the first campaign is launched. <b>It begins when the commercial system becomes repeatable.</b></div>
+        
+      </div>
+    </div>
+  </div>
+  <div class="ftr">
+    <span></span>
+    <span class="mid"><span class="d"></span>CASE STUDY &mdash; XTIX</span>
+    <span><b>P.06</b> &mdash; 13</span>
+  </div>
+</section>
+
+
+<!-- ================= PAGE 07 . OASIS COMMAND ================= -->
+<section class="page casef p07" style="--fc:var(--brass)">
+  <span class="brk tl"></span><span class="brk tr"></span><span class="brk bl"></span><span class="brk br"></span>
+  <div class="hd">
+    <div class="rub"><span class="d"></span>CASE STUDY 02</div>
+    <div class="tok">FILE 02 &middot; COMMAND</div>
+  </div>
+  <div class="ttl">Building Leaders, Not Just Sales Teams</div>
+  <div class="meta">OASIS &middot; CEO &middot; CONSTRUCTION &amp; SMART BUILDING SOLUTIONS</div>
+  <div class="folder">
+    <div class="tabrow"><div class="tA"><span class="nm">Oasis</span><span class="fl">&#9656; COMMAND</span></div></div>
+    <div class="rail"><span class="hole" style="top:70px"></span><span class="hole" style="top:104px"></span></div>
+    <div class="inner">
+      <div>
+        <div class="z">
+          <div class="zr"><b>01</b><span class="d2"></span>THE SITUATION</div>
+          <div class="para">The mandate as CEO wasn't more revenue &mdash; it was a <b>profitable, scalable commercial organization</b>.</div>
+        </div>
+        <div class="z" style="margin-bottom:0">
+          <div class="zr"><b>02</b><span class="d2"></span>CEO RESPONSIBILITIES</div>
+          <div class="rgrid"><div class="dash">P&amp;L</div><div class="dash">Pricing Strategy</div><div class="dash">Hiring</div><div class="dash">Commercial Operations</div><div class="dash">Profitability</div><div class="dash">Cross-Functional Leadership</div><div class="dash">Strategic Planning</div><div class="dash">Forecasting &amp; KPIs</div></div>
+        </div>
+      </div>
+      <div>
+        <div class="zr"><b>03</b><span class="d2"></span>COMMERCIAL SYSTEM BUILT</div>
+        <div class="lg"><span class="c">&#10003;</span>Recruited &amp; onboarded the entire sales team</div><div class="lg"><span class="c">&#10003;</span>Built the profitability-based pricing model from scratch</div><div class="lg"><span class="c">&#10003;</span>Designed the commercial process</div><div class="lg"><span class="c">&#10003;</span>Implemented company-wide KPI framework</div><div class="lg"><span class="c">&#10003;</span>Created sales playbooks &amp; onboarding</div><div class="lg"><span class="c">&#10003;</span>Established weekly business reviews</div><div class="lg"><span class="c">&#10003;</span>Built forecasting &amp; commercial reporting</div><div class="lg"><span class="c">&#10003;</span>Created cross-functional collaboration</div>
+      </div>
+    </div>
+    <div class="model">
+      <div class="zr"><b>04</b><span class="d2"></span>LEADERSHIP MODEL</div>
+      <div class="chips"><div class="chip"><b>WEEKLY</b>COACHING SESSIONS</div><div class="chip"><b>MONTHLY</b>1:1 PERFORMANCE REVIEWS</div><div class="chip"><b>QUARTERLY</b>BUSINESS REVIEWS</div><div class="chip"><b>LIVE</b>DEAL REVIEWS</div><div class="chip"><b>ALWAYS</b>COMMERCIAL COACHING</div><div class="chip"><b>CROSS-FUNCTIONAL</b>COLLABORATION</div><div class="chip"><b>OWNED</b>CLEAR OWNERSHIP &amp; ACCOUNTABILITY</div></div>
+    </div>
+    <div class="insight">
+      <div class="qx">High-performing sales teams aren't built by pressure. <b>They're built by clarity.</b></div>
+      
+    </div>
+  </div>
+  <div class="ftr">
+    <span></span>
+    <span class="mid"><span class="d"></span>CASE STUDY &mdash; OASIS</span>
+    <span><b>P.07</b> &mdash; 13</span>
+  </div>
+</section>
+
+
+<!-- ================= PAGE 08 . OASIS EVIDENCE ================= -->
+<section class="page casef p08" style="--fc:var(--brass)">
+  <span class="brk tl"></span><span class="brk tr"></span><span class="brk bl"></span><span class="brk br"></span>
+  <div class="hd">
+    <div class="rub"><span class="d"></span>CASE STUDY 02 &middot; OASIS</div>
+    <div class="tok">MISSION DEBRIEF</div>
+  </div>
+  <div class="ttl">Evidence &mdash; Commercial Results</div>
+  <div class="meta">OASIS &middot; CEO &middot; CONSTRUCTION &amp; SMART BUILDING SOLUTIONS</div>
+  <div class="folder">
+    <div class="tabrow"><div class="tA"><span class="nm">Oasis</span><span class="fl">&#9656; EVIDENCE</span></div></div>
+    <div class="rail"><span class="hole" style="top:70px"></span><span class="hole" style="top:104px"></span></div>
+    <div class="inner">
+      <div>
+        <div class="zr"><b>A</b><span class="d2"></span>KEY BUSINESS OUTCOME</div>
+        <div class="stat">
+          <div class="slip">KEY BUSINESS OUTCOME</div>
+          <div class="num"><b>$</b>2M</div>
+          <div class="lbl">LARGEST DEAL CLOSED</div>
+        </div>
+        <div class="perf"></div>
+      </div>
+      <div>
+        <div class="zr"><b>B</b><span class="d2"></span>COMMERCIAL LEADERSHIP</div>
+        <div class="lg"><span class="c">&#10003;</span>Recruited an entire sales team</div><div class="lg"><span class="c">&#10003;</span>Led a team of 5&ndash;6 sales professionals</div><div class="lg"><span class="c">&#10003;</span>Conducted weekly coaching sessions</div><div class="lg"><span class="c">&#10003;</span>Established KPI-driven management</div><div class="lg"><span class="c">&#10003;</span>Built onboarding documentation</div><div class="lg"><span class="c">&#10003;</span>Standardized commercial processes</div>
+      </div>
+      <div class="ringwrap">
+        <div class="zr" style="justify-content:center"><b>C</b><span class="d2"></span>CROSS-FUNCTIONAL LEADERSHIP</div>
+        <svg viewBox="0 0 240 196" style="width:100%;max-width:250px;height:auto;margin:0 auto;overflow:visible"><circle cx="120" cy="98" r="58" fill="none" stroke="#33353C" stroke-width="1.2" stroke-dasharray="3 4"/><circle cx="120" cy="98" r="18" fill="#25262D" stroke="#E0A458" stroke-width="2"/><text x="120" y="101" text-anchor="middle" font-size="8.5" font-weight="700" letter-spacing="1.5" fill="#F2F1ED">CEO</text><line x1="120.0" y1="80.0" x2="120.0" y2="47.0" stroke="#4B4E55" stroke-width="1"/><circle cx="120.0" cy="40.0" r="5.5" fill="#202127" stroke="#E0A458" stroke-width="1.6"/><text x="120.0" y="18.4" text-anchor="middle" font-size="7.6" letter-spacing="1" fill="#A6A7AC">OPERATIONS</text><line x1="135.6" y1="89.0" x2="164.2" y2="72.5" stroke="#4B4E55" stroke-width="1"/><circle cx="170.2" cy="69.0" r="5.5" fill="#202127" stroke="#E0A458" stroke-width="1.6"/><text x="191.0" y="59.4" text-anchor="start" font-size="7.6" letter-spacing="1" fill="#A6A7AC">PRODUCTION</text><line x1="135.6" y1="107.0" x2="164.2" y2="123.5" stroke="#4B4E55" stroke-width="1"/><circle cx="170.2" cy="127.0" r="5.5" fill="#202127" stroke="#E0A458" stroke-width="1.6"/><text x="191.0" y="141.4" text-anchor="start" font-size="7.6" letter-spacing="1" fill="#A6A7AC">CUSTOMER SUCCESS</text><line x1="120.0" y1="116.0" x2="120.0" y2="149.0" stroke="#4B4E55" stroke-width="1"/><circle cx="120.0" cy="156.0" r="5.5" fill="#202127" stroke="#E0A458" stroke-width="1.6"/><text x="120.0" y="182.4" text-anchor="middle" font-size="7.6" letter-spacing="1" fill="#A6A7AC">FINANCE</text><line x1="104.4" y1="107.0" x2="75.8" y2="123.5" stroke="#4B4E55" stroke-width="1"/><circle cx="69.8" cy="127.0" r="5.5" fill="#202127" stroke="#E0A458" stroke-width="1.6"/><text x="49.0" y="141.4" text-anchor="end" font-size="7.6" letter-spacing="1" fill="#A6A7AC">MARKETING</text><line x1="104.4" y1="89.0" x2="75.8" y2="72.5" stroke="#4B4E55" stroke-width="1"/><circle cx="69.8" cy="69.0" r="5.5" fill="#202127" stroke="#E0A458" stroke-width="1.6"/><text x="49.0" y="59.4" text-anchor="end" font-size="7.6" letter-spacing="1" fill="#A6A7AC">TECHNICAL TEAMS</text></svg>
+        <div class="ringlbl">WORKED CLOSELY WITH &middot; 06 FUNCTIONS</div>
+      </div>
+    </div>
+    <div class="band">
+      <div>
+        <div class="zr"><b>D</b><span class="d2"></span>EXECUTIVE REFLECTION</div>
+        <div class="para">The biggest lesson wasn't selling &mdash; it was <b>leadership</b>. The more I managed everything myself, the less the organization scaled.</div>
+      </div>
+      <div class="lesson">
+        <div class="qx">Organizations don't scale because leaders work harder. <b>They scale because leaders create clarity, ownership and trust.</b></div>
+        
+      </div>
+    </div>
+  </div>
+  <div class="ftr">
+    <span></span>
+    <span class="mid"><span class="d"></span>CASE STUDY &mdash; OASIS</span>
+    <span><b>P.08</b> &mdash; 13</span>
+  </div>
+</section>
+
+
+<!-- ================= PAGE 09 . EVENTER SYNC ================= -->
+<section class="page casef p09" style="--fc:var(--ice)">
+  <span class="brk tl"></span><span class="brk tr"></span><span class="brk bl"></span><span class="brk br"></span>
+  <div class="hd">
+    <div class="rub"><span class="d"></span>CASE STUDY 03</div>
+    <div class="tok">FILE 03 &middot; SYNC</div>
+  </div>
+  <div class="ttl">Aligning Commercial Execution Across Teams</div>
+  <div class="meta">EVENTER &middot; SAAS &middot; EVENT MANAGEMENT PLATFORM</div>
+  <div class="folder">
+    <div class="tabrow"><div class="tA"><span class="nm">Eventer</span><span class="fl">&#9656; SYNC</span></div></div>
+    <div class="rail"><span class="hole" style="top:70px"></span><span class="hole" style="top:104px"></span></div>
+    <div class="inner">
+      <div>
+        <div class="z">
+          <div class="zr"><b>01</b><span class="d2"></span>THE SITUATION</div>
+          <div class="para">Here, a commercial operation <b>already existed</b>. The job: sharpen execution, connect departments, find new growth.</div>
+        </div>
+        <div class="z">
+          <div class="zr"><b>02</b><span class="d2"></span>MY ROLE</div>
+          <div class="para"><b>Connecting business strategy with day-to-day execution</b> &mdash; across every function.</div>
+        </div>
+        <div class="z" style="margin-bottom:0">
+          <div class="zr"><b>03</b><span class="d2"></span>CROSS-FUNCTIONAL IMPACT</div>
+          <div class="para">Customer insights became business decisions. Growth became a <b>shared responsibility</b> &mdash; not a sales target.</div>
+        </div>
+          <div class="zr" style="margin-top:16px"><b>EV</b><span class="d2"></span>EVIDENCE</div><div class="etr"><div class="et"><div class="en">03</div><div class="el">BD TEAM MEMBERS<br>MANAGED &amp; COACHED</div></div><div class="et"><div class="en">05</div><div class="el">DEPARTMENTS<br>ALIGNED</div></div><div class="et"><div class="en">07</div><div class="el">KEY CONTRIBUTIONS<br>DELIVERED</div></div></div>
+      </div>
+      <div>
+        <div class="zr"><b>04</b><span class="d2"></span>ORGANIZATIONAL CONVERGENCE</div>
+        <svg class="conv" viewBox="0 -11 560 179" style="width:100%;height:auto"><rect x="4" y="14" width="150" height="20" rx="6" fill="#25262D" stroke="#4B4E55" stroke-width="1.3"/><text x="79.0" y="27.4" text-anchor="middle" font-size="8.5" letter-spacing="1.2" fill="#A6A7AC">PRODUCT</text><path d="M154 24.0 C 235 24.0, 265 80, 361 80" fill="none" stroke="#4B4E55" stroke-width="1.4"/><rect x="4" y="44" width="150" height="20" rx="6" fill="#25262D" stroke="#4B4E55" stroke-width="1.3"/><text x="79.0" y="57.4" text-anchor="middle" font-size="8.5" letter-spacing="1.2" fill="#A6A7AC">MARKETING</text><path d="M154 54.0 C 235 54.0, 265 80, 361 80" fill="none" stroke="#4B4E55" stroke-width="1.4"/><rect x="4" y="74" width="150" height="20" rx="6" fill="#25262D" stroke="#4B4E55" stroke-width="1.3"/><text x="79.0" y="87.4" text-anchor="middle" font-size="8.5" letter-spacing="1.2" fill="#A6A7AC">FINANCE</text><path d="M154 84.0 C 235 84.0, 265 80, 361 80" fill="none" stroke="#4B4E55" stroke-width="1.4"/><rect x="4" y="104" width="150" height="20" rx="6" fill="#25262D" stroke="#4B4E55" stroke-width="1.3"/><text x="79.0" y="117.4" text-anchor="middle" font-size="8.5" letter-spacing="1.2" fill="#A6A7AC">R&amp;D</text><path d="M154 114.0 C 235 114.0, 265 80, 361 80" fill="none" stroke="#4B4E55" stroke-width="1.4"/><rect x="4" y="134" width="150" height="20" rx="6" fill="rgba(94,143,191,.14)" stroke="#5E8FBF" stroke-width="1.3"/><text x="79.0" y="147.4" text-anchor="middle" font-size="8.5" letter-spacing="1.2" fill="#F2F1ED">BUSINESS DEVELOPMENT</text><path d="M154 144.0 C 235 144.0, 265 80, 361 80" fill="none" stroke="#5E8FBF" stroke-width="1.4"/><path d="M364 80 l-8 -4.5 v9 z" fill="#5E8FBF"/><circle cx="398" cy="80" r="32" fill="#25262D" stroke="#5E8FBF" stroke-width="2.2"/><text x="398" y="77" text-anchor="middle" font-size="9" font-weight="700" letter-spacing="1.4" fill="#F2F1ED">THE</text><text x="398" y="88" text-anchor="middle" font-size="9" font-weight="700" letter-spacing="1.4" fill="#F2F1ED">CUSTOMER</text><path d="M430 66 C 480 30, 420 6, 250 6 L 170 6" fill="none" stroke="#8E8E93" stroke-width="1.1" stroke-dasharray="3 4"/><path d="M162 6 l9 -4.5 v9 z" fill="#A6A7AC"/><text x="300" y="-0.5" text-anchor="middle" font-size="8" letter-spacing="1.6" fill="#A6A7AC">CUSTOMER INSIGHT &#8594; BUSINESS DECISIONS</text><text x="398" y="132" text-anchor="middle" font-size="8" letter-spacing="1.4" fill="#A6A7AC">SHARED RESPONSIBILITY</text></svg>
+        <div class="zr" style="margin-top:4px"><b>05</b><span class="d2"></span>KEY CONTRIBUTIONS</div>
+        <div class="lg"><span class="c">&#10003;</span>Managed &amp; coached Business Development team members</div><div class="lg"><span class="c">&#10003;</span>Participated in recruiting commercial talent</div><div class="lg"><span class="c">&#10003;</span>Improved commercial processes</div><div class="lg"><span class="c">&#10003;</span>Introduced new business initiatives</div><div class="lg"><span class="c">&#10003;</span>Worked closely with Product, Marketing, Finance &amp; R&amp;D</div><div class="lg"><span class="c">&#10003;</span>Brought customer feedback directly into product discussions</div><div class="lg"><span class="c">&#10003;</span>Helped improve commercial alignment across the organization</div>
+      </div>
+    </div>
+    <div class="band">
+      <div>
+        <div class="zr"><b>06</b><span class="d2"></span>WHAT I LEARNED</div>
+        <div class="para">Leadership doesn't require authority &mdash; <b>influence, collaboration and better decisions</b> move organizations.</div>
+      </div>
+      <div class="insight">
+        <div class="qx">Commercial growth accelerates when every department understands the customer &mdash; <b>not only Sales.</b></div>
+        
+      </div>
+    </div>
+  </div>
+  <div class="ftr">
+    <span></span>
+    <span class="mid"><span class="d"></span>CASE STUDY &mdash; EVENTER</span>
+    <span><b>P.09</b> &mdash; 13</span>
+  </div>
+</section>
+
+
+
+
+<!-- ================= PAGE 10 . MEDCOIN ORIGIN ================= -->
+<section class="page casef p10b" style="--fc:var(--ink)">
+  <span class="brk tl"></span><span class="brk tr"></span><span class="brk bl"></span><span class="brk br"></span>
+  <div class="hd">
+    <div class="rub"><span class="d"></span>FOUNDER CASE STUDY</div>
+    <div class="tok">FILE 04 &middot; ORIGIN</div>
+  </div>
+  <div class="ttl">Building a Business From Vision</div>
+  <div class="meta">MEDCOIN TEKNOLOJI &middot; CRYPTO FINTECH &middot; FOUNDER</div>
+  <div class="folder">
+    <div class="tabrow"><div class="tA"><span class="nm">Medcoin</span><span class="fl">&#9656; ORIGIN</span></div></div>
+    <div class="rail"><span class="hole" style="top:70px"></span><span class="hole" style="top:104px"></span></div>
+    <div class="inner">
+      <div>
+        <div class="z">
+          <div class="zr"><b>01</b><span class="d2"></span>THE VISION</div>
+          <div class="para">A <b>compliant, scalable crypto-ATM network</b> &mdash; accessible digital finance for Europe.</div>
+        </div>
+        <div class="z">
+          <div class="zr"><b>02</b><span class="d2"></span>THE CHALLENGE</div>
+          <div class="para">From zero, <b>every decision was mine</b> &mdash; model, partnerships, compliance, operations, commercialization.</div>
+        </div>
+        <div class="z" style="margin-bottom:0">
+          <div class="zr"><b>03</b><span class="d2"></span>WHAT WE BUILT</div>
+          <div class="bgrid"><div class="lg2"><span class="c2">&#10003;</span>Founded the company from scratch</div><div class="lg2"><span class="c2">&#10003;</span>Defined the business model</div><div class="lg2"><span class="c2">&#10003;</span>Built the commercial strategy</div><div class="lg2"><span class="c2">&#10003;</span>Established strategic partnerships</div><div class="lg2"><span class="c2">&#10003;</span>Raised external investment</div><div class="lg2"><span class="c2">&#10003;</span>Deployed cryptocurrency ATMs across Europe</div><div class="lg2"><span class="c2">&#10003;</span>Built operational &amp; regulatory processes</div><div class="lg2"><span class="c2">&#10003;</span>Managed financial-service providers &amp; international vendors</div><div class="lg2"><span class="c2">&#10003;</span>Designed the customer journey &amp; user experience</div></div>
+        </div>
+      </div>
+      <div>
+        <div class="zr"><b>04</b><span class="d2"></span>BUSINESS OUTCOMES</div>
+        <div class="outs">
+          <table><tr><td class="k">MARKETS</td><td class="v">Europe</td></tr><tr><td class="k">BUSINESS MODEL</td><td class="v">Crypto ATM network</td></tr><tr><td class="k">INVESTMENT</td><td class="v">External investment raised</td></tr><tr><td class="k">REVENUE</td><td class="v em">Hundreds of thousands of &euro;</td></tr><tr><td class="k">INFRASTRUCTURE</td><td class="v">Operational ATM network deployed</td></tr><tr><td class="k">TEAM</td><td class="v">Founder-led operation</td></tr></table>
+        </div>
+        <div class="why"><span class="wl">WHY IT ENDED</span><div class="wt">Operations concluded following geopolitical changes affecting business activity in Turkey.</div></div>
+      </div>
+    </div>
+    <div class="tl2">
+      <div class="zr"><b>05</b><span class="d2"></span>THE ORIGIN LINE</div>
+      <svg viewBox="0 0 1040 58" style="width:100%;height:auto"><line x1="26" y1="26" x2="906" y2="26" stroke="#F2F1ED" stroke-width="1.3"/><line x1="912" y1="26" x2="1014" y2="26" stroke="#2FB380" stroke-width="2" stroke-dasharray="4 4"/><path d="M1020 26 l-9 -5 v10 z" fill="#2FB380"/><circle cx="40" cy="26" r="4.5" fill="#191A1F" stroke="#F2F1ED" stroke-width="1.6"/><text x="40" y="52" text-anchor="middle" font-size="8" letter-spacing="1.3" fill="#A6A7AC">FOUNDED</text><circle cx="255" cy="26" r="4.5" fill="#191A1F" stroke="#F2F1ED" stroke-width="1.6"/><text x="255" y="52" text-anchor="middle" font-size="8" letter-spacing="1.3" fill="#A6A7AC">BUSINESS MODEL</text><circle cx="470" cy="26" r="4.5" fill="#191A1F" stroke="#F2F1ED" stroke-width="1.6"/><text x="470" y="52" text-anchor="middle" font-size="8" letter-spacing="1.3" fill="#A6A7AC">PARTNERSHIPS</text><circle cx="685" cy="26" r="4.5" fill="#191A1F" stroke="#F2F1ED" stroke-width="1.6"/><text x="685" y="52" text-anchor="middle" font-size="8" letter-spacing="1.3" fill="#A6A7AC">INVESTMENT RAISED</text><circle cx="900" cy="26" r="6" fill="#2FB380" stroke="#F2F1ED" stroke-width="1.6"/><text x="900" y="52" text-anchor="middle" font-size="8" letter-spacing="1.3" fill="#A6A7AC">ATMs ACROSS EUROPE</text><text x="968" y="14" text-anchor="middle" font-size="8.4" font-weight="700" letter-spacing="1.5" fill="#2FB380">REVENUE</text></svg>
+    </div>
+    <div class="band2">
+      <div>
+        <div class="zr"><b>06</b><span class="d2"></span>WHAT I LEARNED</div>
+        <div class="para3">Every commercial decision affects operations. Every operational decision affects profitability. Every strategic decision affects survival. <b>That's the reality of building a company.</b></div>
+      </div>
+      <div class="lessq2">
+        <div class="qx">Founders don't manage functions. <b>They align the entire business around one vision.</b></div>
+        
+      </div>
+    </div>
+  </div>
+  <div class="ftr">
+    <span></span>
+    <span class="mid"><span class="d"></span>CASE STUDY &mdash; MEDCOIN</span>
+    <span><b>P.10</b> &mdash; 13</span>
+  </div>
+</section>
+
+<!-- ================= PAGE 11 . LEADERSHIP ================= -->
+<section class="page casef p11" style="--fc:var(--emb)">
+  <span class="brk tl"></span><span class="brk tr"></span><span class="brk bl"></span><span class="brk br"></span>
+  <div class="hd">
+    <div class="rub"><span class="d"></span>LEADERSHIP</div>
+    <div class="tok">MANAGEMENT FILE</div>
+  </div>
+  <div class="ttl">Building People. Building Systems. Building Accountability.</div>
+  <div class="meta">HOW I LEAD &middot; PRINCIPLES &amp; TOOLKIT</div>
+  <div class="folder">
+    <div class="tabrow"><div class="tA"><span class="nm">Leadership</span><span class="fl">&#9656; DOCTRINE</span></div></div>
+    <div class="rail"><span class="hole" style="top:70px"></span><span class="hole" style="top:104px"></span></div>
+    <div class="lead">Great leaders build people who <b>no longer depend on them</b>.</div>
+    <div class="cols">
+      <div>
+        <div class="zr"><b>A</b><span class="d2"></span>LEADERSHIP PRINCIPLES</div>
+        <div class="pr"><div class="n">01</div><div><div class="nm2">Build Trust Before Performance</div><div class="ds">People perform better when expectations are clear and trust is earned.</div></div></div><div class="pr"><div class="n">02</div><div><div class="nm2">Coach Before You Judge</div><div class="ds">Every performance issue deserves investigation first &mdash; understand the process, review the data, listen first, coach second, decide last.</div></div></div><div class="pr"><div class="n">03</div><div><div class="nm2">Create Ownership</div><div class="ds">People shouldn't execute tasks. They should own outcomes.</div></div></div><div class="pr"><div class="n">04</div><div><div class="nm2">Decisions Based on Facts</div><div class="ds">KPIs don't replace leadership &mdash; they improve it. Every coaching session begins with evidence, not assumptions.</div></div></div><div class="pr"><div class="n">05</div><div><div class="nm2">Great Managers Solve Today's Problems. Great Leaders Build Tomorrow's System.</div><div class="ds">My objective was never to close one more deal &mdash; it was to build an organization that produces consistent results without depending on one individual.</div></div></div>
+      </div>
+      <div>
+        <div class="zr"><b>B</b><span class="d2"></span>LEADERSHIP TOOLKIT</div>
+        <div class="tools"><div class="lg">Hiring &amp; Recruitment</div><div class="lg">Onboarding Programs</div><div class="lg">Weekly Team Meetings</div><div class="lg">Monthly 1:1 Reviews</div><div class="lg">Quarterly Performance Reviews</div><div class="lg">KPI Design</div><div class="lg">Coaching</div><div class="lg">Sales Methodology</div><div class="lg">Performance Improvement Plans</div><div class="lg">Cross-functional Leadership</div></div>
+        <div class="sigq">
+          <div class="qx">Leadership is not about creating better employees. <b>It's about creating people who no longer depend on&nbsp;you.</b></div>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="ftr">
+    <span></span>
+    <span class="mid"><span class="d"></span>LEADERSHIP</span>
+    <span><b>P.11</b> &mdash; 13</span>
+  </div>
+</section>
+
+
+
+
+<!-- ================= PAGE 12 . COMMERCIAL INTELLIGENCE PLATFORM ================= -->
+<section class="page casef p12b" style="--fc:var(--emb)">
+  <span class="brk tl"></span><span class="brk tr"></span><span class="brk bl"></span><span class="brk br"></span>
+  <div class="hd">
+    <div class="rub"><span class="d"></span>COMMERCIAL TECHNOLOGY &amp; AI</div>
+    <div class="tok">SYSTEM FILE &middot; AI</div>
+  </div>
+  <div class="ttl">How I use technology to improve commercial decisions.</div>
+  <div class="meta">COMMERCIAL INTELLIGENCE PLATFORM &middot; SYSTEM ARCHITECTURE</div>
+  <div class="folder">
+    <div class="tabrow"><div class="tA"><span class="nm">Technology</span><span class="fl">&#9656; AI SYSTEM</span></div></div>
+    <div class="rail"><span class="hole" style="top:70px"></span><span class="hole" style="top:104px"></span></div>
+    <div class="lead">Technology should never replace commercial thinking &mdash; <b>it should amplify it</b>. I don't collect tools; I build systems. This is the commercial intelligence platform I designed &amp; implemented:</div>
+    <div class="intb">AI BUILT FOR INTERNAL COMMERCIAL OPERATIONS &mdash; NOT A SELLABLE PRODUCT</div>
+    <div class="archw">
+      <div class="zr"><b>A</b><span class="d2"></span>COMMERCIAL INTELLIGENCE PLATFORM &mdash; SYSTEM ARCHITECTURE</div>
+      <svg viewBox="0 0 808 114" style="width:100%;height:auto"><rect x="4" y="30" width="104" height="26" rx="8" fill="#25262D" stroke="#2FB380" stroke-width="1.5"/><text x="56.0" y="46.5" text-anchor="middle" font-size="8.4" letter-spacing="1.1" fill="#F2F1ED">LEAD SOURCES</text><rect x="138" y="30" width="96" height="26" rx="8" fill="#25262D" stroke="#2FB380" stroke-width="1.5"/><text x="186.0" y="46.5" text-anchor="middle" font-size="8.4" letter-spacing="1.1" fill="#F2F1ED">AI RESEARCH</text><rect x="264" y="30" width="118" height="26" rx="8" fill="#25262D" stroke="#2FB380" stroke-width="1.5"/><text x="323.0" y="46.5" text-anchor="middle" font-size="8.4" letter-spacing="1.1" fill="#F2F1ED">KNOWLEDGE BASE</text><rect x="412" y="30" width="120" height="26" rx="8" fill="#25262D" stroke="#2FB380" stroke-width="1.5"/><text x="472.0" y="46.5" text-anchor="middle" font-size="8.4" letter-spacing="1.1" fill="#F2F1ED">DECISION ENGINE</text><rect x="562" y="30" width="160" height="26" rx="8" fill="#25262D" stroke="#2FB380" stroke-width="1.5"/><text x="642.0" y="46.5" text-anchor="middle" font-size="8.4" letter-spacing="1.1" fill="#F2F1ED">PERSONALIZED OUTREACH</text><rect x="752" y="30" width="52" height="26" rx="8" fill="#25262D" stroke="#2FB380" stroke-width="1.5"/><text x="778.0" y="46.5" text-anchor="middle" font-size="8.4" letter-spacing="1.1" fill="#F2F1ED">CRM</text><line x1="110" y1="43" x2="131" y2="43" stroke="#2FB380" stroke-width="1.5"/><path d="M137 43 l-6 -3.4 v6.8 z" fill="#2FB380"/><line x1="236" y1="43" x2="257" y2="43" stroke="#2FB380" stroke-width="1.5"/><path d="M263 43 l-6 -3.4 v6.8 z" fill="#2FB380"/><line x1="384" y1="43" x2="405" y2="43" stroke="#2FB380" stroke-width="1.5"/><path d="M411 43 l-6 -3.4 v6.8 z" fill="#2FB380"/><line x1="534" y1="43" x2="555" y2="43" stroke="#2FB380" stroke-width="1.5"/><path d="M561 43 l-6 -3.4 v6.8 z" fill="#2FB380"/><line x1="724" y1="43" x2="745" y2="43" stroke="#2FB380" stroke-width="1.5"/><path d="M751 43 l-6 -3.4 v6.8 z" fill="#2FB380"/><path d="M778.0 56 C 778.0 84, 186.0 84, 186.0 58" fill="none" stroke="#8E8E93" stroke-width="1.2" stroke-dasharray="3 4"/><path d="M186.0 56 l-4.5 8.5 h9 z" fill="#8E8E93" transform="rotate(26 186 60.2)"/><text x="482.0" y="104" text-anchor="middle" font-size="7" letter-spacing="1.8" fill="#A6A7AC">LEARNING FEEDBACK &mdash; EVERY INTERACTION IMPROVES THE SYSTEM</text></svg>
+    </div>
+    <div class="bot2">
+      <div>
+        <div class="zr"><b>B</b><span class="d2"></span>WHAT THE SYSTEM DOES</div>
+        <div class="lg"><span class="c">&#10003;</span>Researching prospects</div><div class="lg"><span class="c">&#10003;</span>Enriching leads</div><div class="lg"><span class="c">&#10003;</span>Personalizing outreach</div><div class="lg"><span class="c">&#10003;</span>Automating commercial workflows</div><div class="lg"><span class="c">&#10003;</span>Learning from previous interactions</div><div class="lg"><span class="c">&#10003;</span>Improving commercial recommendations over time</div>
+      </div>
+      <div>
+        <div class="zr"><b>C</b><span class="d2"></span>UNDERLYING STACK</div>
+        <div class="stackr"><span><b>HubSpot</b> CRM</span><span><b>Zapier</b> &middot; Webhooks</span><span>Google Workspace</span><span>API Integrations</span><span><b>GPT</b></span><span><b>Claude</b></span><span><b>Gemini</b></span><span><b>Clay</b></span><span><b>Apollo</b></span><span><b>Hunter</b></span><span>Custom AI Workflows</span><span>Lead Intelligence</span><span>Lead Enrichment</span><span>Competitive Intelligence</span></div>
+        <div class="phil">MY PHILOSOPHY: TECHNOLOGY SHOULD AUTOMATE EXECUTION. PEOPLE SHOULD MAKE&nbsp;DECISIONS.</div>
+        <div class="quote2">
+          <div class="qx">AI doesn't replace commercial leaders. <b>It lets them think faster, learn faster and execute at scale.</b></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="ftr">
+    <span></span>
+    <span class="mid"><span class="d"></span>COMMERCIAL TECHNOLOGY &amp; AI</span>
+    <span><b>P.12</b> &mdash; 13</span>
+  </div>
+</section>
+
+<!-- ================= PAGE 13 . FINAL THOUGHTS ================= -->
+<section class="page casef p13" style="--fc:var(--emb)">
+  <span class="brk tl"></span><span class="brk tr"></span><span class="brk bl"></span><span class="brk br"></span>
+  <div class="hd">
+    <div class="rub"><span class="d"></span>FINAL THOUGHTS</div>
+    <div class="tok">END OF FILE</div>
+  </div>
+  <div class="ttl">The Builder's Principles</div>
+  <div class="meta">TEN PRINCIPLES &middot; ONE OPERATING SYSTEM</div>
+  <div class="folder">
+    <div class="tabrow"><div class="tA"><span class="nm">The Builder</span><span class="fl">&#9656; END OF FILE</span></div></div>
+    <div class="rail"><span class="hole" style="top:70px"></span><span class="hole" style="top:104px"></span></div>
+    <div class="inner">
+      <div>
+        <div class="zr"><b>A</b><span class="d2"></span>THE BUILDER'S PRINCIPLES</div>
+        <div class="pgrid"><div class="pi"><div class="n">01</div><div class="t">Understand before you build.</div></div><div class="pi"><div class="n">02</div><div class="t">Vision creates direction. Execution creates momentum.</div></div><div class="pi"><div class="n">03</div><div class="t">Commercial growth is a business problem &mdash; not a sales problem.</div></div><div class="pi"><div class="n">04</div><div class="t">Build systems before you scale people.</div></div><div class="pi"><div class="n">05</div><div class="t">Measure decisions &mdash; not assumptions.</div></div><div class="pi"><div class="n">06</div><div class="t">Technology should improve thinking &mdash; not replace it.</div></div><div class="pi"><div class="n">07</div><div class="t">Great leaders create ownership.</div></div><div class="pi"><div class="n">08</div><div class="t">Commercial success belongs to every department.</div></div><div class="pi"><div class="n">09</div><div class="t">Continuous learning is a competitive advantage.</div></div><div class="pi vision"><div class="n">10</div><div class="t">If you connect to the vision, you'll always know where you're going.</div></div></div>
+        <div class="zr" style="margin-top:20px"><b>AM</b><span class="d2"></span>ABOUT ME</div>
+        <div class="abt">I enjoy building commercial organizations <b>from zero</b>.<br>I believe <b>systems scale better than heroes</b>.<br>My goal is to leave every company <b>stronger than I found it</b>.</div>
+      </div>
+      <div>
+        <div class="zr"><b>B</b><span class="d2"></span>INDUSTRIES &amp; FOCUS</div>
+        <div class="ich"><span>SaaS</span><span>FinTech</span><span>Construction</span><span>Events</span><span>B2B</span><span>AI</span><span>Commercial Strategy</span><span>Business Development</span><span>Revenue Operations</span></div>
+        <div class="zr"><b>C</b><span class="d2"></span>CONTACT</div>
+        <div class="card">
+          <div class="clip"><span class="nm">Oran Carmon</span><span class="fl">COMMERCIAL SYSTEMS BUILDER</span></div>
+          <div class="crow"><span class="k">LINKEDIN</span><span class="v">linkedin.com/in/oran-carmon</span></div>
+          <div class="crow"><span class="k">EMAIL</span><span class="v">orancarmon@gmail.com</span></div>
+          <div class="crow"><span class="k">PHONE</span><span class="v">+972-54-668-5331</span></div>
+        </div>
+        <div class="endrow">
+          <span class="yr" style="font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.3em;color:var(--dim)">ARCHIVE &middot; 2026</span>
+        </div>
+        <div class="minidrawer">
+          <div class="md" style="background:var(--emb)"></div>
+          <div class="md" style="background:var(--brass)"></div>
+          <div class="md" style="background:var(--ice)"></div>
+          <div class="md" style="background:var(--ink)"></div>
+        </div>
+        <div class="mdl"></div>
+        <div class="closeline">Turning vision into <b>commercial growth</b>.</div>
+      </div>
+    </div>
+  </div>
+  <div class="ftr">
+    <span></span>
+    <span class="mid"><span class="d"></span>FINAL THOUGHTS</span>
+    <span><b>P.13</b> &mdash; 13</span>
+  </div>
+</section>
+
+</body></html>
