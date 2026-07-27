@@ -1737,6 +1737,14 @@ body.static .hfolder,body.static #hero .mfold{--sx:-320px}
   background-size:230px 100%!important;background-position:var(--sx) 0!important;
   background-repeat:no-repeat!important}
 
+
+/* R10d — the card carries its own vanishing point (the card IS .hcard, so a
+   parent perspective would never reach it) */
+.hcard{perspective:none}
+.hfolder{transform:perspective(1600px) rotateY(var(--ry,0deg)) scale(var(--sc,.94))!important;
+  transform-origin:left center;backface-visibility:hidden}
+@media (max-width:860px){.hfolder{transform:scale(var(--sc,1))!important}}
+
 </style>
 <section class="sec" id="leadership" style="--fc:var(--emb)">
   <div class="secnum" aria-hidden="true">07</div>
