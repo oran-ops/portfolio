@@ -1,0 +1,349 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>Motion Lab II — the four big ideas</title>
+<link rel="stylesheet" href="fonts/fonts_dossier.css">
+<style>
+:root{--bg:#191A1F;--card:#202127;--card2:#25262D;--ink:#F2F1ED;--mut:#B6B7BB;--lbl:#CFD0D4;
+--grid:#33353C;--grid2:#4B4E55;--hair:rgba(255,255,255,.09);--emb:#2FB380;--brass:#E0A458;--ice:#5E8FBF;
+--ease:cubic-bezier(.22,.61,.2,1)}
+*{margin:0;padding:0;box-sizing:border-box}
+html{background:var(--bg)}
+body{background:var(--bg);color:var(--ink);font-family:Inter,-apple-system,sans-serif;padding:40px 26px 120px}
+.wrap{max-width:1120px;margin:0 auto}
+.crumb{font-family:'JetBrains Mono',monospace;font-weight:600;font-size:10.5px;letter-spacing:.2em;color:var(--mut)}
+.crumb b{color:var(--emb);font-weight:600}
+h1{margin-top:18px;font-weight:800;font-size:clamp(28px,4.4vw,44px);letter-spacing:-.028em;line-height:1.05}
+.sub{margin-top:12px;font-family:'Fraunces',serif;font-style:italic;font-size:17px;color:var(--lbl)}
+.he{margin-top:10px;font-size:14.5px;line-height:1.7;color:var(--mut)}
+.he b{color:var(--ink);font-weight:600}
+.panel{margin-top:58px;border-top:1px solid var(--grid);padding-top:22px}
+.phead{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
+.pn{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:10px;letter-spacing:.24em;color:var(--emb)}
+.pt{font-weight:800;font-size:21px;letter-spacing:-.01em}
+.src{margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.18em;
+color:var(--mut);border:1px solid var(--grid2);border-radius:5px;padding:4px 9px}
+.pd{margin-top:10px;font-size:14px;line-height:1.7;color:var(--mut);max-width:790px}
+.stage{margin-top:22px;border:1px solid var(--hair);border-radius:16px;background:#15161A;
+padding:40px 30px;position:relative;min-height:300px;display:flex;align-items:center;
+justify-content:center;gap:38px;flex-wrap:wrap}
+.hint{position:absolute;left:16px;top:14px;font-family:'JetBrains Mono',monospace;font-size:9px;
+letter-spacing:.2em;color:var(--grid2)}
+.btn{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:10px;letter-spacing:.2em;
+color:#191A1F;background:var(--emb);border:0;border-radius:8px;padding:11px 17px;cursor:pointer}
+.cap{margin-top:16px;text-align:center;font-family:'JetBrains Mono',monospace;font-size:9px;
+letter-spacing:.2em;color:var(--mut)}
+
+/* ---------- 01 the stack ---------- */
+.stk{position:relative;width:min(560px,100%);height:440px;perspective:3000px}
+.fold{position:absolute;left:0;right:0;bottom:0;height:290px;background:var(--c);
+border-radius:0 16px 14px 14px;transform-origin:bottom center;transform-style:preserve-3d;
+transform:translateY(calc((3 - var(--i)) * -44px));z-index:var(--i);
+transition:transform .65s cubic-bezier(.33,1,.68,1);
+box-shadow:0 -1px 10px rgba(0,0,0,.45);cursor:pointer}
+.fold .tab{position:absolute;top:-27px;left:calc(var(--i) * 118px);height:28px;background:var(--c);
+border-radius:8px 15px 0 0;display:flex;align-items:center;gap:9px;padding:0 15px;
+font-family:'Fraunces',serif;font-weight:700;font-size:14.5px;color:#191A1F}
+.fold .tab span{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:7.5px;letter-spacing:.18em}
+.fold .fc{padding:18px 22px;color:#191A1F}
+.fold .fc .k{font-weight:800;font-size:22px;letter-spacing:-.02em}
+.fold .fc .m{margin-top:7px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.14em;opacity:.85}
+.fold.lift{transform:translateY(calc((3 - var(--i)) * -44px + 20px)) rotateX(-4deg)}
+.fold.open{transform:translateY(calc((3 - var(--i)) * -44px - 14px))}
+.fold.open .fc{opacity:1}
+.fold .fc{opacity:.9;transition:opacity .4s}
+
+/* ---------- 02 declassify ---------- */
+.dcase{position:relative;width:min(560px,100%);height:250px;border-radius:0 16px 14px 14px;overflow:hidden}
+.dcase .layer{position:absolute;inset:0;padding:22px 24px}
+.dcase .real{background:var(--emb);color:#191A1F}
+.dcase .real .k{font-weight:800;font-size:26px;letter-spacing:-.02em}
+.dcase .real .m{margin-top:8px;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.14em}
+.dcase .real .rows{margin-top:18px;display:grid;gap:9px}
+.dcase .real .row{display:flex;justify-content:space-between;border-top:1px solid rgba(25,26,31,.22);padding-top:8px;
+font-family:'JetBrains Mono',monospace;font-size:11px}
+.dcase .real .row b{font-weight:700}
+.dcase .sealed{background:var(--card);color:var(--mut)}
+.dcase .sealed .st{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:10px;
+letter-spacing:.3em;color:var(--brass);border:2px solid var(--brass);border-radius:6px;
+padding:7px 13px;display:inline-block;transform:rotate(-5deg)}
+.dcase .sealed .bar{height:15px;background:var(--grid2);border-radius:2px;margin-top:13px}
+.dcase .lip2{position:absolute;top:0;left:0;height:28px;background:var(--emb);border-radius:8px 15px 0 0;
+display:flex;align-items:center;gap:9px;padding:0 15px;z-index:4;
+font-family:'Fraunces',serif;font-weight:700;font-size:14.5px;color:#191A1F}
+.dcase .lip2 span{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:7.5px;letter-spacing:.18em}
+
+/* ---------- 03 dust ---------- */
+#dust{width:min(620px,100%);height:280px;display:block;border-radius:12px}
+
+/* ---------- 04 one continuous take ---------- */
+.room{position:relative;width:min(720px,100%);border-radius:14px;overflow:hidden;
+border:1px solid var(--hair);transition:background-color .18s linear}
+.room .nav{display:flex;align-items:center;gap:16px;padding:13px 18px;border-bottom:1px solid rgba(255,255,255,.08);
+font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.22em}
+.room .nav i{width:8px;height:8px;transform:rotate(45deg);display:block}
+.room .body{position:relative;padding:34px 24px 40px;min-height:190px}
+.room .gn{position:absolute;right:16px;top:6px;font-weight:800;font-size:120px;line-height:1;
+color:transparent;-webkit-text-stroke:1px rgba(242,241,237,.08)}
+.room .ttl{font-weight:800;font-size:26px;letter-spacing:-.02em}
+.room .sq{margin-top:10px;font-family:'Fraunces',serif;font-style:italic;font-size:16px}
+.room .tabs{margin-top:26px;display:flex;gap:8px}
+.room .tabs i{width:54px;height:22px;border-radius:6px 10px 0 0;display:block;opacity:.35}
+.room .tabs i.on{opacity:1}
+.rc{position:absolute;width:56px;height:56px;border:3px solid var(--brass);opacity:.4;pointer-events:none}
+.rc.tl{top:10px;left:10px;border-right:0;border-bottom:0;border-radius:8px 0 0 0}
+.rc.tr{top:10px;right:10px;border-left:0;border-bottom:0;border-radius:0 8px 0 0}
+.rc.bl{bottom:10px;left:10px;border-right:0;border-top:0;border-radius:0 0 0 8px}
+.rc.br{bottom:10px;right:10px;border-left:0;border-top:0;border-radius:0 0 8px 0}
+input[type=range]{width:min(720px,100%);accent-color:var(--emb);margin-top:22px}
+.foot{margin-top:70px;border-top:1px solid var(--grid);padding-top:18px;
+font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.18em;color:var(--mut)}
+@media (max-width:680px){.stage{padding:26px 14px;gap:26px}.stk{height:380px}.fold{height:250px}
+.fold .tab{left:calc(var(--i) * 74px);font-size:12.5px;padding:0 10px}}
+</style></head>
+<body>
+<div class="wrap">
+  <div class="crumb">ARCHIVE://COMMERCIAL/2026 <b>&#8250;</b> MOTION LAB II <b>&#8250;</b> THE BIG FOUR</div>
+  <h1>Four ideas, live</h1>
+  <div class="sub">Each one is the real mechanic, running &mdash; not a picture of it.</div>
+  <div class="he" dir="rtl">ארבע האופציות שהסוכנים חילצו מהאתרים ששלחת. <b>שום דבר מזה עדיין לא באתר</b> &mdash; תעבור, תחליט מה נכנס.</div>
+
+  <!-- 01 -->
+  <div class="panel">
+    <div class="phead"><span class="pn">01</span><span class="pt">The stack &mdash; reach in and the files above lift</span>
+      <span class="src">mosbyfiles.com</span></div>
+    <div class="pd" dir="rtl">ארבעת התיקים מונחים אחד על השני כמו ערימה אמיתית. <b>העבר עכבר על תיק</b> &mdash; התיקים שמעליו מתרוממים ונוטים אחורה, והתיק שביקשת עולה קדימה. במגע: לחיצה. זו החלפה של המגירה האופקית שיש היום.</div>
+    <div class="stage" style="min-height:520px;padding:50px 30px">
+      <span class="hint">HOVER ANY FILE</span>
+      <div class="stk" id="stk">
+        <div class="fold" style="--i:0;--c:var(--ink)"><div class="tab">Medcoin <span>FILE 04</span></div>
+          <div class="fc"><div class="k">FOUNDER</div><div class="m">&gt; built the business from vision</div></div></div>
+        <div class="fold" style="--i:1;--c:var(--ice)"><div class="tab">Eventer <span>FILE 03</span></div>
+          <div class="fc"><div class="k">ALIGNMENT</div><div class="m">&gt; aligned execution across teams</div></div></div>
+        <div class="fold" style="--i:2;--c:var(--brass)"><div class="tab">Oasis <span>FILE 02</span></div>
+          <div class="fc"><div class="k">LEADERSHIP</div><div class="m">&gt; CEO &mdash; profitable, scalable org</div></div></div>
+        <div class="fold" style="--i:3;--c:var(--emb)"><div class="tab">XTIX <span>FILE 01</span></div>
+          <div class="fc"><div class="k">BUILT FROM ZERO</div><div class="m">&gt; commercial function from zero</div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 02 -->
+  <div class="panel">
+    <div class="phead"><span class="pn">02</span><span class="pt">Declassified &mdash; a hard edge wipes the seal away</span>
+      <span class="src">landonorris.com</span></div>
+    <div class="pd" dir="rtl">התיק נפתח <b>חתום</b>: פסי צנזורה וחותמת. ואז קו חד אחד עובר מלמעלה למטה &mdash; מתקמר החוצה באמצע ומתיישר בקצוות &mdash; ומגלה את התוכן. בלי מעבר רך, בלי גרדיאנט. זה בדיוק המנגנון של הקסדה של לנדו נוריס, מתורגם לשפה של תיק חקירה.</div>
+    <div class="stage" style="flex-direction:column">
+      <div class="dcase" id="dcase">
+        <div class="layer real">
+          <div class="k">BUILT FROM ZERO</div>
+          <div class="m">XTIX &middot; FINTECH SAAS &middot; 2023&ndash;2026</div>
+          <div class="rows">
+            <div class="row"><span>PIPELINE MANAGED</span><b>&euro;3M+ ARR</b></div>
+            <div class="row"><span>QUALIFIED MEETINGS</span><b>~6 / WEEK</b></div>
+            <div class="row"><span>INBOUND CONVERSION</span><b>50%+</b></div>
+          </div>
+        </div>
+        <div class="layer sealed" id="sealed">
+          <div class="st">CLASSIFIED &middot; SEALED</div>
+          <div class="bar" style="width:78%"></div>
+          <div class="bar" style="width:52%"></div>
+          <div class="bar" style="width:66%"></div>
+          <div class="bar" style="width:38%"></div>
+        </div>
+        <div class="lip2">XTIX <span>FILE 01</span></div>
+      </div>
+      <button class="btn" onclick="declass()" style="margin-top:24px">DECLASSIFY</button>
+    </div>
+  </div>
+
+  <!-- 03 -->
+  <div class="panel">
+    <div class="phead"><span class="pn">03</span><span class="pt">The dust was the evidence all along</span>
+      <span class="src">dala.craftedbygc.com</span></div>
+    <div class="pd" dir="rtl">האבק שמרחף באתר לאורך כל המסמך <b>מתכנס בסוף לצורה</b> &mdash; ואז מתפזר בחזרה. הזז עכבר בתוך הפאנל: החלקיקים נדחים ממך, והרדיוס גדל ככל שאתה מזיז מהר יותר. זה רץ על מנוע האבק שכבר קיים אצלנו.</div>
+    <div class="stage" style="flex-direction:column">
+      <span class="hint">MOVE THE CURSOR THROUGH THE DUST</span>
+      <canvas id="dust"></canvas>
+      <button class="btn" onclick="formDust()" style="margin-top:20px">FORM &middot; DISPERSE</button>
+    </div>
+  </div>
+
+  <!-- 04 -->
+  <div class="panel">
+    <div class="phead"><span class="pn">04</span><span class="pt">One continuous take &mdash; the room changes as the case progresses</span>
+      <span class="src">landonorris.com &mdash; structure</span></div>
+    <div class="pd" dir="rtl">לא אפקט &mdash; מבנה. <b>גרור את הסליידר</b>: הרקע, הניווט, האקסנט, הספרה והלשוניות זזים כמכלול אחד רציף, במקום שכל חלק יחליף מצב בנפרד. זה מה שגורם לאתר להיקרא כצילום אחד ארוך ולא כערימת דמואים.</div>
+    <div class="stage" style="flex-direction:column">
+      <div class="room" id="room">
+        <span class="rc tl"></span><span class="rc tr"></span><span class="rc bl"></span><span class="rc br"></span>
+        <div class="nav" id="rnav"><i id="rdia"></i><span id="rlab">ARCHIVE :: CASE FILE 01</span></div>
+        <div class="body">
+          <div class="gn" id="rnum">01</div>
+          <div class="ttl" id="rttl">Building a Commercial Function From Zero</div>
+          <div class="sq" id="rsq">&ldquo;First build a system that works.&rdquo;</div>
+          <div class="tabs" id="rtabs"><i class="on"></i><i></i><i></i><i></i></div>
+        </div>
+      </div>
+      <input type="range" min="0" max="100" value="0" id="rroom">
+    </div>
+  </div>
+
+  <div class="foot">MOTION LAB II &middot; ORAN CARMON &middot; NOTHING HERE IS LIVE ON THE SITE YET</div>
+</div>
+
+<script>
+/* ---------- 01 stack ---------- */
+(function(){
+  var stk=document.getElementById('stk'), folds=[].slice.call(stk.querySelectorAll('.fold'));
+  function set(k){
+    folds.forEach(function(f){
+      var i=+f.style.getPropertyValue('--i');
+      f.classList.toggle('lift', k!==null && i>k);
+      f.classList.toggle('open', k!==null && i===k);
+    });
+  }
+  folds.forEach(function(f){
+    var i=+f.style.getPropertyValue('--i');
+    f.addEventListener('pointerenter',function(){set(i)});
+    f.addEventListener('click',function(){set(i)});
+  });
+  stk.addEventListener('pointerleave',function(){set(null)});
+})();
+
+/* ---------- 02 declassified sweep ---------- */
+var dseal=document.getElementById('sealed'), draf=null;
+function seam(p){
+  var N=22, bow=13, pts=[], H=100;
+  var y0=p*(H+18);
+  for(var i=0;i<=N;i++){
+    var x=i/N;
+    var y=y0 - Math.sin(x*Math.PI)*bow*Math.sin(p*Math.PI);
+    pts.push((x*100).toFixed(1)+'% '+y.toFixed(2)+'%');
+  }
+  pts.push('100% 100%','0% 100%');
+  return 'polygon('+pts.join(',')+')';
+}
+function declass(){
+  if(draf)cancelAnimationFrame(draf);
+  var t0=null, dur=1500;
+  dseal.style.clipPath=seam(0);
+  function step(t){
+    if(!t0)t0=t;
+    var p=Math.min(1,(t-t0)/dur);
+    var e=p<.5?4*p*p*p:1-Math.pow(-2*p+2,3)/2;
+    dseal.style.clipPath=seam(e);
+    if(p<1){draf=requestAnimationFrame(step)}
+    else{setTimeout(function(){dseal.style.clipPath=seam(0)},1800)}
+  }
+  draf=requestAnimationFrame(step);
+}
+dseal.style.clipPath=seam(0);
+setTimeout(declass,900);
+
+/* ---------- 03 dust ---------- */
+(function(){
+  var cv=document.getElementById('dust'), ctx=cv.getContext('2d');
+  var W=0,H=0,DPR=Math.min(2,devicePixelRatio||1),P=[],targets=[],form=0,dir=0;
+  var mx=-1e3,my=-1e3,pmx=0,pmy=0,vx=0,vy=0;
+  function size(){
+    W=cv.clientWidth; H=cv.clientHeight;
+    cv.width=W*DPR; cv.height=H*DPR; ctx.setTransform(DPR,0,0,DPR,0,0);
+  }
+  function sample(){
+    var off=document.createElement('canvas'); off.width=W; off.height=H;
+    var o=off.getContext('2d');
+    o.fillStyle='#fff'; o.textAlign='center'; o.textBaseline='middle';
+    o.font='800 '+Math.round(Math.min(W/9,64))+'px Inter, sans-serif';
+    o.fillText('ORAN CARMON', W/2, H/2-10);
+    o.font='700 '+Math.round(Math.min(W/26,17))+'px "JetBrains Mono", monospace';
+    o.fillText('COMMERCIAL SYSTEMS BUILDER', W/2, H/2+38);
+    var d=o.getImageData(0,0,W,H).data, out=[];
+    for(var y=0;y<H;y+=3){for(var x=0;x<W;x+=3){
+      if(d[(y*W+x)*4+3]>128)out.push([x,y]);
+    }}
+    for(var i=out.length-1;i>0;i--){var j=(i*9301+49297)%(i+1);var t=out[i];out[i]=out[j];out[j]=t}
+    targets=out;
+  }
+  function build(){
+    var n=Math.round(Math.min(1500,Math.max(600,W*H/260)));
+    P=[];
+    for(var i=0;i<n;i++){
+      P.push({x:Math.random()*W,y:Math.random()*H,
+        dx:(Math.random()-.5)*.22,dy:(Math.random()-.5)*.22,
+        r:Math.random()*1.3+.6,a:Math.random()*.5+.18,
+        rnd:Math.random(),rnd2:Math.random(),ord:i});
+    }
+  }
+  function init(){size();build();sample()}
+  if(document.fonts&&document.fonts.ready){document.fonts.ready.then(init)}else{init()}
+  addEventListener('resize',function(){clearTimeout(window.__dt);window.__dt=setTimeout(init,180)});
+  cv.addEventListener('pointermove',function(e){
+    var r=cv.getBoundingClientRect(); pmx=mx;pmy=my; mx=e.clientX-r.left; my=e.clientY-r.top;
+    vx=mx-pmx; vy=my-pmy;
+  });
+  cv.addEventListener('pointerleave',function(){mx=my=-1e3;vx=vy=0});
+  window.formDust=function(){dir=dir?0:1};
+  var t=0;
+  (function loop(){
+    t+=.016;
+    form+=((dir?1:0)-form)*(dir?.035:.06);
+    ctx.clearRect(0,0,W,H);
+    var n=P.length, R0=42, R=R0+Math.hypot(vx,vy)*3.2;
+    vx*=.9; vy*=.9;
+    for(var i=0;i<n;i++){
+      var p=P[i];
+      p.x+=p.dx; p.y+=p.dy;
+      if(p.x<0)p.x=W; if(p.x>W)p.x=0; if(p.y<0)p.y=H; if(p.y>H)p.y=0;
+      var X=p.x, Y=p.y;
+      if(targets.length){
+        var tg=targets[i%targets.length];
+        var d=i/n, s=Math.min(1,Math.max(0,form*(1+d*.9)-d*.9));
+        var e=s<.5?8*s*s*s*s:1-Math.pow(-2*s+2,4)/2;
+        X=p.x+(tg[0]-p.x)*e; Y=p.y+(tg[1]-p.y)*e;
+      }
+      var dist=Math.hypot(X-mx,Y-my);
+      if(dist<R){
+        var f=1-dist/R;
+        X+=f*Math.sin(t*3+p.rnd*6)*(p.rnd2*10+vx*1.5);
+        Y+=f*Math.cos(t*3+p.rnd*6)*(p.rnd2*10+vy*1.5);
+      }
+      ctx.globalAlpha=p.a+form*.35;
+      ctx.fillStyle=form>.5?'#2FB380':'#CFD0D4';
+      ctx.fillRect(X,Y,p.r*1.6,p.r*1.6);
+    }
+    ctx.globalAlpha=1;
+    requestAnimationFrame(loop);
+  })();
+})();
+
+/* ---------- 04 one continuous take ---------- */
+(function(){
+  var R=document.getElementById('room'),nav=document.getElementById('rnav'),dia=document.getElementById('rdia'),
+      lab=document.getElementById('rlab'),num=document.getElementById('rnum'),ttl=document.getElementById('rttl'),
+      sq=document.getElementById('rsq'),tabs=[].slice.call(document.querySelectorAll('#rtabs i')),
+      rng=document.getElementById('rroom');
+  var STOPS=[
+    {bg:[26,38,33],ac:'#2FB380',n:'01',t:'Building a Commercial Function From Zero',q:'“First build a system that works.”',l:'ARCHIVE :: CASE FILE 01 · XTIX'},
+    {bg:[33,30,29],ac:'#E0A458',n:'02',t:'Building Leaders, Not Just Sales Teams',q:'“They’re built by clarity.”',l:'ARCHIVE :: CASE FILE 02 · OASIS'},
+    {bg:[26,31,40],ac:'#5E8FBF',n:'03',t:'Aligning Commercial Execution Across Teams',q:'“Growth became a shared responsibility.”',l:'ARCHIVE :: CASE FILE 03 · EVENTER'},
+    {bg:[29,30,35],ac:'#F2F1ED',n:'04',t:'Building a Business From Vision',q:'“Founders align the whole business.”',l:'ARCHIVE :: CASE FILE 04 · MEDCOIN'}
+  ];
+  function mix(a,b,p){return a.map(function(v,i){return Math.round(v+(b[i]-v)*p)})}
+  function hex(c){return 'rgb('+c[0]+','+c[1]+','+c[2]+')'}
+  function paint(v){
+    var f=v/100*(STOPS.length-1), i=Math.min(STOPS.length-2,Math.floor(f)), p=f-i;
+    var A=STOPS[i],B=STOPS[i+1];
+    R.style.background=hex(mix(A.bg,B.bg,p));
+    var cur=p<.5?A:B;
+    dia.style.background=cur.ac; lab.style.color=cur.ac; lab.textContent=cur.l;
+    num.textContent=cur.n; num.style.webkitTextStroke='1px '+cur.ac+'33';
+    ttl.textContent=cur.t; sq.textContent=cur.q; sq.style.color=cur.ac;
+    tabs.forEach(function(el,k){el.classList.toggle('on',k===(p<.5?i:i+1));
+      el.style.background=STOPS[k].ac});
+  }
+  rng.addEventListener('input',function(){paint(+rng.value)});
+  paint(0);
+})();
+</script>
+</body></html>
