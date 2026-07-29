@@ -1976,7 +1976,7 @@ function statement(y){
   }
   for(var si=0;si<SPS.length;si++){var sq=eo(clamp((p-.02-si*.05)/.22));SPS[si].style.opacity=String(.2+.8*sq);SPS[si].style.transform='translateX(-50%) translateY('+((1-sq)*44)+'px)';}
   words(W1,.05,.30);
-  words(W2,.40,.26);
+  if(window.__ai2){window.__ai2(p);}else{words(W2,.40,.26);}
   if(memo){
     var qq=eo(clamp((p-.70)/.14));
     memo.style.opacity=String(qq);
@@ -3226,138 +3226,126 @@ window.__acts3OK=true;
 })();
 </script>
 <script>
-/* ARCHIVE SIGNATURE — the dust was the evidence all along */
+/* SECOND INTELLIGENCE — the second line assembles itself out of the archive dust */
 (function(){
 "use strict";
 try{
-  var q=new URLSearchParams(location.search);
-  if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;
-  if(q.get('static')==='1')return;
-
-  var cv=null,ctx=null,W=0,H=0,DPR=1,P=[],T=null,sampled=false;
-  var prog=0,state='idle',t0=0,armed=true,lastY=0;
-  var mx=-1e4,my=-1e4,pmx=0,pmy=0,vx=0,vy=0,running=false;
-
-  function make(){
-    cv=document.createElement('canvas');
-    cv.id='dustsig';
-    cv.style.cssText='position:fixed;inset:0;z-index:58;pointer-events:none;opacity:0;transition:opacity .5s linear';
-    document.body.appendChild(cv);
-    ctx=cv.getContext('2d');
-    size();
-    addEventListener('resize',function(){clearTimeout(cv.__t);cv.__t=setTimeout(function(){size();sampled=false;seed()},200)},{passive:true});
-    document.addEventListener('mousemove',function(e){pmx=mx;pmy=my;mx=e.clientX;my=e.clientY;
-      if(pmx>-1e3){vx=mx-pmx;vy=my-pmy}},{passive:true});
+var q=new URLSearchParams(location.search);
+if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+if(q.get('static')==='1')return;
+if(innerWidth<861&&q.get('force')!=='1')return;
+var L2=document.getElementById('stmt2'),L1=document.getElementById('stmt1');
+if(!L2)return;
+var W2i=[].slice.call(L2.querySelectorAll('.w>i'));
+var cv=null,ctx=null,DPR=1,T=null,S=null,N=0,key='';
+var doneSnd=false,shown=-1,t=0;
+function rng(i){var x=Math.sin(i*127.1+311.7)*43758.5453;return x-Math.floor(x)}
+function q5(v){return v<.5?16*v*v*v*v*v:1-Math.pow(-2*v+2,5)/2}
+function ensure(){
+  if(cv)return;
+  cv=document.createElement('canvas');cv.id='ai2c';
+  cv.style.cssText='position:fixed;inset:0;z-index:57;pointer-events:none';
+  document.body.appendChild(cv);ctx=cv.getContext('2d');size();
+  addEventListener('resize',function(){if(cv){size();key=''}},{passive:true});
+}
+function size(){DPR=Math.min(2,devicePixelRatio||1);cv.width=innerWidth*DPR;cv.height=innerHeight*DPR;ctx.setTransform(DPR,0,0,DPR,0,0)}
+function setW2(v){
+  for(var i=0;i<W2i.length;i++){
+    W2i[i].style.opacity=String(v);
+    W2i[i].style.transform=v?'none':'translateY(115%)';
   }
-  function size(){
-    DPR=Math.min(2,window.devicePixelRatio||1);
-    W=innerWidth;H=innerHeight;
-    cv.width=W*DPR;cv.height=H*DPR;ctx.setTransform(DPR,0,0,DPR,0,0);
-  }
-  function sample(){
-    var off=document.createElement('canvas');off.width=W;off.height=H;
-    var o=off.getContext('2d');
-    o.fillStyle='#fff';o.textAlign='center';o.textBaseline='middle';
-    var big=Math.round(Math.min(W/8.2,96));
-    o.font='800 '+big+'px Inter, sans-serif';
-    o.fillText('ORAN CARMON',W/2,H*0.47);
-    var sm=Math.round(Math.min(W/44,15));
-    o.font='700 '+sm+'px "JetBrains Mono", monospace';
-    o.fillText('C O M M E R C I A L   S Y S T E M S   B U I L D E R',W/2,H*0.47+big*0.72);
-    var d=o.getImageData(0,0,W,H).data,out=[],step=W>900?4:3;
-    for(var y=0;y<H;y+=step){for(var x=0;x<W;x+=step){
-      if(d[(y*W+x)*4+3]>140)out.push(x,y);
+  if(!W2i.length)L2.style.opacity=String(v);
+}
+function sample(){
+  if(document.fonts&&document.fonts.status!=='loaded')return false;
+  var r=L2.getBoundingClientRect();
+  if(r.width<40)return false;
+  var k=Math.round(r.width)+'x'+Math.round(r.height)+'x'+innerWidth;
+  if(k===key&&T)return true;
+  var cs=getComputedStyle(L2);
+  var w=Math.ceil(r.width),h=Math.ceil(r.height*1.4);
+  var off=document.createElement('canvas');off.width=w;off.height=h;
+  var o=off.getContext('2d');
+  o.fillStyle='#fff';o.textBaseline='middle';
+  o.font=cs.fontWeight+' '+cs.fontSize+' '+cs.fontFamily;
+  try{o.letterSpacing=cs.letterSpacing==='normal'?'0px':cs.letterSpacing}catch(e){}
+  var txt=(L2.textContent||'').replace(/\s+/g,' ').trim();
+  var tw=o.measureText(txt).width;
+  o.fillText(txt,(w-tw)/2,h/2);
+  var data=o.getImageData(0,0,w,h).data;
+  var step=2,pts;
+  do{
+    pts=[];
+    for(var y=0;y<h;y+=step){for(var x=0;x<w;x+=step){
+      if(data[(y*w+x)*4+3]>140){pts.push(x,y-(h-r.height)/2)}
     }}
-    /* deterministic shuffle so the sweep order is stable across frames */
-    var n=out.length/2;
-    for(var i=n-1;i>0;i--){
-      var j=(i*9301+49297)%(i+1);
-      var ax=out[i*2],ay=out[i*2+1];
-      out[i*2]=out[j*2];out[i*2+1]=out[j*2+1];out[j*2]=ax;out[j*2+1]=ay;
-    }
-    T=out;sampled=true;
-  }
-  function seed(){
-    var n=Math.round(Math.min(2000,Math.max(700,W*H/620)));
-    P=[];
-    for(var i=0;i<n;i++){
-      P.push({x:Math.random()*W,y:Math.random()*H,
-        dx:(Math.random()-.5)*.26,dy:(Math.random()-.5)*.22,
-        r:Math.random()*1.2+.7,a:Math.random()*.32+.12,
-        s1:Math.random(),s2:Math.random()});
+    step++;
+  }while(pts.length/2>2600&&step<7);
+  T=pts;N=pts.length/2;key=k;
+  var r1=L1?L1.getBoundingClientRect():r;
+  S=new Float32Array(N*2);
+  for(var i=0;i<N;i++){
+    var a=rng(i),b=rng(i+9999),c=rng(i+51234);
+    if(a<.62){
+      S[i*2]=(r1.left-r.left)+b*r1.width+(rng(i+777)-.5)*90;
+      S[i*2+1]=(r1.top-r.top)+c*r1.height+(rng(i+888)-.5)*70;
+    }else{
+      S[i*2]=(b-.5)*innerWidth*.9+r.width/2;
+      S[i*2+1]=(c-.9)*innerHeight*.7;
     }
   }
-  function ready(cb){
-    if(!cv)make();
-    if(!P.length)seed();
-    if(sampled)return cb();
-    if(document.fonts&&document.fonts.ready){document.fonts.ready.then(function(){sample();cb()})}
-    else{sample();cb()}
+  return true;
+}
+var mx=-1e4,my=-1e4,vx=0,vy=0,pmx=0,pmy=0;
+document.addEventListener('mousemove',function(e){pmx=mx;pmy=my;mx=e.clientX;my=e.clientY;
+  if(pmx>-1e3){vx=mx-pmx;vy=my-pmy}},{passive:true});
+window.__ai2=function(p){
+  t+=.016;
+  var prog=Math.max(0,Math.min(1,(p-.38)/.34));
+  if(prog<=0){
+    if(cv){ctx.clearRect(0,0,innerWidth,innerHeight);cv.style.opacity='0'}
+    if(shown!==0){setW2(0);shown=0}
+    doneSnd=false;return;
   }
-
-  function begin(){
-    if(state!=='idle'||!armed)return;
-    armed=false;
-    ready(function(){
-      state='form';t0=0;
-      cv.style.opacity='1';
-      if(!running){running=true;requestAnimationFrame(loop)}
-      try{if(window.__archLog)window.__archLog('SIGNATURE ON FILE',2600)}catch(e){}
-    });
-  }
-  function loop(){
-    /* frame-counted, so the beat is identical no matter how the clock behaves */
-    t0++;
-    if(state==='form'){prog=Math.min(1,t0/95);if(prog>=1){state='hold';t0=0}}
-    else if(state==='hold'){prog=1;if(t0>150){state='out';t0=0}}
-    else if(state==='out'){prog=Math.max(0,1-t0/75);
-      if(prog<=0){state='idle';cv.style.opacity='0';running=false;ctx.clearRect(0,0,W,H);return}}
-    draw();
-    requestAnimationFrame(loop);
-  }
-  function ease(p){return p<.5?8*p*p*p*p:1-Math.pow(-2*p+2,4)/2}
-
-  function draw(){
-    ctx.clearRect(0,0,W,H);
-    var n=P.length,tn=T?T.length/2:0,R=54+Math.hypot(vx,vy)*3.4;
-    vx*=.88;vy*=.88;
-    var e=ease(prog),tt=performance.now()/1000;
-    for(var i=0;i<n;i++){
-      var p=P[i];
-      p.x+=p.dx;p.y+=p.dy;
-      if(p.x<0)p.x=W;if(p.x>W)p.x=0;if(p.y<0)p.y=H;if(p.y>H)p.y=0;
-      var X=p.x,Y=p.y,s=0;
-      if(tn){
-        var d=i/n;
-        s=Math.min(1,Math.max(0,e*(1+d*.85)-d*.85));
-        var k=(i%tn)*2;
-        X=p.x+(T[k]-p.x)*s;Y=p.y+(T[k+1]-p.y)*s;
+  ensure();
+  if(!sample()){if(shown!==1){setW2(1);shown=1}return}
+  if(prog>=.995){
+    ctx.clearRect(0,0,innerWidth,innerHeight);cv.style.opacity='0';
+    if(shown!==1){setW2(1);shown=1;
+      if(!doneSnd){doneSnd=true;
+        try{window.__archAudio&&window.__archAudio.tick&&window.__archAudio.tick()}catch(e){}
+        try{window.__archLog&&window.__archLog('SECOND INTELLIGENCE ONLINE',2600)}catch(e){}
       }
-      var ddx=X-mx,ddy=Y-my,dist=Math.sqrt(ddx*ddx+ddy*ddy);
-      if(dist<R){
-        var f=1-dist/R;
-        X+=f*Math.sin(tt*2.6+p.s1*6.28)*(p.s2*9+vx*1.4);
-        Y+=f*Math.cos(tt*2.6+p.s1*6.28)*(p.s2*9+vy*1.4);
-      }
-      ctx.globalAlpha=Math.min(1,p.a+s*.8);
-      ctx.fillStyle=s>.5?(p.s2>.72?'#2FB380':'#F2F1ED'):'#CFD0D4';
-      var sz=p.r*(1+s*1.25);
-      ctx.fillRect(X,Y,sz,sz);
     }
-    ctx.globalAlpha=1;
+    return;
   }
-
-  /* preview hook: paint one frame of the signature at a given progress */
-  window.__archSign=function(v){ready(function(){prog=(v==null?1:v);cv.style.opacity='1';draw()})};
-
-  /* the signature fires once you reach the end of the file, and re-arms
-     only after you have travelled back up the document */
-  addEventListener('scroll',function(){
-    var y=pageYOffset,doc=document.documentElement.scrollHeight;
-    if(y+innerHeight>doc-120){begin()}
-    else if(doc-(y+innerHeight)>innerHeight*1.2){armed=true}
-    lastY=y;
-  },{passive:true});
+  cv.style.opacity='1';
+  if(shown!==0){setW2(0);shown=0}
+  var r=L2.getBoundingClientRect();
+  ctx.clearRect(0,0,innerWidth,innerHeight);
+  var K=.85,R=64+Math.hypot(vx,vy)*2.4;vx*=.9;vy*=.9;
+  for(var i=0;i<N;i++){
+    var d=i/N;
+    var sN=Math.max(0,Math.min(1,prog*(1+K)-d*K));
+    var e=q5(sN);
+    var sx=S[i*2],sy=S[i*2+1],tx=T[i*2],ty=T[i*2+1];
+    var X=sx+(tx-sx)*e,Y=sy+(ty-sy)*e;
+    var sw=(1-e)*16;
+    X+=Math.sin(t*2.2+i*.61)*sw*rng(i+3);
+    Y+=Math.cos(t*2.4+i*.37)*sw*rng(i+4);
+    X+=r.left;Y+=r.top;
+    if(prog>.9){
+      var ddx=X-mx,ddy=Y-my,dd=Math.sqrt(ddx*ddx+ddy*ddy);
+      if(dd<R){var f=1-dd/R;X+=f*Math.sin(t*3+i)*(6+vx);Y+=f*Math.cos(t*3+i)*(6+vy)}
+    }
+    var a=rng(i+42);
+    ctx.globalAlpha=.34+.62*e;
+    ctx.fillStyle=e<.55?'#9BE3C6':(a>.82?'#F2F1ED':'#2FB380');
+    var z=(2.5+a*1.3)*(1-e*.22);
+    ctx.fillRect(X,Y,z,z);
+  }
+  ctx.globalAlpha=1;
+};
 }catch(err){}
 })();
 </script>
