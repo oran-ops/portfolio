@@ -3234,7 +3234,7 @@ window.__acts3OK=true;
 })();
 </script>
 <script>
-/* SECOND INTELLIGENCE IV — scroll dispatches, time flies */
+/* SECOND INTELLIGENCE V — every star steers at its own point of the sentence */
 (function(){
 "use strict";
 try{
@@ -3248,24 +3248,25 @@ if(!L2||!stWrap)return;
 var W2i=[].slice.call(L2.querySelectorAll('.w>i'));
 var TP=q.get('aip')!==null?parseFloat(q.get('aip')):null;
 var TPRE=q.get('aipre')!==null?parseFloat(q.get('aipre')):null;
+var TELE=q.get('aitele')==='1';
+if(TELE)window.__tele=[];
 
 var CALL0=.20,CALL1=.36,
-    G0=.36,G1=.66,          /* the launch window                  */
-    U0=.74,U1=.92,          /* constellation -> real type          */
+    G0=.36,G1=.66,
+    U0=.74,U1=.92,
     FR0=.93,FR1=.985;
 
 var NTXT=1900,FREE=260,TOTAL=NTXT+FREE;
 var cv=null,ctx=null,DPR=1,SPR={};
 var T=null,N=0,key='';
 var ST=null;
-var t=0,lastY=-1,kick=0,cleared=true;
+var t=0,fr=0,lastY=-1,kick=0,cleared=true;
 var P=-1,PRE=-1;
 var stTop=0,geomKey='';
 var mx=-1e4,my=-1e4,vx=0,vy=0,pmx=0,pmy=0;
 var doneSnd=false;
 
 function rng(i){var x=Math.sin(i*127.1+311.7)*43758.5453;return x-Math.floor(x)}
-function q5(v){return v<=0?0:v>=1?1:(v<.5?16*v*v*v*v*v:1-Math.pow(-2*v+2,5)/2)}
 function sm(v){return v<=0?0:v>=1?1:v*v*(3-2*v)}
 function clampU(v){return v<0?0:v>1?1:v}
 function band(p,a,b){return clampU((p-a)/(b-a))}
@@ -3300,17 +3301,21 @@ function build(){
     var kind=rng(i*7+5);
     ST[i]={
       fx:rng(i*11+2)*W, fy:rng(i*13+3)*H,
+      x:0,y:0,vx:0,vy:0,
       z:z,
       sz:(3.0+rng(i*17+4)*2.8)*z,
       d:rng(i*19+6)*.85,
-      tw:.8+rng(i*29+8)*1.4,
+      k:.013+rng(i*23+7)*.007,
+      dp:.90+rng(i*43+15)*.025,
+      nw:.9+rng(i*29+8)*1.6,
       ph:rng(i*31+9)*6.28,
+      ph2:rng(i*47+17)*6.28,
+      tw:.8+rng(i*53+19)*1.4,
       b:rng(i*37+11)*.8,
       spr:z>.75?(kind>.45?'em':'wt'):(z>.45?(kind>.6?'wt':'dm'):'dm'),
       a:(.3+z*.5)*(kind>.85?1.25:1),
       ssz:2.2+rng(i*41+13)*.9,
-      mode:0,fe:0,fdur:55+rng(i*43+15)*35,rdur:34+rng(i*47+17)*16,
-      lx:0,ly:0,c1x:0,c1y:0,c2dx:0,c2dy:0,r0x:0,r0y:0,flare:0,
+      mode:0,flare:0,
       px:0,py:0,has:false
     };
   }
@@ -3364,26 +3369,6 @@ function setW2(v,rise){
 function flx(x,y,tt){return Math.sin(y*.0022+tt*.25)+Math.cos((x+y)*.0013-tt*.17)}
 function fly(x,y,tt){return Math.cos(x*.0021-tt*.22)+Math.sin((x-y)*.0011+tt*.13)}
 
-/* the flight leaves along the star's own current, on a cubic curve */
-function dispatch(st,i,tx,ty){
-  st.lx=st.fx;st.ly=st.fy;
-  var tvx=flx(st.fx,st.fy,t),tvy=fly(st.fx,st.fy,t);
-  var tl=Math.max(.35,Math.hypot(tvx,tvy));
-  var reach=60+rng(i*53+19)*50;
-  st.c1x=st.lx+tvx/tl*reach;
-  st.c1y=st.ly+tvy/tl*reach;
-  var dx=tx-st.lx,dy=ty-st.ly,dl=Math.max(60,Math.hypot(dx,dy));
-  var back=70+rng(i*59+21)*60;
-  var side=(rng(i*61+23)-.5)*70;
-  st.c2dx=-dx/dl*back-dy/dl*side;
-  st.c2dy=-dy/dl*back+dx/dl*side;
-  st.mode=1;st.fe=0;
-}
-function beginReturn(st){
-  st.r0x=st.px;st.r0y=st.py;
-  st.mode=3;st.fe=0;
-}
-
 document.addEventListener('mousemove',function(e){pmx=mx;pmy=my;mx=e.clientX;my=e.clientY;
   if(pmx>-1e3){vx=mx-pmx;vy=my-pmy}},{passive:true});
 
@@ -3392,7 +3377,8 @@ window.__ai2=function(pRaw){
   var yNow=pageYOffset,vhh=innerHeight;
   var preRaw=stTop>vhh*.3?clampU((yNow-vhh*.3)/(stTop-vhh*.3)):1;
   if(pRaw>0)preRaw=1;
-  if(TP!==null){pRaw=TP;P=TP}
+  if(window.__TPO!=null){pRaw=window.__TPO;P=window.__TPO}
+  else if(TP!==null){pRaw=TP;P=TP}
   if(TPRE!==null){preRaw=TPRE;PRE=TPRE}
 
   if(P<0)P=pRaw;if(PRE<0)PRE=preRaw;
@@ -3410,7 +3396,7 @@ window.__ai2=function(pRaw){
   ensure();
   var hasT=sample();
   cleared=false;
-  t+=.016;
+  t+=.016;fr++;
 
   if(lastY>=0)kick+=(yNow-lastY)*.02;
   lastY=yNow;kick*=.88;
@@ -3429,50 +3415,72 @@ window.__ai2=function(pRaw){
   }
 
   ctx.clearRect(0,0,W,H);
+  var tcx=0,tcy=0,scx=0,scy=0,sn=0,nfly=0,nland=0;
   for(var i=0;i<TOTAL;i++){
     var st=ST[i];
     var birth=sm((PRE-st.b)/.16);
     if(birth<=.01)continue;
     var isTxt=hasT&&i<N;
 
-    /* the home position keeps living in the currents, whatever the mode */
-    var sp=.4*st.z*(st.mode===0?1:.5);
-    st.fx+=flx(st.fx,st.fy,t)*sp;
-    st.fy+=fly(st.fx,st.fy,t)*sp+kick*st.z*(st.mode===0?.5:.15);
-    if(st.fx<-50)st.fx+=W+100;if(st.fx>W+50)st.fx-=W+100;
-    if(st.fy<-50)st.fy+=H+100;if(st.fy>H+50)st.fy-=H+100;
+    /* the field home keeps drifting in the shared currents */
+    if(st.mode===0){
+      var sp=.4*st.z;
+      st.fx+=flx(st.fx,st.fy,t)*sp;
+      st.fy+=fly(st.fx,st.fy,t)*sp+kick*st.z*.5;
+      if(st.fx<-50)st.fx+=W+100;if(st.fx>W+50)st.fx-=W+100;
+      if(st.fy<-50)st.fy+=H+100;if(st.fy>H+50)st.fy-=H+100;
+    }
 
     var tx=0,ty=0;
     if(isTxt){
       tx=T[i*2]+r.left;ty=T[i*2+1]+r.top;
       if(call>0&&st.mode===0){st.fx+=(tx-st.fx)*.005*call;st.fy+=(ty-st.fy)*.005*call}
-      /* scroll dispatches; time flies */
-      if(st.mode===0&&front>st.d+.001){dispatch(st,i,tx,ty)}
-      else if((st.mode===1||st.mode===2)&&front<st.d-.05){beginReturn(st)}
+      if(st.mode===0&&front>st.d+.001){
+        st.x=st.fx;st.y=st.fy;
+        st.vx=flx(st.fx,st.fy,t)*.4*st.z;st.vy=fly(st.fx,st.fy,t)*.4*st.z;
+        st.mode=1;
+      }else if((st.mode===1||st.mode===2)&&front<Math.max(st.d-.05,.004)){
+        st.mode=3;
+      }
     }
 
-    var X,Y,e=0;
+    var X,Y,ev=0;
     if(isTxt&&st.mode===1){
-      st.fe+=1/st.fdur;
-      var s1=q5(st.fe);e=s1;
-      if(st.fe>=1){st.mode=2;st.flare=9;e=1;X=tx;Y=ty}
-      else{
-        var ie=1-s1;
-        var c2x=tx+st.c2dx,c2y=ty+st.c2dy;
-        X=ie*ie*ie*st.lx+3*ie*ie*s1*st.c1x+3*ie*s1*s1*c2x+s1*s1*s1*tx;
-        Y=ie*ie*ie*st.ly+3*ie*ie*s1*st.c1y+3*ie*s1*s1*c2y+s1*s1*s1*ty;
-      }
+      /* the body steers at its own point of the sentence, always */
+      var dxx=tx-st.x,dyy=ty-st.y;
+      var dist=Math.sqrt(dxx*dxx+dyy*dyy);
+      var namp=2.1*clampU(dist/260);
+      st.vx+=dxx*st.k+Math.sin(t*st.nw+st.ph)*namp;
+      st.vy+=dyy*st.k+Math.cos(t*st.nw*.93+st.ph2)*namp;
+      var dmp=dist<40?.84:st.dp;
+      st.vx*=dmp;st.vy*=dmp;
+      var vv=Math.sqrt(st.vx*st.vx+st.vy*st.vy);
+      if(vv>18){st.vx*=18/vv;st.vy*=18/vv}
+      st.x+=st.vx;st.y+=st.vy;
+      if(dist<2.2&&vv<1.1){st.x=tx;st.y=ty;st.mode=2;st.flare=9}
+      X=st.x;Y=st.y;
+      ev=1-clampU(dist/240);
+      nfly++;
     }else if(isTxt&&st.mode===2){
-      X=tx;Y=ty;e=1;
+      X=tx;Y=ty;ev=1;nland++;
     }else if(isTxt&&st.mode===3){
-      st.fe+=1/st.rdur;
-      var s2=q5(st.fe);e=1-s2;
-      X=st.r0x+(st.fx-st.r0x)*s2;
-      Y=st.r0y+(st.fy-st.r0y)*s2;
-      if(st.fe>=1){st.mode=0;e=0}
+      /* going home: same physics, the target is the living field home */
+      var hx=st.fx,hy=st.fy;
+      var dxx2=hx-st.x,dyy2=hy-st.y;
+      var dist2=Math.sqrt(dxx2*dxx2+dyy2*dyy2);
+      var namp2=1.4*clampU(dist2/240);
+      st.vx+=dxx2*st.k*.8+Math.sin(t*st.nw+st.ph)*namp2;
+      st.vy+=dyy2*st.k*.8+Math.cos(t*st.nw*.93+st.ph2)*namp2;
+      st.vx*=.9;st.vy*=.9;
+      var vv2=Math.sqrt(st.vx*st.vx+st.vy*st.vy);
+      if(vv2>15){st.vx*=15/vv2;st.vy*=15/vv2}
+      st.x+=st.vx;st.y+=st.vy;
+      if(dist2<12){st.mode=0}
+      X=st.x;Y=st.y;
+      ev=clampU(1-dist2/240)*.4;
     }else{X=st.fx;Y=st.fy}
 
-    var pf=isTxt?(1-e):1;
+    var pf=isTxt?(1-ev):1;
     if(mx>-1e3){X+=(mx-W/2)*.012*st.z*pf;Y+=(my-H/2)*.008*st.z*pf}
 
     if(isTxt&&st.mode===2&&u<.6){
@@ -3482,23 +3490,28 @@ window.__ai2=function(pRaw){
 
     var twk=.78+.22*Math.sin(t*st.tw+st.ph);
     var a=st.a*twk*birth;
-    if(isTxt){a*=(.8+.4*e);a*=(1-u)}
+    if(isTxt){a*=(.8+.4*ev);a*=(1-u)}
     else{a*=freeOut}
     if(a<=.012)continue;
 
-    var d2=isTxt?(st.sz*(1-e)+st.ssz*e)*(1-u*.45):st.sz;
+    var d2=isTxt?(st.sz*(1-ev)+st.ssz*ev)*(1-u*.45):st.sz;
     if(st.flare>0){d2*=1+.05*st.flare;st.flare--}
     if(d2<2.2)d2=2.2;
-    var spr=isTxt&&e>.7?SPR.core:(isTxt&&e>.45?SPR.em:SPR[st.spr]);
+    var spr=isTxt&&ev>.7?SPR.core:(isTxt&&ev>.45?SPR.em:SPR[st.spr]);
     ctx.globalAlpha=Math.min(1,a);
-    if(st.has&&e<.9){
+    if(st.has&&ev<.9){
       var mvx=X-st.px,mvy=Y-st.py,mv=mvx*mvx+mvy*mvy;
       if(mv>9&&mv<784){ctx.globalAlpha=Math.min(1,a*.35);ctx.drawImage(spr,st.px-d2,st.py-d2,d2*2,d2*2);ctx.globalAlpha=Math.min(1,a)}
     }
     ctx.drawImage(spr,X-d2,Y-d2,d2*2,d2*2);
     st.px=X;st.py=Y;st.has=true;
+    if(TELE&&isTxt&&(st.mode===1||st.mode===2)){scx+=X;scy+=Y;sn++;tcx+=tx;tcy+=ty}
   }
   ctx.globalAlpha=1;
+  if(TELE&&sn>0){
+    window.__tele.push([fr,Math.round(scx/sn),Math.round(scy/sn),
+      Math.round(tcx/sn),Math.round(tcy/sn),nfly,nland]);
+  }
 };
 }catch(err){}
 })();
