@@ -1767,6 +1767,11 @@ body.static .hfolder,body.static #hero .mfold{--sx:-320px}
 #tech .lead{font-family:inherit;font-style:normal;font-weight:700;
   font-size:clamp(14px,1.8vw,17px);letter-spacing:.01em;color:var(--ink)}
 
+
+/* agent-3 pass, site parity: XTIX evidence stat row on an even 3-column rhythm */
+#xtix .statrow{display:grid;grid-template-columns:repeat(3,1fr);gap:12px 30px;align-items:end}
+@media (max-width:900px){#xtix .statrow{grid-template-columns:1fr;gap:26px}}
+
 </style>
 <section class="sec" id="leadership" style="--fc:var(--emb)">
   <div class="secnum" aria-hidden="true">07</div>
