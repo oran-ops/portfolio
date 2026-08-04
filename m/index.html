@@ -1780,6 +1780,23 @@ body.static .hfolder,body.static #hero .mfold{--sx:-320px}
 /* agent-6 pass, site parity: spine numerals share one axis with their connector */
 #final .node{align-items:center}
 
+
+
+
+
+/* ================= MOBILE TRACK - M1: reclaim the screen ================= */
+/* All rules are <=880px only; the desktop rendering of this page is untouched. */
+@media (max-width:880px){
+  /* The side-padding stack (24 section + 16 wrap + 38 folder = 78px a side)
+     left content only 219px of a 375px phone. The folder rail that justified
+     the 38px is display:none at this width. Flatten to 14 + 0 + 16. */
+  .sec{padding-left:14px;padding-right:14px}
+  .sec>.wrap{padding-left:0;padding-right:0}
+  .case .folder,#philosophy .folder,#leadership .folder,#final .folder{
+    padding-left:16px;padding-right:16px}
+  #hero{padding-left:16px;padding-right:16px}
+}
+
 </style>
 <section class="sec" id="leadership" style="--fc:var(--emb)">
   <div class="secnum" aria-hidden="true">07</div>
