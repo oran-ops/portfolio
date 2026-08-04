@@ -1797,6 +1797,35 @@ body.static .hfolder,body.static #hero .mfold{--sx:-320px}
   #hero{padding-left:16px;padding-right:16px}
 }
 
+
+/* ================= MOBILE TRACK - M2: legibility & content fit ================= */
+@media (max-width:880px){
+  /* M2-1 micro-type floor: nothing chrome-critical below ~8.5px on a phone */
+  .tok{font-size:9px}
+  .smeta{font-size:9px;letter-spacing:.18em}
+  .crumb{font-size:8.5px}
+  #hero .kick{font-size:8.5px;letter-spacing:.3em}
+  .cue{font-size:8.5px}
+  .slip{font-size:8.5px}
+  .ticker .tk{font-size:8.5px}
+  /* M2-2 medcoin outcomes: stacked key-over-value rows instead of a squeezed table */
+  #medcoin .outs table,#medcoin .outs tbody{display:block;width:100%}
+  #medcoin .outs tr{display:block;padding:8px 0;border-top:1px solid var(--grid)}
+  #medcoin .outs tr:first-child{border-top:0}
+  #medcoin .outs td{display:block;border:0;padding:0;text-align:left}
+  #medcoin .outs td.k{margin-bottom:3px}
+  #medcoin .outs td.v{font-size:14px}
+  /* M2-3 the drawer hint tells the truth on phones (the files stack downward) */
+  .hhint .hs{display:none}
+  .hhint::after{content:"THE FILES OPEN BELOW";font-family:'JetBrains Mono',monospace;
+    font-size:8.5px;letter-spacing:.22em;color:var(--lbl)}
+  /* M2-4 wide diagrams: edge fade signals there is more to swipe */
+  #eventer .convwrap,#tech .archw{
+    -webkit-overflow-scrolling:touch;
+    -webkit-mask-image:linear-gradient(90deg,#000 86%,transparent 99%);
+    mask-image:linear-gradient(90deg,#000 86%,transparent 99%)}
+}
+
 </style>
 <section class="sec" id="leadership" style="--fc:var(--emb)">
   <div class="secnum" aria-hidden="true">07</div>
