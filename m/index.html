@@ -1921,7 +1921,6 @@ body.static .hfolder,body.static #hero .mfold{--sx:-320px}
     transition:opacity .55s var(--ease)}
   .swcue .swar{color:var(--emb);font-style:normal;font-size:13px;line-height:1;
     animation:swnudge 1.6s ease-in-out infinite}
-  .swcue.off{opacity:0}
 }
 @keyframes swnudge{0%,100%{transform:translateX(0)}50%{transform:translateX(6px)}}
 @media (prefers-reduced-motion:reduce){.swcue .swar{animation:none!important}}
@@ -1937,6 +1936,16 @@ body.static .hfolder,body.static #hero .mfold{--sx:-320px}
   #medcoin .outs tr{padding:10px 0 11px}
   #medcoin .outs td.k{margin-bottom:4px;font-size:9px;letter-spacing:.22em;color:var(--lbl)}
   #medcoin .outs td.v{text-align:left;font-size:15px;line-height:1.4}
+  /* R3-1: the 1.15s boot-open pose is a desktop luxury - on phones a user
+     scrolls within it and the scrub stomps a mid-flight 3D matrix (tab and
+     card project differently under rotateX). Open fast, then the scrub owns
+     the transform (engine kills the transition at first scroll). */
+  #hero .hw{transition:transform .45s cubic-bezier(.16,1,.3,1),opacity .35s var(--ease)}
+  #drawerlip{transition:transform .45s cubic-bezier(.16,1,.3,1)}
+  /* R3-1: hfloat levitates the CARD +-13px while the name tab stays put -
+     desktop ambience, but at 390px the card fills the screen and the pair
+     reads as broken apart. Phones keep the sweep sheen, drop the float. */
+  #hero .mfold.on{animation:sweepx 7.5s ease-in-out 1.2s infinite}
 }
 
 </style>
@@ -2041,12 +2050,13 @@ function eo(p){return 1-Math.pow(1-p,3)}
    desktop) are HARD and behave exactly as before. Desktop >=861 is never
    classified soft. */
 (function(){
-  var W0=window.innerWidth,H0=window.innerHeight,EV=null,SOFT=false,Q=[],idler=null,anchor=0;
-  function runQ(){var fns=Q;Q=[];idler=null;for(var i=0;i<fns.length;i++){try{fns[i]()}catch(e){}}}
-  function chk(){
-    if(Math.abs(window.pageYOffset-anchor)>2){anchor=window.pageYOffset;idler=setTimeout(chk,260);return}
-    runQ();
-  }
+  /* v3: soft resizes schedule NOTHING - no idle timers, no deferred
+     re-measure (the round-2 idle re-measure was itself the direction-change
+     jump inside iOS webviews). A soft resize may only run the immediate
+     light work its caller passes (additive reveals, canvas bitmap refresh);
+     scrub mappings keep their load-time viewport and stay continuous. Width
+     changes (rotation, desktop) remain HARD and behave exactly as before. */
+  var W0=window.innerWidth,H0=window.innerHeight,EV=null,SOFT=false;
   window.__mSoftRz=function(e,fn){
     if(e!==EV||!e){
       EV=e||null;
@@ -2054,12 +2064,7 @@ function eo(p){return 1-Math.pow(1-p,3)}
       SOFT=w<861&&w===W0&&Math.abs(h-H0)<160;
       W0=w;H0=h;
     }
-    if(SOFT&&fn&&Q.indexOf(fn)<0){
-      Q.push(fn);
-      anchor=window.pageYOffset;
-      if(idler)clearTimeout(idler);
-      idler=setTimeout(chk,260);
-    }
+    if(SOFT&&fn){try{fn()}catch(err){}}
     return SOFT;
   };
 })();
@@ -2168,6 +2173,14 @@ function reveal(u){
   u.el.classList.add('on');u.done=true;
   setTimeout(function(){u.el.classList.add('done')},1700);
 }
+/* additive reveal sweep against the LIVE viewport - safe to run any time
+   (never un-reveals, touches no scrub state); the soft-resize path uses it
+   so a toolbar collapse can widen the gate without re-measuring anything */
+function revealPass(){
+  var y=window.pageYOffset;if(y<0)y=0;
+  var gate=y+window.innerHeight*(MOB?1.15:.94);
+  for(var i=0;i<units.length;i++){var u=units[i];if(!u.done&&u.t<gate)reveal(u)}
+}
 
 /* ---------- sections / rail ---------- */
 var pbar=document.getElementById('pbar');
@@ -2206,7 +2219,12 @@ var hero=document.getElementById('hero');
 var hc=hero.querySelector('.hw')||hero.querySelector('.center'),hd=hero.querySelector('.drawer'),
     hx=hero.querySelector('.idx'),hb=hero.querySelector('.barc'),hcue=hero.querySelector('.cue'),
     htabs=hd?[].slice.call(hd.children):[];
+var hcKill=false;
 function heroFx(y){
+  /* phones: the moment real scrolling starts, the scrub owns the transform -
+     otherwise the boot-open transition retargets every frame write and the
+     folder lags/shears behind the finger (tab and card visibly part) */
+  if(MOB&&!hcKill&&y>2){hc.style.transition='none';hcKill=true}
   var p=clamp(y/(vh*.9));
   hc.style.opacity=String(1-p*.95);
   hc.style.transform='translateY('+(-y*.17)+'px) scale('+(1-p*.05)+')';
@@ -2221,6 +2239,10 @@ function heroFx(y){
 function measure(){
   vh=window.innerHeight;
   MOB=window.innerWidth<861;
+  /* phones: freeze the hero card height in px - inside in-app webviews the
+     toolbar makes CSS vh flutter mid-scroll and 62vh visibly stretches */
+  if(MOB){var mf0=document.querySelector('#hero .mfold');
+    if(mf0)mf0.style.minHeight=Math.round(window.innerHeight*.62)+'px'}
   var se=document.scrollingElement||document.documentElement;DOCH=Math.max(1,se.scrollHeight-window.innerHeight);
   scenes.forEach(function(x){x.t=top0(x.el)});
   units.forEach(function(u){u.t=top0(u.el)});
@@ -2233,6 +2255,9 @@ var lastY=-1,railI=-1;
 function frame(){
   window.__engineOK=true;
   var y=window.pageYOffset;
+  /* iOS rubber-band produces out-of-range scrollY at the extremes
+     (bottom bound keeps toolbar-flutter slack: DOCH may be ~160px stale) */
+  if(MOB){if(y<0)y=0;else if(y>DOCH+200)y=DOCH+200}
   if(y!==lastY){
     lastY=y;
     pbar.style.width=(y/DOCH*100)+'%';
@@ -2282,7 +2307,7 @@ function init(){
   }
 }
 var _hardRz=function(){measure();lastY=-1};
-window.addEventListener('resize',function(e){if(window.__mSoftRz&&window.__mSoftRz(e,_hardRz))return;_hardRz()});
+window.addEventListener('resize',function(e){if(window.__mSoftRz&&window.__mSoftRz(e,revealPass))return;_hardRz()});
 window.addEventListener('load',function(){measure();lastY=-1});
 setTimeout(init,60);
 setTimeout(function(){measure();lastY=-1},900);
@@ -2315,17 +2340,14 @@ if(MOB){
   setTimeout(function(){
     [].forEach.call(document.querySelectorAll('#eventer .convwrap,#medcoin .mzorg,#tech .archw'),function(sc){
       if(sc.scrollWidth<=sc.clientWidth+12)return;
+      /* owner spec (round 3): the cue is PERSISTENT - the arrow must be
+         visible at all times, so there is no dismiss path at all (the old
+         one-shot fade could half-die in iOS webviews: composited animated
+         child vs parent opacity transition) */
       var cue=document.createElement('div');
       cue.className='swcue';cue.setAttribute('aria-hidden','true');
       cue.innerHTML='<span>SWIPE</span><b class="swar">&#10230;</b>';
       sc.parentNode.insertBefore(cue,sc.nextSibling);
-      var armed=false;
-      setTimeout(function(){armed=true},1200);
-      sc.addEventListener('scroll',function once(){
-        if(!armed)return;
-        sc.removeEventListener('scroll',once);
-        cue.classList.add('off');
-      },{passive:true});
     });
   },700);
 }
@@ -3646,6 +3668,7 @@ window.__ai2=function(pRaw){
   if(MOBP&&document.body.classList.contains('failsafe')){setW2(1,false);return;}
   geom();
   var yNow=pageYOffset,vhh=innerHeight;
+  if(MOBP&&yNow<0)yNow=0; /* iOS top rubber-band */
   var preRaw=stTop>vhh*.3?clampU((yNow-vhh*.3)/(stTop-vhh*.3)):1;
   if(pRaw>0)preRaw=1;
   if(window.__TPO!=null){pRaw=window.__TPO;P=window.__TPO}
@@ -3726,14 +3749,19 @@ window.__ai2=function(pRaw){
       var dxx=tx-st.x,dyy=ty-st.y;
       var dist=Math.sqrt(dxx*dxx+dyy*dyy);
       var namp=2.1*clampU(dist/260);
-      st.vx+=dxx*st.k+Math.sin(t*st.nw+st.ph)*namp;
-      st.vy+=dyy*st.k+Math.cos(t*st.nw*.93+st.ph2)*namp;
+      /* phones: as the word band nears, stragglers get urgent - arrival must
+         complete BEFORE the swap, and noise dies so nothing hovers */
+      var urg=MOBP?1+5*clampU((P-.66)/.1):1;
+      if(urg>1)namp*=Math.max(0,1.6-urg);
+      st.vx+=dxx*st.k*urg+Math.sin(t*st.nw+st.ph)*namp;
+      st.vy+=dyy*st.k*urg+Math.cos(t*st.nw*.93+st.ph2)*namp;
       var dmp=dist<40?.84:st.dp;
       st.vx*=dmp;st.vy*=dmp;
       var vv=Math.sqrt(st.vx*st.vx+st.vy*st.vy);
       if(vv>18){st.vx*=18/vv;st.vy*=18/vv}
       st.x+=st.vx;st.y+=st.vy;
       if(dist<2.2&&vv<1.1){st.x=tx;st.y=ty;st.mode=2;st.flare=9}
+      if(MOBP&&u>.2){st.x=tx;st.y=ty;st.mode=2;st.flare=6}
       X=st.x;Y=st.y;
       ev=1-clampU(dist/240);
       nfly++;
@@ -3766,8 +3794,17 @@ window.__ai2=function(pRaw){
 
     var twk=.78+.22*Math.sin(t*st.tw+st.ph);
     var a=st.a*twk*birth;
-    if(isTxt){a*=(MOBP?(.95+.3*ev):(.8+.4*ev));a*=(1-u)}
-    else{a*=freeOut}
+    if(isTxt){
+      a*=(MOBP?(.95+.3*ev):(.8+.4*ev));
+      /* phones: text stars extinguish INTO the glyphs by P=.86, before the
+         sentence fully solidifies at .92 - no dot may outlive the letters */
+      a*=(MOBP?(1-sm(band(P,U0,.86))):(1-u));
+    }else{
+      a*=freeOut;
+      /* phones: post-handoff, ambient stars near the sentence line dim away
+         so nothing reads as a leftover letter */
+      if(MOBP&&u>.3){var bd=Math.abs(Y-(r.top+r.height/2));if(bd<r.height*1.7)a*=(1-.85*u)}
+    }
     a*=relOut;
     if(a<=.012)continue;
 
