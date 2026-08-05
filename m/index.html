@@ -1277,7 +1277,7 @@ padding:6px 13px;font-family:'JetBrains Mono',monospace;font-weight:700;font-siz
           </div>
         </div>
       </div>
-      <div class="hairtop rv">
+      <div class="hairtop rv mzorg">
         <div class="zr"><b>05</b><span class="d2"></span>THE ORIGIN LINE</div>
         <svg viewBox="0 0 1060 60" style="width:100%;height:auto"><line x1="44" y1="26" x2="923" y2="26" stroke="#F2F1ED" stroke-width="1.5"/><line class="crawlp" x1="930" y1="26" x2="1032" y2="26" stroke="#2FB380" stroke-width="2" stroke-dasharray="4 4"/><path d="M1040 26 l-9 -5 v10 z" fill="#2FB380"/><circle class="ndot" style="--i:0" cx="44" cy="26" r="5" fill="#191A1F" stroke="#F2F1ED" stroke-width="1.6"/><text x="44" y="54" text-anchor="middle" font-size="9" letter-spacing="1.3" fill="#CFD0D4">FOUNDED</text><circle class="ndot" style="--i:1" cx="262" cy="26" r="5" fill="#191A1F" stroke="#F2F1ED" stroke-width="1.6"/><text x="262" y="54" text-anchor="middle" font-size="9" letter-spacing="1.3" fill="#CFD0D4">BUSINESS MODEL</text><circle class="ndot" style="--i:2" cx="480" cy="26" r="5" fill="#191A1F" stroke="#F2F1ED" stroke-width="1.6"/><text x="480" y="54" text-anchor="middle" font-size="9" letter-spacing="1.3" fill="#CFD0D4">PARTNERSHIPS</text><circle class="ndot" style="--i:3" cx="698" cy="26" r="5" fill="#191A1F" stroke="#F2F1ED" stroke-width="1.6"/><text x="698" y="54" text-anchor="middle" font-size="9" letter-spacing="1.3" fill="#CFD0D4">INVESTMENT RAISED</text><circle class="ndot" style="--i:4" cx="916" cy="26" r="7" fill="#2FB380" stroke="#F2F1ED" stroke-width="1.6"/><text x="916" y="54" text-anchor="middle" font-size="9" letter-spacing="1.3" fill="#CFD0D4">ATMs ACROSS EUROPE</text><text x="986" y="12" text-anchor="middle" font-size="7.8" font-weight="700" letter-spacing="1.5" fill="#2FB380">REVENUE</text></svg>
       </div>
@@ -1363,7 +1363,13 @@ font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.2em;color:v
 footer b{color:var(--mut);font-weight:600}
 /* ================= MOBILE EXCELLENCE (<=680px) ================= */
 @media (max-width:680px){
- html,body{overflow-x:hidden}
+ /* clip sideways overflow WITHOUT making body a scroll container:
+    body{overflow-x:hidden} + html{overflow-x:hidden} turns body into the
+    sticky containment box (it never scrolls), which silently kills every
+    position:sticky pin on phones. html carries the clip; body uses clip,
+    which cannot create a scroll container. */
+ html{overflow-x:hidden}
+ body{overflow-x:clip}
  .wrap{padding-left:16px!important;padding-right:16px!important}
  #rail{display:none!important}
  svg{max-width:100%}
@@ -1826,6 +1832,84 @@ body.static .hfolder,body.static #hero .mfold{--sx:-320px}
     mask-image:linear-gradient(90deg,#000 86%,transparent 99%)}
 }
 
+
+/* ================= MOBILE TRACK - M3: entrance pacing ================= */
+/* A phone flick moves ~1.5 viewports in the time one desktop entrance plays.
+   On phones every entrance completes in ~350-500ms with tight stagger, and
+   travel distances shrink so late arrivals do not read as layout jumps.
+   (The engine reveals earlier on phones too - vh*1.15 gate + velocity lookahead.) */
+@media (max-width:880px){
+  .rv{transform:translateY(18px);transition-duration:.42s,.42s;transition-delay:calc(var(--i,0)*45ms)}
+  .rv.wipe{transition-duration:.45s,.45s,.55s;transition-delay:calc(var(--i,0)*45ms)}
+  .rvs{transform:translateY(10px) scale(.992);transition-duration:.4s,.4s;transition-delay:calc(var(--i,0)*45ms)}
+  .st{transform:translateY(12px)}
+  .u.on .st{transition:opacity .34s var(--ease) calc(var(--i,0)*38ms),transform .34s var(--ease) calc(var(--i,0)*38ms)}
+  .u.on .st .c{transition:transform .3s var(--ease) calc(var(--i,0)*38ms + .12s)}
+  .u.on .st .o{transition:transform .3s var(--ease) calc(var(--i,0)*38ms + .1s)}
+  .u.on .dash.st::before{transition:transform .32s var(--ease) calc(var(--i,0)*38ms + .08s)}
+  .u .zr{transform:translateX(-14px)}
+  .u.on .zr{transition:opacity .34s var(--ease),transform .34s var(--ease)}
+  .u.on .zr .d2{transition:transform .3s var(--ease) .08s}
+  .tw .w>i{transition:transform .5s var(--ease)}
+  .tw.on .w>i,.u.on .tw .w>i{transition-delay:calc(var(--wi,0)*26ms + var(--i,0)*30ms)}
+  .case .hairtop.on::before{transition:transform .55s var(--ease)}
+  .lessq.on::before,.u.on .lessq::before{transition:transform .45s var(--ease) .1s}
+  .sigp.on::before,.sigp.on::after{transition:width .3s var(--ease) .25s,height .3s var(--ease) .25s,opacity .2s var(--ease) .25s}
+  .folder.on .flip{transition:opacity .35s var(--ease) .04s,transform .35s var(--ease) .04s}
+  .folder.on .frail,.u.on .frail{transition:opacity .4s var(--ease) .06s,transform .4s var(--ease) .06s}
+  .folder.on .rstampS{animation-delay:.25s}
+  #philosophy .u.on .node svg *:not(.dsh){transition:stroke-dashoffset .5s var(--ease) calc(var(--i,0)*45ms + var(--pi,0)*36ms + .08s)}
+  #philosophy .u.on .node svg .dsh{transition:opacity .4s var(--ease) calc(var(--i,0)*45ms + .3s)}
+  .u.on .bignum{transition:opacity .4s var(--ease),transform .4s var(--ease)}
+  .u.on .reality .frow .redct{transition:transform .45s var(--ease) calc(var(--i,0)*70ms + .2s)}
+  #final .osmap .spine{transition:transform .6s var(--ease) .05s}
+  /* M3-fast: units revealed during a fast flick (engine adds .fon before .on)
+     drop their stagger so content is simply there when the eye lands */
+  .fon.rv,.fon.rvs{transition-duration:.3s,.3s;transition-delay:0ms}
+  .fon.rv.wipe{transition-duration:.3s,.3s,.34s;transition-delay:0ms}
+  .u.fon.on .st{transition-delay:0ms;transition-duration:.26s}
+  .u.fon.on .zr{transition-delay:0ms;transition-duration:.26s}
+  .u.fon.on .st .c,.u.fon.on .st .o{transition-delay:.06s;transition-duration:.24s}
+  .u.fon.on .dash.st::before{transition-delay:.05s;transition-duration:.24s}
+  .u.fon.on .tw .w>i,.fon.tw.on .w>i{transition-delay:calc(var(--wi,0)*12ms);transition-duration:.3s}
+  #philosophy .u.fon.on .node svg *:not(.dsh){transition-delay:calc(var(--pi,0)*18ms);transition-duration:.38s}
+  #philosophy .u.fon.on .node svg .dsh{transition-delay:.15s;transition-duration:.3s}
+  .u.fon.on .reality .frow .redct{transition-delay:calc(var(--i,0)*40ms + .1s)}
+  .fon.folder.on .flip{transition-delay:0ms}
+  .fon.folder.on .frail,.u.fon.on .frail{transition-delay:0ms;transition-duration:.3s}
+}
+
+
+/* ================= MOBILE TRACK - M4: folder punch-holes ================= */
+/* The M1 padding flatten removed the wide rail band the punch-holes were
+   centered in, leaving them printed over the first characters of every line.
+   Rebuild an honest narrow rail: content clears the band, smaller holes sit
+   centered on the band's midline. */
+@media (max-width:860px){
+  .hfolder{padding-left:34px}
+  .hfolder .hole2{left:10px;width:13px;height:13px}
+}
+@media (max-width:680px){
+  #hero .mfold{padding-left:26px!important;padding-right:26px!important}
+  #hero .mfold .hole{left:7px;width:12px;height:12px;border-width:1.5px}
+}
+
+
+/* ================= MOBILE TRACK - M5: visual sweep fixes ================= */
+@media (max-width:680px){
+  /* the legacy `#hero .center{padding:0 6px}` rule also hits the master
+     folder card (it carries both classes) and zeroed its vertical padding,
+     shoving the kick line up under the name tab. Restore the card's air. */
+  #hero .mfold{padding-top:46px;padding-bottom:64px}
+  /* medcoin origin line: scaled to 390px its labels rendered ~3px. Swipe
+     like the other wide charts, with larger type and an edge-fade hint. */
+  #medcoin .mzorg{overflow-x:auto;-webkit-overflow-scrolling:touch;
+    -webkit-mask-image:linear-gradient(90deg,#000 88%,transparent 99%);
+    mask-image:linear-gradient(90deg,#000 88%,transparent 99%)}
+  #medcoin .mzorg>svg{min-width:760px}
+  #medcoin .mzorg>svg text{font-size:12.5px}
+}
+
 </style>
 <section class="sec" id="leadership" style="--fc:var(--emb)">
   <div class="secnum" aria-hidden="true">07</div>
@@ -1971,6 +2055,8 @@ function setCnt(c,p){
 
 /* ---------- scrub scene registry ---------- */
 var vh=window.innerHeight,DOCH=1;
+/* mobile track: phones reveal earlier and track scroll velocity (desktop path untouched) */
+var MOB=window.innerWidth<861,lastVY=-1,lastVT=0,vel=0;
 var scenes=[];
 function top0(el){var r=el.getBoundingClientRect();return r.top+window.pageYOffset}
 function add(el,fn,travel,lead){if(!el)return;scenes.push({el:el,fn:fn,tv:travel||.55,ld:lead||.9,t:0})}
@@ -2012,10 +2098,12 @@ cnts.forEach(function(c){
     if(flip){var qq=eo(clamp((pr-.15)/.4));flip.style.opacity=String(qq);flip.style.transform='translateY('+((1-qq)*10)+'px)'}
   },.5,.94);
 });
+if(MOB){scenes.forEach(function(x){if(x.ld<1.06)x.ld=1.06})}
 
 /* ---------- reveal units ---------- */
 var units=[].slice.call(document.querySelectorAll('.u')).map(function(el){return {el:el,t:0,done:false}});
 function reveal(u){
+  if(MOB&&vel>2.2)u.el.classList.add('fon');
   u.el.classList.add('on');u.done=true;
   setTimeout(function(){u.el.classList.add('done')},1700);
 }
@@ -2071,6 +2159,7 @@ function heroFx(y){
 /* ---------- geometry ---------- */
 function measure(){
   vh=window.innerHeight;
+  MOB=window.innerWidth<861;
   var se=document.scrollingElement||document.documentElement;DOCH=Math.max(1,se.scrollHeight-window.innerHeight);
   scenes.forEach(function(x){x.t=top0(x.el)});
   units.forEach(function(u){u.t=top0(u.el)});
@@ -2089,6 +2178,10 @@ function frame(){
     heroFx(y);
     statement(y);
     var gate=y+vh*.94;
+    if(MOB){var nvt=performance.now();
+      if(lastVY>=0&&nvt>lastVT)vel=Math.max(0,(y-lastVY)/Math.max(16,nvt-lastVT));
+      lastVY=y;lastVT=nvt;
+      gate=y+vh*1.15+Math.min(vh*1.6,vel*320);}
     for(var i=0;i<units.length;i++){var u=units[i];if(!u.done&&u.t<gate)reveal(u)}
     for(var j=0;j<scenes.length;j++){var x=scenes[j];
       var pr=clamp((y+vh*x.ld-x.t)/(vh*x.tv));x.fn(x.el,pr);}
@@ -2099,6 +2192,10 @@ function frame(){
       var fc=getComputedStyle(SEC[act].el).getPropertyValue('--fc').trim();
       pbar.style.background=fc||'#2FB380';
     }
+  }else if(MOB&&stWrap&&!frozen&&y>stTop-vh&&y<stTop+stH){
+    /* phones: native momentum can stop mid-pin; keep the statement scene
+       breathing while parked inside it (desktop's inertia tail masks this) */
+    statement(y);
   }
   requestAnimationFrame(frame);
 }
@@ -3301,7 +3398,11 @@ try{
 var q=new URLSearchParams(location.search);
 if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;
 if(q.get('static')==='1')return;
-if(innerWidth<861&&q.get('force')!=='1')return;
+/* mobile track: the second intelligence runs on phones too, at a phone-sized
+   particle budget; only very narrow screens sit out (desktop >=861 untouched) */
+var MOBP=innerWidth<861;
+if(MOBP&&innerWidth<360&&q.get('force')!=='1')return;
+var SMF=MOBP?.14:.085; /* phones: snappier settle so a flick still resolves the sentence */
 var L2=document.getElementById('stmt2'),L1=document.getElementById('stmt1');
 var stWrap=document.querySelector('#statement .pinh');
 if(!L2||!stWrap)return;
@@ -3316,7 +3417,7 @@ var CALL0=.20,CALL1=.36,
     U0=.74,U1=.92,
     FR0=.93,FR1=.985;
 
-var NTXT=1900,FREE=260,TOTAL=NTXT+FREE;
+var NTXT=MOBP?950:1900,FREE=MOBP?120:260,TOTAL=NTXT+FREE;
 var cv=null,ctx=null,DPR=1,SPR={};
 var T=null,N=0,key='';
 var ST=null;
@@ -3351,7 +3452,7 @@ function ensure(){
   size();build();
   addEventListener('resize',function(){if(cv){size();key='';geomKey='';build()}},{passive:true});
 }
-function size(){DPR=Math.min(2,devicePixelRatio||1);cv.width=Math.round(innerWidth*DPR);cv.height=Math.round(innerHeight*DPR);cv.style.width=innerWidth+'px';cv.style.height=innerHeight+'px';ctx.setTransform(DPR,0,0,DPR,0,0)}
+function size(){DPR=Math.min(MOBP?1.75:2,devicePixelRatio||1);cv.width=Math.round(innerWidth*DPR);cv.height=Math.round(innerHeight*DPR);cv.style.width=innerWidth+'px';cv.style.height=innerHeight+'px';ctx.setTransform(DPR,0,0,DPR,0,0)}
 
 function build(){
   ST=new Array(TOTAL);
@@ -3433,6 +3534,7 @@ document.addEventListener('mousemove',function(e){pmx=mx;pmy=my;mx=e.clientX;my=
   if(pmx>-1e3){vx=mx-pmx;vy=my-pmy}},{passive:true});
 
 window.__ai2=function(pRaw){
+  if(MOBP&&document.body.classList.contains('failsafe')){setW2(1,false);return;}
   geom();
   var yNow=pageYOffset,vhh=innerHeight;
   var preRaw=stTop>vhh*.3?clampU((yNow-vhh*.3)/(stTop-vhh*.3)):1;
@@ -3442,8 +3544,8 @@ window.__ai2=function(pRaw){
   if(TPRE!==null){preRaw=TPRE;PRE=TPRE}
 
   if(P<0)P=pRaw;if(PRE<0)PRE=preRaw;
-  P+=(pRaw-P)*.085;
-  PRE+=(preRaw-PRE)*.085;
+  P+=(pRaw-P)*SMF;
+  PRE+=(preRaw-PRE)*SMF;
 
   var u=sm(band(P,U0,U1));
   var freeOut=1-band(P,FR0,FR1);
