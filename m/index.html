@@ -1393,7 +1393,7 @@ footer b{color:var(--mut);font-weight:600}
  #statement .spine{width:20px}
  #statement .sp span{display:none}
  #statement .in{padding-left:26px!important;padding-right:6px}
- #statement .l1,#statement .l2{font-size:clamp(17px,5.4vw,22px)!important;line-height:1.28}
+ #statement .l1,#statement .l2{font-size:clamp(22px,7.2vw,28px)!important;line-height:1.22}
  .memo{font-size:8px;letter-spacing:.16em;padding:7px 12px;margin-bottom:22px}
  /* --- section headers --- */
  .sttl{font-size:clamp(18px,6vw,24px)!important;letter-spacing:-.02em;overflow-wrap:break-word}
@@ -1910,6 +1910,35 @@ body.static .hfolder,body.static #hero .mfold{--sx:-320px}
   #medcoin .mzorg>svg text{font-size:12.5px}
 }
 
+
+/* ================= MOBILE TRACK - M6: round 2 ================= */
+@media (max-width:880px){
+  /* item 5 - one shared swipe affordance for every sideways-scrolling chart
+     (injected by the engine on phones; fades out for good after first swipe) */
+  .swcue{display:flex;justify-content:flex-end;align-items:center;gap:8px;
+    margin:6px 2px 0 0;font-family:'JetBrains Mono',monospace;font-weight:700;
+    font-size:8.5px;letter-spacing:.26em;color:var(--lbl);
+    transition:opacity .55s var(--ease)}
+  .swcue .swar{color:var(--emb);font-style:normal;font-size:13px;line-height:1;
+    animation:swnudge 1.6s ease-in-out infinite}
+  .swcue.off{opacity:0}
+}
+@keyframes swnudge{0%,100%{transform:translateX(0)}50%{transform:translateX(6px)}}
+@media (prefers-reduced-motion:reduce){.swcue .swar{animation:none!important}}
+@media (max-width:680px){
+  /* item 7 - oasis hub-and-spoke: the radial labels spill past the 260-unit
+     viewBox by design (overflow:visible); desktop columns absorb it, a 390px
+     column does not. Cap the rendered size so the spill lands inside the
+     zone instead of escaping its frame. */
+  /* the svg carries an inline max-width:280px - the override must out-rank it */
+  #oasis svg[viewBox="0 0 260 210"]{max-width:215px!important}
+  /* item 6 - medcoin outcomes: one left rail, key over value, calm rhythm */
+  #medcoin .outs{padding:4px 18px 6px}
+  #medcoin .outs tr{padding:10px 0 11px}
+  #medcoin .outs td.k{margin-bottom:4px;font-size:9px;letter-spacing:.22em;color:var(--lbl)}
+  #medcoin .outs td.v{text-align:left;font-size:15px;line-height:1.4}
+}
+
 </style>
 <section class="sec" id="leadership" style="--fc:var(--emb)">
   <div class="secnum" aria-hidden="true">07</div>
@@ -2002,6 +2031,38 @@ if(g){var ge=document.getElementById(g);if(ge)setTimeout(function(){window.scrol
 
 function clamp(v){return v<0?0:v>1?1:v}
 function eo(p){return 1-Math.pow(1-p,3)}
+
+/* ---------- mobile soft-resize guard ----------
+   Mobile Chrome fires window.resize every time the URL bar hides/shows
+   (width unchanged, height +-~120px), mostly on scroll-UP. Re-measuring and
+   rebuilding mid-scroll is what made the page jump. Classify those as SOFT:
+   listeners skip their heavy path and hand it to a deferred queue that runs
+   once scrolling has been idle. Width changes (rotation, real resizes,
+   desktop) are HARD and behave exactly as before. Desktop >=861 is never
+   classified soft. */
+(function(){
+  var W0=window.innerWidth,H0=window.innerHeight,EV=null,SOFT=false,Q=[],idler=null,anchor=0;
+  function runQ(){var fns=Q;Q=[];idler=null;for(var i=0;i<fns.length;i++){try{fns[i]()}catch(e){}}}
+  function chk(){
+    if(Math.abs(window.pageYOffset-anchor)>2){anchor=window.pageYOffset;idler=setTimeout(chk,260);return}
+    runQ();
+  }
+  window.__mSoftRz=function(e,fn){
+    if(e!==EV||!e){
+      EV=e||null;
+      var w=window.innerWidth,h=window.innerHeight;
+      SOFT=w<861&&w===W0&&Math.abs(h-H0)<160;
+      W0=w;H0=h;
+    }
+    if(SOFT&&fn&&Q.indexOf(fn)<0){
+      Q.push(fn);
+      anchor=window.pageYOffset;
+      if(idler)clearTimeout(idler);
+      idler=setTimeout(chk,260);
+    }
+    return SOFT;
+  };
+})();
 
 /* ---------- entrance tagging ---------- */
 document.querySelectorAll('.rv').forEach(function(u){u.classList.add('u')});
@@ -2220,10 +2281,54 @@ function init(){
     requestAnimationFrame(frame);
   }
 }
-window.addEventListener('resize',function(){measure();lastY=-1});
+var _hardRz=function(){measure();lastY=-1};
+window.addEventListener('resize',function(e){if(window.__mSoftRz&&window.__mSoftRz(e,_hardRz))return;_hardRz()});
 window.addEventListener('load',function(){measure();lastY=-1});
 setTimeout(init,60);
 setTimeout(function(){measure();lastY=-1},900);
+
+/* ---------- mobile: chip taps cut, they do not travel ----------
+   html{scroll-behavior:smooth} makes a phone tap on a case chip animate
+   through thousands of px - dragging the statement starfield across every
+   section on the way. On phones an internal anchor is an archive CUT:
+   instant jump; the canvas clears itself the next frame (exit fade sees the
+   new y far outside the statement zone). */
+if(MOB&&!frozen){
+  [].forEach.call(document.querySelectorAll('a[href^="#"]'),function(a){
+    a.addEventListener('click',function(ev){
+      var id=a.getAttribute('href');
+      if(!id||id.length<2)return;
+      var el=document.querySelector(id);
+      if(!el)return;
+      ev.preventDefault();
+      var se=document.documentElement;
+      var top=Math.max(0,el.getBoundingClientRect().top+window.pageYOffset-8);
+      se.style.scrollBehavior='auto';
+      window.scrollTo(0,top);
+      setTimeout(function(){se.style.scrollBehavior=''},80);
+    });
+  });
+}
+
+/* ---------- mobile: swipe cues on sideways-scrolling charts ---------- */
+if(MOB){
+  setTimeout(function(){
+    [].forEach.call(document.querySelectorAll('#eventer .convwrap,#medcoin .mzorg,#tech .archw'),function(sc){
+      if(sc.scrollWidth<=sc.clientWidth+12)return;
+      var cue=document.createElement('div');
+      cue.className='swcue';cue.setAttribute('aria-hidden','true');
+      cue.innerHTML='<span>SWIPE</span><b class="swar">&#10230;</b>';
+      sc.parentNode.insertBefore(cue,sc.nextSibling);
+      var armed=false;
+      setTimeout(function(){armed=true},1200);
+      sc.addEventListener('scroll',function once(){
+        if(!armed)return;
+        sc.removeEventListener('scroll',once);
+        cue.classList.add('off');
+      },{passive:true});
+    });
+  },700);
+}
 
 /* ---------- magnetic tabs ---------- */
 if(!frozen&&window.matchMedia('(pointer:fine)').matches){
@@ -2511,7 +2616,7 @@ function measure(){
     l.b=l.t+l.el.offsetHeight;
   });
 }
-window.addEventListener('resize',measure);
+window.addEventListener('resize',function(e){if(window.__mSoftRz&&window.__mSoftRz(e,measure))return;measure()});
 window.addEventListener('load',function(){setTimeout(measure,80)});
 setTimeout(measure,120);setTimeout(measure,1200);
 
@@ -2802,7 +2907,7 @@ function measure(){
     l.t=r.top+window.pageYOffset;l.b=l.t+l.el.offsetHeight;
   });
 }
-window.addEventListener('resize',measure);
+window.addEventListener('resize',function(e){if(window.__mSoftRz&&window.__mSoftRz(e,measure))return;measure()});
 window.addEventListener('load',function(){setTimeout(measure,90)});
 setTimeout(measure,140);setTimeout(measure,1400);
 
@@ -2958,7 +3063,7 @@ function measure(){
     theaters[id]={t:r.top+pageYOffset,h:Math.max(1,o.offsetHeight-vh)};
   });
 }
-addEventListener('resize',measure);
+addEventListener('resize',function(e){if(window.__mSoftRz&&window.__mSoftRz(e,measure))return;measure()});
 addEventListener('load',function(){setTimeout(measure,120)});
 setTimeout(measure,200);setTimeout(measure,1600);
 addEventListener('wheel',function(){lastWheel=performance.now()},{passive:true});
@@ -3415,15 +3520,15 @@ if(TELE)window.__tele=[];
 var CALL0=.20,CALL1=.36,
     G0=.36,G1=.66,
     U0=.74,U1=.92,
-    FR0=.93,FR1=.985;
+    FR0=MOBP?.90:.93,FR1=MOBP?.99:.985;
 
-var NTXT=MOBP?950:1900,FREE=MOBP?120:260,TOTAL=NTXT+FREE;
+var NTXT=MOBP?1200:1900,FREE=MOBP?120:260,TOTAL=NTXT+FREE;
 var cv=null,ctx=null,DPR=1,SPR={};
 var T=null,N=0,key='';
 var ST=null;
 var t=0,fr=0,lastY=-1,kick=0,cleared=true;
 var P=-1,PRE=-1;
-var stTop=0,geomKey='';
+var stTop=0,stH=0,geomKey='';
 var mx=-1e4,my=-1e4,vx=0,vy=0,pmx=0,pmy=0;
 var doneSnd=false;
 
@@ -3450,7 +3555,10 @@ function ensure(){
   SPR.dm=sprite('rgba(140,142,148,.55)','rgba(200,201,206,.6)',false);
   SPR.core=sprite('rgba(47,179,128,1)','rgba(240,255,248,1)',true);
   size();build();
-  addEventListener('resize',function(){if(cv){size();key='';geomKey='';build()}},{passive:true});
+  addEventListener('resize',function(e){
+    if(window.__mSoftRz&&window.__mSoftRz(e,null)){if(cv)size();return}
+    if(cv){size();key='';geomKey='';build()}
+  },{passive:true});
 }
 function size(){DPR=Math.min(MOBP?1.75:2,devicePixelRatio||1);cv.width=Math.round(innerWidth*DPR);cv.height=Math.round(innerHeight*DPR);cv.style.width=innerWidth+'px';cv.style.height=innerHeight+'px';ctx.setTransform(DPR,0,0,DPR,0,0)}
 
@@ -3487,6 +3595,7 @@ function geom(){
   if(k===geomKey)return;
   geomKey=k;
   stTop=stWrap.getBoundingClientRect().top+pageYOffset;
+  stH=stWrap.offsetHeight;
 }
 
 function sample(){
@@ -3506,7 +3615,7 @@ function sample(){
   var tw=o.measureText(txt).width;
   o.fillText(txt,(w-tw)/2,h/2);
   var data=o.getImageData(0,0,w,h).data;
-  var step=3,pts;
+  var step=MOBP?2:3,pts;
   do{
     pts=[];
     for(var y=0;y<h;y+=step){for(var x=0;x<w;x+=step){
@@ -3549,7 +3658,12 @@ window.__ai2=function(pRaw){
 
   var u=sm(band(P,U0,U1));
   var freeOut=1-band(P,FR0,FR1);
-  if(PRE<.003||(P>.99&&freeOut<=.02)){
+  /* phones: the scene exit follows the PAGE, not the smoothed clock - as the
+     statement scrolls away everything scatters down in alpha over ~half a
+     viewport instead of vanishing (desktop: relOut stays 1, identical) */
+  var relOut=1;
+  if(MOBP&&stH>0)relOut=1-clampU((yNow-(stTop+stH-vhh))/(vhh*.55));
+  if(PRE<.003||(P>.99&&freeOut<=.02)||(MOBP&&relOut<=0)){
     if(cv&&!cleared){ctx.clearRect(0,0,innerWidth,innerHeight);cleared=true}
     setW2(P>=U1?1:0,false);
     if(P<G0)doneSnd=false;
@@ -3652,8 +3766,9 @@ window.__ai2=function(pRaw){
 
     var twk=.78+.22*Math.sin(t*st.tw+st.ph);
     var a=st.a*twk*birth;
-    if(isTxt){a*=(.8+.4*ev);a*=(1-u)}
+    if(isTxt){a*=(MOBP?(.95+.3*ev):(.8+.4*ev));a*=(1-u)}
     else{a*=freeOut}
+    a*=relOut;
     if(a<=.012)continue;
 
     var d2=isTxt?(st.sz*(1-ev)+st.ssz*ev)*(1-u*.45):st.sz;
