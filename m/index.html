@@ -3530,6 +3530,21 @@ if(q.get('static')==='1')return;
 var MOBP=innerWidth<861;
 if(MOBP&&innerWidth<360&&q.get('force')!=='1')return;
 var SMF=MOBP?.14:.085; /* phones: snappier settle so a flick still resolves the sentence */
+/* R4: wall-clock physics. Phones measure real frame dt (clamped 8-50ms so a
+   hiccup cannot teleport anything) and every per-frame constant is normalized
+   by dtN=dt/16.667 - at 30/20fps the swarm now converges per SECOND of wall
+   time exactly as it does at 60fps, so nothing hovers around the sentence
+   while the words rise. Desktop: MOBP false keeps dtN identically 1 and every
+   ternary below picks the original arithmetic - behavior byte-identical.
+   Threshold audit (P-leap safety, 20fps flick steps P by .15+): every
+   discrete transition is LEVEL-triggered against current P and latched in
+   st.mode (launch front>st.d, force-land u>.2, re-scatter front<st.d-.05) -
+   re-checked every frame, so a leap can skip none of them; extinguish/
+   solidify/urgency are continuous functions of P (nothing to skip); the only
+   frame-COUNT ramp was st.flare, now decayed in dt units. Reverse unlatches
+   through the same level conditions - symmetric by construction. */
+var dtN=1,lastFT=-1,emaDt=16.7,govN=0,rzRepaint=false,lastPRaw=-1;
+var DPRCAP=MOBP?1.5:2; /* R4 budget: was 1.75 on phones; one-way governor may drop to 1.25 */
 var L2=document.getElementById('stmt2'),L1=document.getElementById('stmt1');
 var stWrap=document.querySelector('#statement .pinh');
 if(!L2||!stWrap)return;
@@ -3544,7 +3559,7 @@ var CALL0=.20,CALL1=.36,
     U0=.74,U1=.92,
     FR0=MOBP?.90:.93,FR1=MOBP?.99:.985;
 
-var NTXT=MOBP?1200:1900,FREE=MOBP?120:260,TOTAL=NTXT+FREE;
+var NTXT=MOBP?900:1900,FREE=MOBP?100:260,TOTAL=NTXT+FREE; /* R4 budget: 1200/120 -> 900/100, density compensated in build() */
 var cv=null,ctx=null,DPR=1,SPR={};
 var T=null,N=0,key='';
 var ST=null;
@@ -3578,11 +3593,16 @@ function ensure(){
   SPR.core=sprite('rgba(47,179,128,1)','rgba(240,255,248,1)',true);
   size();build();
   addEventListener('resize',function(e){
-    if(window.__mSoftRz&&window.__mSoftRz(e,null)){if(cv)size();return}
+    if(window.__mSoftRz&&window.__mSoftRz(e,null)){
+      /* R4: size() resets the bitmap - repaint in the SAME frame or Telegram's
+         toolbar resizes leave a blank flash mid-statement. dtN=0 makes the
+         re-entrant call a pure redraw: smf=0, pow(c,0)=1, pos+=v*0. */
+      if(cv){size();if(MOBP&&!cleared&&lastPRaw>=0){rzRepaint=true;try{window.__ai2(lastPRaw)}catch(e2){}rzRepaint=false;}}
+      return}
     if(cv){size();key='';geomKey='';build()}
   },{passive:true});
 }
-function size(){DPR=Math.min(MOBP?1.75:2,devicePixelRatio||1);cv.width=Math.round(innerWidth*DPR);cv.height=Math.round(innerHeight*DPR);cv.style.width=innerWidth+'px';cv.style.height=innerHeight+'px';ctx.setTransform(DPR,0,0,DPR,0,0)}
+function size(){DPR=Math.min(DPRCAP,devicePixelRatio||1);cv.width=Math.round(innerWidth*DPR);cv.height=Math.round(innerHeight*DPR);cv.style.width=innerWidth+'px';cv.style.height=innerHeight+'px';ctx.setTransform(DPR,0,0,DPR,0,0)}
 
 function build(){
   ST=new Array(TOTAL);
@@ -3594,7 +3614,7 @@ function build(){
       fx:rng(i*11+2)*W, fy:rng(i*13+3)*H,
       x:0,y:0,vx:0,vy:0,
       z:z,
-      sz:(3.0+rng(i*17+4)*2.8)*z,
+      sz:(3.0+rng(i*17+4)*2.8)*z*(MOBP?1.1:1),
       d:rng(i*19+6)*.85,
       k:.013+rng(i*23+7)*.007,
       dp:.90+rng(i*43+15)*.025,
@@ -3604,8 +3624,8 @@ function build(){
       tw:.8+rng(i*53+19)*1.4,
       b:rng(i*37+11)*.8,
       spr:z>.75?(kind>.45?'em':'wt'):(z>.45?(kind>.6?'wt':'dm'):'dm'),
-      a:(.3+z*.5)*(kind>.85?1.25:1),
-      ssz:2.2+rng(i*41+13)*.9,
+      a:(.3+z*.5)*(kind>.85?1.25:1)*(MOBP?1.12:1),
+      ssz:(2.2+rng(i*41+13)*.9)*(MOBP?1.16:1),
       mode:0,flare:0,
       px:0,py:0,has:false
     };
@@ -3645,8 +3665,18 @@ function sample(){
         pts.push(x+(rng(jj*13+29)-.5)*2.6,y-(h-r.height)/2+(rng(jj*17+31)-.5)*2.6)}
     }}
     step++;
-  }while(pts.length/2>NTXT&&step<8);
+  }while(pts.length/2>NTXT*(MOBP?1.5:1)&&step<8);
+  /* R4 phones: never coarsen the grid to hit the budget (step 3 would halve
+     glyph coverage) - keep the dense pass and thin EVENLY to NTXT */
+  if(MOBP&&pts.length/2>NTXT){
+    var cnt=pts.length/2,keep=[];
+    for(var j2=0;j2<cnt;j2++){
+      if(Math.floor((j2+1)*NTXT/cnt)>Math.floor(j2*NTXT/cnt))keep.push(pts[j2*2],pts[j2*2+1]);
+    }
+    pts=keep;
+  }
   T=pts;N=Math.min(NTXT,pts.length/2);key=k;
+  if(TELE)window.__aiN=[N,step-1];
   return true;
 }
 
@@ -3666,6 +3696,28 @@ document.addEventListener('mousemove',function(e){pmx=mx;pmy=my;mx=e.clientX;my=
 
 window.__ai2=function(pRaw){
   if(MOBP&&document.body.classList.contains('failsafe')){setW2(1,false);return;}
+  lastPRaw=pRaw;
+  /* R4 dt measurement (phones only; desktop keeps dtN===1 exactly) */
+  if(MOBP){
+    if(rzRepaint){dtN=0}
+    else{
+      var nowT=performance.now();
+      if(lastFT>=0){
+        var rdt=nowT-lastFT;if(rdt<8)rdt=8;else if(rdt>50)rdt=50;
+        dtN=rdt/16.667;
+        emaDt+=(rdt-emaDt)*.06;
+        /* one-way frame-budget governor: sustained >26ms frames sheds one
+           notch of DPR, once, and repaints at the new size this same frame */
+        if(!govN&&fr>24&&emaDt>26){govN=1;window.__aiGov=1;if(DPRCAP>1.25){DPRCAP=1.25;if(cv)size();}}
+      }
+      lastFT=nowT;
+    }
+    if(TELE)window.__aiDbg=[Math.round(emaDt*10)/10,fr,Math.round(dtN*100)/100,govN];
+  }
+  var smf=dtN===1?SMF:1-Math.pow(1-SMF,dtN);
+  var d90=dtN===1?.9:Math.pow(.9,dtN);
+  var d88=dtN===1?.88:Math.pow(.88,dtN);
+  var d84=dtN===1?.84:Math.pow(.84,dtN);
   geom();
   var yNow=pageYOffset,vhh=innerHeight;
   if(MOBP&&yNow<0)yNow=0; /* iOS top rubber-band */
@@ -3676,8 +3728,8 @@ window.__ai2=function(pRaw){
   if(TPRE!==null){preRaw=TPRE;PRE=TPRE}
 
   if(P<0)P=pRaw;if(PRE<0)PRE=preRaw;
-  P+=(pRaw-P)*SMF;
-  PRE+=(preRaw-PRE)*SMF;
+  P+=(pRaw-P)*smf;
+  PRE+=(preRaw-PRE)*smf;
 
   var u=sm(band(P,U0,U1));
   var freeOut=1-band(P,FR0,FR1);
@@ -3688,18 +3740,21 @@ window.__ai2=function(pRaw){
   if(MOBP&&stH>0)relOut=1-clampU((yNow-(stTop+stH-vhh))/(vhh*.55));
   if(PRE<.003||(P>.99&&freeOut<=.02)||(MOBP&&relOut<=0)){
     if(cv&&!cleared){ctx.clearRect(0,0,innerWidth,innerHeight);cleared=true}
-    setW2(P>=U1?1:0,false);
+    /* phones: a violent conveyor-scroll can exit the zone while smoothed P is
+       still mid-ramp and the engine stops driving the scene - the PAGE being
+       past the ramp is the truth, the sentence must be lit when glanced back */
+    setW2((MOBP&&pRaw>P?pRaw:P)>=U1?1:0,false);
     if(P<G0)doneSnd=false;
     return;
   }
   ensure();
   var hasT=sample();
   cleared=false;
-  t+=.016;fr++;
+  t+=.016*dtN;fr++;
 
   if(lastY>=0)kick+=(yNow-lastY)*.02;
-  lastY=yNow;kick*=.88;
-  vx*=.9;vy*=.9;
+  lastY=yNow;kick*=d88;
+  vx*=d90;vy*=d90;
 
   var call=band(P,CALL0,CALL1)*.3;
   var front=band(P,G0,G1);
@@ -3723,9 +3778,9 @@ window.__ai2=function(pRaw){
 
     /* the field home keeps drifting in the shared currents */
     if(st.mode===0){
-      var sp=.4*st.z;
+      var sp=.4*st.z*dtN;
       st.fx+=flx(st.fx,st.fy,t)*sp;
-      st.fy+=fly(st.fx,st.fy,t)*sp+kick*st.z*.5;
+      st.fy+=fly(st.fx,st.fy,t)*sp+kick*st.z*.5*dtN;
       if(st.fx<-50)st.fx+=W+100;if(st.fx>W+50)st.fx-=W+100;
       if(st.fy<-50)st.fy+=H+100;if(st.fy>H+50)st.fy-=H+100;
     }
@@ -3733,7 +3788,7 @@ window.__ai2=function(pRaw){
     var tx=0,ty=0;
     if(isTxt){
       tx=T[i*2]+r.left;ty=T[i*2+1]+r.top;
-      if(call>0&&st.mode===0){st.fx+=(tx-st.fx)*.005*call;st.fy+=(ty-st.fy)*.005*call}
+      if(call>0&&st.mode===0){st.fx+=(tx-st.fx)*.005*call*dtN;st.fy+=(ty-st.fy)*.005*call*dtN}
       if(st.mode===0&&front>st.d+.001){
         st.x=st.fx;st.y=st.fy;
         st.vx=flx(st.fx,st.fy,t)*.4*st.z;st.vy=fly(st.fx,st.fy,t)*.4*st.z;
@@ -3753,13 +3808,13 @@ window.__ai2=function(pRaw){
          complete BEFORE the swap, and noise dies so nothing hovers */
       var urg=MOBP?1+5*clampU((P-.66)/.1):1;
       if(urg>1)namp*=Math.max(0,1.6-urg);
-      st.vx+=dxx*st.k*urg+Math.sin(t*st.nw+st.ph)*namp;
-      st.vy+=dyy*st.k*urg+Math.cos(t*st.nw*.93+st.ph2)*namp;
-      var dmp=dist<40?.84:st.dp;
+      st.vx+=(dxx*st.k*urg+Math.sin(t*st.nw+st.ph)*namp)*dtN;
+      st.vy+=(dyy*st.k*urg+Math.cos(t*st.nw*.93+st.ph2)*namp)*dtN;
+      var dmp=dist<40?d84:(dtN===1?st.dp:Math.pow(st.dp,dtN));
       st.vx*=dmp;st.vy*=dmp;
       var vv=Math.sqrt(st.vx*st.vx+st.vy*st.vy);
       if(vv>18){st.vx*=18/vv;st.vy*=18/vv}
-      st.x+=st.vx;st.y+=st.vy;
+      st.x+=st.vx*dtN;st.y+=st.vy*dtN;
       if(dist<2.2&&vv<1.1){st.x=tx;st.y=ty;st.mode=2;st.flare=9}
       if(MOBP&&u>.2){st.x=tx;st.y=ty;st.mode=2;st.flare=6}
       X=st.x;Y=st.y;
@@ -3773,12 +3828,12 @@ window.__ai2=function(pRaw){
       var dxx2=hx-st.x,dyy2=hy-st.y;
       var dist2=Math.sqrt(dxx2*dxx2+dyy2*dyy2);
       var namp2=1.4*clampU(dist2/240);
-      st.vx+=dxx2*st.k*.8+Math.sin(t*st.nw+st.ph)*namp2;
-      st.vy+=dyy2*st.k*.8+Math.cos(t*st.nw*.93+st.ph2)*namp2;
-      st.vx*=.9;st.vy*=.9;
+      st.vx+=(dxx2*st.k*.8+Math.sin(t*st.nw+st.ph)*namp2)*dtN;
+      st.vy+=(dyy2*st.k*.8+Math.cos(t*st.nw*.93+st.ph2)*namp2)*dtN;
+      st.vx*=d90;st.vy*=d90;
       var vv2=Math.sqrt(st.vx*st.vx+st.vy*st.vy);
       if(vv2>15){st.vx*=15/vv2;st.vy*=15/vv2}
-      st.x+=st.vx;st.y+=st.vy;
+      st.x+=st.vx*dtN;st.y+=st.vy*dtN;
       if(dist2<12){st.mode=0}
       X=st.x;Y=st.y;
       ev=clampU(1-dist2/240)*.4;
@@ -3803,13 +3858,13 @@ window.__ai2=function(pRaw){
       a*=freeOut;
       /* phones: post-handoff, ambient stars near the sentence line dim away
          so nothing reads as a leftover letter */
-      if(MOBP&&u>.3){var bd=Math.abs(Y-(r.top+r.height/2));if(bd<r.height*1.7)a*=(1-.85*u)}
+      if(MOBP&&u>.3){var bd=Math.abs(Y-(r.top+r.height/2));if(bd<r.height*2.4)a*=(1-.92*u)}
     }
     a*=relOut;
     if(a<=.012)continue;
 
     var d2=isTxt?(st.sz*(1-ev)+st.ssz*ev)*(1-u*.45):st.sz;
-    if(st.flare>0){d2*=1+.05*st.flare;st.flare--}
+    if(st.flare>0){d2*=1+.05*st.flare;st.flare-=dtN}
     if(d2<2.2)d2=2.2;
     var spr=isTxt&&ev>.7?SPR.core:(isTxt&&ev>.45?SPR.em:SPR[st.spr]);
     ctx.globalAlpha=Math.min(1,a);
@@ -3822,9 +3877,9 @@ window.__ai2=function(pRaw){
     if(TELE&&isTxt&&(st.mode===1||st.mode===2)){scx+=X;scy+=Y;sn++;tcx+=tx;tcy+=ty}
   }
   ctx.globalAlpha=1;
-  if(TELE&&sn>0){
-    window.__tele.push([fr,Math.round(scx/sn),Math.round(scy/sn),
-      Math.round(tcx/sn),Math.round(tcy/sn),nfly,nland]);
+  if(TELE){
+    window.__tele.push(sn>0?[fr,Math.round(scx/sn),Math.round(scy/sn),
+      Math.round(tcx/sn),Math.round(tcy/sn),nfly,nland]:[fr,0,0,0,0,nfly,nland]);
   }
 };
 }catch(err){}
