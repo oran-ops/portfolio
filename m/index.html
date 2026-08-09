@@ -1960,17 +1960,17 @@ body.static .hfolder,body.static #hero .mfold{--sx:-320px}
 /* film grain - the document was scanned in a dark room */
 body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:2147480000;opacity:.42;mix-blend-mode:overlay;background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="220" height="220"><filter id="g"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/><feComponentTransfer><feFuncA type="linear" slope="0.10"/></feComponentTransfer></filter><rect width="220" height="220" filter="url(%23g)"/></svg>')}
 /* cover memo */
-.bmemo{background:rgba(233,231,223,.82);color:#22201C;transform:rotate(-1.7deg);margin:22px auto 6px;max-width:430px;padding:13px 15px 11px;box-shadow:0 10px 22px rgba(0,0,0,.22);position:relative;text-align:left}
-.bmemo::before,.bmemo::after{content:"";position:absolute;width:60px;height:15px;background:rgba(255,255,255,.26);box-shadow:0 1px 2px rgba(0,0,0,.09)}
+.bmemo{background:rgba(14,25,19,.92);color:#E9F5EE;transform:rotate(-1.7deg);margin:22px auto 6px;max-width:430px;padding:13px 15px 11px;box-shadow:0 12px 26px rgba(0,0,0,.3);border:1px solid rgba(233,245,238,.1);position:relative;text-align:left}
+.bmemo::before,.bmemo::after{content:"";position:absolute;width:60px;height:15px;background:rgba(233,245,238,.16);box-shadow:0 1px 2px rgba(0,0,0,.12)}
 .bmemo::before{top:-8px;left:20px;transform:rotate(-4deg)}
 .bmemo::after{top:-8px;right:20px;transform:rotate(3deg)}
-.bm-h{font-family:'JetBrains Mono',monospace;font-weight:800;font-size:8px;letter-spacing:.28em;color:#8A8578;display:flex;justify-content:space-between;gap:8px;margin-bottom:7px}
-.bm-h b{color:#1E6B4B}
-.bm-row{display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding:6px 0;border-top:1px solid rgba(34,32,28,.14)}
+.bm-h{font-family:'JetBrains Mono',monospace;font-weight:800;font-size:8px;letter-spacing:.28em;color:#8FB3A2;display:flex;justify-content:space-between;gap:8px;margin-bottom:7px}
+.bm-h b{color:#7FD7B2}
+.bm-row{display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding:6px 0;border-top:1px solid rgba(233,245,238,.12)}
 .bm-c{font-family:'Inter',sans-serif;font-weight:600;font-size:11.5px;line-height:1.4}
-.bm-c span{display:block;font-family:'JetBrains Mono',monospace;font-weight:400;font-size:7.5px;letter-spacing:.05em;color:#8A8578;margin-top:2px}
+.bm-c span{display:block;font-family:'JetBrains Mono',monospace;font-weight:400;font-size:7.5px;letter-spacing:.05em;color:#8FB3A2;margin-top:2px}
 .bm-v{font-family:'JetBrains Mono',monospace;font-weight:800;font-size:14px;white-space:nowrap}
-.bm-verdict{font-family:'Fraunces',serif;font-style:italic;font-size:12.5px;border-top:2px solid #22201C;margin-top:6px;padding-top:8px}
+.bm-verdict{font-family:'Fraunces',serif;font-style:italic;font-size:12.5px;border-top:2px solid rgba(233,245,238,.75);margin-top:6px;padding-top:8px;color:#DFF3E9}
 /* classification grammar - case colors via each section's --fc */
 .clsband{background:var(--fc,var(--emb));color:#141519;font-family:'JetBrains Mono',monospace;font-weight:800;font-size:9.5px;letter-spacing:.4em;text-align:center;padding:7px 8px 6px;border-radius:4px;margin:14px 0 0}
 .clsctl{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:.07em;color:var(--dim,#6B6E76);padding:7px 2px;border-bottom:1px solid rgba(107,110,118,.28);margin-bottom:6px}
@@ -2022,12 +2022,7 @@ body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:214748
 
 
 /* ===== R2: evidence slips ===== */
-.ev-chip{display:inline-flex;align-items:center;gap:7px;margin-top:12px;font-family:'JetBrains Mono',monospace;font-size:8.5px;font-weight:600;letter-spacing:.2em;color:#16171B;background:var(--fc,var(--emb));border:0;border-radius:4px;padding:8px 13px;cursor:pointer;transition:transform .15s;position:relative;z-index:3}
-.ev-chip:hover{transform:translateY(-1px)}
-.ev-chip:active{transform:translateY(1px)}
-.ev-chip i{font-style:normal;font-size:11px}
-.evslip{background:#E9E7DF;color:#22201C;margin:0;max-width:420px;padding:0 15px;box-shadow:0 14px 30px rgba(0,0,0,.35);transform:rotate(-1.2deg) translateY(-14px);opacity:0;max-height:0;overflow:hidden;transition:max-height .5s cubic-bezier(.2,1,.3,1),opacity .35s,transform .5s cubic-bezier(.2,1.1,.3,1),padding .4s,margin .4s;position:relative;pointer-events:none}
-.evslip.out{max-height:220px;opacity:1;transform:rotate(-1.2deg) translateY(0);padding:13px 15px 11px;margin:12px 0 4px;pointer-events:auto}
+.evslip{background:#E9E7DF;color:#22201C;margin:14px 0 4px;max-width:420px;padding:13px 15px 11px;box-shadow:0 14px 30px rgba(0,0,0,.35);transform:rotate(-1.2deg);position:relative}
 .evslip::before{content:"";position:absolute;top:-7px;left:24px;width:54px;height:15px;background:rgba(255,255,255,.35);box-shadow:0 1px 2px rgba(0,0,0,.12);transform:rotate(-3deg)}
 .es-h{display:flex;justify-content:space-between;gap:8px;font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:.22em;color:#8A8578;margin-bottom:7px}
 .es-h b{color:#1E6B4B}
@@ -4075,19 +4070,12 @@ CASES.forEach(function(id){
     var host=df.host?el.closest(df.host):null;
     if(!host)host=el.parentElement;
     if(!host)return;
-    var chip=document.createElement('button');chip.type='button';chip.className='ev-chip';
-    chip.innerHTML='<i>\uD83D\uDCCE</i>EVIDENCE ATTACHED \u25B8';
     var slip=document.createElement('div');slip.className='evslip';
     var rows=df.rows.map(function(r){return '<div class="es-row"><span class="es-k">'+r[0]+'</span><span class="es-v">'+r[1]+'</span></div>'}).join('');
     slip.innerHTML='<div class="es-h"><span>EVIDENCE SLIP</span><b>'+df.ctrl+'</b></div>'+rows+'<span class="es-stamp">VERIFIED</span>';
-    host.appendChild(chip);
     if(host.nextSibling)host.parentNode.insertBefore(slip,host.nextSibling);
     else host.parentNode.appendChild(slip);
-    chip.addEventListener('click',function(){
-      var out=slip.classList.toggle('out');
-      chip.innerHTML=out?'<i>\uD83D\uDCCE</i>TUCK BACK \u25C2':'<i>\uD83D\uDCCE</i>EVIDENCE ATTACHED \u25B8';
-      try{if(navigator.vibrate)navigator.vibrate(6)}catch(e){}
-    });
+
   });
 })();
 
