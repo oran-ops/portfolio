@@ -199,6 +199,25 @@ nav.toc a:hover{border-color:var(--red);color:var(--red)}
 footer{margin-top:70px;border-top:2px solid var(--ink);padding:26px 0 60px;font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.14em;color:var(--dim);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;direction:ltr}
 html{overflow-x:clip}
 body{overflow-x:clip}
+
+/* ============ EX18 — brief chip ============ */
+.bchip{position:absolute;top:16px;left:16px;display:inline-flex;align-items:center;gap:8px;font-family:'JetBrains Mono',monospace;font-size:8.5px;font-weight:600;letter-spacing:.22em;color:var(--em);background:rgba(22,23,27,.9);border:1px solid rgba(47,179,128,.5);border-radius:20px;padding:8px 14px;cursor:pointer;z-index:5;transition:border-color .2s,transform .15s}
+.bchip:hover{border-color:var(--em);transform:translateY(-1px)}
+.bchip i{width:6px;height:6px;border-radius:50%;background:var(--em);animation:vfyp 2.2s ease-in-out infinite}
+.bovl{position:absolute;inset:0;background:rgba(10,11,13,.72);backdrop-filter:blur(3px);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s;z-index:6}
+.bovl.on{opacity:1;pointer-events:auto}
+.bmemo2{position:relative;background:rgba(14,25,19,.97);color:#E9F5EE;border:1px solid rgba(233,245,238,.12);max-width:400px;width:88%;padding:16px 18px 13px;transform:rotate(-1deg) translateY(10px);transition:transform .4s cubic-bezier(.2,1.1,.3,1);box-shadow:0 30px 70px rgba(0,0,0,.6)}
+.bovl.on .bmemo2{transform:rotate(-1deg) translateY(0)}
+.bx{position:absolute;top:10px;right:12px;background:none;border:0;color:#8FB3A2;font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.18em;cursor:pointer}
+.bx:hover{color:#E9F5EE}
+.b2h{font-family:'JetBrains Mono',monospace;font-weight:800;font-size:8px;letter-spacing:.26em;color:#8FB3A2;display:flex;justify-content:space-between;gap:8px;margin-bottom:8px;padding-right:56px}
+.b2h b{color:#7FD7B2}
+.b2r{display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding:7px 0;border-top:1px solid rgba(233,245,238,.12)}
+.b2c{font-family:'Inter',sans-serif;font-weight:600;font-size:11.5px;line-height:1.4}
+.b2c span{display:block;font-family:'JetBrains Mono',monospace;font-weight:400;font-size:7.5px;letter-spacing:.05em;color:#8FB3A2;margin-top:2px}
+.b2v{font-family:'JetBrains Mono',monospace;font-weight:800;font-size:14px;white-space:nowrap}
+.b2verdict{font-family:'Fraunces',serif;font-style:italic;font-size:12.5px;border-top:2px solid rgba(233,245,238,.7);margin-top:6px;padding-top:9px;color:#DFF3E9}
+
 /* ============ EX16 — evidence slip ============ */
 .evwrap{max-width:520px;margin:0 auto;position:relative}
 .evstat{position:relative;z-index:2;background:#25262D;border-radius:8px;padding:20px 22px;box-shadow:0 16px 40px rgba(0,0,0,.45)}
@@ -351,7 +370,7 @@ body{overflow-x:clip}
   <h1>מעבדת הרעיונות</h1>
   <p class="sub">12 מוצגים חיים — אחד לכל ממצא מרכזי מארבעת דוחות המחקר. אלה <b>סקיצות מהירות</b> שנועדו להרגיש את הרעיון, לא הביצוע הסופי (בגרסה אמיתית: פונטים ייעודיים, ליטוש מלא). ליד כל מוצג — מי מהחוקרים עומד מאחוריו.</p>
   <nav class="toc">
-    <a href="#ex16" style="border-color:var(--red);color:var(--red)">16 EVIDENCE SLIP ★★</a><a href="#ex17" style="border-color:var(--red);color:var(--red)">17 CONNECTION BOARD ★★</a>
+    <a href="#ex18" style="border-color:var(--red);color:var(--red)">18 BRIEF CHIP ★★</a><a href="#ex16" style="border-color:var(--red);color:var(--red)">16 EVIDENCE SLIP ★</a><a href="#ex17" style="border-color:var(--red);color:var(--red)">17 CONNECTION BOARD ★★</a>
     <a href="#ex15" style="border-color:var(--red);color:var(--red)">15 END-OF-FILE RITUAL ★</a>
     <a href="#ex13" style="border-color:var(--red);color:var(--red)">13 SYNTHESIS CARD ★</a><a href="#ex14" style="border-color:var(--red);color:var(--red)">14 COVER BRIEF ★</a>
     <a href="#ex1">01 30-SEC CUT</a><a href="#ex2">02 PAPER↔NOIR</a><a href="#ex3">03 CLASSIFICATION</a><a href="#ex4">04 TYPE</a><a href="#ex5">05 STAMP</a><a href="#ex6">06 CLEARANCE</a><a href="#ex7">07 REDACTION</a><a href="#ex8">08 RED STRING</a><a href="#ex9">09 LOUPE</a><a href="#ex10">10 KINETIC</a><a href="#ex11">11 MICROFILM</a><a href="#ex12">12 OG CARD</a>
@@ -359,6 +378,26 @@ body{overflow-x:clip}
 </header>
 
 <div class="featured">
+
+<!-- ============ EX18 ============ -->
+<section class="ex" id="ex18" style="padding-top:34px">
+  <div class="exh"><span class="exn">18</span><span class="ext">צ'יפ ה-BRIEF — התקציר זמין מכל נקודה</span><span class="exs">R4 · THE 30-SEC SYSTEM COMPLETED</span></div>
+  <p class="exd">המזכר יושב על הכריכה — אבל מי שכבר עמוק בקובץ לא יחזור אליה. צ'יפ קטן וקבוע בפינת המסך פותח את התקציר המלא מעל כל נקודה בגלילה. לחץ על הצ'יפ בפינת הדמו.</p>
+  <div class="demo dark" style="padding:0;position:relative;min-height:360px;overflow:hidden">
+    <div style="padding:26px;font-family:'Inter',sans-serif;color:#6B6E76;font-size:12px;line-height:2">· · · אמצע המסמך — איפשהו בתיק 03 · · ·<br>Customer insights became business decisions. Growth became a shared responsibility.<br>· · ·</div>
+    <button class="bchip" id="bchip" type="button"><i></i>BRIEF · 30 SEC</button>
+    <div class="bovl" id="bovl">
+      <div class="bmemo2">
+        <button class="bx" id="bx" type="button">✕ CLOSE</button>
+        <div class="b2h"><span>MEMO — THE 30-SEC BRIEF</span><b>CASE FILE №26</b></div>
+        <div class="b2r"><div class="b2c">Commercial operating system — built<span>CASE FILE 01 — XTIX · ON RECORD</span></div><div class="b2v">$9M+ ARR</div></div>
+        <div class="b2r"><div class="b2c">Largest deal closed<span>CASE FILE 02 — OASIS · ON RECORD</span></div><div class="b2v">$2M</div></div>
+        <div class="b2r"><div class="b2c">Funnel — outbound to inbound<span>REPLY ~20% · CONV 7–8%</span></div><div class="b2v">50%+ INB</div></div>
+        <div class="b2verdict">Four case files. One commercial operating system.</div>
+      </div>
+    </div>
+  </div>
+</section>
 
 <!-- ============ EX16 ============ -->
 <section class="ex" id="ex16" style="padding-top:34px">
@@ -775,6 +814,14 @@ document.getElementById('abPaper').addEventListener('click',function(){abCard.cl
     });
   }
   addEventListener('scroll',upd,{passive:true});addEventListener('resize',upd);upd();
+})();
+
+/* EX18 — brief chip */
+(function(){
+  var chip=document.getElementById('bchip'),ovl=document.getElementById('bovl');
+  chip.addEventListener('click',function(){ovl.classList.add('on')});
+  document.getElementById('bx').addEventListener('click',function(){ovl.classList.remove('on')});
+  ovl.addEventListener('click',function(e){if(e.target===ovl)ovl.classList.remove('on')});
 })();
 
 /* EX16 — evidence slip */
