@@ -1983,6 +1983,33 @@ body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:214748
 @media (max-width:680px){.bmemo{margin-left:2px;margin-right:2px}}
 @media (prefers-reduced-motion:reduce){body::after{display:none}}
 
+
+/* ===== EMERALD II phase 2 ===== */
+.clrgate{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-top:26px;padding-top:16px;border-top:1px dashed rgba(107,110,118,.35);position:relative}
+#medcoin .clrgate{border-top-color:rgba(34,32,28,.25)}
+.cgbtn{position:relative;overflow:hidden;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.22em;color:var(--fc,var(--emb));background:transparent;border:1px solid var(--fc,var(--emb));border-radius:3px;padding:11px 16px;cursor:pointer;user-select:none;-webkit-user-select:none;touch-action:none}
+#medcoin .cgbtn{color:#22201C;border-color:#22201C}
+.cgp{position:absolute;left:0;bottom:0;height:3px;width:0%;background:var(--fc,var(--emb))}
+#medcoin .cgp{background:#22201C}
+.cgimp{font-family:'JetBrains Mono',monospace;font-weight:800;font-size:12px;letter-spacing:.3em;color:var(--fc,var(--emb));border:2.5px solid var(--fc,var(--emb));border-radius:5px;padding:6px 12px;opacity:0;transform:rotate(-4deg)}
+#medcoin .cgimp{color:#22201C;border-color:#22201C}
+.cgimp.go{animation:stampdrop .5s cubic-bezier(.2,1.4,.3,1) both}
+.cgdone .cgbtn{opacity:.45;pointer-events:none}
+.redx{position:relative;display:inline;color:transparent;border-radius:2px;transition:color .5s .25s}
+.redx::after{content:"";position:absolute;inset:-1px -3px;background:#101114;border:1px solid #3A3D44;border-radius:2px;transform-origin:left center;transition:transform .6s cubic-bezier(.7,0,.2,1)}
+#medcoin .redx::after{background:#22201C;border-color:#4a463c}
+.redx.open{color:inherit}
+.redx.open::after{transform:scaleX(0)}
+.lens2{position:fixed;width:154px;height:154px;border-radius:50%;border:2.5px solid var(--emb);background:#16171B;box-shadow:0 18px 44px rgba(0,0,0,.6),0 0 30px rgba(47,179,128,.14);pointer-events:none;opacity:0;transition:opacity .18s;z-index:2147479000;display:flex;align-items:center;justify-content:center;text-align:center;padding:16px;transform:translate(-50%,-62%)}
+.lens2.on{opacity:1}
+.lens2 .lt{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.06em;line-height:1.8;color:#CFD0D4}
+.lens2 .lt b{color:var(--emb);display:block;letter-spacing:.22em;font-size:7.5px;margin-bottom:4px}
+[data-lsrc]{cursor:crosshair}
+.strsvg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:1}
+.strsvg path{fill:none;stroke:var(--fc,var(--emb));stroke-width:1.8;stroke-linecap:round;stroke-dasharray:4 6;opacity:.85;filter:drop-shadow(0 0 6px rgba(47,179,128,.35))}
+.strsvg circle{fill:var(--fc,var(--emb));opacity:.9}
+@media (prefers-reduced-motion:reduce){.redx{color:inherit}.redx::after{transform:scaleX(0)}.cgimp{opacity:1;animation:none}}
+
 </style>
 <section class="sec" id="leadership" style="--fc:var(--emb)">
   <div class="secnum" aria-hidden="true">07</div>
@@ -3154,6 +3181,7 @@ document.body.appendChild(meter);
 var reviewed={},reviewedN=0;
 var ccstamp=document.getElementById('ccstamp'),ceremonyDone=false;
 if(ccstamp){ccstamp.classList.add('lk');ccstamp.textContent='IN REVIEW · 0/4';}
+window.__markReviewed=function(id){markReviewed(id)};
 function markReviewed(id){
   if(reviewed[id])return;
   reviewed[id]=true;reviewedN++;
@@ -3922,6 +3950,158 @@ window.__ai2=function(pRaw){
 </script>
 
 <script>document.querySelectorAll(".rstampS").forEach(function(st){st.style.setProperty("--srot",((Math.random()*7-3.5).toFixed(1))+"deg")});</script>
+
+<script>
+/* ===== EMERALD II phase 2 module (__em2) ===== */
+(function(){
+'use strict';
+var reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+var CASES=['xtix','oasis','eventer','medcoin'];
+var cleared={},clearedN=0;
+
+/* runtime redaction: wrap the tail words of one existing sentence per case */
+function redact(folder){
+  if(reduced)return;
+  var t=folder.querySelector('.sigq .qx')||folder.querySelector('.lead')||folder.closest('.sec').querySelector('.sigq .qx, .lead, .para');
+  if(!t)return;
+  var node=null;
+  for(var i=t.childNodes.length-1;i>=0;i--){
+    var c=t.childNodes[i];
+    if(c.nodeType===3&&c.textContent.trim().split(/\s+/).length>=4){node=c;break}
+  }
+  if(!node)return;
+  var words=node.textContent.split(' ');
+  if(words.length<6)return;
+  var keep=Math.max(2,words.length-6);
+  var head=words.slice(0,keep).join(' ')+' ';
+  var tail=words.slice(keep).join(' ');
+  var sp=document.createElement('span');sp.className='redx';sp.textContent=tail;
+  node.textContent=head;
+  node.parentNode.insertBefore(sp,node.nextSibling);
+}
+function openCase(id){
+  var sec=document.getElementById(id);if(!sec)return;
+  sec.querySelectorAll('.redx').forEach(function(r){r.classList.add('open')});
+}
+
+/* clearance gate per case folder */
+CASES.forEach(function(id){
+  var sec=document.getElementById(id);if(!sec)return;
+  var folder=sec.querySelector('.folder');if(!folder)return;
+  redact(folder);
+  var g=document.createElement('div');g.className='clrgate';
+  g.innerHTML='<button class="cgbtn" type="button">HOLD TO STAMP \u2014 FILE REVIEWED \u25B8<span class="cgp"></span></button><span class="cgimp">REVIEWED</span>';
+  folder.appendChild(g);
+  var btn=g.querySelector('.cgbtn'),p=g.querySelector('.cgp'),imp=g.querySelector('.cgimp');
+  var t0=null,raf=null,HOLD=1000;
+  function done(){
+    if(cleared[id])return;
+    cleared[id]=true;clearedN++;
+    g.classList.add('cgdone');
+    imp.style.setProperty('--srot',((Math.random()*7-3.5).toFixed(1))+'deg');
+    imp.classList.add('go');
+    openCase(id);
+    var k=CASES.indexOf(id);if(k>-1&&CASES[k+1])openCase(CASES[k+1]);
+    if(clearedN>=CASES.length)CASES.forEach(openCase);
+    try{if(window.__markReviewed)window.__markReviewed(id)}catch(e){}
+    try{if(navigator.vibrate)navigator.vibrate([10,40,14])}catch(e){}
+  }
+  function tick(ts){
+    if(t0===null)t0=ts;
+    var pr=Math.min(1,(ts-t0)/HOLD);
+    p.style.width=(pr*100)+'%';
+    if(pr>=1){t0=null;p.style.width='0%';done();return}
+    raf=requestAnimationFrame(tick);
+  }
+  function down(e){e.preventDefault();if(cleared[id])return;t0=null;raf=requestAnimationFrame(tick)}
+  function up(){if(raf)cancelAnimationFrame(raf);t0=null;p.style.width='0%'}
+  btn.addEventListener('pointerdown',down);
+  btn.addEventListener('pointerup',up);
+  btn.addEventListener('pointerleave',up);
+  btn.addEventListener('pointercancel',up);
+});
+
+/* source loupe on the two money stats */
+(function(){
+  var nine=document.querySelector('.cnt[data-n="9"]'),two=document.querySelector('.cnt[data-n="2"]');
+  function host(el){var h=el&&(el.closest('.bignum')||el.parentElement);return h}
+  var h9=host(nine),h2=host(two);
+  if(h9)h9.setAttribute('data-lsrc','ON RECORD \u00B7 CASE FILE 01 \u2014 XTIX');
+  if(h2)h2.setAttribute('data-lsrc','ON RECORD \u00B7 CASE FILE 02 \u2014 OASIS');
+  if(!h9&&!h2)return;
+  var lens=document.createElement('div');lens.className='lens2';
+  lens.innerHTML='<div class="lt"><b>SOURCE LINE</b><span></span></div>';
+  document.body.appendChild(lens);
+  var txt=lens.querySelector('span');
+  function move(e){
+    var el=document.elementFromPoint(e.clientX,e.clientY);
+    var h=el&&el.closest?el.closest('[data-lsrc]'):null;
+    if(h){txt.textContent=h.getAttribute('data-lsrc');
+      lens.style.left=e.clientX+'px';lens.style.top=e.clientY+'px';
+      lens.classList.add('on')}
+    else lens.classList.remove('on');
+  }
+  document.addEventListener('pointermove',move,{passive:true});
+  document.addEventListener('pointerdown',move,{passive:true});
+})();
+
+/* red-string pilot inside #xtix: situation -> evidence -> the number */
+(function(){
+  var sec=document.getElementById('xtix');if(!sec)return;
+  var folder=sec.querySelector('.wrap')||sec;
+  var a=sec.querySelector('.folder .zr')||sec.querySelector('.zr'),b=sec.querySelector('.plabel.pl2')||sec.querySelectorAll('.zr')[2],c=sec.querySelector('.bignum');
+  if(!a||!c)return;
+  if(getComputedStyle(folder).position==='static')folder.style.position='relative';
+  var NS='http://www.w3.org/2000/svg';
+  var svg=document.createElementNS(NS,'svg');svg.setAttribute('class','strsvg');
+  var path=document.createElementNS(NS,'path');svg.appendChild(path);
+  var dots=[];
+  [a,b,c].forEach(function(el){if(!el)return;
+    var d=document.createElementNS(NS,'circle');d.setAttribute('r','3.2');svg.appendChild(d);dots.push([el,d])});
+  folder.insertBefore(svg,folder.firstChild);
+  var L=0;
+  function pt(el,fr){
+    var r=el.getBoundingClientRect();
+    return [r.left-fr.left+Math.min(170,r.width*0.28),r.top-fr.top+r.height/2];
+  }
+  function build(){
+    var fr=folder.getBoundingClientRect();
+    svg.setAttribute('viewBox','0 0 '+Math.round(fr.width)+' '+Math.round(fr.height));
+    var pts=[a,b,c].filter(Boolean).map(function(el){return pt(el,fr)});
+    if(pts.length<2)return;
+    var d='M'+pts[0][0].toFixed(1)+','+pts[0][1].toFixed(1);
+    for(var i=1;i<pts.length;i++){
+      var p0=pts[i-1],p1=pts[i];
+      var mx=(p0[0]+p1[0])/2;
+      d+=' C'+mx.toFixed(1)+','+p0[1].toFixed(1)+' '+mx.toFixed(1)+','+p1[1].toFixed(1)+' '+p1[0].toFixed(1)+','+p1[1].toFixed(1);
+    }
+    path.setAttribute('d',d);
+    L=path.getTotalLength();
+    path.style.strokeDasharray=L;
+    path.style.strokeDashoffset=reduced?0:L;
+    dots.forEach(function(pair){
+      var q=pt(pair[0],fr);
+      pair[1].setAttribute('cx',q[0].toFixed(1));pair[1].setAttribute('cy',q[1].toFixed(1));
+    });
+  }
+  var ticking=false;
+  function upd(){
+    ticking=false;
+    if(reduced||!L)return;
+    var r=folder.getBoundingClientRect(),vh=innerHeight;
+    var pr=Math.min(1,Math.max(0,(vh*0.85-r.top)/Math.max(1,r.height*0.8)));
+    path.style.strokeDashoffset=(L*(1-pr)).toFixed(1);
+  }
+  function onScroll(){if(!ticking){ticking=true;requestAnimationFrame(upd)}}
+  setTimeout(function(){build();upd()},600);
+  addEventListener('scroll',onScroll,{passive:true});
+  addEventListener('resize',function(e){
+    if(window.__mSoftRz&&window.__mSoftRz(e,null))return;
+    build();upd();
+  });
+})();
+})();
+</script>
 
 </body>
 </html>
