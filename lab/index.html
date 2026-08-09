@@ -1,0 +1,536 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CONCEPT LAB — מעבדת הרעיונות</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,100..900,0..100,0..1;1,9..144,100..900,0..100,0..1&family=Special+Elite&family=Courier+Prime:wght@400;700&family=Heebo:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F3EFE4; --paper2:#EDE7D8; --ink:#22201C; --ink2:#4A463E; --dim:#8A8578;
+  --red:#B3372B; --redink:#A32E22;
+  --noir:#191A1F; --noirs:#25262D; --em:#2FB380; --noirtxt:#F2F1ED; --noirdim:#6B6E76;
+  --sf-orange:#E8731A; --sf-red:#C0392B; --sf-blue:#2C63A8;
+  --hair:rgba(34,32,28,.18);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--paper);color:var(--ink);font-family:'Heebo',system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+/* global paper grain */
+body::before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.5;z-index:9999;
+  background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="240" height="240"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/><feComponentTransfer><feFuncA type="linear" slope="0.05"/></feComponentTransfer></filter><rect width="240" height="240" filter="url(%23n)"/></svg>')}
+.wrap{max-width:900px;margin:0 auto;padding:0 22px}
+header{padding:64px 0 30px;border-bottom:2px solid var(--ink)}
+.kick{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.35em;color:var(--red);direction:ltr;text-align:right}
+h1{font-family:'Fraunces',serif;font-weight:900;font-size:clamp(30px,6vw,52px);line-height:1.06;margin-top:10px}
+.sub{margin-top:12px;font-size:15px;color:var(--ink2);max-width:620px;line-height:1.7}
+.sub b{color:var(--ink)}
+nav.toc{display:flex;flex-wrap:wrap;gap:8px;margin:22px 0 8px}
+nav.toc a{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.06em;color:var(--ink2);border:1px solid var(--hair);border-radius:3px;padding:5px 9px;text-decoration:none;direction:ltr}
+nav.toc a:hover{border-color:var(--red);color:var(--red)}
+/* exhibit frame */
+.ex{padding:54px 0 10px}
+.exh{display:flex;align-items:baseline;gap:14px;border-bottom:1px solid var(--hair);padding-bottom:10px;margin-bottom:6px}
+.exn{font-family:'JetBrains Mono',monospace;font-weight:800;font-size:13px;color:var(--red);direction:ltr}
+.ext{font-family:'Heebo';font-weight:700;font-size:19px}
+.exs{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.14em;color:var(--dim);margin-inline-start:auto;direction:ltr;white-space:nowrap}
+.exd{font-size:13.5px;color:var(--ink2);line-height:1.75;margin:10px 0 18px;max-width:640px}
+.exd b{color:var(--ink)}
+.demo{border:1px solid var(--hair);border-radius:6px;background:#fff9;padding:26px;direction:ltr;text-align:left;position:relative;overflow:hidden}
+.demo.dark{background:var(--noir);border-color:#000}
+.note{font-size:11.5px;color:var(--dim);margin-top:10px;line-height:1.6}
+/* ============ EX1 — 30-second cut ============ */
+.cut{font-family:'Courier Prime',monospace}
+.cut .nm{font-family:'Fraunces',serif;font-weight:900;font-size:26px;letter-spacing:-.01em}
+.cut .rl{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.3em;color:var(--red);margin-top:2px}
+.cut table{width:100%;border-collapse:collapse;margin-top:16px}
+.cut td{border-top:1px solid var(--hair);padding:9px 4px;vertical-align:baseline}
+.cut .cl{font-size:13px;font-weight:700;font-family:'Heebo'}
+.cut .vv{font-family:'JetBrains Mono',monospace;font-weight:800;font-size:17px;white-space:nowrap;text-align:right}
+.cut .src{font-family:'JetBrains Mono',monospace;font-size:8.5px;color:var(--dim);letter-spacing:.05em;display:block;margin-top:2px}
+.cut .verdict{margin-top:16px;font-family:'Fraunces',serif;font-style:italic;font-size:15.5px;border-top:2px solid var(--ink);padding-top:12px}
+.cut .door{display:inline-block;margin-top:14px;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.22em;border:1.5px solid var(--ink);padding:10px 16px;color:var(--ink);text-decoration:none;transition:all .2s}
+.cut .door:hover{background:var(--ink);color:var(--paper)}
+/* ============ EX2 — noir vs paper toggle ============ */
+.abwrap{display:flex;justify-content:flex-end;margin-bottom:14px}
+.ab{display:inline-flex;border:1px solid var(--hair);border-radius:20px;overflow:hidden;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.15em}
+.ab button{border:0;background:transparent;padding:8px 16px;cursor:pointer;font:inherit;color:var(--dim)}
+.ab button.on{background:var(--ink);color:var(--paper)}
+.card{border-radius:8px;padding:24px;transition:background .5s,color .5s,box-shadow .5s;position:relative}
+.card .tab{display:inline-block;font-family:'Fraunces',serif;font-weight:700;font-size:15px;padding:6px 18px 5px;border-radius:6px 10px 0 0;margin-bottom:0}
+.card .body{border-radius:0 8px 8px 8px;padding:20px;position:relative}
+.card .zr{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.25em;margin-bottom:10px}
+.card .big{font-family:'JetBrains Mono',monospace;font-weight:800;font-size:30px;letter-spacing:-.02em}
+.card .cap{font-size:12px;margin-top:4px}
+.card .srcl{font-family:'JetBrains Mono',monospace;font-size:8.5px;margin-top:10px;letter-spacing:.04em}
+.card .stampx{position:absolute;top:14px;right:16px;font-family:'JetBrains Mono',monospace;font-weight:800;font-size:10px;letter-spacing:.3em;border:2px solid;border-radius:4px;padding:5px 10px;transform:rotate(-5deg)}
+/* noir skin */
+.card.noir{background:var(--noirs);color:var(--noirtxt);box-shadow:0 20px 50px rgba(0,0,0,.45)}
+.card.noir .tab{background:var(--em);color:#0E2A1E}
+.card.noir .body{background:#2B2C33}
+.card.noir .zr{color:#9EA0A6}
+.card.noir .big{color:var(--em);text-shadow:0 0 24px rgba(47,179,128,.35)}
+.card.noir .cap{color:#CFD0D4}
+.card.noir .srcl{color:#6B6E76}
+.card.noir .stampx{color:var(--em);border-color:var(--em);opacity:.9}
+/* paper skin */
+.card.paper{background:var(--paper2);color:var(--ink);box-shadow:0 14px 34px rgba(34,32,28,.14), inset 0 0 0 1px var(--hair)}
+.card.paper .tab{background:var(--ink);color:var(--paper)}
+.card.paper .body{background:#F7F3E9;box-shadow:inset 0 0 0 1px var(--hair)}
+.card.paper .zr{color:var(--dim)}
+.card.paper .big{color:var(--ink);font-family:'Courier Prime',monospace;text-shadow:0 1px 0 rgba(255,255,255,.6)}
+.card.paper .cap{color:var(--ink2);font-family:'Courier Prime',monospace;font-size:12.5px}
+.card.paper .srcl{color:var(--dim)}
+.card.paper .stampx{color:var(--redink);border-color:var(--redink);opacity:.85}
+.card.paper:hover .big{text-shadow:1px 0 0 rgba(179,55,43,.35),-1px 0 0 rgba(44,99,168,.3)}
+/* ============ EX3 — classification tiers ============ */
+.tiers{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+@media(max-width:700px){.tiers{grid-template-columns:1fr}}
+.tier{border:1.5px solid var(--ink);border-radius:5px;overflow:hidden;background:#F7F3E9}
+.tier .band{color:#fff;font-family:'JetBrains Mono',monospace;font-weight:800;font-size:11px;letter-spacing:.3em;text-align:center;padding:9px 6px}
+.tier.t1 .band{background:var(--sf-orange)}
+.tier.t2 .band{background:var(--sf-red)}
+.tier.t3 .band{background:var(--sf-blue)}
+.tier .meta{display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--dim);padding:7px 10px;border-bottom:1px dashed var(--hair);letter-spacing:.06em}
+.tier .cont{padding:12px 12px 14px;font-family:'Courier Prime',monospace;font-size:12.5px;line-height:1.7}
+.tier .pm{font-weight:700;color:var(--redink)}
+.tier .nm2{font-family:'Heebo';font-weight:700;font-size:13px;margin-bottom:5px}
+/* ============ EX4 — typography ============ */
+.spec{display:grid;gap:22px}
+.spec .row{border-top:1px dashed var(--hair);padding-top:16px}
+.spec .lbl{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.22em;color:var(--dim);margin-bottom:10px}
+.fx1{font-family:'Fraunces',serif;font-size:clamp(26px,5vw,42px);font-weight:600;font-variation-settings:"SOFT" 0,"WONK" 0,"opsz" 100;transition:font-variation-settings 1s cubic-bezier(.2,.8,.2,1),font-weight 1s}
+.fx1:hover{font-variation-settings:"SOFT" 100,"WONK" 1,"opsz" 20;font-weight:900}
+.tw{font-family:'Special Elite',monospace;font-size:19px;line-height:1.9;color:#2A2620}
+.tw span{display:inline-block}
+.degr{display:grid;gap:5px;font-family:'Courier Prime',monospace;font-weight:700;font-size:16px;letter-spacing:.02em}
+.degr div{white-space:nowrap;overflow:hidden}
+.d1{opacity:.95}
+.d2{filter:blur(.2px) contrast(1.15);opacity:.9}
+.d3{filter:blur(.35px) contrast(1.5);opacity:.85}
+.d4{filter:blur(.5px) contrast(2.2);opacity:.8;transform:skewX(-.3deg)}
+.d5{filter:blur(.7px) contrast(3.5);opacity:.72;transform:skewX(.4deg) translateY(.5px)}
+/* ============ EX5 — stamp press ============ */
+.stampzone{min-height:190px;display:flex;align-items:center;justify-content:center;gap:34px;flex-wrap:wrap}
+.pressbtn{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.25em;border:1.5px solid var(--ink);background:transparent;color:var(--ink);padding:12px 20px;cursor:pointer;border-radius:3px}
+.pressbtn:active{transform:translateY(1px)}
+.stamped{position:relative;width:230px;height:120px;background:#F7F3E9;box-shadow:inset 0 0 0 1px var(--hair);border-radius:4px;display:flex;align-items:center;justify-content:center;font-family:'Courier Prime',monospace;font-size:12px;color:var(--ink2)}
+.imprint{position:absolute;font-family:'JetBrains Mono',monospace;font-weight:800;font-size:15px;letter-spacing:.3em;color:var(--redink);border:3px solid var(--redink);border-radius:6px;padding:8px 14px;pointer-events:none;
+  mask-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="80"><filter id="r"><feTurbulence type="fractalNoise" baseFrequency="0.55" numOctaves="3"/><feComponentTransfer><feFuncA type="discrete" tableValues="0.55 0.8 1 0.9 1 0.75 1"/></feComponentTransfer></filter><rect width="200" height="80" filter="url(%23r)"/></svg>');mask-size:cover}
+@keyframes press{0%{transform:scale(1.6) rotate(var(--rot));opacity:0}55%{transform:scale(.94) rotate(var(--rot));opacity:1}75%{transform:scale(1.04) rotate(var(--rot))}100%{transform:scale(1) rotate(var(--rot));opacity:1}}
+.imprint.go{animation:press .38s cubic-bezier(.2,1.4,.3,1) forwards}
+/* ============ EX6 — clearance ============ */
+.clr{display:grid;grid-template-columns:220px 1fr;gap:26px;align-items:start}
+@media(max-width:700px){.clr{grid-template-columns:1fr}}
+.holdbtn{position:relative;width:100%;aspect-ratio:1.6;border:1.5px solid var(--ink);border-radius:6px;background:#F7F3E9;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;user-select:none;-webkit-user-select:none;touch-action:none}
+.holdbtn .lv{font-family:'JetBrains Mono',monospace;font-weight:800;font-size:13px;letter-spacing:.24em;color:var(--redink)}
+.holdbtn .hint{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.18em;color:var(--dim)}
+.holdbtn .prog{position:absolute;left:0;bottom:0;height:4px;width:0%;background:var(--redink);transition:none}
+.docline{font-family:'Courier Prime',monospace;font-size:13.5px;line-height:2.15;color:#2A2620}
+.docline .kpi{font-weight:700}
+.red{position:relative;display:inline-block;color:transparent;border-radius:2px;transition:color .5s .25s}
+.red::after{content:"";position:absolute;inset:-1px -3px;background:var(--ink);border-radius:2px;transform-origin:left center;transition:transform .6s cubic-bezier(.7,0,.2,1)}
+.red .exc{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.12em;color:#B8B2A2;transition:opacity .3s}
+.red.open{color:inherit}
+.red.open::after{transform:scaleX(0)}
+.red.open .exc{opacity:0}
+.clrnote{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.1em;color:var(--dim);margin-top:10px}
+/* ============ EX7 — scroll redaction ============ */
+.scrub{font-family:'Courier Prime',monospace;font-size:14.5px;line-height:2.1}
+.sr{position:relative;display:inline}
+.sr i{font-style:normal;position:relative;z-index:1}
+.sr::after{content:"";position:absolute;inset:-1px -2px;background:var(--ink);border-radius:2px;transform-origin:right center;transform:scaleX(var(--p,1));z-index:2}
+/* ============ EX8 — red string ============ */
+.board{position:relative;background:#E9E2CF;border:1px solid var(--hair);border-radius:6px;padding:20px;min-height:330px}
+.pin{position:absolute;background:#FBF8EF;border:1px solid var(--hair);box-shadow:0 8px 18px rgba(34,32,28,.18);padding:12px 14px;width:172px;transform:rotate(var(--r,0deg))}
+.pin .ph{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.2em;color:var(--dim)}
+.pin .pt{font-family:'Heebo';font-weight:700;font-size:12.5px;margin-top:3px;line-height:1.4}
+.pin::before{content:"";position:absolute;top:-6px;left:50%;width:11px;height:11px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#E0574A,#8E2318);box-shadow:0 2px 4px rgba(0,0,0,.4);transform:translateX(-50%)}
+.board svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.board path{fill:none;stroke:#B3372B;stroke-width:2.2;stroke-linecap:round;filter:drop-shadow(0 2px 1px rgba(0,0,0,.2))}
+/* ============ EX9 — loupe ============ */
+.loupezone{position:relative;background:#F7F3E9;border:1px solid var(--hair);border-radius:6px;padding:26px;cursor:none}
+.loupezone .row{display:flex;justify-content:space-between;align-items:baseline;font-family:'JetBrains Mono',monospace;padding:10px 2px;border-top:1px solid var(--hair)}
+.loupezone .row:first-child{border-top:0}
+.loupezone .k{font-size:11px;letter-spacing:.12em;color:var(--ink2)}
+.loupezone .v{font-weight:800;font-size:16px}
+.lens{position:absolute;width:150px;height:150px;border-radius:50%;border:3px solid var(--ink);background:#FFFDF5;box-shadow:0 18px 40px rgba(34,32,28,.35),inset 0 0 0 2px rgba(179,55,43,.25);pointer-events:none;opacity:0;transition:opacity .2s;z-index:5;display:flex;align-items:center;justify-content:center;text-align:center;padding:16px;transform:translate(-50%,-58%)}
+.lens.on{opacity:1}
+.lens .src2{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.06em;line-height:1.8;color:var(--ink2)}
+.lens .src2 b{color:var(--redink);display:block;letter-spacing:.2em;font-size:8px;margin-bottom:4px}
+/* ============ EX10 — kinetic type ============ */
+.kin{font-family:'Fraunces',serif;font-size:clamp(26px,5.6vw,46px);line-height:1.25;color:var(--ink)}
+.kin span{display:inline-block;font-weight:100;will-change:font-weight;transition:none}
+.kin .l2{color:var(--redink)}
+/* ============ EX11 — microfilm ============ */
+.filmwrap{display:grid;grid-template-columns:1fr;gap:0}
+.film{position:relative;border-radius:6px;overflow:hidden;transition:background .6s,color .6s;padding:24px 58px;background:#F7F3E9;color:var(--ink);box-shadow:inset 0 0 0 1px var(--hair)}
+.film .doc{font-family:'Courier Prime',monospace;font-size:13px;line-height:1.95}
+.film .hdd{font-family:'JetBrains Mono',monospace;font-weight:800;font-size:10px;letter-spacing:.3em;margin-bottom:10px}
+.film .rebate{position:absolute;top:0;bottom:0;width:34px;display:none;flex-direction:column;justify-content:space-around;align-items:center;background:#000}
+.film .rebate span{font-family:'JetBrains Mono',monospace;font-size:7px;color:#777;transform:rotate(90deg);letter-spacing:.2em;white-space:nowrap}
+.film .rebate::before,.film .rebate::after{content:"";width:12px;height:100%;background-image:radial-gradient(rgba(255,255,255,.9) 3px,transparent 3.5px);background-size:12px 26px;background-position:center}
+.film.neg{background:#0A0B0C;color:#EDEDF2;box-shadow:inset 0 0 90px rgba(0,0,0,.9)}
+.film.neg .doc{color:#E6E8F0;text-shadow:0 0 6px rgba(230,235,255,.35)}
+.film.neg .hdd{color:#fff}
+.film.neg .rebate{display:flex}
+.film.neg{padding-left:58px;padding-right:58px}
+/* ============ EX12 — OG card ============ */
+.chat{background:#0B141A;border-radius:10px;padding:20px;display:grid;gap:14px}
+.bub{max-width:430px;background:#1F2C34;border-radius:10px;padding:10px 12px;color:#E9EDEF;font-size:13px;justify-self:start}
+.bub .url{color:#53BDEB;word-break:break-all;font-family:'JetBrains Mono',monospace;font-size:11.5px}
+.bub .ogc{margin-top:8px;border-radius:8px;overflow:hidden;background:#191A1F;border:1px solid #2a3942}
+.ogimg{aspect-ratio:1200/630;background:linear-gradient(135deg,#16171B,#1E2025);display:flex;flex-direction:column;justify-content:center;padding:20px 22px;position:relative}
+.ogimg .on2{font-family:'Fraunces',serif;font-weight:900;font-size:24px;color:#F2F1ED}
+.ogimg .oc{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.3em;color:#2FB380;margin-top:4px}
+.ogimg .onums{display:flex;gap:16px;margin-top:14px}
+.ogimg .onums div{font-family:'JetBrains Mono',monospace}
+.ogimg .onums b{display:block;font-size:15px;color:#F2F1ED}
+.ogimg .onums span{font-size:7px;letter-spacing:.14em;color:#8B8E96}
+.ogimg .ostamp{position:absolute;top:12px;right:14px;font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:.25em;color:#B3372B;border:1.5px solid #B3372B;padding:3px 7px;border-radius:3px;transform:rotate(6deg)}
+.ogc .ogmeta{padding:9px 12px}
+.ogc .ogt{font-weight:700;font-size:13px;color:#E9EDEF}
+.ogc .ogd{font-size:11.5px;color:#8696A0;margin-top:2px}
+.ogc .ogu{font-size:10.5px;color:#8696A0;margin-top:4px;font-family:'JetBrains Mono',monospace}
+.tagb{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.2em;color:#8696A0;margin-bottom:4px}
+/* footer */
+footer{margin-top:70px;border-top:2px solid var(--ink);padding:26px 0 60px;font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.14em;color:var(--dim);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;direction:ltr}
+html{overflow-x:clip}
+body{overflow-x:clip}
+@media(max-width:560px){
+  .exh{flex-wrap:wrap;row-gap:3px}
+  .exs{white-space:normal;margin-inline-start:0;width:100%;order:3}
+  .film{padding-left:44px;padding-right:44px}
+  .demo{padding:18px}
+  .pin{width:126px;padding:9px 10px}
+  .pin .pt{font-size:10.5px}
+  #board .pin:nth-child(2){left:4%!important;top:8%!important}
+  #board .pin:nth-child(3){left:44%!important;top:26%!important}
+  #board .pin:nth-child(4){left:30%!important;top:62%!important}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .red::after{transition:none}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="kick">EMERALD // RESEARCH DIVISION</div>
+  <h1>מעבדת הרעיונות</h1>
+  <p class="sub">12 מוצגים חיים — אחד לכל ממצא מרכזי מארבעת דוחות המחקר. אלה <b>סקיצות מהירות</b> שנועדו להרגיש את הרעיון, לא הביצוע הסופי (בגרסה אמיתית: פונטים ייעודיים, ליטוש מלא). ליד כל מוצג — מי מהחוקרים עומד מאחוריו.</p>
+  <nav class="toc">
+    <a href="#ex1">01 30-SEC CUT</a><a href="#ex2">02 PAPER↔NOIR</a><a href="#ex3">03 CLASSIFICATION</a><a href="#ex4">04 TYPE</a><a href="#ex5">05 STAMP</a><a href="#ex6">06 CLEARANCE</a><a href="#ex7">07 REDACTION</a><a href="#ex8">08 RED STRING</a><a href="#ex9">09 LOUPE</a><a href="#ex10">10 KINETIC</a><a href="#ex11">11 MICROFILM</a><a href="#ex12">12 OG CARD</a>
+  </nav>
+</header>
+
+<!-- ============ EX1 ============ -->
+<section class="ex" id="ex1">
+  <div class="exh"><span class="exn">01</span><span class="ext">חיתוך 30 השניות</span><span class="exs">AGENT D · ATTENTION RESEARCH</span></div>
+  <p class="exd">למגייס יש 7.4 שניות במסך הראשון. במקום מסך טעינה — <b>התיק כולו, שלם, בעמוד אחד סטטי</b>: טענות-פעולה, מספרים עם קו-מקור, פסק-דין. הקולנוע מאחורי דלת מסומנת בזמן אמת.</p>
+  <div class="demo cut">
+    <div class="nm">Oran Carmon</div>
+    <div class="rl">COMMERCIAL SYSTEMS BUILDER · CASE FILE №26</div>
+    <table>
+      <tr><td><span class="cl">Built XTIX's commercial engine from zero</span><span class="src">SOURCE: CRM EXPORT FY25 · VERIFIED BY CEO REFERENCE</span></td><td class="vv">$XM GMV</td></tr>
+      <tr><td><span class="cl">Scaled ARR through systematic pipeline design</span><span class="src">SOURCE: BOARD DECK Q4-25 · AUDITED</span></td><td class="vv">+212%</td></tr>
+      <tr><td><span class="cl">Recruited &amp; ramped the full commercial team</span><span class="src">SOURCE: ORG RECORDS · 3 NAMED REFERENCES</span></td><td class="vv">0 → 6</td></tr>
+    </table>
+    <div class="verdict">Six years, four companies, one operating system for revenue.</div>
+    <a class="door" href="#ex2">OPEN THE FULL FILE — 6 MIN ▸</a>
+  </div>
+  <p class="note">שים לב: המספרים כאן דמו. הנקודה — הכל HTML סטטי; אפס אנימציית ספירה; בוט/צילום-מסך/מצב-קריאה רואים בדיוק את זה.</p>
+</section>
+
+<!-- ============ EX2 ============ -->
+<section class="ex" id="ex2">
+  <div class="exh"><span class="exn">02</span><span class="ext">נייר ↔ נואר — אותו תוכן, שני עולמות</span><span class="exs">AGENTS A+C · THE PAPER TURN</span></div>
+  <p class="exd">הכרעת-העל: מ"סרט בלש על מסך" ל"מסמך פיזי בחדר קריאה". לחץ על המתג. שים לב בגרסת הנייר: גרעון, צל-אותיות של דפוס-בלט, ובריחוף על המספר — <b>הסטת-צבע של עותק דור-שני</b>.</p>
+  <div class="abwrap"><span class="ab"><button id="abNoir">NOIR</button><button id="abPaper" class="on">PAPER</button></span></div>
+  <div class="demo" style="background:transparent;border:0;padding:0">
+    <div class="card paper" id="abCard">
+      <span class="tab">XTIX</span>
+      <div class="body">
+        <span class="stampx">VERIFIED</span>
+        <div class="zr">04 — EVIDENCE · COMMERCIAL RESULTS</div>
+        <div class="big">$2M</div>
+        <div class="cap">Largest deal closed — enterprise ticketing partnership</div>
+        <div class="srcl">SOURCE: SIGNED AGREEMENT 2025-11 · (C) PORTION-MARKED</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ EX3 ============ -->
+<section class="ex" id="ex3">
+  <div class="exh"><span class="exn">03</span><span class="ext">מערכת הסיווג האמיתית</span><span class="exs">AGENT C · 32 CFR 2001.80</span></div>
+  <p class="exd">במקום צבעי-קייס מומצאים — המערכת <b>שקיימת במציאות</b> בתקנות הפדרליות: כתום/אדום/כחול לפי דרגה, מספרי-בקרה, "עותק 3 מתוך 12", וסימון-מודיעין לפני כל KPI. מגייס מרגיש שזה אמיתי בלי לדעת למה.</p>
+  <div class="demo tiers">
+    <div class="tier t1"><div class="band">TOP SECRET</div><div class="meta"><span>CTRL № TS-26-0114</span><span>COPY 3 OF 12</span></div><div class="cont"><div class="nm2">XTIX — Flagship Case</div><span class="pm">(TS)</span> GMV scaled to <b>$XM</b> in 24 months<br><span class="pm">(TS)</span> Largest deal: <b>$2M</b></div></div>
+    <div class="tier t2"><div class="band">SECRET</div><div class="meta"><span>CTRL № S-26-0087</span><span>COPY 5 OF 12</span></div><div class="cont"><div class="nm2">Oasis — Command Case</div><span class="pm">(S)</span> ARR growth <b>+212%</b> YoY<br><span class="pm">(S)</span> Team ramp <b>0 → 6</b> AEs</div></div>
+    <div class="tier t3"><div class="band">CONFIDENTIAL</div><div class="meta"><span>CTRL № C-26-0203</span><span>COPY 9 OF 12</span></div><div class="cont"><div class="nm2">Eventer — Growth Case</div><span class="pm">(C)</span> Retention <b>94%</b> logo<br><span class="pm">(C)</span> Cross-functional impact ×3 teams</div></div>
+  </div>
+</section>
+
+<!-- ============ EX4 ============ -->
+<section class="ex" id="ex4">
+  <div class="exh"><span class="exn">04</span><span class="ext">שלושה קולות טיפוגרפיים</span><span class="exs">AGENTS A+C · TYPE SYSTEMS</span></div>
+  <p class="exd">‏Inter מת (הוא כיום סממן ה-AI הרשמי). שלושה קולות במקומו: ‏<b>Fraunces מנוצל עד הסוף</b> (רחף מעל הכותרת — הצירים הרכים "מתעוררים"), <b>מכונת כתיבה אמיתית</b> (כל אות מוטית אחרת — בגרסה סופית: ‏TT2020 עם 9 וריאציות לאות), ו<b>סולם שחיקת-הצלם</b> (בגרסה סופית: פונט Redaction מ-MoMA).</p>
+  <div class="demo spec">
+    <div class="row"><div class="lbl">DISPLAY — FRAUNCES, SOFT+WONK AXES (HOVER ME)</div><div class="fx1">The Commercial Systems Builder.</div></div>
+    <div class="row"><div class="lbl">TYPED EXHIBITS — TYPEWRITER VOICE, PER-GLYPH JITTER</div><div class="tw" id="twline">Subject demonstrates repeatable revenue architecture across four ventures.</div></div>
+    <div class="row"><div class="lbl">DEGRADATION RAMP — PHOTOCOPY GENERATIONS 1→5</div><div class="degr"><div class="d1">DECLASSIFIED — APPROVED FOR RELEASE</div><div class="d2">DECLASSIFIED — APPROVED FOR RELEASE</div><div class="d3">DECLASSIFIED — APPROVED FOR RELEASE</div><div class="d4">DECLASSIFIED — APPROVED FOR RELEASE</div><div class="d5">DECLASSIFIED — APPROVED FOR RELEASE</div></div></div>
+  </div>
+</section>
+
+<!-- ============ EX5 ============ -->
+<section class="ex" id="ex5">
+  <div class="exh"><span class="exn">05</span><span class="ext">חותמת שנלחצת</span><span class="exs">AGENT B · SPRING PHYSICS</span></div>
+  <p class="exd">חותמת אמיתית לא "מופיעה" — היא <b>נוחתת</b>: קפיץ, סיבוב אקראי קל, שולי-דיו לא אחידים (מסכת רעש), ורטט קטן באנדרואיד. לחץ שוב ושוב — אף חותמת לא זהה לקודמתה.</p>
+  <div class="demo stampzone">
+    <button class="pressbtn" id="stampBtn">PRESS TO STAMP ▸</button>
+    <div class="stamped" id="stampPad">document awaiting review…</div>
+  </div>
+</section>
+
+<!-- ============ EX6 ============ -->
+<section class="ex" id="ex6">
+  <div class="exh"><span class="exn">06</span><span class="ext">THE CLEARANCE — דרגה שנפתחת בהחזקה</span><span class="exs">AGENT B №1 + חוק AGENT D</span></div>
+  <p class="exd">החזק את הכפתור ~1.2 שניות להעלאת דרגה. שים לב לחוק של חוקר D: <b>המספרים לעולם לא מוסתרים</b> — רק שורות ההקשר והעומק נפתחות. "המסמך השתנה מאחוריך".</p>
+  <div class="demo clr">
+    <div>
+      <div class="holdbtn" id="holdBtn"><span class="lv" id="lvTxt">CONFIDENTIAL</span><span class="hint">HOLD TO UPGRADE ▸</span><span class="prog" id="lvProg"></span></div>
+      <div class="clrnote" id="lvNote">LEVEL 1 OF 3</div>
+    </div>
+    <div class="docline">
+      <div>ARR GROWTH: <span class="kpi">+212%</span> — <span class="red r1"><span class="exc">(b)(1) — SECRET</span>driven by outbound engine rebuilt in Q2</span></div>
+      <div>LARGEST DEAL: <span class="kpi">$2M</span> — <span class="red r1"><span class="exc">(b)(1) — SECRET</span>closed against incumbent, 9-month cycle</span></div>
+      <div>METHOD: <span class="red r2"><span class="exc">(b)(3) — TOP SECRET</span>playbook: land-and-expand via ops teams</span></div>
+      <div>REFERENCE: <span class="red r2"><span class="exc">(b)(3) — TOP SECRET</span>CEO, XTIX — "builds the machine, then the team"</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ EX7 ============ -->
+<section class="ex" id="ex7">
+  <div class="exh"><span class="exn">07</span><span class="ext">הסרת-הסתרה בגלילה</span><span class="exs">AGENT B · CLIP-PATH CHOREOGRAPHY</span></div>
+  <p class="exd">גלול לאט דרך הפסקה — הפסים השחורים <b>נמחקים ע"י הגלילה עצמה</b>, כאילו הקורא הוא זה שמסיר את הסיווג. (רץ על מנוע הגלילה של הדפדפן — אפס עומס.)</p>
+  <div class="demo scrub" id="scrubZone">
+    <p>The subject's method is consistent across ventures: <span class="sr"><i>diagnose the revenue architecture first</i></span>, then <span class="sr"><i>rebuild pipeline as a measurable system</i></span>, then <span class="sr"><i>hire against the system — not against gut feel</i></span>. Outcomes replicated at <span class="sr"><i>four consecutive companies</i></span>.</p>
+  </div>
+</section>
+
+<!-- ============ EX8 ============ -->
+<section class="ex" id="ex8">
+  <div class="exh"><span class="exn">08</span><span class="ext">החוט האדום — לוח ראיות</span><span class="exs">AGENT C №3 + AGENT B</span></div>
+  <p class="exd">המטאפורה החזקה ביותר למנהל מסחרי: <b>"אני מחבר את הנקודות"</b>. גלול — החוט מותח את עצמו בין הראיות: יכולת ← מהלך ← תוצאה.</p>
+  <div class="demo board" id="board">
+    <svg viewBox="0 0 840 330" preserveAspectRatio="none"><path id="yarn" d="M170,84 C 300,150 340,60 452,105 C 560,150 600,230 672,252"/></svg>
+    <div class="pin" style="left:6%;top:12%;--r:-2.4deg"><div class="ph">CAPABILITY</div><div class="pt">Systematic outbound design</div></div>
+    <div class="pin" style="left:41%;top:16%;--r:1.8deg"><div class="ph">MOVE — Q2/25</div><div class="pt">Rebuilt XTIX pipeline engine</div></div>
+    <div class="pin" style="left:68%;top:62%;--r:-1.2deg"><div class="ph">OUTCOME</div><div class="pt">+212% ARR · $2M flagship deal</div></div>
+  </div>
+</section>
+
+<!-- ============ EX9 ============ -->
+<section class="ex" id="ex9">
+  <div class="exh"><span class="exn">09</span><span class="ext">זכוכית המגדלת — בדיקת נאותות</span><span class="exs">AGENT B + AGENT D · VERIFIABILITY</span></div>
+  <p class="exd">עבור עם הסמן (או געע באצבע) מעל מספר — העדשה חושפת את <b>קו-המקור</b> שלו. תיאטרון שמשרת את הדבר שהקהל הזה באמת קונה: אימות.</p>
+  <div class="demo loupezone" id="loupeZone">
+    <div class="row" data-src="CRM EXPORT FY25 · PIPELINE REPORT P.14 · VERIFIED 2026-07"><span class="k">GMV — XTIX</span><span class="v">$X,XXX,XXX</span></div>
+    <div class="row" data-src="SIGNED AGREEMENT 2025-11 · COUNTERSIGNED · ON FILE"><span class="k">LARGEST DEAL</span><span class="v">$2,000,000</span></div>
+    <div class="row" data-src="BOARD DECK Q4-25 · SLIDE 7 · AUDITED BY CFO"><span class="k">ARR GROWTH</span><span class="v">+212%</span></div>
+    <div class="lens" id="lens"><div class="src2"><b>SOURCE LINE</b><span id="lensTxt"></span></div></div>
+  </div>
+</section>
+
+<!-- ============ EX10 ============ -->
+<section class="ex" id="ex10">
+  <div class="exh"><span class="exn">10</span><span class="ext">טיפוגרפיה קינטית — היורש של החלקיקים?</span><span class="exs">AGENT A · TRENDLINE 2026</span></div>
+  <p class="exd">המהלך היוקרתי היום: האותיות <b>עצמן</b> הן האובייקט. גלול דרך המשפט — המשקל נבנה מילה-מילה עם הגלילה (פונט משתנה, אפס חלקיקים). זו החלופה המודרנית לסצנת ההצהרה.</p>
+  <div class="demo"><div class="kin" id="kin">
+    <span>One</span> <span>intelligence</span> <span>built</span> <span>the</span> <span>world.</span><br>
+    <span class="l2">Two</span> <span class="l2">will</span> <span class="l2">build</span> <span class="l2">the</span> <span class="l2">next.</span>
+  </div></div>
+</section>
+
+<!-- ============ EX11 ============ -->
+<section class="ex" id="ex11">
+  <div class="exh"><span class="exn">11</span><span class="ext">מצב מיקרופילם — חושך עם סיבה</span><span class="exs">AGENT C · THE VAULT</span></div>
+  <p class="exd">אם עוברים לאור-יום, החושך לא נזרק — הוא הופך ל<b>"כספת"</b>: נגטיב כסף-הליד אמיתי, עם שולי-פילם ומספרי-פריים. מצב-לילה שיש לו הצדקה נרטיבית. לחץ למעבר.</p>
+  <div class="demo" style="background:transparent;border:0;padding:0">
+    <div class="abwrap" style="margin-bottom:14px"><span class="ab"><button id="fmPos" class="on">READING ROOM</button><button id="fmNeg">THE VAULT</button></span></div>
+    <div class="film" id="film">
+      <div class="rebate" style="left:0"><span>KODAK SAFETY FILM</span><span>FR 0114</span></div>
+      <div class="rebate" style="right:0"><span>EMERALD ARCHIVE</span><span>FR 0115</span></div>
+      <div class="doc"><div class="hdd">CASE FILE №26 — SUMMARY</div>
+      Subject built commercial systems at four consecutive ventures. Pattern: diagnose, systematize, staff, scale. Current status: <b>ACTIVE — AVAILABLE FOR ENGAGEMENT.</b></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ EX12 ============ -->
+<section class="ex" id="ex12">
+  <div class="exh"><span class="exn">12</span><span class="ext">כרטיס התצוגה-המקדימה — הפורטפוליו של השנייה הראשונה</span><span class="exs">AGENT D · HIGHEST ROI FIX</span></div>
+  <p class="exd">כך נראה הלינק שלך היום בוואטסאפ/לינקדאין — ומה שהוא <b>יכול</b> להיות. הכרטיס נראה ע"י פי-10 אנשים מהאתר. (וגרסת בונוס: כרטיס אישי-לחברה — "PREPARED FOR".)</p>
+  <div class="demo chat">
+    <div class="bub"><span class="tagb">היום ↓</span><br><span class="url">https://oran-ops.github.io/portfolio/</span></div>
+    <div class="bub"><span class="tagb">אחרי התיקון ↓</span>
+      <div class="ogc"><div class="ogimg"><span class="ostamp">CASE FILE №26</span><div class="on2">Oran Carmon</div><div class="oc">COMMERCIAL SYSTEMS BUILDER</div><div class="onums"><div><b>$XM</b><span>GMV BUILT</span></div><div><b>+212%</b><span>ARR GROWTH</span></div><div><b>4</b><span>VENTURES</span></div></div></div>
+      <div class="ogmeta"><div class="ogt">Oran Carmon — The Commercial Systems Builder</div><div class="ogd">Six years, four companies, one operating system for revenue. See the numbers in 30 seconds.</div><div class="ogu">oran-ops.github.io</div></div></div>
+    </div>
+  </div>
+</section>
+
+<footer><span>EMERALD RESEARCH DIVISION — CONCEPT LAB v1</span><span>SKETCHES, NOT FINALS</span></footer>
+</div>
+
+<script>
+(function(){
+'use strict';
+var reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* EX2 — noir/paper toggle */
+var abCard=document.getElementById('abCard');
+document.getElementById('abNoir').addEventListener('click',function(){abCard.className='card noir';this.classList.add('on');document.getElementById('abPaper').classList.remove('on')});
+document.getElementById('abPaper').addEventListener('click',function(){abCard.className='card paper';this.classList.add('on');document.getElementById('abNoir').classList.remove('on')});
+
+/* EX4 — typewriter jitter: wrap chars, pseudo-random per index */
+(function(){
+  var el=document.getElementById('twline'), txt=el.textContent; el.textContent='';
+  function pr(i,s){var x=Math.sin(i*127.1+s*311.7)*43758.5453;return x-Math.floor(x)}
+  for(var i=0;i<txt.length;i++){
+    if(txt[i]===' '){el.appendChild(document.createTextNode(' '));continue}
+    var s=document.createElement('span');s.textContent=txt[i];
+    var dy=(pr(i,1)-.5)*1.6, rot=(pr(i,2)-.5)*2.2, op=.78+pr(i,3)*.22;
+    s.style.transform='translateY('+dy.toFixed(2)+'px) rotate('+rot.toFixed(2)+'deg)';
+    s.style.opacity=op.toFixed(2);
+    el.appendChild(s);
+  }
+})();
+
+/* EX5 — stamp press */
+(function(){
+  var pad=document.getElementById('stampPad'), n=0;
+  var words=['VERIFIED','RECEIVED','CLEARED','APPROVED','ON FILE'];
+  document.getElementById('stampBtn').addEventListener('click',function(){
+    var st=document.createElement('div');st.className='imprint';
+    st.textContent=words[n%words.length]; n++;
+    var rot=(Math.random()*10-5).toFixed(1);
+    st.style.setProperty('--rot',rot+'deg');
+    st.style.left=(8+Math.random()*30)+'%';
+    st.style.top=(12+Math.random()*40)+'%';
+    if(pad.children.length>4)pad.removeChild(pad.children[1]||pad.firstChild);
+    pad.appendChild(st);
+    if(!reduced)requestAnimationFrame(function(){st.classList.add('go')});else st.style.opacity=1;
+    try{if(navigator.vibrate)navigator.vibrate(8)}catch(e){}
+  });
+})();
+
+/* EX6 — clearance hold */
+(function(){
+  var btn=document.getElementById('holdBtn'),prog=document.getElementById('lvProg'),
+      lv=document.getElementById('lvTxt'),note=document.getElementById('lvNote'),
+      levels=['CONFIDENTIAL','SECRET','TOP SECRET'],cur=0,t0=null,raf=null,HOLD=1200;
+  function open(cls){document.querySelectorAll('.red.'+cls).forEach(function(r){r.classList.add('open')})}
+  function reset(){cur=0;lv.textContent=levels[0];note.textContent='LEVEL 1 OF 3';
+    document.querySelectorAll('.red').forEach(function(r){r.classList.remove('open')})}
+  function tick(ts){
+    if(t0===null)t0=ts;
+    var p=Math.min(1,(ts-t0)/HOLD);
+    prog.style.width=(p*100)+'%';
+    if(p>=1){finishHold();return}
+    raf=requestAnimationFrame(tick);
+  }
+  function finishHold(){
+    t0=null;prog.style.width='0%';
+    if(cur<2){cur++;lv.textContent=levels[cur];
+      note.textContent=cur<2?('LEVEL '+(cur+1)+' OF 3'):'FULL ACCESS — TAP TO RESET';
+      if(cur===1)open('r1'); if(cur===2)open('r2');
+      try{if(navigator.vibrate)navigator.vibrate([10,40,14])}catch(e){}
+    } else { reset(); }
+  }
+  function down(e){e.preventDefault();if(cur>=2){reset();return}
+    t0=null;raf=requestAnimationFrame(tick)}
+  function up(){if(raf)cancelAnimationFrame(raf);t0=null;prog.style.width='0%'}
+  btn.addEventListener('pointerdown',down);
+  btn.addEventListener('pointerup',up);
+  btn.addEventListener('pointerleave',up);
+  btn.addEventListener('pointercancel',up);
+})();
+
+/* EX7 — scroll redaction scrub (rAF-driven, viewport progress) */
+(function(){
+  var zone=document.getElementById('scrubZone'),srs=[].slice.call(zone.querySelectorAll('.sr'));
+  function upd(){
+    var vh=innerHeight;
+    srs.forEach(function(el,i){
+      var r=el.getBoundingClientRect();
+      var p=1-Math.min(1,Math.max(0,(vh*0.82-r.top)/(vh*0.45)-i*0.12));
+      el.style.setProperty('--p',(reduced?0:p).toFixed(3));
+    });
+  }
+  addEventListener('scroll',upd,{passive:true});addEventListener('resize',upd);upd();
+})();
+
+/* EX8 — red string draw-on-scroll */
+(function(){
+  var yarn=document.getElementById('yarn'),board=document.getElementById('board');
+  var L=yarn.getTotalLength();
+  yarn.style.strokeDasharray=L;
+  yarn.style.strokeDashoffset=L;
+  function upd(){
+    var r=board.getBoundingClientRect(),vh=innerHeight;
+    var p=Math.min(1,Math.max(0,(vh*0.9-r.top)/(vh*0.75)));
+    yarn.style.strokeDashoffset=reduced?0:(L*(1-p));
+  }
+  addEventListener('scroll',upd,{passive:true});addEventListener('resize',upd);upd();
+})();
+
+/* EX9 — loupe */
+(function(){
+  var zone=document.getElementById('loupeZone'),lens=document.getElementById('lens'),txt=document.getElementById('lensTxt');
+  function move(e){
+    var r=zone.getBoundingClientRect();
+    var x=e.clientX-r.left,y=e.clientY-r.top;
+    lens.style.left=x+'px';lens.style.top=y+'px';
+    var el=document.elementFromPoint(e.clientX,e.clientY);
+    var row=el&&el.closest?el.closest('.row'):null;
+    if(row&&row.dataset.src){txt.textContent=row.dataset.src;lens.classList.add('on')}
+    else lens.classList.remove('on');
+  }
+  zone.addEventListener('pointermove',move);
+  zone.addEventListener('pointerdown',move);
+  zone.addEventListener('pointerleave',function(){lens.classList.remove('on')});
+})();
+
+/* EX10 — kinetic weight scrub */
+(function(){
+  var kin=document.getElementById('kin'),words=[].slice.call(kin.querySelectorAll('span'));
+  function upd(){
+    var r=kin.getBoundingClientRect(),vh=innerHeight;
+    var base=Math.min(1,Math.max(0,(vh*0.92-r.top)/(vh*0.6)));
+    words.forEach(function(w,i){
+      var p=Math.min(1,Math.max(0,base*1.6-i*0.12));
+      var wt=100+(reduced?800:Math.round(700*p));
+      w.style.fontWeight=wt;
+      w.style.opacity=(0.25+0.75*p).toFixed(2);
+    });
+  }
+  addEventListener('scroll',upd,{passive:true});addEventListener('resize',upd);upd();
+})();
+
+/* EX11 — microfilm toggle */
+(function(){
+  var film=document.getElementById('film');
+  document.getElementById('fmPos').addEventListener('click',function(){film.classList.remove('neg');this.classList.add('on');document.getElementById('fmNeg').classList.remove('on')});
+  document.getElementById('fmNeg').addEventListener('click',function(){film.classList.add('neg');this.classList.add('on');document.getElementById('fmPos').classList.remove('on')});
+})();
+})();
+</script>
+</body>
+</html>
