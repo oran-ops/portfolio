@@ -6,7 +6,7 @@
 <title>CONCEPT LAB — מעבדת הרעיונות</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,100..900,0..100,0..1;1,9..144,100..900,0..100,0..1&family=Special+Elite&family=Courier+Prime:wght@400;700&family=Heebo:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;600;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,100..900,0..100,0..1;1,9..144,100..900,0..100,0..1&family=Special+Elite&family=Courier+Prime:wght@400;700&family=Heebo:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;600;800&family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
 <style>
 :root{
   --paper:#F3EFE4; --paper2:#EDE7D8; --ink:#22201C; --ink2:#4A463E; --dim:#8A8578;
@@ -199,6 +199,66 @@ nav.toc a:hover{border-color:var(--red);color:var(--red)}
 footer{margin-top:70px;border-top:2px solid var(--ink);padding:26px 0 60px;font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.14em;color:var(--dim);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;direction:ltr}
 html{overflow-x:clip}
 body{overflow-x:clip}
+/* ============ EX13 — synthesis card (existing noir language) ============ */
+.featured{border:2px solid var(--red);border-radius:10px;padding:6px 18px 2px;margin-top:34px;position:relative}
+.featured::before{content:"החדשים — הסינתזה";position:absolute;top:-11px;right:18px;background:var(--paper);padding:0 10px;font-family:'Heebo';font-weight:700;font-size:12px;color:var(--red)}
+.c13{background:#25262D;border-radius:8px;overflow:hidden;box-shadow:0 24px 60px rgba(0,0,0,.5);color:#F2F1ED;font-family:'Inter',sans-serif;position:relative;max-width:560px;margin:0 auto}
+.c13::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:.5;mix-blend-mode:overlay;
+  background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200"><filter id="g"><feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/><feComponentTransfer><feFuncA type="linear" slope="0.16"/></feComponentTransfer></filter><rect width="200" height="200" filter="url(%23g)"/></svg>')}
+.c13 .band{background:var(--em);color:#0B241A;font-family:'JetBrains Mono',monospace;font-weight:800;font-size:10px;letter-spacing:.4em;text-align:center;padding:8px 6px}
+.c13 .ctl{display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.08em;color:#8B8E96;padding:8px 18px;border-bottom:1px solid #33353C}
+.c13 .inner{padding:16px 20px 20px;position:relative}
+.c13 .tab13{display:inline-block;font-family:'Fraunces',serif;font-weight:700;font-size:15px;background:#191A1F;color:#7FD7B2;border-radius:6px 10px 6px 6px;padding:5px 16px;box-shadow:inset 0 2px 3px rgba(0,0,0,.6);margin-bottom:12px}
+.c13 .zr13{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.25em;color:#9EA0A6;margin-bottom:6px}
+.m13row{display:flex;justify-content:space-between;align-items:baseline;gap:14px;padding:11px 0;border-top:1px solid #33353C;cursor:none}
+.m13row:first-of-type{border-top:0}
+.m13row .cap13{font-size:12px;color:#CFD0D4;line-height:1.55}
+.m13row .cap13 .pm{color:var(--em);font-family:'JetBrains Mono',monospace;font-weight:700;font-size:10px;margin-inline-end:4px}
+.m13row .src13{display:block;font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.05em;color:#6B6E76;margin-top:3px}
+.big13{font-family:'JetBrains Mono',monospace;font-weight:800;font-size:30px;letter-spacing:-.02em;color:var(--em);text-shadow:0 0 22px rgba(47,179,128,.28);white-space:nowrap;transition:text-shadow .18s}
+.m13row:hover .big13{text-shadow:1.5px 0 0 rgba(94,143,191,.75),-1.5px 0 0 rgba(47,179,128,.9),0 0 22px rgba(47,179,128,.28)}
+.red13{position:relative;display:inline-block;color:transparent;transition:color .5s .25s}
+.red13::after{content:"";position:absolute;inset:-1px -3px;background:#101114;border:1px solid #3A3D44;border-radius:2px;transform-origin:left center;transition:transform .6s cubic-bezier(.7,0,.2,1)}
+.red13 .exc13{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:.14em;color:#565A62;z-index:1;transition:opacity .3s}
+.red13.open{color:inherit}
+.red13.open::after{transform:scaleX(0)}
+.red13.open .exc13{opacity:0}
+.c13foot{display:flex;justify-content:space-between;align-items:center;margin-top:14px;gap:12px;flex-wrap:wrap}
+.hold13{position:relative;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.2em;color:#CFD0D4;background:transparent;border:1px solid #4B4E55;border-radius:3px;padding:9px 14px;cursor:pointer;user-select:none;-webkit-user-select:none;touch-action:none;overflow:hidden}
+.hold13 .p13{position:absolute;left:0;bottom:0;height:3px;width:0%;background:var(--em)}
+.stamp13btn{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.2em;color:#7FD7B2;background:transparent;border:1px solid rgba(47,179,128,.5);border-radius:3px;padding:9px 14px;cursor:pointer}
+.imp13{position:absolute;font-family:'JetBrains Mono',monospace;font-weight:800;font-size:12px;letter-spacing:.3em;color:var(--em);border:2.5px solid var(--em);border-radius:5px;padding:6px 11px;pointer-events:none;z-index:3;
+  mask-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="80"><filter id="r"><feTurbulence type="fractalNoise" baseFrequency="0.55" numOctaves="3"/><feComponentTransfer><feFuncA type="discrete" tableValues="0.5 0.85 1 0.9 1 0.7 1"/></feComponentTransfer></filter><rect width="200" height="80" filter="url(%23r)"/></svg>');mask-size:cover}
+.imp13.go{animation:press .38s cubic-bezier(.2,1.4,.3,1) forwards}
+.lens13{position:absolute;width:150px;height:150px;border-radius:50%;border:2.5px solid var(--em);background:#16171B;box-shadow:0 18px 44px rgba(0,0,0,.6),0 0 30px rgba(47,179,128,.15);pointer-events:none;opacity:0;transition:opacity .2s;z-index:6;display:flex;align-items:center;justify-content:center;text-align:center;padding:16px;transform:translate(-50%,-58%)}
+.lens13.on{opacity:1}
+.lens13 .l13t{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.06em;line-height:1.8;color:#CFD0D4}
+.lens13 .l13t b{color:var(--em);display:block;letter-spacing:.22em;font-size:7.5px;margin-bottom:4px}
+/* ============ EX14 — cover brief ============ */
+.cov{background:#191A1F;border-radius:8px;padding:38px 22px 30px;display:flex;flex-direction:column;align-items:center;overflow:hidden}
+.crumb14{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:.18em;color:#6B6E76;margin-bottom:26px;text-align:center}
+.fold14{width:min(430px,100%);background:linear-gradient(172deg,#35B786,#289D71);border-radius:0 16px 14px 14px;position:relative;padding:26px 22px 20px;color:#10241B;box-shadow:0 30px 70px rgba(0,0,0,.55)}
+.ftab14{position:absolute;top:-31px;left:0;background:#3DBE8E;padding:7px 22px 6px;border-radius:10px 12px 0 0;font-family:'Fraunces',serif;font-weight:700;font-size:16px;color:#10241B}
+.hole14{position:absolute;left:10px;width:11px;height:11px;border-radius:50%;border:1.6px solid rgba(16,36,27,.5);background:rgba(16,36,27,.12)}
+.kick14{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.55em;color:#123726;text-align:center;margin-bottom:10px}
+.ttl14{font-family:'Inter',sans-serif;font-weight:900;font-size:clamp(21px,4.6vw,26px);line-height:1.12;text-align:center;letter-spacing:-.01em;color:#0F231A}
+.sub14{font-family:'Fraunces',serif;font-style:italic;font-weight:500;font-size:13.5px;text-align:center;margin-top:8px;color:#144029}
+.memo14{background:#E9E7DF;color:#22201C;transform:rotate(-1.7deg);margin:20px 2px 8px;padding:13px 15px 12px;box-shadow:0 14px 30px rgba(0,0,0,.38);position:relative}
+.memo14::before,.memo14::after{content:"";position:absolute;width:64px;height:16px;background:rgba(255,255,255,.34);box-shadow:0 1px 2px rgba(0,0,0,.12)}
+.memo14::before{top:-8px;left:22px;transform:rotate(-4deg)}
+.memo14::after{top:-8px;right:22px;transform:rotate(3deg)}
+.memo14 .mh{font-family:'JetBrains Mono',monospace;font-weight:800;font-size:8px;letter-spacing:.3em;color:#8A8578;display:flex;justify-content:space-between;margin-bottom:8px}
+.memo14 .mh b{color:#1E6B4B}
+.mrow{display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding:6px 0;border-top:1px solid rgba(34,32,28,.14)}
+.mrow .mc{font-family:'Inter',sans-serif;font-weight:600;font-size:11.5px;line-height:1.4}
+.mrow .mc span{display:block;font-family:'JetBrains Mono',monospace;font-weight:400;font-size:7.5px;letter-spacing:.04em;color:#8A8578;margin-top:2px}
+.mrow .mv{font-family:'JetBrains Mono',monospace;font-weight:800;font-size:14px;white-space:nowrap}
+.memo14 .mverdict{font-family:'Fraunces',serif;font-style:italic;font-size:12.5px;border-top:2px solid #22201C;margin-top:6px;padding-top:8px}
+.chips14{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:16px}
+.chip14{border-radius:9px;padding:10px 8px;text-align:center;font-family:'Fraunces',serif;font-weight:700;font-size:13.5px}
+.ch-x{background:#17271F;color:#7FD7B2}.ch-o{background:#E0A458;color:#2A1F0E}.ch-e{background:#5E8FBF;color:#101B26}.ch-m{background:#E9E7DF;color:#22201C}
+.cue14{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.3em;color:#6B6E76;margin-top:24px;text-align:center}
+@media(max-width:560px){.c13 .band{letter-spacing:.24em}.big13{font-size:24px}}
 @media(max-width:560px){
   .exh{flex-wrap:wrap;row-gap:3px}
   .exs{white-space:normal;margin-inline-start:0;width:100%;order:3}
@@ -224,9 +284,68 @@ body{overflow-x:clip}
   <h1>מעבדת הרעיונות</h1>
   <p class="sub">12 מוצגים חיים — אחד לכל ממצא מרכזי מארבעת דוחות המחקר. אלה <b>סקיצות מהירות</b> שנועדו להרגיש את הרעיון, לא הביצוע הסופי (בגרסה אמיתית: פונטים ייעודיים, ליטוש מלא). ליד כל מוצג — מי מהחוקרים עומד מאחוריו.</p>
   <nav class="toc">
+    <a href="#ex13" style="border-color:var(--red);color:var(--red)">13 SYNTHESIS CARD ★</a><a href="#ex14" style="border-color:var(--red);color:var(--red)">14 COVER BRIEF ★</a>
     <a href="#ex1">01 30-SEC CUT</a><a href="#ex2">02 PAPER↔NOIR</a><a href="#ex3">03 CLASSIFICATION</a><a href="#ex4">04 TYPE</a><a href="#ex5">05 STAMP</a><a href="#ex6">06 CLEARANCE</a><a href="#ex7">07 REDACTION</a><a href="#ex8">08 RED STRING</a><a href="#ex9">09 LOUPE</a><a href="#ex10">10 KINETIC</a><a href="#ex11">11 MICROFILM</a><a href="#ex12">12 OG CARD</a>
   </nav>
 </header>
+
+<div class="featured">
+
+<!-- ============ EX13 ============ -->
+<section class="ex" id="ex13" style="padding-top:34px">
+  <div class="exh"><span class="exn">13</span><span class="ext">כרטיס הסינתזה — הכל ביחד, בנואר הקיים</span><span class="exs">YOUR PALETTE · YOUR FONTS · NEW GRAMMAR</span></div>
+  <p class="exd">כרטיס XTIX בשפה הקיימת — פחם, אמרלד, ‏Inter/Fraunces/Mono באותם גדלים — עם כל מה שאהבת: פס-דרגה, ‏CTRL/COPY, סימוני-מודיעין, גרעון-פילם, הסטת-צבע בריחוף על המספר, <b>עדשה</b> (עבור מעל המספרים), <b>שורה מסווגת</b> (החזק את הכפתור), ו<b>חותמת</b> (לחץ).</p>
+  <div class="demo dark" style="padding:30px 16px">
+    <div class="c13" id="c13">
+      <div class="band">R E S T R I C T E D · EMERALD ARCHIVE</div>
+      <div class="ctl"><span>CTRL № X-26-0114</span><span>CASE FILE 04 — XTIX</span><span>COPY 3 OF 12</span></div>
+      <div class="inner" id="c13inner">
+        <span class="tab13">XTIX</span>
+        <div class="zr13">04 — EVIDENCE · COMMERCIAL RESULTS</div>
+        <div class="m13row" data-src="SIGNED AGREEMENT 2025-11 · COUNTERSIGNED · ON FILE">
+          <div class="cap13"><span class="pm">(S)</span>Largest deal closed — enterprise partnership<br><span class="red13 rr1"><span class="exc13">(b)(1) — HOLD TO DECLASSIFY</span>closed against incumbent, 9-month cycle</span><span class="src13">SOURCE: SIGNED AGREEMENT 2025-11 · VERIFIED</span></div>
+          <div class="big13">$2M</div>
+        </div>
+        <div class="m13row" data-src="BOARD DECK Q4-25 · SLIDE 7 · AUDITED BY CFO">
+          <div class="cap13"><span class="pm">(S)</span>ARR growth through systematic pipeline design<br><span class="red13 rr1"><span class="exc13">(b)(1) — HOLD TO DECLASSIFY</span>outbound engine rebuilt in Q2, 3.2x velocity</span><span class="src13">SOURCE: BOARD DECK Q4-25 · AUDITED</span></div>
+          <div class="big13">+212%</div>
+        </div>
+        <div class="c13foot">
+          <button class="hold13" id="hold13">HOLD TO DECLASSIFY ▸<span class="p13" id="p13"></span></button>
+          <button class="stamp13btn" id="stamp13">STAMP ▸</button>
+        </div>
+        <div class="lens13" id="lens13"><div class="l13t"><b>SOURCE LINE</b><span id="lens13t"></span></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ EX14 ============ -->
+<section class="ex" id="ex14">
+  <div class="exh"><span class="exn">14</span><span class="ext">הכריכה היא התקציר — ההירו הקיים + חיתוך 30 השניות</span><span class="exs">THE LIVING DOCUMENT KEEPS ITS SOUL</span></div>
+  <p class="exd">התיקייה הירוקה שלך, בדיוק כמו היום — עם מזכר מודבק על הכריכה: התיק כולו ב-30 שניות. גוללים — והחוויה החיה נפתחת במלואה, כלום לא נלקח ממנה. (וזה מתקן אגב את באג ה-‎$0: בוטים רואים את הכריכה.)</p>
+  <div class="demo cov">
+    <div class="crumb14">ARCHIVE://COMMERCIAL/2026 › ORAN_CARMON › MASTER_FILE</div>
+    <div class="fold14">
+      <span class="ftab14">Oran Carmon</span>
+      <span class="hole14" style="top:84px"></span><span class="hole14" style="top:128px"></span>
+      <div class="kick14">E X E C U T I V E&nbsp;&nbsp;P O R T F O L I O</div>
+      <div class="ttl14">THE COMMERCIAL<br>SYSTEMS BUILDER</div>
+      <div class="sub14">From Vision to Measurable Growth</div>
+      <div class="memo14">
+        <div class="mh"><span>MEMO — AFFIXED TO COVER</span><b>THE 30-SEC BRIEF</b></div>
+        <div class="mrow" style="border-top:0"><div class="mc">Built XTIX's commercial engine from zero<span>CRM EXPORT FY25 · CEO REFERENCE</span></div><div class="mv">$XM GMV</div></div>
+        <div class="mrow"><div class="mc">Scaled ARR by systematic pipeline design<span>BOARD DECK Q4-25 · AUDITED</span></div><div class="mv">+212%</div></div>
+        <div class="mrow"><div class="mc">Recruited &amp; ramped the commercial team<span>ORG RECORDS · 3 REFERENCES</span></div><div class="mv">0 → 6</div></div>
+        <div class="mverdict">Six years, four companies, one operating system for revenue.</div>
+      </div>
+      <div class="chips14"><span class="chip14 ch-x">XTIX</span><span class="chip14 ch-o">Oasis</span><span class="chip14 ch-e">Eventer</span><span class="chip14 ch-m">Medcoin</span></div>
+    </div>
+    <div class="cue14">▾ SCROLL TO OPEN — FULL FILE · 6 MIN</div>
+  </div>
+</section>
+
+</div>
 
 <!-- ============ EX1 ============ -->
 <section class="ex" id="ex1">
@@ -522,6 +641,47 @@ document.getElementById('abPaper').addEventListener('click',function(){abCard.cl
     });
   }
   addEventListener('scroll',upd,{passive:true});addEventListener('resize',upd);upd();
+})();
+
+/* EX13 — synthesis card: hold-to-declassify, stamp, loupe */
+(function(){
+  var btn=document.getElementById('hold13'),p=document.getElementById('p13'),
+      open=false,t0=null,raf=null,HOLD=1000;
+  function setAll(v){document.querySelectorAll('.red13').forEach(function(r){r.classList.toggle('open',v)})}
+  function tick(ts){if(t0===null)t0=ts;var pr=Math.min(1,(ts-t0)/HOLD);p.style.width=(pr*100)+'%';
+    if(pr>=1){t0=null;p.style.width='0%';open=!open;setAll(open);
+      btn.childNodes[0].textContent=open?'HOLD TO RE-CLASSIFY ▸':'HOLD TO DECLASSIFY ▸';
+      try{if(navigator.vibrate)navigator.vibrate([10,40,14])}catch(e){}return}
+    raf=requestAnimationFrame(tick)}
+  function down(e){e.preventDefault();t0=null;raf=requestAnimationFrame(tick)}
+  function up(){if(raf)cancelAnimationFrame(raf);t0=null;p.style.width='0%'}
+  btn.addEventListener('pointerdown',down);btn.addEventListener('pointerup',up);
+  btn.addEventListener('pointerleave',up);btn.addEventListener('pointercancel',up);
+
+  var inner=document.getElementById('c13inner'),n13=0,words=['VERIFIED','CLEARED','ON FILE','APPROVED'];
+  document.getElementById('stamp13').addEventListener('click',function(){
+    var st=document.createElement('div');st.className='imp13';
+    st.textContent=words[n13%words.length];n13++;
+    st.style.setProperty('--rot',((Math.random()*9-4.5).toFixed(1))+'deg');
+    st.style.right=(6+Math.random()*22)+'%';st.style.top=(6+Math.random()*20)+'%';
+    var olds=inner.querySelectorAll('.imp13');if(olds.length>2)olds[0].remove();
+    inner.appendChild(st);
+    if(!reduced)requestAnimationFrame(function(){st.classList.add('go')});else st.style.opacity=1;
+    try{if(navigator.vibrate)navigator.vibrate(8)}catch(e){}
+  });
+
+  var lens=document.getElementById('lens13'),lt=document.getElementById('lens13t');
+  function move(e){
+    var r=inner.getBoundingClientRect();
+    lens.style.left=(e.clientX-r.left)+'px';lens.style.top=(e.clientY-r.top)+'px';
+    var el=document.elementFromPoint(e.clientX,e.clientY);
+    var row=el&&el.closest?el.closest('.m13row'):null;
+    if(row&&row.dataset.src){lt.textContent=row.dataset.src;lens.classList.add('on')}
+    else lens.classList.remove('on');
+  }
+  inner.addEventListener('pointermove',move);
+  inner.addEventListener('pointerdown',move);
+  inner.addEventListener('pointerleave',function(){lens.classList.remove('on')});
 })();
 
 /* EX11 — microfilm toggle */
