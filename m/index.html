@@ -2014,18 +2014,27 @@ body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:214748
 .redx.open{color:inherit;animation:rxflash 1.4s ease-out .35s}
 @keyframes rxflash{0%{background:rgba(47,179,128,.32)}100%{background:rgba(47,179,128,0)}}
 .redx.open::after{transform:scaleX(0)}
-.lens2{position:fixed;width:154px;height:154px;border-radius:50%;border:2.5px solid var(--emb);background:#16171B;box-shadow:0 18px 44px rgba(0,0,0,.6),0 0 30px rgba(47,179,128,.14);pointer-events:none;opacity:0;transition:opacity .18s;z-index:2147479000;display:flex;align-items:center;justify-content:center;text-align:center;padding:16px;transform:translate(-50%,-62%)}
-.lens2.on{opacity:1}
-.lens2 .lt{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.06em;line-height:1.8;color:#CFD0D4}
-.lens2 .lt b{color:var(--emb);display:block;letter-spacing:.22em;font-size:7.5px;margin-bottom:4px}
-[data-lsrc]{cursor:crosshair}
+
 @media (prefers-reduced-motion:reduce){.redx{color:inherit}.redx::after{transform:scaleX(0)}.sb-imp{opacity:1;animation:none}.stampbox::after{animation:none}}
 
 
-.vfy{display:inline-flex;align-items:center;gap:5px;margin-top:7px;font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.22em;color:var(--emb);border:1px solid rgba(47,179,128,.45);border-radius:3px;padding:4px 8px;white-space:nowrap;user-select:none;-webkit-user-select:none}
-.vfy i{font-style:normal;font-size:10px;line-height:1;animation:vfyp 2.2s ease-in-out infinite}
-@keyframes vfyp{0%,100%{opacity:.55}50%{opacity:1}}
-@media (prefers-reduced-motion:reduce){.vfy i{animation:none}}
+
+
+
+/* ===== R2: evidence slips ===== */
+.ev-chip{display:inline-flex;align-items:center;gap:7px;margin-top:12px;font-family:'JetBrains Mono',monospace;font-size:8.5px;font-weight:600;letter-spacing:.2em;color:#16171B;background:var(--fc,var(--emb));border:0;border-radius:4px;padding:8px 13px;cursor:pointer;transition:transform .15s;position:relative;z-index:3}
+.ev-chip:hover{transform:translateY(-1px)}
+.ev-chip:active{transform:translateY(1px)}
+.ev-chip i{font-style:normal;font-size:11px}
+.evslip{background:#E9E7DF;color:#22201C;margin:0;max-width:420px;padding:0 15px;box-shadow:0 14px 30px rgba(0,0,0,.35);transform:rotate(-1.2deg) translateY(-14px);opacity:0;max-height:0;overflow:hidden;transition:max-height .5s cubic-bezier(.2,1,.3,1),opacity .35s,transform .5s cubic-bezier(.2,1.1,.3,1),padding .4s,margin .4s;position:relative;pointer-events:none}
+.evslip.out{max-height:220px;opacity:1;transform:rotate(-1.2deg) translateY(0);padding:13px 15px 11px;margin:12px 0 4px;pointer-events:auto}
+.evslip::before{content:"";position:absolute;top:-7px;left:24px;width:54px;height:15px;background:rgba(255,255,255,.35);box-shadow:0 1px 2px rgba(0,0,0,.12);transform:rotate(-3deg)}
+.es-h{display:flex;justify-content:space-between;gap:8px;font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:.22em;color:#8A8578;margin-bottom:7px}
+.es-h b{color:#1E6B4B}
+.es-row{display:flex;gap:12px;padding:5px 0;border-top:1px solid rgba(34,32,28,.13);font-family:'JetBrains Mono',monospace}
+.es-k{font-size:7.5px;letter-spacing:.2em;color:#8A8578;min-width:50px;padding-top:2px}
+.es-v{font-size:10px;font-weight:600;letter-spacing:.04em;color:#22201C}
+.es-stamp{position:absolute;right:13px;bottom:11px;font-family:'JetBrains Mono',monospace;font-weight:800;font-size:8.5px;letter-spacing:.24em;color:#1E6B4B;border:2px solid #1E6B4B;border-radius:4px;padding:3px 7px;transform:rotate(5deg);opacity:.85}
 
 </style>
 <section class="sec" id="leadership" style="--fc:var(--emb)">
@@ -4051,34 +4060,35 @@ CASES.forEach(function(id){
   box.addEventListener('pointercancel',up);
 });
 
-/* source loupe on the two money stats */
+/* R2: evidence slips on the two money stats */
 (function(){
-  var nine=document.querySelector('.cnt[data-n="9"]'),two=document.querySelector('.cnt[data-n="2"]');
-  function host(el){var h=el&&(el.closest('.bignum')||el.parentElement);return h}
-  var h9=host(nine),h2=host(two);
-  if(h9)h9.setAttribute('data-lsrc','ON RECORD \u00B7 CASE FILE 01 \u2014 XTIX');
-  if(h2)h2.setAttribute('data-lsrc','ON RECORD \u00B7 CASE FILE 02 \u2014 OASIS');
-  [h9,h2].forEach(function(h){
-    if(!h)return;
-    var chip=document.createElement('span');chip.className='vfy';
-    chip.innerHTML='<i>⌕</i>HOLD TO VERIFY';
-    h.appendChild(chip);
+  var d=new Date();
+  var filed=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');
+  var DEFS=[
+    {sel:'.cnt[data-n="9"]',host:'.bignum',ctrl:'(S) \u00B7 CTRL \u2116 X-26-0114',
+     rows:[['SOURCE','CRM EXPORT \u00B7 PIPELINE REPORT FY25'],['SCOPE','CUMULATIVE ARR PIPELINE \u00B7 2024\u20132026'],['FILED',filed]]},
+    {sel:'.cnt[data-n="2"]',host:null,ctrl:'(S) \u00B7 CTRL \u2116 O-26-0102',
+     rows:[['SOURCE','SIGNED AGREEMENT \u00B7 ON FILE'],['SCOPE','SINGLE LARGEST CONTRACT VALUE'],['FILED',filed]]}
+  ];
+  DEFS.forEach(function(df){
+    var el=document.querySelector(df.sel);if(!el)return;
+    var host=df.host?el.closest(df.host):null;
+    if(!host)host=el.parentElement;
+    if(!host)return;
+    var chip=document.createElement('button');chip.type='button';chip.className='ev-chip';
+    chip.innerHTML='<i>\uD83D\uDCCE</i>EVIDENCE ATTACHED \u25B8';
+    var slip=document.createElement('div');slip.className='evslip';
+    var rows=df.rows.map(function(r){return '<div class="es-row"><span class="es-k">'+r[0]+'</span><span class="es-v">'+r[1]+'</span></div>'}).join('');
+    slip.innerHTML='<div class="es-h"><span>EVIDENCE SLIP</span><b>'+df.ctrl+'</b></div>'+rows+'<span class="es-stamp">VERIFIED</span>';
+    host.appendChild(chip);
+    if(host.nextSibling)host.parentNode.insertBefore(slip,host.nextSibling);
+    else host.parentNode.appendChild(slip);
+    chip.addEventListener('click',function(){
+      var out=slip.classList.toggle('out');
+      chip.innerHTML=out?'<i>\uD83D\uDCCE</i>TUCK BACK \u25C2':'<i>\uD83D\uDCCE</i>EVIDENCE ATTACHED \u25B8';
+      try{if(navigator.vibrate)navigator.vibrate(6)}catch(e){}
+    });
   });
-  if(!h9&&!h2)return;
-  var lens=document.createElement('div');lens.className='lens2';
-  lens.innerHTML='<div class="lt"><b>SOURCE LINE</b><span></span></div>';
-  document.body.appendChild(lens);
-  var txt=lens.querySelector('span');
-  function move(e){
-    var el=document.elementFromPoint(e.clientX,e.clientY);
-    var h=el&&el.closest?el.closest('[data-lsrc]'):null;
-    if(h){txt.textContent=h.getAttribute('data-lsrc');
-      lens.style.left=e.clientX+'px';lens.style.top=e.clientY+'px';
-      lens.classList.add('on')}
-    else lens.classList.remove('on');
-  }
-  document.addEventListener('pointermove',move,{passive:true});
-  document.addEventListener('pointerdown',move,{passive:true});
 })();
 
 
