@@ -2041,21 +2041,20 @@ body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:214748
 
 
 /* ===== R4: BRIEF chip ===== */
-#brieftab{position:fixed;right:0;top:64%;z-index:2147470000;writing-mode:vertical-rl;display:none;align-items:center;gap:7px;
-font-family:'JetBrains Mono',monospace;font-size:8.5px;font-weight:800;letter-spacing:.26em;
-padding:16px 9px 16px 11px;border-radius:9px 0 0 9px;cursor:pointer;border:0;
-background:var(--stbg,#17271F);color:var(--stfg,#7FD7B2);
-box-shadow:-8px 6px 18px rgba(0,0,0,.42),inset 2px 0 0 rgba(255,255,255,.08);
-transform:rotate(0.001deg) translateX(0);transition:transform .25s,opacity .3s;opacity:0}
-#brieftab.on{display:inline-flex;opacity:1}
-#brieftab:hover{transform:translateX(-3px)}
-#brieftab::after{content:"";position:absolute;left:-1px;bottom:-1px;border-style:solid;border-width:12px 0 0 12px;border-color:transparent transparent transparent rgba(0,0,0,.32)}
-#brieftab i{font-style:normal;width:6px;height:6px;border-radius:50%;background:var(--stfg,#7FD7B2);animation:rxsheen2 2.2s ease-in-out infinite}
-#brieftab.c-xtix{--stbg:#17271F;--stfg:#7FD7B2}
-#brieftab.c-oasis{--stbg:#E0A458;--stfg:#2A1F0E}
-#brieftab.c-eventer{--stbg:#5E8FBF;--stfg:#101B26}
-#brieftab.c-medcoin{--stbg:#E9E7DF;--stfg:#22201C}
-@media (max-width:680px){#brieftab{top:38%;font-size:8px;padding:13px 8px 13px 10px}}
+#brieftab{position:fixed;left:clamp(6px,calc((100vw - 1150px)/4 - 46px),210px);top:42%;z-index:2147470000;width:92px;height:92px;border-radius:50%;display:none;flex-direction:column;align-items:center;justify-content:center;gap:4px;cursor:pointer;border:2px solid var(--stc,#2FB380);background:color-mix(in srgb,var(--stc,#2FB380) 16%,#191A1F);color:var(--stfg,#7FD7B2);box-shadow:0 14px 30px rgba(0,0,0,.5),inset 0 0 0 5px rgba(0,0,0,.16);transform:rotate(-7deg);transition:transform .25s,opacity .3s;opacity:0;animation:btfloat 4.2s ease-in-out infinite}
+#brieftab.on{display:flex;opacity:1}
+#brieftab:hover{transform:rotate(0deg) scale(1.07)}
+#brieftab b{font-family:'JetBrains Mono',monospace;font-weight:800;font-size:12.5px;letter-spacing:.24em;text-indent:.24em}
+#brieftab s{display:block;width:26px;height:1px;background:currentColor;opacity:.5;text-decoration:none}
+#brieftab span{font-family:'JetBrains Mono',monospace;font-size:6.5px;letter-spacing:.3em;text-indent:.3em;opacity:.85}
+#brieftab::before{content:"";position:absolute;inset:0;border-radius:50%;background:radial-gradient(52px 40px at 30% 22%,rgba(255,255,255,.13),transparent 62%)}
+@keyframes btfloat{0%,100%{margin-top:0}50%{margin-top:-5px}}
+#brieftab.c-xtix{--stc:#2FB380;--stfg:#7FD7B2}
+#brieftab.c-oasis{--stc:#E0A458;--stfg:#EBC488}
+#brieftab.c-eventer{--stc:#5E8FBF;--stfg:#A9C6E2}
+#brieftab.c-medcoin{--stc:#E9E7DF;--stfg:#EFEDE6}
+@media (max-width:900px){#brieftab{width:64px;height:64px;left:6px;top:40%}#brieftab b{font-size:9.5px}#brieftab span{font-size:5.5px}}
+@media (prefers-reduced-motion:reduce){#brieftab{animation:none}}
 #briefovl{position:fixed;inset:0;background:rgba(10,11,13,.74);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s;z-index:2147475000}
 #briefovl.on{opacity:1;pointer-events:auto}
 #briefovl .bm-ovl{opacity:1!important;transform:rotate(-1deg)!important;width:min(440px,90vw);max-width:none;margin:0;box-shadow:0 34px 80px rgba(0,0,0,.65)}
@@ -4143,7 +4142,7 @@ document.querySelectorAll('.redx').forEach(function(r){
 });
 /* BRIEF side sticker: lives on the case folders' right edge, case-colored */
 var tab=document.createElement('button');tab.type='button';tab.id='brieftab';
-tab.innerHTML='<i></i>BRIEF \u00B7 30 SEC';
+tab.innerHTML='<b>BRIEF</b><s></s><span>30 SEC</span>';
 document.body.appendChild(tab);
 var ovl=document.createElement('div');ovl.id='briefovl';document.body.appendChild(ovl);
 function close(){ovl.classList.remove('on');ovl.innerHTML=''}
@@ -4159,23 +4158,32 @@ tab.addEventListener('click',function(){
 });
 ovl.addEventListener('click',function(e){if(e.target===ovl)close()});
 (function(){
-  var CASES2=['xtix','oasis','eventer','medcoin'],vis={};
-  function apply(){
-    var cur=null;
-    CASES2.forEach(function(id){if(vis[id]&&(cur===null||vis[id]>vis[cur]))cur=id});
-    if(cur){tab.className='on c-'+cur}
-    else tab.className='';
+  var CASES2=['xtix','oasis','eventer','medcoin'],secs=[];
+  function measure(){
+    secs=[];
+    CASES2.forEach(function(id){
+      var el=document.getElementById(id);
+      if(!el)return;
+      var r=el.getBoundingClientRect(),y=window.pageYOffset;
+      secs.push({id:id,t:r.top+y,b:r.bottom+y});
+    });
   }
-  if('IntersectionObserver' in window){
-    var io=new IntersectionObserver(function(ents){
-      ents.forEach(function(en){
-        var id=en.target.id;
-        vis[id]=en.isIntersecting?en.intersectionRatio:0;
-      });
-      apply();
-    },{threshold:[0,0.08,0.2,0.4,0.6]});
-    CASES2.forEach(function(id){var el=document.getElementById(id);if(el)io.observe(el)});
+  var cur=null,tick=false;
+  function upd(){
+    tick=false;
+    var mid=window.pageYOffset+innerHeight*0.5,nxt=null;
+    for(var i=0;i<secs.length;i++){
+      if(mid>=secs[i].t+80&&mid<secs[i].b-80){nxt=secs[i].id;break}
+    }
+    if(nxt!==cur){cur=nxt;tab.className=cur?('on c-'+cur):''}
   }
+  function onScroll(){if(!tick){tick=true;requestAnimationFrame(upd)}}
+  setTimeout(function(){measure();upd()},700);
+  addEventListener('scroll',onScroll,{passive:true});
+  addEventListener('resize',function(e){
+    if(window.__mSoftRz&&window.__mSoftRz(e,null))return;
+    measure();upd();
+  });
 })();
 })();
 </script>
