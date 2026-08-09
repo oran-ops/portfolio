@@ -199,6 +199,39 @@ nav.toc a:hover{border-color:var(--red);color:var(--red)}
 footer{margin-top:70px;border-top:2px solid var(--ink);padding:26px 0 60px;font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.14em;color:var(--dim);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;direction:ltr}
 html{overflow-x:clip}
 body{overflow-x:clip}
+/* ============ EX15 — end-of-file ritual ============ */
+.rmeter{position:absolute;top:16px;right:18px;font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.2em;color:#8B8E96}
+.rmeter b{color:var(--em)}
+.rprose{font-family:'Inter',sans-serif;font-size:12.5px;line-height:2;color:#CFD0D4;max-width:640px;margin:26px 0 8px}
+.rrx{position:relative;display:inline-block;max-width:100%;color:transparent;border-radius:2px;transition:color .5s .3s;vertical-align:bottom}
+.rrx::after{content:"";position:absolute;inset:-1px -3px;background:#101114;border:1px solid #3A3D44;border-radius:2px;transform-origin:left center;transition:transform .7s cubic-bezier(.7,0,.2,1)}
+.rrx .rxc{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:.14em;color:#565A62;z-index:1;transition:opacity .3s;white-space:nowrap;overflow:hidden}
+.rrx.open{color:inherit;animation:rxflash 1.4s ease-out .35s}
+.rrx.open::after{transform:scaleX(0)}
+.rrx.open .rxc{opacity:0}
+@keyframes rxflash{0%{background:rgba(47,179,128,.34)}100%{background:rgba(47,179,128,0)}}
+.ritual{display:grid;grid-template-columns:1fr 1.3fr 1fr;gap:28px;align-items:end;border-top:1px solid #33353C;margin-top:18px;padding-top:24px}
+.rt-end span{display:block;font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.3em;color:#8B8E96}
+.rt-end b{display:block;font-family:'JetBrains Mono',monospace;font-weight:800;font-size:17px;letter-spacing:.06em;color:#F2F1ED;margin-top:5px}
+.rt-end i{display:block;font-style:normal;font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:.12em;color:#6B6E76;margin-top:6px}
+.rt-sig{display:flex;flex-direction:column;gap:6px}
+.rt-lbl{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:.24em;color:#8B8E96}
+.rt-line{border-bottom:1px dashed #4B4E55;height:36px;position:relative}
+.rt-line svg{position:absolute;inset:0;width:100%;height:100%}
+.rt-line path{fill:none;stroke:#CFD0D4;stroke-width:1.7;stroke-linecap:round;opacity:.9}
+.rt-date{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.14em;color:#6B6E76}
+.rt-date b{color:#CFD0D4;font-weight:600}
+.stampbox{position:relative;border:2px dashed rgba(47,179,128,.55);border-radius:8px;min-height:84px;display:flex;align-items:center;justify-content:center;cursor:pointer;user-select:none;-webkit-user-select:none;touch-action:none;overflow:hidden;transition:border-color .3s,border-style .3s}
+.stampbox.done{border-style:solid;border-color:var(--em)}
+.sb-lbl{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.22em;color:var(--em);position:relative;z-index:2;transition:opacity .3s;text-align:center;padding:0 10px}
+.sb-fill{position:absolute;left:0;right:0;bottom:0;height:0%;background:rgba(47,179,128,.14)}
+.sb-imp{position:absolute;font-family:'JetBrains Mono',monospace;font-weight:800;font-size:16px;letter-spacing:.3em;color:var(--em);border:3px solid var(--em);border-radius:6px;padding:8px 16px;opacity:0;z-index:3;
+  mask-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="80"><filter id="r"><feTurbulence type="fractalNoise" baseFrequency="0.5" numOctaves="3"/><feComponentTransfer><feFuncA type="discrete" tableValues="0.55 0.85 1 0.92 1 0.75 1"/></feComponentTransfer></filter><rect width="200" height="80" filter="url(%23r)"/></svg>');mask-size:cover;-webkit-mask-size:cover}
+.sb-imp.go{animation:press .42s cubic-bezier(.2,1.4,.3,1) forwards}
+@media(max-width:640px){
+  .ritual{grid-template-columns:1fr;gap:18px;align-items:stretch}
+  .stampbox{min-height:92px}
+}
 /* ============ EX13 — synthesis card (existing noir language) ============ */
 .featured{border:2px solid var(--red);border-radius:10px;padding:6px 18px 2px;margin-top:34px;position:relative}
 .featured::before{content:"החדשים — הסינתזה";position:absolute;top:-11px;right:18px;background:var(--paper);padding:0 10px;font-family:'Heebo';font-weight:700;font-size:12px;color:var(--red)}
@@ -284,12 +317,37 @@ body{overflow-x:clip}
   <h1>מעבדת הרעיונות</h1>
   <p class="sub">12 מוצגים חיים — אחד לכל ממצא מרכזי מארבעת דוחות המחקר. אלה <b>סקיצות מהירות</b> שנועדו להרגיש את הרעיון, לא הביצוע הסופי (בגרסה אמיתית: פונטים ייעודיים, ליטוש מלא). ליד כל מוצג — מי מהחוקרים עומד מאחוריו.</p>
   <nav class="toc">
+    <a href="#ex15" style="border-color:var(--red);color:var(--red)">15 END-OF-FILE RITUAL ★★</a>
     <a href="#ex13" style="border-color:var(--red);color:var(--red)">13 SYNTHESIS CARD ★</a><a href="#ex14" style="border-color:var(--red);color:var(--red)">14 COVER BRIEF ★</a>
     <a href="#ex1">01 30-SEC CUT</a><a href="#ex2">02 PAPER↔NOIR</a><a href="#ex3">03 CLASSIFICATION</a><a href="#ex4">04 TYPE</a><a href="#ex5">05 STAMP</a><a href="#ex6">06 CLEARANCE</a><a href="#ex7">07 REDACTION</a><a href="#ex8">08 RED STRING</a><a href="#ex9">09 LOUPE</a><a href="#ex10">10 KINETIC</a><a href="#ex11">11 MICROFILM</a><a href="#ex12">12 OG CARD</a>
   </nav>
 </header>
 
 <div class="featured">
+
+<!-- ============ EX15 ============ -->
+<section class="ex" id="ex15" style="padding-top:34px">
+  <div class="exh"><span class="exn">15</span><span class="ext">טקס סוף-התיק — R1 של תוכנית ההטמעה</span><span class="exs">A STAGE, NOT A BUTTON</span></div>
+  <p class="exd">סוף קייס כרגע מעוצב, לא כפתור חבוי: תווית סיום, קו-חתימה של "הקצין הבוחן" (אתה), ו<b>קופסת-חותמת גדולה</b> שאי-אפשר לפספס. החזק אותה: חתימת-שרבוט נמשכת על הקו, התאריך נחתם, REVIEWED נלחץ פנימה, המונה מתקדם — והשורה המסווגת שמעל <b>נפתחת עם הבזק אמרלד</b>. נסה.</p>
+  <div class="demo dark" style="padding:26px 22px;position:relative">
+    <div class="rmeter">FILES REVIEWED · <b id="rmn">0/4</b></div>
+    <div class="rprose">METHOD NOTE — The playbook replicated across ventures: <span class="rrx" id="rrx"><span class="rxc">(b)(1) — OPENS ON REVIEW</span>diagnose first, systematize second, hire against the system.</span></div>
+    <div class="ritual" id="ritual">
+      <div class="rt-end"><span>END OF FILE</span><b>01 — XTIX</b><i>8 EXHIBITS · 2 PARTS · ON RECORD</i></div>
+      <div class="rt-sig">
+        <span class="rt-lbl">REVIEWING OFFICER</span>
+        <div class="rt-line"><svg viewBox="0 0 220 34" preserveAspectRatio="none"><path id="scrib" d="M8,24 C30,8 44,30 62,18 C80,6 92,28 112,16 C130,6 142,26 164,14 C180,6 196,20 212,12"/></svg></div>
+        <span class="rt-date">DATE: <b id="rdate">—</b></span>
+      </div>
+      <div class="stampbox" id="sbox">
+        <span class="sb-lbl" id="sblbl">PRESS &amp; HOLD TO STAMP ▸</span>
+        <span class="sb-fill" id="sbfill"></span>
+        <span class="sb-imp" id="sbimp">REVIEWED</span>
+      </div>
+    </div>
+    <div class="note" style="color:#8B8E96">לחיצה שנייה על הקופסה מאפסת את הדמו.</div>
+  </div>
+</section>
 
 <!-- ============ EX13 ============ -->
 <section class="ex" id="ex13" style="padding-top:34px">
@@ -641,6 +699,53 @@ document.getElementById('abPaper').addEventListener('click',function(){abCard.cl
     });
   }
   addEventListener('scroll',upd,{passive:true});addEventListener('resize',upd);upd();
+})();
+
+/* EX15 — end-of-file ritual */
+(function(){
+  var box=document.getElementById('sbox'),lbl=document.getElementById('sblbl'),
+      fill=document.getElementById('sbfill'),imp=document.getElementById('sbimp'),
+      rrx=document.getElementById('rrx'),rmn=document.getElementById('rmn'),
+      rdate=document.getElementById('rdate'),scrib=document.getElementById('scrib');
+  var SL=scrib.getTotalLength();
+  scrib.style.strokeDasharray=SL;scrib.style.strokeDashoffset=SL;
+  var done=false,t0=null,raf=null,HOLD=1100;
+  function complete(){
+    done=true;
+    box.classList.add('done');
+    lbl.style.opacity='0';
+    fill.style.height='100%';
+    imp.style.setProperty('--rot',((Math.random()*8-4).toFixed(1))+'deg');
+    if(!reduced)requestAnimationFrame(function(){imp.classList.add('go')});else imp.style.opacity=1;
+    scrib.style.transition=reduced?'none':'stroke-dashoffset 1s cubic-bezier(.4,0,.2,1) .15s';
+    scrib.style.strokeDashoffset='0';
+    var d=new Date();
+    rdate.textContent=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+    rrx.classList.add('open');
+    rmn.textContent='1/4';
+    try{if(navigator.vibrate)navigator.vibrate([10,50,16])}catch(e){}
+  }
+  function reset(){
+    done=false;box.classList.remove('done');lbl.style.opacity='1';fill.style.height='0%';
+    imp.classList.remove('go');imp.style.opacity='0';
+    scrib.style.transition='none';scrib.style.strokeDashoffset=SL;
+    rdate.textContent='—';rrx.classList.remove('open');rmn.textContent='0/4';
+  }
+  function tick(ts){
+    if(t0===null)t0=ts;
+    var p=Math.min(1,(ts-t0)/HOLD);
+    fill.style.height=(p*100)+'%';
+    if(p>=1){t0=null;complete();return}
+    raf=requestAnimationFrame(tick);
+  }
+  function down(e){e.preventDefault();
+    if(done){reset();return}
+    t0=null;raf=requestAnimationFrame(tick)}
+  function up(){if(done)return;if(raf)cancelAnimationFrame(raf);t0=null;fill.style.height='0%'}
+  box.addEventListener('pointerdown',down);
+  box.addEventListener('pointerup',up);
+  box.addEventListener('pointerleave',up);
+  box.addEventListener('pointercancel',up);
 })();
 
 /* EX13 — synthesis card: hold-to-declassify, stamp, loupe */
