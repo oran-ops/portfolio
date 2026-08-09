@@ -2005,10 +2005,13 @@ body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:214748
 .lens2 .lt{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.06em;line-height:1.8;color:#CFD0D4}
 .lens2 .lt b{color:var(--emb);display:block;letter-spacing:.22em;font-size:7.5px;margin-bottom:4px}
 [data-lsrc]{cursor:crosshair}
-.strsvg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:1}
-.strsvg path{fill:none;stroke:var(--fc,var(--emb));stroke-width:1.8;stroke-linecap:round;stroke-dasharray:4 6;opacity:.85;filter:drop-shadow(0 0 6px rgba(47,179,128,.35))}
-.strsvg circle{fill:var(--fc,var(--emb));opacity:.9}
 @media (prefers-reduced-motion:reduce){.redx{color:inherit}.redx::after{transform:scaleX(0)}.cgimp{opacity:1;animation:none}}
+
+
+.vfy{display:inline-flex;align-items:center;gap:5px;margin-top:7px;font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.22em;color:var(--emb);border:1px solid rgba(47,179,128,.45);border-radius:3px;padding:4px 8px;white-space:nowrap;user-select:none;-webkit-user-select:none}
+.vfy i{font-style:normal;font-size:10px;line-height:1;animation:vfyp 2.2s ease-in-out infinite}
+@keyframes vfyp{0%,100%{opacity:.55}50%{opacity:1}}
+@media (prefers-reduced-motion:reduce){.vfy i{animation:none}}
 
 </style>
 <section class="sec" id="leadership" style="--fc:var(--emb)">
@@ -3991,7 +3994,7 @@ CASES.forEach(function(id){
   redact(folder);
   var g=document.createElement('div');g.className='clrgate';
   g.innerHTML='<button class="cgbtn" type="button">HOLD TO STAMP \u2014 FILE REVIEWED \u25B8<span class="cgp"></span></button><span class="cgimp">REVIEWED</span>';
-  folder.appendChild(g);
+  ((sec.querySelector('.wrap'))||folder).appendChild(g);
   var btn=g.querySelector('.cgbtn'),p=g.querySelector('.cgp'),imp=g.querySelector('.cgimp');
   var t0=null,raf=null,HOLD=1000;
   function done(){
@@ -4028,6 +4031,12 @@ CASES.forEach(function(id){
   var h9=host(nine),h2=host(two);
   if(h9)h9.setAttribute('data-lsrc','ON RECORD \u00B7 CASE FILE 01 \u2014 XTIX');
   if(h2)h2.setAttribute('data-lsrc','ON RECORD \u00B7 CASE FILE 02 \u2014 OASIS');
+  [h9,h2].forEach(function(h){
+    if(!h)return;
+    var chip=document.createElement('span');chip.className='vfy';
+    chip.innerHTML='<i>⌕</i>HOLD TO VERIFY';
+    h.appendChild(chip);
+  });
   if(!h9&&!h2)return;
   var lens=document.createElement('div');lens.className='lens2';
   lens.innerHTML='<div class="lt"><b>SOURCE LINE</b><span></span></div>';
@@ -4045,61 +4054,7 @@ CASES.forEach(function(id){
   document.addEventListener('pointerdown',move,{passive:true});
 })();
 
-/* red-string pilot inside #xtix: situation -> evidence -> the number */
-(function(){
-  var sec=document.getElementById('xtix');if(!sec)return;
-  var folder=sec.querySelector('.wrap')||sec;
-  var a=sec.querySelector('.folder .zr')||sec.querySelector('.zr'),b=sec.querySelector('.plabel.pl2')||sec.querySelectorAll('.zr')[2],c=sec.querySelector('.bignum');
-  if(!a||!c)return;
-  if(getComputedStyle(folder).position==='static')folder.style.position='relative';
-  var NS='http://www.w3.org/2000/svg';
-  var svg=document.createElementNS(NS,'svg');svg.setAttribute('class','strsvg');
-  var path=document.createElementNS(NS,'path');svg.appendChild(path);
-  var dots=[];
-  [a,b,c].forEach(function(el){if(!el)return;
-    var d=document.createElementNS(NS,'circle');d.setAttribute('r','3.2');svg.appendChild(d);dots.push([el,d])});
-  folder.insertBefore(svg,folder.firstChild);
-  var L=0;
-  function pt(el,fr){
-    var r=el.getBoundingClientRect();
-    return [r.left-fr.left+Math.min(170,r.width*0.28),r.top-fr.top+r.height/2];
-  }
-  function build(){
-    var fr=folder.getBoundingClientRect();
-    svg.setAttribute('viewBox','0 0 '+Math.round(fr.width)+' '+Math.round(fr.height));
-    var pts=[a,b,c].filter(Boolean).map(function(el){return pt(el,fr)});
-    if(pts.length<2)return;
-    var d='M'+pts[0][0].toFixed(1)+','+pts[0][1].toFixed(1);
-    for(var i=1;i<pts.length;i++){
-      var p0=pts[i-1],p1=pts[i];
-      var mx=(p0[0]+p1[0])/2;
-      d+=' C'+mx.toFixed(1)+','+p0[1].toFixed(1)+' '+mx.toFixed(1)+','+p1[1].toFixed(1)+' '+p1[0].toFixed(1)+','+p1[1].toFixed(1);
-    }
-    path.setAttribute('d',d);
-    L=path.getTotalLength();
-    path.style.strokeDasharray=L;
-    path.style.strokeDashoffset=reduced?0:L;
-    dots.forEach(function(pair){
-      var q=pt(pair[0],fr);
-      pair[1].setAttribute('cx',q[0].toFixed(1));pair[1].setAttribute('cy',q[1].toFixed(1));
-    });
-  }
-  var ticking=false;
-  function upd(){
-    ticking=false;
-    if(reduced||!L)return;
-    var r=folder.getBoundingClientRect(),vh=innerHeight;
-    var pr=Math.min(1,Math.max(0,(vh*0.85-r.top)/Math.max(1,r.height*0.8)));
-    path.style.strokeDashoffset=(L*(1-pr)).toFixed(1);
-  }
-  function onScroll(){if(!ticking){ticking=true;requestAnimationFrame(upd)}}
-  setTimeout(function(){build();upd()},600);
-  addEventListener('scroll',onScroll,{passive:true});
-  addEventListener('resize',function(e){
-    if(window.__mSoftRz&&window.__mSoftRz(e,null))return;
-    build();upd();
-  });
-})();
+
 })();
 </script>
 
