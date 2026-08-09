@@ -1792,7 +1792,7 @@ body.static .hfolder,body.static #hero .mfold{--sx:-320px}
 
 /* ================= MOBILE TRACK - M1: reclaim the screen ================= */
 /* All rules are <=880px only; the desktop rendering of this page is untouched. */
-@media (max-width:880px){
+@media (max-width:860px){
   /* The side-padding stack (24 section + 16 wrap + 38 folder = 78px a side)
      left content only 219px of a 375px phone. The folder rail that justified
      the 38px is display:none at this width. Flatten to 14 + 0 + 16. */
@@ -1805,7 +1805,7 @@ body.static .hfolder,body.static #hero .mfold{--sx:-320px}
 
 
 /* ================= MOBILE TRACK - M2: legibility & content fit ================= */
-@media (max-width:880px){
+@media (max-width:860px){
   /* M2-1 micro-type floor: nothing chrome-critical below ~8.5px on a phone */
   .sec .tok,#hero .tok,.shead .tok{font-size:9px!important}
   .smeta{font-size:9px;letter-spacing:.18em}
@@ -1838,7 +1838,7 @@ body.static .hfolder,body.static #hero .mfold{--sx:-320px}
    On phones every entrance completes in ~350-500ms with tight stagger, and
    travel distances shrink so late arrivals do not read as layout jumps.
    (The engine reveals earlier on phones too - vh*1.15 gate + velocity lookahead.) */
-@media (max-width:880px){
+@media (max-width:860px){
   .rv{transform:translateY(18px);transition-duration:.42s,.42s;transition-delay:calc(var(--i,0)*45ms)}
   .rv.wipe{transition-duration:.45s,.45s,.55s;transition-delay:calc(var(--i,0)*45ms)}
   .rvs{transform:translateY(10px) scale(.992);transition-duration:.4s,.4s;transition-delay:calc(var(--i,0)*45ms)}
@@ -1912,7 +1912,7 @@ body.static .hfolder,body.static #hero .mfold{--sx:-320px}
 
 
 /* ================= MOBILE TRACK - M6: round 2 ================= */
-@media (max-width:880px){
+@media (max-width:860px){
   /* item 5 - one shared swipe affordance for every sideways-scrolling chart
      (injected by the engine on phones; fades out for good after first swipe) */
   .swcue{display:flex;justify-content:flex-end;align-items:center;gap:8px;
