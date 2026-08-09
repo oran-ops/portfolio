@@ -2010,13 +2010,13 @@ body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:214748
   mask-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="80"><filter id="r"><feTurbulence type="fractalNoise" baseFrequency="0.5" numOctaves="3"/><feComponentTransfer><feFuncA type="discrete" tableValues="0.55 0.85 1 0.92 1 0.75 1"/></feComponentTransfer></filter><rect width="200" height="80" filter="url(%23r)"/></svg>');mask-size:cover;-webkit-mask-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="80"><filter id="r"><feTurbulence type="fractalNoise" baseFrequency="0.5" numOctaves="3"/><feComponentTransfer><feFuncA type="discrete" tableValues="0.55 0.85 1 0.92 1 0.75 1"/></feComponentTransfer></filter><rect width="200" height="80" filter="url(%23r)"/></svg>');-webkit-mask-size:cover}
 .sb-imp.go{animation:stampdrop .45s cubic-bezier(.2,1.4,.3,1) both}
 @media (max-width:640px){.ritual{grid-template-columns:1fr;gap:18px;align-items:stretch}.stampbox{min-height:96px}}
-.redx{position:relative;display:inline-block;max-width:100%;vertical-align:bottom;color:transparent;border-radius:2px;transition:color .5s .25s;cursor:pointer}
-.redx::after{content:"SEALED · STAMP FILE TO REVEAL ▸";position:absolute;inset:-1px -3px;display:flex;align-items:center;justify-content:center;overflow:hidden;white-space:nowrap;font-family:'JetBrains Mono',monospace;font-size:7.5px;font-weight:600;letter-spacing:.16em;background:#2A3B34;background:color-mix(in srgb,var(--fc,var(--emb)) 26%,#20262A);border:1px solid color-mix(in srgb,var(--fc,var(--emb)) 48%,#101114);color:color-mix(in srgb,var(--fc,var(--emb)) 80%,#F2F1ED);border-radius:3px;transform-origin:left center;transition:transform .6s cubic-bezier(.7,0,.2,1);background-image:linear-gradient(110deg,transparent 32%,rgba(255,255,255,.09) 50%,transparent 68%);background-size:230% 100%;animation:rxsheen 3.4s linear infinite}
+.redx{position:relative;display:inline-block;max-width:100%;vertical-align:bottom;color:transparent;border-radius:2px;transition:color .5s .25s;cursor:pointer;touch-action:pan-y}
+.redx::after{content:"SEALED · TAP TO REVEAL ▸";position:absolute;inset:-1px -3px;display:flex;align-items:center;justify-content:center;overflow:hidden;white-space:nowrap;font-family:'JetBrains Mono',monospace;font-size:7.5px;font-weight:700;letter-spacing:.16em;background:#E4E1D8;color:#4A473F;border:1px solid rgba(20,21,25,.35);border-bottom-color:rgba(20,21,25,.5);border-radius:3px;box-shadow:0 2px 6px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.5);transform:translateX(var(--dx,0px));transform-origin:left center;transition:transform .55s cubic-bezier(.7,0,.2,1),opacity .4s;background-image:linear-gradient(110deg,transparent 32%,rgba(255,255,255,.55) 50%,transparent 68%);background-size:230% 100%;animation:rxsheen 3.4s linear infinite}
 
 .redx.open{color:inherit;animation:rxflash 1.4s ease-out .35s}
 @keyframes rxsheen{0%{background-position:135% 0}100%{background-position:-95% 0}}
 @keyframes rxflash{0%{background:rgba(47,179,128,.32)}100%{background:rgba(47,179,128,0)}}
-.redx.open::after{transform:scaleX(0)}
+.redx.open::after{transform:translateX(calc(100% + 14px));opacity:0;pointer-events:none}
 
 @media (prefers-reduced-motion:reduce){.redx{color:inherit}.redx::after{transform:scaleX(0)}.sb-imp{opacity:1;animation:none}.stampbox::after{animation:none}}
 
@@ -2041,17 +2041,27 @@ body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:214748
 
 
 /* ===== R4: BRIEF chip ===== */
-#briefchip{position:fixed;left:16px;bottom:44px;display:inline-flex;align-items:center;gap:8px;font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:800;letter-spacing:.22em;color:#0B241A;background:var(--emb);border:0;border-radius:22px;padding:11px 18px;cursor:pointer;z-index:2147470000;box-shadow:0 10px 28px rgba(0,0,0,.45),0 0 24px rgba(47,179,128,.25);transition:transform .15s,box-shadow .2s}
-#briefchip:hover{transform:translateY(-2px);box-shadow:0 14px 32px rgba(0,0,0,.5),0 0 32px rgba(47,179,128,.4)}
-#briefchip i{width:7px;height:7px;border-radius:50%;background:#0B241A;animation:rxsheen2 2.2s ease-in-out infinite}
-@keyframes rxsheen2{0%,100%{opacity:.5}50%{opacity:1}}
+#brieftab{position:fixed;right:0;top:64%;z-index:2147470000;writing-mode:vertical-rl;display:none;align-items:center;gap:7px;
+font-family:'JetBrains Mono',monospace;font-size:8.5px;font-weight:800;letter-spacing:.26em;
+padding:16px 9px 16px 11px;border-radius:9px 0 0 9px;cursor:pointer;border:0;
+background:var(--stbg,#17271F);color:var(--stfg,#7FD7B2);
+box-shadow:-8px 6px 18px rgba(0,0,0,.42),inset 2px 0 0 rgba(255,255,255,.08);
+transform:rotate(0.001deg) translateX(0);transition:transform .25s,opacity .3s;opacity:0}
+#brieftab.on{display:inline-flex;opacity:1}
+#brieftab:hover{transform:translateX(-3px)}
+#brieftab::after{content:"";position:absolute;left:-1px;bottom:-1px;border-style:solid;border-width:12px 0 0 12px;border-color:transparent transparent transparent rgba(0,0,0,.32)}
+#brieftab i{font-style:normal;width:6px;height:6px;border-radius:50%;background:var(--stfg,#7FD7B2);animation:rxsheen2 2.2s ease-in-out infinite}
+#brieftab.c-xtix{--stbg:#17271F;--stfg:#7FD7B2}
+#brieftab.c-oasis{--stbg:#E0A458;--stfg:#2A1F0E}
+#brieftab.c-eventer{--stbg:#5E8FBF;--stfg:#101B26}
+#brieftab.c-medcoin{--stbg:#E9E7DF;--stfg:#22201C}
+@media (max-width:680px){#brieftab{top:38%;font-size:8px;padding:13px 8px 13px 10px}}
 #briefovl{position:fixed;inset:0;background:rgba(10,11,13,.74);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s;z-index:2147475000}
 #briefovl.on{opacity:1;pointer-events:auto}
 #briefovl .bm-ovl{opacity:1!important;transform:rotate(-1deg)!important;width:min(440px,90vw);max-width:none;margin:0;box-shadow:0 34px 80px rgba(0,0,0,.65)}
 #briefovl .bm-x{position:absolute;top:-34px;right:0;background:none;border:0;color:#CFD0D4;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.2em;cursor:pointer}
 #briefovl .bm-x:hover{color:#fff}
-@media (max-width:680px){#briefchip{left:12px;bottom:36px;padding:10px 15px}}
-@media (prefers-reduced-motion:reduce){#briefchip i,.redx::after{animation:none}}
+@media (prefers-reduced-motion:reduce){#brieftab i,.redx::after{animation:none}}
 
 </style>
 <section class="sec" id="leadership" style="--fc:var(--emb)">
@@ -4055,9 +4065,6 @@ CASES.forEach(function(id){
     scrib.style.strokeDashoffset='0';
     var d=new Date();
     dt.textContent=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
-    openCase(id);
-    var k=CASES.indexOf(id);if(k>-1&&CASES[k+1])openCase(CASES[k+1]);
-    if(clearedN>=CASES.length)CASES.forEach(openCase);
     try{if(window.__markReviewed)window.__markReviewed(id)}catch(e){}
     try{if(navigator.vibrate)navigator.vibrate([10,50,16])}catch(e){}
   }
@@ -4107,34 +4114,69 @@ CASES.forEach(function(id){
 <script>
 (function(){
 'use strict';
-/* redaction bars point to the ritual */
+/* sealed bars: tap or drag aside to reveal (self-service) */
 document.querySelectorAll('.redx').forEach(function(r){
-  r.addEventListener('click',function(){
+  var sx=null,dx=0,W=0,dragging=false;
+  function reveal(){r.classList.add('open');r.style.removeProperty('--dx');
+    try{if(navigator.vibrate)navigator.vibrate(8)}catch(e){}}
+  r.addEventListener('pointerdown',function(e){
     if(r.classList.contains('open'))return;
-    var sec=r.closest('.sec');var box=sec&&sec.querySelector('.stampbox');
-    if(!box)return;
-    try{box.scrollIntoView({block:'center',behavior:'smooth'})}catch(e){box.scrollIntoView()}
-    box.classList.add('urge');
-    setTimeout(function(){box.classList.remove('urge')},3400);
+    sx=e.clientX;dx=0;W=r.getBoundingClientRect().width;dragging=false;
+    try{r.setPointerCapture(e.pointerId)}catch(err){}
   });
+  r.addEventListener('pointermove',function(e){
+    if(sx===null||r.classList.contains('open'))return;
+    dx=Math.max(0,e.clientX-sx);
+    if(dx>6)dragging=true;
+    if(dragging)r.style.setProperty('--dx',dx.toFixed(0)+'px');
+  });
+  function up(){
+    if(sx===null)return;
+    if(r.classList.contains('open')){sx=null;return}
+    if(dragging&&dx>W*0.38){reveal()}
+    else if(!dragging){reveal()}
+    else{r.style.setProperty('--dx','0px')}
+    sx=null;dragging=false;
+  }
+  r.addEventListener('pointerup',up);
+  r.addEventListener('pointercancel',function(){if(!r.classList.contains('open'))r.style.setProperty('--dx','0px');sx=null;dragging=false});
 });
-/* BRIEF chip: opens a live clone of the cover memo */
-var chip=document.createElement('button');chip.type='button';chip.id='briefchip';
-chip.innerHTML='<i></i>BRIEF · 30 SEC';
-document.body.appendChild(chip);
+/* BRIEF side sticker: lives on the case folders' right edge, case-colored */
+var tab=document.createElement('button');tab.type='button';tab.id='brieftab';
+tab.innerHTML='<i></i>BRIEF \u00B7 30 SEC';
+document.body.appendChild(tab);
 var ovl=document.createElement('div');ovl.id='briefovl';document.body.appendChild(ovl);
 function close(){ovl.classList.remove('on');ovl.innerHTML=''}
-chip.addEventListener('click',function(){
+tab.addEventListener('click',function(){
   var m=document.querySelector('.bmemo');if(!m)return;
   ovl.innerHTML='';
   var wrap=document.createElement('div');wrap.style.position='relative';
   var c=m.cloneNode(true);c.classList.add('bm-ovl');
-  var x=document.createElement('button');x.type='button';x.className='bm-x';x.textContent='✕ CLOSE';
+  var x=document.createElement('button');x.type='button';x.className='bm-x';x.textContent='\u2715 CLOSE';
   x.addEventListener('click',close);
   wrap.appendChild(x);wrap.appendChild(c);ovl.appendChild(wrap);
   ovl.classList.add('on');
 });
 ovl.addEventListener('click',function(e){if(e.target===ovl)close()});
+(function(){
+  var CASES2=['xtix','oasis','eventer','medcoin'],vis={};
+  function apply(){
+    var cur=null;
+    CASES2.forEach(function(id){if(vis[id]&&(cur===null||vis[id]>vis[cur]))cur=id});
+    if(cur){tab.className='on c-'+cur}
+    else tab.className='';
+  }
+  if('IntersectionObserver' in window){
+    var io=new IntersectionObserver(function(ents){
+      ents.forEach(function(en){
+        var id=en.target.id;
+        vis[id]=en.isIntersecting?en.intersectionRatio:0;
+      });
+      apply();
+    },{threshold:[0,0.08,0.2,0.4,0.6]});
+    CASES2.forEach(function(id){var el=document.getElementById(id);if(el)io.observe(el)});
+  }
+})();
 })();
 </script>
 
