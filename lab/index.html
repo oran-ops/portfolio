@@ -200,6 +200,24 @@ footer{margin-top:70px;border-top:2px solid var(--ink);padding:26px 0 60px;font-
 html{overflow-x:clip}
 body{overflow-x:clip}
 
+
+/* ============ EX19 — the vault ============ */
+.vault{position:relative;background:#0A0B0D;min-height:430px;padding:34px 74px;box-shadow:inset 0 0 110px rgba(0,0,0,.95)}
+.vault::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:.6;mix-blend-mode:overlay;background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200"><filter id="g"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/><feComponentTransfer><feFuncA type="linear" slope="0.14"/></feComponentTransfer></filter><rect width="200" height="200" filter="url(%23g)"/></svg>')}
+.v-rebate{position:absolute;top:0;bottom:0;width:52px;background:#000;display:flex;flex-direction:column;justify-content:space-between;align-items:center;padding:16px 0;z-index:2}
+.v-rebate::before,.v-rebate::after{content:"";width:14px;flex:1;margin:6px 0;background-image:radial-gradient(rgba(255,255,255,.92) 3.5px,transparent 4px);background-size:14px 30px;background-position:center;background-repeat:repeat-y}
+.v-rebate span{font-family:'JetBrains Mono',monospace;font-size:6.5px;letter-spacing:.28em;color:#8a8a92;writing-mode:vertical-rl;white-space:nowrap;padding:6px 0}
+.v-frame{position:relative;z-index:1;max-width:520px;margin:0 auto;text-align:center}
+.v-kick{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.34em;color:#9DA3B0;margin-bottom:16px}
+.v-ttl{font-family:'Fraunces',serif;font-weight:600;font-style:italic;font-size:clamp(19px,3.4vw,26px);line-height:1.4;color:#EDEFF6;text-shadow:0 0 14px rgba(220,230,255,.45),0 0 40px rgba(200,215,255,.18)}
+.v-rows{margin:22px auto 0;max-width:360px;text-align:left}
+.v-row{display:flex;justify-content:space-between;gap:12px;padding:8px 2px;border-top:1px solid rgba(237,239,246,.14);font-family:'JetBrains Mono',monospace}
+.v-row span{font-size:7.5px;letter-spacing:.24em;color:#7C8290;padding-top:3px}
+.v-row b{font-size:11px;letter-spacing:.08em;color:#EDEFF6;text-shadow:0 0 10px rgba(220,230,255,.35)}
+.v-stamp{display:inline-block;margin-top:24px;font-family:'JetBrains Mono',monospace;font-weight:800;font-size:14px;letter-spacing:.34em;color:#EDEFF6;border:3px solid #EDEFF6;border-radius:6px;padding:9px 18px;transform:rotate(-5deg);text-shadow:0 0 12px rgba(220,230,255,.5);box-shadow:0 0 18px rgba(220,230,255,.2),inset 0 0 12px rgba(220,230,255,.12);
+  mask-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="80"><filter id="r"><feTurbulence type="fractalNoise" baseFrequency="0.5" numOctaves="3"/><feComponentTransfer><feFuncA type="discrete" tableValues="0.6 0.9 1 0.92 1 0.8 1"/></feComponentTransfer></filter><rect width="200" height="80" filter="url(%23r)"/></svg>');mask-size:cover;-webkit-mask-size:cover}
+@media(max-width:640px){.vault{padding:28px 58px}.v-rebate{width:42px}}
+
 /* ============ EX18 — brief chip ============ */
 .bchip{position:absolute;top:16px;left:16px;display:inline-flex;align-items:center;gap:8px;font-family:'JetBrains Mono',monospace;font-size:8.5px;font-weight:600;letter-spacing:.22em;color:var(--em);background:rgba(22,23,27,.9);border:1px solid rgba(47,179,128,.5);border-radius:20px;padding:8px 14px;cursor:pointer;z-index:5;transition:border-color .2s,transform .15s}
 .bchip:hover{border-color:var(--em);transform:translateY(-1px)}
@@ -370,7 +388,7 @@ body{overflow-x:clip}
   <h1>מעבדת הרעיונות</h1>
   <p class="sub">12 מוצגים חיים — אחד לכל ממצא מרכזי מארבעת דוחות המחקר. אלה <b>סקיצות מהירות</b> שנועדו להרגיש את הרעיון, לא הביצוע הסופי (בגרסה אמיתית: פונטים ייעודיים, ליטוש מלא). ליד כל מוצג — מי מהחוקרים עומד מאחוריו.</p>
   <nav class="toc">
-    <a href="#ex18" style="border-color:var(--red);color:var(--red)">18 BRIEF CHIP ★★</a><a href="#ex16" style="border-color:var(--red);color:var(--red)">16 EVIDENCE SLIP ★</a><a href="#ex17" style="border-color:var(--red);color:var(--red)">17 CONNECTION BOARD ★★</a>
+    <a href="#ex19" style="border-color:var(--red);color:var(--red)">19 THE VAULT ★★</a><a href="#ex18" style="border-color:var(--red);color:var(--red)">18 BRIEF CHIP ★</a><a href="#ex16" style="border-color:var(--red);color:var(--red)">16 EVIDENCE SLIP ★</a><a href="#ex17" style="border-color:var(--red);color:var(--red)">17 CONNECTION BOARD ★★</a>
     <a href="#ex15" style="border-color:var(--red);color:var(--red)">15 END-OF-FILE RITUAL ★</a>
     <a href="#ex13" style="border-color:var(--red);color:var(--red)">13 SYNTHESIS CARD ★</a><a href="#ex14" style="border-color:var(--red);color:var(--red)">14 COVER BRIEF ★</a>
     <a href="#ex1">01 30-SEC CUT</a><a href="#ex2">02 PAPER↔NOIR</a><a href="#ex3">03 CLASSIFICATION</a><a href="#ex4">04 TYPE</a><a href="#ex5">05 STAMP</a><a href="#ex6">06 CLEARANCE</a><a href="#ex7">07 REDACTION</a><a href="#ex8">08 RED STRING</a><a href="#ex9">09 LOUPE</a><a href="#ex10">10 KINETIC</a><a href="#ex11">11 MICROFILM</a><a href="#ex12">12 OG CARD</a>
@@ -378,6 +396,29 @@ body{overflow-x:clip}
 </header>
 
 <div class="featured">
+
+<!-- ============ EX19 ============ -->
+<section class="ex" id="ex19" style="padding-top:34px">
+  <div class="exh"><span class="exn">19</span><span class="ext">הכספת — סיום המסמך כנגטיב מיקרופילם</span><span class="exs">R6 · A DARK MODE WITH A REASON</span></div>
+  <p class="exd">הביט האחרון של המסמך: סקרת הכל, ארבעת התיקים חתומים — <b>הקובץ יורד לכספת</b>. סקשן הסיום (יצירת הקשר) מתרנדר כנגטיב כסף-הליד אמיתי: שולי-פילם עם חורי-הזנה, מספרי-פריים, זוהר-סריקה עדין. חושך שיש לו סיבה נרטיבית. גלול פנימה.</p>
+  <div class="demo" style="background:#050607;padding:0;overflow:hidden">
+    <div class="vault" id="vault">
+      <div class="v-rebate" style="left:0"><span>KODAK SAFETY FILM 5063</span><span>›› 26A</span></div>
+      <div class="v-rebate" style="right:0"><span>EMERALD ARCHIVE · REEL 04</span><span>27A ‹‹</span></div>
+      <div class="v-frame">
+        <div class="v-kick">END OF ARCHIVE — FILE COMMITTED TO VAULT</div>
+        <div class="v-ttl">The evidence is on record.<br>The next system is yours to commission.</div>
+        <div class="v-rows">
+          <div class="v-row"><span>DIRECT LINE</span><b>ORAN CARMON</b></div>
+          <div class="v-row"><span>STATUS</span><b>AVAILABLE FOR ENGAGEMENT</b></div>
+          <div class="v-row"><span>RESPONSE TIME</span><b>&lt; 24 HOURS</b></div>
+        </div>
+        <div class="v-stamp">CASE CLOSED</div>
+      </div>
+    </div>
+  </div>
+  <p class="note">באתר: זה יהיה הטיפול של סקשן הסיום האמיתי (עם פרטי הקשר הקיימים) — או מצב שמופעל רק אחרי 4/4 חתימות. להחלטתך.</p>
+</section>
 
 <!-- ============ EX18 ============ -->
 <section class="ex" id="ex18" style="padding-top:34px">
