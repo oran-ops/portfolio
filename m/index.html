@@ -2062,6 +2062,8 @@ body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:214748
 #briefovl .bm-x:hover{color:#fff}
 @media (prefers-reduced-motion:reduce){#brieftab i,.redx::after{animation:none}}
 
+#medcoin .evslip{border:1px solid rgba(34,32,28,.28);box-shadow:0 12px 26px rgba(34,32,28,.28)}
+#eventer .evslip,#medcoin .evslip{margin-top:10px}
 </style>
 <section class="sec" id="leadership" style="--fc:var(--emb)">
   <div class="secnum" aria-hidden="true">07</div>
@@ -4086,19 +4088,31 @@ CASES.forEach(function(id){
 (function(){
   var d=new Date();
   var filed=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');
+  function zoneHost(sec,needle){
+    var zs=document.querySelectorAll('#'+sec+' .zr');
+    for(var i=0;i<zs.length;i++){
+      if((zs[i].textContent||'').indexOf(needle)>-1)return zs[i];
+    }
+    return null;
+  }
   var DEFS=[
-    {sel:'.cnt[data-n="9"]',host:'.bignum',ctrl:'(S) \u00B7 CTRL \u2116 X-26-0114',
-     rows:[['SOURCE','CRM EXPORT \u00B7 PIPELINE REPORT FY25'],['SCOPE','CUMULATIVE ARR PIPELINE \u00B7 2024\u20132026'],['FILED',filed]]},
-    {sel:'.cnt[data-n="2"]',host:null,ctrl:'(S) \u00B7 CTRL \u2116 O-26-0102',
-     rows:[['SOURCE','SIGNED AGREEMENT \u00B7 ON FILE'],['SCOPE','SINGLE LARGEST CONTRACT VALUE'],['FILED',filed]]}
+    {get:function(){var el=document.querySelector('.cnt[data-n="9"]');return el&&el.closest('.bignum')},
+     ctrl:'(S) \u00B7 CTRL \u2116 X-26-0114',
+     rows:[['SOURCE','CRM PIPELINE RECORDS \u00B7 FY24\u201326'],['CLAIM','COMMERCIAL OS \u2014 BUILT FROM ZERO'],['FILED','__F__']]},
+    {get:function(){var el=document.querySelector('.cnt[data-n="2"]');return el&&el.parentElement},
+     ctrl:'(S) \u00B7 CTRL \u2116 O-26-0102',
+     rows:[['SOURCE','SIGNED AGREEMENT \u00B7 ON FILE'],['CLAIM','LARGEST CONTRACT \u2014 CLOSED AS CEO'],['FILED','__F__']]},
+    {get:function(){return zoneHost('eventer','EVIDENCE')},
+     ctrl:'(C) \u00B7 CTRL \u2116 E-26-0103',
+     rows:[['SOURCE','CROSS-FUNCTIONAL RECORDS \u00B7 ON FILE'],['CLAIM','INSIGHT \u2192 DECISIONS \u00B7 GROWTH SHARED BY ALL TEAMS'],['FILED','__F__']]},
+    {get:function(){return zoneHost('medcoin','BUSINESS OUTCOMES')},
+     ctrl:'(C) \u00B7 CTRL \u2116 M-26-0104',
+     rows:[['SOURCE','FOUNDER RECORDS \u00B7 ON FILE'],['CLAIM','BUILT FROM ZERO \u2014 MODEL \u00B7 COMPLIANCE \u00B7 OPERATIONS'],['FILED','__F__']]}
   ];
   DEFS.forEach(function(df){
-    var el=document.querySelector(df.sel);if(!el)return;
-    var host=df.host?el.closest(df.host):null;
-    if(!host)host=el.parentElement;
-    if(!host)return;
+    var host=df.get();if(!host)return;
     var slip=document.createElement('div');slip.className='evslip';
-    var rows=df.rows.map(function(r){return '<div class="es-row"><span class="es-k">'+r[0]+'</span><span class="es-v">'+r[1]+'</span></div>'}).join('');
+    var rows=df.rows.map(function(r){return '<div class="es-row"><span class="es-k">'+r[0]+'</span><span class="es-v">'+String(r[1]).replace('__F__',filed)+'</span></div>'}).join('');
     slip.innerHTML='<div class="es-h"><span>EVIDENCE SLIP</span><b>'+df.ctrl+'</b></div>'+rows+'<span class="es-stamp">VERIFIED</span>';
     if(host.nextSibling)host.parentNode.insertBefore(slip,host.nextSibling);
     else host.parentNode.appendChild(slip);
