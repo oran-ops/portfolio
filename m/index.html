@@ -1702,7 +1702,7 @@ body.static .hhint .har,body.failsafe .hhint .har{animation:none!important}
 
 
 /* ============ R10 — the background sits behind the page, not on it ============ */
-.secnum,#heromq{transform:translate3d(var(--pxx,0px),var(--pyy,0px),0);will-change:transform}
+.secnum,#heromq{transform:translate3d(var(--pxx,0px),var(--pyy,0px),0)}
 
 
 /* R10 — kill switches keep working */
@@ -2786,16 +2786,31 @@ if(!reduced&&!isStatic&&window.matchMedia('(pointer:fine)').matches){
 
 /* ---- ghost numeral parallax ---- */
 if(!reduced&&!isStatic){
-  var nums=[].slice.call(document.querySelectorAll('.secnum'));
-  (function nloop(){
+  /* PERF: was an always-on rAF reading a rect per section every frame. Now it
+     rides the shared scroll pass on cached document positions and writes only
+     when the value actually moves. */
+  var nums=[].slice.call(document.querySelectorAll('.secnum')).map(function(el){
+    return {el:el,host:el.parentElement,top:0,h:0,last:1e9};
+  });
+  function nmeasure(){
+    var y=pageYOffset;
     for(var i=0;i<nums.length;i++){
-      var r=nums[i].parentElement.getBoundingClientRect();
-      if(r.bottom>0&&r.top<window.innerHeight){
-        nums[i].style.transform='translateY('+((r.top-window.innerHeight*.5)*-.14)+'px)';
-      }
+      var r=nums[i].host.getBoundingClientRect();
+      nums[i].top=r.top+y;nums[i].h=r.height;
     }
-    requestAnimationFrame(nloop);
-  })();
+  }
+  window.__numMeasure=nmeasure;
+  window.__numUpd=function(y,vh){
+    for(var i=0;i<nums.length;i++){
+      var N=nums[i],rel=N.top-y;
+      if(rel+N.h<0||rel>vh)continue;
+      var v=(rel-vh*.5)*-.14;
+      if(Math.abs(v-N.last)<.6)continue;
+      N.last=v;
+      N.el.style.transform='translateY('+v.toFixed(1)+'px)';
+    }
+  };
+  nmeasure();
 }
 })();
 </script>
@@ -2979,19 +2994,22 @@ if(!frozen){
   document.body.insertBefore(dc,document.body.firstChild);
   var ctx=dc.getContext('2d');
   var W=0,H=0,pts=[];
+  var DSC=.5; /* PERF: the dust is soft points — half the pixels is invisible, and a
+                 quarter of the fill area on a full-viewport canvas that repaints every frame */
   function dsize(){
-    W=dc.width=window.innerWidth;H=dc.height=window.innerHeight;
+    W=dc.width=Math.round(window.innerWidth*DSC);H=dc.height=Math.round(window.innerHeight*DSC);
+    dc.style.width=window.innerWidth+'px';dc.style.height=window.innerHeight+'px';
   }
   dsize();window.addEventListener('resize',dsize);
   for(var n=0;n<64;n++){
-    pts.push({x:Math.random()*1600,y:Math.random()*900,r:Math.random()*1.4+.4,
+    pts.push({x:Math.random()*800,y:Math.random()*450,r:Math.random()*.9+.35,
       vx:(Math.random()-.5)*.16,vy:(Math.random()-.5)*.12,o:Math.random()*.35+.1});
   }
   var idleF=1;
-  window.__dustBurst=function(bx,by){try{for(var q=0;q<pts.length;q++){var dxx=pts[q].x-bx,dyy=pts[q].y-by;var dd=Math.max(60,Math.hypot(dxx,dyy));pts[q].vx+=dxx/dd*(2.6+Math.random()*3.2);pts[q].vy+=dyy/dd*(2.6+Math.random()*3.2);}}catch(e){}};
+  window.__dustBurst=function(bx,by){bx*=DSC;by*=DSC;try{for(var q=0;q<pts.length;q++){var dxx=pts[q].x-bx,dyy=pts[q].y-by;var dd=Math.max(60,Math.hypot(dxx,dyy));pts[q].vx+=dxx/dd*(2.6+Math.random()*3.2);pts[q].vy+=dyy/dd*(2.6+Math.random()*3.2);}}catch(e){}};
   window.__dustIdle=function(on){idleF=on?1.6:1};
   var mx=-999,my=-999;
-  document.addEventListener('mousemove',function(e){mx=e.clientX;my=e.clientY},{passive:true});
+  document.addEventListener('mousemove',function(e){mx=e.clientX*DSC;my=e.clientY*DSC},{passive:true});
   (function dl(){
     if(!document.hidden){
       ctx.clearRect(0,0,W,H);
@@ -3002,7 +3020,7 @@ if(!frozen){
         if(Math.abs(pt.vx)>.25)pt.vx*=.955;
         if(Math.abs(pt.vy)>.2)pt.vy*=.955;
         var ddx=pt.x-mx,ddy=pt.y-my,dd=ddx*ddx+ddy*ddy;
-        if(dd<12000){var f=(12000-dd)/12000;pt.x+=ddx*f*.045;pt.y+=ddy*f*.045;}
+        if(dd<3000){var f=(3000-dd)/3000;pt.x+=ddx*f*.045;pt.y+=ddy*f*.045;}
         if(pt.x<-8)pt.x=W+8;if(pt.x>W+8)pt.x=-8;
         if(pt.y<-8)pt.y=H+8;if(pt.y>H+8)pt.y=-8;
         ctx.globalAlpha=pt.o;
@@ -4016,6 +4034,22 @@ window.__ai2=function(pRaw){
      viewport instead of vanishing (desktop: relOut stays 1, identical) */
   var relOut=1;
   if(MOBP&&stH>0)relOut=1-clampU((yNow-(stTop+stH-vhh))/(vhh*.55));
+  /* PERF (deep round): the scene's progress is smoothed at 8.5%/call and only
+     advances while the page moves, so after a fast scroll THROUGH the statement
+     P lags far behind reality and the field kept painting ~3,000 sprites a frame
+     over sections that are nowhere near it — exactly during the fastest scrolling.
+     Viewport truth overrides the smoothed clock: once the pinned scene is off
+     screen there is nothing to draw, whatever P still believes. */
+  if(stH>0){
+    var offBelow=yNow>stTop+stH+vhh*.40;
+    var offAbove=yNow+vhh*1.30<stTop;
+    if(offBelow||offAbove){
+      if(cv&&!cleared){ctx.clearRect(0,0,innerWidth,innerHeight);cleared=true}
+      setW2(offBelow?1:0,false);
+      if(offAbove)doneSnd=false;
+      return;
+    }
+  }
   if(PRE<.003||(P>.99&&freeOut<=.02)||(MOBP&&relOut<=0)){
     if(cv&&!cleared){ctx.clearRect(0,0,innerWidth,innerHeight);cleared=true}
     /* phones: a violent conveyor-scroll can exit the zone while smoothed P is
@@ -4522,6 +4556,14 @@ ovl.addEventListener('click',function(e){if(e.target===ovl)close()});
   var K=lens.querySelector('.dl-k'),N=lens.querySelector('.dl-n'),
       M=lens.querySelector('.dl-m'),S=lens.querySelector('.dl-s');
   var timer=null,held=null,sx=0,sy=0,shown=false;
+  /* The drawer is a horizontally-driven track: while the page scrolls, the cards
+     slide sideways UNDER a stationary pointer and each one fires pointerenter.
+     The glass must answer a deliberate pointer, never moving content — so it only
+     opens if the pointer itself moved a moment ago, and never right after a scroll. */
+  var lastMove=-1e9,lastScroll=-1e9;
+  document.addEventListener('pointermove',function(e){if(e.pointerType==='mouse')lastMove=Date.now()},{passive:true});
+  addEventListener('scroll',function(){lastScroll=Date.now();hide()},{passive:true});
+  function pointerIsLive(){return Date.now()-lastMove<170&&Date.now()-lastScroll>280}
   function fill(card){
     var nm=(card.querySelector('.hlip .nm')||{}).textContent||'FILE';
     var fl=(card.querySelector('.hlip .fl')||{}).textContent||'';
@@ -4553,7 +4595,7 @@ ovl.addEventListener('click',function(e){if(e.target===ovl)close()});
     card.appendChild(hint);
     /* mouse: resting on the file raises the glass, no click needed */
     card.addEventListener('pointerenter',function(e){
-      if(e.pointerType!=='mouse')return;
+      if(e.pointerType!=='mouse'||!pointerIsLive())return;
       sx=e.clientX;sy=e.clientY;
       if(timer)clearTimeout(timer);
       show(card,sx,sy);
@@ -4566,14 +4608,15 @@ ovl.addEventListener('click',function(e){if(e.target===ovl)close()});
     });
     card.addEventListener('pointermove',function(e){
       if(shown){place(e.clientX,e.clientY);return}
-      if(e.pointerType==='mouse'){sx=e.clientX;sy=e.clientY;return}
+      if(e.pointerType==='mouse'){sx=e.clientX;sy=e.clientY;
+        if(Date.now()-lastScroll>280)show(card,sx,sy);
+        return}
       if(timer&&(Math.abs(e.clientX-sx)>8||Math.abs(e.clientY-sy)>8)){clearTimeout(timer);timer=null}
     });
     card.addEventListener('pointerup',function(e){if(e.pointerType!=='mouse')hide()});
     card.addEventListener('pointercancel',hide);
     card.addEventListener('pointerleave',hide);
   });
-  addEventListener('scroll',hide,{passive:true});
 })();
 </script>
 
@@ -4587,6 +4630,7 @@ ovl.addEventListener('click',function(e){if(e.target===ovl)close()});
     var y=pageYOffset,vh=innerHeight;
     if(window.__kinUpd)window.__kinUpd(y,vh);
     if(window.__rxsUpd)window.__rxsUpd(y,vh);
+    if(window.__numUpd)window.__numUpd(y,vh);
   }
   function onScroll(){if(!tick){tick=true;requestAnimationFrame(frame)}}
   window.__perfTick=onScroll;
@@ -4595,11 +4639,13 @@ ovl.addEventListener('click',function(e){if(e.target===ovl)close()});
     if(window.__mSoftRz&&window.__mSoftRz(e,onScroll))return;
     if(window.__kinMeasure)window.__kinMeasure();
     if(window.__rxsMeasure)window.__rxsMeasure();
+    if(window.__numMeasure)window.__numMeasure();
     onScroll();
   });
   setTimeout(function(){
     if(window.__kinMeasure)window.__kinMeasure();
     if(window.__rxsMeasure)window.__rxsMeasure();
+    if(window.__numMeasure)window.__numMeasure();
     frame();
   },220);
   frame();
