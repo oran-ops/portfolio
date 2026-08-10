@@ -201,6 +201,43 @@ html{overflow-x:clip}
 body{overflow-x:clip}
 
 
+
+/* ============ master plan ============ */
+.plangrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:760px){.plangrid{grid-template-columns:1fr}}
+.pcard{border:1px solid var(--hair);border-radius:6px;background:#fff8;overflow:hidden}
+.pcard.live{border-color:rgba(31,107,75,.5)}
+.pcard.wait{border-color:rgba(224,164,88,.75)}
+.pcard.park{opacity:.62}
+.pc-h{display:flex;justify-content:space-between;align-items:center;padding:9px 13px;border-bottom:1px solid var(--hair)}
+.pc-h b{font-size:13.5px}
+.pc-h span{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.2em;padding:3px 8px;border-radius:3px}
+.pcard.live .pc-h span{background:#1E6B4B;color:#fff}
+.pcard.wait .pc-h span{background:#E0A458;color:#2A1F0E}
+.pcard.park .pc-h span{background:#8A8578;color:#fff}
+.pc-b{padding:10px 13px 12px;font-size:12px;line-height:1.8;color:var(--ink2)}
+.pc-b i{font-style:normal;font-weight:700;color:var(--ink)}
+.pc-b a{color:var(--red);text-decoration:none;font-family:'JetBrains Mono',monospace;font-size:10px;direction:ltr;display:inline-block}
+
+/* ============ EX20 kinetic ============ */
+.kin2{font-family:'Fraunces',serif;font-size:clamp(28px,5.2vw,44px);line-height:1.3;color:#F2F1ED;text-align:center}
+.kin2 span{display:inline-block;font-weight:100;opacity:.3}
+/* ============ EX21 voices ============ */
+.an-note{max-width:430px;margin:0 auto;background:#25262D;border-left:3px solid var(--em);padding:14px 16px;transform:rotate(-.6deg)}
+.an-h{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:.28em;color:#8B8E96;margin-bottom:8px}
+.an-t{font-family:'Special Elite',monospace;font-size:14.5px;line-height:1.85;color:#DDD9CE}
+.an-s{font-family:'Special Elite',monospace;font-size:11px;color:#8B8E96;margin-top:8px;text-align:right}
+.gen3{max-width:430px;margin:18px auto 0;display:flex;flex-direction:column;gap:4px;text-align:center;border:1px dashed rgba(207,208,212,.3);border-radius:4px;padding:12px}
+.g3-b{font-family:'Courier Prime',monospace;font-weight:700;font-size:13px;letter-spacing:.14em;color:#CFD0D4;filter:blur(.45px) contrast(2.4);opacity:.8}
+.g3-t{font-family:'Courier Prime',monospace;font-size:8.5px;letter-spacing:.12em;color:#8B8E96;filter:blur(.3px);opacity:.75}
+/* ============ EX22 morph ============ */
+.morph{font-family:'Fraunces',serif;font-weight:800;font-size:clamp(24px,4.6vw,38px);color:#F2F1ED;min-height:1.4em}
+.morph i{font-style:normal;display:inline-block;transition:opacity .5s,filter .5s,transform .5s}
+.morph i.out{opacity:0;filter:blur(6px);transform:translateY(-14px)}
+.morph i.inn{opacity:0;filter:blur(6px);transform:translateY(14px)}
+.morph i.em2{color:var(--em)}
+.morph-sub{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.3em;color:#6B6E76;margin-top:18px}
+
 /* ============ EX19 — the vault ============ */
 .vault{position:relative;background:#0A0B0D;min-height:430px;padding:34px 74px;box-shadow:inset 0 0 110px rgba(0,0,0,.95)}
 .vault::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:.6;mix-blend-mode:overlay;background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200"><filter id="g"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/><feComponentTransfer><feFuncA type="linear" slope="0.14"/></feComponentTransfer></filter><rect width="200" height="200" filter="url(%23g)"/></svg>')}
@@ -388,14 +425,63 @@ body{overflow-x:clip}
   <h1>מעבדת הרעיונות</h1>
   <p class="sub">12 מוצגים חיים — אחד לכל ממצא מרכזי מארבעת דוחות המחקר. אלה <b>סקיצות מהירות</b> שנועדו להרגיש את הרעיון, לא הביצוע הסופי (בגרסה אמיתית: פונטים ייעודיים, ליטוש מלא). ליד כל מוצג — מי מהחוקרים עומד מאחוריו.</p>
   <nav class="toc">
-    <a href="#ex19" style="border-color:var(--red);color:var(--red)">19 THE VAULT ★★</a><a href="#ex18" style="border-color:var(--red);color:var(--red)">18 BRIEF CHIP ★</a><a href="#ex16" style="border-color:var(--red);color:var(--red)">16 EVIDENCE SLIP ★</a><a href="#ex17" style="border-color:var(--red);color:var(--red)">17 CONNECTION BOARD ★★</a>
+    <a href="#plan" style="background:var(--red);color:var(--paper);border-color:var(--red)">MASTER PLAN</a><a href="#ex20" style="border-color:var(--red);color:var(--red)">20 KINETIC ★★</a><a href="#ex21" style="border-color:var(--red);color:var(--red)">21 TYPE VOICES ★★</a><a href="#ex22" style="border-color:var(--red);color:var(--red)">22 STATEMENT MORPH ★★</a><a href="#ex19" style="border-color:var(--red);color:var(--red)">19 THE VAULT ★</a><a href="#ex18" style="border-color:var(--red);color:var(--red)">18 BRIEF CHIP ★</a><a href="#ex16" style="border-color:var(--red);color:var(--red)">16 EVIDENCE SLIP ★</a><a href="#ex17" style="border-color:var(--red);color:var(--red)">17 CONNECTION BOARD ★★</a>
     <a href="#ex15" style="border-color:var(--red);color:var(--red)">15 END-OF-FILE RITUAL ★</a>
     <a href="#ex13" style="border-color:var(--red);color:var(--red)">13 SYNTHESIS CARD ★</a><a href="#ex14" style="border-color:var(--red);color:var(--red)">14 COVER BRIEF ★</a>
     <a href="#ex1">01 30-SEC CUT</a><a href="#ex2">02 PAPER↔NOIR</a><a href="#ex3">03 CLASSIFICATION</a><a href="#ex4">04 TYPE</a><a href="#ex5">05 STAMP</a><a href="#ex6">06 CLEARANCE</a><a href="#ex7">07 REDACTION</a><a href="#ex8">08 RED STRING</a><a href="#ex9">09 LOUPE</a><a href="#ex10">10 KINETIC</a><a href="#ex11">11 MICROFILM</a><a href="#ex12">12 OG CARD</a>
   </nav>
 </header>
 
+
+<section class="ex" id="plan" style="padding-top:40px">
+  <div class="exh"><span class="exn">◈</span><span class="ext">תוכנית-האב — כל מכשירי EMERALD II</span><span class="exs">THE COMPLETE IMPLEMENTATION MAP</span></div>
+  <p class="exd">כל מכשיר במסמך — חי, ממתין או מוצע — עם המיקום, ההתנהגות, פעולת-המשתמש והפלואו. <b>ירוק = חי באתר</b> · <b>כתום = מוקאפ ממתין להחלטתך</b> · <b>אפור = מוקפא</b>. לחיצה על שם מוצג קופצת לדוגמה החיה.</p>
+  <div class="plangrid">
+    <div class="pcard live"><div class="pc-h"><b>מזכר הכריכה + סטיקר BRIEF</b><span>חי</span></div><div class="pc-b"><i>מיקום:</i> הכריכה (סטטי) + נקודה עגולה צפה בשוליים השמאליים בתוך 4 התיקים בלבד.<br><i>פעולה:</i> אפס לתקציר-הכריכה; לחיצה על הנקודה פותחת את המזכר מכל עומק.<br><i>פלואו:</i> 7 השניות הראשונות מקבלות הכל; מי שעמוק בקובץ — הנקודה לידו. <a href="#ex14">מוצג 14</a> · <a href="#ex18">18</a></div></div>
+    <div class="pcard live"><div class="pc-h"><b>דקדוק הסיווג</b><span>חי</span></div><div class="pc-b"><i>מיקום:</i> ראש כל תיק — פס RESTRICTED בצבע הקייס, CTRL №, COPY N/12, סימוני (S) על מדדי-כסף.<br><i>פעולה:</i> אין — שכבת אמינות פסיבית.<br><i>פלואו:</i> נקרא ברגע פתיחת התיק, לפני התוכן. <a href="#ex13">מוצג 13</a></div></div>
+    <div class="pcard live"><div class="pc-h"><b>פסי SEALED</b><span>חי</span></div><div class="pc-b"><i>מיקום:</i> משפט-מפתח אחד בכל תיק (4 שאישרת).<br/><i>מראה:</i> פס נייר בהיר-מט עם "SEALED · TAP TO REVEAL ▸" וברק.<br><i>פעולה:</i> הקשה או גרירה הצידה — הפס מחליק החוצה, המשפט נחשף בהבזק.<br><i>פלואו:</i> עצירת-סקרנות באמצע הקריאה — פעולה במקום, בלי לעזוב. <a href="#ex15">מוצג 15</a></div></div>
+    <div class="pcard live"><div class="pc-h"><b>פתקי-ראיה</b><span>חי</span></div><div class="pc-b"><i>מיקום:</i> אחד בכל תיק, מודבק תחת הטענה החשובה של הקייס.<br><i>מראה:</i> פתק נייר עם פס-דבק, SOURCE/CLAIM/FILED, חותמת VERIFIED.<br><i>פעולה:</i> אין — פתוח תמיד (החלטתך).<br><i>פלואו:</i> הראיה נקראת יחד עם המספר. <a href="#ex16">מוצג 16</a></div></div>
+    <div class="pcard live"><div class="pc-h"><b>טקס סוף-התיק</b><span>חי</span></div><div class="pc-b"><i>מיקום:</i> שורת-במה ברוחב מלא בסוף כל תיק.<br><i>פעולה:</i> החזקת קופסת-החותמת ~שנייה — REVIEWED נלחץ, שרבוט-חתימה, תאריך, מונה 4/4.<br><i>פלואו:</i> שער רגשי בין תיק לתיק; לא חוסם — מי שממהר גולל הלאה. <a href="#ex15">מוצג 15</a></div></div>
+    <div class="pcard live"><div class="pc-h"><b>תשתית: גרעון · חותמות · OG · מונים אמיתיים</b><span>חי</span></div><div class="pc-b">גרעון-פילם עדין על הכל · פיזיקת-לחיצה לכל חותמת · כרטיס-שיתוף 1200×630 + מטא מלא · מספרים אמיתיים ב-HTML (בוטים רואים אמת). שכבה שקטה שמרימה הכל.</div></div>
+    <div class="pcard wait"><div class="pc-h"><b>הכספת (מיקרופילם)</b><span>ממתין</span></div><div class="pc-b"><i>מיקום מוצע:</i> סקשן הסיום/קונטקט.<br><i>מראה:</i> נגטיב כסף-הליד — שולי-פילם, חורי-הזנה, מספרי-פריים, זוהר-סריקה, CASE CLOSED זוהרת.<br><i>שתי דרכים:</i> (א) קבוע לכולם · (ב) נפתח רק אחרי 4/4 חתימות — פרס למסיימים.<br><i>החלטה:</i> אישור + בחירת דרך. <a href="#ex19">מוצג 19</a></div></div>
+    <div class="pcard wait"><div class="pc-h"><b>כותרות קינטיות</b><span>ממתין</span></div><div class="pc-b"><i>מיקום:</i> כותרות הסקשנים (לא ההצהרה).<br><i>התנהגות:</i> המשקל נבנה מילה-מילה עם הגלילה — האותיות עצמן הן האובייקט.<br><i>עלות:</i> דורש פונט משתנה מוטמע (~+180KB) או מעבר לסריף בכותרות.<br><i>החלטה:</i> אישור עיצוב + אישור עלות-משקל. <a href="#ex20">מוצג 20</a></div></div>
+    <div class="pcard wait"><div class="pc-h"><b>קולות-כתיבה: מכונת-כתיבה + שחיקה</b><span>ממתין</span></div><div class="pc-b"><i>מיקום:</i> הערות-אנליסט בתיקים (מכונת-כתיבה, כל אות שונה) + רגעי עומק-ארכיון (טקסט דור-3 של צילום).<br><i>פעולה:</i> אין — טקסטורת אותנטיות.<br><i>עלות:</i> ~+90KB פונטים מוטמעים.<br><i>החלטה:</i> אישור + היקף (כמה הערות). <a href="#ex21">מוצג 21</a></div></div>
+    <div class="pcard wait"><div class="pc-h"><b>מורף ההצהרה</b><span>ממתין</span></div><div class="pc-b"><i>מיקום:</i> סצנת החלקיקים הקיימת — שדרוג-העל שלה.<br><i>התנהגות:</i> באמצע ההצמדה המשפט <b>כותב את עצמו מחדש</b> — הכוכבים נודדים מאותיות משפט א׳ לאותיות משפט ב׳.<br><i>פלואו:</i> "נקרא כך — מתגבש אחרת": רגע-הצילום של המסמך.<br><i>החלטה:</i> אישור קונספט (מימוש קנבס מלא = סבב ייעודי). <a href="#ex22">מוצג 22</a></div></div>
+    <div class="pcard park"><div class="pc-h"><b>סטיקרי-מסלול + חוט</b><span>מוקפא</span></div><div class="pc-b">תגי 01/02/03/A הופכים לסטיקרים והחוט מושחל דרכם עד החותמת. מוקפא לפי החלטתך — זמין להחייאה. <a href="#ex17">מוצג 17</a></div></div>
+  </div>
+  <p class="exd" style="margin-top:18px"><b>סדר מומלץ ליישום הממתינים:</b> הכספת (קטן, סוגר את המסמך בשיא) → קולות-הכתיבה (טקסטורה, אפס-סיכון) → כותרות קינטיות (אחרי החלטת פונט) → מורף ההצהרה (הפרויקט הגדול — סבב ייעודי עם המעבדה המלאה). כל אחד: מוקאפ מאושר → יישום → אימות → ‎/m/‎ → בדיקתך.</p>
+</section>
+
 <div class="featured">
+
+<!-- ============ EX20 ============ -->
+<section class="ex" id="ex20" style="padding-top:34px">
+  <div class="exh"><span class="exn">20</span><span class="ext">כותרות קינטיות — המשקל נבנה עם הגלילה</span><span class="exs">TYPE AS THE OBJECT</span></div>
+  <p class="exd">גלול דרך הכותרת — כל מילה עולה ממשקל-נוצה למשקל-מלא, בזו אחר זו. באתר: כל כותרות הסקשנים יתנהגו כך (ההצהרה נשארת לחלקיקים).</p>
+  <div class="demo dark" style="padding:60px 26px">
+    <div class="kin2" id="kin2"><span>Building</span> <span>People.</span> <span>Building</span> <span>Systems.</span><br><span>Building</span> <span>Accountability.</span></div>
+  </div>
+</section>
+
+<!-- ============ EX21 ============ -->
+<section class="ex" id="ex21">
+  <div class="exh"><span class="exn">21</span><span class="ext">קולות-כתיבה — הערת אנליסט + עותק שחוק</span><span class="exs">PROCESS, NOT PROPS</span></div>
+  <p class="exd">שני קולות חדשים בתוך התיקים: <b>הערת-אנליסט מוקלדת</b> (כל אות מוטית אחרת — מכונה אמיתית) מוצמדת לשולי ראיה, ו<b>חותם עותק-שחוק</b> לרגעי עומק. טקסטורה שאומרת "מסמך אמיתי", בלי אינטראקציה.</p>
+  <div class="demo dark" style="padding:26px">
+    <div class="an-note"><div class="an-h">ANALYST NOTE — MARGIN</div><div class="an-t" id="antw">Subject builds the machine first, then the team. Pattern verified across all four files.</div><div class="an-s">— REVIEWING DESK, 2026</div></div>
+    <div class="gen3"><span class="g3-b">ARCHIVE COPY — GEN 3</span><span class="g3-t">DUPLICATED FROM MICROFILM · QUALITY DEGRADED · CONTENT VERIFIED</span></div>
+  </div>
+</section>
+
+<!-- ============ EX22 ============ -->
+<section class="ex" id="ex22">
+  <div class="exh"><span class="exn">22</span><span class="ext">מורף ההצהרה — המשפט כותב את עצמו מחדש</span><span class="exs">THE SIGNATURE MOVE · CONCEPT</span></div>
+  <p class="exd">קונספט לשדרוג-העל של סצנת החלקיקים: באמצע ההצמדה, אותיות המשפט הראשון <b>נודדות והופכות</b> למשפט השני. כאן — הדמיה ב-DOM (בסצנה האמיתית: הכוכבים עצמם יעשו את המסע). צפה בלופ.</p>
+  <div class="demo dark" style="padding:70px 26px;text-align:center">
+    <div class="morph" id="morph"></div>
+    <div class="morph-sub" id="morphsub">ONE INTELLIGENCE BUILT THE WORLD</div>
+  </div>
+</section>
 
 <!-- ============ EX19 ============ -->
 <section class="ex" id="ex19" style="padding-top:34px">
@@ -855,6 +941,56 @@ document.getElementById('abPaper').addEventListener('click',function(){abCard.cl
     });
   }
   addEventListener('scroll',upd,{passive:true});addEventListener('resize',upd);upd();
+})();
+
+/* EX20 kinetic weight-build */
+(function(){
+  var kin=document.getElementById('kin2'),words=[].slice.call(kin.querySelectorAll('span'));
+  function upd(){
+    var r=kin.getBoundingClientRect(),vh=innerHeight;
+    var base=Math.min(1,Math.max(0,(vh*0.9-r.top)/(vh*0.55)));
+    words.forEach(function(w,i){
+      var p=Math.min(1,Math.max(0,base*1.7-i*0.16));
+      w.style.fontWeight=100+Math.round(800*p);
+      w.style.opacity=(0.3+0.7*p).toFixed(2);
+      w.style.letterSpacing=((1-p)*0.06)+'em';
+    });
+  }
+  addEventListener('scroll',function(){requestAnimationFrame(upd)},{passive:true});
+  addEventListener('resize',upd);upd();
+})();
+
+/* EX22 statement morph loop */
+(function(){
+  var el=document.getElementById('morph'),sub=document.getElementById('morphsub');
+  var A='One intelligence built the world.',B='Two will build the next.';
+  var SUBA='ONE INTELLIGENCE BUILT THE WORLD',SUBB='THE SENTENCE REWRITES ITSELF';
+  var showingA=true;
+  function render(txt,emCls){
+    el.innerHTML='';
+    txt.split('').forEach(function(ch,i){
+      var sp=document.createElement('i');
+      sp.textContent=ch===' '?'\u00A0':ch;
+      if(emCls)sp.className='em2';
+      sp.style.transitionDelay=(i*14)+'ms';
+      el.appendChild(sp);
+    });
+  }
+  function swap(){
+    var chars=[].slice.call(el.children);
+    chars.forEach(function(c,i){c.classList.add('out')});
+    setTimeout(function(){
+      showingA=!showingA;
+      render(showingA?A:B,!showingA);
+      sub.textContent=showingA?SUBA:SUBB;
+      var nc=[].slice.call(el.children);
+      nc.forEach(function(c){c.classList.add('inn')});
+      void el.offsetWidth;
+      nc.forEach(function(c){c.classList.remove('inn')});
+    },900);
+  }
+  render(A,false);
+  if(!reduced)setInterval(swap,4200);
 })();
 
 /* EX18 — brief chip */
