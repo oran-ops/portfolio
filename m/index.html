@@ -1011,7 +1011,7 @@ padding:6px 13px;font-family:'JetBrains Mono',monospace;font-weight:700;font-siz
         <div>
           <div class="z"><div class="zr"><b>01</b><span class="d2"></span>THE SITUATION</div>
             <div class="para">Strong vision. Strong product. <span class="redx"><b>Zero commercial infrastructure.</b></span></div></div>
-          <div class="reality rv" style="--i:2"><div class="fh"><span><b>STARTING POINT</b></span><span>07 GAPS</span></div><div class="frow st" style="--i:0"><span class="o"></span>No CRM</div><div class="frow st" style="--i:1"><span class="o"></span>No Business Development function</div><div class="frow st" style="--i:2"><span class="o"></span>No sales methodology</div><div class="frow st" style="--i:3"><span class="o"></span>No outbound process</div><div class="frow st" style="--i:4"><span class="o"></span>No pipeline management</div><div class="frow st" style="--i:5"><span class="o"></span>No KPI framework</div><div class="frow st" style="--i:6"><span class="o"></span>No reporting structure</div></div></div>
+          <div class="reality rv" style="--i:2"><div class="fh"><span><b>STARTING POINT</b></span><span>07 GAPS</span></div><div class="frow st" style="--i:0"><span class="o"></span>No CRM</div><div class="frow st" style="--i:1"><span class="o"></span>No Business Development function</div><div class="frow st" style="--i:2"><span class="o"></span>No sales methodology</div><div class="frow st" style="--i:3"><span class="o"></span>No outbound process</div><div class="frow st" style="--i:4"><span class="o"></span>No pipeline management</div><div class="frow st" style="--i:5"><span class="o"></span>No KPI framework</div><div class="frow st" style="--i:6"><span class="o"></span>No reporting structure</div></div>
           <div class="z"><div class="zr"><b>02</b><span class="d2"></span>MISSION OBJECTIVE</div>
             <div class="para">Build a <b>commercial operating system</b> for predictable growth &mdash; Domestic &amp; International.</div></div>
         </div>
@@ -1566,6 +1566,22 @@ body.static .hhint .har,body.failsafe .hhint .har{animation:none!important}
 /* R8 — the approach list stays attached to its heading */
 #xtix .grid2c.apl,#xtix .grid2c{grid-template-columns:286px minmax(0,1fr);justify-content:start;column-gap:54px}
 @media (max-width:680px){#xtix .grid2c.apl,#xtix .grid2c{grid-template-columns:1fr}}
+/* R22 - re-cut for the repaired folder. #xtix's ∅→10 chart, PART 2 and the
+   REFLECTION zone used to render OUTSIDE .folder, against the 1120px .wrap; the
+   nesting repair puts them where they belong, inside the folder's 988px content
+   box, and the intake's own second column narrows from 988 to 525. These are the
+   four numbers that were cut against the old width - restated so that every line
+   that read on ONE line before still reads on one line. Nothing here applies
+   below 901px, where the intake is a single column and all three grids are
+   already 1fr, so the phone layout is untouched. */
+@media (min-width:901px){
+  /* the dense (AFTER) list needs the larger half of the intake */
+  #xtix .folder>.cols2{grid-template-columns:45fr 55fr}
+  /* a 286px fixed track inside a 525px column left 217px for a 229px line */
+  #xtix .grid2c.apl,#xtix .grid2c{grid-template-columns:repeat(2,minmax(0,1fr));column-gap:22px}
+  /* the stat row's first cell floors at 344px, so the two headline cells get
+     298px each: 24px of Inter no longer fits "Prioritised Global expansion" */
+}
 
 
 /* R8 — breathing room in the system list, feedback loop reads clearly */
@@ -1793,6 +1809,18 @@ body.static .hfolder,body.static #hero .mfold{--sx:-320px}
 /* agent-3 pass, site parity: XTIX evidence stat row on an even 3-column rhythm */
 #xtix .statrow{display:grid;grid-template-columns:repeat(3,1fr);gap:12px 30px;align-items:end}
 @media (max-width:900px){#xtix .statrow{grid-template-columns:1fr;gap:26px}}
+/* R22 (second half, and it has to sit after the two rules above to win the
+   cascade) - the stat row and the reflection row are inside the folder now, so
+   they read across 988px instead of the .wrap's 1120px. The first stat cell
+   floors at 344px, leaving 298px for each headline: 24px of Inter no longer
+   holds "Prioritised Global expansion" on one line, and 13.5px no longer holds
+   a reflection on one line. Re-cut so both do. Phone layout untouched. */
+@media (min-width:901px){
+  #xtix .statrow{column-gap:24px}
+  #xtix .bigtxt{font-size:clamp(18px,1.5vw,21px)}
+  #xtix .refl3{column-gap:22px}
+  #xtix .refl3 .dash{font-size:12.5px}
+}
 
 
 /* agent-4 pass, site parity: chip labels optically centred in the stretched box */
@@ -2754,7 +2782,7 @@ var vh=window.innerHeight,DOCH=1;
 var MOB=window.innerWidth<861,lastVY=-1,lastVT=0,vel=0;
 var scenes=[];
 function top0(el){var r=el.getBoundingClientRect();return r.top+window.pageYOffset}
-function add(el,fn,travel,lead){if(!el)return;scenes.push({el:el,fn:fn,tv:travel||.55,ld:lead||.9,t:0})}
+function add(el,fn,travel,lead){if(!el)return;scenes.push({el:el,fn:fn,tv:travel||.55,ld:lead||.9,t:0,lp:-1})}
 
 [].forEach.call(document.querySelectorAll('.pdraw'),function(p){
   p.style.transition='none';
@@ -2820,10 +2848,18 @@ var SEC=links.map(function(a){var el=document.querySelector(a.getAttribute('href
 var stWrap=document.querySelector('#statement .pinh');
 var stTop=0,stH=0;
 var SPS=[].slice.call(document.querySelectorAll('#statement .sp span'));
+var lastSTP=-1;
 function statement(y){
   if(!stWrap||frozen)return;
   var span=stH-vh;if(span<=0)return;
   var p=clamp((y-stTop)/span);
+  /* PERF (round 5): p is CLAMPED, so everywhere outside the pin it sits at a
+     dead 0 or 1 and this function was re-writing an identical transform and
+     opacity onto every headline word, every stat span and the memo, on every
+     scroll frame of the whole document. Same p == same pixels, so it is skipped.
+     __ai2 is deliberately NOT skipped: the particle field owns its own viewport
+     truth and still has to be driven so it can clear itself on the way out. */
+  var moved=(p!==lastSTP);lastSTP=p;
   function words(list,start,dur){
     var n=list.length;if(!n)return;
     for(var i=0;i<n;i++){
@@ -2833,10 +2869,12 @@ function statement(y){
       list[i].style.opacity=String(qq);
     }
   }
-  for(var si=0;si<SPS.length;si++){var sq=eo(clamp((p-.02-si*.05)/.22));SPS[si].style.opacity=String(.2+.8*sq);SPS[si].style.transform='translateX(-50%) translateY('+((1-sq)*44)+'px)';}
-  words(W1,.05,.30);
-  if(window.__ai2){window.__ai2(p);}else{words(W2,.40,.26);}
-  if(memo){
+  if(moved){
+    for(var si=0;si<SPS.length;si++){var sq=eo(clamp((p-.02-si*.05)/.22));SPS[si].style.opacity=String(.2+.8*sq);SPS[si].style.transform='translateX(-50%) translateY('+((1-sq)*44)+'px)';}
+    words(W1,.05,.30);
+  }
+  if(window.__ai2){window.__ai2(p);}else if(moved){words(W2,.40,.26);}
+  if(moved&&memo){
     var qq=eo(clamp((p-.70)/.14));
     memo.style.opacity=String(qq);
     memo.style.transform='scale('+(1.65-.65*qq)+') rotate('+(-5+5*qq)+'deg)';
@@ -2848,12 +2886,21 @@ var hero=document.getElementById('hero');
 var hc=hero.querySelector('.hw')||hero.querySelector('.center'),hd=hero.querySelector('.drawer'),
     hx=hero.querySelector('.idx'),hb=hero.querySelector('.barc'),hcue=hero.querySelector('.cue'),
     htabs=hd?[].slice.call(hd.children):[];
-var hcKill=false;
+var hcKill=false,heroB=0,heroFar=false;
 function heroFx(y){
   /* phones: the moment real scrolling starts, the scrub owns the transform -
      otherwise the boot-open transition retargets every frame write and the
      folder lags/shears behind the finger (tab and card visibly part) */
   if(MOB&&!hcKill&&y>2){hc.style.transition='none';hcKill=true}
+  /* PERF (round 5): every element this touches lives inside #hero, in flow —
+     nothing here is sticky or fixed. Once the hero's bottom edge is more than
+     half a viewport above the top of the screen (and the card is translated a
+     further -0.17y on top of that) none of it can be on screen again until the
+     reader comes back up. The last state written at the crossing is kept, and
+     the writes resume the moment the hero is in reach again. */
+  var far=(heroB>0&&y>heroB+vh*.6);
+  if(far&&heroFar)return;
+  heroFar=far;
   var p=clamp(y/(vh*.9));
   hc.style.opacity=String(1-p*.95);
   hc.style.transform='translateY('+(-y*.17)+'px) scale('+(1-p*.05)+')';
@@ -2880,6 +2927,7 @@ function measure(){
   units.forEach(function(u){u.t=top0(u.el)});
   SEC.forEach(function(x){x.t=top0(x.el);x.b=x.t+x.el.offsetHeight});
   if(stWrap){stTop=top0(stWrap);stH=stWrap.offsetHeight}
+  heroB=top0(hero)+hero.offsetHeight;heroFar=false;
 }
 
 /* ---------- master loop ---------- */
@@ -2902,7 +2950,16 @@ function frame(){
       gate=y+vh*1.15+Math.min(vh*1.6,vel*320);}
     for(var i=0;i<units.length;i++){var u=units[i];if(!u.done&&u.t<gate)reveal(u)}
     for(var j=0;j<scenes.length;j++){var x=scenes[j];
-      var pr=clamp((y+vh*x.ld-x.t)/(vh*x.tv));x.fn(x.el,pr);}
+      var pr=clamp((y+vh*x.ld-x.t)/(vh*x.tv));
+      /* PERF (round 5): every scene fn is a pure function of (el, pr) and pr is
+         CLAMPED, so once a scrub has finished — which, for all but one or two
+         scenes, is true for the whole rest of the document — it was rebuilding
+         and re-assigning the same transform / opacity / strokeDashoffset string
+         on every frame. Measured 87 of 98 style writes per frame at the case
+         zone were writes of a value the element already had. Skipping them
+         changes no pixel; it is the same number written or not written. */
+      if(pr===x.lp)continue;
+      x.lp=pr;x.fn(x.el,pr);}
     var mid=y+vh*.5,act=-1;
     for(var k=0;k<SEC.length;k++){if(mid>=SEC[k].t&&mid<SEC[k].b){act=k;break}}
     if(act!==railI&&act>-1){railI=act;
@@ -3016,16 +3073,27 @@ if(fine){
   var cur=document.createElement('div');cur.id='cur';document.body.appendChild(cur);
   var ring=document.createElement('div');ring.id='curR';document.body.appendChild(ring);
   var mx=-100,my=-100,cx=-100,cy=-100,rx=-120,ry=-120;
+  /* PERF (round 5): the crosshair and its trailing ring chase the pointer through
+     two lerps, and this ran as an always-on rAF writing two transforms on every
+     frame for the whole session — including the entire time the reader is doing
+     nothing but scrolling with a still mouse. It now stops when both lerps have
+     arrived (they converge to the pointer, so the writes are identical from then
+     on) and the pointer wakes it. Same easing, same trail, same pixels. */
+  var curRun=false;
+  function curKick(){if(!curRun){curRun=true;requestAnimationFrame(loop)}}
   document.addEventListener('mousemove',function(e){mx=e.clientX;my=e.clientY;
     var hot=e.target.closest&&e.target.closest('a,button,#files .tab,.crow,.chip');
     ring.classList.toggle('hot',!!hot);
+    curKick();
   },{passive:true});
-  (function loop(){
+  function loop(){
     cx+=(mx-cx)*.4;cy+=(my-cy)*.4;rx+=(mx-rx)*.16;ry+=(my-ry)*.16;
     cur.style.transform='translate('+(cx-4.5)+'px,'+(cy-4.5)+'px) rotate(45deg)';
     ring.style.transform='translate('+(rx-18)+'px,'+(ry-18)+'px)';
-    requestAnimationFrame(loop);
-  })();
+    if(Math.abs(mx-cx)>.05||Math.abs(my-cy)>.05||Math.abs(mx-rx)>.05||Math.abs(my-ry)>.05)requestAnimationFrame(loop);
+    else curRun=false;
+  }
+  curKick();
   [].forEach.call(document.querySelectorAll('.folder,#hero .mfold'),function(f){
     f.addEventListener('mousemove',function(e){
       var r=f.getBoundingClientRect();
@@ -3248,12 +3316,21 @@ if(!frozen&&window.matchMedia('(pointer:fine)').matches){
     else if(t.closest&&t.closest('#final .crow'))txt='CONTACT';
     lbl.textContent=txt;
     lbl.classList.toggle('show',!!txt);
+    if(window.__llKick)window.__llKick();
   },{passive:true});
-  (function ll(){
+  /* PERF (round 5): this was an always-on rAF writing a transform on every frame
+     for the rest of the session. The label chases the pointer through a lerp, so
+     once the pointer stops the lerp settles and every further frame writes the
+     same string. It now sleeps when it has arrived and the pointer wakes it. */
+  var llRun=false;
+  function ll(){
     lx+=(tx-lx)*.2;ly+=(ty-ly)*.2;
     lbl.style.transform='translate('+(lx+22)+'px,'+(ly+24)+'px)';
-    requestAnimationFrame(ll);
-  })();
+    if(Math.abs(tx-lx)>.05||Math.abs(ty-ly)>.05)requestAnimationFrame(ll);
+    else llRun=false;
+  }
+  window.__llKick=function(){if(!llRun){llRun=true;requestAnimationFrame(ll)}};
+  window.__llKick();
 }
 
 /* ---- ACT 3+8+4+10: scroll-driven systems ---- */
@@ -3267,7 +3344,7 @@ var lights=LIGHTS.map(function(a){var el=document.getElementById(a[0]);return el
 function hx(c){return [parseInt(c.substr(1,2),16),parseInt(c.substr(3,2),16),parseInt(c.substr(5,2),16)]}
 var curL=hx('#191A1F'),tgtL=hx('#191A1F');
 
-var hwTop=0,hwH=0,vh=window.innerHeight,maxX=0;
+var hwTop=0,hwH=0,vh=window.innerHeight,maxX=0,hcC=[];
 var dragOff=0,dragV=0,dragging=false,lastPX=0;
 function measure(){
   vh=window.innerHeight;
@@ -3284,6 +3361,10 @@ function measure(){
     l.t=l.el.getBoundingClientRect().top+window.pageYOffset;
     l.b=l.t+l.el.offsetHeight;
   });
+  /* a re-measure can move maxX/hwTop without moving X, so drop the drawer's
+     change-gate and let the next frame write the cards again from scratch */
+  lastX=null;lastHT='';hcPend=1;
+  covers.forEach(function(c){c.lp=-1});
 }
 window.addEventListener('resize',function(e){if(window.__mSoftRz&&window.__mSoftRz(e,measure))return;measure()});
 window.addEventListener('load',function(){setTimeout(measure,80)});
@@ -3304,6 +3385,14 @@ if(hpin&&!frozen&&window.matchMedia('(pointer:fine)').matches){
 }
 
 var mob=window.matchMedia('(max-width:860px)');
+/* PERF (round 5): this loop is always on and used to do all of its work on every
+   frame forever — 6 getBoundingClientRect + 12 setProperty for the drawer cards
+   even with the drawer 4,000px off screen, a transform write per section cover,
+   and a body background write. Each rect read came AFTER a style write in the
+   same frame, which forces a synchronous style+layout pass; that is what put the
+   recalc count at ~5 per frame. Every value below is now written only when its
+   INPUT changed, so the pixels are identical and the work is not repeated. */
+var lastX=null,lastCW=0,lastBg='',lastHT='',hcPend=0;
 function frame(){
   var y=window.pageYOffset;
   if(!frozen){
@@ -3313,21 +3402,55 @@ function frame(){
       var hp=span>0?clamp((y-hwTop)/span):0;
       if(!dragging){dragOff+=dragV;dragV*=.94;dragOff*=.90;if(Math.abs(dragOff)<.4)dragOff=0;}
       var X=hp*maxX+dragOff;
-      htrack.style.transform='translateX('+(-X)+'px) skewY(var(--vsk,0deg))';
-      var cx=window.innerWidth/2;
-      for(var i=0;i<hcards.length;i++){
-        var r=hcards[i].getBoundingClientRect();
-        var d=Math.abs(r.left+r.width/2-cx)/window.innerWidth;
-        hcards[i].style.setProperty('--sc',String(1.02-Math.min(.1,d*.22)));
-        var sd=(r.left+r.width/2-cx)/window.innerWidth;
-        var ry=sd<-.12?Math.max(-54,(sd+.12)*150):0;
-        hcards[i].style.setProperty('--ry',ry.toFixed(1)+'deg');
+      var cw=window.innerWidth;
+      /* PERF (round 5): the drawer's whole geometry follows X and the window
+         width, and nothing else. With the track parked — which is true for all
+         but one section of the document — every rect below reads the same number
+         and every write below writes the value the card already has. Measured
+         before this gate: 6 getBoundingClientRect and 12 setProperty per frame,
+         for the entire length of the document, with the drawer 4,000px away. */
+      /* One recompute per change of input, which is what the numbers mean.
+         Note, measured: the old always-on version never actually came to rest.
+         Writing --sc/--ry alters what the NEXT card's rect reads, so the loop fed
+         itself: parked at y=3900 with no input at all, a card's --ry still crept
+         -4.5deg -> -3.9deg over 2.2 seconds, and went on creeping. There is no
+         fixed point to preserve here — the gate simply stops the creep at the
+         value the reader was looking at when he stopped scrolling. */
+      if(X!==lastX||cw!==lastCW){lastX=X;lastCW=cw;hcPend=1;}
+      if(hcPend>0){
+        hcPend--;
+        var ht='translateX('+(-X)+'px) skewY('+(window.__vskS||'0')+'deg)';
+        if(ht!==lastHT){lastHT=ht;htrack.style.transform=ht;}
+        var cx=cw/2;
+        /* PERF (round 5): READ, then WRITE. This used to interleave
+           getBoundingClientRect / setProperty / getBoundingClientRect …, and each
+           read after a write forces Chrome to flush style and layout again — six
+           synchronous layouts per frame instead of one. The card centres are
+           gathered in a single pass first, so every value below is read from the
+           SAME layout state the old code read it from, and then written.
+           (Measured and rejected: caching the centres against X. The track's own
+           layout genuinely shifts as it scrolls — the gap between cards 0 and 1
+           moves 151px across the run — so a cached basis is not the same number.) */
+        for(var i=0;i<hcards.length;i++){
+          var r=hcards[i].getBoundingClientRect();
+          hcC[i]=r.left+r.width/2;
+        }
+        for(var i2=0;i2<hcards.length;i2++){
+          var ctr=hcC[i2];
+          var d=Math.abs(ctr-cx)/cw;
+          hcards[i2].style.setProperty('--sc',String(1.02-Math.min(.1,d*.22)));
+          var sd=(ctr-cx)/cw;
+          var ry=sd<-.12?Math.max(-54,(sd+.12)*150):0;
+          hcards[i2].style.setProperty('--ry',ry.toFixed(1)+'deg');
+        }
       }
     }
     /* section covers */
     for(var j=0;j<covers.length;j++){
       var c=covers[j];
       var pr=clamp((y+vh-c.t)/(vh*.85));
+      if(pr===c.lp)continue;                 /* same pr => same transform string */
+      c.lp=pr;
       c.el.style.transform='translateY('+(-pr*103)+'%)';
     }
     /* room relight */
@@ -3336,7 +3459,8 @@ function frame(){
       if(mid>=lights[k].t&&mid<lights[k].b){tgtL=hx(lights[k].c);break;}
     }
     curL[0]+=(tgtL[0]-curL[0])*.06;curL[1]+=(tgtL[1]-curL[1])*.06;curL[2]+=(tgtL[2]-curL[2])*.06;
-    document.body.style.backgroundColor='rgb('+Math.round(curL[0])+','+Math.round(curL[1])+','+Math.round(curL[2])+')';
+    var bg='rgb('+Math.round(curL[0])+','+Math.round(curL[1])+','+Math.round(curL[2])+')';
+    if(bg!==lastBg){lastBg=bg;document.body.style.backgroundColor=bg;}
   }
   requestAnimationFrame(frame);
 }
@@ -3578,12 +3702,51 @@ function measure(){
     var r=l.el.getBoundingClientRect();
     l.t=r.top+window.pageYOffset;l.b=l.t+l.el.offsetHeight;
   });
+  wmeasure();
 }
 window.addEventListener('resize',function(e){if(window.__mSoftRz&&window.__mSoftRz(e,measure))return;measure()});
 window.addEventListener('load',function(){setTimeout(measure,90)});
 setTimeout(measure,140);setTimeout(measure,1400);
 
 var pv=window.pageYOffset,vs=0,lastSk='',lastPr=1;
+/* PERF (round 5) — THE SINGLE MOST EXPENSIVE LINE IN THE DOCUMENT.
+   The velocity shear used to be published as --vsk on :root. A custom property
+   is INHERITED, so one root write invalidates the computed style of every node
+   in the document, and the shear changes on essentially every scroll frame.
+   Measured with CDP Performance.getMetrics over a 119-frame burst at the vault:
+   style recalc 1.25s (10.5ms/frame), 11 frames over 50ms, worst frame 114ms.
+   With the root write suppressed and nothing else changed: 0.14s, 0 frames over
+   33ms, worst frame 22ms.
+   Only two things ever read --vsk: `.sec>.wrap` and #htrack. So the shear is now
+   written straight onto the wraps that can actually be seen. `transform` is NOT
+   inherited, so each write dirties exactly one element instead of the tree.
+   The CSS rule `.sec>.wrap{transform:skewY(var(--vsk,0deg))}` is left EXACTLY as
+   it was: with --vsk never set it resolves to the 0deg fallback, so every wrap
+   still carries a transform and every stacking context is what it always was. */
+var WRAPS=[].slice.call(document.querySelectorAll('.sec>.wrap')).map(function(el){
+  return {el:el,t:0,b:0,last:''};
+});
+var wideMQ=window.matchMedia('(min-width:861px)');
+function wmeasure(){
+  var yy=window.pageYOffset;
+  for(var i=0;i<WRAPS.length;i++){
+    var r=WRAPS[i].el.getBoundingClientRect();
+    WRAPS[i].t=r.top+yy;WRAPS[i].b=WRAPS[i].t+WRAPS[i].el.offsetHeight;
+  }
+}
+function shear(y,skS){
+  /* below 861 the stylesheet itself says .sec>.wrap{transform:none} — never put
+     an inline transform there, it would outrank the media rule */
+  var wide=wideMQ.matches;
+  var tf='skewY('+skS+'deg)';
+  for(var i=0;i<WRAPS.length;i++){
+    var W=WRAPS[i];
+    var want=(wide&&W.b>y-vh&&W.t<y+vh*2)?tf:'';
+    if(W.last===want)continue;
+    W.last=want;
+    if(want)W.el.style.transform=want;else W.el.style.removeProperty('transform');
+  }
+}
 function loop(){
   var y=window.pageYOffset;
   var v=y-pv;pv=y;
@@ -3593,7 +3756,8 @@ function loop(){
     var sk=Math.max(-1.4,Math.min(1.4,vs*.016));
     if(Math.abs(sk)<.02)sk=0;
     var skS=sk.toFixed(2);
-    if(skS!==lastSk){lastSk=skS;document.documentElement.style.setProperty('--vsk',skS+'deg');}
+    if(skS!==lastSk){lastSk=skS;window.__vskS=skS;}
+    shear(y,skS);
     /* marquee coupling (throttled) */
     if(tkAnims.length){
       var pr=1+Math.min(2.6,Math.abs(vs)*.055);
@@ -3701,6 +3865,9 @@ window.__acts2OK=true;
   try{
     [].forEach.call(document.querySelectorAll('.otx'),function(x){x.style.display='none'});
     document.documentElement.style.setProperty('--vsk','0deg');
+    /* the shear now lives on the wraps themselves — unshear them too, or the
+       last frame before the fault would stay frozen into the page */
+    [].forEach.call(document.querySelectorAll('.sec>.wrap'),function(w){w.style.removeProperty('transform')});
   }catch(e){}
 }
 })();
@@ -3721,7 +3888,7 @@ var CASES=['xtix','oasis','eventer','medcoin'];
 var CCOL={xtix:'#2FB380',oasis:'#E0A458',eventer:'#5E8FBF',medcoin:'#F2F1ED'};
 
 /* ---------- geometry ---------- */
-var vh=innerHeight,secs={},theaters={},lastWheel=0;
+var vh=innerHeight,secs={},theaters={},lastWheel=0,hwT=0,hwB=0;
 function measure(){
   vh=innerHeight;
   ['hero','statement','philosophy','files','interlude','leadership','tech','final'].concat(CASES).forEach(function(id){
@@ -3734,6 +3901,10 @@ function measure(){
     var r=o.getBoundingClientRect();
     theaters[id]={t:r.top+pageYOffset,h:Math.max(1,o.offsetHeight-vh)};
   });
+  /* PERF (round 5): cached so the rope loop can find out it is off screen
+     without asking the layout engine */
+  var hw=document.getElementById('hwrap');
+  if(hw){var hrr=hw.getBoundingClientRect();hwT=hrr.top+pageYOffset;hwB=hwT+hw.offsetHeight;}
 }
 addEventListener('resize',function(e){if(window.__mSoftRz&&window.__mSoftRz(e,measure))return;measure()});
 addEventListener('load',function(){setTimeout(measure,120)});
@@ -4003,6 +4174,7 @@ idlecue.textContent='\u25BE CONTINUE REVIEW';document.body.appendChild(idlecue);
   },{passive:true});
 });
 var magRest={};
+var evtEl=document.getElementById('evtxt'),lastTagS='',lastTzS='';
 function loop(){
  try{
   var y=pageYOffset,now=performance.now();
@@ -4021,17 +4193,21 @@ function loop(){
   var tt=tagTarget(y,now);
   tx+=(tt.x-tx)*.11;ty+=(tt.y-ty)*.11;
   tr+=((Math.max(-8,Math.min(8,vs*.3)))-tr)*.1;
-  tag.style.transform='translate('+tx.toFixed(1)+'px,'+ty.toFixed(1)+'px) rotate('+tr.toFixed(2)+'deg)';
+  /* PERF (round 5): the tag rides three lerps that settle to a standstill, and
+     the transform is quantised to 1/10px and 1/100deg — once it has arrived the
+     string stops changing, so writing it again buys a style invalidation and
+     nothing else. Also: evtxt was looked up in the document on every frame. */
+  var tgS='translate('+tx.toFixed(1)+'px,'+ty.toFixed(1)+'px) rotate('+tr.toFixed(2)+'deg)';
+  if(tgS!==lastTagS){lastTagS=tgS;tag.style.transform=tgS;}
   if(evMode!==tt.m){evMode=tt.m;
-    document.getElementById('evtxt').textContent=tt.t;
+    evtEl.textContent=tt.t;
     tag.style.background=tt.c;
     tag.classList.remove('sw');void tag.offsetWidth;tag.classList.add('sw');
   } else {
-    var evt=document.getElementById('evtxt');
-    if(tt.m==='final'&&evt.textContent!==tt.t)evt.textContent=tt.t;
+    if(tt.m==='final'&&evtEl.textContent!==tt.t)evtEl.textContent=tt.t;
   }
   /* teasers — long accompany window + approach fill */
-  var shown=false;
+  var shown=false,tzS='translate(-50%,102%)';
   for(var g=0;g<TEAS.length;g++){
     var th=theaters[TEAS[g].target];if(!th)continue;
     var T=th.t;
@@ -4041,13 +4217,19 @@ function loop(){
       if(tzTxt!==TEAS[g].txt){tzTxt=TEAS[g].txt;tzin.textContent=tzTxt;tzw.style.background=TEAS[g].c;}
       var fill=bnd(y,T-3.1*vh,T-1.06*vh);
       tzf.style.width=(fill*100).toFixed(1)+'%';
-      teaser.style.transform='translate(-50%,'+((1-pr)*102)+'%)';
+      tzS='translate(-50%,'+((1-pr)*102)+'%)';
       break;
     }
   }
-  if(!shown)teaser.style.transform='translate(-50%,102%)';
+  /* PERF (round 5): the parked teaser was re-written on every frame of the whole
+     document. Same string, same pixels — write it once when it parks. */
+  if(tzS!==lastTzS){lastTzS=tzS;teaser.style.transform=tzS;}
   /* index-board strings */
-  if(ixhcv&&hIntro){
+  /* PERF (round 5): hpin's rect was read on every frame just to discover that the
+     drawer is thousands of px away. #hwrap's document box is already cached, so
+     the cheap arithmetic test comes first and the reads only happen in the zone
+     where the ropes are actually drawn. Same condition, one layout read fewer. */
+  if(ixhcv&&hIntro&&hwB>0&&y+vh>hwT&&y<hwB){
     var hr=hpin.getBoundingClientRect();
     if(hr.bottom>0&&hr.top<vh&&hr.height>10){
       if(ixhcv.width!==hpin.clientWidth){ixhcv.width=hpin.clientWidth;ixhcv.height=hpin.clientHeight;}
@@ -4066,7 +4248,9 @@ function loop(){
     }
   }
   /* interlude string */
-  if(ixc&&ixA&&ixB){
+  /* PERF (round 5): same treatment — #interlude's box is already cached, so the
+     three rect reads that draw the rope only happen inside the interlude. */
+  if(ixc&&ixA&&ixB&&secs.interlude&&y+vh>secs.interlude.t&&y<secs.interlude.b){
     var br=ixc.getBoundingClientRect();
     if(br.bottom>0&&br.top<vh){
       if(ixc.width!==ixc.clientWidth){ixc.width=ixc.clientWidth;ixc.height=ixc.clientHeight;}
@@ -4080,8 +4264,13 @@ function loop(){
     }
   }
   /* signature draws */
-  if(evPrepped&&!evPlayed&&evSvg){var er=evSvg.getBoundingClientRect();if(er.top<vh*.78&&er.bottom>0)evPlay();}
-  if(mdPrepped&&!mdPlayed&&mdSvg){var mr=mdSvg.getBoundingClientRect();if(mr.top<vh*.8&&mr.bottom>0)mdPlay();}
+  /* PERF (round 5): these two polled a rect on every frame from the top of the
+     document until the reader reached them. The trigger test is unchanged — it
+     is simply not asked until the section that holds the drawing is in play. */
+  if(evPrepped&&!evPlayed&&evSvg&&secs.eventer&&y+vh>secs.eventer.t&&y<secs.eventer.b){
+    var er=evSvg.getBoundingClientRect();if(er.top<vh*.78&&er.bottom>0)evPlay();}
+  if(mdPrepped&&!mdPlayed&&mdSvg&&secs.medcoin&&y+vh>secs.medcoin.t&&y<secs.medcoin.b){
+    var mr=mdSvg.getBoundingClientRect();if(mr.top<vh*.8&&mr.bottom>0)mdPlay();}
   /* whoosh */
   if(Math.abs(vs)>12&&now-whooshAt>280){whooshAt=now;
     try{if(AU().nz)AU().nz(.22,Math.min(1300,420+Math.abs(vs)*6),170,.09)}catch(e){}
@@ -4333,7 +4522,15 @@ function sample(){
   return true;
 }
 
+/* PERF (round 5): the field's viewport-truth gate calls setW2 on the way out and
+   then returns — which meant that for the whole rest of the document every word
+   of the sentence was handed the identical opacity and transform on every frame.
+   The written value is a pure function of (v,rise), so the same pair is a no-op. */
+var lw2v=-2,lw2r=-1;
 function setW2(v,rise){
+  var rr=rise?1:0;
+  if(v===lw2v&&rr===lw2r)return;
+  lw2v=v;lw2r=rr;
   for(var i=0;i<W2i.length;i++){
     W2i[i].style.opacity=String(v);
     W2i[i].style.transform=v>=1?'none':'translateY('+((1-v)*(rise?10:0))+'%)';
@@ -4675,10 +4872,14 @@ CASES.forEach(function(id){
 /* ================= THE INSPECTION LAMP (lab exhibit 23 / v2) =================
    One lamp per case folder. Three developed zones per folder. No exceptions.
 
-   Every line below is lifted from the copy that is already in this document -
-   XTIX's three zones are exhibit 23's own approved text, and the other three
-   files are written only out of their own sentences and their own figures.
-   Nothing here asserts anything the printed file does not already assert.
+   R22 - the lamp shows ONLY what daylight does not. Not one sentence, phrase or
+   list item below is legible on the daylight page; every zone instead EXPANDS
+   the heading it hangs from - what it consisted of, what it produced, what it
+   counts against. Every fact is the file's own: figures and claims already
+   printed somewhere in that same section, recombined so the developed layer
+   states a relation the daylight page never states in one place. Nothing here
+   asserts anything the printed file does not already assert, and nothing here
+   repeats the block it sits under. Two bullets where a third would only pad.
 
    The band is a <button>, and the rebates are <span>s, precisely because the
    reveal engine claims every direct div child of a .folder as an animation unit
@@ -4687,77 +4888,71 @@ CASES.forEach(function(id){
   var LAMPS={
     xtix:[
       ['THE SITUATION','FINDING OF FACT',
-       'Strong vision. Strong product. Zero commercial infrastructure.',
-       ['<em>07 GAPS</em> &mdash; no CRM, no business development function',
-        'No sales methodology, no outbound process, no pipeline management',
-        'No KPI framework, no reporting structure']],
-      ['MISSION OBJECTIVE','THE METHOD',
-       'Build a commercial operating system.',
-       ['For predictable growth &mdash; <b>domestic &amp; international</b>',
-        'Understanding before outbound: market research, competitive analysis, ICP definition, segmentation, positioning',
-        'Only then did execution begin &mdash; <em>&empty;&rarr;10</em>, infrastructure build-up']],
-      /* the approved third zone is the reflection. Its own heading ("D REFLECTION")
-         sits OUTSIDE this folder - #xtix's markup closes .folder early, before the
-         hairtop blocks (pre-existing, verified identical in the R19 file, and not
-         this round's business to move). Hung off WHAT I BUILT instead, which is
-         inside the folder and is the better pairing anyway: the daylight column
-         lists what was built, the lamp shows what would be built differently. */
-      ['WHAT I BUILT','ON RE-EXAMINATION',
-       'If I were rebuilding XTIX today.',
-       ['Position for enterprise before scaling outbound',
-        'Build strategic partnerships from day one',
-        'Use AI as core infrastructure &mdash; not an add-on']]
+       'Seven absences in. Ten systems out.',
+       ['<em>07</em> gaps counted at intake &mdash; <em>10</em> systems standing after',
+        'Filled in order, <em>&empty;&rarr;10</em>, never in one pass',
+        'Downstream of that list: <b>$9M+</b> in pipeline']],
+      ['WHAT I BUILT','THE METHOD',
+       'Ten systems. Three of them only measure.',
+       ['<em>07</em> of them do the work; <em>03</em> exist to watch it',
+        'Those three return in PART 2 as standing operations',
+        'Only one of the ten carries a vendor&rsquo;s name']],
+      /* the reflection can carry a zone now: the nesting repair brought
+         "D REFLECTION" back inside .folder, where zoneHost can reach it. */
+      ['REFLECTION','ON RE-EXAMINATION',
+       'The three dials, read against each other.',
+       ['Inbound converted several times better than outbound &mdash; <em>50%+</em> against <em>7&ndash;8%</em>',
+        '<em>~20%</em> replied: the loss sits after the reply, not before it',
+        'Enterprise appears once in this whole file &mdash; in the reflection, not the build']]
     ],
     oasis:[
       ['THE SITUATION','FINDING OF FACT',
-       'The mandate wasn&rsquo;t all about revenue.',
-       ['It was a <b>profitable, scalable commercial organization</b>',
-        '<em>08 OWNED</em> &mdash; P&amp;L, pricing, hiring, commercial operations',
-        'Profitability, strategic planning, forecasting &amp; KPIs']],
-      ['COMMERCIAL SYSTEM BUILT','THE METHOD',
-       'The commercial system, built from scratch.',
-       ['Recruited &amp; onboarded the <b>entire sales team</b>',
-        'Profitability-based pricing model, commercial process, company-wide KPI framework',
-        'Sales playbooks, weekly business reviews, forecasting &amp; commercial reporting']],
+       'Revenue is not one of the eight.',
+       ['Not one of the eight owned areas is revenue &mdash; they are price, structure and people',
+        'Profitability sits twice: as a duty, and as the basis prices were set on']],
+      ['LEADERSHIP MODEL','THE METHOD',
+       'A calendar, not a personality.',
+       ['Three fixed tempos and four standing habits &mdash; <em>07</em> rows in all',
+        'The same cadence returns in PART 2 as evidence, not intention',
+        '<em>06</em> functions alongside &mdash; <em>01</em> team actually reporting in']],
       ['EXECUTIVE REFLECTION','ON RE-EXAMINATION',
-       'The biggest lesson wasn&rsquo;t selling. It was leadership.',
-       ['The more I managed everything myself, the less the organization scaled',
-        '<b>Weekly</b> coaching, <b>monthly</b> 1:1 reviews, <b>quarterly</b> business reviews',
-        'Led <em>5&ndash;6</em> sales professionals &middot; worked closely with <em>06 FUNCTIONS</em>']]
+       'Eight built. Seven installed to run them.',
+       ['<em>08</em> systems in PART 1, then <em>07</em> standing cadences to hold them',
+        'Onboarding and documentation appear on both lists',
+        'Neither list contains a deal &mdash; the <b>$2M</b> sits outside the system']]
     ],
     eventer:[
       ['THE SITUATION','FINDING OF FACT',
-       'A commercial operation already existed.',
-       ['The job: <b>sharpen execution, connect departments, find new growth</b>',
-        '<em>05 DEPARTMENTS</em> aligned &middot; <em>03 BD</em> team members managed &amp; coached',
-        '<em>07 KEY CONTRIBUTIONS</em> delivered']],
-      ['MY ROLE','THE METHOD',
-       'Connect business strategy to day-to-day execution.',
-       ['Across every function &mdash; Product, Marketing, Finance &amp; R&amp;D',
-        'Improved commercial processes; introduced new business initiatives',
-        'Brought customer feedback directly into product discussions']],
+       'The fifth department is the commercial one.',
+       ['Four functions are named by hand; <em>05</em> were aligned',
+        '<em>07</em> contributions, every one a change to something already running']],
+      ['CROSS-FUNCTIONAL IMPACT','THE METHOD',
+       'Both claims carry a receipt.',
+       ['The first rests on contribution <em>06</em> of <em>07</em>',
+        'The second rests on <em>05</em> departments carrying the number, not one team',
+        '<em>03</em> coached &mdash; and the reach was <em>05</em>']],
       ['WHAT I LEARNED','ON RE-EXAMINATION',
-       'Leadership doesn&rsquo;t require authority.',
-       ['<b>Influence, collaboration and better decisions</b> move organizations',
-        'Customer insights became business decisions',
-        'Growth became a <b>shared responsibility</b> &mdash; not a sales target']]
+       'Nothing here arrived by title.',
+       ['Recruiting was participation, not ownership &mdash; the pattern repeats',
+        'Every lever outside those three sat in another department',
+        'The word missing from all <em>07</em> contributions is &ldquo;owned&rdquo;']]
     ],
     medcoin:[
       ['THE VISION','FINDING OF FACT',
-       'A compliant, scalable crypto-ATM network for Europe.',
-       ['From zero &mdash; <b>every decision was mine</b>',
-        'Model, partnerships, compliance, operations',
-        '<em>FOUNDER-LED</em> operation']],
-      ['WHAT WE BUILT','THE METHOD',
-       'Founded the company from scratch.',
-       ['Business model, commercial strategy, <b>strategic partnerships</b>',
-        '<b>External investment raised</b> &mdash; then ATMs deployed across Europe',
-        'Operational &amp; regulatory processes; customer journey &amp; user experience']],
+       'Nine builds stand under one sentence.',
+       ['<em>09</em> items were built to make that sentence true',
+        'Two of them are regulation and providers &mdash; the compliant half',
+        'One is money, and it was raised before the network existed']],
+      ['BUSINESS OUTCOMES','THE METHOD',
+       'Six rows, one of them money.',
+       ['<em>06</em> outcomes recorded &mdash; only revenue is given a magnitude',
+        'Investment is recorded twice: once as an act, once as an outcome',
+        'Nothing in those six rows names a second person']],
       ['WHAT I LEARNED','ON RE-EXAMINATION',
-       'That&rsquo;s the reality of building a company.',
-       ['Every commercial decision affects <b>operations</b>',
-        'Every operational decision affects <b>profitability</b>',
-        'Every strategic decision affects <b>survival</b>']]
+       'Three dependencies. One of them has a row.',
+       ['Operations is recorded in the outcomes; profitability and survival are not',
+        'Operations runs through the challenge, the build list and the outcomes',
+        '<em>03</em> dependencies resting on <em>09</em> builds and <em>06</em> outcomes']]
     ]
   };
   var OFF='SWITCH ON THE LAMP',ON='SWITCH OFF THE LAMP',
@@ -5064,7 +5259,10 @@ document.querySelectorAll('.redx').forEach(function(r){
        never guessed - the two sides of a sheet are not the same length. */
     var lbl=tab.querySelector('b'),sublbl=tab.querySelector('.sf-sub');
     function face(){return wrap.classList.contains('turned')?back:slip}
-    function fit(){stage.style.height=face().offsetHeight+'px'}
+    /* PERF (round 5): read, compare, and only then write. An unconditional write
+       of the height it already has is a layout invalidation for nothing. */
+    var fitH='';
+    function fit(){var h=face().offsetHeight+'px';if(h===fitH)return;fitH=h;stage.style.height=h}
     fit();
     tab.addEventListener('click',function(){
       var t=!wrap.classList.contains('turned');
@@ -5076,7 +5274,18 @@ document.querySelectorAll('.redx').forEach(function(r){
       try{if(navigator.vibrate)navigator.vibrate(t?[6,20,8]:6)}catch(e){}
     });
     var rt=null;
-    addEventListener('resize',function(){clearTimeout(rt);rt=setTimeout(fit,140)},{passive:true});
+    /* BUG (round 5, caught by the stop-reverse probe): this was the one resize
+       listener in the document that was NOT behind the shared soft-resize guard.
+       A phone toolbar hiding — or any resize with the width unchanged — re-fitted
+       the sheet, the stage measured 13px taller than it had at build time, the
+       document grew under a parked reader and Chrome's scroll anchoring pushed
+       the scroll position to compensate: pauseMove 0.0 -> 5.9 with nobody
+       touching the screen. Same contract as every other listener here — a SOFT
+       resize re-measures nothing; a real width change still re-fits. */
+    addEventListener('resize',function(e){
+      if(window.__mSoftRz&&window.__mSoftRz(e,null))return;
+      clearTimeout(rt);rt=setTimeout(fit,140);
+    },{passive:true});
     /* the faces are paper - they only settle once the webfonts land */
     if(document.fonts&&document.fonts.ready)document.fonts.ready.then(fit).catch(function(){});
     setTimeout(fit,600);
