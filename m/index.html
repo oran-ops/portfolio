@@ -2178,16 +2178,43 @@ footer::after{right:0}
 .case .folder.lampon .an-note{border-left-color:#E6EAF6}
 
 /* ---- THE LAMP BAND ----
-   Not a rubric in a corner: one horizontal line of instruction laid over the
-   file, in the band between the tab row and the card's first heading. Small
-   icon, explicit arrow pointing back AT it, invitation in the loudest type on
-   the card. The whole band is the control - the words are pressable too. */
-.lampband{display:flex;align-items:center;gap:0;width:100%;background:none;border:0;
-  padding:0 2px 12px;margin:0;cursor:pointer;font:inherit;text-align:left;color:inherit;
+   R21. The owner tested the live build on two devices and gave one verdict:
+   nobody notices it. Not the icon - the LABEL. So the band stops being a caption
+   floating over the card and becomes a CONTROL STRIP: its own ground, its own
+   hairline in the case colour, generous padding, an arrow scaled to match, and
+   the invitation set at headline scale (20px at 1440 / 15.5px at 390, from
+   13.5/11) - the loudest type on the card by a wide margin, because a reader who
+   never reads the instruction never presses it. The whole strip is the control -
+   the words are pressable too. */
+.lampband{display:flex;align-items:center;gap:0;width:100%;
+  padding:9px 14px;margin:0 0 11px;cursor:pointer;font:inherit;text-align:left;
+  color:var(--fc,var(--emb));border:0;border-radius:4px;
+  background:linear-gradient(180deg,rgba(255,255,255,.065),rgba(255,255,255,.018));
+  box-shadow:0 2px 10px rgba(0,0,0,.22);
   -webkit-tap-highlight-color:transparent;position:relative;z-index:4;
-  border-bottom:1px solid rgba(107,110,118,.22);transition:border-color .85s}
-.case .folder.lampon .lampband{border-bottom-color:rgba(237,239,246,.16)}
-.lampband .lamp{pointer-events:none;flex:none;display:block;line-height:0}
+  transition:background .45s,color .85s}
+.lampband:hover{background:linear-gradient(180deg,rgba(255,255,255,.105),rgba(255,255,255,.032))}
+.lampband:active{background:linear-gradient(180deg,rgba(255,255,255,.042),rgba(255,255,255,.012))}
+/* the hairline is a real ELEMENT, not a ::after, for one reason: the off-screen
+   pause writes animationPlayState onto the node - the same contract the two
+   marquees keep - and no inline style can reach a pseudo. Its currentColor is
+   var(--fc), which .lampon re-points to silver in a single declaration, so the
+   strip drains with the rest of the negative without a second rule. */
+.lampedge{position:absolute;inset:0;border:1px solid currentColor;border-radius:4px;
+  opacity:.34;pointer-events:none;z-index:2;animation:lampedge 5.4s ease-in-out infinite}
+@keyframes lampedge{0%,100%{opacity:.24}50%{opacity:.62}}
+.lampband:hover .lampedge{opacity:.85;animation:none}
+/* ONE sweep of light across the strip, the first time it enters the viewport.
+   One iteration, fill both: it ends invisible and never runs again. The page is
+   not allowed to blink at the reader - it may catch his eye exactly once. */
+.lampband::before{content:"";position:absolute;inset:0;border-radius:4px;pointer-events:none;
+  opacity:0;transform:translateX(-100%);z-index:3;
+  background:linear-gradient(100deg,transparent 34%,rgba(255,255,255,.13) 45%,
+    rgba(255,255,255,.28) 50%,rgba(255,255,255,.13) 55%,transparent 66%)}
+.lampband.swept::before{animation:lampsweep 1.25s cubic-bezier(.32,0,.2,1) 1 both}
+@keyframes lampsweep{0%{opacity:0;transform:translateX(-100%)}
+  14%{opacity:1}86%{opacity:1}100%{opacity:0;transform:translateX(100%)}}
+.lampband .lamp{pointer-events:none;flex:none;display:block;line-height:0;position:relative;z-index:2}
 .lampband .lamp svg{width:30px;height:30px;display:block;overflow:visible;filter:none!important}
 .lampband .lbody{fill:none;stroke:#9EA0A6;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;transition:stroke .6s}
 .lampband .lbulb{fill:#7A7E88;transition:fill .6s,filter .6s}
@@ -2211,21 +2238,32 @@ footer::after{right:0}
 .case .folder.lampon .lampband .ls3{stop-color:#E4EBFF;stop-opacity:0}
 .case .folder.lampon .lampband .lh1{stop-color:#F2F6FF;stop-opacity:.95}
 .case .folder.lampon .lampband .lh2{stop-color:#F2F6FF;stop-opacity:0}
-/* the arrow is the sentence "press this" - drawn on, not decorative */
-.lamparrow{flex:none;display:flex;align-items:center;gap:0;margin:0 12px 0 9px;
-  color:var(--fc,var(--emb));transition:color .7s,opacity .7s;opacity:.95}
-.lamparrow i{font-style:normal;font-size:15px;line-height:1;font-weight:700;margin-right:-2px}
-.lamparrow s{display:block;width:34px;height:2px;background:currentColor;text-decoration:none;border-radius:1px}
+/* the arrow is the sentence "press this" - drawn on, not decorative. Scaled to
+   the new headline: it has to look like it belongs to 20px type, not to 13.5px */
+.lamparrow{flex:none;display:flex;align-items:center;gap:0;margin:0 15px 0 11px;
+  color:var(--fc,var(--emb));transition:color .7s,opacity .7s;opacity:.95;position:relative;z-index:2}
+.lamparrow i{font-style:normal;font-size:19px;line-height:1;font-weight:700;margin-right:-3px}
+.lamparrow s{display:block;width:46px;height:2px;background:currentColor;text-decoration:none;border-radius:1px}
 .case .folder.lampon .lamparrow{color:#C9D3EE;opacity:.8}
 .lampband:hover .lamparrow{opacity:1}
-.lampwords{display:flex;flex-direction:column;align-items:flex-start;gap:3px;min-width:0}
-/* deliberately the loudest label in the document */
-.lampcall{font-family:'JetBrains Mono',monospace;font-weight:800;font-size:13.5px;letter-spacing:.2em;
-  color:#F2F1ED;text-align:left;transition:color .6s}
+.lampwords{display:flex;flex-direction:column;align-items:flex-start;gap:2px;min-width:0;
+  position:relative;z-index:2}
+/* deliberately, and by a long way, the loudest label in the document */
+.lampcall{font-family:'JetBrains Mono',monospace;font-weight:800;font-size:20px;letter-spacing:.11em;
+  line-height:1.02;color:#FFFFFF;text-align:left;text-shadow:0 1px 2px rgba(0,0,0,.55);
+  transition:color .6s}
 .lampband:hover .lampcall{color:#FFFFFF}
-.case .folder.lampon .lampcall{color:#EDEFF6}
-.lampsub{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:.2em;color:#9EA0A6;transition:color .6s}
+.case .folder.lampon .lampcall{color:#F4F6FB}
+/* kept, and now unmistakably subordinate: 20px against 8.5px */
+.lampsub{font-family:'JetBrains Mono',monospace;font-weight:600;font-size:8.5px;letter-spacing:.2em;
+  line-height:1.2;color:#9EA0A6;transition:color .6s}
 .case .folder.lampon .lampsub{color:#8D93A2}
+/* a switch should say which way it is thrown. Fills the right end of a strip that
+   runs the full width of the file, and turns the band into a control with state. */
+.lampstate{margin-left:auto;flex:none;position:relative;z-index:2;
+  font-family:'JetBrains Mono',monospace;font-weight:800;font-size:9px;letter-spacing:.22em;
+  border:1px solid currentColor;border-radius:999px;padding:4px 11px;opacity:.9;
+  white-space:nowrap;transition:color .85s}
 
 /* ---- THE DEVELOPED COPY ----
    Scanned in two seconds, not read: the FIRST line of a zone is the typewriter
@@ -2261,11 +2299,18 @@ body.static .devz,body.failsafe .devz{max-height:none;opacity:1;margin-top:15px;
   pointer-events:auto;transition:none}
 body.static .lampsig,body.failsafe .lampsig{max-height:48px;opacity:.85;margin-top:18px;padding-top:10px;
   border-top-color:rgba(237,239,246,.18);transition:none}
+/* the attention cue is a courtesy, never a requirement: in every frozen mode the
+   strip keeps its ground and its hairline and simply stops moving */
+body.static .lampedge,body.failsafe .lampedge{animation:none;opacity:.5}
+body.static .lampband::before,body.failsafe .lampband::before{animation:none!important;opacity:0}
+body.static .lampband .lcone,body.failsafe .lampband .lcone{animation:none}
 @media (prefers-reduced-motion:reduce){
   .devz{max-height:none;opacity:1;margin-top:15px;transform:none;pointer-events:auto;transition:none}
   .lampsig{max-height:48px;opacity:.85;margin-top:18px;padding-top:10px;
     border-top-color:rgba(237,239,246,.18);transition:none}
   .lampband .lcone{animation:none}
+  .lampedge{animation:none;opacity:.5}
+  .lampband::before{animation:none!important;opacity:0}
   .case .folder,.case .folder .vfilm,.case .folder .frail,.case .folder svg{transition:none!important}
 }
 @media (max-width:860px){
@@ -2277,13 +2322,16 @@ body.static .lampsig,body.failsafe .lampsig{max-height:48px;opacity:.85;margin-t
   .case .folder .vfilm span{display:none}
 }
 @media (max-width:680px){
-  .lampband{padding-bottom:10px}
+  /* 330px of folder to spend: icon 26 + arrow 49 + a 19-character headline at
+     15.5px/.06em = 197 -> 272 inside 308 of content box. Measured, not guessed. */
+  .lampband{padding:8px 11px;margin-bottom:10px}
   .lampband .lamp svg{width:26px;height:26px}
-  .lampcall{font-size:11px;letter-spacing:.13em}
-  .lampsub{font-size:6.5px;letter-spacing:.12em}
-  .lamparrow{margin:0 8px 0 6px}
-  .lamparrow s{width:18px}
-  .lamparrow i{font-size:12px}
+  .lampcall{font-size:15.5px;letter-spacing:.06em}
+  .lampsub{font-size:7px;letter-spacing:.13em}
+  .lamparrow{margin:0 8px 0 7px}
+  .lamparrow s{width:20px}
+  .lamparrow i{font-size:14px}
+  .lampstate{display:none}
   .dv-t{font-size:13px}
   .dv-b li{font-size:12.5px}
 }
@@ -2313,8 +2361,16 @@ body.static .lampsig,body.failsafe .lampsig{max-height:48px;opacity:.85;margin-t
    change the object's height - on demand, once, by the reader's own hand, the way
    the SEALED bars in this file already behave. That is the one honest cost and it
    is paid only by the reader who asked for it. */
-.slipflip{position:relative;max-width:420px;margin:14px 0 4px;transform:rotate(-1.2deg);
-  perspective:1500px;transition:height .5s cubic-bezier(.4,0,.2,1)}
+/* R21. Verdict from the live build: nobody notices the tab. So the sheet keeps
+   its two faces and loses its silhouette control - the turn is now a full-width
+   pressable BAR across the sheet's foot, in flow, carrying a sentence that says
+   what the reader gets. That puts a real object between the two faces and the
+   column, so the faces get their own stage: .slipflip is the sheet (tilt, width,
+   margins), .sf-stage is the JS-measured turning bed and now owns the perspective
+   the flip needs, and .sf-tab is the control, below both. */
+.slipflip{position:relative;max-width:420px;margin:14px 0 4px;transform:rotate(-1.2deg)}
+.sf-stage{position:relative;width:100%;perspective:1500px;
+  transition:height .5s cubic-bezier(.4,0,.2,1)}
 #eventer .slipflip,#medcoin .slipflip{margin-top:10px}
 .sf-in{position:relative;width:100%;height:100%;transform-style:preserve-3d;
   transition:transform .72s cubic-bezier(.4,0,.2,1)}
@@ -2346,17 +2402,33 @@ body.static .lampsig,body.failsafe .lampsig{max-height:48px;opacity:.85;margin-t
 .ms-stamp{position:absolute;right:14px;bottom:9px;font-family:'JetBrains Mono',monospace;font-weight:800;
   font-size:8px;letter-spacing:.24em;color:#3E3A31;border:2px solid #3E3A31;border-radius:4px;
   padding:3px 7px;opacity:.9;transform:rotate(-2.6deg)}
-/* the tab: the document's own file-tab silhouette, on the sheet instead of the
-   folder. Absolutely positioned - it adds nothing to the column. */
-.sf-tab{position:absolute;top:-14px;right:16px;z-index:6;display:flex;align-items:center;gap:6px;
-  height:16px;padding:0 9px;background:#CFCBBE;color:#22201C;border:0;border-radius:5px 11px 0 0;
-  cursor:pointer;font-family:'JetBrains Mono',monospace;font-weight:800;font-size:7.5px;
-  letter-spacing:.18em;white-space:nowrap;box-shadow:0 -2px 6px rgba(0,0,0,.28);
-  -webkit-tap-highlight-color:transparent;transition:background .2s,top .2s}
-.sf-tab i{font-style:normal;font-size:9px;line-height:1;color:#1E6B4B;transition:transform .5s}
+/* THE TURN CONTROL - a bar clipped to the sheet's foot, not a tab on its edge.
+   Same paper stock one shade darker, a raised bevel, a real border and a real
+   pressed state, and a sentence rather than a noun: the reader is told what he
+   gets, not what the object is called. Its label is 11px/800 against the slip's
+   own 10px value rows - the control is the largest thing on the sheet after the
+   figures themselves. It is in FLOW, so it costs exactly its own height and can
+   never overlap the ANALYST NOTE, which follows it as the next sibling. */
+.sf-tab{display:flex;align-items:center;gap:9px;width:100%;margin:7px 0 0;
+  padding:9px 13px;color:#22201C;border:1px solid rgba(34,32,28,.42);border-radius:3px;
+  background:linear-gradient(180deg,#DCD8CA,#CBC7B8);
+  cursor:pointer;font-family:'JetBrains Mono',monospace;font-weight:800;font-size:10px;
+  letter-spacing:.16em;white-space:nowrap;text-align:left;
+  box-shadow:0 6px 16px rgba(0,0,0,.30),inset 0 1px 0 rgba(255,255,255,.55);
+  -webkit-tap-highlight-color:transparent;
+  transition:background .18s,box-shadow .18s,transform .12s}
+.sf-tab b{flex:none;font-weight:800;font-size:11px;letter-spacing:.16em;color:#14120F}
+.sf-tab .sf-sub{font-weight:600;font-size:8.5px;letter-spacing:.14em;color:#5C574C;
+  min-width:0;overflow:hidden;text-overflow:ellipsis}
+.sf-tab i{font-style:normal;font-size:13px;line-height:1;color:#1E6B4B;flex:none;
+  transition:transform .5s}
 .slipflip.turned .sf-tab i{transform:rotate(180deg)}
-.slipflip.turned .sf-tab{background:#E0DCCE}
-.sf-tab:hover{background:#E4E0D3;top:-17px}
+.sf-tab .sf-go{margin-left:auto;flex:none;font-size:12px;line-height:1;color:#1E6B4B}
+.slipflip.turned .sf-tab{background:linear-gradient(180deg,#D2CEC0,#C2BEAF)}
+.sf-tab:hover{background:linear-gradient(180deg,#EDE9DA,#DAD6C6);
+  box-shadow:0 9px 20px rgba(0,0,0,.34),inset 0 1px 0 rgba(255,255,255,.72)}
+.sf-tab:active{transform:translateY(1px);
+  box-shadow:0 3px 9px rgba(0,0,0,.28),inset 0 1px 0 rgba(255,255,255,.4)}
 .sf-tab:focus-visible{outline:1px dashed rgba(242,241,237,.75);outline-offset:3px}
 @media (max-width:680px){
   /* the 420px cap stays at every width. The evidence slip has always carried it,
@@ -2365,20 +2437,31 @@ body.static .lampsig,body.failsafe .lampsig{max-height:48px;opacity:.85;margin-t
   .ms-t{font-size:10.5px;line-height:1.5}
   .mslip .es-k{min-width:56px}
   .mslip .es-row:last-of-type .es-v{padding-right:80px}
-  .sf-tab{right:10px}
+  /* the narrowest slip on a 390 phone is 296px wide, which will not hold the
+     whole sentence on one line - so it takes a second line rather than being
+     cut to an ellipsis. The promise is the point; nothing about it is optional. */
+  .sf-tab{flex-wrap:wrap;padding:8px 11px;gap:7px}
+  .sf-tab b{font-size:10px;letter-spacing:.13em}
+  /* the indent is PADDING, not margin: a 100% flex-basis resolves against the
+     content box, so a left margin would hang 22px of the second line off the
+     right edge of the control (measured: 11px of internal overflow). Padding is
+     inside the basis - box-sizing is border-box document-wide. */
+  .sf-tab .sf-sub{order:1;flex:1 0 100%;margin:2px 0 0;padding-left:22px;font-size:8px;
+    letter-spacing:.11em;white-space:normal}
 }
 /* reduced motion / static: no sheet turns in three dimensions. The same two faces
    cross-fade in place, and the height still resolves, so the reader never lands on
    a blank card. */
 @media (prefers-reduced-motion:reduce){
-  .slipflip,.sf-in,.sf-tab,.sf-tab i{transition:none}
+  .slipflip,.sf-stage,.sf-in,.sf-tab,.sf-tab i{transition:none}
   .sf-in{transform:none!important}
+  .sf-tab:active{transform:none}
   .sf-face{-webkit-backface-visibility:visible;backface-visibility:visible}
   .sf-back{transform:none;opacity:0;pointer-events:none}
   .slipflip.turned .sf-front{opacity:0;pointer-events:none}
   .slipflip.turned .sf-back{opacity:1;pointer-events:auto}
 }
-body.static .slipflip,body.static .sf-in{transition:none}
+body.static .slipflip,body.static .sf-stage,body.static .sf-in{transition:none}
 body.static .sf-in{transform:none!important}
 body.static .sf-face{-webkit-backface-visibility:visible;backface-visibility:visible}
 body.static .sf-back{transform:none;opacity:0;pointer-events:none}
@@ -4682,6 +4765,7 @@ CASES.forEach(function(id){
   /* frame numbers run up the reel in file order and stop short of 26A/27A, which
      the closing section already occupies - one reel, no two frames alike */
   var FRAMES={xtix:[11,12],oasis:[14,15],eventer:[17,18],medcoin:[20,21]};
+  var BANDS=[];   /* every strip built, for the off-screen pause + one-shot sweep */
 
   function lampSVG(uid){
     return '<svg viewBox="0 0 40 40" focusable="false" aria-hidden="true">'+
@@ -4743,19 +4827,55 @@ CASES.forEach(function(id){
     b.innerHTML='<span class="lamp">'+lampSVG(id)+'</span>'+
       '<span class="lamparrow" aria-hidden="true"><i>&#9666;</i><s></s></span>'+
       '<span class="lampwords"><span class="lampcall">'+OFF+'</span>'+
-      '<span class="lampsub">'+OFFS+'</span></span>';
+      '<span class="lampsub">'+OFFS+'</span></span>'+
+      '<span class="lampstate" aria-hidden="true">OFF</span>'+
+      '<span class="lampedge" aria-hidden="true"></span>';
     band.parentNode.insertBefore(b,band);
+    BANDS.push(b);
 
-    var call=b.querySelector('.lampcall'),sub=b.querySelector('.lampsub'),lit=false;
+    var call=b.querySelector('.lampcall'),sub=b.querySelector('.lampsub'),
+        st=b.querySelector('.lampstate'),lit=false;
     b.addEventListener('click',function(){
       lit=!lit;
       folder.classList.toggle('lampon',lit);
       call.textContent=lit?ON:OFF;
       sub.textContent=lit?ONS:OFFS;
+      if(st)st.textContent=lit?'ON':'OFF';
       b.setAttribute('aria-pressed',lit?'true':'false');
       try{if(navigator.vibrate)navigator.vibrate(lit?[8,26,10]:6)}catch(e){}
     });
   });
+
+  /* R21 - the attention cue, on the document's own terms.
+     1. NOTHING on this strip animates while it is off screen. Same contract and
+        same mechanism as the two 13,000px marquees: animationPlayState written
+        onto the node itself. Pre-paused at build time so a band far down the
+        document has never run a frame before the reader arrives.
+     2. The sweep of light fires ONCE per band, on first intersection, and the
+        flag makes sure scrolling back never re-fires it.
+     3. Reduced motion / static / failsafe: no sweep at all. */
+  if(BANDS.length&&('IntersectionObserver' in window)){
+    var frozen=matchMedia('(prefers-reduced-motion: reduce)').matches;
+    BANDS.forEach(function(el){
+      ['.lcone','.lampedge'].forEach(function(s){
+        var n=el.querySelector(s);if(n)n.style.animationPlayState='paused';
+      });
+    });
+    var lio=new IntersectionObserver(function(es){
+      es.forEach(function(e){
+        var el=e.target,on=e.isIntersecting;
+        ['.lcone','.lampedge'].forEach(function(s){
+          var n=el.querySelector(s);if(n)n.style.animationPlayState=on?'':'paused';
+        });
+        if(on&&!el.__swept){
+          el.__swept=1;
+          if(!frozen&&!document.body.classList.contains('static')&&
+             !document.body.classList.contains('failsafe'))el.classList.add('swept');
+        }
+      });
+    },{rootMargin:'120px 0px'});
+    BANDS.forEach(function(el){lio.observe(el)});
+  }
 })();
 
 })();
@@ -4907,8 +5027,13 @@ document.querySelectorAll('.redx').forEach(function(r){
 
     var wrap=document.createElement('div');wrap.className='slipflip';
     slip.parentNode.insertBefore(wrap,slip);
+    /* the stage is the turning bed: it holds the two out-of-flow faces and it is
+       the element JS measures. The control bar sits under it, in flow, so the
+       sheet's own height and the control's height stay separate numbers. */
+    var stage=document.createElement('div');stage.className='sf-stage';
+    wrap.appendChild(stage);
     var inner=document.createElement('div');inner.className='sf-in';
-    wrap.appendChild(inner);
+    stage.appendChild(inner);
     inner.appendChild(slip);
     slip.classList.add('sf-face','sf-front');
 
@@ -4922,23 +5047,31 @@ document.querySelectorAll('.redx').forEach(function(r){
       '<span class="ms-stamp">ON RECORD</span>';
     inner.appendChild(back);
 
+    /* the control says what the reader GETS on the other side, in both
+       directions. A tab that reads METHOD names the object; a bar that reads
+       TURN THE SHEET / HOW THIS CLAIM WAS BUILT hands him a reason. */
+    var CTL={front:['TURN THE SHEET','HOW THIS CLAIM WAS BUILT'],
+             back:['TURN BACK','THE CLAIM AND ITS FIGURES']};
     var tab=document.createElement('button');
     tab.className='sf-tab';tab.type='button';
     tab.setAttribute('aria-pressed','false');
-    tab.innerHTML='<i>&#9662;</i><b>METHOD</b>';
+    tab.innerHTML='<i aria-hidden="true">&#8635;</i><b>'+CTL.front[0]+'</b>'+
+      '<span class="sf-sub">'+CTL.front[1]+'</span>'+
+      '<span class="sf-go" aria-hidden="true">&#9656;</span>';
     wrap.appendChild(tab);
 
-    /* the container owns the height because both faces are out of flow. Measured,
+    /* the STAGE owns the height because both faces are out of flow. Measured,
        never guessed - the two sides of a sheet are not the same length. */
-    var lbl=tab.querySelector('b');
+    var lbl=tab.querySelector('b'),sublbl=tab.querySelector('.sf-sub');
     function face(){return wrap.classList.contains('turned')?back:slip}
-    function fit(){wrap.style.height=face().offsetHeight+'px'}
+    function fit(){stage.style.height=face().offsetHeight+'px'}
     fit();
     tab.addEventListener('click',function(){
       var t=!wrap.classList.contains('turned');
       wrap.classList.toggle('turned',t);
       tab.setAttribute('aria-pressed',t?'true':'false');
-      lbl.textContent=t?'EVIDENCE':'METHOD';
+      lbl.textContent=t?CTL.back[0]:CTL.front[0];
+      sublbl.textContent=t?CTL.back[1]:CTL.front[1];
       fit();
       try{if(navigator.vibrate)navigator.vibrate(t?[6,20,8]:6)}catch(e){}
     });
