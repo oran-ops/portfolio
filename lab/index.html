@@ -404,160 +404,182 @@ body{overflow-x:clip}
    ROUND 5 — EXHIBITS 23-28
    ================================================================== */
 .featured.fnew{border-color:var(--red);margin-top:44px}
-.featured.fnew::before{content:"הסבב החדש — 23–28 · ממתין להחלטתך"}
+.featured.fnew::before{content:"הסבב החדש — 23 ו-25 · אושרו עם שינויים"}
 
-/* ============ EX23 — THE UV LAMP / FILM MODE ============ */
+/* ============ EX23 - THE INSPECTION LAMP / MICROFILM MODE ============
+   Daylight: the folder card in the document's own noir language - and the card is
+   deliberately INCOMPLETE. Only the zone headings are printed; the body sits on
+   unexposed stock. Switching on the lamp DEVELOPS it: the card becomes the same
+   silver-halide microfilm negative as the document's closing section (bed #0A0B0D,
+   silver #EDEFF6, scan bloom, film rebates with sprocket holes and frame numbers -
+   the language is lifted from #final / .vfilm on the live site) and the text arrives.
+   Black-and-white glowing. No colour. */
 .uvwrap{display:grid;grid-template-columns:1fr 272px;gap:20px;align-items:start}
 .uvcard{position:relative;background:#25262D;border-radius:0 12px 12px 12px;padding:13px 20px 18px;overflow:hidden;
-  box-shadow:0 22px 55px rgba(0,0,0,.5);transition:background .8s cubic-bezier(.4,0,.2,1),box-shadow .8s}
+  box-shadow:0 22px 55px rgba(0,0,0,.5);
+  transition:background .8s cubic-bezier(.4,0,.2,1),box-shadow .8s,padding .7s cubic-bezier(.4,0,.2,1)}
+/* the scan bloom of the negative - #final::before, verbatim */
 .uvcard::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .8s;z-index:0;
-  background:radial-gradient(130% 95% at 80% -12%,rgba(158,124,255,.30),rgba(88,66,190,.11) 44%,transparent 72%)}
-.uvcard::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .8s;z-index:0;
-  box-shadow:inset 0 0 0 1px rgba(170,140,255,.26),inset 0 0 80px rgba(74,54,164,.55)}
-.uvcard.on{background:#151424;box-shadow:0 22px 55px rgba(0,0,0,.6),0 0 60px rgba(110,80,220,.15)}
-.uvcard.on::before,.uvcard.on::after{opacity:1}
-.uvtop{position:relative;z-index:2;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+  box-shadow:inset 0 0 150px rgba(0,0,0,.96),inset 0 0 46px rgba(0,0,0,.7);
+  background:radial-gradient(120% 70% at 50% 42%,rgba(214,226,255,.055),transparent 62%)}
+.uvcard.on{background:#0A0B0D;padding-left:62px;padding-right:62px;box-shadow:0 22px 55px rgba(0,0,0,.68)}
+.uvcard.on::before{opacity:1}
+/* film rebates - the physical edge of the stock (.vfilm) */
+.uvreb{position:absolute;top:0;bottom:0;width:46px;background:#000;z-index:3;opacity:0;pointer-events:none;
+  display:flex;flex-direction:column;justify-content:space-between;align-items:center;padding:14px 0;transition:opacity .7s}
+.uvreb.l{left:0;box-shadow:6px 0 18px rgba(0,0,0,.75)}
+.uvreb.r{right:0;box-shadow:-6px 0 18px rgba(0,0,0,.75)}
+.uvreb::before,.uvreb::after{content:"";width:15px;flex:1;margin:8px 0;
+  background-image:radial-gradient(rgba(233,238,250,.9) 3.6px,transparent 4.1px);
+  background-size:15px 32px;background-position:center;background-repeat:repeat-y;opacity:.85}
+.uvreb span{font-family:'JetBrains Mono',monospace;font-size:6.5px;letter-spacing:.3em;color:#7f838d;
+  writing-mode:vertical-rl;white-space:nowrap;padding:8px 0}
+.uvreb.l span{transform:rotate(180deg)}
+.uvcard.on .uvreb{opacity:1}
+.uvtop{position:relative;z-index:2;display:flex;align-items:flex-start;justify-content:space-between;gap:14px;flex-wrap:wrap}
 .uvtab{font-family:'Fraunces',serif;font-weight:700;font-size:15px;background:var(--em);color:#0B241A;
   border-radius:6px 12px 6px 6px;padding:4px 16px;transition:background .8s,color .8s}
-.uvcard.on .uvtab{background:#3B2D7C;color:#DCD3FF}
-.uvbtn{display:inline-flex;align-items:center;gap:8px;font-family:'JetBrains Mono',monospace;font-weight:600;
-  font-size:8px;letter-spacing:.22em;color:#9EA0A6;background:rgba(14,15,18,.72);border:1px solid #4B4E55;border-radius:3px;
-  padding:8px 12px;cursor:pointer;white-space:nowrap;transition:border-color .35s,color .35s,background .35s}
-.uvbtn:hover{border-color:#8E7BE0;color:#CFC6F5}
-.uvled{width:7px;height:7px;border-radius:50%;background:#4B4E55;flex:none;transition:background .5s,box-shadow .5s}
-.uvcard.on .uvbtn{border-color:#9A85E8;color:#DCD3FF;background:rgba(45,33,100,.66)}
-.uvcard.on .uvled{background:#CBAAFF;box-shadow:0 0 8px #A87BFF,0 0 18px rgba(168,123,255,.6);animation:uvpulse 2.2s ease-in-out infinite}
-@keyframes uvpulse{0%,100%{opacity:1}50%{opacity:.42}}
+.uvcard.on .uvtab{background:#E6EAF6;color:#0A0B0D}
+
+/* ---- the lamp: a small instrument in the corner, a loud invitation under it ---- */
+.lamp{display:flex;flex-direction:column;align-items:center;gap:5px;background:none;border:0;padding:0 2px;
+  cursor:pointer;font:inherit;line-height:1;-webkit-tap-highlight-color:transparent}
+.lamp svg{width:40px;height:40px;display:block;overflow:visible}
+.lamp .lbody{fill:none;stroke:#9EA0A6;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;transition:stroke .6s}
+.lamp .lbulb{fill:#7A7E88;transition:fill .6s,filter .6s}
+.lamp .lcone{opacity:.55;transition:opacity .6s;animation:lampbreath 3.1s ease-in-out infinite;transform-origin:15px 20px}
+.lamp .ls1{stop-color:#F7E7C2;stop-opacity:.92}
+.lamp .ls2{stop-color:#F7E7C2;stop-opacity:.26}
+.lamp .ls3{stop-color:#F7E7C2;stop-opacity:0}
+.lamp .lh1{stop-color:#FFF4D8;stop-opacity:.8}
+.lamp .lh2{stop-color:#FFF4D8;stop-opacity:0}
+.lamp:hover .lbody{stroke:#F2F1ED}
+.lamp:hover .lbulb{fill:#F2F1ED}
+.lamp:hover .lcone{opacity:.95}
+.lamp:focus-visible{outline:1px dashed rgba(242,241,237,.6);outline-offset:5px}
+/* lit: the bulb is the only light source left in a black-and-white file */
+.uvcard.on .lamp .lbody,.uvpcard.on .lamp .lbody{stroke:#EDEFF6}
+.uvcard.on .lamp .lbulb,.uvpcard.on .lamp .lbulb{fill:#FFFFFF;filter:drop-shadow(0 0 5px rgba(214,226,255,.95))}
+.uvcard.on .lamp .lcone,.uvpcard.on .lamp .lcone{opacity:1;animation:none}
+.uvcard.on .lamp .ls1,.uvpcard.on .lamp .ls1{stop-color:#E4EBFF;stop-opacity:1}
+.uvcard.on .lamp .ls2,.uvpcard.on .lamp .ls2{stop-color:#E4EBFF;stop-opacity:.3}
+.uvcard.on .lamp .ls3,.uvpcard.on .lamp .ls3{stop-color:#E4EBFF;stop-opacity:0}
+.uvcard.on .lamp .lh1,.uvpcard.on .lamp .lh1{stop-color:#F2F6FF;stop-opacity:.95}
+.uvcard.on .lamp .lh2,.uvpcard.on .lamp .lh2{stop-color:#F2F6FF;stop-opacity:0}
+@keyframes lampbreath{0%,100%{opacity:.4}50%{opacity:.95}}
+/* the invitation - deliberately louder than every other label in the document */
+.lampcall{font-family:'JetBrains Mono',monospace;font-weight:800;font-size:11.5px;letter-spacing:.24em;
+  color:#F2F1ED;white-space:nowrap;text-align:center;border-bottom:1.5px solid var(--em);padding-bottom:4px;
+  transition:color .6s,border-color .6s,text-shadow .6s}
+.lamp:hover .lampcall{color:#FFFFFF}
+.uvcard.on .lampcall,.uvpcard.on .lampcall{color:#EDEFF6;border-bottom-color:rgba(237,239,246,.55);
+  text-shadow:0 0 16px rgba(214,226,255,.42),0 0 46px rgba(190,205,255,.16)}
+.lampsub{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:.2em;color:#9EA0A6;
+  white-space:nowrap;transition:color .6s}
+.uvcard.on .lampsub,.uvpcard.on .lampsub{color:#8D93A2}
+
 .uvband{position:relative;z-index:2;background:var(--em);color:#141519;font-family:'JetBrains Mono',monospace;font-weight:800;
-  font-size:9px;letter-spacing:.36em;text-align:center;padding:7px 8px 6px;border-radius:4px;margin:12px 0 0;transition:background .8s,color .8s}
-.uvcard.on .uvband{background:#2E2358;color:#CFC2FF}
+  font-size:9px;letter-spacing:.36em;text-align:center;padding:7px 8px 6px;border-radius:4px;margin:14px 0 0;transition:background .8s,color .8s}
+.uvcard.on .uvband{background:#E6EAF6;color:#0A0B0D}
 .uvctl{position:relative;z-index:2;display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;
   font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:.07em;color:#6B6E76;padding:7px 2px;
-  border-bottom:1px solid rgba(107,110,118,.28);margin-bottom:4px;transition:color .8s}
-.uvcard.on .uvctl{color:#6B62A0}
-.uvz{position:relative;z-index:2;padding:13px 0 3px;border-top:1px solid rgba(107,110,118,.16)}
+  border-bottom:1px solid rgba(107,110,118,.28);margin-bottom:4px;transition:color .8s,border-color .8s}
+.uvcard.on .uvctl{color:#8D93A2;border-bottom-color:rgba(237,239,246,.18)}
+.uvz{position:relative;z-index:2;padding:13px 0 3px;border-top:1px solid rgba(107,110,118,.16);transition:border-color .8s}
 .uvz.z1{border-top:0}
-.uvday{transition:opacity .8s}
-.uvcard.on .uvday{opacity:.35}
+.uvcard.on .uvz{border-top-color:rgba(237,239,246,.13)}
 .uvzr{display:flex;align-items:center;gap:9px;font-family:'JetBrains Mono',monospace;font-weight:700;font-size:10px;
-  letter-spacing:.22em;color:#F2F1ED;margin-bottom:8px;transition:opacity .8s}
-.uvcard.on .uvzr{opacity:.4}
-.uvzr b{color:var(--em)}
-.uvzr i{width:5px;height:5px;background:var(--em);transform:rotate(45deg);font-style:normal;flex:none}
-.uvp{font-family:'Inter',sans-serif;font-size:13px;line-height:1.62;color:#B6B7BB}
-/* in daylight the annotation takes no room at all — the card GROWS under the lamp */
+  letter-spacing:.22em;color:#F2F1ED;margin-bottom:9px;transition:color .8s,text-shadow .8s}
+.uvzr b{color:var(--em);transition:color .8s}
+.uvzr i{width:5px;height:5px;background:var(--em);transform:rotate(45deg);font-style:normal;flex:none;transition:background .8s,box-shadow .8s}
+.uvcard.on .uvzr{color:#EDEFF6;text-shadow:0 0 16px rgba(214,226,255,.42),0 0 46px rgba(190,205,255,.16)}
+.uvcard.on .uvzr b{color:#E6EAF6}
+.uvcard.on .uvzr i{background:#E6EAF6;box-shadow:0 0 10px rgba(214,226,255,.6)}
+/* daylight: a heading over unexposed stock - the body was never printed */
+.uvlat{display:flex;flex-direction:column;gap:10px;padding:3px 0 5px;max-height:80px;opacity:1;overflow:hidden;
+  transition:max-height .5s cubic-bezier(.4,0,.2,1),opacity .35s,padding .5s}
+.uvlat s{display:block;height:0;border-bottom:1px dashed rgba(107,110,118,.4);text-decoration:none}
+.uvlat s.h{width:56%}
+.uvlat em{font-style:normal;font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:.26em;color:#5C5F66}
+.uvcard.on .uvlat{max-height:0;opacity:0;padding:0}
+/* under the lamp the card develops */
 .uvhid{margin-top:0;max-height:0;overflow:hidden;opacity:0;transform:translateY(7px);pointer-events:none;
   transition:opacity .5s,transform .5s,max-height .65s cubic-bezier(.4,0,.2,1),margin-top .5s}
-.uvcard.on .uvhid{margin-top:10px;max-height:220px;opacity:1;transform:none;pointer-events:auto}
+.uvcard.on .uvhid{margin-top:2px;max-height:380px;opacity:1;transform:none;pointer-events:auto}
 .uvcard.on .z1 .uvhid{transition-delay:.28s}
 .uvcard.on .z2 .uvhid{transition-delay:.44s}
 .uvcard.on .z3 .uvhid{transition-delay:.60s}
 .uvk{display:block;font-family:'JetBrains Mono',monospace;font-weight:700;font-size:7.5px;letter-spacing:.28em;
-  color:#7FE4FF;text-shadow:0 0 10px rgba(120,220,255,.5);margin-bottom:4px}
-.uvt{display:block;font-family:'Special Elite',monospace;font-size:13px;line-height:1.75;color:#C9F5FF;
-  text-shadow:0 0 9px rgba(150,235,255,.55),0 0 26px rgba(120,190,255,.28)}
+  color:#B9BECC;text-shadow:0 0 10px rgba(214,226,255,.35);margin-bottom:6px}
+.uvt{display:block;font-family:'Special Elite',monospace;font-size:12.5px;line-height:1.82;color:#EDEFF6;
+  text-shadow:0 0 12px rgba(214,226,255,.3),0 0 34px rgba(190,205,255,.13)}
 .uvsig{position:relative;z-index:2;margin-top:0;padding-top:0;max-height:0;overflow:hidden;
-  border-top:1px dashed rgba(150,235,255,0);
-  font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:.2em;color:#7FE4FF;text-align:right;
-  opacity:0;text-shadow:0 0 10px rgba(120,220,255,.4);
+  border-top:1px dashed rgba(237,239,246,0);
+  font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:.2em;color:#8D93A2;text-align:right;opacity:0;
   transition:opacity .5s .7s,max-height .6s .55s,margin-top .5s .55s,padding-top .5s .55s,border-color .5s .55s}
-.uvcard.on .uvsig{opacity:.9;margin-top:15px;padding-top:10px;max-height:44px;border-top-color:rgba(150,235,255,.22)}
+.uvcard.on .uvsig{opacity:.95;margin-top:16px;padding-top:10px;max-height:48px;border-top-color:rgba(237,239,246,.2)}
 /* phone mock */
 .uvphone{border:7px solid #2B2C33;border-radius:22px;background:#191A1F;padding:8px 7px 12px;box-shadow:0 22px 50px rgba(0,0,0,.5)}
 .uvphl{font-family:'JetBrains Mono',monospace;font-size:6.5px;letter-spacing:.24em;color:#6B6E76;text-align:center;padding:2px 0 7px}
 .uvpcard{position:relative;background:#25262D;border-radius:0 8px 8px 8px;overflow:hidden;padding:9px 11px 12px;
-  transition:background .8s cubic-bezier(.4,0,.2,1)}
+  transition:background .8s cubic-bezier(.4,0,.2,1),padding .7s cubic-bezier(.4,0,.2,1)}
 .uvpcard::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .8s;z-index:0;
-  background:radial-gradient(130% 80% at 70% -6%,rgba(158,124,255,.32),transparent 70%)}
-.uvpcard.on{background:#151424}
+  box-shadow:inset 0 0 90px rgba(0,0,0,.95),inset 0 0 30px rgba(0,0,0,.7);
+  background:radial-gradient(120% 70% at 50% 42%,rgba(214,226,255,.055),transparent 62%)}
+.uvpcard.on{background:#0A0B0D;padding-left:26px;padding-right:26px}
 .uvpcard.on::before{opacity:1}
+.uvpreb{position:absolute;top:0;bottom:0;width:20px;background:#000;z-index:3;opacity:0;pointer-events:none;transition:opacity .7s;
+  background-image:radial-gradient(rgba(233,238,250,.9) 2.4px,transparent 2.8px);
+  background-size:10px 22px;background-position:center;background-repeat:repeat-y}
+.uvpreb.l{left:0}
+.uvpreb.r{right:0}
+.uvpcard.on .uvpreb{opacity:1}
 .uvptab{position:relative;z-index:2;display:inline-block;font-family:'Fraunces',serif;font-weight:700;font-size:11px;
   background:var(--em);color:#0B241A;border-radius:4px 8px 4px 4px;padding:2px 10px;transition:background .8s,color .8s}
-.uvpcard.on .uvptab{background:#3B2D7C;color:#DCD3FF}
+.uvpcard.on .uvptab{background:#E6EAF6;color:#0A0B0D}
 .uvpband{position:relative;z-index:2;background:var(--em);color:#141519;font-family:'JetBrains Mono',monospace;font-weight:800;
   font-size:6.5px;letter-spacing:.22em;text-align:center;padding:5px 4px;border-radius:3px;margin-top:8px;transition:background .8s,color .8s}
-.uvpcard.on .uvpband{background:#2E2358;color:#CFC2FF}
-.uvpbar{position:relative;z-index:2;display:flex;align-items:center;justify-content:center;gap:7px;width:100%;margin-top:7px;
-  font-family:'JetBrains Mono',monospace;font-weight:700;font-size:7px;letter-spacing:.2em;color:#9EA0A6;
-  background:rgba(14,15,18,.7);border:1px solid #4B4E55;border-radius:3px;padding:9px 6px;cursor:pointer;transition:all .35s}
-.uvpcard.on .uvpbar{border-color:#9A85E8;color:#DCD3FF;background:rgba(45,33,100,.7)}
-.uvpz{position:relative;z-index:2;margin-top:10px}
-.uvpzr{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:7.5px;letter-spacing:.2em;color:#F2F1ED;margin-bottom:5px;transition:opacity .8s}
-.uvpcard.on .uvpzr{opacity:.4}
-.uvpzr b{color:var(--em)}
-.uvpp{font-family:'Inter',sans-serif;font-size:10px;line-height:1.55;color:#B6B7BB;transition:opacity .8s}
-.uvpcard.on .uvpp{opacity:.35}
+.uvpcard.on .uvpband{background:#E6EAF6;color:#0A0B0D}
+.uvplampw{position:relative;z-index:2;display:flex;justify-content:center;margin-top:10px}
+.uvpcard .lamp svg{width:32px;height:32px}
+.uvpcard .lampcall{font-size:9px;letter-spacing:.18em;padding-bottom:3px}
+.uvpcard .lampsub{font-size:6.5px;letter-spacing:.16em}
+.uvpz{position:relative;z-index:2;margin-top:11px}
+.uvpzr{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:7.5px;letter-spacing:.2em;color:#F2F1ED;margin-bottom:6px;transition:color .8s,text-shadow .8s}
+.uvpzr b{color:var(--em);transition:color .8s}
+.uvpcard.on .uvpzr{color:#EDEFF6;text-shadow:0 0 12px rgba(214,226,255,.4)}
+.uvpcard.on .uvpzr b{color:#E6EAF6}
+.uvplat{display:flex;flex-direction:column;gap:8px;max-height:40px;opacity:1;overflow:hidden;transition:max-height .5s,opacity .35s}
+.uvplat s{display:block;height:0;border-bottom:1px dashed rgba(107,110,118,.4);text-decoration:none}
+.uvplat s.h{width:52%}
+.uvpcard.on .uvplat{max-height:0;opacity:0}
 .uvphid{margin-top:0;max-height:0;overflow:hidden;opacity:0;transform:translateY(6px);
   transition:opacity .5s .28s,transform .5s .28s,max-height .6s .18s,margin-top .5s .18s}
-.uvpcard.on .uvphid{margin-top:8px;max-height:170px;opacity:1;transform:none}
-.uvphid .uvk{font-size:6.5px;letter-spacing:.22em}
-.uvphid .uvt{font-size:10px;line-height:1.6}
+.uvpcard.on .uvphid{margin-top:6px;max-height:230px;opacity:1;transform:none}
+.uvphid .uvk{font-size:6.5px;letter-spacing:.22em;margin-bottom:4px}
+.uvphid .uvt{font-size:10px;line-height:1.66}
 @media(max-width:880px){.uvwrap{grid-template-columns:1fr}.uvphone{max-width:300px;margin:0 auto}}
-/* at phone width the card IS the phone: the control becomes a full-width bar under
-   the folder head, and the nested phone mock retires (no phone inside a phone) */
+/* at phone width the card IS the phone: the nested mock retires and the negative
+   narrows so the rebates never eat the column */
+@media(max-width:640px){
+  .uvcard.on{padding-left:46px;padding-right:46px}
+  .uvreb{width:34px}
+  .uvreb::before,.uvreb::after{width:11px;background-size:11px 26px}
+  .uvreb span{font-size:5.5px;letter-spacing:.22em}
+}
 @media(max-width:560px){
-  .uvbtn{width:100%;justify-content:center;padding:10px 8px}
+  .uvtop{gap:12px}
+  .lamp{width:100%}
+  .lampcall{font-size:11px;letter-spacing:.2em}
   .uvphone{display:none}
   .uvband{letter-spacing:.22em}
+  .uvt{font-size:12px}
 }
 
-/* ============ EX24 — FILE 05: UNOPENED ============ */
-.f5{display:grid;grid-template-columns:232px 1fr;gap:20px;align-items:start}
-.f5dl{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:.26em;color:#6B6E76;margin-bottom:9px}
-.f5sp{display:flex;align-items:center;gap:9px;border-radius:0 8px 8px 8px;padding:8px 11px;background:#202127;
-  border:1px solid #33353C;margin-bottom:7px;opacity:.45}
-.f5sp i{width:5px;height:5px;transform:rotate(45deg);flex:none;font-style:normal}
-.f5sp b{font-family:'Fraunces',serif;font-weight:600;font-size:12.5px;color:#F2F1ED}
-.f5sp span{margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:.16em;color:#6B6E76}
-.f5card{position:relative;width:100%;text-align:left;border:1px solid #5D6A5A;border-radius:0 10px 10px 10px;background:#232A22;
-  padding:0 0 11px;margin-top:11px;cursor:pointer;overflow:hidden;transition:transform .25s,box-shadow .25s,border-color .25s}
-.f5card:hover{transform:translateY(-2px);border-color:#8A9A88;box-shadow:0 14px 32px rgba(0,0,0,.45)}
-.f5lip{display:flex;align-items:center;gap:8px;background:#8A9A88;color:#191A1F;padding:6px 11px;
-  font-family:'JetBrains Mono',monospace;font-weight:700;font-size:8px;letter-spacing:.16em}
-.f5lip b{font-family:'Fraunces',serif;font-weight:600;font-size:12.5px;letter-spacing:0}
-.f5lip span{margin-left:auto;font-size:7.5px}
-.f5cat{display:block;font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:.26em;color:#8A9A88;padding:11px 12px 0 24px}
-.f5doss{display:block;font-family:'Inter',sans-serif;font-size:11px;line-height:1.5;color:#9EA0A6;padding:6px 12px 0 24px}
-.f5hole{position:absolute;left:7px;width:9px;height:9px;border:1.4px solid rgba(138,154,136,.45);border-radius:50%}
-.f5open{display:block;margin-top:11px;padding:0 12px 0 24px;font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:.2em;color:#B4C4B2}
-/* the intake sheet */
-.f5sheet{position:relative;background:#25262D;border-radius:0 12px 12px 12px;padding:13px 22px 20px;overflow:hidden;
-  box-shadow:0 22px 55px rgba(0,0,0,.5)}
-.f5top{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
-.f5tab{font-family:'Fraunces',serif;font-weight:700;font-size:14.5px;background:#8A9A88;color:#191A1F;
-  border-radius:6px 12px 6px 6px;padding:4px 15px}
-.f5state{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:7.5px;letter-spacing:.24em;color:#8A9A88;
-  border:1px solid rgba(138,154,136,.45);border-radius:3px;padding:6px 10px}
-.f5band{background:#8A9A88;color:#141519;font-family:'JetBrains Mono',monospace;font-weight:800;font-size:9px;
-  letter-spacing:.36em;text-align:center;padding:7px 8px 6px;border-radius:4px;margin:12px 0 0}
-.f5ctl{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;font-family:'JetBrains Mono',monospace;
-  font-size:7.5px;letter-spacing:.07em;color:#6B6E76;padding:7px 2px;border-bottom:1px solid rgba(107,110,118,.28)}
-.f5inner{max-height:1500px;opacity:1;transition:max-height .65s cubic-bezier(.4,0,.2,1),opacity .4s .1s}
-.f5sheet.shut .f5inner{max-height:0;opacity:0;transition:max-height .55s cubic-bezier(.4,0,.2,1),opacity .3s}
-.f5cols{display:grid;grid-template-columns:1fr 1fr;gap:26px;padding-top:16px}
-.f5z{margin-bottom:20px}
-.f5zr{display:flex;align-items:center;gap:9px;font-family:'JetBrains Mono',monospace;font-weight:700;font-size:10.5px;
-  letter-spacing:.22em;color:#F2F1ED;margin-bottom:10px}
-.f5zr b{color:#8A9A88}
-.f5zr i{width:5px;height:5px;background:#8A9A88;transform:rotate(45deg);font-style:normal;flex:none}
-.f5rule{height:19px;border-bottom:1px dashed #4B4E55;margin-top:11px}
-.f5rule.s{width:58%}
-.f5wait{margin-top:10px;font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:.22em;color:#5C5F66}
-.f5step{display:flex;align-items:flex-start;gap:10px;padding:7px 0}
-.f5step em{font-style:normal;flex:none;width:9px;height:2px;background:#8A9A88;margin-top:9px}
-.f5step b{display:block;font-family:'JetBrains Mono',monospace;font-weight:700;font-size:9px;letter-spacing:.18em;color:#DFE3DD}
-.f5step span{display:block;font-family:'Inter',sans-serif;font-size:11.5px;line-height:1.5;color:#9EA0A6;margin-top:3px}
-.f5then{margin-top:12px;font-family:'Fraunces',serif;font-style:italic;font-size:14px;color:#A9BAA7}
-.f5foot{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;
-  border-top:1px solid rgba(107,110,118,.2);margin-top:6px;padding-top:16px}
-.f5note{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:.14em;color:#6B6E76;line-height:1.9;max-width:290px}
-.f5stamp{flex:none;transform:rotate(-5deg);font-family:'JetBrains Mono',monospace;font-weight:800;font-size:10px;
-  letter-spacing:.22em;color:#A7B8A4;border:2.5px solid #A7B8A4;border-radius:5px;padding:8px 13px;text-align:center;opacity:.92;
-  mask-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="80"><filter id="r"><feTurbulence type="fractalNoise" baseFrequency="0.5" numOctaves="3"/><feComponentTransfer><feFuncA type="discrete" tableValues="0.55 0.85 1 0.92 1 0.75 1"/></feComponentTransfer></filter><rect width="200" height="80" filter="url(%23r)"/></svg>');mask-size:cover;-webkit-mask-size:cover}
-.f5stamp span{display:block;font-weight:400;font-size:6.5px;letter-spacing:.2em;margin-top:5px;opacity:.85}
-@media(max-width:880px){.f5{grid-template-columns:1fr}.f5cols{grid-template-columns:1fr;gap:0}}
-
-/* ============ EX25 — ADVERSE FINDING (COUNTER-SLIP) ============ */
+/* ============ EX25 - THE METHOD SLIP (SECOND SLIP) ============
+   Same paper grammar as the evidence slip; the second slip is not a counter-finding,
+   it is the reasoning layer - FACT / ACTION / CONCLUSION behind the headline claim.
+   Its seal is the desk's own graphite ink, not caution amber. */
 .afzone{max-width:520px;margin:0 auto}
 .aftogw{display:flex;justify-content:center;margin-bottom:18px}
 .aftog{display:inline-flex;border:1px solid #4B4E55;border-radius:20px;overflow:hidden;
@@ -568,170 +590,24 @@ body{overflow-x:clip}
 .afslip::before{content:"";position:absolute;top:-8px;left:26px;width:56px;height:16px;background:rgba(255,255,255,.35);
   box-shadow:0 1px 2px rgba(0,0,0,.12);transform:rotate(-3deg)}
 .af1{transform:rotate(-1.1deg)}
-.af2w{padding-top:16px;max-height:440px;opacity:1;transition:max-height .55s cubic-bezier(.4,0,.2,1),opacity .4s,padding-top .4s}
+.af2w{padding-top:16px;max-height:1500px;opacity:1;transition:max-height .55s cubic-bezier(.4,0,.2,1),opacity .4s,padding-top .4s}
 .af2w.off{max-height:0;opacity:0;padding-top:0;overflow:hidden;pointer-events:none}
-.af2{transform:rotate(1.3deg);background:#E4E1D6;box-shadow:0 12px 26px rgba(0,0,0,.32),inset 0 0 0 1px rgba(138,90,23,.2)}
+.af2{transform:rotate(1.3deg);background:#E4E1D6;box-shadow:0 12px 26px rgba(0,0,0,.32),inset 0 0 0 1px rgba(62,58,49,.18)}
 .af2::before{left:auto;right:30px;transform:rotate(3deg)}
-.af2 .es-h{color:#8E7C55;padding-right:96px}
-.af2 .es-h b{color:#8A5A17}
-.af2 .es-k{color:#8E7C55}
+.af2 .es-h{color:#6E685C;flex-wrap:wrap;row-gap:4px;padding-right:112px}
+.af2 .es-h b{color:#3E3A31}
+.af2 .es-k{color:#6E685C}
 .af-t{font-family:'Courier Prime',monospace;font-size:11.5px;line-height:1.62;color:#2A2620;letter-spacing:0}
 .af-stamp{position:absolute;right:13px;top:10px;font-family:'JetBrains Mono',monospace;font-weight:800;font-size:9px;
-  letter-spacing:.26em;color:#8A5A17;border:2px solid #8A5A17;border-radius:4px;padding:4px 9px;transform:rotate(5deg);opacity:.92;
+  letter-spacing:.26em;color:#3E3A31;border:2px solid #3E3A31;border-radius:4px;padding:4px 9px;transform:rotate(5deg);opacity:.9;
   mask-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="80"><filter id="r"><feTurbulence type="fractalNoise" baseFrequency="0.55" numOctaves="3"/><feComponentTransfer><feFuncA type="discrete" tableValues="0.6 0.9 1 0.92 1 0.8 1"/></feComponentTransfer></filter><rect width="200" height="80" filter="url(%23r)"/></svg>');mask-size:cover;-webkit-mask-size:cover}
 .afconn{display:flex;align-items:center;gap:9px;font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:.2em;
   color:#6B6E76;padding:14px 4px 0;max-height:40px;overflow:hidden;
   transition:opacity .35s,max-height .45s,padding-top .35s}
 .afconn s{flex:1;height:1px;background:rgba(107,110,118,.35);text-decoration:none}
 .afconn.off{opacity:0;max-height:0;padding-top:0}
-@media(max-width:560px){.af-stamp{font-size:8px;padding:3px 7px}.af2 .es-h{padding-right:72px}}
+@media(max-width:560px){.af-stamp{font-size:8px;padding:3px 7px;letter-spacing:.2em}.af2 .es-h{padding-right:86px}}
 
-/* ============ EX26 — THE REDACTED REFERENCE CARD ============ */
-.refcard{max-width:560px;margin:0 auto;background:#25262D;border-radius:8px;overflow:hidden;box-shadow:0 22px 55px rgba(0,0,0,.5)}
-.refband{background:#E9E7DF;color:#22201C;font-family:'JetBrains Mono',monospace;font-weight:800;font-size:9px;
-  letter-spacing:.34em;text-align:center;padding:7px 8px 6px}
-.refctl{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;font-family:'JetBrains Mono',monospace;
-  font-size:7.5px;letter-spacing:.07em;color:#6B6E76;padding:8px 18px;border-bottom:1px solid #33353C}
-.refbody{padding:2px 18px 4px}
-.refrow{display:flex;align-items:center;gap:9px 22px;flex-wrap:wrap;padding:13px 0;border-top:1px solid #33353C}
-.refrow:first-child{border-top:0}
-.refn{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:.24em;color:#6B6E76;flex:none}
-.refm{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.13em;color:#CFD0D4}
-.refm em{font-style:normal;color:#6B6E76}
-/* the redaction is the glyph run itself — so a short name is a short bar and the
-   honest label can never be clipped by a fixed-width box */
-.refbar{position:relative;display:inline-grid;align-items:center;justify-items:start;flex:none;
-  background:none;border:0;padding:0;margin:0;cursor:pointer;line-height:1;font:inherit}
-.refbar>span{grid-area:1/1;transition:opacity .35s}
-.refbar .rb1{font-family:'JetBrains Mono',monospace;font-weight:400;font-size:12px;letter-spacing:-.1em;
-  line-height:1.5;color:#0E0F12;text-shadow:0 0 2px rgba(0,0,0,.8);transition:opacity .3s,color .3s}
-.refbar:hover .rb1{color:#16181D}
-.refbar .rb2{opacity:0;font-family:'JetBrains Mono',monospace;font-weight:700;font-size:7.5px;letter-spacing:.18em;
-  color:var(--em);white-space:nowrap;border-bottom:1px dashed rgba(47,179,128,.55);padding-bottom:3px;
-  text-shadow:0 0 12px rgba(47,179,128,.35)}
-.refbar::after{content:"▸";position:absolute;right:-14px;top:50%;transform:translateY(-50%);
-  font-family:'JetBrains Mono',monospace;font-size:9px;color:#7A7E88;transition:color .3s}
-.refbar:hover::after{color:#F2F1ED}
-.refbar.rel .rb1{opacity:0}
-.refbar.rel .rb2{opacity:1}
-.refbar.rel::after{content:"✓";color:var(--em)}
-.reffoot{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;
-  border-top:1px solid #33353C;padding:12px 18px 14px;font-family:'JetBrains Mono',monospace;font-size:7.5px;
-  letter-spacing:.2em;color:#9EA0A6}
-.reffoot b{color:#F2F1ED;font-weight:700}
-.refcount{color:#6B6E76;transition:color .3s}
-.refcount.hot{color:var(--em)}
-.refhint{text-align:center;font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:.2em;color:#6B6E76;margin-top:12px}
-@media(max-width:560px){.refrow{gap:7px}.refm{font-size:8px;letter-spacing:.1em}.refbar .rb1{font-size:8px}}
-
-/* ============ EX27 — THE DOCKET ============ */
-.dk{background:#202127;border-radius:8px;padding:15px 18px 13px;box-shadow:0 18px 44px rgba(0,0,0,.45)}
-.dkhead{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-family:'JetBrains Mono',monospace;
-  font-size:7.5px;letter-spacing:.24em;color:#6B6E76;border-bottom:1px solid #33353C;padding-bottom:9px;margin-bottom:14px}
-.dkhead b{color:#F2F1ED;font-weight:800;letter-spacing:.3em}
-.dkscroll{overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;padding-bottom:2px}
-.dkgrid{min-width:640px;position:relative;padding-bottom:16px}
-.dkruler{position:relative;height:20px;margin-left:126px;border-bottom:1px solid #4B4E55}
-.dktick{position:absolute;bottom:-1px;width:1px;height:6px;background:#4B4E55}
-.dktick s{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);text-decoration:none;
-  font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:.14em;color:#6B6E76}
-.dklane{display:flex;align-items:center;height:33px}
-.dkk{width:126px;flex:none;padding-right:12px;white-space:nowrap;font-family:'JetBrains Mono',monospace;
-  font-size:7.5px;letter-spacing:.14em;color:#6B6E76}
-.dkk b{display:block;font-size:9px;letter-spacing:.1em;color:#F2F1ED;font-weight:700;margin-bottom:2px}
-.dktrack{position:relative;flex:1;height:100%;border-left:1px solid rgba(75,78,85,.5)}
-.dkbar{position:absolute;top:50%;height:13px;margin-top:-6.5px;border-radius:2px;cursor:pointer;
-  transition:height .22s,margin-top .22s,filter .22s,box-shadow .22s,opacity .22s}
-.dkbar:hover,.dkbar.hot{height:19px;margin-top:-9.5px;filter:brightness(1.2)}
-.dkbar.src{box-shadow:inset 0 0 0 1px rgba(0,0,0,.3)}
-.dkbar.src:hover,.dkbar.src.hot{box-shadow:0 0 18px rgba(47,179,128,.45),inset 0 0 0 1px rgba(0,0,0,.3)}
-.dkbar.prov{opacity:.55;border:1px dashed rgba(255,255,255,.4);
-  background-image:repeating-linear-gradient(45deg,rgba(0,0,0,.45) 0 3px,transparent 3px 7px)}
-.dkbar.prov:hover,.dkbar.prov.hot{opacity:.9}
-.dkbar b{position:absolute;left:8px;top:50%;transform:translateY(-50%);font-family:'JetBrains Mono',monospace;
-  font-weight:800;font-size:7.5px;letter-spacing:.14em;white-space:nowrap;opacity:.9;transition:opacity .22s}
-.dkbar.prov b{text-shadow:0 1px 0 rgba(255,255,255,.5),0 0 4px rgba(255,255,255,.35)}
-.dkbar:hover b,.dkbar.hot b{opacity:1}
-.dknow{position:absolute;top:14px;bottom:18px;width:0;border-left:1px dashed rgba(242,241,237,.42);pointer-events:none;z-index:3}
-.dknow s{position:absolute;bottom:-14px;right:0;text-decoration:none;
-  font-family:'JetBrains Mono',monospace;font-size:6.5px;letter-spacing:.2em;color:#9EA0A6;white-space:nowrap}
-.dkcap{margin-top:12px;border-top:1px solid #33353C;padding-top:11px;min-height:34px;
-  font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.14em;color:#9EA0A6;line-height:1.8}
-.dkcap b{color:#F2F1ED;font-weight:700;letter-spacing:.2em}
-.dkcap .prv{color:#E0A458}
-.swcue2{display:none;justify-content:flex-end;align-items:center;gap:8px;margin:7px 2px 0 0;
-  font-family:'JetBrains Mono',monospace;font-weight:700;font-size:8.5px;letter-spacing:.26em;color:#CFD0D4}
-.swcue2 i{font-style:normal;color:var(--em);font-size:13px;line-height:1;animation:swnudge 1.6s ease-in-out infinite}
-@keyframes swnudge{0%,100%{transform:translateX(0)}50%{transform:translateX(6px)}}
-@media(max-width:760px){
-  .swcue2{display:flex}
-  .dkscroll{-webkit-mask-image:linear-gradient(90deg,#000 0,#000 calc(100% - 24px),transparent 100%);
-    mask-image:linear-gradient(90deg,#000 0,#000 calc(100% - 24px),transparent 100%)}
-  .dkgrid{padding-right:8px}
-  /* the lane keys stay pinned while the timeline slides under them, so a bar at
-     2026 is still identifiable */
-  .dkk{position:sticky;left:0;z-index:4;background:#202127;box-shadow:7px 0 9px -5px rgba(0,0,0,.6)}
-}
-
-/* ============ EX28 — THE COMMISSIONING ORDER ============ */
-.ordbed{position:relative;background:#0A0B0D;padding:30px 70px 32px;box-shadow:inset 0 0 110px rgba(0,0,0,.95);overflow:hidden}
-.ordbed::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:.55;mix-blend-mode:overlay;z-index:0;
-  background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200"><filter id="g"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/><feComponentTransfer><feFuncA type="linear" slope="0.14"/></feComponentTransfer></filter><rect width="200" height="200" filter="url(%23g)"/></svg>')}
-.ordf{position:relative;z-index:1;max-width:520px;margin:0 auto}
-.ordkick{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.32em;color:#9DA3B0;text-align:center}
-.ordttl{font-family:'Fraunces',serif;font-weight:600;font-style:italic;font-size:clamp(17px,3vw,23px);line-height:1.4;
-  color:#EDEFF6;text-align:center;margin-top:10px;text-shadow:0 0 14px rgba(220,230,255,.45),0 0 40px rgba(200,215,255,.18)}
-.ordrows{margin-top:22px}
-.ordrow{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:9px 0;border-top:1px solid rgba(237,239,246,.14)}
-.ordrow>s{width:88px;flex:none;text-decoration:none;font-family:'JetBrains Mono',monospace;font-size:7.5px;
-  letter-spacing:.24em;color:#7C8290}
-.ordchip{font-family:'JetBrains Mono',monospace;font-weight:600;font-size:8.5px;letter-spacing:.16em;color:#C6CBD6;
-  background:transparent;border:1px solid rgba(237,239,246,.24);border-radius:3px;padding:8px 12px;cursor:pointer;
-  transition:background .28s,color .28s,border-color .28s,box-shadow .28s}
-.ordchip:hover{border-color:rgba(237,239,246,.62);color:#EDEFF6}
-.ordchip.on{background:#EDEFF6;color:#0A0B0D;border-color:#EDEFF6;box-shadow:0 0 16px rgba(220,230,255,.42)}
-.ordblock{margin-top:20px;border:1px solid rgba(237,239,246,.2);border-radius:4px;padding:13px 15px 14px;
-  background:rgba(237,239,246,.035)}
-.obh{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-family:'JetBrains Mono',monospace;
-  font-size:7.5px;letter-spacing:.22em;color:#7C8290;border-bottom:1px solid rgba(237,239,246,.16);padding-bottom:8px;margin-bottom:6px}
-.obh b{color:#EDEFF6;font-weight:700}
-.obr{display:flex;align-items:baseline;gap:0;padding:6px 0}
-.obr>s{text-decoration:none;font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:.22em;color:#7C8290;flex:none}
-.obd{flex:1;min-width:14px;border-bottom:1px dotted rgba(237,239,246,.24);margin:0 9px;transform:translateY(-3px)}
-.ordv{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:10px;letter-spacing:.14em;color:#4E5462;
-  flex:none;transition:color .3s,text-shadow .3s;display:inline-block}
-.ordv.set{color:#EDEFF6;text-shadow:0 0 12px rgba(220,230,255,.55)}
-.ordv.pop{animation:ordpop .42s cubic-bezier(.2,1.4,.3,1)}
-@keyframes ordpop{0%{transform:scale(1.5);opacity:0}55%{transform:scale(.95);opacity:1}100%{transform:scale(1)}}
-.obs{display:flex;align-items:baseline;gap:9px;border-top:1px solid rgba(237,239,246,.16);margin-top:6px;padding-top:9px;
-  font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:.22em;color:#7C8290}
-.obs b{font-size:9px;letter-spacing:.2em;color:#C08C3C;font-weight:800;transition:color .4s,text-shadow .4s}
-.obs b.go{color:#EDEFF6;text-shadow:0 0 12px rgba(220,230,255,.55)}
-.ordbtn{display:block;width:100%;margin-top:16px;font-family:'JetBrains Mono',monospace;font-weight:800;font-size:10px;
-  letter-spacing:.3em;color:#4E5462;background:transparent;border:2px dashed rgba(237,239,246,.2);border-radius:5px;
-  padding:14px 10px;cursor:not-allowed;transition:color .4s,background .4s,border-color .4s,box-shadow .4s}
-.ordbtn.rdy{color:#0A0B0D;background:#EDEFF6;border:2px solid #EDEFF6;cursor:pointer;box-shadow:0 0 26px rgba(220,230,255,.32)}
-.ordbtn.rdy:active{transform:translateY(1px)}
-.ordclr{display:block;margin:9px auto 0;background:none;border:0;cursor:pointer;font-family:'JetBrains Mono',monospace;
-  font-size:7px;letter-spacing:.24em;color:#757C8C}
-.ordclr:hover{color:#EDEFF6}
-.ordprev{margin-top:13px;border:1px solid rgba(237,239,246,.22);border-radius:4px;background:rgba(5,6,8,.92);
-  max-height:0;opacity:0;overflow:hidden;padding:0 14px;
-  transition:max-height .55s cubic-bezier(.2,.8,.2,1),opacity .4s,padding .4s}
-.ordprev.on{max-height:520px;opacity:1;padding:13px 14px 15px}
-.opw{display:inline-block;font-family:'JetBrains Mono',monospace;font-weight:800;font-size:7.5px;letter-spacing:.26em;
-  color:#E0A458;border:1px solid rgba(224,164,88,.55);border-radius:3px;padding:4px 8px;margin-bottom:11px}
-.ordprev pre{font-family:'JetBrains Mono',monospace;font-size:9px;line-height:1.95;color:#C6CBD6;
-  white-space:pre-wrap;word-break:break-word;margin:0}
-.ordprev pre b{color:#EDEFF6;font-weight:700}
-@media(max-width:640px){
-  .ordbed{padding:24px 46px 26px}
-  .ordbed .v-rebate{width:40px}
-  .ordrow>s{width:100%}
-  .ordchip{font-size:8px;padding:7px 10px;letter-spacing:.12em}
-  .ordv{font-size:9px}
-  .ordprev pre{font-size:8px}
-}
 @media(max-width:560px){.c13 .band{letter-spacing:.24em}.big13{font-size:24px}}
 @media(max-width:560px){
   .exh{flex-wrap:wrap;row-gap:3px}
@@ -756,9 +632,9 @@ body{overflow-x:clip}
 <header>
   <div class="kick">EMERALD // RESEARCH DIVISION</div>
   <h1>מעבדת הרעיונות</h1>
-  <p class="sub"><b>סבב חדש: מוצגים 23–28 בראש העמוד</b> — שש הצעות ויזואליות להחלטתך, לפני שמשהו נוגע באתר האמיתי.<br>28 מוצגים חיים — אחד לכל ממצא מרכזי מארבעת דוחות המחקר. אלה <b>סקיצות מהירות</b> שנועדו להרגיש את הרעיון, לא הביצוע הסופי (בגרסה אמיתית: פונטים ייעודיים, ליטוש מלא). ליד כל מוצג — מי מהחוקרים עומד מאחוריו.</p>
+  <p class="sub"><b>אחרי הביקורת: נשארו מוצגים 23 ו-25 בראש העמוד</b> — שניים שאושרו ונבנו מחדש לפי ההערות; ארבעה נדחו והוסרו.<br>מוצגים חיים — אחד לכל ממצא מרכזי מארבעת דוחות המחקר. אלה <b>סקיצות מהירות</b> שנועדו להרגיש את הרעיון, לא הביצוע הסופי (בגרסה אמיתית: פונטים ייעודיים, ליטוש מלא). ליד כל מוצג — מי מהחוקרים עומד מאחוריו.</p>
   <nav class="toc">
-    <a href="#plan" style="background:var(--red);color:var(--paper);border-color:var(--red)">MASTER PLAN</a><a href="#ex23" style="border-color:var(--red);color:var(--red)">23 UV LAMP ★★</a><a href="#ex24" style="border-color:var(--red);color:var(--red)">24 FILE 05 ★★</a><a href="#ex25" style="border-color:var(--red);color:var(--red)">25 ADVERSE FINDING ★★</a><a href="#ex26" style="border-color:var(--red);color:var(--red)">26 REDACTED REFS ★★</a><a href="#ex27" style="border-color:var(--red);color:var(--red)">27 THE DOCKET ★★</a><a href="#ex28" style="border-color:var(--red);color:var(--red)">28 COMMISSIONING ORDER ★★</a>
+    <a href="#plan" style="background:var(--red);color:var(--paper);border-color:var(--red)">MASTER PLAN</a><a href="#ex23" style="border-color:var(--red);color:var(--red)">23 INSPECTION LAMP ★★</a><a href="#ex25" style="border-color:var(--red);color:var(--red)">25 METHOD SLIP ★★</a>
     <a href="#ex20" style="border-color:var(--red);color:var(--red)">20 KINETIC ★★</a><a href="#ex21" style="border-color:var(--red);color:var(--red)">21 TYPE VOICES ★★</a><a href="#ex22" style="border-color:var(--red);color:var(--red)">22 STATEMENT MORPH ★★</a><a href="#ex19" style="border-color:var(--red);color:var(--red)">19 THE VAULT ★</a><a href="#ex18" style="border-color:var(--red);color:var(--red)">18 BRIEF CHIP ★</a><a href="#ex16" style="border-color:var(--red);color:var(--red)">16 EVIDENCE SLIP ★</a><a href="#ex17" style="border-color:var(--red);color:var(--red)">17 CONNECTION BOARD ★★</a>
     <a href="#ex15" style="border-color:var(--red);color:var(--red)">15 END-OF-FILE RITUAL ★</a>
     <a href="#ex13" style="border-color:var(--red);color:var(--red)">13 SYNTHESIS CARD ★</a><a href="#ex14" style="border-color:var(--red);color:var(--red)">14 COVER BRIEF ★</a>
@@ -771,12 +647,8 @@ body{overflow-x:clip}
   <div class="exh"><span class="exn">◈</span><span class="ext">תוכנית-האב — כל מכשירי EMERALD II</span><span class="exs">THE COMPLETE IMPLEMENTATION MAP</span></div>
   <p class="exd">כל מכשיר במסמך — חי, ממתין או מוצע — עם המיקום, ההתנהגות, פעולת-המשתמש והפלואו. <b>ירוק = חי באתר</b> · <b>כתום = מוקאפ ממתין להחלטתך</b> · <b>אפור = מוקפא</b>. לחיצה על שם מוצג קופצת לדוגמה החיה.</p>
   <div class="plangrid">
-    <div class="pcard wait"><div class="pc-h"><b>מנורת ה-UV — מצב בדיקה</b><span>ממתין</span></div><div class="pc-b"><i>מיקום מוצע:</i> פקד בפינת התיקייה בכל אחד מארבעת התיקים + אחד בכספת.<br><i>פעולה:</i> לחיצה — הכרטיס עובר לסגול-UV, הדיו הרגיל עומם ל-35%, שלוש שורות נסתרות עולות בזוהר. לחיצה שנייה מכבה.<br><i>תוכן:</i> ממצא לרעה · גבול השיטה · מה הייתי עושה אחרת (שורה אחת לתיק).<br><i>מובייל:</i> אותו פקד כפס מלא מתחת לראש התיקייה.<br><i>החלטה:</i> אישור קונספט + כתיבת 4 שלישיות תוכן אמיתי. <a href="#ex23">מוצג 23</a></div></div>
-    <div class="pcard wait"><div class="pc-h"><b>תיק 05: לא נפתח</b><span>ממתין</span></div><div class="pc-b"><i>מיקום מוצע:</i> כרטיס חמישי בקצה מגירת התיקים, אחרי Medcoin.<br><i>מראה:</i> לשונית ירוק-אפור ניטרלית "PROSPECTIVE — YOUR COMPANY", אותו דקדוק סיווג, CTRL ריק, COPY 0 OF 12.<br><i>פעולה:</i> נפתח לטופס אינטייק — 01/02 ריקים, 03 (השיטה) מלא.<br><i>פלואו:</i> CTA שאינו CTA, אחרי כל הראיות.<br><i>החלטה:</i> אישור + ניסוח ארבעת שלבי השיטה. <a href="#ex24">מוצג 24</a></div></div>
-    <div class="pcard wait"><div class="pc-h"><b>ממצא לרעה — פתק-נגד</b><span>ממתין</span></div><div class="pc-b"><i>מיקום מוצע:</i> מתחת לפתק-הראיה בכל תיק — <b>אחד לתיק, לא יותר</b>.<br><i>מראה:</i> אותו נייר #E9E7DF ופס-דבק, חותמת NOTED בענבר במקום VERIFIED בירוק, CTRL זהה עם סיומת A.<br><i>פעולה:</i> אין — פתוח תמיד, כמו פתק-הראיה.<br><i>החלטה:</i> אישור + כתיבת 4 מחירים אמיתיים ברמת-שיטה. <a href="#ex25">מוצג 25</a></div></div>
-    <div class="pcard wait"><div class="pc-h"><b>כרטיס הממליצים המושחר</b><span>ממתין</span></div><div class="pc-b"><i>מיקום מוצע:</i> סקשן קצר לפני הכספת (או בתוכה).<br><i>מראה:</i> שלוש רשומות, שם מושחר בלבד, כל השאר גלוי; CTRL № R-26-0001.<br><i>פעולה:</i> לחיצה על פס <b>לא</b> חושפת — היא מחליפה אותו ב-"RELEASED ON REQUEST" באמרלד.<br><i>נדרש ממך:</i> שלושת התפקידים/הקשרים המדויקים. <a href="#ex26">מוצג 26</a></div></div>
-    <div class="pcard wait"><div class="pc-h"><b>הדוקט — ציר משמורת</b><span>ממתין · חסום על תאריכים</span></div><div class="pc-b"><i>מיקום מוצע:</i> אחרי מגירת התיקים, לפני תיק 01.<br><i>מראה:</i> סרגל 2018–2026, ארבעה פסים בצבעי הקייס, קו NOW; בטלפון גלילה הצידה עם רמז SWIPE.<br><i>חסם:</i> רק XTIX (2024–2026) מתועד באתר. שלושת האחרים מצוירים כ-<b>SPAN UNVERIFIED</b> עד שתיתן תאריכים.<br><i>החלטה:</i> אישור עיצוב + ארבעה טווחים. <a href="#ex27">מוצג 27</a></div></div>
-    <div class="pcard wait"><div class="pc-h"><b>הזמנת ההפעלה (FORM 26/C)</b><span>ממתין</span></div><div class="pc-b"><i>מיקום מוצע:</i> סוף הכספת — במקום/מתחת להצהרת הסיום.<br><i>מראה:</i> נגטיב מיקרופילם, שלוש שורות צ'יפים, בלוק הזמנה מונו שנחתם בזמן אמת, מספר הזמנה מהבחירות.<br><i>פעולה:</i> ▸ TRANSMIT ORDER — באתר יפתח mailto מוכן; במוקאפ מציג תצוגה מקדימה בלבד.<br><i>תנאי:</i> להשאיר לצידו דרך פנייה רגילה. <a href="#ex28">מוצג 28</a></div></div>
+    <div class="pcard wait"><div class="pc-h"><b>מנורת הבדיקה — מצב מיקרופילם</b><span>אושר עם שינויים</span></div><div class="pc-b"><i>מיקום:</i> מנורה אחת בפינת התיקייה בכל אחד מארבעת התיקים.<br><i>מראה:</i> הפעלה מעבירה את הכרטיס לנגטיב מיקרופילם — אותה שפה של הכספת (#0A0B0D / #EDEFF6 / שולי פילם).<br><i>תוכן:</i> באור יום — כותרות בלבד; תחת המנורה — עובדה / שיטה / רפלקציה, שלוש שורות לתיק.<br><i>נדרש:</i> כתיבת 3 שורות לכל אחד משלושת התיקים הנותרים. <a href="#ex23">מוצג 23</a></div></div>
+    <div class="pcard wait"><div class="pc-h"><b>פתק-השיטה — הפתק השני</b><span>אושר עם שינויים</span></div><div class="pc-b"><i>מיקום:</i> מתחת לפתק-הראיה בכל תיק — <b>אחד לתיק, לא יותר</b>.<br><i>מראה:</i> אותו נייר #E9E7DF ופס-דבק, אותו CTRL № עם סיומת A, חותמת <b>ON RECORD</b> בגרפיט במקום VERIFIED בירוק.<br><i>תוכן:</i> FACT / ACTION / CONCLUSION — ההנמקה מאחורי הטענה, בלי שלילה.<br><i>נדרש:</i> כתיבת שלושת השורות ל-3 התיקים הנותרים. <a href="#ex25">מוצג 25</a></div></div>
     <div class="pcard live"><div class="pc-h"><b>מזכר הכריכה + סטיקר BRIEF</b><span>חי</span></div><div class="pc-b"><i>מיקום:</i> הכריכה (סטטי) + נקודה עגולה צפה בשוליים השמאליים בתוך 4 התיקים בלבד.<br><i>פעולה:</i> אפס לתקציר-הכריכה; לחיצה על הנקודה פותחת את המזכר מכל עומק.<br><i>פלואו:</i> 7 השניות הראשונות מקבלות הכל; מי שעמוק בקובץ — הנקודה לידו. <a href="#ex14">מוצג 14</a> · <a href="#ex18">18</a></div></div>
     <div class="pcard live"><div class="pc-h"><b>דקדוק הסיווג</b><span>חי</span></div><div class="pc-b"><i>מיקום:</i> ראש כל תיק — פס RESTRICTED בצבע הקייס, CTRL №, COPY N/12, סימוני (S) על מדדי-כסף.<br><i>פעולה:</i> אין — שכבת אמינות פסיבית.<br><i>פלואו:</i> נקרא ברגע פתיחת התיק, לפני התוכן. <a href="#ex13">מוצג 13</a></div></div>
     <div class="pcard live"><div class="pc-h"><b>פסי SEALED</b><span>חי</span></div><div class="pc-b"><i>מיקום:</i> משפט-מפתח אחד בכל תיק (4 שאישרת).<br/><i>מראה:</i> פס נייר בהיר-מט עם "SEALED · TAP TO REVEAL ▸" וברק.<br><i>פעולה:</i> הקשה או גרירה הצידה — הפס מחליק החוצה, המשפט נחשף בהבזק.<br><i>פלואו:</i> עצירת-סקרנות באמצע הקריאה — פעולה במקום, בלי לעזוב. <a href="#ex15">מוצג 15</a></div></div>
@@ -796,251 +668,123 @@ body{overflow-x:clip}
 
 <!-- ============ EX23 ============ -->
 <section class="ex" id="ex23" style="padding-top:34px">
-  <div class="exh"><span class="exn">23</span><span class="ext">מנורת ה-UV — למסמך יש שכבה שנייה</span><span class="exs">YOUR IDEA · EXAMINATION MODE · 365 nm</span></div>
-  <p class="exd">הרעיון שלך, ממומש. פקד קטן בפינת התיקייה מעביר את הכרטיס ל<b>מצב בדיקה</b>: הנייר עובר לסגול-כחול קר של מנורת UV בחדר ראיות, הדיו הרגיל עומם ל-35%, ושלוש שורות שלא היו שם עולות בדיו זוהר — בכתב-מכונה, כאילו נוספו אחר-כך ביד: <b>ממצא לרעה</b>, <b>גבול של השיטה</b>, ו<b>מה הייתי עושה אחרת</b>. לחיצה שנייה מכבה את המנורה.<br><b>מיקום באתר:</b> פקד אחד בכל אחד מארבעת התיקים — בפינת ה-folder, בגובה הלשונית — ואחד בכספת, שם הוא חושף מה התיק כולו לא אומר בקול. <b>למה זו אמינות ולא תיאטרון:</b> כל מועמד כותב מה עבד. השכבה השנייה כותבת מה זה עלה, מתי השיטה <i>לא</i> מתאימה, ומה היה משתנה בפעם הבאה — בדיוק המידע שמנכ"ל מחפש בראיון ולא מקבל. הסגול רק מסמן שנכנסת למקום אחר; הערך הוא הטקסט. <b>מובייל</b> (מוקאפ מימין): אותו פקד הופך לפס ברוחב מלא מתחת לראש התיקייה — שני המוקאפים מסונכרנים, לחיצה על אחד מפעילה את שניהם.</p>
+  <div class="exh"><span class="exn">23</span><span class="ext">מנורת הבדיקה — הכרטיס מתפתח מתחת לאור</span><span class="exs">V2 · SILVER-HALIDE MODE · THE FILE DEVELOPS</span></div>
+  <p class="exd">שלושה שינויים לפי ההערות שלך. <b>(1) המראה:</b> הסגול ירד לגמרי. הכרטיס עובר לאותו <b>נגטיב מיקרופילם</b> של סוף המסמך — מצע #0A0B0D, כסף #EDEFF6 עם זוהר-סריקה, שולי פילם עם חורי-הזנה ומספרי-פריים (23A / 24A). שחור-לבן זוהר, לא צבע. <b>(2) הטריגר:</b> אין כפתור. יש <b>מנורת בדיקה קטנה</b> (40px, SVG) שמקרינה קונוס אור חמים ונושמת בעדינות בפינת התיקייה, ומתחתיה הזמנה בקול רם: <b>SWITCH ON THE LAMP</b>. <b>(3) מודל התוכן:</b> באור יום הכרטיס <b>לא שלם</b> — רואים רק את כותרות האזורים (01/02/03) מעל שורות ריקות מסומנות UNEXPOSED. המנורה לא <i>מוסיפה</i> הערות — היא <b>מפתחת</b> כרטיס שנולד חסר. הנוסח עודכן לפי ההחלטה שלך: עובדה, פעולה, מסקנה, רפלקציה — בלי שלילה, בלי “טעויות שעשיתי”.</p>
   <div class="demo dark" style="padding:26px 20px">
     <div class="uvwrap">
       <div class="uvcard" id="uvcard">
+        <div class="uvreb l" aria-hidden="true"><span>KODAK SAFETY FILM 5063</span><span>&rsaquo;&rsaquo; 23A</span></div>
+        <div class="uvreb r" aria-hidden="true"><span>EMERALD ARCHIVE &middot; REEL 04</span><span>24A &lsaquo;&lsaquo;</span></div>
         <div class="uvtop">
           <span class="uvtab">XTIX</span>
-          <button class="uvbtn" id="uvbtn" type="button"><i class="uvled"></i><span id="uvbtnt">EXAMINE UNDER UV · 365 nm</span></button>
+          <button class="lamp" id="uvbtn" type="button" aria-pressed="false">
+          <svg viewBox="0 0 40 40" aria-hidden="true" focusable="false">
+            <defs>
+              <linearGradient id="lcguvbtn" x1="0" y1="0" x2="0" y2="1"><stop offset="0" class="ls1"/><stop offset=".62" class="ls2"/><stop offset="1" class="ls3"/></linearGradient>
+              <radialGradient id="lhguvbtn"><stop offset="0" class="lh1"/><stop offset="1" class="lh2"/></radialGradient>
+            </defs>
+            <g class="lcone">
+              <path d="M9.2 20.6 L20.8 20.6 L27.5 37 L2.5 37 Z" fill="url(#lcguvbtn)"/>
+              <circle cx="15.2" cy="20.3" r="8" fill="url(#lhguvbtn)"/>
+            </g>
+            <path class="lbody" d="M25.5 35.5 H36.5"/>
+            <path class="lbody" d="M31 35.5 V23"/>
+            <path class="lbody" d="M31 23 L20.6 13.4"/>
+            <path class="lbody" d="M11 12.5 H19.5 L22.5 20.5 H8 Z"/>
+            <circle class="lbulb" cx="15.2" cy="20.3" r="1.8"/>
+          </svg>
+          <span class="lampcall" id="uvbtnt">SWITCH ON THE LAMP</span>
+          <span class="lampsub" id="uvbtns">THIS FILE IS NOT FULLY EXPOSED</span>
+        </button>
         </div>
-        <div class="uvband">R E S T R I C T E D · EMERALD ARCHIVE</div>
-        <div class="uvctl"><span>CTRL № X-26-0101</span><span>CASE FILE 01 — XTIX</span><span>COPY 3 OF 12</span></div>
+        <div class="uvband">R E S T R I C T E D &middot; EMERALD ARCHIVE</div>
+        <div class="uvctl"><span>CTRL &#8470; X-26-0101</span><span>CASE FILE 01 &mdash; XTIX</span><span>COPY 3 OF 12</span></div>
         <div class="uvz z1">
           <div class="uvzr"><b>01</b><i></i>THE SITUATION</div>
-          <div class="uvp uvday">Strong vision. Strong product. Zero commercial infrastructure.</div>
-          <div class="uvhid"><span class="uvk">ADVERSE FINDING</span><span class="uvt">Diagnosis before outbound means the first weeks produce understanding, not pipeline. On a short runway that is a real cost — price it before you hire him.</span></div>
+          <div class="uvlat" aria-hidden="true"><s></s><s></s><s class="h"></s><em>UNEXPOSED</em></div>
+          <div class="uvhid"><span class="uvk">FINDING OF FACT</span><span class="uvt">At intake the file records strong vision, a strong product, and no commercial function of any kind &mdash; seven named gaps: no CRM, no business development, no sales methodology, no outbound process, no pipeline management, no KPI framework, no reporting structure.</span></div>
         </div>
         <div class="uvz z2">
           <div class="uvzr"><b>02</b><i></i>MISSION OBJECTIVE</div>
-          <div class="uvp uvday">Build a commercial operating system for predictable growth — domestic &amp; international.</div>
-          <div class="uvhid"><span class="uvk">LIMIT OF THE METHOD</span><span class="uvt">Built for predictable growth, not for one heroic quarter. If what you need is a single number by December, hire a closer — not an operator.</span></div>
+          <div class="uvlat" aria-hidden="true"><s></s><s></s><s class="h"></s><em>UNEXPOSED</em></div>
+          <div class="uvhid"><span class="uvk">THE METHOD</span><span class="uvt">The brief was written as a system, not a quarter: a commercial operating system for predictable growth, domestic and international. Understanding before outbound &mdash; business and product analysis, market and competitive research, ICP definition, segmentation, positioning &mdash; and only then execution.</span></div>
         </div>
         <div class="uvz z3">
           <div class="uvzr"><b>03</b><i></i>MY APPROACH</div>
-          <div class="uvp uvday">Understanding before outbound — only then did execution begin.</div>
-          <div class="uvhid"><span class="uvk">ON RE-EXAMINATION</span><span class="uvt">Subject would run the diagnosis and the first outbound sequence in parallel, and publish the scoreboard from week one — so the learning is visible before the pipeline is.</span></div>
+          <div class="uvlat" aria-hidden="true"><s></s><s></s><s class="h"></s><em>UNEXPOSED</em></div>
+          <div class="uvhid"><span class="uvk">ON RE-EXAMINATION</span><span class="uvt">The order held: diagnosis, then infrastructure, then execution &mdash; ten pieces built from zero, up to an in-house AI commercial intelligence platform. Rebuilding XTIX today the subject would position for enterprise before scaling outbound, and treat AI as core infrastructure rather than an add-on.</span></div>
         </div>
-        <div class="uvsig">— REVIEWING DESK, 2026 · UV LAYER — NOT PRESENT IN THE PRINTED COPY</div>
+        <div class="uvsig">&mdash; REVIEWING DESK, 2026 &middot; DEVELOPED UNDER THE LAMP &mdash; NOT PRESENT IN THE PRINTED COPY</div>
       </div>
       <div class="uvphone">
-        <div class="uvphl">MOBILE · 390 px</div>
+        <div class="uvphl">MOBILE &middot; 390 px</div>
         <div class="uvpcard" id="uvpcard">
+          <div class="uvpreb l" aria-hidden="true"></div>
+          <div class="uvpreb r" aria-hidden="true"></div>
           <span class="uvptab">XTIX</span>
           <div class="uvpband">R E S T R I C T E D</div>
-          <button class="uvpbar" id="uvpbar" type="button"><i class="uvled"></i><span id="uvpbart">EXAMINE UNDER UV · 365 nm</span></button>
+          <div class="uvplampw"><button class="lamp" id="uvpbar" type="button" aria-pressed="false">
+          <svg viewBox="0 0 40 40" aria-hidden="true" focusable="false">
+            <defs>
+              <linearGradient id="lcguvpbar" x1="0" y1="0" x2="0" y2="1"><stop offset="0" class="ls1"/><stop offset=".62" class="ls2"/><stop offset="1" class="ls3"/></linearGradient>
+              <radialGradient id="lhguvpbar"><stop offset="0" class="lh1"/><stop offset="1" class="lh2"/></radialGradient>
+            </defs>
+            <g class="lcone">
+              <path d="M9.2 20.6 L20.8 20.6 L27.5 37 L2.5 37 Z" fill="url(#lcguvpbar)"/>
+              <circle cx="15.2" cy="20.3" r="8" fill="url(#lhguvpbar)"/>
+            </g>
+            <path class="lbody" d="M25.5 35.5 H36.5"/>
+            <path class="lbody" d="M31 35.5 V23"/>
+            <path class="lbody" d="M31 23 L20.6 13.4"/>
+            <path class="lbody" d="M11 12.5 H19.5 L22.5 20.5 H8 Z"/>
+            <circle class="lbulb" cx="15.2" cy="20.3" r="1.8"/>
+          </svg>
+          <span class="lampcall" id="uvpbart">SWITCH ON THE LAMP</span>
+          <span class="lampsub" id="uvpbars">NOT FULLY EXPOSED</span>
+        </button></div>
           <div class="uvpz">
-            <div class="uvpzr"><b>01</b> · THE SITUATION</div>
-            <div class="uvpp">Strong vision. Strong product. Zero commercial infrastructure.</div>
-            <div class="uvphid"><span class="uvk">ADVERSE FINDING</span><span class="uvt">Diagnosis before outbound means the first weeks produce understanding, not pipeline.</span></div>
+            <div class="uvpzr"><b>01</b> &middot; THE SITUATION</div>
+            <div class="uvplat" aria-hidden="true"><s></s><s class="h"></s></div>
+            <div class="uvphid"><span class="uvk">FINDING OF FACT</span><span class="uvt">Strong vision, a strong product, and seven named gaps &mdash; no CRM, no business development, no methodology, no pipeline, no KPI framework.</span></div>
           </div>
         </div>
       </div>
     </div>
   </div>
-  <p class="note"><b>השיפוט שלי:</b> מה יהרוג את זה — אם הטקסט הנסתר יהיה עוד שבח בתחפושת ("הייתי עושה את זה מהר יותר"). השכבה הזו חייבת <b>לעלות לך משהו</b> לכתוב, אחרת הקורא מריח את זה בשנייה והאפקט הופך לגימיק יקר. מה יציל את זה — משפט אחד לתיק, ספציפי מספיק שאפשר לחלוק עליו. שלוש שורות זו התקרה: ארבע והתיק הופך למסמך שני. שני תנאי-סף נוספים: (א) הפקד חייב להצהיר מה בדיוק יקרה — "EXAMINE UNDER UV", לא "לחץ כאן"; (ב) הכיבוי חייב להיות באותה נגישות כמו ההדלקה, אחרת זה מרגיש כמו מלכודת. הסיכון האמיתי: מגייס שקורא רק את שכבת ה-UV ומסיק שזה תיק של חסרונות — לכן שורת החתימה למטה חייבת להישאר, היא מסגור.</p>
+  <p class="note"><b>השיפוט שלי:</b> המעבר למיקרופילם פתר את הבעיה האמיתית של הגרסה הקודמת: סגול הוא אפקט מסיבה, כסף-על-שחור הוא ארכיון — ועכשיו שתי הנקודות הכי חזקות במסמך (הכספת והמנורה) מדברות בדיוק אותה שפה. מה שאני עוד בודק בעיניים: כרטיס שנראה ריק באור יום הוא הימור — מי שלא ילחץ לעולם לא יקרא את התוכן. לכן המנורה קטנה אבל הכיתוב גדול ונוגד, ולכן השורות הריקות מסומנות UNEXPOSED — זה נראה מכוון, לא שבור. המלצה אחת ליישום באתר: <b>מנורה אחת לתיק, שלוש שורות, לא יותר</b> — אם כל סקשן יקבל מנורה, המכשיר מתבזבז והמסמך הופך למשחק חיפושים.</p>
 </section>
-
-<!-- ============ EX24 ============ -->
-<section class="ex" id="ex24">
-  <div class="exh"><span class="exn">24</span><span class="ext">תיק 05: לא נפתח</span><span class="exs">FILE 05 — PROSPECTIVE · THE INTAKE FORM</span></div>
-  <p class="exd">תיק חמישי בקצה המגירה, אחרי ארבעת האמיתיים: לשונית ניטרלית בירוק-אפור — <b>PROSPECTIVE — YOUR COMPANY</b> — בדיוק אותה אנטומיה כמו התיקים האחרים (פס RESTRICTED, שורת CTRL, מסילת חורים), אבל <b>ריק</b>. נפתח לטופס אינטייק: <b>01 THE SITUATION</b> — שורות משורטטות ריקות. <b>02 MISSION OBJECTIVE</b> — ריק. <b>03 MY APPROACH</b> — כבר מלא, כי זה החלק היחיד שלא משתנה בין חברה לחברה: אבחון ← שיטתיות ← גיוס לתוך המערכת ← מדידה. חותמת: <b>AWAITING ASSIGNMENT · CTRL № —— · COPY 0 OF 12</b>. לחיצה על הכרטיס פותחת וסוגרת את התיק.</p>
-  <div class="demo dark" style="padding:26px 20px">
-    <div class="f5">
-      <div>
-        <div class="f5dl">THE DRAWER — END OF RUN</div>
-        <div class="f5sp"><i style="background:#2FB380"></i><b>XTIX</b><span>FILE 01</span></div>
-        <div class="f5sp"><i style="background:#E0A458"></i><b>Oasis</b><span>FILE 02</span></div>
-        <div class="f5sp"><i style="background:#5E8FBF"></i><b>Eventer</b><span>FILE 03</span></div>
-        <div class="f5sp"><i style="background:#E9E7DF"></i><b>Medcoin</b><span>FILE 04</span></div>
-        <button class="f5card" id="f5card" type="button">
-          <span class="f5hole" style="top:44px"></span><span class="f5hole" style="top:70px"></span>
-          <span class="f5lip"><b>Your Company</b><span>FILE 05</span></span>
-          <span class="f5cat">PROSPECTIVE</span>
-          <span class="f5doss">&gt; Unopened. The situation has not been written yet.</span>
-          <span class="f5open" id="f5open">▾ CLICK TO CLOSE THE FILE</span>
-        </button>
-      </div>
-      <div class="f5sheet" id="f5sheet">
-        <div class="f5top">
-          <span class="f5tab">PROSPECTIVE — YOUR COMPANY</span>
-          <span class="f5state">INTAKE — UNFILED</span>
-        </div>
-        <div class="f5band">R E S T R I C T E D · EMERALD ARCHIVE</div>
-        <div class="f5ctl"><span>CTRL № ——</span><span>CASE FILE 05 — PROSPECTIVE</span><span>COPY 0 OF 12</span></div>
-        <div class="f5inner">
-          <div class="f5cols">
-            <div>
-              <div class="f5z">
-                <div class="f5zr"><b>01</b><i></i>THE SITUATION</div>
-                <div class="f5rule"></div><div class="f5rule"></div><div class="f5rule s"></div>
-                <div class="f5wait">TO BE COMPLETED AT INTAKE</div>
-              </div>
-              <div class="f5z">
-                <div class="f5zr"><b>02</b><i></i>MISSION OBJECTIVE</div>
-                <div class="f5rule"></div><div class="f5rule s"></div>
-                <div class="f5wait">TO BE COMPLETED AT INTAKE</div>
-              </div>
-            </div>
-            <div>
-              <div class="f5z" style="margin-bottom:0">
-                <div class="f5zr"><b>03</b><i></i>MY APPROACH</div>
-                <div class="f5step"><em></em><span><b>01 · DIAGNOSE</b><span>Business, product, market, ICP. Understanding before outbound.</span></span></div>
-                <div class="f5step"><em></em><span><b>02 · SYSTEMATIZE</b><span>CRM, pipeline, sequences, KPI framework. The machine before the headcount.</span></span></div>
-                <div class="f5step"><em></em><span><b>03 · HIRE AGAINST THE SYSTEM</b><span>Recruit to a defined process — not to gut feel.</span></span></div>
-                <div class="f5step"><em></em><span><b>04 · MEASURE</b><span>One scoreboard, weekly, visible to everyone who is on it.</span></span></div>
-                <div class="f5then">Only then does execution begin.</div>
-              </div>
-            </div>
-          </div>
-          <div class="f5foot">
-            <div class="f5note">SECTIONS 01–02 ARE YOURS TO FILL.<br>SECTION 03 DOES NOT CHANGE WITH THE LOGO.</div>
-            <div class="f5stamp">AWAITING ASSIGNMENT<span>CTRL № —— · COPY 0 OF 12</span></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <p class="note"><b>השיפוט שלי:</b> זה המהלך הכי חכם מבין השישה מבחינת אפקט-מול-עלות — הוא הופך CTA למסמך, ובלי לבקש כלום. שני סיכונים: (א) <b>יומרנות</b> — טופס ריק יכול להיקרא כ"תמלא לי את הפרטים", לכן קטע 03 המלא הוא לא קישוט אלא ההצדקה: אתה נותן לפני שאתה מבקש; (ב) <b>מיקום</b> — אם הכרטיס הזה יופיע במגירה לפני התיקים האמיתיים או בגודל שווה להם, הוא גונב את הבמה מהראיות. הוא חייב להיות אחרון, מעומעם ביחס לארבעה, ולהיפתח רק בלחיצה. לא הייתי מוסיף לו טופס אמיתי (שדות קלט) — ברגע שיש input זה הופך לדף נחיתה ומאבד את הכבוד.</p>
-</section>
-
 <!-- ============ EX25 ============ -->
 <section class="ex" id="ex25">
-  <div class="exh"><span class="exn">25</span><span class="ext">ממצא לרעה — פתק-הנגד</span><span class="exs">COUNTER-SLIP · NOTED, NOT VERIFIED</span></div>
-  <p class="exd">בדיוק אותו דקדוק-נייר של פתק-הראיה הקיים (מוצג 16): נייר <b>#E9E7DF</b>, פס-דבק, שורות SOURCE / CLAIM / FILED, חותמת פינתית — רק שהחותמת היא <b>NOTED</b> בענבר מעומעם במקום <b>VERIFIED</b> בירוק. הוא מודבק ישירות מתחת לפתק ראיה רגיל, וכך הזוג נקרא כ<b>שיטה</b>: כל טענה שנבדקה נושאת איתה את המחיר שלה, מוצמד באותו מספר בקרה. התוכן ברמת-שיטה בלבד — עלות אמיתית של הצלחה אמיתית, בלי מספר אחד שהומצא. המתג למעלה מראה בדיוק את ההבדל שהפתק השני עושה.</p>
+  <div class="exh"><span class="exn">25</span><span class="ext">פתק-השיטה — מה עומד מאחורי הטענה</span><span class="exs">METHOD SLIP · FACT · ACTION · CONCLUSION</span></div>
+  <p class="exd">המנגנון נשאר כמו שאישרת: שני פתקים על אותו נייר <b>#E9E7DF</b>, פס-דבק, אותו CTRL № עם סיומת A, ומתג שמראה את ההבדל בין פתק אחד לזוג. <b>מה שהשתנה הוא מה שכתוב בפתק השני.</b> במקום ממצא לרעה וחותמת NOTED בענבר, הפתק נושא את שכבת ההנמקה שמאחורי הטענה: <b>FACT</b> — מה היה שם, <b>ACTION</b> — מה הוא עשה, <b>CONCLUSION</b> — מה הוא מסיק מזה. החותמת היא <b>ON RECORD</b> בדיו גרפיט של השולחן — לא אזהרה, הערה. כל מילה בפתק השני לקוחה מהנוסח שכבר קיים באתר ל-XTIX — לא המצאתי עובדה אחת. הכלל נשמר: <b>אחד לתיק, לעולם לא שניים</b>.</p>
   <div class="demo dark" style="padding:30px 22px">
     <div class="afzone">
       <div class="aftogw"><span class="aftog">
         <button id="afOnly" type="button">EVIDENCE ONLY</button>
-        <button id="afBoth" type="button" class="on">EVIDENCE + COUNTER</button>
+        <button id="afBoth" type="button" class="on">EVIDENCE + METHOD</button>
       </span></div>
       <div class="afslip af1">
-        <div class="es-h"><span>EVIDENCE SLIP</span><b>(S) · CTRL № X-26-0114</b></div>
-        <div class="es-row"><span class="es-k">SOURCE</span><span class="es-v">CRM EXPORT · PIPELINE REPORT FY25</span></div>
-        <div class="es-row"><span class="es-k">CLAIM</span><span class="es-v">COMMERCIAL OPERATING SYSTEM — BUILT FROM ZERO</span></div>
+        <div class="es-h"><span>EVIDENCE SLIP</span><b>(S) &middot; CTRL &#8470; X-26-0114</b></div>
+        <div class="es-row"><span class="es-k">SOURCE</span><span class="es-v">CRM EXPORT &middot; PIPELINE REPORT FY25</span></div>
+        <div class="es-row"><span class="es-k">CLAIM</span><span class="es-v">COMMERCIAL OPERATING SYSTEM &mdash; BUILT FROM ZERO</span></div>
         <div class="es-row"><span class="es-k">FILED</span><span class="es-v" id="afdate1">2026-08</span></div>
         <span class="es-stamp">VERIFIED</span>
       </div>
-      <div class="afconn"><span>↳ SAME CTRL №</span><s></s><span>THE COST TRAVELS WITH THE CLAIM</span></div>
+      <div class="afconn"><span>&#9662; SAME CTRL &#8470;</span><s></s><span>THE REASONING TRAVELS WITH THE CLAIM</span></div>
       <div class="af2w" id="af2w">
         <div class="afslip af2">
-          <div class="es-h"><span>COUNTER-SLIP — ADVERSE FINDING</span><b>(S) · CTRL № X-26-0114-A</b></div>
-          <div class="es-row"><span class="es-k">SOURCE</span><span class="es-v">SUBJECT'S OWN ACCOUNT — VOLUNTEERED, NOT DISCLOSED UNDER QUESTION</span></div>
-          <div class="es-row"><span class="es-k">FINDING</span><span class="af-t">The system was built before the team existed. The first hires inherited a process they had no hand in designing.</span></div>
-          <div class="es-row"><span class="es-k">COST</span><span class="af-t">Ownership has to be won back after the fact — and the method screens out strong people who need to build their own.</span></div>
+          <div class="es-h"><span>METHOD SLIP &mdash; HOW THE CLAIM WAS BUILT</span><b>(S) &middot; CTRL &#8470; X-26-0114-A</b></div>
+          <div class="es-row"><span class="es-k">SOURCE</span><span class="es-v">CASE FILE 01 &mdash; XTIX &middot; SECTIONS 01&ndash;04, SAME FILE AS ABOVE</span></div>
+          <div class="es-row"><span class="es-k">FACT</span><span class="af-t">At intake: strong vision, a strong product, and seven named gaps &mdash; no CRM, no business development function, no sales methodology, no outbound process, no pipeline management, no KPI framework, no reporting structure.</span></div>
+          <div class="es-row"><span class="es-k">ACTION</span><span class="af-t">Understanding before outbound &mdash; business and product analysis, market research, competitive analysis, ICP definition, customer segmentation, commercial positioning. Then the build: commercial strategy, HubSpot CRM, business development process, sales pipeline, ICP framework, outbound sequences, KPI framework, forecasting structure, reporting dashboards, and an AI-powered outbound engine.</span></div>
+          <div class="es-row"><span class="es-k">CONCLUSION</span><span class="af-t">A commercial function is infrastructure before it is activity. Built in that order it carries $9M+ ARR in managed pipeline, ~20% outbound reply, 7&ndash;8% outbound conversion and 50%+ inbound conversion.</span></div>
           <div class="es-row"><span class="es-k">FILED</span><span class="es-v" id="afdate2">2026-08</span></div>
-          <span class="af-stamp">NOTED</span>
+          <span class="af-stamp">ON RECORD</span>
         </div>
       </div>
     </div>
   </div>
-  <p class="note"><b>השיפוט שלי:</b> זה המוצג שהכי משנה את קריאת המסמך כולו, וגם הכי מסוכן. מסמך עם עשרים חותמות VERIFIED נקרא כשיווק; חותמת <b>NOTED</b> אחת גורמת לעשרים האחרות להיקרא כאמת. אבל: <b>אחת לתיק, לא יותר</b> — שתיים והתיק הופך להתנצלות, וגרוע מזה, לענווה מבוימת (וזה נקרא מיד). התוכן חייב להיות מחיר שאתה באמת שילמת ושהיית משלם שוב, לא חולשה מנוסחת כחוזקה. הבדיקה הפשוטה: אם משפט ה-COST לא גורם לך אי-נוחות קלה כשאתה קורא אותו למנכ"ל בקול — הוא חלש מדי. הערה טכנית: ה-COUNTER חייב לשאת את אותו CTRL № עם סיומת A, אחרת הוא נראה כמו הערת שוליים ולא כמו חלק מהתיק.</p>
-</section>
-
-<!-- ============ EX26 ============ -->
-<section class="ex" id="ex26">
-  <div class="exh"><span class="exn">26</span><span class="ext">כרטיס הממליצים המושחר</span><span class="exs">THE ONE REDACTION THAT IS LITERALLY TRUE</span></div>
-  <p class="exd">בכל שאר המסמך פס שחור הוא <b>מכשיר</b> — אנחנו יודעים ששום דבר לא באמת מסווג. כאן הוא <b>הדבר האמיתי היחיד</b>: אי-אפשר לפרסם שם של ממליץ בעמוד ציבורי בלי רשותו, נקודה. אז השם באמת חסוי, וכל השאר גלוי — תפקיד, איזה תיק, סוג הקשר, היקף. <b>לחיצה על הפס לא חושפת שם.</b> היא הופכת אותו לתווית הכנה: <b>RELEASED ON REQUEST</b>. זה הרגע היחיד במסמך שבו הדקדוק הבלשי מפסיק להיות תחפושת ומתאר מציאות — ולכן זה גם המקום היחיד שבו מותר לו להיות מפורש.</p>
-  <div class="demo dark" style="padding:30px 22px">
-    <div class="refcard" id="refcard">
-      <div class="refband">R E F E R E N C E &nbsp; I N D E X · S E A L E D</div>
-      <div class="refctl"><span>CTRL № R-26-0001</span><span>03 RECORDS</span><span>NAMES WITHHELD BY CONSENT</span></div>
-      <div class="refbody">
-        <div class="refrow">
-          <span class="refn">REFERENCE 01</span>
-          <button class="refbar" type="button" data-w="118"><span class="rb1">███████████</span><span class="rb2">RELEASED ON REQUEST</span></button>
-          <span class="refm">CEO · FILE 01 <em>·</em> DIRECT MANAGER <em>·</em> FULL TENURE</span>
-        </div>
-        <div class="refrow">
-          <span class="refn">REFERENCE 02</span>
-          <button class="refbar" type="button" data-w="96"><span class="rb1">████████</span><span class="rb2">RELEASED ON REQUEST</span></button>
-          <span class="refm">BOARD · FILE 02 <em>·</em> OVERSIGHT OF THE MANDATE</span>
-        </div>
-        <div class="refrow">
-          <span class="refn">REFERENCE 03</span>
-          <button class="refbar" type="button" data-w="130"><span class="rb1">████████████</span><span class="rb2">RELEASED ON REQUEST</span></button>
-          <span class="refm">PEER — OPERATIONS · FILE 03 <em>·</em> CROSS-FUNCTIONAL</span>
-        </div>
-      </div>
-      <div class="reffoot">
-        <span>NAMES RELEASED ON REQUEST — <b>CTRL № R-26-0001</b></span>
-        <span class="refcount" id="refcount">0 OF 3 MARKED</span>
-      </div>
-    </div>
-    <div class="refhint">▸ CLICK A BAR — IT DOES NOT REVEAL. IT TELLS YOU THE TRUTH.</div>
-  </div>
-  <p class="note"><b>השיפוט שלי:</b> זה המוצג עם הכי מעט סיכון וההחזר הכי גבוה — הוא לוקח את המוסכמה הכי שחוקה בקורות-חיים ("ממליצים יינתנו לפי בקשה", שורה שאף אחד לא קורא) והופך אותה למכשיר היחיד במסמך שאומר אמת מילולית. חובה: הפס <b>לא</b> יזוז ולא יחליק כמו פסי ה-SEALED האחרים — אם הוא מתנהג כמוהם, הקורא מצפה לשם ומקבל אכזבה, וזו הרגשה גרועה. הוא נשאר במקום ומחליף טקסט. שתי הערות תוכן: (א) שלושת הרשומות כאן הן <b>מבנה בלבד</b> — התפקידים והקשרים צריכים להגיע ממך ולהיות מדויקים, כי דווקא כאן שקר קטן הורס את כל התרגיל; (ב) לא הייתי כותב מספר שנים לאף ממליץ אלא אם הוא מאומת מול התיק — "FULL TENURE" עושה את אותה עבודה בלי סיכון.</p>
-</section>
-
-<!-- ============ EX27 ============ -->
-<section class="ex" id="ex27">
-  <div class="exh"><span class="exn">27</span><span class="ext">הדוקט — שרשרת המשמורת על ציר זמן</span><span class="exs">THE DOCKET · CHAIN OF CUSTODY 2018–2026</span></div>
-  <p class="exd">פס כרונולוגיה אופקי אחד שעונה על השאלה שהמסמך כרגע לא עונה עליה: <b>מתי, וכמה זמן</b>. סרגל מונו עם ארבעה פסי-משמורת בצבעי הקייס, בסדר האמיתי — Medcoin, Eventer, Oasis, XTIX. ריחוף על פס מאיר אותו ומדפיס את שורת המקור למטה; בטלפון הפס נגלל הצידה עם רמז ה-SWIPE הקיים באתר.<br><b>הערת יושרה — קרא את זה:</b> הטווח היחיד שמתועד באתר עצמו הוא <b>2024–2026 ל-XTIX</b> (מכרטיס השדרה של תיק 01), והכותרת הכללית <b>2018–2026</b>. את שלושת הטווחים האחרים אני <b>לא ממציא</b> — הם מצוירים כפסים מקווקווים ומסומנים <b>SPAN UNVERIFIED</b> עד שתיתן לי אותם. בדיוק בגלל זה זה עובד: בתיק ראיות, פס לא-מאומת נראה אחרת מפס מאומת — וזה מוסיף לאמינות במקום לגרוע ממנה.</p>
-  <div class="demo dark" style="padding:26px 20px">
-    <div class="dk">
-      <div class="dkhead"><span><b>DOCKET</b> — CHAIN OF CUSTODY</span><span>04 FILES · 2018–2026 · CTRL № D-26-0001</span></div>
-      <div class="dkscroll" id="dkscroll">
-        <div class="dkgrid" id="dkgrid">
-          <div class="dkruler" id="dkruler"></div>
-          <div class="dklane"><span class="dkk"><b>FILE 04</b>MEDCOIN · FOUNDER</span><span class="dktrack"><span class="dkbar prov" style="background-color:#E9E7DF;color:#22201C" data-a="2018.1" data-b="2020.2" data-cap="prov" data-nm="FILE 04 · MEDCOIN" tabindex="0"><b>SPAN UNVERIFIED</b></span></span></div>
-          <div class="dklane"><span class="dkk"><b>FILE 03</b>EVENTER · ALIGNMENT</span><span class="dktrack"><span class="dkbar prov" style="background-color:#5E8FBF;color:#0C1520" data-a="2020.3" data-b="2022.1" data-cap="prov" data-nm="FILE 03 · EVENTER" tabindex="0"><b>SPAN UNVERIFIED</b></span></span></div>
-          <div class="dklane"><span class="dkk"><b>FILE 02</b>OASIS · CEO MANDATE</span><span class="dktrack"><span class="dkbar prov" style="background-color:#E0A458;color:#2A1F0E" data-a="2022.2" data-b="2023.95" data-cap="prov" data-nm="FILE 02 · OASIS" tabindex="0"><b>SPAN UNVERIFIED</b></span></span></div>
-          <div class="dklane"><span class="dkk"><b>FILE 01</b>XTIX · BUILT FROM ZERO</span><span class="dktrack"><span class="dkbar src" style="background-color:#2FB380;color:#08231A" data-a="2024" data-b="2026.6" data-cap="src" data-nm="FILE 01 · XTIX" tabindex="0"><b>2024–2026 · SOURCED</b></span></span></div>
-        </div>
-      </div>
-      <div class="swcue2"><span>SWIPE</span><i>→</i></div>
-      <div class="dkcap" id="dkcap"><b>SOURCED</b> — XTIX 2024–2026, FROM THE FILE 01 SPINE TICKET. &nbsp;<span class="prv">UNVERIFIED</span> — 03 SPANS DRAWN IN ORDER ONLY, AWAITING THE FILE OWNER. &nbsp;▸ HOVER A BAR.</div>
-    </div>
-  </div>
-  <p class="note"><b>השיפוט שלי:</b> מבין השישה, זה המוצג שהכי קרוב לכשלון אם לא תיתן לי תאריכים. חצי-דוקט (פס אחד מאומת ושלושה מקווקווים) אפשר להציג — הוא נראה כמו תיק שנמצא באמצע בדיקה — אבל <b>רק לזמן קצר</b>: אם המצב הזה ישאר קפוא באתר לאורך זמן הוא מתחיל להיקרא כרשלנות, לא כיושרה. ההמלצה שלי: לאשר את העיצוב, לשלוח לי ארבעה טווחים (חודש+שנה מספיק), ורק אז לעלות. ועוד שיקול: הדוקט חושף גם רצף וגם <b>פערים</b>. אם יש בציר פער שאתה לא רוצה שיישאל עליו — עדיף לא לבנות את המוצג הזה בכלל מאשר לבנות אותו ואז לרמות בו.</p>
-</section>
-
-<!-- ============ EX28 ============ -->
-<section class="ex" id="ex28">
-  <div class="exh"><span class="exn">28</span><span class="ext">הזמנת ההפעלה — סוף הכספת הופך לטופס</span><span class="exs">FORM 26/C · COMMISSIONING ORDER</span></div>
-  <p class="exd">הכספת נגמרת היום בהצהרה. כאן היא נגמרת ב<b>פעולה</b>, באותה שפה בדיוק: נגטיב מיקרופילם (שחור <b>#0A0B0D</b>, כסף <b>#EDEFF6</b>, זוהר-סריקה, שולי פילם עם חורי הזנה). שלוש שורות של צ'יפים — <b>ENGAGEMENT</b>, <b>HORIZON</b>, <b>FOCUS</b> — וכל בחירה <b>נחתמת</b> לתוך בלוק ההזמנה שמתחת, עם מספר הזמנה שנבנה מהבחירות שלך. כשכל שלושת השדות מלאים, הסטטוס מתהפך ל-READY והכפתור נדלק. <b>במוקאפ הזה</b> ▸ TRANSMIT ORDER לא פותח דואר — הוא מציג את גוף ה-mailto המורכב בפאנל תצוגה מקדימה, כדי שתראה בדיוק מה יגיע אליך. באתר האמיתי הוא יפתח mailto עם אותו טקסט.</p>
-  <div class="demo" style="background:#050607;padding:0;overflow:hidden">
-    <div class="ordbed">
-      <div class="v-rebate" style="left:0"><span>KODAK SAFETY FILM 5063</span><span>›› 28A</span></div>
-      <div class="v-rebate" style="right:0"><span>EMERALD ARCHIVE · REEL 04</span><span>29A ‹‹</span></div>
-      <div class="ordf">
-        <div class="ordkick">END OF ARCHIVE — FORM 26/C</div>
-        <div class="ordttl">The evidence is on record.<br>Commission the next system.</div>
-        <div class="ordrows" id="ordrows">
-          <div class="ordrow" data-f="0"><s>ENGAGEMENT</s>
-            <button class="ordchip" type="button" data-v="FRACTIONAL" data-c="F">FRACTIONAL</button>
-            <button class="ordchip" type="button" data-v="INTERIM" data-c="I">INTERIM</button>
-            <button class="ordchip" type="button" data-v="ADVISORY" data-c="A">ADVISORY</button>
-          </div>
-          <div class="ordrow" data-f="1"><s>HORIZON</s>
-            <button class="ordchip" type="button" data-v="0–3 MONTHS" data-c="3">0–3 MONTHS</button>
-            <button class="ordchip" type="button" data-v="3–6 MONTHS" data-c="6">3–6</button>
-            <button class="ordchip" type="button" data-v="6+ MONTHS" data-c="9">6+</button>
-          </div>
-          <div class="ordrow" data-f="2"><s>FOCUS</s>
-            <button class="ordchip" type="button" data-v="PIPELINE" data-c="P">PIPELINE</button>
-            <button class="ordchip" type="button" data-v="TEAM" data-c="T">TEAM</button>
-            <button class="ordchip" type="button" data-v="BOTH" data-c="B">BOTH</button>
-          </div>
-        </div>
-        <div class="ordblock">
-          <div class="obh"><span>COMMISSIONING ORDER</span><span>№ <b id="ordno">C-26-———</b></span></div>
-          <div class="obr"><s>ENGAGEMENT</s><i class="obd"></i><span class="ordv" id="ov0">————</span></div>
-          <div class="obr"><s>HORIZON</s><i class="obd"></i><span class="ordv" id="ov1">————</span></div>
-          <div class="obr"><s>FOCUS</s><i class="obd"></i><span class="ordv" id="ov2">————</span></div>
-          <div class="obs"><span>STATUS</span><b id="ordstat">INCOMPLETE — 3 FIELDS REQUIRED</b></div>
-        </div>
-        <button class="ordbtn" id="ordbtn" type="button">▸ TRANSMIT ORDER</button>
-        <button class="ordclr" id="ordclr" type="button">CLEAR FORM</button>
-        <div class="ordprev" id="ordprev">
-          <span class="opw">PREVIEW — NOTHING WAS SENT</span>
-          <pre id="ordpre"></pre>
-        </div>
-      </div>
-    </div>
-  </div>
-  <p class="note"><b>השיפוט שלי:</b> הרווח האמיתי כאן הוא לא האינטראקציה — הוא ש<b>הפנייה מגיעה אליך כבר מוגדרת</b>: במקום "היי, אשמח לדבר" אתה מקבל "FRACTIONAL / 0–3 חודשים / PIPELINE", וזו שיחה אחרת לגמרי. שלוש אזהרות: (א) <b>שלוש שורות זה המקסימום</b> — כל שדה רביעי הופך את זה לטופס לידים ומוריד את שיעור ההשלמה; (ב) חייבת להישאר <b>דרך יציאה רגילה</b> ליד הכפתור (מייל/לינקדאין רגילים) — מי שלא רוצה לשחק חייב לפנות בשתי שניות; (ג) mailto הוא לא CRM — אם הוא נכשל אצל מישהו, הוא מאבד אותך בלי שתדע. הייתי משאיר את הטקסט המורכב גם כטקסט שניתן להעתקה. ולבסוף: <b>אל תדליק את זה מאחורי 4/4 חתימות</b>. אם זו נקודת הפנייה היחידה, היא חייבת להיות זמינה לכל מי שהגיע לסוף.</p>
+  <p class="note"><b>השיפוט שלי:</b> המעבר מ-"מה זה עלה לי" ל-"איך בניתי את זה" הוא שינוי נכון, והוא גם מסיר את הסיכון הגדול של המוצג הקודם — מגייס שקורא רק את הפתק השני ומסיק חסרונות. מה שנשמר מהמנגנון הוא העיקר: מסמך עם עשרים חותמות VERIFIED נקרא כשיווק; פתק שני שמראה את הדרך מהעובדה אל המסקנה הופך את המספר לבניין. שתי אזהרות: (א) שורת CONCLUSION חייבת להיות מסקנה — משפט שאפשר להעביר לתיק הבא; אם היא רק סיכום של השורות מעליה, הפתק מיותר. (ב) הפתק השני ארוך מהראשון, וזה בסדר רק כל עוד הוא אחד לתיק. שניים באותו תיק והראיות נעלמות מתחת להסברים.</p>
 </section>
 
 </div>
@@ -1745,16 +1489,20 @@ document.getElementById('abPaper').addEventListener('click',function(){abCard.cl
 
 /* ================= ROUND 5 — EXHIBITS 23-28 ================= */
 
-/* EX23 — the UV lamp: one lamp state, two mocks (desktop card + phone bar) */
+/* EX23 - the inspection lamp: one lamp state, two mocks (desktop card + phone) */
 (function(){
   var card=document.getElementById('uvcard'),pcard=document.getElementById('uvpcard'),
       b1=document.getElementById('uvbtn'),b2=document.getElementById('uvpbar'),
-      t1=document.getElementById('uvbtnt'),t2=document.getElementById('uvpbart'),lit=false;
-  var OFFT='EXAMINE UNDER UV · 365 nm',ONT='LAMP OFF · RETURN TO DAYLIGHT',ONT2='LAMP OFF · DAYLIGHT';
+      t1=document.getElementById('uvbtnt'),t2=document.getElementById('uvpbart'),
+      s1=document.getElementById('uvbtns'),s2=document.getElementById('uvpbars'),lit=false;
+  var OFF='SWITCH ON THE LAMP',ON='SWITCH OFF THE LAMP',
+      OFFS='THIS FILE IS NOT FULLY EXPOSED',ONS='DEVELOPED \u00b7 03 ZONES ON RECORD',
+      OFFS2='NOT FULLY EXPOSED',ONS2='DEVELOPED \u00b7 ON RECORD';
   function set(v){
     lit=v;
     card.classList.toggle('on',lit);pcard.classList.toggle('on',lit);
-    t1.textContent=lit?ONT:OFFT;t2.textContent=lit?ONT2:OFFT;
+    t1.textContent=lit?ON:OFF;t2.textContent=lit?ON:OFF;
+    s1.textContent=lit?ONS:OFFS;s2.textContent=lit?ONS2:OFFS2;
     b1.setAttribute('aria-pressed',lit?'true':'false');
     b2.setAttribute('aria-pressed',lit?'true':'false');
     try{if(navigator.vibrate)navigator.vibrate(lit?[8,26,10]:6)}catch(e){}
@@ -1764,20 +1512,7 @@ document.getElementById('abPaper').addEventListener('click',function(){abCard.cl
   set(false);
 })();
 
-/* EX24 — FILE 05 UNOPENED: the drawer card opens / closes the intake sheet */
-(function(){
-  var card=document.getElementById('f5card'),sheet=document.getElementById('f5sheet'),
-      lbl=document.getElementById('f5open'),state=sheet.querySelector('.f5state'),open=true;
-  card.addEventListener('click',function(){
-    open=!open;
-    sheet.classList.toggle('shut',!open);
-    lbl.textContent=open?'▾ CLICK TO CLOSE THE FILE':'▸ CLICK TO OPEN THE FILE';
-    state.textContent=open?'INTAKE — UNFILED':'CLOSED — NEVER OPENED';
-    try{if(navigator.vibrate)navigator.vibrate(6)}catch(e){}
-  });
-})();
-
-/* EX25 — adverse finding: the counter-slip travels with the claim */
+/* EX25 - the method slip: the reasoning travels with the claim */
 (function(){
   var w=document.getElementById('af2w'),conn=document.querySelector('#ex25 .afconn'),
       a=document.getElementById('afOnly'),b=document.getElementById('afBoth');
@@ -1792,115 +1527,6 @@ document.getElementById('abPaper').addEventListener('click',function(){abCard.cl
   b.addEventListener('click',function(){show(true)});
 })();
 
-/* EX26 — redacted reference card: the bar never reveals, it tells the truth */
-(function(){
-  var card=document.getElementById('refcard'),cnt=document.getElementById('refcount');
-  var bars=[].slice.call(card.querySelectorAll('.refbar'));
-  bars.forEach(function(b){
-    b.addEventListener('click',function(){
-      b.classList.toggle('rel');
-      var n=card.querySelectorAll('.refbar.rel').length;
-      cnt.textContent=n+' OF 3 MARKED';
-      cnt.classList.toggle('hot',n>0);
-      try{if(navigator.vibrate)navigator.vibrate(6)}catch(e){}
-    });
-  });
-})();
-
-/* EX27 — the docket: ruler + custody bars, sourced vs unverified */
-(function(){
-  var grid=document.getElementById('dkgrid'),ruler=document.getElementById('dkruler'),
-      cap=document.getElementById('dkcap'),A=2018,B=2026.75,GUT=126;
-  function pct(y){return ((y-A)/(B-A))*100}
-  var h='';
-  for(var y=2018;y<=2026;y++){h+='<span class="dktick" style="left:'+pct(y).toFixed(2)+'%"><s>'+y+'</s></span>'}
-  ruler.innerHTML=h;
-  var now=document.createElement('span');
-  now.className='dknow';
-  now.style.left='calc('+GUT+'px + (100% - '+GUT+'px) * '+(pct(2026.6)/100).toFixed(4)+')';
-  now.innerHTML='<s>NOW · 2026</s>';
-  grid.appendChild(now);
-  var DEF='<b>SOURCED</b> — XTIX 2024–2026, FROM THE FILE 01 SPINE TICKET. &nbsp;'+
-          '<span class="prv">UNVERIFIED</span> — 03 SPANS DRAWN IN ORDER ONLY, AWAITING THE FILE OWNER. &nbsp;▸ HOVER A BAR.';
-  var bars=[].slice.call(grid.querySelectorAll('.dkbar'));
-  bars.forEach(function(b){
-    var a=parseFloat(b.dataset.a),z=parseFloat(b.dataset.b);
-    b.style.left=pct(a).toFixed(2)+'%';
-    b.style.width=Math.max(0,pct(z)-pct(a)).toFixed(2)+'%';
-    function show(){
-      bars.forEach(function(x){x.classList.toggle('hot',x===b)});
-      var nm=b.getAttribute('data-nm')||b.querySelector('b').textContent;
-      cap.innerHTML=(b.dataset.cap==='src')
-        ? '<b>'+nm+'</b> — SPAN SOURCED FROM THE FILE 01 SPINE TICKET · 2024–2026 · 2 PARTS · ON RECORD'
-        : '<b>'+nm+'</b> — <span class="prv">SPAN UNVERIFIED.</span> ORDER IS CONFIRMED BY THE DRAWER; THE DATES AWAIT THE FILE OWNER. NOTHING IN THE DOCUMENT SOURCES THEM.';
-    }
-    b.addEventListener('pointerenter',show);
-    b.addEventListener('click',show);
-    b.addEventListener('focus',show);
-  });
-  grid.addEventListener('pointerleave',function(){
-    bars.forEach(function(x){x.classList.remove('hot')});
-    cap.innerHTML=DEF;
-  });
-})();
-
-/* EX28 — the commissioning order: chips stamp into the order block */
-(function(){
-  var rows=document.getElementById('ordrows'),
-      vs=[document.getElementById('ov0'),document.getElementById('ov1'),document.getElementById('ov2')],
-      no=document.getElementById('ordno'),stat=document.getElementById('ordstat'),
-      btn=document.getElementById('ordbtn'),prev=document.getElementById('ordprev'),
-      pre=document.getElementById('ordpre'),clr=document.getElementById('ordclr');
-  var pick=[null,null,null],code=['','',''];
-  function stamp(el){el.classList.remove('pop');void el.offsetWidth;if(!reduced)el.classList.add('pop')}
-  function refresh(){
-    var n=0,i;for(i=0;i<3;i++){if(pick[i])n++}
-    no.textContent='C-26-'+(code[0]||'—')+(code[1]||'—')+(code[2]||'—');
-    var done=n===3;
-    stat.textContent=done?'READY FOR TRANSMISSION':('INCOMPLETE — '+(3-n)+' FIELD'+((3-n)>1?'S':'')+' REQUIRED');
-    stat.classList.toggle('go',done);
-    btn.classList.toggle('rdy',done);
-    if(!done)prev.classList.remove('on');
-  }
-  rows.addEventListener('click',function(e){
-    var c=e.target&&e.target.closest?e.target.closest('.ordchip'):null;
-    if(!c)return;
-    var row=c.parentNode,f=parseInt(row.getAttribute('data-f'),10);
-    [].slice.call(row.querySelectorAll('.ordchip')).forEach(function(x){x.classList.toggle('on',x===c)});
-    pick[f]=c.getAttribute('data-v');code[f]=c.getAttribute('data-c');
-    vs[f].textContent=pick[f];vs[f].classList.add('set');stamp(vs[f]);
-    refresh();
-    try{if(navigator.vibrate)navigator.vibrate(8)}catch(err){}
-  });
-  btn.addEventListener('click',function(){
-    if(!btn.classList.contains('rdy'))return;
-    var d=new Date(),ds=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
-    pre.textContent=
-      'TO       orancarmon@gmail.com\n'+
-      'SUBJECT  COMMISSIONING ORDER '+no.textContent+' — '+pick[0]+' · '+pick[1]+' · '+pick[2]+'\n'+
-      '\n'+
-      'Oran —\n'+
-      '\n'+
-      'Commissioning the following, per FORM 26/C:\n'+
-      '\n'+
-      '  ENGAGEMENT   '+pick[0]+'\n'+
-      '  HORIZON      '+pick[1]+'\n'+
-      '  FOCUS        '+pick[2]+'\n'+
-      '\n'+
-      'Filed from the vault — CASE FILE №26 · '+ds+'.\n'+
-      'Reply to this order with a time.\n';
-    prev.classList.add('on');
-    try{if(navigator.vibrate)navigator.vibrate([10,40,14])}catch(err){}
-  });
-  clr.addEventListener('click',function(){
-    pick=[null,null,null];code=['','',''];
-    [].slice.call(rows.querySelectorAll('.ordchip')).forEach(function(x){x.classList.remove('on')});
-    vs.forEach(function(v){v.textContent='————';v.classList.remove('set','pop')});
-    prev.classList.remove('on');
-    refresh();
-  });
-  refresh();
-})();
 })();
 </script>
 </body>
