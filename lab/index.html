@@ -418,12 +418,20 @@ body{overflow-x:clip}
 .uvcard{position:relative;background:#25262D;border-radius:0 12px 12px 12px;padding:13px 20px 18px;overflow:hidden;
   box-shadow:0 22px 55px rgba(0,0,0,.5);
   transition:background .8s cubic-bezier(.4,0,.2,1),box-shadow .8s,padding .7s cubic-bezier(.4,0,.2,1)}
-/* the scan bloom of the negative - #final::before, verbatim */
-.uvcard::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .8s;z-index:0;
-  box-shadow:inset 0 0 150px rgba(0,0,0,.96),inset 0 0 46px rgba(0,0,0,.7);
-  background:radial-gradient(120% 70% at 50% 42%,rgba(214,226,255,.055),transparent 62%)}
+/* R19/A2 - THE LIGHT. A lamp shining on film stock does not cut a spotlight and it
+   does not ring the subject; it lays a soft, low-contrast film across the whole
+   sheet, brightest near the head where the lamp stands. Two flat layers, no bloom:
+   ::before is the wash (a very wide, very low-alpha fall from the lamp), ::after is
+   the film-stock edge - a whisper of a vignette, a fifth of the old one, only there
+   so the negative still has a physical border. Matte, not lit. */
+.uvcard::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .9s;z-index:0;
+  background:
+    linear-gradient(180deg,rgba(222,231,250,.052) 0%,rgba(222,231,250,.030) 46%,rgba(222,231,250,.014) 100%),
+    radial-gradient(150% 96% at 24% -8%,rgba(226,234,252,.055),rgba(226,234,252,.020) 58%,transparent 100%)}
+.uvcard::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .9s;z-index:0;
+  box-shadow:inset 0 0 74px rgba(0,0,0,.34),inset 0 0 22px rgba(0,0,0,.20)}
 .uvcard.on{background:#0A0B0D;padding-left:62px;padding-right:62px;box-shadow:0 22px 55px rgba(0,0,0,.68)}
-.uvcard.on::before{opacity:1}
+.uvcard.on::before,.uvcard.on::after{opacity:1}
 /* film rebates - the physical edge of the stock (.vfilm) */
 .uvreb{position:absolute;top:0;bottom:0;width:46px;background:#000;z-index:3;opacity:0;pointer-events:none;
   display:flex;flex-direction:column;justify-content:space-between;align-items:center;padding:14px 0;transition:opacity .7s}
@@ -441,10 +449,28 @@ body{overflow-x:clip}
   border-radius:6px 12px 6px 6px;padding:4px 16px;transition:background .8s,color .8s}
 .uvcard.on .uvtab{background:#E6EAF6;color:#0A0B0D}
 
-/* ---- the lamp: a small instrument in the corner, a loud invitation under it ---- */
+/* ---- R19/A1 - THE LAMP BAND ----
+   The lamp is no longer a rubric in the corner of the folder. It is one horizontal
+   line of instruction laid over the file, in the band between the tab row and the
+   card's first heading: a small icon, an explicit arrow pointing back AT it, and the
+   invitation in the loudest type on the card. Icon small, arrow explicit, text loud.
+   The whole band is the control - you can press the words as well as the lamp. */
+.uvlampband{display:flex;align-items:center;gap:0;width:100%;background:none;border:0;padding:11px 2px 12px;
+  margin:2px 0 0;cursor:pointer;font:inherit;text-align:left;-webkit-tap-highlight-color:transparent;
+  position:relative;z-index:2;border-bottom:1px solid rgba(107,110,118,.22);transition:border-color .8s}
+.uvcard.on .uvlampband,.uvpcard.on .uvlampband{border-bottom-color:rgba(237,239,246,.16)}
+.uvlampband .lamp{pointer-events:none}
+/* the arrow is the sentence "press this" - it must read as drawn on, not decorative */
+.uvarrow{flex:none;display:flex;align-items:center;gap:0;margin:0 12px 0 9px;color:var(--em);
+  transition:color .7s,opacity .7s;opacity:.95}
+.uvarrow i{font-style:normal;font-size:15px;line-height:1;font-weight:700;margin-right:-2px}
+.uvarrow s{display:block;width:34px;height:2px;background:currentColor;text-decoration:none;border-radius:1px}
+.uvcard.on .uvarrow,.uvpcard.on .uvarrow{color:#C9D3EE;opacity:.8}
+.uvlampband .lampwords{display:flex;flex-direction:column;align-items:flex-start;gap:3px;min-width:0}
 .lamp{display:flex;flex-direction:column;align-items:center;gap:5px;background:none;border:0;padding:0 2px;
   cursor:pointer;font:inherit;line-height:1;-webkit-tap-highlight-color:transparent}
 .lamp svg{width:40px;height:40px;display:block;overflow:visible}
+.uvlampband .lamp svg{width:30px;height:30px}
 .lamp .lbody{fill:none;stroke:#9EA0A6;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;transition:stroke .6s}
 .lamp .lbulb{fill:#7A7E88;transition:fill .6s,filter .6s}
 .lamp .lcone{opacity:.55;transition:opacity .6s;animation:lampbreath 3.1s ease-in-out infinite;transform-origin:15px 20px}
@@ -453,10 +479,11 @@ body{overflow-x:clip}
 .lamp .ls3{stop-color:#F7E7C2;stop-opacity:0}
 .lamp .lh1{stop-color:#FFF4D8;stop-opacity:.8}
 .lamp .lh2{stop-color:#FFF4D8;stop-opacity:0}
-.lamp:hover .lbody{stroke:#F2F1ED}
-.lamp:hover .lbulb{fill:#F2F1ED}
-.lamp:hover .lcone{opacity:.95}
-.lamp:focus-visible{outline:1px dashed rgba(242,241,237,.6);outline-offset:5px}
+.lamp:hover .lbody,.uvlampband:hover .lbody{stroke:#F2F1ED}
+.lamp:hover .lbulb,.uvlampband:hover .lbulb{fill:#F2F1ED}
+.lamp:hover .lcone,.uvlampband:hover .lcone{opacity:.95}
+.uvlampband:hover .uvarrow{opacity:1}
+.lamp:focus-visible,.uvlampband:focus-visible{outline:1px dashed rgba(242,241,237,.6);outline-offset:5px}
 /* lit: the bulb is the only light source left in a black-and-white file */
 .uvcard.on .lamp .lbody,.uvpcard.on .lamp .lbody{stroke:#EDEFF6}
 .uvcard.on .lamp .lbulb,.uvpcard.on .lamp .lbulb{fill:#FFFFFF;filter:drop-shadow(0 0 5px rgba(214,226,255,.95))}
@@ -468,14 +495,13 @@ body{overflow-x:clip}
 .uvcard.on .lamp .lh2,.uvpcard.on .lamp .lh2{stop-color:#F2F6FF;stop-opacity:0}
 @keyframes lampbreath{0%,100%{opacity:.4}50%{opacity:.95}}
 /* the invitation - deliberately louder than every other label in the document */
-.lampcall{font-family:'JetBrains Mono',monospace;font-weight:800;font-size:11.5px;letter-spacing:.24em;
-  color:#F2F1ED;white-space:nowrap;text-align:center;border-bottom:1.5px solid var(--em);padding-bottom:4px;
+.lampcall{font-family:'JetBrains Mono',monospace;font-weight:800;font-size:13.5px;letter-spacing:.2em;
+  color:#F2F1ED;text-align:left;padding-bottom:0;
   transition:color .6s,border-color .6s,text-shadow .6s}
-.lamp:hover .lampcall{color:#FFFFFF}
-.uvcard.on .lampcall,.uvpcard.on .lampcall{color:#EDEFF6;border-bottom-color:rgba(237,239,246,.55);
-  text-shadow:0 0 16px rgba(214,226,255,.42),0 0 46px rgba(190,205,255,.16)}
+.lamp:hover .lampcall,.uvlampband:hover .lampcall{color:#FFFFFF}
+.uvcard.on .lampcall,.uvpcard.on .lampcall{color:#EDEFF6}
 .lampsub{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:.2em;color:#9EA0A6;
-  white-space:nowrap;transition:color .6s}
+  transition:color .6s}
 .uvcard.on .lampsub,.uvpcard.on .lampsub{color:#8D93A2}
 
 .uvband{position:relative;z-index:2;background:var(--em);color:#141519;font-family:'JetBrains Mono',monospace;font-weight:800;
@@ -492,7 +518,7 @@ body{overflow-x:clip}
   letter-spacing:.22em;color:#F2F1ED;margin-bottom:9px;transition:color .8s,text-shadow .8s}
 .uvzr b{color:var(--em);transition:color .8s}
 .uvzr i{width:5px;height:5px;background:var(--em);transform:rotate(45deg);font-style:normal;flex:none;transition:background .8s,box-shadow .8s}
-.uvcard.on .uvzr{color:#EDEFF6;text-shadow:0 0 16px rgba(214,226,255,.42),0 0 46px rgba(190,205,255,.16)}
+.uvcard.on .uvzr{color:#EDEFF6;text-shadow:0 0 14px rgba(214,226,255,.20)}
 .uvcard.on .uvzr b{color:#E6EAF6}
 .uvcard.on .uvzr i{background:#E6EAF6;box-shadow:0 0 10px rgba(214,226,255,.6)}
 /* daylight: a heading over unexposed stock - the body was never printed */
@@ -510,9 +536,20 @@ body{overflow-x:clip}
 .uvcard.on .z2 .uvhid{transition-delay:.44s}
 .uvcard.on .z3 .uvhid{transition-delay:.60s}
 .uvk{display:block;font-family:'JetBrains Mono',monospace;font-weight:700;font-size:7.5px;letter-spacing:.28em;
-  color:#B9BECC;text-shadow:0 0 10px rgba(214,226,255,.35);margin-bottom:6px}
-.uvt{display:block;font-family:'Special Elite',monospace;font-size:12.5px;line-height:1.82;color:#EDEFF6;
-  text-shadow:0 0 12px rgba(214,226,255,.3),0 0 34px rgba(190,205,255,.13)}
+  color:#B9BECC;margin-bottom:6px}
+/* R19/A3 - the developed copy is scanned, not read. The FIRST line of every zone is
+   the typewriter (Special Elite) doing what a typewriter is good at - one short
+   headline. Everything under it is Inter, the document's body face, at a size a
+   human actually reads. Long typewriter paragraphs are gone. */
+.uvt{display:block;font-family:'Special Elite',monospace;font-size:14px;line-height:1.5;color:#F4F6FB;
+  text-shadow:0 0 12px rgba(214,226,255,.18);margin-bottom:9px}
+.uvb{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:5px}
+.uvb li{position:relative;font-family:'Inter',sans-serif;font-size:13px;font-weight:400;line-height:1.5;
+  color:#D8DCE6;padding-left:15px;letter-spacing:.005em}
+.uvb li::before{content:"";position:absolute;left:1px;top:.6em;width:5px;height:1px;background:#8D93A2}
+.uvb li b{font-weight:700;color:#F2F4FA}
+.uvb li em{font-style:normal;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;
+  letter-spacing:.06em;color:#EDEFF6}
 .uvsig{position:relative;z-index:2;margin-top:0;padding-top:0;max-height:0;overflow:hidden;
   border-top:1px dashed rgba(237,239,246,0);
   font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:.2em;color:#8D93A2;text-align:right;opacity:0;
@@ -523,9 +560,10 @@ body{overflow-x:clip}
 .uvphl{font-family:'JetBrains Mono',monospace;font-size:6.5px;letter-spacing:.24em;color:#6B6E76;text-align:center;padding:2px 0 7px}
 .uvpcard{position:relative;background:#25262D;border-radius:0 8px 8px 8px;overflow:hidden;padding:9px 11px 12px;
   transition:background .8s cubic-bezier(.4,0,.2,1),padding .7s cubic-bezier(.4,0,.2,1)}
-.uvpcard::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .8s;z-index:0;
-  box-shadow:inset 0 0 90px rgba(0,0,0,.95),inset 0 0 30px rgba(0,0,0,.7);
-  background:radial-gradient(120% 70% at 50% 42%,rgba(214,226,255,.055),transparent 62%)}
+.uvpcard::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .9s;z-index:0;
+  background:
+    linear-gradient(180deg,rgba(222,231,250,.052) 0%,rgba(222,231,250,.030) 46%,rgba(222,231,250,.014) 100%),
+    radial-gradient(150% 96% at 24% -8%,rgba(226,234,252,.055),rgba(226,234,252,.020) 58%,transparent 100%)}
 .uvpcard.on{background:#0A0B0D;padding-left:26px;padding-right:26px}
 .uvpcard.on::before{opacity:1}
 .uvpreb{position:absolute;top:0;bottom:0;width:20px;background:#000;z-index:3;opacity:0;pointer-events:none;transition:opacity .7s;
@@ -540,10 +578,14 @@ body{overflow-x:clip}
 .uvpband{position:relative;z-index:2;background:var(--em);color:#141519;font-family:'JetBrains Mono',monospace;font-weight:800;
   font-size:6.5px;letter-spacing:.22em;text-align:center;padding:5px 4px;border-radius:3px;margin-top:8px;transition:background .8s,color .8s}
 .uvpcard.on .uvpband{background:#E6EAF6;color:#0A0B0D}
-.uvplampw{position:relative;z-index:2;display:flex;justify-content:center;margin-top:10px}
-.uvpcard .lamp svg{width:32px;height:32px}
-.uvpcard .lampcall{font-size:9px;letter-spacing:.18em;padding-bottom:3px}
-.uvpcard .lampsub{font-size:6.5px;letter-spacing:.16em}
+.uvplampw{position:relative;z-index:2}
+.uvpcard .uvlampband{padding:8px 0 9px;margin-top:2px}
+.uvpcard .uvlampband .lamp svg{width:23px;height:23px}
+.uvpcard .lampcall{font-size:9.5px;letter-spacing:.14em;padding-bottom:0}
+.uvpcard .lampsub{font-size:6px;letter-spacing:.12em}
+.uvpcard .uvarrow{margin:0 7px 0 5px}
+.uvpcard .uvarrow s{width:18px}
+.uvpcard .uvarrow i{font-size:11px}
 .uvpz{position:relative;z-index:2;margin-top:11px}
 .uvpzr{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:7.5px;letter-spacing:.2em;color:#F2F1ED;margin-bottom:6px;transition:color .8s,text-shadow .8s}
 .uvpzr b{color:var(--em);transition:color .8s}
@@ -557,7 +599,11 @@ body{overflow-x:clip}
   transition:opacity .5s .28s,transform .5s .28s,max-height .6s .18s,margin-top .5s .18s}
 .uvpcard.on .uvphid{margin-top:6px;max-height:230px;opacity:1;transform:none}
 .uvphid .uvk{font-size:6.5px;letter-spacing:.22em;margin-bottom:4px}
-.uvphid .uvt{font-size:10px;line-height:1.66}
+.uvphid .uvt{font-size:11px;line-height:1.42;margin-bottom:6px}
+.uvphid .uvb li{font-size:10.5px;padding-left:12px}
+.uvpcard::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .9s;z-index:0;
+  box-shadow:inset 0 0 46px rgba(0,0,0,.34),inset 0 0 16px rgba(0,0,0,.2)}
+.uvpcard.on::after{opacity:1}
 @media(max-width:880px){.uvwrap{grid-template-columns:1fr}.uvphone{max-width:300px;margin:0 auto}}
 /* at phone width the card IS the phone: the nested mock retires and the negative
    narrows so the rebates never eat the column */
@@ -569,44 +615,167 @@ body{overflow-x:clip}
 }
 @media(max-width:560px){
   .uvtop{gap:12px}
-  .lamp{width:100%}
-  .lampcall{font-size:11px;letter-spacing:.2em}
+  .lampcall{font-size:11.5px;letter-spacing:.14em}
+  .lampsub{font-size:6.5px;letter-spacing:.14em}
   .uvphone{display:none}
   .uvband{letter-spacing:.22em}
-  .uvt{font-size:12px}
+  .uvt{font-size:13px}
+  .uvb li{font-size:12.5px}
+  .uvarrow{margin:0 8px 0 6px}
+  .uvarrow s{width:20px}
+  .uvlampband{padding:9px 0 10px}
+  .uvlampband .lamp svg{width:26px;height:26px}
 }
 
-/* ============ EX25 - THE METHOD SLIP (SECOND SLIP) ============
-   Same paper grammar as the evidence slip; the second slip is not a counter-finding,
-   it is the reasoning layer - FACT / ACTION / CONCLUSION behind the headline claim.
-   Its seal is the desk's own graphite ink, not caution amber. */
-.afzone{max-width:520px;margin:0 auto}
-.aftogw{display:flex;justify-content:center;margin-bottom:18px}
-.aftog{display:inline-flex;border:1px solid #4B4E55;border-radius:20px;overflow:hidden;
-  font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.16em}
-.aftog button{border:0;background:transparent;padding:8px 15px;cursor:pointer;font:inherit;color:#9EA0A6;transition:background .25s,color .25s}
-.aftog button.on{background:#E9E7DF;color:#22201C;font-weight:700}
+/* ============ EX25 - THE METHOD SLIP (R19) ============
+   Same paper grammar as the evidence slip; the second slip is the reasoning layer -
+   FACT / ACTION / CONCLUSION behind the headline claim - and its seal is the desk's
+   own graphite ink, not caution amber.
+   R19/B1: cut to six short rows. R19/B2: it no longer stands in the reading column.
+   Every case already carries an evidence slip AND an analyst note directly under it;
+   a third paper object inline would stack three sheets and cost real height. So on
+   desktop the slip lives in the PAGE MARGIN and slides out horizontally from behind
+   the evidence slip - absolutely positioned inside a clipped gutter, so the reading
+   column's height is mathematically unchanged. On phones there is no margin, so it
+   folds in place, collapsed by default. */
 .afslip{position:relative;background:#E9E7DF;color:#22201C;padding:13px 16px 12px;box-shadow:0 14px 30px rgba(0,0,0,.35)}
 .afslip::before{content:"";position:absolute;top:-8px;left:26px;width:56px;height:16px;background:rgba(255,255,255,.35);
   box-shadow:0 1px 2px rgba(0,0,0,.12);transform:rotate(-3deg)}
 .af1{transform:rotate(-1.1deg)}
-.af2w{padding-top:16px;max-height:1500px;opacity:1;transition:max-height .55s cubic-bezier(.4,0,.2,1),opacity .4s,padding-top .4s}
-.af2w.off{max-height:0;opacity:0;padding-top:0;overflow:hidden;pointer-events:none}
-.af2{transform:rotate(1.3deg);background:#E4E1D6;box-shadow:0 12px 26px rgba(0,0,0,.32),inset 0 0 0 1px rgba(62,58,49,.18)}
+.af2{background:#E4E1D6;box-shadow:0 12px 26px rgba(0,0,0,.32),inset 0 0 0 1px rgba(62,58,49,.18)}
 .af2::before{left:auto;right:30px;transform:rotate(3deg)}
-.af2 .es-h{color:#6E685C;flex-wrap:wrap;row-gap:4px;padding-right:112px}
+.af2 .es-h{color:#6E685C;flex-wrap:wrap;row-gap:4px}
 .af2 .es-h b{color:#3E3A31}
-.af2 .es-k{color:#6E685C}
-.af-t{font-family:'Courier Prime',monospace;font-size:11.5px;line-height:1.62;color:#2A2620;letter-spacing:0}
-.af-stamp{position:absolute;right:13px;top:10px;font-family:'JetBrains Mono',monospace;font-weight:800;font-size:9px;
-  letter-spacing:.26em;color:#3E3A31;border:2px solid #3E3A31;border-radius:4px;padding:4px 9px;transform:rotate(5deg);opacity:.9;
+.af2 .es-k{color:#6E685C;min-width:64px}
+.af-t{font-family:'Courier Prime',monospace;font-size:11.5px;line-height:1.5;color:#2A2620;letter-spacing:0}
+.af-fig{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:10px;line-height:1.6;color:#22201C;letter-spacing:.02em}
+.af-stamp{font-family:'JetBrains Mono',monospace;font-weight:800;font-size:8px;
+  letter-spacing:.24em;color:#3E3A31;border:2px solid #3E3A31;border-radius:4px;padding:3px 7px;opacity:.9;
+  display:inline-block;transform:rotate(-2.6deg);margin-top:9px;
   mask-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="80"><filter id="r"><feTurbulence type="fractalNoise" baseFrequency="0.55" numOctaves="3"/><feComponentTransfer><feFuncA type="discrete" tableValues="0.6 0.9 1 0.92 1 0.8 1"/></feComponentTransfer></filter><rect width="200" height="80" filter="url(%23r)"/></svg>');mask-size:cover;-webkit-mask-size:cover}
-.afconn{display:flex;align-items:center;gap:9px;font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:.2em;
-  color:#6B6E76;padding:14px 4px 0;max-height:40px;overflow:hidden;
-  transition:opacity .35s,max-height .45s,padding-top .35s}
-.afconn s{flex:1;height:1px;background:rgba(107,110,118,.35);text-decoration:none}
-.afconn.off{opacity:0;max-height:0;padding-top:0}
-@media(max-width:560px){.af-stamp{font-size:8px;padding:3px 7px;letter-spacing:.2em}.af2 .es-h{padding-right:86px}}
+
+/* ---- B2 / state A: the desktop side-slide ---- */
+.msw{max-width:706px;margin:0 auto}
+.msrub{display:flex;align-items:center;gap:9px;font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.24em;
+  color:#9EA0A6;margin:0 0 14px}
+.msrub b{background:var(--em);color:#0B241A;font-weight:800;border-radius:3px;padding:3px 7px;letter-spacing:.18em}
+.msrub s{flex:1;height:1px;background:rgba(158,160,166,.3);text-decoration:none}
+.msdesk{display:grid;grid-template-columns:240px 1fr;align-items:start}
+/* The gutter's only child is absolutely positioned, so the gutter is structurally
+   incapable of adding a pixel of height to the row. The slide is hidden by its OWN
+   clip-path rather than by container overflow - a clipped container would also crop
+   the slip vertically the moment it grew taller than the reading column, which in a
+   narrow margin it always does. */
+.msgut{position:relative;align-self:start;min-height:200px;padding:14px 10px 26px 0;
+  border-left:1px dashed rgba(158,160,166,.16)}
+.msgut::before{content:"PAGE MARGIN";position:absolute;left:6px;top:0;font-family:'JetBrains Mono',monospace;
+  font-size:6.5px;letter-spacing:.28em;color:#5C5F66}
+.msslide{position:absolute;right:0;top:26px;width:226px;z-index:4;
+  transform:translateX(150px);opacity:0;pointer-events:none;
+  clip-path:inset(-40px -40px -40px 100%);
+  transition:transform .46s cubic-bezier(.22,.9,.3,1),opacity .28s .04s,
+             clip-path .46s cubic-bezier(.22,.9,.3,1)}
+.msdesk.open .msslide{transform:translateX(0);opacity:1;pointer-events:auto;
+  clip-path:inset(-40px -40px -40px -40px)}
+.msslide .af2{transform:rotate(-1.4deg);padding:10px 12px 9px}
+/* a 226px measure cannot carry a key column beside the value - the rows stack,
+   and every tracking value is pulled in so the narrow column does not run long */
+.msslide .es-row{display:block;padding:3px 0}
+.msslide .es-k{display:block;min-width:0;padding-top:0;margin-bottom:1px;font-size:6.5px;letter-spacing:.14em}
+.msslide .es-h{display:block;font-size:6.5px;letter-spacing:.08em;margin-bottom:5px;line-height:1.5}
+.msslide .es-h b{display:block}
+.msslide .es-v{font-size:9.5px;line-height:1.35}
+.msslide .af-t{font-size:10.5px;line-height:1.34}
+.msslide .af-fig{font-size:9.5px;line-height:1.42}
+.msslide .af-stamp{font-size:7.5px;padding:2px 6px;margin-top:7px}
+/* the reading column: three fixed objects, never displaced by the slip */
+.mscol{position:relative;padding-left:22px}
+.mscol .afslip{max-width:430px}
+/* the trigger: a paper tab on the evidence slip's LEFT edge, aimed into the margin */
+/* the column's content starts 22px in; park the tab's RIGHT edge exactly there so
+   it protrudes into the margin instead of sitting on the evidence slip's header */
+.mstab{position:absolute;right:calc(100% - 22px);top:15px;z-index:6;display:flex;align-items:center;gap:5px;
+  background:#CFCBBE;color:#22201C;border:0;border-right:2px solid #A9A493;border-radius:3px 0 0 3px;
+  padding:7px 8px 7px 9px;cursor:pointer;font-family:'JetBrains Mono',monospace;font-weight:800;font-size:8px;
+  letter-spacing:.18em;box-shadow:-3px 3px 9px rgba(0,0,0,.34);transition:background .2s,right .2s;
+  white-space:nowrap}
+.mstab i{font-style:normal;font-size:10px;line-height:1;color:#1E6B4B;transition:transform .3s}
+.mstab:hover{background:#E4E0D3;right:calc(100% - 17px)}
+.mstab:focus-visible{outline:1px dashed rgba(242,241,237,.75);outline-offset:3px}
+.msdesk.open .mstab i{transform:rotate(180deg)}
+/* the sliver of a second sheet behind the first - the affordance that says "more here" */
+.mspeek{position:absolute;left:13px;top:30px;bottom:24px;width:10px;background:#CFCBBE;border-radius:3px 0 0 3px;
+  box-shadow:inset -3px 0 5px rgba(0,0,0,.18);transition:opacity .3s}
+.msdesk.open .mspeek{opacity:0}
+.msbody{font-family:'Inter',sans-serif;font-size:11.5px;line-height:1.75;color:#9EA0A6;margin:15px 0 0;max-width:430px}
+.msmeter{display:flex;align-items:center;gap:7px;flex-wrap:wrap;font-family:'JetBrains Mono',monospace;font-size:7.5px;
+  letter-spacing:.18em;color:#8D93A2;border-top:1px dashed rgba(158,160,166,.28);margin-top:18px;padding-top:11px}
+.msmeter b{color:#F2F1ED;font-size:9.5px;letter-spacing:.06em}
+.msmeter em{font-style:normal;color:#7FD7B2;font-weight:700}
+.mspan{display:none;font-family:'JetBrains Mono',monospace;font-size:6.5px;letter-spacing:.24em;color:#7A7E88;
+  padding:5px 0 0}
+.msreal{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:.14em;line-height:1.9;color:#7A7E88;
+  border-left:2px solid rgba(158,160,166,.3);padding:2px 0 2px 10px;margin-top:10px}
+.msreal b{color:#C9CBD1;font-weight:700}
+.msreal span{display:block;color:#8D93A2}
+.mssep{height:1px;background:rgba(158,160,166,.22);margin:30px 0 22px}
+/* ---- B2 / state B: the phone fallback ---- */
+.msphw{display:flex;justify-content:center}
+.msph{width:334px;border:7px solid #2B2C33;border-radius:20px;background:#191A1F;padding:12px 11px 14px;
+  box-shadow:0 20px 44px rgba(0,0,0,.5)}
+.msph .afslip{padding:11px 13px 10px}
+.msph .es-h{font-size:6.5px;letter-spacing:.18em}
+.msph .es-v{font-size:9.5px}
+.msph .es-stamp{font-size:7.5px;padding:2px 6px;right:10px;bottom:9px}
+.msph .af1 .es-row:last-of-type .es-v{padding-right:74px}
+/* collapsed, the accordion is one 31px row - it costs no height until it is asked for */
+.msacc{display:flex;align-items:center;gap:8px;width:100%;margin-top:11px;background:rgba(207,203,190,.1);
+  color:#E5E2D8;border:1px solid rgba(207,203,190,.34);border-left:3px solid var(--em);border-radius:2px;
+  padding:8px 10px;cursor:pointer;font-family:'JetBrains Mono',monospace;font-weight:700;font-size:8px;
+  letter-spacing:.16em;text-align:left;transition:background .2s}
+.msacc:hover{background:rgba(207,203,190,.2)}
+.msacc:focus-visible{outline:1px dashed rgba(242,241,237,.75);outline-offset:2px}
+.msacc i{font-style:normal;font-size:13px;line-height:1;color:#7FD7B2;flex:none;width:11px;text-align:center;
+  transition:transform .3s}
+.msacc b{flex:1;font-weight:700}
+.msacc em{font-style:normal;font-size:6.5px;letter-spacing:.2em;color:#9EA0A6}
+.msph.open .msacc i{transform:rotate(45deg)}
+.msaccb{max-height:0;opacity:0;overflow:hidden;pointer-events:none;
+  transition:max-height .45s cubic-bezier(.4,0,.2,1),opacity .3s,margin-top .35s}
+.msph.open .msaccb{max-height:460px;opacity:1;margin-top:9px;pointer-events:auto}
+.msaccb .af2{transform:none;box-shadow:0 8px 18px rgba(0,0,0,.3),inset 0 0 0 1px rgba(62,58,49,.18)}
+.msaccb .af2::before{display:none}
+.msaccb .es-h{font-size:6.5px}
+.msaccb .af-t{font-size:10.5px}
+.msaccb .af-fig{font-size:9.5px}
+.msaccb .af-stamp{font-size:7.5px;padding:2px 6px}
+.msph .an-note{margin-top:13px}
+/* the analyst note that already sits under every evidence slip in the live document */
+.an-note{position:relative;max-width:430px;margin:16px 0 4px;background:rgba(255,255,255,.028);
+  border-left:3px solid var(--em);padding:12px 15px 10px;transform:rotate(-.55deg)}
+.an-h{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:.28em;color:#6B6E76;margin-bottom:7px}
+.an-t{font-family:'Special Elite',monospace;font-size:13px;line-height:1.8;color:#DDD9CE}
+.an-s{font-family:'Special Elite',monospace;font-size:10px;color:#6B6E76;margin-top:7px;text-align:right}
+@media(max-width:780px){
+  .msdesk{grid-template-columns:206px 1fr}
+  .msslide{width:196px}
+}
+@media(max-width:620px){
+  /* A phone cannot show a page margin at 1:1, and collapsing mock A into an
+     accordion would just duplicate mock B. So mock A stays a real desktop layout
+     and the reader pans it - the demonstration keeps its geometry either way. */
+  .msdeskw{overflow-x:auto;padding-bottom:8px;
+    -webkit-overflow-scrolling:touch;scrollbar-width:thin}
+  .msdesk{min-width:640px;grid-template-columns:206px 1fr}
+  /* the slips carry a degree of rotation; give the pan frame room for the corners */
+  .mscol{padding-right:8px}
+  .msslide{width:196px}
+  .msdeskw::-webkit-scrollbar{height:5px}
+  .msdeskw::-webkit-scrollbar-thumb{background:rgba(158,160,166,.4);border-radius:3px}
+  .mspan{display:block}
+  .msph{width:100%;max-width:334px}
+  .af2 .es-k{min-width:56px}
+}
 
 @media(max-width:560px){.c13 .band{letter-spacing:.24em}.big13{font-size:24px}}
 @media(max-width:560px){
@@ -669,7 +838,7 @@ body{overflow-x:clip}
 <!-- ============ EX23 ============ -->
 <section class="ex" id="ex23" style="padding-top:34px">
   <div class="exh"><span class="exn">23</span><span class="ext">מנורת הבדיקה — הכרטיס מתפתח מתחת לאור</span><span class="exs">V2 · SILVER-HALIDE MODE · THE FILE DEVELOPS</span></div>
-  <p class="exd">שלושה שינויים לפי ההערות שלך. <b>(1) המראה:</b> הסגול ירד לגמרי. הכרטיס עובר לאותו <b>נגטיב מיקרופילם</b> של סוף המסמך — מצע #0A0B0D, כסף #EDEFF6 עם זוהר-סריקה, שולי פילם עם חורי-הזנה ומספרי-פריים (23A / 24A). שחור-לבן זוהר, לא צבע. <b>(2) הטריגר:</b> אין כפתור. יש <b>מנורת בדיקה קטנה</b> (40px, SVG) שמקרינה קונוס אור חמים ונושמת בעדינות בפינת התיקייה, ומתחתיה הזמנה בקול רם: <b>SWITCH ON THE LAMP</b>. <b>(3) מודל התוכן:</b> באור יום הכרטיס <b>לא שלם</b> — רואים רק את כותרות האזורים (01/02/03) מעל שורות ריקות מסומנות UNEXPOSED. המנורה לא <i>מוסיפה</i> הערות — היא <b>מפתחת</b> כרטיס שנולד חסר. הנוסח עודכן לפי ההחלטה שלך: עובדה, פעולה, מסקנה, רפלקציה — בלי שלילה, בלי “טעויות שעשיתי”.</p>
+  <p class="exd">המראה והמנגנון אושרו; הסבב הזה נגע בשלושה דברים בלבד. <b>(1) מיקום:</b> המנורה יצאה מפינת התיקייה. עכשיו היא <b>שורת-הוראה אחת אופקית מעל התיק</b>, ברצועה שבין שורת-הלשוניות לכותרת הראשונה של הכרטיס: אייקון קטן (30px), <b>חץ מפורש שמצביע חזרה על המנורה</b>, ולידו הכיתוב בטיפוגרפיה הרמה ביותר בכרטיס. החץ הוא מה שאומר "תלחץ כאן" — לא צריך להסביר את זה במילים. כל השורה לחיצה, לא רק האייקון. <b>(2) האור:</b> אין עוד ספוט ואין טבעת-זוהר. כשהמנורה דולקת נמרח <b>אור פילם מט ורך על כל השטח המפותח</b> — נפילה רחבה מאוד באלפא נמוכה מאוד מכיוון ראש הכרטיס (שם עומדת המנורה), פלוס וינייטה שנחתכה לחמישית מעוצמתה כדי שלנגטיב עדיין תהיה מסגרת פיזית. ניגודיות נמוכה, שטוח, בשפה של המסמך. <b>(3) הנוסח — העיקר:</b> פסקאות מכונת-כתיבה ארוכות ירדו. בכל אזור <b>השורה הראשונה בלבד</b> היא Special Elite — כותרת אחת קצרה — וכל מה שמתחתיה הוא <b>Inter, פונט הגוף של המסמך</b>, בגודל שנקרא (13px), בשלוש שורות-תבליט קצרות. שלושה אזורים, לא יותר. כל מילה לקוחה מהנוסח הקיים של XTIX באתר — לא נוספה טענה אחת.</p>
   <div class="demo dark" style="padding:26px 20px">
     <div class="uvwrap">
       <div class="uvcard" id="uvcard">
@@ -677,8 +846,12 @@ body{overflow-x:clip}
         <div class="uvreb r" aria-hidden="true"><span>EMERALD ARCHIVE &middot; REEL 04</span><span>24A &lsaquo;&lsaquo;</span></div>
         <div class="uvtop">
           <span class="uvtab">XTIX</span>
-          <button class="lamp" id="uvbtn" type="button" aria-pressed="false">
-          <svg viewBox="0 0 40 40" aria-hidden="true" focusable="false">
+        </div>
+        <!-- R19/A1: the instruction line sits OVER the file, between the tab row and
+             the card's first heading. Icon small - arrow explicit - text loud. -->
+        <button class="uvlampband" id="uvbtn" type="button" aria-pressed="false">
+          <span class="lamp" aria-hidden="true">
+          <svg viewBox="0 0 40 40" focusable="false">
             <defs>
               <linearGradient id="lcguvbtn" x1="0" y1="0" x2="0" y2="1"><stop offset="0" class="ls1"/><stop offset=".62" class="ls2"/><stop offset="1" class="ls3"/></linearGradient>
               <radialGradient id="lhguvbtn"><stop offset="0" class="lh1"/><stop offset="1" class="lh2"/></radialGradient>
@@ -693,26 +866,50 @@ body{overflow-x:clip}
             <path class="lbody" d="M11 12.5 H19.5 L22.5 20.5 H8 Z"/>
             <circle class="lbulb" cx="15.2" cy="20.3" r="1.8"/>
           </svg>
-          <span class="lampcall" id="uvbtnt">SWITCH ON THE LAMP</span>
-          <span class="lampsub" id="uvbtns">THIS FILE IS NOT FULLY EXPOSED</span>
+          </span>
+          <span class="uvarrow" aria-hidden="true"><i>&#9666;</i><s></s></span>
+          <span class="lampwords">
+            <span class="lampcall" id="uvbtnt">SWITCH ON THE LAMP</span>
+            <span class="lampsub" id="uvbtns">THIS FILE IS NOT FULLY EXPOSED</span>
+          </span>
         </button>
-        </div>
         <div class="uvband">R E S T R I C T E D &middot; EMERALD ARCHIVE</div>
         <div class="uvctl"><span>CTRL &#8470; X-26-0101</span><span>CASE FILE 01 &mdash; XTIX</span><span>COPY 3 OF 12</span></div>
         <div class="uvz z1">
           <div class="uvzr"><b>01</b><i></i>THE SITUATION</div>
           <div class="uvlat" aria-hidden="true"><s></s><s></s><s class="h"></s><em>UNEXPOSED</em></div>
-          <div class="uvhid"><span class="uvk">FINDING OF FACT</span><span class="uvt">At intake the file records strong vision, a strong product, and no commercial function of any kind &mdash; seven named gaps: no CRM, no business development, no sales methodology, no outbound process, no pipeline management, no KPI framework, no reporting structure.</span></div>
+          <div class="uvhid"><span class="uvk">FINDING OF FACT</span>
+            <span class="uvt">Strong vision. Strong product. Zero commercial infrastructure.</span>
+            <ul class="uvb">
+              <li><em>07 GAPS</em> &mdash; no CRM, no business development function</li>
+              <li>No sales methodology, no outbound process, no pipeline management</li>
+              <li>No KPI framework, no reporting structure</li>
+            </ul>
+          </div>
         </div>
         <div class="uvz z2">
           <div class="uvzr"><b>02</b><i></i>MISSION OBJECTIVE</div>
           <div class="uvlat" aria-hidden="true"><s></s><s></s><s class="h"></s><em>UNEXPOSED</em></div>
-          <div class="uvhid"><span class="uvk">THE METHOD</span><span class="uvt">The brief was written as a system, not a quarter: a commercial operating system for predictable growth, domestic and international. Understanding before outbound &mdash; business and product analysis, market and competitive research, ICP definition, segmentation, positioning &mdash; and only then execution.</span></div>
+          <div class="uvhid"><span class="uvk">THE METHOD</span>
+            <span class="uvt">Build a commercial operating system.</span>
+            <ul class="uvb">
+              <li>For predictable growth &mdash; <b>domestic &amp; international</b></li>
+              <li>Understanding before outbound: market research, competitive analysis, ICP definition, segmentation, positioning</li>
+              <li>Only then did execution begin &mdash; <em>&empty;&rarr;10</em>, infrastructure build-up</li>
+            </ul>
+          </div>
         </div>
         <div class="uvz z3">
-          <div class="uvzr"><b>03</b><i></i>MY APPROACH</div>
+          <div class="uvzr"><b>03</b><i></i>REFLECTION</div>
           <div class="uvlat" aria-hidden="true"><s></s><s></s><s class="h"></s><em>UNEXPOSED</em></div>
-          <div class="uvhid"><span class="uvk">ON RE-EXAMINATION</span><span class="uvt">The order held: diagnosis, then infrastructure, then execution &mdash; ten pieces built from zero, up to an in-house AI commercial intelligence platform. Rebuilding XTIX today the subject would position for enterprise before scaling outbound, and treat AI as core infrastructure rather than an add-on.</span></div>
+          <div class="uvhid"><span class="uvk">ON RE-EXAMINATION</span>
+            <span class="uvt">If I were rebuilding XTIX today.</span>
+            <ul class="uvb">
+              <li>Position for enterprise before scaling outbound</li>
+              <li>Build strategic partnerships from day one</li>
+              <li>Use AI as core infrastructure &mdash; not an add-on</li>
+            </ul>
+          </div>
         </div>
         <div class="uvsig">&mdash; REVIEWING DESK, 2026 &middot; DEVELOPED UNDER THE LAMP &mdash; NOT PRESENT IN THE PRINTED COPY</div>
       </div>
@@ -722,9 +919,9 @@ body{overflow-x:clip}
           <div class="uvpreb l" aria-hidden="true"></div>
           <div class="uvpreb r" aria-hidden="true"></div>
           <span class="uvptab">XTIX</span>
-          <div class="uvpband">R E S T R I C T E D</div>
-          <div class="uvplampw"><button class="lamp" id="uvpbar" type="button" aria-pressed="false">
-          <svg viewBox="0 0 40 40" aria-hidden="true" focusable="false">
+          <div class="uvplampw"><button class="uvlampband" id="uvpbar" type="button" aria-pressed="false">
+          <span class="lamp" aria-hidden="true">
+          <svg viewBox="0 0 40 40" focusable="false">
             <defs>
               <linearGradient id="lcguvpbar" x1="0" y1="0" x2="0" y2="1"><stop offset="0" class="ls1"/><stop offset=".62" class="ls2"/><stop offset="1" class="ls3"/></linearGradient>
               <radialGradient id="lhguvpbar"><stop offset="0" class="lh1"/><stop offset="1" class="lh2"/></radialGradient>
@@ -739,52 +936,109 @@ body{overflow-x:clip}
             <path class="lbody" d="M11 12.5 H19.5 L22.5 20.5 H8 Z"/>
             <circle class="lbulb" cx="15.2" cy="20.3" r="1.8"/>
           </svg>
-          <span class="lampcall" id="uvpbart">SWITCH ON THE LAMP</span>
-          <span class="lampsub" id="uvpbars">NOT FULLY EXPOSED</span>
+          </span>
+          <span class="uvarrow" aria-hidden="true"><i>&#9666;</i><s></s></span>
+          <span class="lampwords">
+            <span class="lampcall" id="uvpbart">SWITCH ON THE LAMP</span>
+            <span class="lampsub" id="uvpbars">NOT FULLY EXPOSED</span>
+          </span>
         </button></div>
+          <div class="uvpband">R E S T R I C T E D</div>
           <div class="uvpz">
             <div class="uvpzr"><b>01</b> &middot; THE SITUATION</div>
             <div class="uvplat" aria-hidden="true"><s></s><s class="h"></s></div>
-            <div class="uvphid"><span class="uvk">FINDING OF FACT</span><span class="uvt">Strong vision, a strong product, and seven named gaps &mdash; no CRM, no business development, no methodology, no pipeline, no KPI framework.</span></div>
+            <div class="uvphid"><span class="uvk">FINDING OF FACT</span>
+              <span class="uvt">Strong vision. Strong product. Zero commercial infrastructure.</span>
+              <ul class="uvb">
+                <li><em>07 GAPS</em> &mdash; no CRM, no business development</li>
+                <li>No methodology, no pipeline, no KPI framework</li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-  <p class="note"><b>השיפוט שלי:</b> המעבר למיקרופילם פתר את הבעיה האמיתית של הגרסה הקודמת: סגול הוא אפקט מסיבה, כסף-על-שחור הוא ארכיון — ועכשיו שתי הנקודות הכי חזקות במסמך (הכספת והמנורה) מדברות בדיוק אותה שפה. מה שאני עוד בודק בעיניים: כרטיס שנראה ריק באור יום הוא הימור — מי שלא ילחץ לעולם לא יקרא את התוכן. לכן המנורה קטנה אבל הכיתוב גדול ונוגד, ולכן השורות הריקות מסומנות UNEXPOSED — זה נראה מכוון, לא שבור. המלצה אחת ליישום באתר: <b>מנורה אחת לתיק, שלוש שורות, לא יותר</b> — אם כל סקשן יקבל מנורה, המכשיר מתבזבז והמסמך הופך למשחק חיפושים.</p>
+  <p class="note"><b>השיפוט שלי:</b> שינוי הנוסח הוא ששינה את המוצג, לא המיקום ולא האור. הגרסה הקודמת ביקשה מהקורא לקרוא שלוש פסקאות במכונת-כתיבה כתגמול על לחיצה — זו עסקה גרועה, ו-Special Elite בגוף רץ היא פונט שנלחמים בו. עכשיו התגמול נסרק בשתי שניות: כותרת אחת חדה בטיפוגרפיה של המכונה, שלוש שורות ב-Inter מתחתיה. המכונה נשארה בדיוק במקום שבו היא חזקה — שורה אחת — ופרשה מהמקום שבו היא מזיקה. על המיקום: השורה האופקית עדיפה על פינה כי היא נקראת כהוראה ולא כקישוט, אבל שימו לב שהיא <b>גובה שנוסף לכל תיק</b> (~46px) — זה המחיר, ובעיניי הוא משתלם רק כי המנורה היא מכשיר אחד בודד במסמך. על האור: הוא בכוונה כמעט בלתי-מורגש כשמסתכלים ישירות — אלפא 0.05 מקסימום. זה נכון פיזיקלית ונכון לשפה השטוחה, אבל צריך להגיד את זה בכנות: <b>מי שיצפה ל"וואו" מהאור לא יקבל אותו</b> — מה שמוכר את הרגע הוא מעבר הרקע לשחור והופעת הטקסט, לא הוואש. שמרתי על הכלל: <b>מנורה אחת לתיק, שלושה אזורים, לא יותר</b>.</p>
 </section>
 <!-- ============ EX25 ============ -->
 <section class="ex" id="ex25">
-  <div class="exh"><span class="exn">25</span><span class="ext">פתק-השיטה — מה עומד מאחורי הטענה</span><span class="exs">METHOD SLIP · FACT · ACTION · CONCLUSION</span></div>
-  <p class="exd">המנגנון נשאר כמו שאישרת: שני פתקים על אותו נייר <b>#E9E7DF</b>, פס-דבק, אותו CTRL № עם סיומת A, ומתג שמראה את ההבדל בין פתק אחד לזוג. <b>מה שהשתנה הוא מה שכתוב בפתק השני.</b> במקום ממצא לרעה וחותמת NOTED בענבר, הפתק נושא את שכבת ההנמקה שמאחורי הטענה: <b>FACT</b> — מה היה שם, <b>ACTION</b> — מה הוא עשה, <b>CONCLUSION</b> — מה הוא מסיק מזה. החותמת היא <b>ON RECORD</b> בדיו גרפיט של השולחן — לא אזהרה, הערה. כל מילה בפתק השני לקוחה מהנוסח שכבר קיים באתר ל-XTIX — לא המצאתי עובדה אחת. הכלל נשמר: <b>אחד לתיק, לעולם לא שניים</b>.</p>
+  <div class="exh"><span class="exn">25</span><span class="ext">&#1508;&#1514;&#1511;-&#1492;&#1513;&#1497;&#1496;&#1492; &mdash; &#1511;&#1510;&#1512; &#1497;&#1493;&#1514;&#1512;, &#1493;&#1504;&#1508;&#1514;&#1495; &#1502;&#1492;&#1510;&#1491;</span><span class="exs">METHOD SLIP &middot; SHORTENED &middot; MARGIN SIDE-SLIDE + PHONE FALLBACK</span></div>
+  <p class="exd">&#1513;&#1504;&#1497; &#1514;&#1497;&#1511;&#1493;&#1504;&#1497;&#1501;. <b>(1) &#1488;&#1493;&#1512;&#1498;:</b> &#1492;&#1508;&#1514;&#1511; &#1497;&#1512;&#1491; &#1502;-982px &#1500;&#1499;&#1493;&#1514;&#1512;&#1514; &#1493;&#1513;&#1513; &#1513;&#1493;&#1512;&#1493;&#1514; &#1511;&#1510;&#1512;&#1493;&#1514; &mdash; SOURCE, FACT, ACTION, CONCLUSION, CARRIES, FILED. &#1490;&#1493;&#1507; &#1492;&#1496;&#1511;&#1505;&#1496; &#1511;&#1493;&#1510;&#1509; &#1489;-68%. &#1499;&#1500; &#1506;&#1493;&#1489;&#1491;&#1492; &#1499;&#1489;&#1512; &#1504;&#1502;&#1510;&#1488;&#1514; &#1489;&#1504;&#1493;&#1505;&#1495; XTIX &#1489;&#1488;&#1514;&#1512; &mdash; &#1500;&#1488; &#1504;&#1493;&#1505;&#1508;&#1492; &#1496;&#1506;&#1504;&#1492;, &#1493;&#1488;&#1497;&#1503; &#1513;&#1500;&#1497;&#1500;&#1492;.
+  <b>(2) &#1492;&#1492;&#1514;&#1504;&#1490;&#1513;&#1493;&#1514;:</b> &#1489;&#1499;&#1500; &#1514;&#1497;&#1511; &#1499;&#1489;&#1512; &#1497;&#1493;&#1513;&#1489;&#1497;&#1501; <b>&#1508;&#1514;&#1511;-&#1512;&#1488;&#1497;&#1492;</b> &#1493;&#1502;&#1497;&#1491; &#1502;&#1514;&#1495;&#1514;&#1497;&#1493; <b>ANALYST NOTE</b>. &#1508;&#1514;&#1511; &#1513;&#1500;&#1497;&#1513;&#1497; &#1489;&#1514;&#1493;&#1498; &#1492;&#1496;&#1493;&#1512; &#1492;&#1497;&#1492; &#1506;&#1493;&#1513;&#1492; &#1513;&#1500;&#1493;&#1513; &#1490;&#1497;&#1500;&#1497;&#1493;&#1504;&#1493;&#1514; &#1504;&#1497;&#1497;&#1512; &#1494;&#1492; &#1506;&#1500; &#1490;&#1489;&#1497; &#1494;&#1492;. &#1492;&#1508;&#1514;&#1512;&#1493;&#1503;: <b>&#1492;&#1508;&#1514;&#1511; &#1506;&#1489;&#1512; &#1500;&#1490;&#1497;&#1500;&#1497;&#1493;&#1503; &#1492;&#1506;&#1502;&#1493;&#1491;</b> &#1493;&#1504;&#1513;&#1500;&#1507; &#1492;&#1495;&#1493;&#1510;&#1492; &#1502;&#1488;&#1495;&#1493;&#1512;&#1497; &#1508;&#1514;&#1511;-&#1492;&#1512;&#1488;&#1497;&#1492; &#1499;&#1513;&#1500;&#1493;&#1495;&#1510;&#1514; &#1506;&#1500; &#1492;&#1500;&#1513;&#1493;&#1504;&#1497;&#1514; &#1513;&#1500;&#1493;. &#1492;&#1493;&#1488; &#1502;&#1502;&#1493;&#1511;&#1501; &#1488;&#1489;&#1505;&#1493;&#1500;&#1493;&#1496;&#1497;&#1514; &#1489;&#1514;&#1493;&#1498; &#1490;&#1497;&#1500;&#1497;&#1493;&#1503; &#1495;&#1514;&#1493;&#1498; &mdash; &#1499;&#1500;&#1493;&#1502;&#1512; <b>&#1492;&#1493;&#1488; &#1500;&#1488; &#1497;&#1499;&#1493;&#1500; &#1500;&#1492;&#1493;&#1505;&#1497;&#1507; &#1490;&#1493;&#1489;&#1492; &#1500;&#1506;&#1502;&#1493;&#1491;&#1492;, &#1488;&#1508;&#1497;&#1500;&#1493; &#1500;&#1488; &#1508;&#1497;&#1511;&#1505;&#1500; &#1488;&#1495;&#1491;</b>. &#1488;&#1497;&#1503; &#1508;&#1493;&#1508;-&#1488;&#1508; &#1493;&#1488;&#1497;&#1503; &#1502;&#1493;&#1491;&#1500;. &#1489;&#1496;&#1500;&#1508;&#1493;&#1503; &#1488;&#1497;&#1503; &#1490;&#1497;&#1500;&#1497;&#1493;&#1503; &#1489;&#1499;&#1500;&#1500;, &#1493;&#1500;&#1499;&#1503; &#1513;&#1501; &#1497;&#1513; <b>&#1488;&#1511;&#1493;&#1512;&#1491;&#1497;&#1493;&#1503; &#1502;&#1511;&#1493;&#1508;&#1500; &#1499;&#1489;&#1512;&#1497;&#1512;&#1514;-&#1502;&#1495;&#1491;&#1500;</b> &mdash; &#1513;&#1493;&#1512;&#1492; &#1488;&#1495;&#1514; &#1513;&#1500; 31px, &#1493;&#1499;&#1500;&#1493;&#1501; &#1512;&#1511; &#1488;&#1501; &#1489;&#1497;&#1511;&#1513;&#1493;. &#1513;&#1504;&#1497; &#1492;&#1502;&#1510;&#1489;&#1497;&#1501; &#1502;&#1493;&#1510;&#1490;&#1497;&#1501; &#1499;&#1488;&#1503;, &#1493;&#1492;&#1502;&#1493;&#1504;&#1492; &#1502;&#1514;&#1495;&#1514; &#1502;&#1493;&#1491;&#1491; &#1488;&#1514; &#1490;&#1493;&#1489;&#1492; &#1506;&#1502;&#1493;&#1491;&#1514;-&#1492;&#1511;&#1512;&#1497;&#1488;&#1492; &#1489;&#1494;&#1502;&#1503; &#1488;&#1502;&#1514;.</p>
   <div class="demo dark" style="padding:30px 22px">
-    <div class="afzone">
-      <div class="aftogw"><span class="aftog">
-        <button id="afOnly" type="button">EVIDENCE ONLY</button>
-        <button id="afBoth" type="button" class="on">EVIDENCE + METHOD</button>
-      </span></div>
-      <div class="afslip af1">
-        <div class="es-h"><span>EVIDENCE SLIP</span><b>(S) &middot; CTRL &#8470; X-26-0114</b></div>
-        <div class="es-row"><span class="es-k">SOURCE</span><span class="es-v">CRM EXPORT &middot; PIPELINE REPORT FY25</span></div>
-        <div class="es-row"><span class="es-k">CLAIM</span><span class="es-v">COMMERCIAL OPERATING SYSTEM &mdash; BUILT FROM ZERO</span></div>
-        <div class="es-row"><span class="es-k">FILED</span><span class="es-v" id="afdate1">2026-08</span></div>
-        <span class="es-stamp">VERIFIED</span>
-      </div>
-      <div class="afconn"><span>&#9662; SAME CTRL &#8470;</span><s></s><span>THE REASONING TRAVELS WITH THE CLAIM</span></div>
-      <div class="af2w" id="af2w">
-        <div class="afslip af2">
+    <div class="msw">
+      <div class="msrub"><b>A</b>DESKTOP &mdash; THE SLIP LIVES IN THE PAGE MARGIN<s></s><span id="msState">CLOSED</span></div>
+      <div class="msdeskw"><div class="msdesk" id="msdesk">
+        <div class="msgut">
+          <div class="msslide"><div class="afslip af2">
           <div class="es-h"><span>METHOD SLIP &mdash; HOW THE CLAIM WAS BUILT</span><b>(S) &middot; CTRL &#8470; X-26-0114-A</b></div>
-          <div class="es-row"><span class="es-k">SOURCE</span><span class="es-v">CASE FILE 01 &mdash; XTIX &middot; SECTIONS 01&ndash;04, SAME FILE AS ABOVE</span></div>
-          <div class="es-row"><span class="es-k">FACT</span><span class="af-t">At intake: strong vision, a strong product, and seven named gaps &mdash; no CRM, no business development function, no sales methodology, no outbound process, no pipeline management, no KPI framework, no reporting structure.</span></div>
-          <div class="es-row"><span class="es-k">ACTION</span><span class="af-t">Understanding before outbound &mdash; business and product analysis, market research, competitive analysis, ICP definition, customer segmentation, commercial positioning. Then the build: commercial strategy, HubSpot CRM, business development process, sales pipeline, ICP framework, outbound sequences, KPI framework, forecasting structure, reporting dashboards, and an AI-powered outbound engine.</span></div>
-          <div class="es-row"><span class="es-k">CONCLUSION</span><span class="af-t">A commercial function is infrastructure before it is activity. Built in that order it carries $9M+ ARR in managed pipeline, ~20% outbound reply, 7&ndash;8% outbound conversion and 50%+ inbound conversion.</span></div>
+          <div class="es-row"><span class="es-k">SOURCE</span><span class="es-v">CASE FILE 01 &mdash; XTIX &middot; SECTIONS 01&ndash;04</span></div>
+          <div class="es-row"><span class="es-k">FACT</span><span class="af-t">Strong vision. Strong product. Zero commercial infrastructure &mdash; 07 named gaps.</span></div>
+          <div class="es-row"><span class="es-k">ACTION</span><span class="af-t">Understanding before outbound. Then &empty;&rarr;10: strategy, CRM, pipeline, ICP, KPIs, AI outbound engine.</span></div>
+          <div class="es-row"><span class="es-k">CONCLUSION</span><span class="af-t">A commercial function is infrastructure before it is activity.</span></div>
+          <div class="es-row"><span class="es-k">CARRIES</span><span class="af-fig">$9M+ ARR MANAGED &middot; ~20% REPLY &middot; 7&ndash;8% OUTBOUND &middot; 50%+ INBOUND</span></div>
           <div class="es-row"><span class="es-k">FILED</span><span class="es-v" id="afdate2">2026-08</span></div>
           <span class="af-stamp">ON RECORD</span>
+        </div></div>
+        </div>
+        <div class="mscol" id="mscol">
+          <span class="mspeek" aria-hidden="true"></span>
+          <button class="mstab" id="msTab" type="button" aria-expanded="false" aria-controls="msdesk"><i>&#9666;</i><b id="msTabT">METHOD</b></button>
+          <div class="afslip af1">
+          <div class="es-h"><span>EVIDENCE SLIP</span><b>(S) &middot; CTRL &#8470; X-26-0114</b></div>
+          <div class="es-row"><span class="es-k">SOURCE</span><span class="es-v">CRM EXPORT &middot; PIPELINE REPORT FY25</span></div>
+          <div class="es-row"><span class="es-k">CLAIM</span><span class="es-v">COMMERCIAL OPERATING SYSTEM &mdash; BUILT FROM ZERO</span></div>
+          <div class="es-row"><span class="es-k">FILED</span><span class="es-v" id="afdate1">2026-08</span></div>
+          <span class="es-stamp">VERIFIED</span>
+        </div>
+          <div class="an-note">
+          <div class="an-h">ANALYST NOTE &mdash; MARGIN</div>
+          <div class="an-t">Subject builds the machine before the team. Zero to a working commercial OS inside one file. Pattern holds.</div>
+          <div class="an-s">&mdash; REVIEWING DESK, 2026</div>
+        </div>
+          <p class="msbody">&hellip; the case text continues here, uninterrupted. Whatever the margin is doing, this column is the same length it was before the tab was pressed.</p>
+        </div>
+      </div></div>
+      <span class="mspan">← PAN TO SEE THE MARGIN →</span>
+      <div class="msmeter">READING COLUMN &mdash; CLOSED <b id="msH0">&mdash;</b> &middot; OPEN <b id="msH1">&mdash;</b> &middot; DELTA <em id="msHd">&mdash;</em><s></s><span id="msNote">PRESS THE TAB</span></div>
+      <div class="msmeter" style="border-top:0;margin-top:0;padding-top:3px">MARGIN SLIP <b id="msSW">&mdash;</b> &times; <b id="msSH">&mdash;</b> &middot; NEEDS A GUTTER OF <em id="msSN">&mdash;</em></div>
+      <div class="msreal">MEASURED ON THE LIVE PAGE AT 1440 &mdash; TRUE GUTTER LEFT OF EACH EVIDENCE SLIP:
+        <b>XTIX 151px</b> &middot; <b>OASIS 267px</b> &middot; <b>EVENTER 247px</b> &middot; <b>MEDCOIN 760px</b>.
+        <span>THE MECHANISM NEEDS ~230px &mdash; SO IT ENGAGES IN THREE CASES OUT OF FOUR AT THIS WIDTH, AND IN ALL FOUR ABOVE ~1570px. WHERE IT DOES NOT FIT, STATE B IS THE FALLBACK.</span></div>
+      <div class="mssep"></div>
+      <div class="msrub"><b>B</b>PHONE 390 &mdash; NO MARGIN EXISTS, SO IT FOLDS IN PLACE<s></s><span id="msPState">COLLAPSED</span></div>
+      <div class="msphw">
+        <div class="msph" id="msph">
+          <div class="afslip af1">
+          <div class="es-h"><span>EVIDENCE SLIP</span><b>(S) &middot; CTRL &#8470; X-26-0114</b></div>
+          <div class="es-row"><span class="es-k">SOURCE</span><span class="es-v">CRM EXPORT &middot; PIPELINE REPORT FY25</span></div>
+          <div class="es-row"><span class="es-k">CLAIM</span><span class="es-v">COMMERCIAL OPERATING SYSTEM &mdash; BUILT FROM ZERO</span></div>
+          <div class="es-row"><span class="es-k">FILED</span><span class="es-v" id="afdate1p">2026-08</span></div>
+          <span class="es-stamp">VERIFIED</span>
+        </div>
+          <button class="msacc" id="msAcc" type="button" aria-expanded="false" aria-controls="msAccB"><i>+</i><b>METHOD &mdash; HOW THIS WAS BUILT</b><em id="msAccS">TAP</em></button>
+          <div class="msaccb" id="msAccB"><div class="afslip af2">
+          <div class="es-h"><span>METHOD SLIP &mdash; HOW THE CLAIM WAS BUILT</span><b>(S) &middot; CTRL &#8470; X-26-0114-A</b></div>
+          <div class="es-row"><span class="es-k">SOURCE</span><span class="es-v">CASE FILE 01 &mdash; XTIX &middot; SECTIONS 01&ndash;04</span></div>
+          <div class="es-row"><span class="es-k">FACT</span><span class="af-t">Strong vision. Strong product. Zero commercial infrastructure &mdash; 07 named gaps.</span></div>
+          <div class="es-row"><span class="es-k">ACTION</span><span class="af-t">Understanding before outbound. Then &empty;&rarr;10: strategy, CRM, pipeline, ICP, KPIs, AI outbound engine.</span></div>
+          <div class="es-row"><span class="es-k">CONCLUSION</span><span class="af-t">A commercial function is infrastructure before it is activity.</span></div>
+          <div class="es-row"><span class="es-k">CARRIES</span><span class="af-fig">$9M+ ARR MANAGED &middot; ~20% REPLY &middot; 7&ndash;8% OUTBOUND &middot; 50%+ INBOUND</span></div>
+          <div class="es-row"><span class="es-k">FILED</span><span class="es-v" id="afdate2p">2026-08</span></div>
+          <span class="af-stamp">ON RECORD</span>
+        </div></div>
+          <div class="an-note">
+          <div class="an-h">ANALYST NOTE &mdash; MARGIN</div>
+          <div class="an-t">Subject builds the machine before the team. Zero to a working commercial OS inside one file. Pattern holds.</div>
+          <div class="an-s">&mdash; REVIEWING DESK, 2026</div>
+        </div>
         </div>
       </div>
+      <div class="msmeter">PHONE COLUMN &mdash; COLLAPSED <b id="msP0">&mdash;</b> &middot; THE TRIGGER ROW COSTS <em id="msPc">&mdash;</em><s></s><span>EXPANDED ONLY ON REQUEST</span></div>
     </div>
   </div>
-  <p class="note"><b>השיפוט שלי:</b> המעבר מ-"מה זה עלה לי" ל-"איך בניתי את זה" הוא שינוי נכון, והוא גם מסיר את הסיכון הגדול של המוצג הקודם — מגייס שקורא רק את הפתק השני ומסיק חסרונות. מה שנשמר מהמנגנון הוא העיקר: מסמך עם עשרים חותמות VERIFIED נקרא כשיווק; פתק שני שמראה את הדרך מהעובדה אל המסקנה הופך את המספר לבניין. שתי אזהרות: (א) שורת CONCLUSION חייבת להיות מסקנה — משפט שאפשר להעביר לתיק הבא; אם היא רק סיכום של השורות מעליה, הפתק מיותר. (ב) הפתק השני ארוך מהראשון, וזה בסדר רק כל עוד הוא אחד לתיק. שניים באותו תיק והראיות נעלמות מתחת להסברים.</p>
+  <p class="note"><b>&#1492;&#1513;&#1497;&#1508;&#1493;&#1496; &#1513;&#1500;&#1497;, &#1489;&#1499;&#1504;&#1493;&#1514;:</b> &#1492;&#1511;&#1497;&#1510;&#1493;&#1512; &#1492;&#1493;&#1488; &#1492;&#1504;&#1497;&#1510;&#1495;&#1493;&#1503; &#1492;&#1489;&#1496;&#1493;&#1495; &#1499;&#1488;&#1503; &mdash; &#1508;&#1514;&#1511; &#1513;&#1504;&#1511;&#1512;&#1488; &#1489;&#1513;&#1500;&#1493;&#1513; &#1513;&#1504;&#1497;&#1493;&#1514; &#1506;&#1493;&#1489;&#1491; &#1489;&#1502;&#1511;&#1493;&#1501; &#1508;&#1514;&#1511; &#1513;&#1488;&#1497;&#1513; &#1500;&#1488; &#1497;&#1511;&#1512;&#1488;. &#1506;&#1500; &#1492;&#1494;&#1495;&#1497;&#1500;&#1492; &#1492;&#1510;&#1497;&#1491;&#1497;&#1514; &#1488;&#1504;&#1497; &#1508;&#1495;&#1493;&#1514; &#1489;&#1496;&#1493;&#1495;, &#1493;&#1488;&#1500;&#1493; &#1492;&#1505;&#1497;&#1489;&#1493;&#1514;: <b>(&#1488;)</b> &#1492;&#1497;&#1488; &#1506;&#1493;&#1489;&#1491;&#1514; &#1489;&#1493;&#1493;&#1491;&#1488;&#1493;&#1514; &#1512;&#1511; &#1489;&#1502;&#1505;&#1498; &#1512;&#1495;&#1489;: &#1502;&#1514;&#1495;&#1514; &#1500;-1150px &#1488;&#1497;&#1503; &#1490;&#1497;&#1500;&#1497;&#1493;&#1503; &#1488;&#1502;&#1497;&#1514;&#1497;, &#1493;&#1499;&#1500; &#1502;&#1492; &#1513;&#1504;&#1493;&#1514;&#1512; &#1492;&#1493;&#1488; &#1492;&#1488;&#1511;&#1493;&#1512;&#1491;&#1497;&#1493;&#1503;. &#1499;&#1500;&#1493;&#1502;&#1512; <b>&#1492;&#1508;&#1514;&#1512;&#1493;&#1503; &#1492;&#1488;&#1500;&#1490;&#1504;&#1496;&#1497; &#1492;&#1493;&#1488; &#1492;&#1502;&#1511;&#1512;&#1492; &#1492;&#1504;&#1493;&#1495;, &#1493;&#1492;&#1508;&#1497;&#1497;&#1500;&#1489;&#1511; &#1492;&#1493;&#1488; &#1502;&#1492; &#1513;&#1512;&#1493;&#1489; &#1492;&#1502;&#1513;&#1514;&#1502;&#1513;&#1497;&#1501; &#1489;&#1508;&#1493;&#1506;&#1500; &#1497;&#1511;&#1489;&#1500;&#1493;</b>. <b>(&#1489;)</b> &#1514;&#1493;&#1499;&#1503; &#1513;&#1497;&#1493;&#1513;&#1489; &#1489;&#1513;&#1493;&#1500;&#1497; &#1492;&#1506;&#1502;&#1493;&#1491; &#1502;&#1505;&#1493;&#1499;&#1503; &#1500;&#1492;&#1497;&#1511;&#1512;&#1488; &#1499;&#1489;&#1512;&#1497;&#1512;&#1514;-&#1502;&#1495;&#1491;&#1500;: &#1502;&#1497; &#1513;&#1500;&#1488; &#1497;&#1500;&#1495;&#1509; &#1500;&#1506;&#1493;&#1500;&#1501; &#1500;&#1488; &#1497;&#1512;&#1488;&#1492; &#1488;&#1493;&#1514;&#1493;. &#1494;&#1492; &#1489;&#1505;&#1491;&#1512; &#1500;&#1513;&#1499;&#1489;&#1514; &#1492;&#1504;&#1502;&#1511;&#1492;, &#1493;&#1494;&#1493; &#1489;&#1488;&#1502;&#1514; &#1513;&#1499;&#1489;&#1514; &#1492;&#1504;&#1502;&#1511;&#1492; &mdash; &#1488;&#1489;&#1500; &#1510;&#1512;&#1497;&#1498; &#1500;&#1492;&#1490;&#1497;&#1491; &#1488;&#1514; &#1494;&#1492; &#1489;&#1511;&#1493;&#1500;: <b>&#1512;&#1493;&#1489; &#1492;&#1511;&#1493;&#1512;&#1488;&#1497;&#1501; &#1500;&#1506;&#1493;&#1500;&#1501; &#1500;&#1488; &#1497;&#1508;&#1514;&#1495;&#1493; &#1488;&#1514; &#1494;&#1492;</b>, &#1493;&#1494;&#1493; &#1492;&#1505;&#1497;&#1489;&#1492; &#1513;&#1499;&#1500; &#1502;&#1492; &#1513;&#1495;&#1497;&#1497;&#1489; &#1500;&#1492;&#1497;&#1493;&#1514; &#1504;&#1511;&#1512;&#1488; &#1495;&#1497;&#1497;&#1489; &#1500;&#1492;&#1497;&#1513;&#1488;&#1512; &#1489;&#1506;&#1502;&#1493;&#1491;&#1492; &#1492;&#1512;&#1488;&#1513;&#1497;&#1514;. <b>(&#1490;)</b> &#1492;&#1497;&#1497;&#1514;&#1492; &#1488;&#1508;&#1513;&#1512;&#1493;&#1514; &#1488;&#1495;&#1514; &#1496;&#1493;&#1489;&#1492; &#1497;&#1493;&#1514;&#1512; &#1513;&#1500;&#1488; &#1489;&#1504;&#1497;&#1514;&#1497;: &#1500;&#1492;&#1508;&#1493;&#1498; &#1488;&#1514; &#1508;&#1514;&#1511;-&#1492;&#1512;&#1488;&#1497;&#1492; &#1506;&#1510;&#1502;&#1493; &#1500;&#1492;&#1508;&#1497;&#1499;&#1492; &mdash; &#1510;&#1491; &#1488;&#1495;&#1491; &#1496;&#1506;&#1504;&#1492;, &#1510;&#1491; &#1513;&#1504;&#1497; &#1513;&#1497;&#1496;&#1492;. &#1494;&#1492; &#1492;&#1497;&#1492; &#1502;&#1493;&#1505;&#1497;&#1507; &#1488;&#1508;&#1505; &#1490;&#1493;&#1489;&#1492; &#1489;&#1488;&#1502;&#1514; &#1493;&#1488;&#1508;&#1505; &#1488;&#1493;&#1489;&#1497;&#1497;&#1511;&#1496;&#1497;&#1501; &#1495;&#1491;&#1513;&#1497;&#1501;. &#1491;&#1495;&#1497;&#1514;&#1497; &#1488;&#1493;&#1514;&#1492; &#1499;&#1497; &#1492;&#1497;&#1488; &#1513;&#1493;&#1489;&#1512;&#1514; &#1488;&#1514; &#1499;&#1500;&#1500; &quot;&#1488;&#1495;&#1491; &#1500;&#1514;&#1497;&#1511;, &#1500;&#1506;&#1493;&#1500;&#1501; &#1500;&#1488; &#1513;&#1504;&#1497;&#1497;&#1501;&quot; &mdash; &#1488;&#1489;&#1500; &#1488;&#1501; &#1492;&#1505;&#1497;&#1489;&#1493;&#1489; &#1492;&#1490;&#1497;&#1500;&#1497;&#1493;&#1503; &#1497;&#1497;&#1508;&#1493;&#1500;, &#1494;&#1493; &#1492;&#1495;&#1500;&#1493;&#1508;&#1492; &#1492;&#1499;&#1497; &#1502;&#1505;&#1493;&#1499;&#1504;&#1514;.</p>
 </section>
 
 </div>
@@ -1512,19 +1766,69 @@ document.getElementById('abPaper').addEventListener('click',function(){abCard.cl
   set(false);
 })();
 
-/* EX25 - the method slip: the reasoning travels with the claim */
+/* EX25 - the method slip: shortened, and moved out of the reading column.
+   The meters are not decoration - they are the proof. msH0/msH1 measure the reading
+   column before and after the slide; the delta must be exactly 0. */
 (function(){
-  var w=document.getElementById('af2w'),conn=document.querySelector('#ex25 .afconn'),
-      a=document.getElementById('afOnly'),b=document.getElementById('afBoth');
+  var desk=document.getElementById('msdesk'),col=document.getElementById('mscol'),
+      tab=document.getElementById('msTab'),ph=document.getElementById('msph'),
+      acc=document.getElementById('msAcc'),accS=document.getElementById('msAccS'),
+      H0=document.getElementById('msH0'),H1=document.getElementById('msH1'),
+      Hd=document.getElementById('msHd'),P0=document.getElementById('msP0'),
+      Pc=document.getElementById('msPc'),st=document.getElementById('msState'),
+      pst=document.getElementById('msPState'),note=document.getElementById('msNote'),
+      SW=document.getElementById('msSW'),SH=document.getElementById('msSH'),
+      SN=document.getElementById('msSN'),slip=document.querySelector('.msslide');
+  if(!desk||!col)return;
   var d=new Date(),ds=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
-  document.getElementById('afdate1').textContent=ds+' · VERIFIED AT INTAKE';
-  document.getElementById('afdate2').textContent=ds+' · FILED WITH THE CLAIM ABOVE';
-  function show(v){
-    w.classList.toggle('off',!v);conn.classList.toggle('off',!v);
-    b.classList.toggle('on',v);a.classList.toggle('on',!v);
+  ['afdate1','afdate1p'].forEach(function(id){var e=document.getElementById(id);if(e)e.textContent=ds+' · VERIFIED AT INTAKE'});
+  ['afdate2','afdate2p'].forEach(function(id){var e=document.getElementById(id);if(e)e.textContent=ds+' · WITH THE CLAIM ABOVE'});
+  function h(el){return Math.round(el.getBoundingClientRect().height)}
+  var closedH=0,gut=document.querySelector('.msgut');
+  function measureClosed(){
+    if(desk.classList.contains('open'))return;
+    /* the margin panel is routinely taller than the column it annotates, so the
+       gutter is grown to hold it. The gutter is a separate grid track and the
+       column is align-start, so growing it cannot move a single line of the text. */
+    if(gut&&slip)gut.style.minHeight=(h(slip)+52)+'px';
+    closedH=h(col);H0.textContent=closedH+' PX';
+    if(slip){
+      var w=Math.round(slip.getBoundingClientRect().width);
+      SW.textContent=w+' PX';SH.textContent=h(slip)+' PX';SN.textContent=(w+14)+' PX';
+    }
   }
-  a.addEventListener('click',function(){show(false)});
-  b.addEventListener('click',function(){show(true)});
+  function slide(v){
+    desk.classList.toggle('open',v);
+    tab.setAttribute('aria-expanded',v?'true':'false');
+    st.textContent=v?'OPEN — SLID INTO THE MARGIN':'CLOSED';
+    if(v){
+      var now=h(col);H1.textContent=now+' PX';
+      var dd=now-closedH;Hd.textContent=(dd>0?'+':'')+dd+' PX';
+      note.textContent=dd===0?'THE COLUMN DID NOT MOVE':'WARNING — COLUMN MOVED';
+    }else{note.textContent='PRESS THE TAB'}
+  }
+  tab.addEventListener('click',function(){slide(!desk.classList.contains('open'))});
+  /* the phone fallback: collapsed by default, so it costs one 31px row and no more */
+  if(ph&&acc){
+    var trigH=0;
+    function measurePhone(){
+      if(ph.classList.contains('open'))return;
+      P0.textContent=h(ph)+' PX';
+      trigH=Math.round(acc.getBoundingClientRect().height)+11;
+      Pc.textContent=trigH+' PX';
+    }
+    acc.addEventListener('click',function(){
+      var v=!ph.classList.contains('open');
+      ph.classList.toggle('open',v);
+      acc.setAttribute('aria-expanded',v?'true':'false');
+      accS.textContent=v?'CLOSE':'TAP';
+      pst.textContent=v?'EXPANDED ON REQUEST':'COLLAPSED';
+    });
+    setTimeout(measurePhone,260);
+    addEventListener('resize',measurePhone);
+  }
+  setTimeout(measureClosed,260);
+  addEventListener('resize',function(){measureClosed()});
 })();
 
 })();
