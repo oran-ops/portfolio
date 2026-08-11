@@ -365,8 +365,14 @@ body.static .bigmq .in2,body.static #files .lip,body.static .rub .d{animation:no
 background:var(--emb);border-radius:11px 24px 0 0;height:44px;padding:0 22px;width:max-content}
 #hero .mflip .nm{font-family:'Fraunces',serif;font-weight:600;font-size:19px;color:#191A1F}
 #hero .mflip .fl{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:9px;letter-spacing:.2em;color:#191A1F}
+/* R20/T1 - with the cover memo gone the ink block no longer fills the card, so a
+   top-anchored flow left the title stranded high with a dead emerald field beneath
+   it (measured 46px above / 186px below at 1440, 46/305 at 390). The cover keeps its
+   physical proportion; the block is centred in it instead, biased a hair high the way
+   an optical centre should be. */
 #hero .mfold{position:relative;z-index:2;max-width:1180px;margin:0 auto;background:var(--emb);
-border-radius:0 26px 22px 22px;min-height:62vh;padding:46px 40px 64px;overflow:hidden;text-align:center}
+border-radius:0 26px 22px 22px;min-height:62vh;padding:46px 40px 64px;overflow:hidden;text-align:center;
+display:flex;flex-direction:column;justify-content:center}
 #hero .mfold .hole{position:absolute;left:26px;width:15px;height:15px;border:2px solid rgba(25,26,31,.38);border-radius:50%}
 #hero .stampP{position:absolute;top:26px;right:30px;transform:rotate(6deg);border:2px solid rgba(25,26,31,.75);border-radius:7px;
 padding:7px 14px;font-family:'JetBrains Mono',monospace;font-weight:700;font-size:10px;letter-spacing:.26em;color:rgba(25,26,31,.85)}
@@ -827,8 +833,6 @@ body.static #clearance,body.static #idlecue,body.failsafe #clearance,body.failsa
     <h1 class="rv" style="--i:3">THE COMMERCIAL<br>SYSTEMS BUILDER</h1>
     <div class="sub">From Vision to Measurable Growth</div>
     <div class="by">BY <b>ORAN CARMON</b></div>
-    
-    <div class="bmemo rv" style="--i:4"><div class="bm-h"><span>MEMO &mdash; AFFIXED TO COVER</span><b>THE 30-SEC BRIEF</b></div><div class="bm-row" style="border-top:0"><div class="bm-c">Commercial operating system &mdash; built<span>CASE FILE 01 &mdash; XTIX &middot; ON RECORD</span></div><div class="bm-v">$9M+ ARR</div></div><div class="bm-row"><div class="bm-c">Largest deal closed<span>CASE FILE 02 &mdash; OASIS &middot; ON RECORD</span></div><div class="bm-v">$2M</div></div><div class="bm-row"><div class="bm-c">Funnel performance &mdash; outbound to inbound<span>REPLY ~20% &middot; OUTBOUND CONV 7&ndash;8%</span></div><div class="bm-v">50%+ INB</div></div><div class="bm-verdict">Four case files. One commercial operating system.</div></div>
   </div>
   <div id="drawerlip" aria-hidden="true"><span class="dlh"></span></div></div>
   <div class="cue"><span class="ar"></span>SCROLL TO OPEN</div>
@@ -1964,18 +1968,7 @@ body.static .hfolder,body.static #hero .mfold{--sx:-320px}
 /* ===== EMERALD II phase 1 ===== */
 /* film grain - the document was scanned in a dark room */
 body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:2147480000;opacity:.22;background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="220" height="220"><filter id="g"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/><feComponentTransfer><feFuncA type="linear" slope="0.10"/></feComponentTransfer></filter><rect width="220" height="220" filter="url(%23g)"/></svg>')}
-/* cover memo */
-.bmemo{background:rgba(14,25,19,.92);color:#E9F5EE;transform:rotate(-1.7deg);margin:22px auto 6px;max-width:430px;padding:13px 15px 11px;box-shadow:0 12px 26px rgba(0,0,0,.3);border:1px solid rgba(233,245,238,.1);position:relative;text-align:left}
-.bmemo::before,.bmemo::after{content:"";position:absolute;width:60px;height:15px;background:rgba(233,245,238,.16);box-shadow:0 1px 2px rgba(0,0,0,.12)}
-.bmemo::before{top:-8px;left:20px;transform:rotate(-4deg)}
-.bmemo::after{top:-8px;right:20px;transform:rotate(3deg)}
-.bm-h{font-family:'JetBrains Mono',monospace;font-weight:800;font-size:8px;letter-spacing:.28em;color:#8FB3A2;display:flex;justify-content:space-between;gap:8px;margin-bottom:7px}
-.bm-h b{color:#7FD7B2}
-.bm-row{display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding:6px 0;border-top:1px solid rgba(233,245,238,.12)}
-.bm-c{font-family:'Inter',sans-serif;font-weight:600;font-size:11.5px;line-height:1.4}
-.bm-c span{display:block;font-family:'JetBrains Mono',monospace;font-weight:400;font-size:7.5px;letter-spacing:.05em;color:#8FB3A2;margin-top:2px}
-.bm-v{font-family:'JetBrains Mono',monospace;font-weight:800;font-size:14px;white-space:nowrap}
-.bm-verdict{font-family:'Fraunces',serif;font-style:italic;font-size:12.5px;border-top:2px solid rgba(233,245,238,.75);margin-top:6px;padding-top:8px;color:#DFF3E9}
+/* owner: cover memo removed - the cover carries the title alone */
 /* classification grammar - case colors via each section's --fc */
 .clsband{background:var(--fc,var(--emb));color:#141519;font-family:'JetBrains Mono',monospace;font-weight:800;font-size:9.5px;letter-spacing:.4em;text-align:center;padding:7px 8px 6px;border-radius:4px;margin:14px 0 0}
 .clsctl{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:.07em;color:var(--dim,#6B6E76);padding:7px 2px;border-bottom:1px solid rgba(107,110,118,.28);margin-bottom:6px}
@@ -1985,7 +1978,6 @@ body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:214748
 #medcoin .pmark{color:#8a5a17}
 .srcline{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.06em;color:var(--dim,#6B6E76);margin-top:6px}
 .rstampS{mask-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="80"><filter id="r"><feTurbulence type="fractalNoise" baseFrequency="0.5" numOctaves="3"/><feComponentTransfer><feFuncA type="discrete" tableValues="0.55 0.85 1 0.92 1 0.75 1"/></feComponentTransfer></filter><rect width="200" height="80" filter="url(%23r)"/></svg>');mask-size:cover;-webkit-mask-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="80"><filter id="r"><feTurbulence type="fractalNoise" baseFrequency="0.5" numOctaves="3"/><feComponentTransfer><feFuncA type="discrete" tableValues="0.55 0.85 1 0.92 1 0.75 1"/></feComponentTransfer></filter><rect width="200" height="80" filter="url(%23r)"/></svg>');-webkit-mask-size:cover}
-@media (max-width:680px){.bmemo{margin-left:2px;margin-right:2px}}
 @media (prefers-reduced-motion:reduce){body::after{display:none}}
 
 
@@ -2118,6 +2110,280 @@ footer::after{right:0}
 @media (max-width:560px){#final{padding-left:40px;padding-right:40px}.vfilm{width:30px}
   .vfilm::before,.vfilm::after{width:9px;background-size:9px 22px}.vfilm span{font-size:5.5px;letter-spacing:.22em}}
 @media (prefers-reduced-motion:reduce){#final::before{background:none}}
+
+/* ================= BIG BUILD 3 - THE INSPECTION LAMP =================
+   Lab exhibit 23 (v2, approved) ported into the live document. ONE lamp per case
+   folder, THREE developed zones per folder. That is the standing rule and this
+   block does not exceed it.
+
+   DAYLIGHT: the folder is the folder. The developed lines are not hidden, they
+   have no height and no ink - the reader is not told anything is missing.
+
+   UNDER THE LAMP: the file is re-photographed as the archive stores it. The bed
+   drops to the vault's own #0A0B0D; the .vfilm rebates swing in over the punch
+   rail - literally the class the closing section uses, sprocket holes and frame
+   numbers and all, so there is one film edge in this document, not two; the
+   vault's two-layer vignette from #final::before (inset shadow + low radial) is
+   re-laid at card scale; and the file's whole accent - tab, classification band,
+   zone numerals, diamonds, rules, ticks - goes silver in ONE move by re-pointing
+   --fc inside the lit folder.
+
+   THE LIGHT is a matte film wash, not a spotlight: a very wide, very low-alpha
+   fall from the head of the card where the lamp stands. Alpha tops out at .055.
+   What sells the moment is the bed going black and the type arriving. */
+
+/* the scroll engine writes transition:none inline on every case folder so its
+   per-frame transform never lags. The lamp needs the bed to FADE, so the list is
+   re-declared here for colour and shadow only - transform and opacity are not in
+   it and stay exactly as instant as the engine needs them to be. */
+.case .folder{transition:background-color .85s cubic-bezier(.4,0,.2,1),box-shadow .85s!important}
+.case .folder.lampon{background-color:#0A0B0D;
+  background-image:
+    linear-gradient(180deg,rgba(222,231,250,.052) 0%,rgba(222,231,250,.030) 46%,rgba(222,231,250,.014) 100%),
+    radial-gradient(150% 96% at 24% -8%,rgba(226,234,252,.055),rgba(226,234,252,.020) 58%,transparent 100%),
+    radial-gradient(120% 70% at 50% 42%,rgba(214,226,255,.055),transparent 62%);
+  box-shadow:inset 0 0 74px rgba(0,0,0,.34),inset 0 0 22px rgba(0,0,0,.20);
+  /* the whole palette is re-pointed at silver for the duration of the exposure.
+     --fc catches the tab, the band, the zone numerals, the diamonds, the rules
+     and the ticks; --emb / --brass / --ice catch the handful of places that
+     reach for the accent directly (the STARTING POINT header and its 07 gap
+     glyphs among them). One declaration block, no colour left in the negative. */
+  --fc:#E6EAF6;--emb:#E6EAF6;--brass:#E6EAF6;--ice:#E6EAF6;
+  --emb-dim:rgba(230,234,246,.10);--ice-dim:rgba(230,234,246,.12)}
+/* the punch rail is daylight furniture; under the lamp the film edge replaces it */
+.case .folder .frail{transition:opacity .6s}
+.case .folder.lampon .frail{opacity:0}
+/* the rebates are sized to the padding the folder ALREADY has - 92px of rail on
+   the left, 38px on the right - so switching the lamp on reflows nothing. Not one
+   line of the case text moves. */
+.case .folder .vfilm{opacity:0;pointer-events:none;transition:opacity .7s;z-index:3;padding:14px 0}
+.case .folder .vfilm.l{width:56px;border-radius:0 0 0 18px}
+.case .folder .vfilm.r{width:36px;border-radius:0 18px 18px 0}
+.case .folder .vfilm.r::before,.case .folder .vfilm.r::after{width:13px;background-size:13px 28px}
+.case .folder.lampon .vfilm{opacity:1}
+/* solid silver on near-black - the inversion the tab and the band are asked for.
+   --fc does the work everywhere it is read; medcoin hard-codes its band, so it
+   is the one case that needs to be told twice. */
+.case .folder .clsband,.case .folder .clsctl,.case .folder .tabrow .tA{
+  transition:background-color .85s,color .85s,border-color .85s}
+.case .folder.lampon .clsband{color:#0A0B0D}
+.case .folder.lampon .clsctl{color:#8D93A2;border-bottom-color:rgba(237,239,246,.18)}
+#medcoin .folder.lampon .clsband{background:#E6EAF6;color:#0A0B0D}
+#medcoin .folder.lampon .clsctl{color:#8D93A2;border-bottom-color:rgba(237,239,246,.18)}
+#medcoin .folder.lampon .pmark{color:#E6EAF6}
+/* a negative has no colour in it. The charts are the last coloured ink in the
+   file, so they are drained too - cheap, contained, and it keeps the promise. */
+.case .folder svg{transition:filter .85s}
+.case .folder.lampon svg{filter:grayscale(1) brightness(1.28)}
+.case .folder.lampon .an-note{border-left-color:#E6EAF6}
+
+/* ---- THE LAMP BAND ----
+   Not a rubric in a corner: one horizontal line of instruction laid over the
+   file, in the band between the tab row and the card's first heading. Small
+   icon, explicit arrow pointing back AT it, invitation in the loudest type on
+   the card. The whole band is the control - the words are pressable too. */
+.lampband{display:flex;align-items:center;gap:0;width:100%;background:none;border:0;
+  padding:0 2px 12px;margin:0;cursor:pointer;font:inherit;text-align:left;color:inherit;
+  -webkit-tap-highlight-color:transparent;position:relative;z-index:4;
+  border-bottom:1px solid rgba(107,110,118,.22);transition:border-color .85s}
+.case .folder.lampon .lampband{border-bottom-color:rgba(237,239,246,.16)}
+.lampband .lamp{pointer-events:none;flex:none;display:block;line-height:0}
+.lampband .lamp svg{width:30px;height:30px;display:block;overflow:visible;filter:none!important}
+.lampband .lbody{fill:none;stroke:#9EA0A6;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;transition:stroke .6s}
+.lampband .lbulb{fill:#7A7E88;transition:fill .6s,filter .6s}
+.lampband .lcone{opacity:.55;transition:opacity .6s;animation:lampbreath 3.1s ease-in-out infinite;transform-origin:15px 20px}
+.lampband .ls1{stop-color:#F7E7C2;stop-opacity:.92}
+.lampband .ls2{stop-color:#F7E7C2;stop-opacity:.26}
+.lampband .ls3{stop-color:#F7E7C2;stop-opacity:0}
+.lampband .lh1{stop-color:#FFF4D8;stop-opacity:.8}
+.lampband .lh2{stop-color:#FFF4D8;stop-opacity:0}
+@keyframes lampbreath{0%,100%{opacity:.4}50%{opacity:.95}}
+.lampband:hover .lbody{stroke:#F2F1ED}
+.lampband:hover .lbulb{fill:#F2F1ED}
+.lampband:hover .lcone{opacity:.95}
+.lampband:focus-visible{outline:1px dashed rgba(242,241,237,.6);outline-offset:5px}
+/* lit: the bulb is the only light source left in a black-and-white file */
+.case .folder.lampon .lampband .lbody{stroke:#EDEFF6}
+.case .folder.lampon .lampband .lbulb{fill:#FFFFFF;filter:drop-shadow(0 0 5px rgba(214,226,255,.95))}
+.case .folder.lampon .lampband .lcone{opacity:1;animation:none}
+.case .folder.lampon .lampband .ls1{stop-color:#E4EBFF;stop-opacity:1}
+.case .folder.lampon .lampband .ls2{stop-color:#E4EBFF;stop-opacity:.3}
+.case .folder.lampon .lampband .ls3{stop-color:#E4EBFF;stop-opacity:0}
+.case .folder.lampon .lampband .lh1{stop-color:#F2F6FF;stop-opacity:.95}
+.case .folder.lampon .lampband .lh2{stop-color:#F2F6FF;stop-opacity:0}
+/* the arrow is the sentence "press this" - drawn on, not decorative */
+.lamparrow{flex:none;display:flex;align-items:center;gap:0;margin:0 12px 0 9px;
+  color:var(--fc,var(--emb));transition:color .7s,opacity .7s;opacity:.95}
+.lamparrow i{font-style:normal;font-size:15px;line-height:1;font-weight:700;margin-right:-2px}
+.lamparrow s{display:block;width:34px;height:2px;background:currentColor;text-decoration:none;border-radius:1px}
+.case .folder.lampon .lamparrow{color:#C9D3EE;opacity:.8}
+.lampband:hover .lamparrow{opacity:1}
+.lampwords{display:flex;flex-direction:column;align-items:flex-start;gap:3px;min-width:0}
+/* deliberately the loudest label in the document */
+.lampcall{font-family:'JetBrains Mono',monospace;font-weight:800;font-size:13.5px;letter-spacing:.2em;
+  color:#F2F1ED;text-align:left;transition:color .6s}
+.lampband:hover .lampcall{color:#FFFFFF}
+.case .folder.lampon .lampcall{color:#EDEFF6}
+.lampsub{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:.2em;color:#9EA0A6;transition:color .6s}
+.case .folder.lampon .lampsub{color:#8D93A2}
+
+/* ---- THE DEVELOPED COPY ----
+   Scanned in two seconds, not read: the FIRST line of a zone is the typewriter
+   doing the one thing a typewriter is good at - a single short headline, wearing
+   the vault's own #final .sttl bloom - and everything under it is Inter, the
+   document's body face, at a size a human actually reads. */
+.devz{max-height:0;opacity:0;overflow:hidden;margin-top:0;transform:translateY(7px);pointer-events:none;
+  transition:opacity .5s,transform .5s,max-height .65s cubic-bezier(.4,0,.2,1),margin-top .5s}
+.case .folder.lampon .devz{max-height:400px;opacity:1;margin-top:15px;transform:none;pointer-events:auto;
+  transition-delay:calc(.16s + var(--dz,0)*.16s)}
+.dv-k{display:block;font-family:'JetBrains Mono',monospace;font-weight:700;font-size:7.5px;letter-spacing:.28em;
+  color:#B9BECC;margin-bottom:6px}
+.dv-t{display:block;font-family:'Special Elite',monospace;font-size:14px;line-height:1.5;color:#F4F6FB;
+  text-shadow:0 0 16px rgba(214,226,255,.42),0 0 46px rgba(190,205,255,.16);margin-bottom:9px}
+.dv-b{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:5px}
+.dv-b li{position:relative;font-family:'Inter',sans-serif;font-size:13px;font-weight:400;line-height:1.5;
+  color:#D8DCE6;padding-left:15px;letter-spacing:.005em}
+.dv-b li::before{content:"";position:absolute;left:1px;top:.6em;width:5px;height:1px;background:#8D93A2}
+.dv-b li b{font-weight:700;color:#F2F4FA}
+.dv-b li em{font-style:normal;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;
+  letter-spacing:.06em;color:#EDEFF6}
+.lampsig{display:block;max-height:0;overflow:hidden;opacity:0;margin-top:0;padding-top:0;
+  border-top:1px dashed rgba(237,239,246,0);position:relative;z-index:2;
+  font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:.2em;color:#8D93A2;text-align:right;
+  transition:opacity .5s .7s,max-height .6s .55s,margin-top .5s .55s,padding-top .5s .55s,border-color .5s .55s}
+.case .folder.lampon .lampsig{opacity:.95;margin-top:18px;padding-top:10px;max-height:48px;
+  border-top-color:rgba(237,239,246,.2)}
+
+/* FAILSAFE / REDUCED MOTION / STATIC - never leave a reader holding a card whose
+   content is behind an animation that will not run. The file stays in DAYLIGHT
+   and the developed copy is simply THERE. */
+body.static .devz,body.failsafe .devz{max-height:none;opacity:1;margin-top:15px;transform:none;
+  pointer-events:auto;transition:none}
+body.static .lampsig,body.failsafe .lampsig{max-height:48px;opacity:.85;margin-top:18px;padding-top:10px;
+  border-top-color:rgba(237,239,246,.18);transition:none}
+@media (prefers-reduced-motion:reduce){
+  .devz{max-height:none;opacity:1;margin-top:15px;transform:none;pointer-events:auto;transition:none}
+  .lampsig{max-height:48px;opacity:.85;margin-top:18px;padding-top:10px;
+    border-top-color:rgba(237,239,246,.18);transition:none}
+  .lampband .lcone{animation:none}
+  .case .folder,.case .folder .vfilm,.case .folder .frail,.case .folder svg{transition:none!important}
+}
+@media (max-width:860px){
+  /* the folder is inset 16px a side at this width and the rail is already
+     display:none, so the film edge narrows to fit that 16px exactly - again, no
+     reflow, and the perforations stay legible the way the vault's own do at 560 */
+  .case .folder .vfilm.l,.case .folder .vfilm.r{width:15px;padding:10px 0;border-radius:0}
+  .case .folder .vfilm::before,.case .folder .vfilm::after{width:9px;background-size:9px 20px;margin:5px 0}
+  .case .folder .vfilm span{display:none}
+}
+@media (max-width:680px){
+  .lampband{padding-bottom:10px}
+  .lampband .lamp svg{width:26px;height:26px}
+  .lampcall{font-size:11px;letter-spacing:.13em}
+  .lampsub{font-size:6.5px;letter-spacing:.12em}
+  .lamparrow{margin:0 8px 0 6px}
+  .lamparrow s{width:18px}
+  .lamparrow i{font-size:12px}
+  .dv-t{font-size:13px}
+  .dv-b li{font-size:12.5px}
+}
+
+/* ================= BIG BUILD 4 - THE METHOD SLIP =================
+   Lab exhibit 25's six rows - SOURCE / FACT / ACTION / CONCLUSION / CARRIES /
+   FILED, stamped ON RECORD in the desk's graphite instead of VERIFIED in green.
+
+   MECHANISM. The lab's desktop mechanism was a margin side-slide, and the lab's
+   own measurements killed it: the panel needs ~240px of true gutter and XTIX has
+   151px at 1440 (re-measured this round at 159px - same answer). It fits in three
+   files out of four, and in all four only above ~1570px. Shipping it would mean
+   XTIX behaves differently from its three siblings on the most common desktop
+   width, and the phone would need a third behaviour again. A document whose whole
+   argument is one repeated grammar cannot afford three grammars for one object.
+
+   So the second slip is not a second object at all: it is the SECOND FACE of the
+   evidence slip that is already clipped to the file. A tab in the document's own
+   file-tab shape sits on the sheet's top edge and turns it over. The tab is
+   absolutely positioned, so it costs zero column height; at rest the reading
+   column is byte-identical to what it was before this build. Nothing overlaps the
+   ANALYST NOTE, which stays exactly where it is as the next sibling in flow. It
+   is not a popup, there is no overlay, and the reader who never presses the tab
+   reads precisely the document they read yesterday.
+
+   The sheet's two sides carry different amounts of ink, so turning it over does
+   change the object's height - on demand, once, by the reader's own hand, the way
+   the SEALED bars in this file already behave. That is the one honest cost and it
+   is paid only by the reader who asked for it. */
+.slipflip{position:relative;max-width:420px;margin:14px 0 4px;transform:rotate(-1.2deg);
+  perspective:1500px;transition:height .5s cubic-bezier(.4,0,.2,1)}
+#eventer .slipflip,#medcoin .slipflip{margin-top:10px}
+.sf-in{position:relative;width:100%;height:100%;transform-style:preserve-3d;
+  transition:transform .72s cubic-bezier(.4,0,.2,1)}
+.slipflip.turned .sf-in{transform:rotateY(180deg)}
+.sf-face{position:absolute;top:0;left:0;width:100%;
+  -webkit-backface-visibility:hidden;backface-visibility:hidden}
+.sf-back{transform:rotateY(180deg)}
+/* the front face is the evidence slip exactly as it was; only its own paper tilt
+   and margins move up to the turning container so the flip axis stays true */
+.slipflip .evslip{transform:none;margin:0;max-width:none}
+/* the back: same paper stock, one shade cooler, taped on the other corner, and
+   sealed in graphite because a method is reasoning, not a verified figure */
+.mslip{background:#E4E1D6;color:#22201C;padding:12px 15px 26px;position:relative;
+  box-shadow:0 12px 26px rgba(0,0,0,.32),inset 0 0 0 1px rgba(62,58,49,.18)}
+.mslip::before{content:"";position:absolute;top:-7px;right:26px;width:54px;height:15px;
+  background:rgba(255,255,255,.35);box-shadow:0 1px 2px rgba(0,0,0,.12);transform:rotate(3deg)}
+.mslip .es-h{color:#6E685C;flex-wrap:wrap;row-gap:4px}
+.mslip .es-h b{color:#3E3A31}
+.mslip .es-k{color:#6E685C;min-width:58px}
+.mslip .es-row{border-top-color:rgba(34,32,28,.16);padding:4px 0}
+/* keep the last value clear of the seal */
+.mslip .es-row:last-of-type .es-v{padding-right:84px}
+/* the desk's own hand - the same typewriter the analyst note is struck on. The
+   document embeds four faces and Courier Prime is not one of them; Special Elite
+   is the reviewing desk's machine already, which is whose voice this slip is. */
+.ms-t{font-family:'Special Elite',monospace;font-size:11px;line-height:1.55;color:#2A2620;letter-spacing:0}
+.ms-fig{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:9.5px;line-height:1.65;
+  color:#22201C;letter-spacing:.02em}
+.ms-stamp{position:absolute;right:14px;bottom:9px;font-family:'JetBrains Mono',monospace;font-weight:800;
+  font-size:8px;letter-spacing:.24em;color:#3E3A31;border:2px solid #3E3A31;border-radius:4px;
+  padding:3px 7px;opacity:.9;transform:rotate(-2.6deg)}
+/* the tab: the document's own file-tab silhouette, on the sheet instead of the
+   folder. Absolutely positioned - it adds nothing to the column. */
+.sf-tab{position:absolute;top:-14px;right:16px;z-index:6;display:flex;align-items:center;gap:6px;
+  height:16px;padding:0 9px;background:#CFCBBE;color:#22201C;border:0;border-radius:5px 11px 0 0;
+  cursor:pointer;font-family:'JetBrains Mono',monospace;font-weight:800;font-size:7.5px;
+  letter-spacing:.18em;white-space:nowrap;box-shadow:0 -2px 6px rgba(0,0,0,.28);
+  -webkit-tap-highlight-color:transparent;transition:background .2s,top .2s}
+.sf-tab i{font-style:normal;font-size:9px;line-height:1;color:#1E6B4B;transition:transform .5s}
+.slipflip.turned .sf-tab i{transform:rotate(180deg)}
+.slipflip.turned .sf-tab{background:#E0DCCE}
+.sf-tab:hover{background:#E4E0D3;top:-17px}
+.sf-tab:focus-visible{outline:1px dashed rgba(242,241,237,.75);outline-offset:3px}
+@media (max-width:680px){
+  /* the 420px cap stays at every width. The evidence slip has always carried it,
+     and #oasis's slip sits in a container that is 967px wide on a 390 phone -
+     lifting the cap here silently stretched the slip to 967px. */
+  .ms-t{font-size:10.5px;line-height:1.5}
+  .mslip .es-k{min-width:56px}
+  .mslip .es-row:last-of-type .es-v{padding-right:80px}
+  .sf-tab{right:10px}
+}
+/* reduced motion / static: no sheet turns in three dimensions. The same two faces
+   cross-fade in place, and the height still resolves, so the reader never lands on
+   a blank card. */
+@media (prefers-reduced-motion:reduce){
+  .slipflip,.sf-in,.sf-tab,.sf-tab i{transition:none}
+  .sf-in{transform:none!important}
+  .sf-face{-webkit-backface-visibility:visible;backface-visibility:visible}
+  .sf-back{transform:none;opacity:0;pointer-events:none}
+  .slipflip.turned .sf-front{opacity:0;pointer-events:none}
+  .slipflip.turned .sf-back{opacity:1;pointer-events:auto}
+}
+body.static .slipflip,body.static .sf-in{transition:none}
+body.static .sf-in{transform:none!important}
+body.static .sf-face{-webkit-backface-visibility:visible;backface-visibility:visible}
+body.static .sf-back{transform:none;opacity:0;pointer-events:none}
+body.static .slipflip.turned .sf-front{opacity:0;pointer-events:none}
+body.static .slipflip.turned .sf-back{opacity:1;pointer-events:auto}
 
 
 
@@ -2520,9 +2786,12 @@ function measure(){
   vh=window.innerHeight;
   MOB=window.innerWidth<861;
   /* phones: freeze the hero card height in px - inside in-app webviews the
-     toolbar makes CSS vh flutter mid-scroll and 62vh visibly stretches */
+     toolbar makes CSS vh flutter mid-scroll and 62vh visibly stretches.
+     R20/T1: the cover memo used to fill this card; without it 62vh left the phone
+     cover barely a third inked. Pulled to 56vh so the card still reads as a folder
+     cover without being a mostly-empty slab. */
   if(MOB){var mf0=document.querySelector('#hero .mfold');
-    if(mf0)mf0.style.minHeight=Math.round(window.innerHeight*.62)+'px'}
+    if(mf0)mf0.style.minHeight=Math.round(window.innerHeight*.56)+'px'}
   var se=document.scrollingElement||document.documentElement;DOCH=Math.max(1,se.scrollHeight-window.innerHeight);
   scenes.forEach(function(x){x.t=top0(x.el)});
   units.forEach(function(u){u.t=top0(u.el)});
@@ -4320,6 +4589,174 @@ CASES.forEach(function(id){
   });
 })();
 
+/* ================= THE INSPECTION LAMP (lab exhibit 23 / v2) =================
+   One lamp per case folder. Three developed zones per folder. No exceptions.
+
+   Every line below is lifted from the copy that is already in this document -
+   XTIX's three zones are exhibit 23's own approved text, and the other three
+   files are written only out of their own sentences and their own figures.
+   Nothing here asserts anything the printed file does not already assert.
+
+   The band is a <button>, and the rebates are <span>s, precisely because the
+   reveal engine claims every direct div child of a .folder as an animation unit
+   (see '.folder>div' above). Neither is a div, so neither is claimed. */
+(function(){
+  var LAMPS={
+    xtix:[
+      ['THE SITUATION','FINDING OF FACT',
+       'Strong vision. Strong product. Zero commercial infrastructure.',
+       ['<em>07 GAPS</em> &mdash; no CRM, no business development function',
+        'No sales methodology, no outbound process, no pipeline management',
+        'No KPI framework, no reporting structure']],
+      ['MISSION OBJECTIVE','THE METHOD',
+       'Build a commercial operating system.',
+       ['For predictable growth &mdash; <b>domestic &amp; international</b>',
+        'Understanding before outbound: market research, competitive analysis, ICP definition, segmentation, positioning',
+        'Only then did execution begin &mdash; <em>&empty;&rarr;10</em>, infrastructure build-up']],
+      /* the approved third zone is the reflection. Its own heading ("D REFLECTION")
+         sits OUTSIDE this folder - #xtix's markup closes .folder early, before the
+         hairtop blocks (pre-existing, verified identical in the R19 file, and not
+         this round's business to move). Hung off WHAT I BUILT instead, which is
+         inside the folder and is the better pairing anyway: the daylight column
+         lists what was built, the lamp shows what would be built differently. */
+      ['WHAT I BUILT','ON RE-EXAMINATION',
+       'If I were rebuilding XTIX today.',
+       ['Position for enterprise before scaling outbound',
+        'Build strategic partnerships from day one',
+        'Use AI as core infrastructure &mdash; not an add-on']]
+    ],
+    oasis:[
+      ['THE SITUATION','FINDING OF FACT',
+       'The mandate wasn&rsquo;t all about revenue.',
+       ['It was a <b>profitable, scalable commercial organization</b>',
+        '<em>08 OWNED</em> &mdash; P&amp;L, pricing, hiring, commercial operations',
+        'Profitability, strategic planning, forecasting &amp; KPIs']],
+      ['COMMERCIAL SYSTEM BUILT','THE METHOD',
+       'The commercial system, built from scratch.',
+       ['Recruited &amp; onboarded the <b>entire sales team</b>',
+        'Profitability-based pricing model, commercial process, company-wide KPI framework',
+        'Sales playbooks, weekly business reviews, forecasting &amp; commercial reporting']],
+      ['EXECUTIVE REFLECTION','ON RE-EXAMINATION',
+       'The biggest lesson wasn&rsquo;t selling. It was leadership.',
+       ['The more I managed everything myself, the less the organization scaled',
+        '<b>Weekly</b> coaching, <b>monthly</b> 1:1 reviews, <b>quarterly</b> business reviews',
+        'Led <em>5&ndash;6</em> sales professionals &middot; worked closely with <em>06 FUNCTIONS</em>']]
+    ],
+    eventer:[
+      ['THE SITUATION','FINDING OF FACT',
+       'A commercial operation already existed.',
+       ['The job: <b>sharpen execution, connect departments, find new growth</b>',
+        '<em>05 DEPARTMENTS</em> aligned &middot; <em>03 BD</em> team members managed &amp; coached',
+        '<em>07 KEY CONTRIBUTIONS</em> delivered']],
+      ['MY ROLE','THE METHOD',
+       'Connect business strategy to day-to-day execution.',
+       ['Across every function &mdash; Product, Marketing, Finance &amp; R&amp;D',
+        'Improved commercial processes; introduced new business initiatives',
+        'Brought customer feedback directly into product discussions']],
+      ['WHAT I LEARNED','ON RE-EXAMINATION',
+       'Leadership doesn&rsquo;t require authority.',
+       ['<b>Influence, collaboration and better decisions</b> move organizations',
+        'Customer insights became business decisions',
+        'Growth became a <b>shared responsibility</b> &mdash; not a sales target']]
+    ],
+    medcoin:[
+      ['THE VISION','FINDING OF FACT',
+       'A compliant, scalable crypto-ATM network for Europe.',
+       ['From zero &mdash; <b>every decision was mine</b>',
+        'Model, partnerships, compliance, operations',
+        '<em>FOUNDER-LED</em> operation']],
+      ['WHAT WE BUILT','THE METHOD',
+       'Founded the company from scratch.',
+       ['Business model, commercial strategy, <b>strategic partnerships</b>',
+        '<b>External investment raised</b> &mdash; then ATMs deployed across Europe',
+        'Operational &amp; regulatory processes; customer journey &amp; user experience']],
+      ['WHAT I LEARNED','ON RE-EXAMINATION',
+       'That&rsquo;s the reality of building a company.',
+       ['Every commercial decision affects <b>operations</b>',
+        'Every operational decision affects <b>profitability</b>',
+        'Every strategic decision affects <b>survival</b>']]
+    ]
+  };
+  var OFF='SWITCH ON THE LAMP',ON='SWITCH OFF THE LAMP',
+      OFFS='THIS FILE IS NOT FULLY EXPOSED',ONS='DEVELOPED · 03 ZONES ON RECORD';
+  /* frame numbers run up the reel in file order and stop short of 26A/27A, which
+     the closing section already occupies - one reel, no two frames alike */
+  var FRAMES={xtix:[11,12],oasis:[14,15],eventer:[17,18],medcoin:[20,21]};
+
+  function lampSVG(uid){
+    return '<svg viewBox="0 0 40 40" focusable="false" aria-hidden="true">'+
+      '<defs><linearGradient id="lcg_'+uid+'" x1="0" y1="0" x2="0" y2="1">'+
+      '<stop offset="0" class="ls1"/><stop offset=".62" class="ls2"/><stop offset="1" class="ls3"/></linearGradient>'+
+      '<radialGradient id="lhg_'+uid+'"><stop offset="0" class="lh1"/><stop offset="1" class="lh2"/></radialGradient></defs>'+
+      '<g class="lcone"><path d="M9.2 20.6 L20.8 20.6 L27.5 37 L2.5 37 Z" fill="url(#lcg_'+uid+')"/>'+
+      '<circle cx="15.2" cy="20.3" r="8" fill="url(#lhg_'+uid+')"/></g>'+
+      '<path class="lbody" d="M25.5 35.5 H36.5"/><path class="lbody" d="M31 35.5 V23"/>'+
+      '<path class="lbody" d="M31 23 L20.6 13.4"/><path class="lbody" d="M11 12.5 H19.5 L22.5 20.5 H8 Z"/>'+
+      '<circle class="lbulb" cx="15.2" cy="20.3" r="1.8"/></svg>';
+  }
+  /* scoped to the FOLDER, never the section: a developed zone that cannot be hung
+     inside the negative is not built at all, rather than left glowing silver on
+     the daylight page next to it. */
+  function zoneHost(folder,needle){
+    var zs=folder.querySelectorAll('.zr');
+    for(var i=0;i<zs.length;i++){
+      if((zs[i].textContent||'').indexOf(needle)>-1)return zs[i];
+    }
+    return null;
+  }
+  Object.keys(LAMPS).forEach(function(id){
+    var sec=document.getElementById(id);if(!sec)return;
+    var folder=sec.querySelector('.folder');if(!folder)return;
+    var band=sec.querySelector('.clsband');if(!band)return;
+
+    /* the three developed zones, hung off the file's OWN headings. If a heading
+       cannot be found the zone is simply not built - it never renders empty. */
+    var built=0;
+    LAMPS[id].forEach(function(z,i){
+      var zr=zoneHost(folder,z[0]);if(!zr||!zr.parentNode)return;
+      var d=document.createElement('div');
+      d.className='devz';d.style.setProperty('--dz',i);
+      d.innerHTML='<span class="dv-k">'+z[1]+'</span><span class="dv-t">'+z[2]+'</span>'+
+        '<ul class="dv-b"><li>'+z[3].join('</li><li>')+'</li></ul>';
+      zr.parentNode.appendChild(d);built++;
+    });
+    if(!built)return;
+
+    /* the film edge - the vault's own .vfilm, so there is one film stock in this
+       document and not a second one that merely resembles it */
+    var fr=FRAMES[id]||[11,12];
+    ['l','r'].forEach(function(side,n){
+      var f=document.createElement('span');
+      f.className='vfilm '+side;f.setAttribute('aria-hidden','true');
+      f.innerHTML=side==='l'?'<span>KODAK SAFETY FILM 5063</span><span>&rsaquo;&rsaquo; '+fr[0]+'A</span>'
+                            :'<span>EMERALD ARCHIVE &middot; REEL 04</span><span>'+fr[1]+'A &lsaquo;&lsaquo;</span>';
+      folder.appendChild(f);
+    });
+
+    var sig=document.createElement('span');
+    sig.className='lampsig';
+    sig.textContent='— REVIEWING DESK, 2026 · DEVELOPED UNDER THE LAMP — NOT PRESENT IN THE PRINTED COPY';
+    folder.appendChild(sig);
+
+    var b=document.createElement('button');
+    b.className='lampband';b.type='button';b.setAttribute('aria-pressed','false');
+    b.innerHTML='<span class="lamp">'+lampSVG(id)+'</span>'+
+      '<span class="lamparrow" aria-hidden="true"><i>&#9666;</i><s></s></span>'+
+      '<span class="lampwords"><span class="lampcall">'+OFF+'</span>'+
+      '<span class="lampsub">'+OFFS+'</span></span>';
+    band.parentNode.insertBefore(b,band);
+
+    var call=b.querySelector('.lampcall'),sub=b.querySelector('.lampsub'),lit=false;
+    b.addEventListener('click',function(){
+      lit=!lit;
+      folder.classList.toggle('lampon',lit);
+      call.textContent=lit?ON:OFF;
+      sub.textContent=lit?ONS:OFFS;
+      b.setAttribute('aria-pressed',lit?'true':'false');
+      try{if(navigator.vibrate)navigator.vibrate(lit?[8,26,10]:6)}catch(e){}
+    });
+  });
+})();
 
 })();
 </script>
@@ -4417,6 +4854,100 @@ document.querySelectorAll('.redx').forEach(function(r){
   if(mc)gen3(mc,'in');
   var fin=document.getElementById('final');
   if(fin){var w=fin.querySelector('.wrap');if(w)gen3(w.firstChild,'before',(0,'vaultmark'));}
+})();
+</script>
+
+<script>
+/* BIG BUILD 4 - THE METHOD SLIP (lab exhibit 25, six rows)
+   Deliberately the LAST thing to touch the evidence slip. The analyst note is
+   placed with slip.parentNode.insertBefore(note, slip.nextSibling) in the block
+   above; wrapping the slip before that ran would have dropped the note inside the
+   turning container. One method slip per case, never two. */
+(function(){
+  'use strict';
+  var d=new Date();
+  var filed=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');
+  /* every value below is this section's own copy or its own figures */
+  var M={
+    xtix:{ctrl:'(S) · CTRL № X-26-0114-A',
+      rows:[['SOURCE','CASE FILE 01 — XTIX · SECTIONS 01–04','k'],
+            ['FACT','Strong vision. Strong product. Zero commercial infrastructure — 07 named gaps.','t'],
+            ['ACTION','Understanding before outbound. Then ∅→10: strategy, CRM, pipeline, ICP, KPIs, AI outbound engine.','t'],
+            ['CONCLUSION','A commercial function is infrastructure before it is activity.','t'],
+            ['CARRIES','$9M+ ARR MANAGED · ~20% REPLY · 7–8% OUTBOUND · 50%+ INBOUND','f'],
+            ['FILED','__F__ · CLAIM OVERLEAF','k']]},
+    oasis:{ctrl:'(S) · CTRL № O-26-0102-A',
+      rows:[['SOURCE','CASE FILE 02 — OASIS · SECTIONS 01–04','k'],
+            ['FACT','The mandate wasn’t all about revenue — it was a profitable, scalable commercial organization.','t'],
+            ['ACTION','Recruited the entire sales team. Built the profitability-based pricing model from scratch, the commercial process and the company-wide KPI framework.','t'],
+            ['CONCLUSION','The more I managed everything myself, the less the organization scaled.','t'],
+            ['CARRIES','$2M LARGEST DEAL CLOSED · TEAM OF 5–6 · 06 FUNCTIONS','f'],
+            ['FILED','__F__ · CLAIM OVERLEAF','k']]},
+    eventer:{ctrl:'(C) · CTRL № E-26-0103-A',
+      rows:[['SOURCE','CASE FILE 03 — EVENTER · SECTIONS 01–07','k'],
+            ['FACT','A commercial operation already existed. The job: sharpen execution, connect departments, find new growth.','t'],
+            ['ACTION','Connected business strategy with day-to-day execution across every function. Brought customer feedback directly into product discussions.','t'],
+            ['CONCLUSION','Leadership doesn’t require authority — influence, collaboration and better decisions move organizations.','t'],
+            ['CARRIES','03 BD MEMBERS COACHED · 05 DEPARTMENTS ALIGNED · 07 CONTRIBUTIONS','f'],
+            ['FILED','__F__ · CLAIM OVERLEAF','k']]},
+    medcoin:{ctrl:'(C) · CTRL № M-26-0104-A',
+      rows:[['SOURCE','CASE FILE 04 — MEDCOIN · SECTIONS 01–06','k'],
+            ['FACT','A compliant, scalable crypto-ATM network for Europe. From zero, every decision was mine.','t'],
+            ['ACTION','Founded the company from scratch. Defined the business model, established strategic partnerships, raised external investment, deployed ATMs across Europe.','t'],
+            ['CONCLUSION','Every strategic decision affects survival. That’s the reality of building a company.','t'],
+            ['CARRIES','EUROPE · CRYPTO ATM NETWORK · INVESTMENT RAISED · HUNDREDS OF THOUSANDS OF €','f'],
+            ['FILED','__F__ · CLAIM OVERLEAF','k']]}
+  };
+  var CLS={k:'es-v',t:'ms-t',f:'ms-fig'};
+
+  Object.keys(M).forEach(function(id){
+    var sec=document.getElementById(id);if(!sec)return;
+    var slip=sec.querySelector('.evslip');if(!slip)return;
+    if(slip.closest('.slipflip'))return;              /* one per case, never two */
+
+    var wrap=document.createElement('div');wrap.className='slipflip';
+    slip.parentNode.insertBefore(wrap,slip);
+    var inner=document.createElement('div');inner.className='sf-in';
+    wrap.appendChild(inner);
+    inner.appendChild(slip);
+    slip.classList.add('sf-face','sf-front');
+
+    var back=document.createElement('div');
+    back.className='mslip sf-face sf-back';
+    back.innerHTML='<div class="es-h"><span>METHOD SLIP — HOW THE CLAIM WAS BUILT</span><b>'+
+      M[id].ctrl+'</b></div>'+
+      M[id].rows.map(function(r){
+        return '<div class="es-row"><span class="es-k">'+r[0]+'</span><span class="'+CLS[r[2]]+'">'+
+               String(r[1]).replace('__F__',filed)+'</span></div>'}).join('')+
+      '<span class="ms-stamp">ON RECORD</span>';
+    inner.appendChild(back);
+
+    var tab=document.createElement('button');
+    tab.className='sf-tab';tab.type='button';
+    tab.setAttribute('aria-pressed','false');
+    tab.innerHTML='<i>&#9662;</i><b>METHOD</b>';
+    wrap.appendChild(tab);
+
+    /* the container owns the height because both faces are out of flow. Measured,
+       never guessed - the two sides of a sheet are not the same length. */
+    var lbl=tab.querySelector('b');
+    function face(){return wrap.classList.contains('turned')?back:slip}
+    function fit(){wrap.style.height=face().offsetHeight+'px'}
+    fit();
+    tab.addEventListener('click',function(){
+      var t=!wrap.classList.contains('turned');
+      wrap.classList.toggle('turned',t);
+      tab.setAttribute('aria-pressed',t?'true':'false');
+      lbl.textContent=t?'EVIDENCE':'METHOD';
+      fit();
+      try{if(navigator.vibrate)navigator.vibrate(t?[6,20,8]:6)}catch(e){}
+    });
+    var rt=null;
+    addEventListener('resize',function(){clearTimeout(rt);rt=setTimeout(fit,140)},{passive:true});
+    /* the faces are paper - they only settle once the webfonts land */
+    if(document.fonts&&document.fonts.ready)document.fonts.ready.then(fit).catch(function(){});
+    setTimeout(fit,600);
+  });
 })();
 </script>
 
