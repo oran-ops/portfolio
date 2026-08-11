@@ -793,6 +793,102 @@ body{overflow-x:clip}
   *,*::before,*::after{animation:none!important;transition:none!important}
   .red::after{transition:none}
 }
+
+/* ============ EX29 — THE REEL ============ */
+.rl-stage{position:relative;height:380px;overflow:hidden;border-radius:4px;background:#191A1F}
+.rl-scroll{position:absolute;inset:0;overflow-y:auto;overflow-x:hidden;padding:0 62px 0 22px;-webkit-overflow-scrolling:touch}
+.rl-scroll::-webkit-scrollbar{width:0}
+.rl-pane{padding:150px 0;border-bottom:1px solid rgba(242,241,237,.07)}
+.rl-pane:last-child{border-bottom:0}
+.rl-k{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.3em;color:var(--em)}
+.rl-t{font-family:'Fraunces',serif;font-weight:800;font-size:23px;color:#F2F1ED;line-height:1.15;margin-top:9px}
+.rl-b{font-size:12.5px;color:#9A9CA3;line-height:1.7;margin-top:9px;max-width:330px}
+/* the machine edge */
+.rl-edge{position:absolute;top:0;right:0;bottom:0;width:40px;pointer-events:none;
+  background-color:#101116;border-left:1px solid rgba(242,241,237,.10);
+  background-image:radial-gradient(ellipse 7px 11px at 50% 16px,#191A1F 0 96%,transparent 100%);
+  background-size:40px 32px;background-repeat:repeat-y}
+.rl-gate{position:absolute;top:0;right:0;bottom:0;width:40px;pointer-events:none;
+  background:linear-gradient(180deg,rgba(16,17,22,.96) 0,transparent 16%,transparent 84%,rgba(16,17,22,.96) 100%)}
+.rl-ctr{position:absolute;right:52px;top:16px;text-align:right;pointer-events:none;direction:ltr}
+.rl-cf{font-family:'JetBrains Mono',monospace;font-weight:800;font-size:12px;letter-spacing:.16em;color:#F2F1ED}
+.rl-cr{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.28em;color:#6B6E76;margin-top:3px}
+/* the gate: the frame currently being read is bracketed against the machine edge */
+.rl-tick{position:absolute;right:40px;top:50%;transform:translateY(-50%);width:13px;height:62px;pointer-events:none;
+  border-top:1.5px solid var(--em);border-bottom:1.5px solid var(--em);border-left:1.5px solid var(--em);
+  border-radius:2px 0 0 2px;opacity:.8}
+.rl-tick:after{content:"GATE";position:absolute;right:100%;top:50%;transform:translateY(-50%) rotate(180deg);
+  writing-mode:vertical-rl;font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:.24em;
+  color:var(--em);opacity:.6;padding-right:5px}
+.rl-hint{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.2em;color:var(--dim);margin-top:9px;direction:ltr}
+/* ============ EX30 — THE CONTACT SHEET ============ */
+.cs-bar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px;direction:ltr}
+.cs-open{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;letter-spacing:.2em;
+  border:1.5px solid var(--em);color:var(--em);background:transparent;padding:9px 15px;border-radius:3px;cursor:pointer;
+  display:inline-flex;align-items:center;gap:9px;transition:background .18s,color .18s}
+.cs-open:hover{background:var(--em);color:#101116}
+.cs-open i{font-style:normal;font-size:13px;line-height:1}
+.cs-legend{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.14em;color:var(--dim);display:flex;gap:14px}
+.cs-legend b{color:var(--ink);font-weight:700}
+.cs-sheet{background:#101116;border-radius:4px;padding:20px 18px 18px;direction:ltr}
+.cs-hd{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;border-bottom:1px solid rgba(242,241,237,.14);padding-bottom:11px;margin-bottom:14px}
+.cs-hn{font-family:'Fraunces',serif;font-weight:800;font-size:16px;color:#F2F1ED;letter-spacing:.01em}
+.cs-hm{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.22em;color:#6B6E76}
+.cs-hx{margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.2em;color:var(--em)}
+.cs-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:9px}
+.cs-f{position:relative;background:#191A1F;border:1px solid rgba(242,241,237,.09);border-radius:2px;
+  padding:9px 9px 9px 16px;min-height:88px;cursor:pointer;overflow:hidden;
+  transition:border-color .18s,background .18s,transform .18s}
+.cs-f:before{content:"";position:absolute;left:0;top:0;bottom:0;width:9px;background-color:#101116;
+  border-right:1px solid rgba(242,241,237,.07);
+  background-image:radial-gradient(ellipse 2.4px 4px at 50% 7px,#22242B 0 94%,transparent 100%);
+  background-size:9px 15px;background-repeat:repeat-y}
+.cs-f:hover{border-color:var(--em);background:#1E2027;transform:translateY(-1px)}
+.cs-n{font-family:'JetBrains Mono',monospace;font-weight:800;font-size:8.5px;letter-spacing:.16em;color:#6B6E76}
+.cs-s{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:.18em;color:var(--fcx,#2FB380);margin-top:5px;opacity:.9}
+.cs-x{font-family:'Heebo',sans-serif;font-size:11px;line-height:1.45;color:#C9CBD1;margin-top:6px}
+.cs-f.exposed{background:#1C1E24;border-color:rgba(47,179,128,.34)}
+.cs-f.exposed .cs-n{color:#F2F1ED}
+.cs-f.exposed .cs-x{color:#F2F1ED}
+.cs-f.exposed:after{content:"\2713";position:absolute;right:7px;top:7px;font-family:'JetBrains Mono',monospace;
+  font-size:9px;font-weight:800;color:var(--em)}
+.cs-ft{display:flex;align-items:center;gap:14px;flex-wrap:wrap;border-top:1px solid rgba(242,241,237,.14);
+  margin-top:14px;padding-top:11px;font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.18em;color:#6B6E76}
+.cs-ft b{color:#F2F1ED;font-weight:700}
+.cs-ft .cs-em{color:var(--em)}
+@media (max-width:620px){.cs-grid{grid-template-columns:repeat(auto-fill,minmax(122px,1fr));gap:7px}
+  .cs-x{font-size:10px}.cs-f{min-height:78px}}
+/* ============ EX31 — THE EXAMINATION RECORD ============ */
+.xr-tabs{display:flex;gap:7px;margin-bottom:14px;flex-wrap:wrap;direction:ltr}
+.xr-tabs button{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.14em;border:1px solid var(--hair);
+  background:transparent;color:var(--dim);padding:7px 12px;border-radius:3px;cursor:pointer;transition:all .18s}
+.xr-tabs button.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.xr-card{position:relative;background:#0D0E12;border-radius:3px;padding:26px 46px;direction:ltr;overflow:hidden}
+.xr-card:before,.xr-card:after{content:"";position:absolute;top:0;bottom:0;width:26px;background-color:#08090C;
+  background-image:radial-gradient(ellipse 4.6px 7px at 50% 11px,#171820 0 95%,transparent 100%);
+  background-size:26px 22px;background-repeat:repeat-y}
+.xr-card:before{left:0;border-right:1px solid rgba(237,239,246,.08)}
+.xr-card:after{right:0;border-left:1px solid rgba(237,239,246,.08)}
+.xr-l{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.34em;color:#7E828C}
+.xr-h{font-family:'Fraunces',serif;font-weight:800;font-size:20px;color:#EDEFF6;margin-top:8px;letter-spacing:.01em}
+.xr-rule{height:1px;background:rgba(237,239,246,.16);margin:15px 0 14px}
+.xr-rows{display:grid;grid-template-columns:1fr auto;gap:7px 18px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em}
+.xr-rows .k{color:#7E828C}
+.xr-rows .v{color:#EDEFF6;font-weight:700;text-align:right}
+.xr-rows .v.part{color:#C8A24A}
+.xr-rows .v.full{color:#8FD9BC}
+.xr-disp{margin-top:16px;display:inline-block;font-family:'JetBrains Mono',monospace;font-weight:800;font-size:11px;
+  letter-spacing:.24em;color:#EDEFF6;border:1.5px solid #EDEFF6;border-radius:2px;padding:8px 14px;
+  transform:rotate(-1.4deg)}
+.xr-disp.open{color:#7E828C;border-color:#3B3E48;border-style:dashed;font-weight:700}
+.xr-foot{margin-top:15px;font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.2em;color:#5A5E68}
+.xr-prev{margin-top:11px;font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.16em;color:#8FD9BC;opacity:.85}
+.xr-bug{margin-top:14px;border:1px solid var(--red);border-radius:4px;padding:12px 14px;background:#B3372B0E}
+.xr-bug .bh{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.22em;color:var(--red);font-weight:700;direction:ltr}
+.xr-bug .bb{font-size:12.5px;color:var(--ink2);line-height:1.7;margin-top:6px}
+.xr-bug .bb b{color:var(--ink)}
+.xr-bug code{font-family:'JetBrains Mono',monospace;font-size:11px;background:#22201C0F;padding:1px 5px;border-radius:2px;direction:ltr;display:inline-block}
+
 </style>
 </head>
 <body>
@@ -803,7 +899,7 @@ body{overflow-x:clip}
   <h1>מעבדת הרעיונות</h1>
   <p class="sub"><b>אחרי הביקורת: נשארו מוצגים 23 ו-25 בראש העמוד</b> — שניים שאושרו ונבנו מחדש לפי ההערות; ארבעה נדחו והוסרו.<br>מוצגים חיים — אחד לכל ממצא מרכזי מארבעת דוחות המחקר. אלה <b>סקיצות מהירות</b> שנועדו להרגיש את הרעיון, לא הביצוע הסופי (בגרסה אמיתית: פונטים ייעודיים, ליטוש מלא). ליד כל מוצג — מי מהחוקרים עומד מאחוריו.</p>
   <nav class="toc">
-    <a href="#plan" style="background:var(--red);color:var(--paper);border-color:var(--red)">MASTER PLAN</a><a href="#ex23" style="border-color:var(--red);color:var(--red)">23 INSPECTION LAMP ★★</a><a href="#ex25" style="border-color:var(--red);color:var(--red)">25 METHOD SLIP ★★</a>
+    <a href="#plan" style="background:var(--red);color:var(--paper);border-color:var(--red)">MASTER PLAN</a><a href="#ex29" style="background:#191A1F;color:#2FB380;border-color:#2FB380">29 THE REEL &#9733;</a><a href="#ex30" style="background:#191A1F;color:#2FB380;border-color:#2FB380">30 CONTACT SHEET &#9733;&#9733;&#9733;</a><a href="#ex31" style="background:#191A1F;color:#2FB380;border-color:#2FB380">31 EXAM RECORD &#9733;&#9733;</a><a href="#ex23" style="border-color:var(--red);color:var(--red)">23 INSPECTION LAMP ★★</a><a href="#ex25" style="border-color:var(--red);color:var(--red)">25 METHOD SLIP ★★</a>
     <a href="#ex20" style="border-color:var(--red);color:var(--red)">20 KINETIC ★★</a><a href="#ex21" style="border-color:var(--red);color:var(--red)">21 TYPE VOICES ★★</a><a href="#ex22" style="border-color:var(--red);color:var(--red)">22 STATEMENT MORPH ★★</a><a href="#ex19" style="border-color:var(--red);color:var(--red)">19 THE VAULT ★</a><a href="#ex18" style="border-color:var(--red);color:var(--red)">18 BRIEF CHIP ★</a><a href="#ex16" style="border-color:var(--red);color:var(--red)">16 EVIDENCE SLIP ★</a><a href="#ex17" style="border-color:var(--red);color:var(--red)">17 CONNECTION BOARD ★★</a>
     <a href="#ex15" style="border-color:var(--red);color:var(--red)">15 END-OF-FILE RITUAL ★</a>
     <a href="#ex13" style="border-color:var(--red);color:var(--red)">13 SYNTHESIS CARD ★</a><a href="#ex14" style="border-color:var(--red);color:var(--red)">14 COVER BRIEF ★</a>
@@ -836,6 +932,78 @@ body{overflow-x:clip}
 <div class="featured fnew">
 
 <!-- ============ EX23 ============ -->
+
+<section class="ex" id="ex29" style="padding-top:40px">
+  <div class="exh"><span class="exn">29</span><span class="ext">הסרט &mdash; המסמך כולו הוא גליל אחד</span><span class="exs">THE REEL &middot; DOCUMENT-SCALE</span></div>
+  <p class="exd">היום שפת-הפילם מופיעה בשני מקומות בלבד &mdash; בכספת ובתוך תיקייה מוארת &mdash; ולכן נקראת כשני אפקטים נפרדים. כאן היא הופכת ל<b>חומר של המסמך</b>: קצה מכונה מחורר שנוסע עם הגלילה, ומונה שאומר לך איפה אתה &mdash; לא באחוזים אלא בשפה של ארכיון.
+  <br><b>הממצא שהפתיע אותי:</b> המספור הזה כבר קיים בקוד. <code style="font-family:'JetBrains Mono',monospace;font-size:11px;direction:ltr">FRAMES={xtix:[11,12],oasis:[14,15],eventer:[17,18],medcoin:[20,21]}</code> ועוד 26A/27A בכספת. המסמך ממוספר עד 27 &mdash; ומעולם לא אמר לקורא.</p>
+  <div class="demo dark" style="padding:0">
+    <div class="rl-stage">
+      <div class="rl-scroll" id="rlScroll">
+        <div class="rl-pane" data-f="8" data-s="FILE 01 &middot; INTAKE"><div class="rl-k">FILE 01 &middot; INTAKE</div><div class="rl-t">Building a Commercial Function From Zero</div><div class="rl-b">XTIX &middot; B2B SaaS &middot; e-ticketing platform. Strong vision, strong product, zero commercial infrastructure.</div></div>
+        <div class="rl-pane" data-f="11" data-s="XTIX &middot; EVIDENCE"><div class="rl-k">A &middot; EVIDENCE</div><div class="rl-t">$9M+ ARR pipeline managed</div><div class="rl-b">From infrastructure to execution &mdash; the commercial operating system in numbers.</div></div>
+        <div class="rl-pane" data-f="14" data-s="FILE 02 &middot; COMMAND"><div class="rl-k">FILE 02 &middot; COMMAND</div><div class="rl-t">Building Leaders, Not Just Sales Teams</div><div class="rl-b">Oasis &middot; CEO &middot; smart shading technologies. The mandate was a profitable, scalable organization.</div></div>
+        <div class="rl-pane" data-f="26" data-s="THE VAULT"><div class="rl-k">END OF FILE</div><div class="rl-t">The Builder&rsquo;s Principles</div><div class="rl-b">Nine principles &middot; one operating system.</div></div>
+      </div>
+      <div class="rl-edge"></div><div class="rl-gate"></div><div class="rl-tick"></div>
+      <div class="rl-ctr"><div class="rl-cf" id="rlF">FRAME 08A / 27A</div><div class="rl-cr" id="rlS">REEL 04 &middot; INTAKE</div></div>
+    </div>
+  </div>
+  <p class="rl-hint">&#9660; SCROLL INSIDE THE FRAME</p>
+  <p class="note">בפועל: קצה אחד ברוחב 14px בטלפון (המחלקה <code style="font-family:'JetBrains Mono',monospace">.vfilm</code> כבר צונחת ל-30px מתחת ל-560px, אז התקדים קיים). התנועה היא <code style="font-family:'JetBrains Mono',monospace">background-position</code> בלבד &mdash; צביעה על שכבה מורכבת, בלי layout ובלי נגיעה בצאצאים. המונה נכתב בענף שכבר רץ רק בהחלפת פרק. <b>+0 קריאות layout לפריים, +2.5KB.</b></p>
+</section>
+
+<section class="ex" id="ex30">
+  <div class="exh"><span class="exn">30</span><span class="ext">גיליון המגע &mdash; מסך אחד שמחזיק את כל המסמך</span><span class="exs">THE CONTACT SHEET &middot; RECOMMENDED FIRST</span></div>
+  <p class="exd">המסמך הוא 26,482px. הכישלון האמיתי הוא לא ויזואלי &mdash; הוא מבני: מגייס פותח בטלפון, גולל שלושה מסכים, סוגר. הפס הצדדי לא יציל את זה. גם המגירה לא &mdash; היא <b>רצף</b>, אי אפשר לראות אותה בשלמותה.
+  <br>גיליון המגע הוא מסך אחד, בלחיצה אחת, שמראה את כל התיק כ-27 פריימים ממוספרים של גליל אחד &mdash; <b>כל פריים נושא עובדה, לא שם</b> &mdash; ומסמן EXPOSED את מה שהקורא כבר עבר. שתי דלתות: על השער (התשובה בת 40 השניות) ובכספת (״קראת &mdash; הנה הכל״). לחיצה על פריים קופצת אליו.</p>
+  <div class="cs-bar">
+    <button class="cs-open" id="csBtn"><i>&#9635;</i>CONTACT SHEET</button>
+    <span class="cs-legend"><span><b>&#10003;</b> EXPOSED = נצפה</span><span>מסגרת כהה = טרם פותח</span></span>
+  </div>
+  <div class="demo dark" id="csDemo" style="padding:14px">
+    <div class="cs-sheet">
+      <div class="cs-hd">
+        <span class="cs-hn">Oran Carmon &mdash; Executive Portfolio</span>
+        <span class="cs-hm">REEL 04 &middot; 27 FRAMES &middot; 2026</span>
+        <span class="cs-hx">10 OF 27 FRAMES EXPOSED</span>
+      </div>
+      <div class="cs-grid"><div class="cs-f exposed" style="--fcx:#6B6E76"><div class="cs-n">01A</div><div class="cs-s">COVER</div><div class="cs-x">Oran Carmon &mdash; Commercial Systems Builder</div></div><div class="cs-f exposed" style="--fcx:#6B6E76"><div class="cs-n">02A</div><div class="cs-s">STATEMENT</div><div class="cs-x">Systems scale better than heroes.</div></div><div class="cs-f exposed" style="--fcx:#6B6E76"><div class="cs-n">03A</div><div class="cs-s">DOCTRINE</div><div class="cs-x">Every business is different. The principles of growth are not.</div></div><div class="cs-f exposed" style="--fcx:#6B6E76"><div class="cs-n">04A</div><div class="cs-s">METHOD 1&ndash;3</div><div class="cs-x">Vision &middot; Business understanding &middot; Market understanding</div></div><div class="cs-f" style="--fcx:#6B6E76"><div class="cs-n">05A</div><div class="cs-s">METHOD 4&ndash;6</div><div class="cs-x">Commercial architecture &middot; People &middot; Execution</div></div><div class="cs-f" style="--fcx:#6B6E76"><div class="cs-n">06A</div><div class="cs-s">METHOD 7&ndash;8</div><div class="cs-x">Measurement &middot; Continuous improvement</div></div><div class="cs-f exposed" style="--fcx:#6B6E76"><div class="cs-n">07A</div><div class="cs-s">THE DRAWER</div><div class="cs-x">Four files. One operating system.</div></div><div class="cs-f exposed" style="--fcx:#2FB380"><div class="cs-n">08A</div><div class="cs-s">FILE 01 &middot; XTIX</div><div class="cs-x">Strong vision. Strong product. Zero commercial infrastructure.</div></div><div class="cs-f exposed" style="--fcx:#2FB380"><div class="cs-n">09A</div><div class="cs-s">XTIX &middot; OBJECTIVE</div><div class="cs-x">Build a commercial operating system for predictable growth.</div></div><div class="cs-f" style="--fcx:#2FB380"><div class="cs-n">10A</div><div class="cs-s">XTIX &middot; APPROACH</div><div class="cs-x">Understanding before outbound.</div></div><div class="cs-f exposed" style="--fcx:#2FB380"><div class="cs-n">11A</div><div class="cs-s">XTIX &middot; EVIDENCE</div><div class="cs-x">$9M+ ARR pipeline managed &mdash; built from zero.</div></div><div class="cs-f" style="--fcx:#2FB380"><div class="cs-n">12A</div><div class="cs-s">XTIX &middot; TECHNOLOGY</div><div class="cs-x">An in-house AI commercial intelligence platform.</div></div><div class="cs-f" style="--fcx:#2FB380"><div class="cs-n">13A</div><div class="cs-s">XTIX &middot; REFLECTION</div><div class="cs-x">Position for enterprise before scaling outbound.</div></div><div class="cs-f exposed" style="--fcx:#E0A458"><div class="cs-n">14A</div><div class="cs-s">FILE 02 &middot; OASIS</div><div class="cs-x">A CEO mandate: not revenue &mdash; a profitable commercial organization.</div></div><div class="cs-f exposed" style="--fcx:#E0A458"><div class="cs-n">15A</div><div class="cs-s">OASIS &middot; EVIDENCE</div><div class="cs-x">$2M largest deal closed.</div></div><div class="cs-f" style="--fcx:#E0A458"><div class="cs-n">16A</div><div class="cs-s">OASIS &middot; REFLECTION</div><div class="cs-x">The more I managed myself, the less the organization grew.</div></div><div class="cs-f" style="--fcx:#5E8FBF"><div class="cs-n">17A</div><div class="cs-s">FILE 03 &middot; EVENTER</div><div class="cs-x">A commercial operation already existed. The job: sharpen it.</div></div><div class="cs-f" style="--fcx:#5E8FBF"><div class="cs-n">18A</div><div class="cs-s">EVENTER &middot; EVIDENCE</div><div class="cs-x">5 departments aligned &middot; 3 BD members coached.</div></div><div class="cs-f" style="--fcx:#5E8FBF"><div class="cs-n">19A</div><div class="cs-s">EVENTER &middot; LEARNED</div><div class="cs-x">Leadership doesn’t require authority.</div></div><div class="cs-f" style="--fcx:#E9E7DF"><div class="cs-n">20A</div><div class="cs-s">FILE 04 &middot; MEDCOIN</div><div class="cs-x">A compliant, scalable crypto-ATM network for Europe.</div></div><div class="cs-f" style="--fcx:#E9E7DF"><div class="cs-n">21A</div><div class="cs-s">MEDCOIN &middot; OUTCOMES</div><div class="cs-x">Founded from scratch &middot; external investment raised.</div></div><div class="cs-f" style="--fcx:#E9E7DF"><div class="cs-n">22A</div><div class="cs-s">MEDCOIN &middot; LEARNED</div><div class="cs-x">Every commercial decision affects operations.</div></div><div class="cs-f" style="--fcx:#6B6E76"><div class="cs-n">23A</div><div class="cs-s">LEADERSHIP</div><div class="cs-x">Build trust before performance.</div></div><div class="cs-f" style="--fcx:#6B6E76"><div class="cs-n">24A</div><div class="cs-s">LEADERSHIP &middot; TOOLKIT</div><div class="cs-x">Coaching, 1:1s, QBRs, live deal reviews.</div></div><div class="cs-f" style="--fcx:#6B6E76"><div class="cs-n">25A</div><div class="cs-s">TECHNOLOGY</div><div class="cs-x">Technology should amplify commercial thinking &mdash; not replace it.</div></div><div class="cs-f" style="--fcx:#6B6E76"><div class="cs-n">26A</div><div class="cs-s">THE VAULT</div><div class="cs-x">Nine principles &middot; one operating system.</div></div><div class="cs-f" style="--fcx:#6B6E76"><div class="cs-n">27A</div><div class="cs-s">DISPOSITION</div><div class="cs-x">I leave every company stronger than I found it.</div></div></div>
+      <div class="cs-ft"><span>CONTACT SHEET &mdash; <b>TAP ANY FRAME TO GO THERE</b></span><span class="cs-em">LOCAL RECORD &middot; NOT TRANSMITTED</span></div>
+    </div>
+  </div>
+  <p class="note">התוכן נאסף מה-DOM החי בזמן הפתיחה הראשונה &mdash; שמונה כותרות הפרקים, 35 שורות האזור, ארבע קטגוריות התיקים &mdash; כך ששום דבר לא מוקלד פעמיים ושום דבר לא יכול להיסחף מהמסמך. <b>לא רץ בלולאת הגלילה בכלל:</b> 0 כתיבות סגנון לפריים, 0 קריאות layout, 0 פעולות קנבס. העלות היחידה היא בנייה חד-פעמית של ~200 צמתים ב-fragment אחד, בלחיצה מכוונת. <b>אין דרך שזה יפגע ב-98&rarr;6 או ב-23&rarr;0 &mdash; קוד שלא רץ בגלילה.</b> בטלפון: 3 עמודות &times; 9 שורות, וזו התכונה הכי טובה בטלפון, לא פשרה.</p>
+  <p class="note" style="color:var(--redink)"><b>הסיכון היחיד, ואני אומר אותו במפורש:</b> אם הפריימים יישאו שמות במקום עובדות &mdash; זה תוכן עניינים עם מסגרות, ותפסול את זה במבט. החוק: <b>כל פריים אומר משהו.</b> ״17A EVENTER&rdquo; אסור; ״17A &mdash; חמש מחלקות נשאו מספר אחד&rdquo; מותר.</p>
+</section>
+
+<section class="ex" id="ex31">
+  <div class="exh"><span class="exn">31</span><span class="ext">רשומת הבדיקה &mdash; המסמך זוכר שקראו אותו</span><span class="exs">THE EXAMINATION RECORD &middot; ALSO A REPAIR</span></div>
+  <p class="exd">שני החוקרים הגיעו לזה בנפרד ובניסוח כמעט זהה: מכל אתרי-הקריירה שנסרקו, <b>אף אחד לא נותן לקורא חפץ בסוף</b>. זה גם המכשיר היחיד שנראה שונה אצל כל קורא &mdash; וזה בדיוק מה שגורם למישהו לצלם אותו.
+  <br>המסמך אוסף את מה שעשית &mdash; תיקים שהוחתמו, תיקיות שפותחו באור, פתקי-שיטה שנפתחו, כיסוי הגליל, זמן שהייה &mdash; ומנפיק בכספת רשומה אחת בכסף על שחור, על קצה הפילם. בשובך: <span style="direction:ltr;display:inline-block">SECOND EXAMINATION</span>.</p>
+  <div class="xr-tabs">
+    <button data-x="full" class="on">קורא מלא &mdash; 4/4</button>
+    <button data-x="part">קורא חלקי &mdash; 2/4</button>
+    <button data-x="none">לא נגע בכלום</button>
+    <button data-x="ret">חזר בשנית</button>
+  </div>
+  <div class="demo dark" style="padding:16px">
+    <div class="xr-card" id="xrCard">
+      <div class="xr-l">ARCHIVE DISPOSITION</div>
+      <div class="xr-h" id="xrH">EXAMINATION RECORD</div>
+      <div class="xr-rule"></div>
+      <div class="xr-rows" id="xrRows"></div>
+      <div class="xr-disp" id="xrDisp">CLOSED</div>
+      <div class="xr-prev" id="xrPrev" style="display:none"></div>
+      <div class="xr-foot">LOCAL RECORD &middot; NOT TRANSMITTED &middot; STORED ON THIS DEVICE ONLY</div>
+    </div>
+  </div>
+  <div class="xr-bug">
+    <div class="bh">&#9888; VERIFIED DEFECT &mdash; FOUND WHILE RESEARCHING THIS</div>
+    <div class="bb">בדקתי בעצמי בקוד ואישרתי: בשורה 3863 הסקריפט שמגדיר את מנגנון החותמות עושה <code>return</code> כשהמסך צר מ-861px. המשמעות &mdash; <b>בטלפון ארבע החותמות לא מחוברות לכלום</b>, וטקס ה-4/4 לא יכול לפעול. גרוע מזה: בתחתית הכספת, אחרי 24,674px של גלילה, הדבר האחרון שקורא בטלפון רואה כתוב <code>IN REVIEW &middot; 0/4</code> &mdash; קבוע, לא משנה מה עשה. זה נקרא ככישלון. <b>הרשומה מתקנת את זה ממילא; אבל התיקון צריך לקרות גם אם תפסול את הרעיון.</b></div>
+  </div>
+  <p class="note">אין שום דבר בלולאת הגלילה חוץ מקידום מונה שלם בענף שכבר רץ רק בהחלפת פרק. שמירה ב-<code style="font-family:'JetBrains Mono',monospace">localStorage</code> באותה תבנית עם ה-try/catch שכבר קיימת ל-<code style="font-family:'JetBrains Mono',monospace">arch_snd</code>. <b>+0 בכל מדד לפריים, +4KB.</b> המצב הריק נכתב בנדיבות כמו המלא &mdash; מי שלא נגע בכלום מקבל ״הבדיקה פתוחה&rdquo;, לא ״0 מתוך 4&rdquo;.</p>
+</section>
+
 <section class="ex" id="ex23" style="padding-top:34px">
   <div class="exh"><span class="exn">23</span><span class="ext">מנורת הבדיקה — הכרטיס מתפתח מתחת לאור</span><span class="exs">V2 · SILVER-HALIDE MODE · THE FILE DEVELOPS</span></div>
   <p class="exd">המראה והמנגנון אושרו; הסבב הזה נגע בשלושה דברים בלבד. <b>(1) מיקום:</b> המנורה יצאה מפינת התיקייה. עכשיו היא <b>שורת-הוראה אחת אופקית מעל התיק</b>, ברצועה שבין שורת-הלשוניות לכותרת הראשונה של הכרטיס: אייקון קטן (30px), <b>חץ מפורש שמצביע חזרה על המנורה</b>, ולידו הכיתוב בטיפוגרפיה הרמה ביותר בכרטיס. החץ הוא מה שאומר "תלחץ כאן" — לא צריך להסביר את זה במילים. כל השורה לחיצה, לא רק האייקון. <b>(2) האור:</b> אין עוד ספוט ואין טבעת-זוהר. כשהמנורה דולקת נמרח <b>אור פילם מט ורך על כל השטח המפותח</b> — נפילה רחבה מאוד באלפא נמוכה מאוד מכיוון ראש הכרטיס (שם עומדת המנורה), פלוס וינייטה שנחתכה לחמישית מעוצמתה כדי שלנגטיב עדיין תהיה מסגרת פיזית. ניגודיות נמוכה, שטוח, בשפה של המסמך. <b>(3) הנוסח — העיקר:</b> פסקאות מכונת-כתיבה ארוכות ירדו. בכל אזור <b>השורה הראשונה בלבד</b> היא Special Elite — כותרת אחת קצרה — וכל מה שמתחתיה הוא <b>Inter, פונט הגוף של המסמך</b>, בגודל שנקרא (13px), בשלוש שורות-תבליט קצרות. שלושה אזורים, לא יותר. כל מילה לקוחה מהנוסח הקיים של XTIX באתר — לא נוספה טענה אחת.</p>
@@ -1831,6 +1999,82 @@ document.getElementById('abPaper').addEventListener('click',function(){abCard.cl
   addEventListener('resize',function(){measureClosed()});
 })();
 
+})();
+</script>
+
+<script>
+/* ===== EX29 — the reel counter ===== */
+(function(){
+  var sc=document.getElementById('rlScroll');if(!sc)return;
+  var F=document.getElementById('rlF'),S=document.getElementById('rlS'),
+      panes=[].slice.call(sc.querySelectorAll('.rl-pane')),edge=sc.parentNode.querySelector('.rl-edge'),
+      last=-1,tick=false;
+  function frame(){
+    tick=false;
+    var y=sc.scrollTop,mid=y+sc.clientHeight*0.5;
+    edge.style.backgroundPositionY=(-(y*0.5)%32)+'px';
+    var cur=panes[0];
+    for(var i=0;i<panes.length;i++){if(panes[i].offsetTop<=mid)cur=panes[i]}
+    var n=+cur.getAttribute('data-f');
+    if(n!==last){last=n;F.textContent='FRAME '+(n<10?'0':'')+n+'A / 27A';S.innerHTML='REEL 04 &middot; '+cur.getAttribute('data-s').replace(/^.*&middot; /,'')}
+  }
+  sc.addEventListener('scroll',function(){if(!tick){tick=true;requestAnimationFrame(frame)}},{passive:true});
+  frame();
+})();
+/* ===== EX30 — the door ===== */
+(function(){
+  var b=document.getElementById('csBtn'),d=document.getElementById('csDemo');
+  if(!b||!d)return;
+  d.style.transition='opacity .3s,transform .3s';
+  b.addEventListener('click',function(){
+    d.style.opacity='0';d.style.transform='scale(.985)';
+    setTimeout(function(){d.style.opacity='1';d.style.transform='none';
+      d.scrollIntoView({behavior:'smooth',block:'center'})},170);
+  });
+  d.querySelectorAll('.cs-f').forEach(function(f){
+    f.addEventListener('click',function(){
+      f.classList.add('exposed');
+      var t=f.querySelector('.cs-n').textContent;
+      b.innerHTML='<i>&#8623;</i>JUMP TO '+t;
+      setTimeout(function(){b.innerHTML='<i>&#9635;</i>CONTACT SHEET'},1400);
+    });
+  });
+})();
+/* ===== EX31 — the four states ===== */
+(function(){
+  var rows=document.getElementById('xrRows'),disp=document.getElementById('xrDisp'),
+      h=document.getElementById('xrH'),prev=document.getElementById('xrPrev'),
+      tabs=[].slice.call(document.querySelectorAll('.xr-tabs button'));
+  if(!rows)return;
+  var ST={
+    full:{h:'EXAMINATION RECORD',d:'CLOSED',dc:'',p:'',
+      r:[['EXAMINED','2026-08-11 &middot; 14:22'],['ELAPSED','06:41'],
+         ['FILES STAMPED','4 / 4','full'],['DEVELOPED UNDER LAMP','4 / 4','full'],
+         ['METHOD SHEETS TURNED','3 / 4','part'],['REEL COVERAGE','27 / 27','full']]},
+    part:{h:'EXAMINATION RECORD',d:'PARTIAL',dc:'',p:'',
+      r:[['EXAMINED','2026-08-11 &middot; 14:22'],['ELAPSED','02:18'],
+         ['FILES STAMPED','2 / 4','part'],['DEVELOPED UNDER LAMP','1 / 4','part'],
+         ['METHOD SHEETS TURNED','0 / 4'],['REEL COVERAGE','19 / 27','part']]},
+    none:{h:'EXAMINATION OPEN',d:'RECORD REMAINS UNSIGNED',dc:'open',p:'',
+      r:[['EXAMINED','2026-08-11 &middot; 14:22'],['ELAPSED','01:04'],
+         ['FILES STAMPED','&mdash;'],['DEVELOPED UNDER LAMP','&mdash;'],
+         ['METHOD SHEETS TURNED','&mdash;'],['REEL COVERAGE','11 / 27']]},
+    ret:{h:'SECOND EXAMINATION',d:'CLOSED',dc:'',p:'PREVIOUS EXAMINATION &middot; 2026-08-11 &middot; RECORD RETAINED',
+      r:[['EXAMINED','2026-08-14 &middot; 09:07'],['ELAPSED','03:52 (TOTAL 10:33)'],
+         ['FILES STAMPED','4 / 4','full'],['DEVELOPED UNDER LAMP','4 / 4','full'],
+         ['METHOD SHEETS TURNED','4 / 4','full'],['REEL COVERAGE','27 / 27','full']]}
+  };
+  function draw(k){
+    var o=ST[k];h.textContent=o.h;
+    disp.innerHTML=o.d;disp.className='xr-disp'+(o.dc?' '+o.dc:'');
+    prev.style.display=o.p?'':'none';prev.innerHTML=o.p;
+    rows.innerHTML=o.r.map(function(x){
+      return '<span class="k">'+x[0]+'</span><span class="v'+(x[2]?' '+x[2]:'')+'">'+x[1]+'</span>'}).join('');
+  }
+  tabs.forEach(function(t){t.addEventListener('click',function(){
+    tabs.forEach(function(o){o.classList.remove('on')});t.classList.add('on');draw(t.getAttribute('data-x'));
+  })});
+  draw('full');
 })();
 </script>
 </body>
