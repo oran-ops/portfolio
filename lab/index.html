@@ -989,9 +989,10 @@ body{overflow-x:clip}
 .rg-ar{position:absolute;left:50%;top:50%;border-radius:50%;
   width:calc(var(--R)*2px);height:calc(var(--R)*2px);
   margin:calc(var(--R)*-1px) 0 0 calc(var(--R)*-1px);
-  border:1.6px solid var(--c);
-  box-shadow:0 0 18px color-mix(in srgb,var(--c) 30%,transparent),
-             inset 0 0 18px color-mix(in srgb,var(--c) 12%,transparent);
+  border:2.6px solid var(--c);
+  box-shadow:0 0 22px color-mix(in srgb,var(--c) 34%,transparent),
+             inset 0 0 22px color-mix(in srgb,var(--c) 14%,transparent),
+             0 1px 0 rgba(255,255,255,.10);
   animation:rgArm var(--dur) linear infinite;animation-direction:var(--dir,normal)}
 @keyframes rgArm{
   from{transform:rotateZ(var(--tz)) rotateX(var(--tx)) rotateY(0deg)}
@@ -1001,75 +1002,107 @@ body{overflow-x:clip}
 .rg-arm .a-t{position:absolute;left:-90px;top:118px;width:180px;text-align:center;
   font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:.3em;color:#7E828C}
 /* --- the thread: each ring is tied to its own file, in its own colour --- */
-.rg-thread{position:absolute;left:50%;top:50%;width:250px;height:1px;pointer-events:none;
+/* the thread leaves the outer ring exactly and lands on the folder's inner face exactly */
+.rg-thread{position:absolute;left:50%;top:50%;width:216px;height:3px;margin-top:-1.5px;pointer-events:none;
   transform-origin:0 50%;
-  transform:translateY(-27px) rotateY(calc(var(--a) + 90deg)) translateX(70px);
-  background:linear-gradient(90deg,var(--tc),color-mix(in srgb,var(--tc) 45%,transparent) 62%,
-                             color-mix(in srgb,var(--tc) 22%,transparent));
+  transform:translateY(-27px) rotateY(calc(var(--a) + 90deg)) translateX(98px);
+  border-radius:2px;
+  background:linear-gradient(180deg,color-mix(in srgb,var(--tc) 70%,#fff) 0 1px,
+                             var(--tc) 1px 2px,color-mix(in srgb,var(--tc) 55%,#000) 2px 3px);
+  box-shadow:0 0 8px color-mix(in srgb,var(--tc) 40%,transparent);
   opacity:calc(.95 - var(--d,0)*.62)}
-.rg-thread:after{content:"";position:absolute;right:-3px;top:-3px;width:7px;height:7px;border-radius:50%;
-  background:var(--tc);box-shadow:0 0 10px color-mix(in srgb,var(--tc) 60%,transparent)}
-/* --- the folders: a little volume, and a face worth looking at --- */
-.rg-card{position:absolute;width:214px;height:288px;margin:-171px 0 0 -107px;transform-style:preserve-3d;
-  transform:rotateY(var(--a)) translateZ(320px);cursor:pointer}
-.rg-side{position:absolute;top:2px;bottom:2px;right:0;width:7px;pointer-events:none;
-  transform-origin:100% 50%;transform:rotateY(-90deg);
-  background:linear-gradient(90deg,#A49E8F,#CFC9BA 45%,#B0AA9B),
-             repeating-linear-gradient(180deg,rgba(255,255,255,.34) 0 1px,transparent 1px 2.4px);
-  background-blend-mode:overlay,normal;
-  opacity:calc((1 - var(--d,0)*.72) * clamp(0,calc((.53 - var(--d,0)) * 22),1))}
-.rg-base{position:absolute;left:2px;right:2px;bottom:0;height:7px;pointer-events:none;
-  transform-origin:50% 100%;transform:rotateX(-90deg);
-  background:linear-gradient(180deg,#8C8677,#6C6759);
-  opacity:calc((1 - var(--d,0)*.72) * clamp(0,calc((.53 - var(--d,0)) * 22),1))}
-.rg-back{position:absolute;inset:0;border-radius:12px 2px 2px 2px;pointer-events:none;
-  transform:translateZ(-8px) rotateY(180deg);
-  backface-visibility:hidden;-webkit-backface-visibility:hidden;
-  background:linear-gradient(157deg,#C6C0B0 0%,#B8B2A2 52%,#ABA595 100%);
-  box-shadow:inset 0 0 0 1px rgba(35,33,28,.13);
-  opacity:calc((1 - var(--d,0)*.55) * clamp(0,calc((var(--d,0) - .47) * 22),1))}
-.rg-back:after{content:"ARCHIVE \2014 C-01";position:absolute;left:0;right:0;bottom:22px;text-align:center;
-  font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:.28em;color:rgba(35,33,28,.30)}
-.rg-face{position:absolute;inset:0;border-radius:2px 13px 2px 2px;overflow:hidden;
-  backface-visibility:hidden;-webkit-backface-visibility:hidden;
-  background:linear-gradient(163deg,#EDE9DE 0%,#E0DBCD 38%,#CFC9B9 78%,#C2BCAB 100%);
-  box-shadow:0 30px 52px rgba(0,0,0,calc(.48*(1 - var(--d,0)*.55))),
-             inset 0 1px 0 rgba(255,255,255,.62),inset 0 -1px 0 rgba(0,0,0,.16),
-             inset 0 0 0 1px rgba(35,33,28,.11)}
-.rg-fog{position:absolute;inset:0;pointer-events:none;background:#0D0F14;opacity:calc(var(--d,0)*.70)}
-/* the watermark sits behind the name, where a watermark belongs */
-.rg-guill{position:absolute;left:-24%;right:-24%;top:-16%;height:150%;pointer-events:none;
-  mix-blend-mode:multiply;opacity:.26;
-  background:repeating-radial-gradient(circle at 50% 34%,transparent 0 7px,rgba(35,33,28,.55) 7px 7.7px),
-             repeating-conic-gradient(from 0deg at 50% 34%,transparent 0 2.4deg,rgba(35,33,28,.40) 2.4deg 2.8deg);
-  -webkit-mask-image:radial-gradient(closest-side at 50% 34%,#000 24%,transparent 82%);
-          mask-image:radial-gradient(closest-side at 50% 34%,#000 24%,transparent 82%)}
-.rg-fibre{position:absolute;inset:0;pointer-events:none;opacity:.42;
-  background:repeating-linear-gradient(96deg,rgba(255,255,255,.11) 0 1px,transparent 1px 3px)}
-.rg-perf{position:absolute;left:0;top:0;bottom:0;width:15px;pointer-events:none;
-  background:repeating-radial-gradient(circle at 7.5px 13px,rgba(35,33,28,.26) 0 2.9px,transparent 3.2px 26px);
-  background-size:15px 26px}
-.rg-spine{position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--tc);opacity:.85}
-.rg-in{position:absolute;inset:0;padding:26px 20px 20px 28px;display:flex;flex-direction:column}
+.rg-thread:after{content:"";position:absolute;right:-4px;top:-3px;width:9px;height:9px;border-radius:50%;
+  background:radial-gradient(circle at 36% 32%,#fff,var(--tc) 62%);
+  box-shadow:0 0 12px color-mix(in srgb,var(--tc) 65%,transparent)}
+.rg-thread:before{content:"";position:absolute;left:-5px;top:-2.5px;width:8px;height:8px;border-radius:50%;
+  background:var(--tc);box-shadow:0 0 10px color-mix(in srgb,var(--tc) 55%,transparent)}
+/* --- the folders: one closed object, six faces, no opacity gates anywhere --- */
+.rg-card{--W:214px;--H:288px;--T:11px;
+  position:absolute;width:var(--W);height:var(--H);margin:-171px 0 0 -107px;
+  transform-style:preserve-3d;transform:rotateY(var(--a)) translateZ(320px);cursor:pointer}
+.rg-card>*{transform-style:preserve-3d}
+.fc{position:absolute;backface-visibility:hidden;-webkit-backface-visibility:hidden;overflow:hidden}
+/* the depth fog rides inside every face, so the whole object dims as one */
+.fc:after{content:"";position:absolute;inset:0;pointer-events:none;background:#0C0E13;
+  opacity:calc(var(--d,0)*.72)}
+.f-front{inset:0;border-radius:2px 12px 2px 2px;transform:translateZ(calc(var(--T)/2));
+  background:linear-gradient(168deg,#F0ECE2 0%,#E4DFD1 34%,#D3CDBD 76%,#C5BFAE 100%);
+  box-shadow:0 32px 54px rgba(0,0,0,calc(.5*(1 - var(--d,0)*.55))),
+             inset 0 1px 0 rgba(255,255,255,.66),inset 0 0 0 1px rgba(35,33,28,.10)}
+.f-back{inset:0;border-radius:12px 2px 2px 2px;transform:rotateY(180deg) translateZ(calc(var(--T)/2));
+  background:linear-gradient(168deg,#C9C3B3 0%,#BAB4A4 54%,#ACA696 100%);
+  box-shadow:inset 0 0 0 1px rgba(35,33,28,.14)}
+.f-back:before{content:"ARCHIVE \2014 C-01";position:absolute;left:0;right:0;bottom:24px;text-align:center;
+  font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:.28em;color:rgba(35,33,28,.32)}
+.f-right{top:0;left:50%;width:var(--T);height:var(--H);margin-left:calc(var(--T)/-2);
+  transform:rotateY(90deg) translateZ(calc(var(--W)/2));
+  background:linear-gradient(90deg,#B7B1A2,#DCD7C8 42%,#BDB7A8),
+             repeating-linear-gradient(180deg,rgba(255,255,255,.36) 0 1px,transparent 1px 2.3px);
+  background-blend-mode:overlay,normal}
+.f-left{top:0;left:50%;width:var(--T);height:var(--H);margin-left:calc(var(--T)/-2);
+  transform:rotateY(-90deg) translateZ(calc(var(--W)/2));
+  background:linear-gradient(90deg,var(--tc),color-mix(in srgb,var(--tc) 62%,#2A2820))}
+.f-top{left:0;top:50%;width:var(--W);height:var(--T);margin-top:calc(var(--T)/-2);
+  transform:rotateX(90deg) translateZ(calc(var(--H)/2));
+  background:linear-gradient(180deg,#E9E4D6,#C9C3B3),
+             repeating-linear-gradient(90deg,rgba(255,255,255,.30) 0 1px,transparent 1px 2.3px);
+  background-blend-mode:overlay,normal}
+.f-bot{left:0;top:50%;width:var(--W);height:var(--T);margin-top:calc(var(--T)/-2);
+  transform:rotateX(-90deg) translateZ(calc(var(--H)/2));
+  background:linear-gradient(180deg,#8E8879,#6A6557)}
+/* the tab is welded to the body, not floating in front of it */
+.rg-tabbox{--TW:84px;--TH:23px;
+  position:absolute;left:auto;right:14px;top:calc(var(--TH) * -1);width:var(--TW);height:var(--TH)}
+.tb{position:absolute;backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.tb:after{content:"";position:absolute;inset:0;background:#0C0E13;opacity:calc(var(--d,0)*.72)}
+.t-front{inset:0;border-radius:5px 5px 0 0;transform:translateZ(calc(var(--T)/2));
+  background:linear-gradient(180deg,color-mix(in srgb,var(--tc) 88%,#fff),var(--tc));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.42)}
+.t-front:before{content:attr(data-n);position:absolute;inset:0;display:flex;align-items:center;
+  justify-content:center;font-family:'JetBrains Mono',monospace;font-weight:800;font-size:8.5px;
+  letter-spacing:.26em;color:rgba(22,21,16,.60);z-index:2}
+.t-back{inset:0;border-radius:5px 5px 0 0;transform:rotateY(180deg) translateZ(calc(var(--T)/2));
+  background:color-mix(in srgb,var(--tc) 66%,#2A2820)}
+.t-top{left:0;top:50%;width:var(--TW);height:var(--T);margin-top:calc(var(--T)/-2);
+  transform:rotateX(90deg) translateZ(calc(var(--TH)/2));
+  background:linear-gradient(180deg,color-mix(in srgb,var(--tc) 92%,#fff),var(--tc))}
+.t-rgt{top:0;left:50%;width:var(--T);height:var(--TH);margin-left:calc(var(--T)/-2);
+  transform:rotateY(90deg) translateZ(calc(var(--TW)/2));
+  background:color-mix(in srgb,var(--tc) 80%,#2A2820)}
+.t-lft{top:0;left:50%;width:var(--T);height:var(--TH);margin-left:calc(var(--T)/-2);
+  transform:rotateY(-90deg) translateZ(calc(var(--TW)/2));
+  background:color-mix(in srgb,var(--tc) 80%,#2A2820)}
+/* --- the cover: ONE dominant idea. A coloured spine band with the filing holes knocked
+       out of it, and everything else quiet enough to let the name carry. --- */
+.rg-band{position:absolute;left:0;top:0;bottom:0;width:26px;background:var(--tc);
+  box-shadow:inset -1px 0 0 rgba(35,33,28,.22),inset 1px 0 0 rgba(255,255,255,.20)}
+.rg-band:after{content:"";position:absolute;inset:0;
+  background:repeating-radial-gradient(circle at 13px 15px,rgba(28,26,21,.60) 0 3.4px,transparent 3.7px 30px);
+  background-size:26px 30px}
+.rg-band i{position:absolute;left:50%;bottom:16px;transform:translateX(-50%) rotate(180deg);
+  writing-mode:vertical-rl;font-style:normal;font-family:'JetBrains Mono',monospace;font-weight:800;
+  font-size:7.5px;letter-spacing:.30em;color:rgba(22,21,16,.52)}
+.rg-wash{position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(120% 74% at 26% 6%,rgba(255,255,255,.40),transparent 62%)}
+.rg-guill{position:absolute;left:8%;right:-16%;top:-6%;height:78%;pointer-events:none;
+  mix-blend-mode:multiply;opacity:.11;
+  background:repeating-radial-gradient(circle at 50% 40%,transparent 0 7px,rgba(35,33,28,.55) 7px 7.7px),
+             repeating-conic-gradient(from 0deg at 50% 40%,transparent 0 2.4deg,rgba(35,33,28,.4) 2.4deg 2.8deg);
+  -webkit-mask-image:radial-gradient(closest-side at 50% 40%,#000 22%,transparent 80%);
+          mask-image:radial-gradient(closest-side at 50% 40%,#000 22%,transparent 80%)}
+.rg-in{position:absolute;inset:0;padding:28px 22px 22px 42px;display:flex;flex-direction:column}
 .rg-no{font-family:'JetBrains Mono',monospace;font-weight:800;font-size:8px;letter-spacing:.32em;color:#7C776B}
-.rg-nm{font-family:'Fraunces',serif;font-weight:900;font-size:33px;line-height:.98;color:#1C1A15;margin-top:11px;
-  letter-spacing:-.028em;font-variation-settings:'opsz' 144,'SOFT' 20}
-.rg-crule{height:2px;width:44px;background:var(--tc);margin:15px 0 13px;opacity:.9}
+.rg-nm{font-family:'Fraunces',serif;font-weight:900;font-size:34px;line-height:.96;color:#1A1813;margin-top:12px;
+  letter-spacing:-.03em;font-variation-settings:'opsz' 144,'SOFT' 16}
+.rg-crule{height:2px;width:40px;background:#1A1813;opacity:.36;margin:16px 0 13px}
 .rg-ct{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:.18em;color:#6B675C;line-height:2}
-.rg-ghost{position:absolute;right:16px;bottom:-14px;font-family:'Fraunces',serif;font-weight:900;
-  font-size:118px;line-height:.78;color:rgba(35,33,28,.07);pointer-events:none;letter-spacing:-.05em}
-.rg-seal{position:absolute;left:28px;bottom:18px;width:46px;height:46px;border-radius:50%;pointer-events:none;
-  border:1px solid rgba(35,33,28,.19);
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.55),inset 0 -1px 0 rgba(35,33,28,.13),
-             0 1px 0 rgba(255,255,255,.45);
-  background:repeating-conic-gradient(from 0deg at 50% 50%,transparent 0 8deg,rgba(35,33,28,.09) 8deg 9deg)}
-.rg-seal:after{content:"";position:absolute;inset:8px;border-radius:50%;border:1px dashed rgba(35,33,28,.2)}
-.rg-tab{position:absolute;top:-22px;right:15px;width:82px;height:24px;border-radius:5px 5px 0 0;
-  background:var(--tc);opacity:calc(.95 - var(--d,0)*.74);
-  box-shadow:0 -2px 6px rgba(0,0,0,.34),inset 0 1px 0 rgba(255,255,255,.30)}
-.rg-tab:after{content:attr(data-n);position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
-  font-family:'JetBrains Mono',monospace;font-weight:800;font-size:8px;letter-spacing:.24em;
-  color:rgba(20,19,15,.62)}
+.rg-ghost{position:absolute;right:14px;bottom:-18px;font-family:'Fraunces',serif;font-weight:900;
+  font-size:126px;line-height:.76;color:rgba(35,33,28,.065);pointer-events:none;letter-spacing:-.055em}
+.rg-seal{position:absolute;right:20px;top:24px;width:42px;height:42px;border-radius:50%;pointer-events:none;
+  border:1px solid rgba(35,33,28,.18);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.55),inset 0 -1px 0 rgba(35,33,28,.12);
+  background:repeating-conic-gradient(from 0deg at 50% 50%,transparent 0 8deg,rgba(35,33,28,.085) 8deg 9deg)}
+.rg-seal:after{content:"";position:absolute;inset:7px;border-radius:50%;border:1px dashed rgba(35,33,28,.19)}
 .rg-sh{position:absolute;left:50%;top:50%;width:250px;height:74px;margin:-1px 0 0 -125px;pointer-events:none;
   transform:rotateY(var(--a)) translateZ(320px) translateY(122px) rotateX(90deg) translateZ(1px);
   background:radial-gradient(50% 50% at 50% 42%,rgba(0,0,0,.80),rgba(0,0,0,.34) 46%,transparent 76%);
@@ -1178,7 +1211,7 @@ body{overflow-x:clip}
         <div class="rg-pane rg-roompane">
           <div class="rg-stage" id="rgStage">
             <div class="rg-horizon"></div><div class="rg-floor"></div><div class="rg-pool"></div>
-            <div class="rg-ring" id="rgRing"><div class="rg-thread" data-i="0" style="--a:0deg;--tc:#2FB380"></div><div class="rg-thread" data-i="1" style="--a:90deg;--tc:#E0A458"></div><div class="rg-thread" data-i="2" style="--a:180deg;--tc:#5E8FBF"></div><div class="rg-thread" data-i="3" style="--a:270deg;--tc:#E9E7DF"></div><div class="rg-sh" data-i="0" style="--a:0deg"></div><div class="rg-sh" data-i="1" style="--a:90deg"></div><div class="rg-sh" data-i="2" style="--a:180deg"></div><div class="rg-sh" data-i="3" style="--a:270deg"></div><div class="rg-card" data-i="0" style="--a:0deg;--tc:#2FB380"><span class="rg-tab" data-n="01"></span><span class="rg-back"></span><span class="rg-side"></span><span class="rg-base"></span><div class="rg-face"><span class="rg-guill"></span><span class="rg-fibre"></span><span class="rg-ghost">01</span><span class="rg-perf"></span><span class="rg-spine"></span><div class="rg-in"><div class="rg-no">FILE 01</div><div class="rg-nm">XTIX</div><div class="rg-crule"></div><div class="rg-ct">B2B SAAS &middot; TECH<br>E-TICKETS PLATFORM</div></div><span class="rg-seal"></span><span class="rg-fog"></span></div></div><div class="rg-card" data-i="1" style="--a:90deg;--tc:#E0A458"><span class="rg-tab" data-n="02"></span><span class="rg-back"></span><span class="rg-side"></span><span class="rg-base"></span><div class="rg-face"><span class="rg-guill"></span><span class="rg-fibre"></span><span class="rg-ghost">02</span><span class="rg-perf"></span><span class="rg-spine"></span><div class="rg-in"><div class="rg-no">FILE 02</div><div class="rg-nm">Oasis</div><div class="rg-crule"></div><div class="rg-ct">CEO MANDATE<br>SMART SHADING</div></div><span class="rg-seal"></span><span class="rg-fog"></span></div></div><div class="rg-card" data-i="2" style="--a:180deg;--tc:#5E8FBF"><span class="rg-tab" data-n="03"></span><span class="rg-back"></span><span class="rg-side"></span><span class="rg-base"></span><div class="rg-face"><span class="rg-guill"></span><span class="rg-fibre"></span><span class="rg-ghost">03</span><span class="rg-perf"></span><span class="rg-spine"></span><div class="rg-in"><div class="rg-no">FILE 03</div><div class="rg-nm">Eventer</div><div class="rg-crule"></div><div class="rg-ct">SAAS &middot; EVENT-TECH<br>CROSS-FUNCTIONAL</div></div><span class="rg-seal"></span><span class="rg-fog"></span></div></div><div class="rg-card" data-i="3" style="--a:270deg;--tc:#E9E7DF"><span class="rg-tab" data-n="04"></span><span class="rg-back"></span><span class="rg-side"></span><span class="rg-base"></span><div class="rg-face"><span class="rg-guill"></span><span class="rg-fibre"></span><span class="rg-ghost">04</span><span class="rg-perf"></span><span class="rg-spine"></span><div class="rg-in"><div class="rg-no">FILE 04</div><div class="rg-nm">Medcoin</div><div class="rg-crule"></div><div class="rg-ct">CRYPTO FINTECH<br>FOUNDER</div></div><span class="rg-seal"></span><span class="rg-fog"></span></div></div><div class="rg-arm"><span class="rg-ar" style="--R:96;--c:#2FB380;--tz:-8deg;--tx:16deg;--dur:16s"></span><span class="rg-ar" style="--R:77;--c:#E0A458;--tz:34deg;--tx:-30deg;--dur:12.5s;--dir:reverse"></span><span class="rg-ar" style="--R:58;--c:#5E8FBF;--tz:-46deg;--tx:24deg;--dur:9.5s"></span><span class="rg-ar" style="--R:39;--c:#E9E7DF;--tz:68deg;--tx:-38deg;--dur:7s;--dir:reverse"></span><span class="a-pip"></span><span class="a-t">ONE SYSTEM</span></div></div>
+            <div class="rg-ring" id="rgRing"><div class="rg-thread" data-i="0" style="--a:0deg;--tc:#2FB380"></div><div class="rg-thread" data-i="1" style="--a:90deg;--tc:#E0A458"></div><div class="rg-thread" data-i="2" style="--a:180deg;--tc:#5E8FBF"></div><div class="rg-thread" data-i="3" style="--a:270deg;--tc:#E9E7DF"></div><div class="rg-sh" data-i="0" style="--a:0deg"></div><div class="rg-sh" data-i="1" style="--a:90deg"></div><div class="rg-sh" data-i="2" style="--a:180deg"></div><div class="rg-sh" data-i="3" style="--a:270deg"></div><div class="rg-card" data-i="0" style="--a:0deg;--tc:#2FB380"><div class="rg-tabbox"><span class="tb t-back"></span><span class="tb t-rgt"></span><span class="tb t-lft"></span><span class="tb t-top"></span><span class="tb t-front" data-n="01"></span></div><span class="fc f-back"></span><span class="fc f-right"></span><span class="fc f-left"></span><span class="fc f-top"></span><span class="fc f-bot"></span><div class="fc f-front"><span class="rg-guill"></span><span class="rg-ghost">01</span><span class="rg-wash"></span><div class="rg-in"><div class="rg-no">FILE 01</div><div class="rg-nm">XTIX</div><div class="rg-crule"></div><div class="rg-ct">B2B SAAS &middot; TECH<br>E-TICKETS PLATFORM</div></div><span class="rg-seal"></span><span class="rg-band"><i>XTIX &middot; 2024</i></span></div></div><div class="rg-card" data-i="1" style="--a:90deg;--tc:#E0A458"><div class="rg-tabbox"><span class="tb t-back"></span><span class="tb t-rgt"></span><span class="tb t-lft"></span><span class="tb t-top"></span><span class="tb t-front" data-n="02"></span></div><span class="fc f-back"></span><span class="fc f-right"></span><span class="fc f-left"></span><span class="fc f-top"></span><span class="fc f-bot"></span><div class="fc f-front"><span class="rg-guill"></span><span class="rg-ghost">02</span><span class="rg-wash"></span><div class="rg-in"><div class="rg-no">FILE 02</div><div class="rg-nm">Oasis</div><div class="rg-crule"></div><div class="rg-ct">CEO MANDATE<br>SMART SHADING</div></div><span class="rg-seal"></span><span class="rg-band"><i>OASIS &middot; CEO</i></span></div></div><div class="rg-card" data-i="2" style="--a:180deg;--tc:#5E8FBF"><div class="rg-tabbox"><span class="tb t-back"></span><span class="tb t-rgt"></span><span class="tb t-lft"></span><span class="tb t-top"></span><span class="tb t-front" data-n="03"></span></div><span class="fc f-back"></span><span class="fc f-right"></span><span class="fc f-left"></span><span class="fc f-top"></span><span class="fc f-bot"></span><div class="fc f-front"><span class="rg-guill"></span><span class="rg-ghost">03</span><span class="rg-wash"></span><div class="rg-in"><div class="rg-no">FILE 03</div><div class="rg-nm">Eventer</div><div class="rg-crule"></div><div class="rg-ct">SAAS &middot; EVENT-TECH<br>CROSS-FUNCTIONAL</div></div><span class="rg-seal"></span><span class="rg-band"><i>EVENTER</i></span></div></div><div class="rg-card" data-i="3" style="--a:270deg;--tc:#E9E7DF"><div class="rg-tabbox"><span class="tb t-back"></span><span class="tb t-rgt"></span><span class="tb t-lft"></span><span class="tb t-top"></span><span class="tb t-front" data-n="04"></span></div><span class="fc f-back"></span><span class="fc f-right"></span><span class="fc f-left"></span><span class="fc f-top"></span><span class="fc f-bot"></span><div class="fc f-front"><span class="rg-guill"></span><span class="rg-ghost">04</span><span class="rg-wash"></span><div class="rg-in"><div class="rg-no">FILE 04</div><div class="rg-nm">Medcoin</div><div class="rg-crule"></div><div class="rg-ct">CRYPTO FINTECH<br>FOUNDER</div></div><span class="rg-seal"></span><span class="rg-band"><i>MEDCOIN</i></span></div></div><div class="rg-arm"><span class="rg-ar" style="--R:96;--c:#2FB380;--tz:-8deg;--tx:16deg;--dur:16s"></span><span class="rg-ar" style="--R:77;--c:#E0A458;--tz:34deg;--tx:-30deg;--dur:12.5s;--dir:reverse"></span><span class="rg-ar" style="--R:58;--c:#5E8FBF;--tz:-46deg;--tx:24deg;--dur:9.5s"></span><span class="rg-ar" style="--R:39;--c:#E9E7DF;--tz:68deg;--tx:-38deg;--dur:7s;--dir:reverse"></span><span class="a-pip"></span><span class="a-t">ONE SYSTEM</span></div></div>
             <div class="rg-hud"><div class="rg-hl">ARCHIVE DRAWER C-01</div><div class="rg-hn" id="rgName">XTIX</div></div>
             <span class="rg-hint">DRAG TO TURN &middot; CLICK A FILE</span>
           </div>
