@@ -940,70 +940,68 @@ body{overflow-x:clip}
 
 
 /* ============ EX35 — THE APPROACH & THE RING ============ */
-.rg-outer{position:relative;height:582px;overflow:hidden;border-radius:3px;background:#0B0C10}
-.rg-track{position:absolute;inset:0;width:200%;display:grid;grid-template-columns:1fr 1fr;
-  transform:translateX(calc(var(--sx,0) * -50%));
-  /* the field is ONE gradient spanning both panels, so the travel never shows a seam */
-  background:radial-gradient(52% 88% at 74% 43%,#24262E 0%,#181A20 40%,#0E0F14 74%,#0B0C10 100%),
-             radial-gradient(34% 78% at 21% 50%,#1E2027 0%,transparent 72%),#0B0C10}
-.rg-panel{position:relative;overflow:hidden}
-/* --- the approach panel --- */
-.rg-intro{display:flex;align-items:center;padding:0 clamp(26px,5vw,64px);background:transparent}
+/* One surface. There is no second panel to cut against — the room is full bleed from
+   the first frame and simply arrives; the text layer is what travels away. */
+.rg-outer{position:relative;height:582px;overflow:hidden;border-radius:3px;
+  background:radial-gradient(52% 88% at 76% 44%,#24262E 0%,#181A20 40%,#0E0F14 74%,#0B0C10 100%),
+             radial-gradient(38% 82% at 16% 50%,#1E2027 0%,transparent 74%),#0B0C10;
+  background-size:150% 100%,150% 100%,auto;
+  background-position:calc(var(--sx,0) * -34%) 0,calc(var(--sx,0) * -34%) 0,0 0}
+.rg-introlayer{position:absolute;inset:0;display:flex;align-items:center;
+  padding:0 clamp(26px,5vw,64px);pointer-events:none;
+  transform:translateX(calc(var(--sx,0) * -48%));
+  opacity:clamp(0,calc(1 - var(--sx,0) * 2.5),1)}
 .rg-itxt{max-width:430px;text-align:left;direction:ltr}
 .rg-ik{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.34em;color:var(--em)}
 .rg-ih{font-family:'Fraunces',serif;font-weight:800;font-size:clamp(24px,3.6vw,40px);line-height:1.14;
   color:#F2F1ED;margin-top:16px;letter-spacing:-.012em}
-.rg-ip{font-family:'Inter',system-ui,sans-serif;font-size:13.5px;line-height:1.8;color:#9EA1A9;margin-top:16px}
 .rg-icue{margin-top:26px;display:inline-flex;align-items:center;gap:11px;
   font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.24em;color:#6B6E76}
 .rg-icue b{display:inline-block;width:46px;height:1px;background:linear-gradient(90deg,#6B6E76,transparent)}
 /* --- the room --- */
-.rg-stage{position:absolute;inset:0;perspective:1500px;perspective-origin:50% 36%;cursor:grab;touch-action:pan-y;
-  background:transparent}
-/* the room's furniture arrives with the travel instead of being cut to */
-.rg-floor,.rg-horizon,.rg-pool{opacity:clamp(0,calc((var(--sx,0) - .10) * 2.1),1)}
-.rg-ring,.rg-hud,.rg-hint{opacity:clamp(0,calc((var(--sx,0) - .20) * 2.3),1)}
-.rg-itxt{opacity:clamp(0,calc(1 - var(--sx,0) * 2.6),1);
-  transform:translateX(calc(var(--sx,0) * -34px))}
+.rg-stage{position:absolute;inset:0;perspective:1500px;perspective-origin:50% 38%;touch-action:pan-y;
+  background:transparent;cursor:grab;
+  transform:translateX(calc((1 - var(--sx,0)) * 20%));
+  opacity:clamp(0,calc((var(--sx,0) - .08) * 2.0),1)}
 .rg-stage.drag{cursor:grabbing}
-.rg-horizon{position:absolute;left:0;right:0;top:0;height:70%;pointer-events:none;
-  background:linear-gradient(180deg,transparent 40%,rgba(233,231,223,.055) 88%,rgba(233,231,223,.085) 100%)}
+.rg-horizon{position:absolute;left:-40%;right:-40%;top:0;height:70%;pointer-events:none;
+  background:linear-gradient(180deg,transparent 42%,rgba(233,231,223,.05) 88%,rgba(233,231,223,.08) 100%)}
+/* C — the document's drafting sheet: a fine rule, a heavy rule every fifth, and one
+   emerald datum. Same grammar as the folders' own grids. */
 .rg-floor{position:absolute;left:50%;top:70%;width:1900px;height:1500px;margin-left:-950px;
   transform:rotateX(68deg);transform-origin:50% 0;pointer-events:none;
-  background-image:repeating-linear-gradient(0deg,rgba(233,231,223,.20) 0 1px,transparent 1px 62px),
-                   repeating-linear-gradient(90deg,rgba(233,231,223,.20) 0 1px,transparent 1px 62px);
+  background-image:
+    linear-gradient(90deg,rgba(47,179,128,.34) 0 1px,transparent 1px),
+    repeating-linear-gradient(0deg,rgba(233,231,223,.26) 0 1px,transparent 1px 305px),
+    repeating-linear-gradient(90deg,rgba(233,231,223,.26) 0 1px,transparent 1px 305px),
+    repeating-linear-gradient(0deg,rgba(233,231,223,.11) 0 1px,transparent 1px 61px),
+    repeating-linear-gradient(90deg,rgba(233,231,223,.11) 0 1px,transparent 1px 61px);
+  background-position:950px 0,0 0,0 0,0 0,0 0;
+  background-repeat:no-repeat,repeat,repeat,repeat,repeat;
   -webkit-mask-image:linear-gradient(180deg,#000 0%,rgba(0,0,0,.42) 38%,transparent 72%),
                      radial-gradient(60% 100% at 50% 0%,#000 0%,transparent 100%);
   -webkit-mask-composite:source-in;
           mask-image:linear-gradient(180deg,#000 0%,rgba(0,0,0,.42) 38%,transparent 72%),
                      radial-gradient(60% 100% at 50% 0%,#000 0%,transparent 100%);
           mask-composite:intersect}
-.rg-pool{position:absolute;left:50%;top:58%;width:560px;height:190px;margin-left:-280px;pointer-events:none;
+.rg-pool{position:absolute;left:50%;top:56%;width:600px;height:200px;margin-left:-300px;pointer-events:none;
   background:radial-gradient(50% 50% at 50% 50%,rgba(233,231,223,.10),transparent 72%);filter:blur(6px)}
 .rg-ring{position:absolute;left:50%;top:52%;width:0;height:0;transform-style:preserve-3d;
   transform:rotateX(-11deg) rotateY(var(--spin,0deg))}
-/* --- 1. the wheel: a core with volume, four spokes, a rim, and a drop to every file.
-       Nothing floats on its own — the whole thing is one body. --- */
+/* --- B: the wheel, now at the folders' mid-height --- */
 .rg-wheel{position:absolute;left:50%;top:50%;width:0;height:0;transform-style:preserve-3d;
-  transform:translateY(-236px)}
-/* the rim the folders hang from */
+  transform:translateY(-27px)}
 .rg-hoop{position:absolute;left:50%;top:50%;width:640px;height:640px;margin:-320px 0 0 -320px;
-  border-radius:50%;border:1px solid rgba(233,231,223,.30);transform:rotateX(90deg);
-  box-shadow:0 0 30px rgba(233,231,223,.05),inset 0 0 30px rgba(233,231,223,.04)}
-.rg-hoop2{position:absolute;left:50%;top:50%;width:596px;height:596px;margin:-298px 0 0 -298px;
-  border-radius:50%;border:1px dashed rgba(233,231,223,.13);transform:rotateX(90deg)}
-/* a spoke from the core out to the rim */
-.rg-spoke{position:absolute;left:50%;top:50%;width:264px;height:1px;pointer-events:none;
-  transform-origin:0 50%;transform:rotateY(calc(var(--a) + 90deg)) translateX(56px);
-  background:linear-gradient(90deg,rgba(233,231,223,.62),rgba(233,231,223,.34) 55%,rgba(233,231,223,.24));
+  border-radius:50%;border:1px solid rgba(233,231,223,.26);transform:rotateX(90deg);
+  box-shadow:0 0 30px rgba(233,231,223,.05)}
+.rg-hoop2{position:absolute;left:50%;top:50%;width:452px;height:452px;margin:-226px 0 0 -226px;
+  border-radius:50%;border:1px dashed rgba(47,179,128,.22);transform:rotateX(90deg)}
+.rg-spoke{position:absolute;left:50%;top:50%;width:250px;height:1px;pointer-events:none;
+  transform-origin:0 50%;transform:rotateY(calc(var(--a) + 90deg)) translateX(70px);
+  background:linear-gradient(90deg,rgba(233,231,223,.66),rgba(233,231,223,.30) 58%,rgba(233,231,223,.20));
   opacity:calc(.98 - var(--d,0)*.62)}
 .rg-spoke:after{content:"";position:absolute;right:-3px;top:-3px;width:7px;height:7px;border-radius:50%;
   background:rgba(233,231,223,.85);box-shadow:0 0 9px rgba(233,231,223,.5)}
-/* and the drop from the rim down onto the folder */
-.rg-drop{position:absolute;left:50%;top:50%;width:1px;height:66px;pointer-events:none;
-  transform:translateY(-236px) rotateY(var(--a)) translateZ(320px);
-  background:linear-gradient(180deg,rgba(233,231,223,.70),rgba(233,231,223,.20));
-  opacity:calc(.98 - var(--d,0)*.66)}
 /* --- the core: a sphere with volume, spinning on its own axis --- */
 .rg-globe{position:absolute;left:50%;top:50%;width:142px;height:142px;margin:-71px 0 0 -71px;
   transform-style:preserve-3d;transform:rotateZ(-13deg) rotateY(var(--gs,0deg));pointer-events:none}
@@ -1020,28 +1018,54 @@ body{overflow-x:clip}
   border-radius:50%;background:#E9E7DF;box-shadow:0 0 12px rgba(233,231,223,.6)}
 .rg-wheel .w-t{position:absolute;left:-90px;top:96px;width:180px;text-align:center;
   font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:.3em;color:#7E828C}
-/* --- 2. the folders --- */
+/* --- D: the folders, with real thickness --- */
 .rg-card{position:absolute;width:214px;height:286px;margin:-170px 0 0 -107px;transform-style:preserve-3d;
   transform:rotateY(var(--a)) translateZ(320px);cursor:pointer}
+/* the sheets inside, peeking past the cover */
+/* the closing side face — this is what makes it an object rather than a plane */
+/* the reverse of the folder — plain stock, an archive code, nothing else */
+.rg-back{position:absolute;inset:0;border-radius:12px 2px 2px 2px;pointer-events:none;
+  transform:translateZ(-15px) rotateY(180deg);
+  backface-visibility:hidden;-webkit-backface-visibility:hidden;
+  background:linear-gradient(157deg,#C8C2B2 0%,#BAB4A4 52%,#ADA797 100%);
+  box-shadow:inset 0 0 0 1px rgba(35,33,28,.13),inset 0 1px 0 rgba(255,255,255,.24);
+  opacity:calc((1 - var(--d,0)*.55) * clamp(0,calc((var(--d,0) - .47) * 22),1))}
+.rg-back:after{content:"ARCHIVE 4 C-01";position:absolute;left:0;right:0;bottom:22px;text-align:center;
+  font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:.28em;color:rgba(35,33,28,.30)}
+.rg-back:before{content:"";position:absolute;left:22px;right:22px;top:26px;height:1px;background:rgba(35,33,28,.14)}
+.rg-side{position:absolute;top:0;bottom:0;right:0;width:15px;pointer-events:none;
+  transform-origin:100% 50%;transform:rotateY(-90deg);
+  /* not a slab: the cut edges of the paper inside, lit from the left */
+  background:linear-gradient(90deg,#8D877A,#B4AE9F 38%,#9E9889),
+             repeating-linear-gradient(180deg,rgba(255,255,255,.30) 0 1px,transparent 1px 2.6px);
+  background-blend-mode:overlay,normal;
+  opacity:calc((1 - var(--d,0)*.72) * clamp(0,calc((.53 - var(--d,0)) * 22),1))}
+.rg-base{position:absolute;left:0;right:0;bottom:0;height:13px;pointer-events:none;
+  transform-origin:50% 100%;transform:rotateX(-90deg);
+  background:linear-gradient(180deg,#7E7869,#645F53);
+  opacity:calc((1 - var(--d,0)*.72) * clamp(0,calc((.53 - var(--d,0)) * 22),1))}
 .rg-face{position:absolute;inset:0;border-radius:2px 12px 2px 2px;overflow:hidden;
+  backface-visibility:hidden;-webkit-backface-visibility:hidden;
   background:linear-gradient(157deg,#E2DDD0 0%,#D5CFC0 46%,#C6C0AF 100%);
   box-shadow:0 26px 46px rgba(0,0,0,calc(.44*(1 - var(--d,0)*.55))),
              inset 0 1px 0 rgba(255,255,255,.42),inset 0 -1px 0 rgba(0,0,0,.17),
-             inset 0 0 0 1px rgba(35,33,28,.10);
-  filter:brightness(calc(1 - var(--d,0)*.62)) saturate(calc(1 - var(--d,0)*.45)) blur(calc(var(--d,0)*2.1px))}
-/* the guilloche rosette — the banknote/share-certificate lathe pattern, two gradients */
+             inset 0 0 0 1px rgba(35,33,28,.10)}
+/* the depth fog is a plate inside the face, not a filter on it: a filter would flatten
+   the face out of the 3D sort and the sheets behind it would paint straight over the top */
+.rg-fog{position:absolute;inset:0;pointer-events:none;background:#0F1117;
+  opacity:calc(var(--d,0)*.70)}
+.rg-fog2{position:absolute;inset:0;pointer-events:none;background:#8A8E98;mix-blend-mode:saturation;
+  opacity:calc(var(--d,0)*.55)}
 .rg-guill{position:absolute;left:-18%;right:-18%;top:-8%;bottom:-8%;pointer-events:none;mix-blend-mode:multiply;
   opacity:.22;
   background:repeating-radial-gradient(circle at 50% 44%,transparent 0 6.5px,rgba(35,33,28,.55) 6.5px 7.1px),
              repeating-conic-gradient(from 0deg at 50% 44%,transparent 0 2.6deg,rgba(35,33,28,.42) 2.6deg 3deg);
   -webkit-mask-image:radial-gradient(closest-side at 50% 44%,#000 30%,transparent 86%);
           mask-image:radial-gradient(closest-side at 50% 44%,#000 30%,transparent 86%)}
-/* fine laid-paper fibre, so the stock reads matte and never glossy */
 .rg-fibre{position:absolute;inset:0;pointer-events:none;opacity:.5;
   background:repeating-linear-gradient(96deg,rgba(255,255,255,.10) 0 1px,transparent 1px 3px)}
 .rg-ghost{position:absolute;right:14px;bottom:-16px;font-family:'Fraunces',serif;font-weight:900;
   font-size:124px;line-height:.78;color:rgba(35,33,28,.085);pointer-events:none;letter-spacing:-.05em}
-/* the punched filing edge */
 .rg-perf{position:absolute;left:0;top:0;bottom:0;width:16px;pointer-events:none;
   background:repeating-radial-gradient(circle at 8px 13px,rgba(35,33,28,.30) 0 3.1px,transparent 3.4px 26px);
   background-size:16px 26px}
@@ -1052,7 +1076,6 @@ body{overflow-x:clip}
   letter-spacing:-.022em}
 .rg-rule{height:1px;background:#1F1D18;opacity:.22;margin:14px 0 12px}
 .rg-ct{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:.17em;color:#6E6A5E;line-height:1.95}
-/* a blind-embossed seal: no colour, only relief */
 .rg-seal{position:absolute;left:27px;bottom:17px;width:50px;height:50px;border-radius:50%;pointer-events:none;
   border:1px solid rgba(35,33,28,.20);
   box-shadow:inset 0 1px 0 rgba(255,255,255,.5),inset 0 -1px 0 rgba(35,33,28,.14),
@@ -1067,20 +1090,21 @@ body{overflow-x:clip}
   transform:rotateY(var(--a)) translateZ(320px) translateY(120px) rotateX(90deg) translateZ(1px);
   background:radial-gradient(50% 50% at 50% 42%,rgba(0,0,0,.78),rgba(0,0,0,.34) 46%,transparent 76%);
   opacity:calc(.95 - var(--d,0)*.7);filter:blur(9px)}
-.rg-hud{position:absolute;left:16px;bottom:14px;pointer-events:none}
+.rg-hud{position:absolute;left:16px;bottom:14px;pointer-events:none;
+  opacity:clamp(0,calc((var(--sx,0) - .35) * 2.4),1)}
 .rg-hl{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.3em;color:#6B6E76}
 .rg-hn{font-family:'Fraunces',serif;font-weight:800;font-size:19px;color:#E9E7DF;margin-top:5px}
 .rg-hint{position:absolute;right:16px;bottom:14px;font-family:'JetBrains Mono',monospace;font-size:8px;
-  letter-spacing:.22em;color:#5A5E68;pointer-events:none}
+  letter-spacing:.22em;color:#5A5E68;pointer-events:none;
+  opacity:clamp(0,calc((var(--sx,0) - .35) * 2.4),1)}
 @media (max-width:620px){.rg-outer{height:498px}.rg-stage{perspective:1100px}
   .rg-card{width:170px;height:232px;margin:-138px 0 0 -85px;transform:rotateY(var(--a)) translateZ(248px)}
   .rg-sh{transform:rotateY(var(--a)) translateZ(248px) translateY(96px) rotateX(90deg)}
-  .rg-spoke{width:200px}.rg-wheel{transform:translateY(-186px)}
-  .rg-hoop{width:496px;height:496px;margin:-248px 0 0 -248px}
-  .rg-hoop2{width:458px;height:458px;margin:-229px 0 0 -229px}
-  .rg-globe{width:98px;height:98px;margin:-49px 0 0 -49px}
-  .rg-globe .g-l{width:calc(98px * var(--s));height:calc(98px * var(--s));
-    margin:calc(-49px * var(--s)) 0 0 calc(-49px * var(--s))}
+  .rg-spoke{width:196px}.rg-hoop{width:496px;height:496px;margin:-248px 0 0 -248px}
+  .rg-hoop2{width:352px;height:352px;margin:-176px 0 0 -176px}
+  .rg-globe{width:104px;height:104px;margin:-52px 0 0 -52px}
+  .rg-globe .g-l{width:calc(104px * var(--s));height:calc(104px * var(--s));
+    margin:calc(-52px * var(--s)) 0 0 calc(-52px * var(--s))}
   .rg-nm{font-size:24px}.rg-ghost{font-size:96px}}
 /* ============ EX36 — STATEMENT (exhibit 22's mechanic) + FILAMENT ============ */
 .sm-stage{position:relative;background:radial-gradient(110% 80% at 26% 50%,#1D1F25 0%,#141519 55%,#0D0E12 100%);
@@ -1162,28 +1186,22 @@ body{overflow-x:clip}
     <label id="rgV">APPROACH</label>
   </div>
   <div class="demo dark" style="padding:0;overflow:hidden">
-    <div class="rg-outer">
-      <div class="rg-track" id="rgTrack">
-        <div class="rg-panel rg-intro">
-          <div class="rg-itxt">
-            <div class="rg-ik">04 &middot; THE DRAWER</div>
-            <div class="rg-ih">Four files.<br>One operating system.</div>
-            
-            <div class="rg-icue"><b></b>KEEP SCROLLING</div>
-          </div>
-        </div>
-        <div class="rg-panel">
-          <div class="rg-stage" id="rgStage">
+    <div class="rg-outer" id="rgOuter">
+      <div class="rg-stage" id="rgStage">
             <div class="rg-horizon"></div><div class="rg-floor"></div><div class="rg-pool"></div>
-            <div class="rg-ring" id="rgRing"><div class="rg-drop" data-i="0" style="--a:0deg"></div><div class="rg-drop" data-i="1" style="--a:90deg"></div><div class="rg-drop" data-i="2" style="--a:180deg"></div><div class="rg-drop" data-i="3" style="--a:270deg"></div><div class="rg-sh" data-i="0" style="--a:0deg"></div><div class="rg-sh" data-i="1" style="--a:90deg"></div><div class="rg-sh" data-i="2" style="--a:180deg"></div><div class="rg-sh" data-i="3" style="--a:270deg"></div><div class="rg-card" data-i="0" style="--a:0deg;--tc:#2FB380"><span class="rg-tab"></span><div class="rg-face"><span class="rg-guill"></span><span class="rg-fibre"></span><span class="rg-ghost">01</span><span class="rg-perf"></span><span class="rg-spine"></span><div class="rg-in"><div class="rg-no">FILE 01</div><div class="rg-nm">XTIX</div><div class="rg-rule"></div><div class="rg-ct">B2B SAAS &middot; TECH<br>E-TICKETS PLATFORM</div></div><span class="rg-seal"></span></div></div><div class="rg-card" data-i="1" style="--a:90deg;--tc:#E0A458"><span class="rg-tab"></span><div class="rg-face"><span class="rg-guill"></span><span class="rg-fibre"></span><span class="rg-ghost">02</span><span class="rg-perf"></span><span class="rg-spine"></span><div class="rg-in"><div class="rg-no">FILE 02</div><div class="rg-nm">Oasis</div><div class="rg-rule"></div><div class="rg-ct">CEO MANDATE<br>SMART SHADING</div></div><span class="rg-seal"></span></div></div><div class="rg-card" data-i="2" style="--a:180deg;--tc:#5E8FBF"><span class="rg-tab"></span><div class="rg-face"><span class="rg-guill"></span><span class="rg-fibre"></span><span class="rg-ghost">03</span><span class="rg-perf"></span><span class="rg-spine"></span><div class="rg-in"><div class="rg-no">FILE 03</div><div class="rg-nm">Eventer</div><div class="rg-rule"></div><div class="rg-ct">SAAS &middot; EVENT-TECH<br>CROSS-FUNCTIONAL</div></div><span class="rg-seal"></span></div></div><div class="rg-card" data-i="3" style="--a:270deg;--tc:#C9C4B4"><span class="rg-tab"></span><div class="rg-face"><span class="rg-guill"></span><span class="rg-fibre"></span><span class="rg-ghost">04</span><span class="rg-perf"></span><span class="rg-spine"></span><div class="rg-in"><div class="rg-no">FILE 04</div><div class="rg-nm">Medcoin</div><div class="rg-rule"></div><div class="rg-ct">CRYPTO FINTECH<br>FOUNDER</div></div><span class="rg-seal"></span></div></div>
+            <div class="rg-ring" id="rgRing"><div class="rg-sh" data-i="0" style="--a:0deg"></div><div class="rg-sh" data-i="1" style="--a:90deg"></div><div class="rg-sh" data-i="2" style="--a:180deg"></div><div class="rg-sh" data-i="3" style="--a:270deg"></div><div class="rg-card" data-i="0" style="--a:0deg;--tc:#2FB380"><span class="rg-tab"></span><span class="rg-back"></span><span class="rg-side"></span><span class="rg-base"></span><div class="rg-face"><span class="rg-guill"></span><span class="rg-fibre"></span><span class="rg-ghost">01</span><span class="rg-perf"></span><span class="rg-spine"></span><div class="rg-in"><div class="rg-no">FILE 01</div><div class="rg-nm">XTIX</div><div class="rg-rule"></div><div class="rg-ct">B2B SAAS &middot; TECH<br>E-TICKETS PLATFORM</div></div><span class="rg-seal"></span><span class="rg-fog2"></span><span class="rg-fog"></span></div></div><div class="rg-card" data-i="1" style="--a:90deg;--tc:#E0A458"><span class="rg-tab"></span><span class="rg-back"></span><span class="rg-side"></span><span class="rg-base"></span><div class="rg-face"><span class="rg-guill"></span><span class="rg-fibre"></span><span class="rg-ghost">02</span><span class="rg-perf"></span><span class="rg-spine"></span><div class="rg-in"><div class="rg-no">FILE 02</div><div class="rg-nm">Oasis</div><div class="rg-rule"></div><div class="rg-ct">CEO MANDATE<br>SMART SHADING</div></div><span class="rg-seal"></span><span class="rg-fog2"></span><span class="rg-fog"></span></div></div><div class="rg-card" data-i="2" style="--a:180deg;--tc:#5E8FBF"><span class="rg-tab"></span><span class="rg-back"></span><span class="rg-side"></span><span class="rg-base"></span><div class="rg-face"><span class="rg-guill"></span><span class="rg-fibre"></span><span class="rg-ghost">03</span><span class="rg-perf"></span><span class="rg-spine"></span><div class="rg-in"><div class="rg-no">FILE 03</div><div class="rg-nm">Eventer</div><div class="rg-rule"></div><div class="rg-ct">SAAS &middot; EVENT-TECH<br>CROSS-FUNCTIONAL</div></div><span class="rg-seal"></span><span class="rg-fog2"></span><span class="rg-fog"></span></div></div><div class="rg-card" data-i="3" style="--a:270deg;--tc:#C9C4B4"><span class="rg-tab"></span><span class="rg-back"></span><span class="rg-side"></span><span class="rg-base"></span><div class="rg-face"><span class="rg-guill"></span><span class="rg-fibre"></span><span class="rg-ghost">04</span><span class="rg-perf"></span><span class="rg-spine"></span><div class="rg-in"><div class="rg-no">FILE 04</div><div class="rg-nm">Medcoin</div><div class="rg-rule"></div><div class="rg-ct">CRYPTO FINTECH<br>FOUNDER</div></div><span class="rg-seal"></span><span class="rg-fog2"></span><span class="rg-fog"></span></div></div>
               <div class="rg-wheel"><div class="rg-hoop"></div><div class="rg-hoop2"></div><div class="rg-spoke" data-i="0" style="--a:0deg"></div><div class="rg-spoke" data-i="1" style="--a:90deg"></div><div class="rg-spoke" data-i="2" style="--a:180deg"></div><div class="rg-spoke" data-i="3" style="--a:270deg"></div><div class="rg-globe" id="rgGlobe"><span class="g-m" style="--r:0deg"></span><span class="g-m" style="--r:22deg"></span><span class="g-m" style="--r:45deg"></span><span class="g-m" style="--r:67deg"></span><span class="g-m" style="--r:90deg"></span><span class="g-m" style="--r:112deg"></span><span class="g-m" style="--r:135deg"></span><span class="g-m" style="--r:157deg"></span><span class="g-l" style="--s:.46;--z:-50px"></span><span class="g-l" style="--s:.78;--z:-34px"></span><span class="g-l" style="--s:.985;--z:0px"></span><span class="g-l" style="--s:.78;--z:34px"></span><span class="g-l" style="--s:.46;--z:50px"></span><span class="g-core"></span><span class="g-pip"></span></div><div class="w-t">ONE SYSTEM</div></div>
             </div>
             <div class="rg-hud"><div class="rg-hl">ARCHIVE DRAWER C-01</div><div class="rg-hn" id="rgName">XTIX</div></div>
             <span class="rg-hint">DRAG TO TURN &middot; CLICK A FILE</span>
           </div>
+      <div class="rg-introlayer">
+        <div class="rg-itxt">
+          <div class="rg-ik">04 &middot; THE DRAWER</div>
+          <div class="rg-ih">Four files.<br>One operating system.</div>
+          <div class="rg-icue"><b></b>KEEP SCROLLING</div>
         </div>
       </div>
-    </div>
   </div>
   <p class="note"><b>המרכז</b> הוא טבעת סגורה שמסתובבת-נגד בדיוק כנגד סיבוב הפטיפון, ולכן היא <b>תמיד פונה אל הצופה</b> בזמן שהתיקיות מקיפות אותה &mdash; זה מה שגורם לה להיקרא כגוף במרכז החלל ולא כדיסק שמסתובב איתן. הקווים יוצאים ממנה אל כל תיקייה ודוהים עם העומק.
   <br><b>העיצוב על התיקיות</b> הוא ג'ילושה &mdash; דפוס המחרטה של שטרות ותעודות מניה &mdash; משתי שכבות גרדיאנט בלבד, ועליו ספרה רפאים, קצה מנוקב לתיוק, וחותם מובלט שהוא <b>הבלטה בלבד, בלי צבע</b>. אפס נכסים.</p>
@@ -2519,13 +2537,12 @@ document.getElementById('abPaper').addEventListener('click',function(){abCard.cl
 <script>
 /* ===== EX35 — the approach, then the ring ===== */
 (function(){
-  var track=document.getElementById('rgTrack'),stage=document.getElementById('rgStage'),
+  var track=document.getElementById('rgOuter'),stage=document.getElementById('rgStage'),
       ring=document.getElementById('rgRing'),sl=document.getElementById('rgS'),vv=document.getElementById('rgV');
   if(!track||!ring)return;
   var cards=[].slice.call(ring.querySelectorAll('.rg-card')),
       shads=[].slice.call(ring.querySelectorAll('.rg-sh')),
       spokes=[].slice.call(ring.querySelectorAll('.rg-spoke')),
-      drops=[].slice.call(ring.querySelectorAll('.rg-drop')),
       globe=document.getElementById('rgGlobe'),gs=0,
       nameEl=document.getElementById('rgName'),NAMES=['XTIX','Oasis','Eventer','Medcoin'];
   var spin=0,target=0,vel=0,drag=false,px=0,moved=0,idle=0,last=-1;
@@ -2536,7 +2553,6 @@ document.getElementById('abPaper').addEventListener('click',function(){abCard.cl
       cards[i].style.setProperty('--d',ds);
       shads[i].style.setProperty('--d',ds);
       if(spokes[i])spokes[i].style.setProperty('--d',ds);
-      if(drops[i])drops[i].style.setProperty('--d',ds);
       cards[i].style.zIndex=String(100-Math.round(d*100));
     }
     var f=((Math.round(-spin/90)%4)+4)%4;
@@ -2575,6 +2591,8 @@ document.getElementById('abPaper').addEventListener('click',function(){abCard.cl
   function slide(){
     var p=+sl.value/100;
     track.style.setProperty('--sx',p.toFixed(4));
+    /* an invisible room must not eat the pointer */
+    stage.style.pointerEvents = p>0.55 ? 'auto' : 'none';
     vv.textContent = p<0.06?'APPROACH' : p<0.94?'TRAVELLING…' : 'THE ROOM';
   }
   sl.addEventListener('input',slide);slide();
@@ -2624,33 +2642,41 @@ document.getElementById('abPaper').addEventListener('click',function(){abCard.cl
   /* ---- the filament ---- */
   var cv=document.getElementById('nfC');if(!cv)return;
   var ctx=cv.getContext('2d'),W=0,H=0,DPR=Math.min(devicePixelRatio||1,1.75),live=false,raf=null,t=0;
-  var N=150,P=new Float32Array(N*3),SC=new Float32Array(N*3),ORD=new Int32Array(N);
-  var PULSE=[];for(var q=0;q<16;q++)PULSE.push({a:0,b:0,p:Math.random(),s:0.010+Math.random()*0.016});
+  var N=176,P=new Float32Array(N*3),SC=new Float32Array(N*3),ORD=new Int32Array(N);
+  var PULSE=[];for(var q=0;q<22;q++)PULSE.push({a:0,b:0,p:Math.random(),s:0.010+Math.random()*0.016});
   function size(){
     var r=cv.getBoundingClientRect();
     W=Math.max(1,r.width);H=Math.max(1,r.height);
     cv.width=Math.round(W*DPR);cv.height=Math.round(H*DPR);
     ctx.setTransform(DPR,0,0,DPR,0,0);
   }
+  /* A wave travels down the body, the tube tapers at head and tail, and the whole
+     thing tumbles on two axes — which is what turns a drifting lattice into something
+     that reads as alive and swimming. */
   function shape(tt){
     for(var i=0;i<N;i++){
       var u=i/(N-1);
-      var sx=Math.sin(u*3.05+tt*0.44)*0.50 + Math.sin(u*6.9-tt*0.27)*0.15;
-      var sy=(u-0.5)*1.06 + Math.sin(u*2.3+tt*0.36)*0.15;
-      var sz=Math.cos(u*2.55+tt*0.39)*0.46 + Math.cos(u*5.4+tt*0.22)*0.14;
-      var an=i*2.39996+tt*0.85, rr=0.108*(0.5+0.5*Math.sin(i*1.31+tt*0.7));
+      var wav=Math.sin(u*7.4 - tt*2.35);          /* the travelling undulation */
+      var sx=Math.sin(u*2.5+tt*0.42)*0.42 + wav*0.20 + Math.sin(u*5.1-tt*0.9)*0.07;
+      var sy=(u-0.5)*1.16 + Math.sin(u*3.2+tt*0.55)*0.13 + wav*0.055;
+      var sz=Math.cos(u*2.1+tt*0.37)*0.42 + Math.cos(u*6.6-tt*1.9)*0.15;
+      var taper=Math.sin(Math.PI*u);              /* thick in the middle, tapered at both ends */
+      var an=i*2.39996+tt*0.95;
+      var rr=(0.046+0.122*taper)*(0.62+0.38*Math.sin(i*1.27+tt*0.85));
       P[i*3  ]=sx+Math.cos(an)*rr;
-      P[i*3+1]=sy+Math.sin(an*1.27)*rr*0.85;
+      P[i*3+1]=sy+Math.sin(an*1.27)*rr*0.88;
       P[i*3+2]=sz+Math.sin(an)*rr;
     }
   }
   function body(){
     t+=0.0062;shape(t);
     ctx.clearRect(0,0,W,H);
-    var cx=W*0.50,cy=H*0.5,S=Math.min(W,H)*0.50,FOV=2.2;
-    var ry=t*0.34,cs=Math.cos(ry),sn=Math.sin(ry);
+    var cx=W*0.50,cy=H*0.5,S=Math.min(W,H)*0.56,FOV=2.1;
+    var ry=t*0.30,cs=Math.cos(ry),sn=Math.sin(ry);
+    var rp=Math.sin(t*0.21)*0.30,cp=Math.cos(rp),sp2=Math.sin(rp);   /* a slow tumble */
     for(var i=0;i<N;i++){
-      var x=P[i*3],y=P[i*3+1],z=P[i*3+2];
+      var x=P[i*3],y0=P[i*3+1],z0=P[i*3+2];
+      var y=y0*cp-z0*sp2, z=y0*sp2+z0*cp;
       var rx=x*cs-z*sn, rz=x*sn+z*cs, k=FOV/(FOV+rz);
       SC[i*3]=cx+rx*S*k; SC[i*3+1]=cy+y*S*k; SC[i*3+2]=k;
       ORD[i]=i;
@@ -2660,15 +2686,15 @@ document.getElementById('abPaper').addEventListener('click',function(){abCard.cl
       for(var j=i+1;j<Math.min(N,i+30);j++){
         var dx=P[i*3]-P[j*3],dy=P[i*3+1]-P[j*3+1],dz=P[i*3+2]-P[j*3+2];
         var d2=dx*dx+dy*dy+dz*dz;
-        if(j!==i+1 && d2>0.036)continue;
-        var f=j===i+1?1:(1-d2/0.036), kk=(SC[i*3+2]+SC[j*3+2])*0.5;
+        if(j!==i+1 && d2>0.042)continue;
+        var f=j===i+1?1:(1-d2/0.042), kk=(SC[i*3+2]+SC[j*3+2])*0.5;
         ctx.strokeStyle='rgba(242,241,237,'+(0.26*f*f*kk*kk).toFixed(3)+')';
         ctx.beginPath();ctx.moveTo(SC[i*3],SC[i*3+1]);ctx.lineTo(SC[j*3],SC[j*3+1]);ctx.stroke();
       }
     }
     for(var i=0;i<N;i++){
-      var kk=SC[i*3+2],r=0.6+kk*1.4;
-      ctx.fillStyle='rgba(242,241,237,'+(0.32*kk*kk).toFixed(3)+')';
+      var kk=SC[i*3+2],r=0.5+kk*kk*2.1;
+      ctx.fillStyle='rgba(242,241,237,'+(0.30*kk*kk*kk).toFixed(3)+')';
       ctx.beginPath();ctx.arc(SC[i*3],SC[i*3+1],r,0,6.284);ctx.fill();
     }
     /* signals firing along the body — the thing that makes it read as neural */
