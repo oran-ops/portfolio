@@ -3880,7 +3880,40 @@ try{
 var q=new URLSearchParams(location.search);
 var reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 var frozen=reduced||q.get('static')==='1'||(window.innerWidth<861&&q.get('force')!=='1');
-if(frozen){window.__acts3OK=true;return;}
+if(frozen){
+  window.__acts3OK=true;
+  /* PHONE REPAIR: everything below this point is desktop-only, including markReviewed,
+     ceremony() and window.__markReviewed. The four .stampbox elements call __markReviewed
+     inside a try/catch, so on a phone they silently called nothing and #ccstamp kept its
+     markup default forever - the last thing a phone reader saw after 24,674px of scrolling
+     was a permanent "IN REVIEW - 0/4", which reads as a failure state. A small counter,
+     the same contract, no scroll work. */
+  (function(){
+    var cc=document.getElementById('ccstamp');
+    if(!cc){window.__markReviewed=function(){};return}
+    var seen={},n=0,closed=false;
+    cc.classList.add('lk');
+    cc.textContent='IN REVIEW · 0/4';
+    window.__markReviewed=function(id){
+      if(closed||!id||seen[id])return;
+      seen[id]=1;n++;
+      if(n>=4){
+        closed=true;
+        cc.classList.remove('lk');
+        cc.textContent='CASE CLOSED';
+        cc.classList.add('done');
+        var vc=cc.closest?cc.closest('.vcommit'):null;
+        if(vc)vc.classList.add('sealed');
+        void cc.offsetWidth;
+        cc.classList.add('ceremony');
+        try{if(navigator.vibrate)navigator.vibrate([9,30,12])}catch(e){}
+      }else{
+        cc.textContent='IN REVIEW · '+n+'/4';
+      }
+    };
+  })();
+  return;
+}
 function clamp(v){return v<0?0:v>1?1:v}
 function bnd(v,a,b){var t=(v-a)/(b-a);t=t<0?0:t>1?1:t;return t*t*(3-2*t)}
 var AU=function(){return window.__archAudio||{}};
