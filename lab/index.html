@@ -889,6 +889,55 @@ body{overflow-x:clip}
 .xr-bug .bb b{color:var(--ink)}
 .xr-bug code{font-family:'JetBrains Mono',monospace;font-size:11px;background:#22201C0F;padding:1px 5px;border-radius:2px;direction:ltr;display:inline-block}
 
+
+/* ============ EX32 — THE CYCLEGRAPH ============ */
+.cg-wrap{display:grid;grid-template-columns:1fr 1fr;gap:14px;direction:ltr}
+.cg-p{position:relative;background:#101116;border:1px solid rgba(242,241,237,.10);border-radius:3px;overflow:hidden}
+.cg-p canvas{display:block;width:100%;height:auto}
+.cg-l{position:absolute;left:12px;bottom:10px;font-family:'JetBrains Mono',monospace;font-weight:800;
+  font-size:9.5px;letter-spacing:.26em;color:#F2F1ED;pointer-events:none}
+.cg-s{position:absolute;right:12px;bottom:10px;font-family:'JetBrains Mono',monospace;
+  font-size:8px;letter-spacing:.18em;color:#6B6E76;pointer-events:none}
+.cg-bar{display:flex;gap:10px;align-items:center;margin-bottom:13px;direction:ltr;flex-wrap:wrap}
+.cg-btn{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;letter-spacing:.2em;
+  border:1.5px solid var(--em);color:var(--em);background:transparent;padding:9px 15px;border-radius:3px;cursor:pointer;
+  transition:background .18s,color .18s}
+.cg-btn:hover{background:var(--em);color:#101116}
+.cg-cap{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.16em;color:var(--dim)}
+.cg-one{margin-top:12px;text-align:center;font-family:'Fraunces',serif;font-style:italic;font-size:15px;color:var(--ink2);direction:ltr}
+@media (max-width:620px){.cg-wrap{grid-template-columns:1fr}}
+/* ============ EX33 — REMOVE THE AUTHOR ============ */
+.ra-stage{background:#191A1F;border-radius:3px;padding:26px 28px;direction:ltr;position:relative;overflow:hidden}
+.ra-h{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.3em;color:var(--em);margin-bottom:14px}
+.ra-t{font-family:'Inter',system-ui,sans-serif;font-size:14.5px;line-height:1.95;color:#C9CBD1;max-width:600px}
+.ra-t p{margin-bottom:13px}
+.ra-t b{color:#F2F1ED;font-weight:600}
+.ra-t i.au{font-style:normal;position:relative;display:inline-block}
+.ra-t i.au>span{display:inline-block;color:#F2F1ED;
+  transform:translateY(calc(var(--au,0)*-14px)) rotate(calc(var(--au,0)*var(--r,2deg)));
+  opacity:calc(1 - var(--au,0)*.45);
+  filter:grayscale(calc(var(--au,0)*1));
+  transition:none}
+.ra-t i.au:after{content:"[ ]";position:absolute;left:0;top:0;color:#4A4D56;
+  opacity:var(--au,0);font-family:'JetBrains Mono',monospace;font-size:.86em;letter-spacing:-.02em}
+.ra-test{margin-top:22px;text-align:center;font-family:'Fraunces',serif;font-style:italic;font-weight:600;
+  font-size:22px;color:#F2F1ED;opacity:var(--tst,0);transform:translateY(calc((1 - var(--tst,0))*8px))}
+.ra-ctl{display:flex;align-items:center;gap:12px;margin-bottom:13px;direction:ltr;flex-wrap:wrap}
+.ra-ctl input[type=range]{flex:1;min-width:170px;accent-color:var(--em)}
+.ra-ctl label{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.18em;color:var(--dim);white-space:nowrap}
+/* ============ EX34 — THE MOIRE ============ */
+.mo-stage{position:relative;background:#101116;border-radius:3px;height:300px;overflow:hidden;direction:ltr}
+.mo-g{position:absolute;inset:-40%;background-repeat:repeat}
+.mo-a{background-image:repeating-linear-gradient(0deg,#5E8FBF 0 1.15px,transparent 1.15px 5px);opacity:.62}
+.mo-b{background-image:repeating-linear-gradient(0deg,#5E8FBF 0 1.15px,transparent 1.15px 5px);opacity:.62;
+  transform:rotate(var(--ang,7deg));mix-blend-mode:screen}
+.mo-lab{position:absolute;left:14px;top:12px;font-family:'JetBrains Mono',monospace;font-weight:800;font-size:9.5px;
+  letter-spacing:.24em;color:#F2F1ED;pointer-events:none;text-shadow:0 1px 6px #000}
+.mo-ang{position:absolute;right:14px;top:12px;font-family:'JetBrains Mono',monospace;font-size:9.5px;
+  letter-spacing:.18em;color:#5E8FBF;pointer-events:none;text-shadow:0 1px 6px #000}
+.mo-state{position:absolute;left:14px;bottom:12px;font-family:'JetBrains Mono',monospace;font-size:8.5px;
+  letter-spacing:.2em;color:#8A8E98;pointer-events:none;text-shadow:0 1px 6px #000}
+
 </style>
 </head>
 <body>
@@ -899,7 +948,7 @@ body{overflow-x:clip}
   <h1>מעבדת הרעיונות</h1>
   <p class="sub"><b>אחרי הביקורת: נשארו מוצגים 23 ו-25 בראש העמוד</b> — שניים שאושרו ונבנו מחדש לפי ההערות; ארבעה נדחו והוסרו.<br>מוצגים חיים — אחד לכל ממצא מרכזי מארבעת דוחות המחקר. אלה <b>סקיצות מהירות</b> שנועדו להרגיש את הרעיון, לא הביצוע הסופי (בגרסה אמיתית: פונטים ייעודיים, ליטוש מלא). ליד כל מוצג — מי מהחוקרים עומד מאחוריו.</p>
   <nav class="toc">
-    <a href="#plan" style="background:var(--red);color:var(--paper);border-color:var(--red)">MASTER PLAN</a><a href="#ex29" style="background:#191A1F;color:#2FB380;border-color:#2FB380">29 THE REEL &#9733;</a><a href="#ex30" style="background:#191A1F;color:#2FB380;border-color:#2FB380">30 CONTACT SHEET &#9733;&#9733;&#9733;</a><a href="#ex31" style="background:#191A1F;color:#2FB380;border-color:#2FB380">31 EXAM RECORD &#9733;&#9733;</a><a href="#ex23" style="border-color:var(--red);color:var(--red)">23 INSPECTION LAMP ★★</a><a href="#ex25" style="border-color:var(--red);color:var(--red)">25 METHOD SLIP ★★</a>
+    <a href="#plan" style="background:var(--red);color:var(--paper);border-color:var(--red)">MASTER PLAN</a><a href="#ex32" style="background:#101116;color:#2FB380;border-color:#2FB380">32 CYCLEGRAPH &#9733;&#9733;&#9733;</a><a href="#ex33" style="background:#101116;color:#2FB380;border-color:#2FB380">33 REMOVE THE AUTHOR &#9733;&#9733;&#9733;</a><a href="#ex34" style="background:#101116;color:#5E8FBF;border-color:#5E8FBF">34 MOIR&Eacute; &#9733;&#9733;</a><a href="#ex29" style="background:#191A1F;color:#2FB380;border-color:#2FB380">29 THE REEL &#9733;</a><a href="#ex30" style="background:#191A1F;color:#2FB380;border-color:#2FB380">30 CONTACT SHEET &#9733;&#9733;&#9733;</a><a href="#ex31" style="background:#191A1F;color:#2FB380;border-color:#2FB380">31 EXAM RECORD &#9733;&#9733;</a><a href="#ex23" style="border-color:var(--red);color:var(--red)">23 INSPECTION LAMP ★★</a><a href="#ex25" style="border-color:var(--red);color:var(--red)">25 METHOD SLIP ★★</a>
     <a href="#ex20" style="border-color:var(--red);color:var(--red)">20 KINETIC ★★</a><a href="#ex21" style="border-color:var(--red);color:var(--red)">21 TYPE VOICES ★★</a><a href="#ex22" style="border-color:var(--red);color:var(--red)">22 STATEMENT MORPH ★★</a><a href="#ex19" style="border-color:var(--red);color:var(--red)">19 THE VAULT ★</a><a href="#ex18" style="border-color:var(--red);color:var(--red)">18 BRIEF CHIP ★</a><a href="#ex16" style="border-color:var(--red);color:var(--red)">16 EVIDENCE SLIP ★</a><a href="#ex17" style="border-color:var(--red);color:var(--red)">17 CONNECTION BOARD ★★</a>
     <a href="#ex15" style="border-color:var(--red);color:var(--red)">15 END-OF-FILE RITUAL ★</a>
     <a href="#ex13" style="border-color:var(--red);color:var(--red)">13 SYNTHESIS CARD ★</a><a href="#ex14" style="border-color:var(--red);color:var(--red)">14 COVER BRIEF ★</a>
@@ -932,6 +981,72 @@ body{overflow-x:clip}
 <div class="featured fnew">
 
 <!-- ============ EX23 ============ -->
+
+
+<section class="ex" id="ex32" style="padding-top:40px">
+  <div class="exh"><span class="exn">32</span><span class="ext">הציקלוגרף &mdash; התזה כתצלום</span><span class="exs">GILBRETH, 1914 &middot; THE ONE BEST WAY</span></div>
+  <p class="exd">פרנק ולילית גילברת' קשרו נורה לאצבע של פועל וצילמו את המשימה בחשיפה ארוכה. מה שהתקבל על הלוח הוא <b>לא הפועל &mdash; אלא המסלול</b>.
+  <br>שני לוחות. אותה משימה, אותה תוצאה. משמאל אדם שעושה הכל בעצמו; מימין מערכת. בלי מלל, בלי מספר, בלי שם &mdash; ובכל זאת אי אפשר לטעות במה שנאמר כאן.
+  <br><b>השפה הזו בת 110 שנה, הומצאה בדיוק כדי לטעון ששיטה מנצחת מאמץ, ומעולם לא שימשה אף אחד כדי לומר את זה על עצמו.</b></p>
+  <div class="cg-bar">
+    <button class="cg-btn" id="cgGo">&#9654; EXPOSE</button>
+    <span class="cg-cap">חשיפה ארוכה &mdash; המסלול מצטבר מול העיניים</span>
+  </div>
+  <div class="demo dark" style="padding:14px">
+    <div class="cg-wrap">
+      <div class="cg-p"><canvas id="cgA" width="760" height="620"></canvas><span class="cg-l">THE HERO</span><span class="cg-s">ONE PERSON &middot; EVERY PATH</span></div>
+      <div class="cg-p"><canvas id="cgB" width="760" height="620"></canvas><span class="cg-l">THE SYSTEM</span><span class="cg-s">ONE LOOP &middot; FORTY TIMES</span></div>
+    </div>
+    <div class="cg-one">&ldquo;the One Best Way&rdquo; &mdash; Frank &amp; Lillian Gilbreth</div>
+  </div>
+  <p class="note">קנבס דו-ממדי אחד לכל לוח, <code style="font-family:'JetBrains Mono',monospace">globalCompositeOperation='lighter'</code> כדי שהקווים <b>יצטברו לאור</b> בדיוק כמו חשיפה ארוכה אמיתית &mdash; זה נותן זוהר בלי blur ובלי shadow, שהם היקרים. שמאל: הליכה אקראית עם רעש. ימין: לולאה פרמטרית שנוסעים בה 40 פעם עם אחוז אחד של סטייה &mdash; מספיק כדי שהיא תיראה <b>מצוירת ביד ולא מודפסת</b>. אפס נכסים, אפס ספריות, ~30 שורות. במסמך זה ייצייר בהדרגה עם הגלילה, ואז נשאר סטטי לנצח &mdash; <b>אפס עלות לפריים אחרי שנחשף</b>.</p>
+</section>
+
+<section class="ex" id="ex33">
+  <div class="exh"><span class="exn">33</span><span class="ext">הסרת המחבר</span><span class="exs">THE THESIS, PERFORMED</span></div>
+  <p class="exd">בפרק המנהיגות &mdash; שכותרתו כבר היום <i>&rdquo;מנהיגים גדולים בונים אנשים שכבר לא תלויים בהם&ldquo;</i> &mdash; כל <code style="font-family:'JetBrains Mono',monospace">I</code>, כל <code style="font-family:'JetBrains Mono',monospace">my</code> וכל אזכור של השם <b>מתנתקים מהשורה ועולים</b>. השורות לא זזות; נשארת סוגריים ריקה. והדף ממשיך לעבוד בלעדיו.
+  <br><b>גרור את המחוון</b> כדי לראות את זה קורה. במסמך זה יקרה מעצמו עם הגלילה.</p>
+  <div class="ra-ctl">
+    <label>SCROLL &rarr;</label>
+    <input type="range" id="raS" min="0" max="100" value="0">
+    <label id="raV">0%</label>
+  </div>
+  <div class="demo dark" style="padding:14px">
+    <div class="ra-stage" id="raStage">
+      <div class="ra-h">MANAGEMENT FILE &middot; DOCTRINE</div>
+      <div class="ra-t" id="raT">
+        <p><b>Build trust before performance.</b> People perform better when expectations are clear and trust is established first. <i class="au" style="--r:-2.4deg"><span>I</span></i> learned this before <i class="au" style="--r:1.9deg"><span>I</span></i> learned anything about forecasting.</p>
+        <p>Every performance issue deserves investigation first. People shouldn&rsquo;t execute tasks &mdash; they should own outcomes.</p>
+        <p><i class="au" style="--r:2.7deg"><span>My</span></i> objective was never to close one more deal. It was to build an organization that produces consistent results <b>without depending on one individual</b>. The more <i class="au" style="--r:-1.6deg"><span>I</span></i> managed everything <i class="au" style="--r:2.1deg"><span>myself</span></i>, the less the organization grew.</p>
+        <p>Great leaders build people who no longer depend on them. That is the whole of it, and <i class="au" style="--r:-2.9deg"><span>Oran Carmon</span></i> is not the exception to it.</p>
+      </div>
+      <div class="ra-test" id="raTest">This is the test.</div>
+    </div>
+  </div>
+  <p class="note">השברים הם <b>שכפולים ממוקמים מוחלטות</b> &mdash; תיבות השורה לא נוגעות, ולכן <b>אין reflow באף שלב</b>. כתיבת סגנון אחת לפריים על מאפיין מותאם ברמת <i>הפרק</i> (לא ברמת <code style="font-family:'JetBrains Mono',monospace">:root</code> &mdash; זה בדיוק התיקון שסבב הביצועים שלנו עשה: מאפיין על השורש מבטל את החישוב ל-6,000 צמתים; כאן זה ~40). 44 צמתים, 1.6KB, ואפס סיכון.</p>
+  <p class="note" style="color:var(--redink)"><b>הסיכון היחיד הוא טונאלי:</b> זה חייב להיקרא כביטחון, לא כהצטנעות. המשפט <i>This is the test.</i> הוא מה שקובע לאיזה כיוון זה נופל &mdash; בלעדיו זה מתנצל, איתו זה טענה.</p>
+</section>
+
+<section class="ex" id="ex34">
+  <div class="exh"><span class="exn">34</span><span class="ext">מוארה &mdash; החיכוך שמתיישב</span><span class="exs">FOR THE EVENTER FILE</span></div>
+  <p class="exd">תיק EVENTER הוא היחיד שעוסק ב<b>יישור בין מחלקות</b> &mdash; ואין לו כרגע שום ייצוג ויזואלי משלו.
+  <br>שתי רשתות קווים, כל אחת מהן תקינה לחלוטין בפני עצמה, בסטייה של כמה מעלות. התוצאה היא הפרעה שהיא <b>פיזית לא נוחה לעיניים</b> &mdash; ואז הן מסתובבות להתאמה וההפרעה <b>נעלמת לגמרי</b>. הבעיה מעולם לא הייתה באף אחת מהרשתות; היא הייתה בזווית ביניהן. זה בדיוק מה שהתיק הזה אומר.</p>
+  <div class="ra-ctl">
+    <label>SCROLL &rarr;</label>
+    <input type="range" id="moS" min="0" max="100" value="0">
+    <label id="moV">7.0&deg;</label>
+  </div>
+  <div class="demo dark" style="padding:14px">
+    <div class="mo-stage" id="moStage">
+      <div class="mo-g mo-a"></div>
+      <div class="mo-g mo-b" id="moB"></div>
+      <span class="mo-lab">FIVE DEPARTMENTS</span>
+      <span class="mo-ang" id="moA">OFFSET 7.0&deg;</span>
+      <span class="mo-state" id="moSt">INTERFERENCE &mdash; NOBODY IS WRONG</span>
+    </div>
+  </div>
+  <p class="note">שני <code style="font-family:'JetBrains Mono',monospace">repeating-linear-gradient</code> וסיבוב אחד. <b>אפס נכסים, אפס JS בזמן גלילה</b> &mdash; במסמך זה יונע ב-<code style="font-family:'JetBrains Mono',monospace">animation-timeline:view()</code>, כלומר על הקומפוזיטור, בלי לגעת בחוט הראשי בכלל. הערה טכנית שמצא החוקר: על רקע כהה <code style="font-family:'JetBrains Mono',monospace">multiply</code> מחזיר שחור ולכן חסר תועלת &mdash; המצב הנכון כאן הוא <code style="font-family:'JetBrains Mono',monospace">screen</code>, שמצטבר לאור.</p>
+</section>
 
 <section class="ex" id="ex29" style="padding-top:40px">
   <div class="exh"><span class="exn">29</span><span class="ext">הסרט &mdash; המסמך כולו הוא גליל אחד</span><span class="exs">THE REEL &middot; DOCUMENT-SCALE</span></div>
@@ -2075,6 +2190,107 @@ document.getElementById('abPaper').addEventListener('click',function(){abCard.cl
     tabs.forEach(function(o){o.classList.remove('on')});t.classList.add('on');draw(t.getAttribute('data-x'));
   })});
   draw('full');
+})();
+</script>
+
+<script>
+/* ===== EX32 — the cyclegraph: two long exposures ===== */
+(function(){
+  var A=document.getElementById('cgA'),B=document.getElementById('cgB');
+  if(!A||!B)return;
+  var ca=A.getContext('2d'),cb=B.getContext('2d'),W=A.width,H=A.height;
+  var raf=null;
+  function ground(c){c.setTransform(1,0,0,1,0,0);c.globalCompositeOperation='source-over';
+    c.fillStyle='#101116';c.fillRect(0,0,W,H);c.globalCompositeOperation='lighter'}
+  /* deterministic noise so every exposure is identical and screenshot-reproducible */
+  function mk(seed){var t=seed>>>0;return function(){t+=0x6D2B79F5;var r=t;
+    r=Math.imul(r^r>>>15,r|1);r^=r+Math.imul(r^r>>>7,r|61);return((r^r>>>14)>>>0)/4294967296}}
+  var HERO=[],SYS=[];
+  (function build(){
+    /* THE HERO — one person doing every path themselves. Sharp reversals, tight
+       clusters, and long darts across the plate: the shape of unaided effort. */
+    var r=mk(0x51ED),x=W*0.5,y=H*0.5,ang=0;
+    for(var i=0;i<17000;i++){
+      if(i%210===0){ang=r()*Math.PI*2}                 /* another interruption */
+      ang+=(r()-0.5)*2.7;
+      var st=(i%210<14)? 14+r()*22 : 3+r()*9;          /* the dart, then the fiddling */
+      x+=Math.cos(ang)*st;y+=Math.sin(ang)*st;
+      if(x<40||x>W-40){ang=Math.PI-ang;x=x<40?40:W-40}
+      if(y<40||y>H-40){ang=-ang;y=y<40?40:H-40}
+      HERO.push(x,y);
+    }
+    /* THE SYSTEM — one parametric loop, traversed forty times, 1% disorder */
+    var r2=mk(0x5157),cx=W*0.5,cy=H*0.5,RX=W*0.19,RY=H*0.22;
+    for(var L=0;L<40;L++){
+      for(var k=0;k<=130;k++){
+        var t=k/130*Math.PI*2;
+        var px=cx+Math.cos(t)*RX+Math.cos(t*2)*RX*0.30;
+        var py=cy+Math.sin(t)*RY-Math.sin(t*3)*RY*0.14;
+        px+=(r2()-0.5)*RX*0.055;py+=(r2()-0.5)*RY*0.055;
+        SYS.push(px,py);
+      }
+    }
+  })();
+  function run(){
+    if(raf)cancelAnimationFrame(raf);
+    ground(ca);ground(cb);
+    var i=0,j=0,PA=Math.ceil(HERO.length/2/170),PB=Math.ceil(SYS.length/2/170);
+    ca.lineCap=cb.lineCap='round';
+    function step(){
+      var n;
+      for(n=0;n<PA&&i<HERO.length/2-1;n++,i++){
+        ca.strokeStyle='rgba(47,179,128,.075)';ca.lineWidth=1.1;
+        ca.beginPath();ca.moveTo(HERO[i*2],HERO[i*2+1]);ca.lineTo(HERO[i*2+2],HERO[i*2+3]);ca.stroke();
+      }
+      for(n=0;n<PB&&j<SYS.length/2-1;n++,j++){
+        if((j+1)%131===0){j++;continue}                     /* do not join loop ends */
+        cb.strokeStyle='rgba(47,179,128,.105)';cb.lineWidth=1.5;
+        cb.beginPath();cb.moveTo(SYS[j*2],SYS[j*2+1]);cb.lineTo(SYS[j*2+2],SYS[j*2+3]);cb.stroke();
+      }
+      if(i<HERO.length/2-1||j<SYS.length/2-1)raf=requestAnimationFrame(step);else raf=null;
+    }
+    step();
+  }
+  window.__cgAll=function(){if(raf)cancelAnimationFrame(raf);raf=null;ground(ca);ground(cb);
+    ca.lineCap=cb.lineCap='round';var n;
+    ca.strokeStyle='rgba(47,179,128,.075)';ca.lineWidth=1.1;
+    for(n=0;n<HERO.length/2-1;n++){ca.beginPath();ca.moveTo(HERO[n*2],HERO[n*2+1]);ca.lineTo(HERO[n*2+2],HERO[n*2+3]);ca.stroke()}
+    cb.strokeStyle='rgba(47,179,128,.105)';cb.lineWidth=1.5;
+    for(n=0;n<SYS.length/2-1;n++){if((n+1)%131===0)continue;cb.beginPath();cb.moveTo(SYS[n*2],SYS[n*2+1]);cb.lineTo(SYS[n*2+2],SYS[n*2+3]);cb.stroke()}};
+  document.getElementById('cgGo').addEventListener('click',run);
+  run();
+})();
+/* ===== EX33 — remove the author ===== */
+(function(){
+  var sl=document.getElementById('raS'),st=document.getElementById('raStage'),
+      v=document.getElementById('raV'),tst=document.getElementById('raTest');
+  if(!sl||!st)return;
+  function draw(){
+    var p=+sl.value/100;
+    /* the lift runs 0 -> 0.7, the closing line arrives after it has settled */
+    var au=Math.min(1,p/0.7), t=p<0.78?0:Math.min(1,(p-0.78)/0.22);
+    st.style.setProperty('--au',au.toFixed(3));
+    tst.style.setProperty('--tst',t.toFixed(3));
+    v.textContent=Math.round(p*100)+'%';
+  }
+  sl.addEventListener('input',draw);draw();
+})();
+/* ===== EX34 — the moire resolving ===== */
+(function(){
+  var sl=document.getElementById('moS'),b=document.getElementById('moB'),
+      v=document.getElementById('moV'),a=document.getElementById('moA'),stt=document.getElementById('moSt');
+  if(!sl||!b)return;
+  function draw(){
+    var p=+sl.value/100, ang=7*(1-p);
+    b.style.setProperty('--ang',ang.toFixed(2)+'deg');
+    v.textContent=ang.toFixed(1)+'\u00B0';
+    a.textContent='OFFSET '+ang.toFixed(1)+'\u00B0';
+    stt.textContent = ang>4.2 ? 'INTERFERENCE \u2014 NOBODY IS WRONG'
+                    : ang>1.2 ? 'CONVERGING \u2014 SAME NUMBER, SAME CADENCE'
+                    : ang>0.15 ? 'ALMOST IN REGISTER'
+                    : 'IN REGISTER \u2014 THE INTERFERENCE IS GONE';
+  }
+  sl.addEventListener('input',draw);draw();
 })();
 </script>
 </body>
