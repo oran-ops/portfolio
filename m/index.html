@@ -2165,22 +2165,31 @@ footer::after{right:0}
    re-declared here for colour and shadow only - transform and opacity are not in
    it and stay exactly as instant as the engine needs them to be. */
 .case .folder{transition:background-color .85s cubic-bezier(.4,0,.2,1),box-shadow .85s!important}
-.case .folder.lampon{background-color:#0A0B0D;
+.case .folder.lampon{background-color:#0E0A18;
+  /* A UV tube leaks visible light around 400nm, so the ground under it is never neutral
+     black - it is violet. The first layer is the lamp's cone falling from the top left,
+     the second the ambient wash, the third the paper's own optical brighteners, which
+     fluoresce faintly blue-white while the room around them does not. */
   background-image:
-    linear-gradient(180deg,rgba(222,231,250,.052) 0%,rgba(222,231,250,.030) 46%,rgba(222,231,250,.014) 100%),
-    radial-gradient(150% 96% at 24% -8%,rgba(226,234,252,.055),rgba(226,234,252,.020) 58%,transparent 100%),
-    radial-gradient(120% 70% at 50% 42%,rgba(214,226,255,.055),transparent 62%);
-  box-shadow:inset 0 0 74px rgba(0,0,0,.34),inset 0 0 22px rgba(0,0,0,.20);
+    radial-gradient(128% 82% at 22% -12%,rgba(123,92,230,.30),rgba(123,92,230,.10) 44%,transparent 76%),
+    radial-gradient(150% 100% at 50% 118%,rgba(24,14,46,.72),transparent 62%),
+    repeating-linear-gradient(101deg,rgba(155,168,222,.035) 0 1px,transparent 1px 4px),
+    linear-gradient(180deg,rgba(150,130,235,.045) 0%,rgba(150,130,235,.022) 52%,rgba(150,130,235,.010) 100%);
+  box-shadow:inset 0 0 84px rgba(6,2,18,.52),inset 0 0 26px rgba(6,2,18,.30);
   /* the whole palette is re-pointed at silver for the duration of the exposure.
      --fc catches the tab, the band, the zone numerals, the diamonds, the rules
      and the ticks; --emb / --brass / --ice catch the handful of places that
      reach for the accent directly (the STARTING POINT header and its 07 gap
      glyphs among them). One declaration block, no colour left in the negative. */
-  --fc:#E6EAF6;--emb:#E6EAF6;--brass:#E6EAF6;--ice:#E6EAF6;
-  --emb-dim:rgba(230,234,246,.10);--ice-dim:rgba(230,234,246,.12)}
+  /* Ordinary printing ink does not fluoresce. Under the lamp the whole daylight palette
+     therefore RECEDES to a dim violet instead of inverting to silver - and that is the
+     entire point of the change: only what was hidden is allowed to be bright. */
+  --fc:#7F87CE;--emb:#7F87CE;--brass:#7F87CE;--ice:#7F87CE;
+  --emb-dim:rgba(127,135,206,.10);--ice-dim:rgba(127,135,206,.12)}
 /* the punch rail is daylight furniture; under the lamp the film edge replaces it */
 .case .folder .frail{transition:opacity .6s}
-.case .folder.lampon .frail{opacity:0}
+/* the punch rail is paper, and paper fluoresces - it stays, faintly */
+.case .folder.lampon .frail{opacity:.34}
 /* the rebates are sized to the padding the folder ALREADY has - 92px of rail on
    the left, 38px on the right - so switching the lamp on reflows nothing. Not one
    line of the case text moves. */
@@ -2188,22 +2197,27 @@ footer::after{right:0}
 .case .folder .vfilm.l{width:56px;border-radius:0 0 0 18px}
 .case .folder .vfilm.r{width:36px;border-radius:0 18px 18px 0}
 .case .folder .vfilm.r::before,.case .folder .vfilm.r::after{width:13px;background-size:13px 28px}
-.case .folder.lampon .vfilm{opacity:1}
+/* a film rebate is film language and has no business under a UV lamp */
+.case .folder.lampon .vfilm{opacity:0}
 /* solid silver on near-black - the inversion the tab and the band are asked for.
    --fc does the work everywhere it is read; medcoin hard-codes its band, so it
    is the one case that needs to be told twice. */
 .case .folder .clsband,.case .folder .clsctl,.case .folder .tabrow .tA{
   transition:background-color .85s,color .85s,border-color .85s}
-.case .folder.lampon .clsband{color:#0A0B0D}
-.case .folder.lampon .clsctl{color:#8D93A2;border-bottom-color:rgba(237,239,246,.18)}
-#medcoin .folder.lampon .clsband{background:#E6EAF6;color:#0A0B0D}
-#medcoin .folder.lampon .clsctl{color:#8D93A2;border-bottom-color:rgba(237,239,246,.18)}
-#medcoin .folder.lampon .pmark{color:#E6EAF6}
+/* the classification band is ordinary print too. Under the lamp it must recede with
+   everything else, or it becomes the brightest thing on a sheet where only the
+   fluorescing copy is allowed to be bright. */
+.case .folder.lampon .clsband{color:#9AA2E4}
+.case .folder.lampon .clsctl{color:#6A6296;border-bottom-color:rgba(123,92,230,.22)}
+#medcoin .folder.lampon .clsband{color:#9AA2E4}
+#medcoin .folder.lampon .clsctl{color:#6A6296;border-bottom-color:rgba(123,92,230,.22)}
+#medcoin .folder.lampon .pmark{color:#7F87CE}
 /* a negative has no colour in it. The charts are the last coloured ink in the
    file, so they are drained too - cheap, contained, and it keeps the promise. */
 .case .folder svg{transition:filter .85s}
-.case .folder.lampon svg{filter:grayscale(1) brightness(1.28)}
-.case .folder.lampon .an-note{border-left-color:#E6EAF6}
+/* the charts are ordinary ink too: they go dark and violet, not silver */
+.case .folder.lampon svg{filter:grayscale(1) brightness(.46) sepia(1) hue-rotate(212deg) saturate(3.1)}
+.case .folder.lampon .an-note{border-left-color:#6A6296}
 
 /* ---- THE LAMP BAND ----
    R21. The owner tested the live build on two devices and gave one verdict:
@@ -2258,21 +2272,22 @@ footer::after{right:0}
 .lampband:hover .lcone{opacity:.95}
 .lampband:focus-visible{outline:1px dashed rgba(242,241,237,.6);outline-offset:5px}
 /* lit: the bulb is the only light source left in a black-and-white file */
-.case .folder.lampon .lampband .lbody{stroke:#EDEFF6}
-.case .folder.lampon .lampband .lbulb{fill:#FFFFFF;filter:drop-shadow(0 0 5px rgba(214,226,255,.95))}
+/* lit: a UV tube glows violet, and its cone is violet too */
+.case .folder.lampon .lampband .lbody{stroke:#C3B2FF}
+.case .folder.lampon .lampband .lbulb{fill:#D9C9FF;filter:drop-shadow(0 0 7px rgba(150,110,255,.95))}
 .case .folder.lampon .lampband .lcone{opacity:1;animation:none}
-.case .folder.lampon .lampband .ls1{stop-color:#E4EBFF;stop-opacity:1}
-.case .folder.lampon .lampband .ls2{stop-color:#E4EBFF;stop-opacity:.3}
-.case .folder.lampon .lampband .ls3{stop-color:#E4EBFF;stop-opacity:0}
-.case .folder.lampon .lampband .lh1{stop-color:#F2F6FF;stop-opacity:.95}
-.case .folder.lampon .lampband .lh2{stop-color:#F2F6FF;stop-opacity:0}
+.case .folder.lampon .lampband .ls1{stop-color:#9E7BFF;stop-opacity:1}
+.case .folder.lampon .lampband .ls2{stop-color:#9E7BFF;stop-opacity:.32}
+.case .folder.lampon .lampband .ls3{stop-color:#9E7BFF;stop-opacity:0}
+.case .folder.lampon .lampband .lh1{stop-color:#D2BEFF;stop-opacity:.95}
+.case .folder.lampon .lampband .lh2{stop-color:#D2BEFF;stop-opacity:0}
 /* the arrow is the sentence "press this" - drawn on, not decorative. Scaled to
    the new headline: it has to look like it belongs to 20px type, not to 13.5px */
 .lamparrow{flex:none;display:flex;align-items:center;gap:0;margin:0 15px 0 11px;
   color:var(--fc,var(--emb));transition:color .7s,opacity .7s;opacity:.95;position:relative;z-index:2}
 .lamparrow i{font-style:normal;font-size:19px;line-height:1;font-weight:700;margin-right:-3px}
 .lamparrow s{display:block;width:46px;height:2px;background:currentColor;text-decoration:none;border-radius:1px}
-.case .folder.lampon .lamparrow{color:#C9D3EE;opacity:.8}
+.case .folder.lampon .lamparrow{color:#A493EA;opacity:.8}
 .lampband:hover .lamparrow{opacity:1}
 .lampwords{display:flex;flex-direction:column;align-items:flex-start;gap:2px;min-width:0;
   position:relative;z-index:2}
@@ -2281,11 +2296,11 @@ footer::after{right:0}
   line-height:1.02;color:#FFFFFF;text-align:left;text-shadow:0 1px 2px rgba(0,0,0,.55);
   transition:color .6s}
 .lampband:hover .lampcall{color:#FFFFFF}
-.case .folder.lampon .lampcall{color:#F4F6FB}
+.case .folder.lampon .lampcall{color:#CFC2FF}
 /* kept, and now unmistakably subordinate: 20px against 8.5px */
 .lampsub{font-family:'JetBrains Mono',monospace;font-weight:600;font-size:8.5px;letter-spacing:.2em;
   line-height:1.2;color:#9EA0A6;transition:color .6s}
-.case .folder.lampon .lampsub{color:#8D93A2}
+.case .folder.lampon .lampsub{color:#6A6296}
 /* a switch should say which way it is thrown. Fills the right end of a strip that
    runs the full width of the file, and turns the band into a control with state. */
 .lampstate{margin-left:auto;flex:none;position:relative;z-index:2;
@@ -2302,23 +2317,26 @@ footer::after{right:0}
   transition:opacity .5s,transform .5s,max-height .65s cubic-bezier(.4,0,.2,1),margin-top .5s}
 .case .folder.lampon .devz{max-height:400px;opacity:1;margin-top:15px;transform:none;pointer-events:auto;
   transition-delay:calc(.16s + var(--dz,0)*.16s)}
+/* THE ONLY BRIGHT THING IN THE FILE. Fluorescing ink emits in its own colour, and ours is
+   the document's emerald pushed to where a UV lamp would take it - so the new state still
+   belongs to the palette instead of importing a purple theme. */
 .dv-k{display:block;font-family:'JetBrains Mono',monospace;font-weight:700;font-size:7.5px;letter-spacing:.28em;
-  color:#B9BECC;margin-bottom:6px}
-.dv-t{display:block;font-family:'Special Elite',monospace;font-size:14px;line-height:1.5;color:#F4F6FB;
-  text-shadow:0 0 16px rgba(214,226,255,.42),0 0 46px rgba(190,205,255,.16);margin-bottom:9px}
+  color:#57F5C4;text-shadow:0 0 12px rgba(87,245,196,.5);margin-bottom:6px}
+.dv-t{display:block;font-family:'Special Elite',monospace;font-size:14px;line-height:1.5;color:#A6FFE0;
+  text-shadow:0 0 15px rgba(87,245,196,.55),0 0 44px rgba(87,245,196,.20);margin-bottom:9px}
 .dv-b{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:5px}
 .dv-b li{position:relative;font-family:'Inter',sans-serif;font-size:13px;font-weight:400;line-height:1.5;
-  color:#D8DCE6;padding-left:15px;letter-spacing:.005em}
-.dv-b li::before{content:"";position:absolute;left:1px;top:.6em;width:5px;height:1px;background:#8D93A2}
-.dv-b li b{font-weight:700;color:#F2F4FA}
+  color:#8FEBCD;padding-left:15px;letter-spacing:.005em}
+.dv-b li::before{content:"";position:absolute;left:1px;top:.6em;width:5px;height:1px;background:#3FBF98}
+.dv-b li b{font-weight:700;color:#C8FFEC}
 .dv-b li em{font-style:normal;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;
-  letter-spacing:.06em;color:#EDEFF6}
+  letter-spacing:.06em;color:#7DFFD4}
 .lampsig{display:block;max-height:0;overflow:hidden;opacity:0;margin-top:0;padding-top:0;
   border-top:1px dashed rgba(237,239,246,0);position:relative;z-index:2;
-  font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:.2em;color:#8D93A2;text-align:right;
+  font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:.2em;color:#4FD3AA;text-align:right;
   transition:opacity .5s .7s,max-height .6s .55s,margin-top .5s .55s,padding-top .5s .55s,border-color .5s .55s}
 .case .folder.lampon .lampsig{opacity:.95;margin-top:18px;padding-top:10px;max-height:48px;
-  border-top-color:rgba(237,239,246,.2)}
+  border-top-color:rgba(87,245,196,.24)}
 
 /* FAILSAFE / REDUCED MOTION / STATIC - never leave a reader holding a card whose
    content is behind an animation that will not run. The file stays in DAYLIGHT
@@ -2605,6 +2623,29 @@ body.static .rxs::after{transform:scaleX(0)}
 #final .vc-s{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:.22em;color:#6B6E76;margin-top:12px;opacity:0;transition:opacity .6s .3s}
 #final .vcommit.sealed .vc-s{opacity:1}
 
+
+/* ---- UV INVARIANT ----
+   Under the lamp, nothing that is ordinary print may be the brightest thing on the sheet.
+   Three elements reach for the case accent directly rather than through --fc (the folder
+   tab, the classification band, and the arrow rule), so they are named here explicitly and
+   placed last in source order. Scoped to .lampon, which only ever lands on a case folder -
+   the vault cannot see any of this. */
+.folder.lampon .lamparrow s{background:#A493EA!important}
+
+/* ---- UV INVARIANT ----
+   The folder tab and the classification band never declare a colour: they read
+   `var(--fc,var(--emb))`. That is why no override on the consuming rule could win, at any
+   specificity, with or without !important - the value was arriving through the variable.
+   So the variable is rewritten on the elements themselves. Scoped to .lampon, which only
+   ever lands on a case folder; the vault cannot see this. */
+.case .folder.lampon .clsband,.case .folder.lampon .tabrow .tA{
+  --fc:#241C48;--emb:#241C48;--brass:#241C48;--ice:#241C48;
+  color:#9AA2E4;box-shadow:inset 0 0 0 1px rgba(123,92,230,.30);
+  /* and the transition has to go. The scrub loop touches these nodes every frame, which
+     restarts an .85s background transition before it can ever arrive - the variable was
+     right the whole time and the colour was simply frozen at 0% of the way there. */
+  transition:none!important}
+.case .folder.lampon .tabrow .tA .nm,.case .folder.lampon .tabrow .tA .fl{color:#9AA2E4}
 </style>
 <section class="sec" id="leadership" style="--fc:var(--emb)">
   <div class="secnum" aria-hidden="true">07</div>
@@ -4988,8 +5029,8 @@ CASES.forEach(function(id){
         '<em>03</em> dependencies resting on <em>09</em> builds and <em>06</em> outcomes']]
     ]
   };
-  var OFF='SWITCH ON THE LAMP',ON='SWITCH OFF THE LAMP',
-      OFFS='THIS FILE IS NOT FULLY EXPOSED',ONS='DEVELOPED · 03 ZONES ON RECORD';
+  var OFF='SWITCH ON THE UV LAMP',ON='SWITCH OFF THE UV LAMP',
+      OFFS='365nm · THIS FILE HOLDS MORE THAN THE PRINT',ONS='365nm · FLUORESCING · 03 ZONES';
   /* frame numbers run up the reel in file order and stop short of 26A/27A, which
      the closing section already occupies - one reel, no two frames alike */
   var FRAMES={xtix:[11,12],oasis:[14,15],eventer:[17,18],medcoin:[20,21]};
@@ -5063,7 +5104,7 @@ CASES.forEach(function(id){
 
     var call=b.querySelector('.lampcall'),sub=b.querySelector('.lampsub'),
         st=b.querySelector('.lampstate'),lit=false;
-    b.addEventListener('click',function(){
+        b.addEventListener('click',function(){
       lit=!lit;
       folder.classList.toggle('lampon',lit);
       call.textContent=lit?ON:OFF;
@@ -5531,6 +5572,8 @@ document.querySelectorAll('.redx').forEach(function(r){
   targets.forEach(function(t){io.observe(t)});
 })();
 </script>
+
+
 
 </body>
 </html>
