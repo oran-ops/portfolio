@@ -840,9 +840,12 @@ body.static #clearance,body.static #idlecue,body.failsafe #clearance,body.failsa
 
 <section class="sec" id="statement">
   <div class="pinh"><div class="pin"><div class="spine" aria-hidden="true"><div class="sp" style="background:var(--emb)"><span>FILE 01 &mdash; XTIX</span></div><div class="sp" style="background:var(--brass)"><span>FILE 02 &mdash; OASIS</span></div><div class="sp" style="background:var(--ice)"><span>FILE 03 &mdash; EVENTER</span></div><div class="sp" style="background:var(--ink)"><span>FILE 04 &mdash; MEDCOIN</span></div></div><div class="in">
-    <div class="memo" id="memoStamp">MEMO &middot; FROM THE ARCHIVE</div>
-    <div class="l1" id="stmt1">One intelligence built the world.</div>
-    <div class="l2" id="stmt2">Two will build the next.</div>
+    <div class="stfil" aria-hidden="true"><canvas id="stnf"></canvas></div>
+    <div class="sttxt">
+      <div class="memo" id="memoStamp">MEMO &middot; FROM THE ARCHIVE</div>
+      <div class="l1" id="stmt1">One intelligence built the world.</div>
+      <div class="l2" id="stmt2">Two will build the next.</div>
+    </div>
   </div></div></div>
 </section>
 
@@ -2841,6 +2844,36 @@ body.static .rg-ar,body.failsafe .rg-ar,html.preopen .rg-ar{animation:none!impor
 .hendflow{max-width:1180px;margin:0 auto;padding:34px 22px 8px}
 .hendflow .hcard.hend{width:auto;height:auto;flex:none;margin:0}
 @media (max-width:860px){.hendflow{padding:18px 18px 4px}}
+
+/* ================= THE STATEMENT =================
+   The sentence sits left-aligned with the filament beside it, and the pair is centred in
+   the frame - so the line reads as a line rather than as a poster. */
+#statement .in{display:flex;align-items:center;justify-content:center;
+  gap:clamp(16px,3vw,48px);max-width:1180px;text-align:left}
+#statement .stfil{position:relative;flex:0 0 min(38%,430px);height:min(54svh,440px);pointer-events:none}
+#statement .stfil canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+#statement .sttxt{flex:1 1 auto;min-width:0;text-align:left}
+#statement .l2{display:none}
+/* Fraunces' own exotic axes: WONK swaps in the splayed alternates, SOFT rounds the
+   terminals, and a display optical size deepens the contrast. No new font file. */
+#statement .l1{font-size:clamp(27px,4.4vw,52px);line-height:1.14;letter-spacing:-.024em;
+  min-height:2.3em;opacity:1;
+  font-variation-settings:'opsz' 144,'SOFT' 42,'WONK' 1;font-optical-sizing:none}
+#statement .l1 .sm-wd{display:inline-block;white-space:nowrap}
+#statement .l1 i{font-style:normal;display:inline-block;opacity:1;
+  transition:opacity .34s cubic-bezier(.4,0,.2,1),filter .34s cubic-bezier(.4,0,.2,1),
+             transform .34s cubic-bezier(.4,0,.2,1)}
+#statement .l1 i.out{opacity:0;filter:blur(6px);transform:translateY(-14px)}
+#statement .l1 i.inn{opacity:0;filter:blur(6px);transform:translateY(14px)}
+#statement .l1 i.em2{color:var(--emb)}
+/* the particle field's canvas has nothing left to draw here */
+#ai2c{display:none!important}
+@media (max-width:860px){
+  #statement .in{flex-direction:column;gap:8px}
+  #statement .stfil{flex:none;width:100%;height:clamp(180px,26svh,240px)}
+  #statement .l1{font-size:clamp(24px,7.4vw,38px);min-height:0}
+}
+@media (prefers-reduced-motion:reduce){#statement .l1 i{transition:none}}
 </style>
 <section class="sec" id="leadership" style="--fc:var(--emb)">
   <div class="secnum" aria-hidden="true">07</div>
@@ -3107,9 +3140,12 @@ function statement(y){
   }
   if(moved){
     for(var si=0;si<SPS.length;si++){var sq=eo(clamp((p-.02-si*.05)/.22));SPS[si].style.opacity=String(.2+.8*sq);SPS[si].style.transform='translateX(-50%) translateY('+((1-sq)*44)+'px)';}
-    words(W1,.05,.30);
   }
-  if(window.__ai2){window.__ai2(p);}else if(moved){words(W2,.40,.26);}
+    /* THE SENTENCE OWNS ITSELF NOW. It is no longer assembled out of particles and no
+       longer raised word by word: the two lines share one line and migrate into each
+       other, character by character. Not calling __ai2 is what stops the particle field
+       - it is driven, never self-running - and #ai2c is hidden so its last frame cannot
+       linger behind the type. */
   if(moved&&memo){
     var qq=eo(clamp((p-.70)/.14));
     memo.style.opacity=String(qq);
@@ -5842,6 +5878,136 @@ document.querySelectorAll('.redx').forEach(function(r){
     new IntersectionObserver(function(es){es[0].isIntersecting?start():stop()},{threshold:0.01}).observe(stage);
   }else start();
   apply();
+})();
+</script>
+
+<script>
+/* THE STATEMENT — the sentence migrates, and a filament drifts beside it.
+   The morph is exhibit 22's mechanic exactly: every character blurs out upward on a
+   stagger and the next sentence arrives from below on the same stagger, so the line
+   travels rather than being replaced. Words are wrapped so a line can only ever break
+   between them - splitting on characters alone lets the browser break inside a word. */
+(function(){
+  'use strict';
+  var el=document.getElementById('stmt1');
+  if(!el)return;
+  var reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var A='One intelligence built the world.',B='Two will build the next.';
+  var showingA=true,timer=null;
+  function render(txt,em){
+    el.innerHTML='';
+    var idx=0,words=txt.split(' ');
+    words.forEach(function(word,wi){
+      var wsp=document.createElement('span');wsp.className='sm-wd';
+      word.split('').forEach(function(ch){
+        var sp=document.createElement('i');
+        sp.textContent=ch;
+        if(em)sp.className='em2';
+        sp.style.transitionDelay=(idx++*9)+'ms';
+        wsp.appendChild(sp);
+      });
+      el.appendChild(wsp);
+      if(wi<words.length-1)el.appendChild(document.createTextNode(' '));
+    });
+  }
+  function swap(){
+    [].slice.call(el.querySelectorAll('i')).forEach(function(c){c.classList.add('out')});
+    setTimeout(function(){
+      showingA=!showingA;
+      render(showingA?A:B,!showingA);
+      var nc=[].slice.call(el.querySelectorAll('i'));
+      nc.forEach(function(c){c.classList.add('inn')});
+      void el.offsetWidth;
+      nc.forEach(function(c){c.classList.remove('inn')});
+    },430);
+  }
+  render(A,false);
+  function on(){if(!timer&&!reduced)timer=setInterval(swap,5000)}
+  function off(){if(timer){clearInterval(timer);timer=null}}
+  if(window.IntersectionObserver){
+    new IntersectionObserver(function(es){es[0].isIntersecting?on():off()},{threshold:0.05}).observe(el);
+  }else on();
+
+  /* ---- the filament: a wandering spine with a sheath of nodes around it, linked to
+     whatever is close in SPACE. A wave travels down the body and the whole thing tumbles
+     on two axes. Matte white, no shadowBlur and no bloom - both are expensive and both
+     are glossy. Zero frames when off screen. ---- */
+  var cv=document.getElementById('stnf');if(!cv)return;
+  var ctx=cv.getContext('2d'),W=0,H=0,DPR=Math.min(devicePixelRatio||1,1.75),live=false,raf=null,t=0;
+  var N=176,P=new Float32Array(N*3),SC=new Float32Array(N*3);
+  var PULSE=[];for(var q=0;q<22;q++)PULSE.push({a:0,b:0,p:q/22,s:0.010+(q%7)*0.0022});
+  function size(){
+    var r=cv.getBoundingClientRect();
+    W=Math.max(1,r.width);H=Math.max(1,r.height);
+    cv.width=Math.round(W*DPR);cv.height=Math.round(H*DPR);
+    ctx.setTransform(DPR,0,0,DPR,0,0);
+  }
+  function shape(tt){
+    for(var i=0;i<N;i++){
+      var u=i/(N-1);
+      var wav=Math.sin(u*7.4 - tt*2.35);
+      var sx=Math.sin(u*2.5+tt*0.42)*0.42 + wav*0.20 + Math.sin(u*5.1-tt*0.9)*0.07;
+      var sy=(u-0.5)*1.06 + Math.sin(u*3.2+tt*0.55)*0.13 + wav*0.055;
+      var sz=Math.cos(u*2.1+tt*0.37)*0.42 + Math.cos(u*6.6-tt*1.9)*0.15;
+      var taper=Math.sin(Math.PI*u);
+      var an=i*2.39996+tt*0.95;
+      var rr=(0.046+0.122*taper)*(0.62+0.38*Math.sin(i*1.27+tt*0.85));
+      P[i*3  ]=sx+Math.cos(an)*rr;
+      P[i*3+1]=sy+Math.sin(an*1.27)*rr*0.88;
+      P[i*3+2]=sz+Math.sin(an)*rr;
+    }
+  }
+  function body(){
+    t+=0.0062;shape(t);
+    ctx.clearRect(0,0,W,H);
+    var cx=W*0.50,cy=H*0.5,S=Math.min(W,H)*0.56,FOV=2.1;
+    var ry=t*0.30,cs=Math.cos(ry),sn=Math.sin(ry);
+    var rp=Math.sin(t*0.21)*0.30,cp=Math.cos(rp),sp2=Math.sin(rp);
+    for(var i=0;i<N;i++){
+      var x=P[i*3],y0=P[i*3+1],z0=P[i*3+2];
+      var y=y0*cp-z0*sp2, z=y0*sp2+z0*cp;
+      var rx=x*cs-z*sn, rz=x*sn+z*cs, k=FOV/(FOV+rz);
+      SC[i*3]=cx+rx*S*k; SC[i*3+1]=cy+y*S*k; SC[i*3+2]=k;
+    }
+    ctx.lineWidth=1;
+    for(var i=0;i<N;i++){
+      for(var j=i+1;j<Math.min(N,i+30);j++){
+        var dx=P[i*3]-P[j*3],dy=P[i*3+1]-P[j*3+1],dz=P[i*3+2]-P[j*3+2];
+        var d2=dx*dx+dy*dy+dz*dz;
+        if(j!==i+1 && d2>0.042)continue;
+        var f=j===i+1?1:(1-d2/0.042), kk=(SC[i*3+2]+SC[j*3+2])*0.5;
+        ctx.strokeStyle='rgba(242,241,237,'+(0.26*f*f*kk*kk).toFixed(3)+')';
+        ctx.beginPath();ctx.moveTo(SC[i*3],SC[i*3+1]);ctx.lineTo(SC[j*3],SC[j*3+1]);ctx.stroke();
+      }
+    }
+    for(var i=0;i<N;i++){
+      var kk=SC[i*3+2],r=0.5+kk*kk*2.1;
+      ctx.fillStyle='rgba(242,241,237,'+(0.30*kk*kk*kk).toFixed(3)+')';
+      ctx.beginPath();ctx.arc(SC[i*3],SC[i*3+1],r,0,6.284);ctx.fill();
+    }
+    for(var q=0;q<PULSE.length;q++){
+      var pu=PULSE[q];pu.p+=pu.s;
+      if(pu.p>=1){pu.p=0;pu.a=(q*7)%(N-2);pu.b=pu.a+1}
+      if(pu.b===0){pu.a=(q*7)%(N-2);pu.b=pu.a+1}
+      var ia=pu.a*3,ib=pu.b*3,e=pu.p;
+      var X=SC[ia]+(SC[ib]-SC[ia])*e, Y=SC[ia+1]+(SC[ib+1]-SC[ia+1])*e,
+          K=SC[ia+2]+(SC[ib+2]-SC[ia+2])*e;
+      var fade=Math.sin(e*3.1416);
+      ctx.fillStyle='rgba(255,255,255,'+(0.72*fade*K*K).toFixed(3)+')';
+      ctx.beginPath();ctx.arc(X,Y,1.5+K*1.1,0,6.284);ctx.fill();
+    }
+  }
+  function draw(){raf=null;if(!live)return;body();raf=requestAnimationFrame(draw)}
+  function start(){if(!live){live=true;if(!raf)raf=requestAnimationFrame(draw)}}
+  function stop(){live=false;if(raf){cancelAnimationFrame(raf);raf=null}}
+  size();body();
+  addEventListener('resize',function(e){
+    if(window.__mSoftRz&&window.__mSoftRz(e,function(){size();body()}))return;
+    size();body();
+  });
+  if(window.IntersectionObserver){
+    new IntersectionObserver(function(es){es[0].isIntersecting?start():stop()},{threshold:0.01}).observe(cv);
+  }else start();
 })();
 </script>
 
