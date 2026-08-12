@@ -939,14 +939,28 @@ body{overflow-x:clip}
   letter-spacing:.2em;color:#8A8E98;pointer-events:none;text-shadow:0 1px 6px #000}
 
 
-/* ============ EX35 — THE RING ============ */
-.rg-stage{position:relative;height:520px;overflow:hidden;border-radius:3px;
-  background:radial-gradient(120% 90% at 50% 42%,#22242B 0%,#15161B 46%,#0C0D11 100%);
-  perspective:1500px;perspective-origin:50% 44%;cursor:grab;touch-action:pan-y}
+/* ============ EX35 — THE APPROACH & THE RING ============ */
+.rg-outer{position:relative;height:540px;overflow:hidden;border-radius:3px;background:#0B0C10}
+.rg-track{position:absolute;inset:0;width:200%;display:grid;grid-template-columns:1fr 1fr;
+  transform:translateX(calc(var(--sx,0) * -50%))}
+.rg-panel{position:relative;overflow:hidden}
+/* --- the approach panel --- */
+.rg-intro{display:flex;align-items:center;padding:0 clamp(26px,5vw,64px);
+  background:radial-gradient(120% 90% at 22% 50%,#1C1E24 0%,#131419 56%,#0B0C10 100%)}
+.rg-itxt{max-width:430px;text-align:left;direction:ltr}
+.rg-ik{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.34em;color:var(--em)}
+.rg-ih{font-family:'Fraunces',serif;font-weight:800;font-size:clamp(24px,3.6vw,40px);line-height:1.14;
+  color:#F2F1ED;margin-top:16px;letter-spacing:-.012em}
+.rg-ip{font-family:'Inter',system-ui,sans-serif;font-size:13.5px;line-height:1.8;color:#9EA1A9;margin-top:16px}
+.rg-icue{margin-top:26px;display:inline-flex;align-items:center;gap:11px;
+  font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.24em;color:#6B6E76}
+.rg-icue b{display:inline-block;width:46px;height:1px;background:linear-gradient(90deg,#6B6E76,transparent)}
+/* --- the room --- */
+.rg-stage{position:absolute;inset:0;perspective:1500px;perspective-origin:50% 44%;cursor:grab;touch-action:pan-y;
+  background:radial-gradient(120% 90% at 50% 42%,#22242B 0%,#15161B 46%,#0C0D11 100%)}
 .rg-stage.drag{cursor:grabbing}
-/* the drafting floor — the single strongest depth cue in the whole demo */
-/* the plane the ring stands on. Shallower than instinct suggests: at 80deg the grid
-   compresses to nothing and reads as haze, so 68deg is what actually sells the floor. */
+.rg-horizon{position:absolute;left:0;right:0;top:0;height:70%;pointer-events:none;
+  background:linear-gradient(180deg,transparent 40%,rgba(233,231,223,.055) 88%,rgba(233,231,223,.085) 100%)}
 .rg-floor{position:absolute;left:50%;top:70%;width:1900px;height:1500px;margin-left:-950px;
   transform:rotateX(68deg);transform-origin:50% 0;pointer-events:none;
   background-image:repeating-linear-gradient(0deg,rgba(233,231,223,.20) 0 1px,transparent 1px 62px),
@@ -957,35 +971,72 @@ body{overflow-x:clip}
           mask-image:linear-gradient(180deg,#000 0%,rgba(0,0,0,.42) 38%,transparent 72%),
                      radial-gradient(60% 100% at 50% 0%,#000 0%,transparent 100%);
           mask-composite:intersect}
-/* a horizon: the room has a far wall, and it is what the fog resolves into */
-.rg-horizon{position:absolute;left:0;right:0;top:0;height:70%;pointer-events:none;
-  background:linear-gradient(180deg,transparent 40%,rgba(233,231,223,.055) 88%,rgba(233,231,223,.085) 100%)}
 .rg-pool{position:absolute;left:50%;top:58%;width:560px;height:190px;margin-left:-280px;pointer-events:none;
   background:radial-gradient(50% 50% at 50% 50%,rgba(233,231,223,.10),transparent 72%);filter:blur(6px)}
 .rg-ring{position:absolute;left:50%;top:50%;width:0;height:0;transform-style:preserve-3d;
   transform:rotateX(-7deg) rotateY(var(--spin,0deg))}
-.rg-card{position:absolute;width:212px;height:290px;margin:-172px 0 0 -106px;transform-style:preserve-3d;
+/* --- 1. the hub: a closed circle at the centre, and a spoke to every file --- */
+.rg-hub{position:absolute;left:50%;top:50%;width:112px;height:112px;margin:-56px 0 0 -56px;
+  transform:translateY(-204px) rotateY(calc(-1 * var(--spin,0deg))) rotateX(7deg);pointer-events:none}
+.rg-hub .h-o{position:absolute;inset:0;border-radius:50%;border:1px solid rgba(233,231,223,.42);
+  box-shadow:0 0 26px rgba(233,231,223,.10),inset 0 0 22px rgba(233,231,223,.06)}
+.rg-hub .h-m{position:absolute;inset:17px;border-radius:50%;border:1px dashed rgba(233,231,223,.24)}
+.rg-hub .h-i{position:absolute;inset:38px;border-radius:50%;border:1px solid rgba(233,231,223,.30);
+  background:radial-gradient(circle at 40% 34%,rgba(233,231,223,.14),rgba(233,231,223,.03) 70%,transparent)}
+.rg-hub .h-c{position:absolute;left:50%;top:50%;width:7px;height:7px;margin:-3.5px 0 0 -3.5px;border-radius:50%;
+  background:#E9E7DF;box-shadow:0 0 12px rgba(233,231,223,.55)}
+.rg-hub .h-t{position:absolute;left:0;right:0;top:calc(100% + 9px);text-align:center;
+  font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:.3em;color:#7E828C}
+.rg-spoke{position:absolute;left:50%;top:50%;width:256px;height:1px;margin:0 0 0 0;pointer-events:none;
+  transform-origin:0 50%;
+  transform:translateY(-204px) rotateY(calc(var(--a) + 90deg)) translateX(60px);
+  background:linear-gradient(90deg,rgba(233,231,223,.40),rgba(233,231,223,.10) 62%,rgba(233,231,223,0));
+  opacity:calc(.95 - var(--d,0)*.75)}
+.rg-spoke:after{content:"";position:absolute;right:0;top:-2px;width:5px;height:5px;border-radius:50%;
+  background:rgba(233,231,223,.7)}
+/* --- 2. the folders --- */
+.rg-card{position:absolute;width:214px;height:286px;margin:-170px 0 0 -107px;transform-style:preserve-3d;
   transform:rotateY(var(--a)) translateZ(320px);cursor:pointer}
-.rg-face{position:absolute;inset:0;border-radius:3px 10px 3px 3px;overflow:hidden;
-  background:linear-gradient(158deg,#DAD5C8 0%,#CFC9BA 52%,#C4BEAE 100%);
-  box-shadow:0 26px 46px rgba(0,0,0,calc(.42*(1 - var(--d,0)*.55))),
-             inset 0 1px 0 rgba(255,255,255,.34),inset 0 -1px 0 rgba(0,0,0,.16);
-  /* matte stock: fine fibre, never a highlight */
-  background-image:repeating-linear-gradient(96deg,rgba(255,255,255,.05) 0 1px,transparent 1px 3px),
-                   linear-gradient(158deg,#DAD5C8 0%,#CFC9BA 52%,#C4BEAE 100%);
-  filter:brightness(calc(1 - var(--d,0)*.62)) saturate(calc(1 - var(--d,0)*.45)) blur(calc(var(--d,0)*2.1px));
-  transition:none}
-.rg-tab{position:absolute;top:-19px;right:16px;width:74px;height:21px;border-radius:4px 4px 0 0;
+.rg-face{position:absolute;inset:0;border-radius:2px 12px 2px 2px;overflow:hidden;
+  background:linear-gradient(157deg,#E2DDD0 0%,#D5CFC0 46%,#C6C0AF 100%);
+  box-shadow:0 26px 46px rgba(0,0,0,calc(.44*(1 - var(--d,0)*.55))),
+             inset 0 1px 0 rgba(255,255,255,.42),inset 0 -1px 0 rgba(0,0,0,.17),
+             inset 0 0 0 1px rgba(35,33,28,.10);
+  filter:brightness(calc(1 - var(--d,0)*.62)) saturate(calc(1 - var(--d,0)*.45)) blur(calc(var(--d,0)*2.1px))}
+/* the guilloche rosette — the banknote/share-certificate lathe pattern, two gradients */
+.rg-guill{position:absolute;left:-18%;right:-18%;top:-8%;bottom:-8%;pointer-events:none;mix-blend-mode:multiply;
+  opacity:.22;
+  background:repeating-radial-gradient(circle at 50% 44%,transparent 0 6.5px,rgba(35,33,28,.55) 6.5px 7.1px),
+             repeating-conic-gradient(from 0deg at 50% 44%,transparent 0 2.6deg,rgba(35,33,28,.42) 2.6deg 3deg);
+  -webkit-mask-image:radial-gradient(closest-side at 50% 44%,#000 30%,transparent 86%);
+          mask-image:radial-gradient(closest-side at 50% 44%,#000 30%,transparent 86%)}
+/* fine laid-paper fibre, so the stock reads matte and never glossy */
+.rg-fibre{position:absolute;inset:0;pointer-events:none;opacity:.5;
+  background:repeating-linear-gradient(96deg,rgba(255,255,255,.10) 0 1px,transparent 1px 3px)}
+.rg-ghost{position:absolute;right:14px;bottom:-16px;font-family:'Fraunces',serif;font-weight:900;
+  font-size:124px;line-height:.78;color:rgba(35,33,28,.085);pointer-events:none;letter-spacing:-.05em}
+/* the punched filing edge */
+.rg-perf{position:absolute;left:0;top:0;bottom:0;width:16px;pointer-events:none;
+  background:repeating-radial-gradient(circle at 8px 13px,rgba(35,33,28,.30) 0 3.1px,transparent 3.4px 26px);
+  background-size:16px 26px}
+.rg-spine{position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--tc);opacity:.55}
+.rg-in{position:absolute;inset:0;padding:23px 19px 19px 27px;display:flex;flex-direction:column}
+.rg-no{font-family:'JetBrains Mono',monospace;font-weight:800;font-size:8px;letter-spacing:.30em;color:#7A756A}
+.rg-nm{font-family:'Fraunces',serif;font-weight:800;font-size:30px;line-height:1;color:#1F1D18;margin-top:10px;
+  letter-spacing:-.022em}
+.rg-rule{height:1px;background:#1F1D18;opacity:.22;margin:14px 0 12px}
+.rg-ct{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:.17em;color:#6E6A5E;line-height:1.95}
+/* a blind-embossed seal: no colour, only relief */
+.rg-seal{position:absolute;left:27px;bottom:17px;width:50px;height:50px;border-radius:50%;pointer-events:none;
+  border:1px solid rgba(35,33,28,.20);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.5),inset 0 -1px 0 rgba(35,33,28,.14),
+             0 1px 0 rgba(255,255,255,.42);
+  background:repeating-conic-gradient(from 0deg at 50% 50%,transparent 0 8deg,rgba(35,33,28,.10) 8deg 9deg)}
+.rg-seal:after{content:"";position:absolute;inset:9px;border-radius:50%;border:1px dashed rgba(35,33,28,.22)}
+.rg-tab{position:absolute;top:-19px;right:16px;width:76px;height:21px;border-radius:4px 4px 0 0;
   background:var(--tc);opacity:calc(.9 - var(--d,0)*.72);
-  box-shadow:0 -2px 5px rgba(0,0,0,.30);
+  box-shadow:0 -2px 5px rgba(0,0,0,.30),inset 0 1px 0 rgba(255,255,255,.24);
   filter:brightness(calc(1 - var(--d,0)*.62)) saturate(calc(.70 - var(--d,0)*.45)) blur(calc(var(--d,0)*2.1px))}
-.rg-in{position:absolute;inset:0;padding:22px 18px;display:flex;flex-direction:column}
-.rg-no{font-family:'JetBrains Mono',monospace;font-weight:800;font-size:8.5px;letter-spacing:.28em;color:#6E6A5E}
-.rg-nm{font-family:'Fraunces',serif;font-weight:800;font-size:26px;line-height:1.02;color:#23211C;margin-top:9px;letter-spacing:-.01em}
-.rg-ct{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:.16em;color:#7A756A;margin-top:8px;line-height:1.75}
-.rg-rule{height:1px;background:#23211C;opacity:.16;margin:12px 0 0}
-.rg-fact{margin-top:auto;font-family:'Inter',system-ui,sans-serif;font-size:11.5px;line-height:1.5;color:#3B372F}
-.rg-spine{position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--tc);opacity:.5}
 .rg-sh{position:absolute;left:50%;top:50%;width:250px;height:74px;margin:-1px 0 0 -125px;pointer-events:none;
   transform:rotateY(var(--a)) translateZ(320px) translateY(120px) rotateX(90deg) translateZ(1px);
   background:radial-gradient(50% 50% at 50% 42%,rgba(0,0,0,.78),rgba(0,0,0,.34) 46%,transparent 76%);
@@ -995,33 +1046,30 @@ body{overflow-x:clip}
 .rg-hn{font-family:'Fraunces',serif;font-weight:800;font-size:19px;color:#E9E7DF;margin-top:5px}
 .rg-hint{position:absolute;right:16px;bottom:14px;font-family:'JetBrains Mono',monospace;font-size:8px;
   letter-spacing:.22em;color:#5A5E68;pointer-events:none}
-.rg-enter{position:absolute;right:16px;top:16px;font-family:'JetBrains Mono',monospace;font-weight:700;
-  font-size:9px;letter-spacing:.22em;color:#0C0D11;background:#E9E7DF;border:0;border-radius:3px;
-  padding:8px 13px;cursor:pointer;opacity:.94}
-.rg-enter:hover{background:#fff}
-@media (max-width:620px){.rg-stage{height:430px;perspective:1100px}
-  .rg-card{width:168px;height:236px;margin:-140px 0 0 -84px;transform:rotateY(var(--a)) translateZ(250px)}
-  .rg-sh{transform:rotateY(var(--a)) translateZ(250px) translateY(96px) rotateX(90deg)}
-  .rg-nm{font-size:21px}}
-/* ============ EX36 — STATEMENT + NEURAL FILAMENT ============ */
+@media (max-width:620px){.rg-outer{height:460px}.rg-stage{perspective:1100px}
+  .rg-card{width:170px;height:232px;margin:-138px 0 0 -85px;transform:rotateY(var(--a)) translateZ(248px)}
+  .rg-sh{transform:rotateY(var(--a)) translateZ(248px) translateY(96px) rotateX(90deg)}
+  .rg-spoke{width:196px}.rg-hub{width:92px;height:92px;margin:-46px 0 0 -46px}
+  .rg-nm{font-size:24px}.rg-ghost{font-size:96px}}
+/* ============ EX36 — STATEMENT (exhibit 22's mechanic) + FILAMENT ============ */
 .sm-stage{position:relative;background:radial-gradient(110% 80% at 26% 50%,#1D1F25 0%,#141519 55%,#0D0E12 100%);
-  border-radius:3px;overflow:hidden;min-height:390px;display:grid;grid-template-columns:minmax(0,44%) minmax(0,56%);
+  border-radius:3px;overflow:hidden;min-height:400px;display:grid;grid-template-columns:minmax(0,44%) minmax(0,56%);
   align-items:center;gap:8px;direction:ltr}
-.nf-holder{position:relative;height:390px}
+.nf-holder{position:relative;height:400px}
 .nf-holder canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
-.sm-txt{padding:34px 36px 34px 8px;text-align:left}
+.sm-txt{padding:34px 40px 34px 8px;text-align:left}
 .sm-k{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.34em;color:#6B6E76}
-.sm-line{font-family:'Fraunces',serif;font-weight:700;font-size:clamp(20px,3.1vw,33px);line-height:1.24;
-  color:#F2F1ED;margin-top:15px;letter-spacing:-.008em}
-.sm-w{position:relative;display:inline-block;white-space:pre;overflow:hidden;vertical-align:top;line-height:inherit}
-.sm-w.old{color:#8A8E98}
-.sm-w.old:after{content:"";position:absolute;left:0;top:52%;height:1.5px;background:#C0392B;
-  width:calc(var(--k,0)*100%);opacity:.95}
-.sm-cur{display:inline-block;width:2px;height:.94em;background:var(--em);vertical-align:-.10em;
-  opacity:var(--cur,0);margin-left:1px}
-.sm-sub{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.2em;color:#5A5E68;margin-top:20px}
+/* exhibit 22, verbatim mechanic: per-character blur migration on a stagger */
+.sm-line{font-family:'Fraunces',serif;font-weight:800;font-size:clamp(21px,3.3vw,36px);line-height:1.22;
+  color:#F2F1ED;margin-top:17px;letter-spacing:-.012em;min-height:2.5em}
+.sm-line .sm-wd{display:inline-block;white-space:nowrap}
+.sm-line i{font-style:normal;display:inline-block;
+  transition:opacity .5s cubic-bezier(.4,0,.2,1),filter .5s cubic-bezier(.4,0,.2,1),transform .5s cubic-bezier(.4,0,.2,1)}
+.sm-line i.out{opacity:0;filter:blur(6px);transform:translateY(-14px)}
+.sm-line i.inn{opacity:0;filter:blur(6px);transform:translateY(14px)}
+.sm-line i.em2{color:var(--em)}
 @media (max-width:760px){.sm-stage{grid-template-columns:1fr;min-height:0}
-  .nf-holder{height:230px}.sm-txt{padding:6px 24px 30px}}
+  .nf-holder{height:240px}.sm-txt{padding:6px 24px 30px}}
 
 </style>
 </head>
@@ -1069,44 +1117,58 @@ body{overflow-x:clip}
 
 
 
+
 <section class="ex" id="ex35" style="padding-top:40px">
-  <div class="exh"><span class="exn">35</span><span class="ext">הטבעת &mdash; ארבעת התיקים במרחב</span><span class="exs">CSS 3D &middot; NO LIBRARY &middot; NO ASSETS</span></div>
-  <p class="exd">חדר אפלולי, רצפת שרטוט שנמשכת לאופק, וארבע תיקיות עומדות על פטיפון. <b>גרור</b> כדי לסובב, או <b>לחץ על תיקייה</b> והטבעת מביאה אותה לחזית.
-  <br>הכל מט: אין ברק, אין השתקפות, אין זוהר. העומק לא מגיע מצבע אלא מ<b>ערפול אטמוספרי</b> &mdash; כרטיס שמתרחק מתעמעם, מאבד רוויה, ומטשטש קלות אל תוך הרקע. בדיוק מה שהעין עושה במרחב אמיתי.
-  <br><b>אין כאן Three.js ואין קנבס.</b> אלה ארבעה כרטיסי DOM אמיתיים על <code style="font-family:'JetBrains Mono',monospace">transform-style:preserve-3d</code> &mdash; הטקסט נבחר, הקישורים עובדים, המקלדת עובדת. אצל K95 הכל בתוך קנבס ולכן שום דבר מזה לא נכון שם.</p>
+  <div class="exh"><span class="exn">35</span><span class="ext">הגישה והטבעת &mdash; המסך זז הצידה אל העולם</span><span class="exs">CSS 3D &middot; NO LIBRARY &middot; NO ASSETS</span></div>
+  <p class="exd">הקורא מגיע מהפרק הקודם ופוגש <b>מלל בלבד</b>, מיושר לשמאל. הוא ממשיך לגלול &mdash; <b>והמסך נוסע הצידה</b> וחושף את החדר: ארבע התיקיות עומדות סביב טבעת, ובמרכזה גוף מעגלי סגור שקווים יוצאים ממנו אל כל תיקייה. הכל צף בחלל.
+  <br>גרור את המחוון כדי לעבור. בתוך העולם: <b>גרור לסובב</b>, או <b>לחץ על תיקייה</b> והטבעת מביאה אותה לחזית.</p>
+  <div class="ra-ctl">
+    <label>SCROLL &rarr;</label>
+    <input type="range" id="rgS" min="0" max="100" value="0">
+    <label id="rgV">APPROACH</label>
+  </div>
   <div class="demo dark" style="padding:0;overflow:hidden">
-    <div class="rg-stage" id="rgStage">
-      <div class="rg-horizon"></div><div class="rg-floor"></div><div class="rg-pool"></div>
-      <div class="rg-ring" id="rgRing"><div class="rg-sh" data-i="0" style="--a:0deg"></div><div class="rg-sh" data-i="1" style="--a:90deg"></div><div class="rg-sh" data-i="2" style="--a:180deg"></div><div class="rg-sh" data-i="3" style="--a:270deg"></div><div class="rg-card" data-i="0" style="--a:0deg;--tc:#2FB380"><span class="rg-tab"></span><div class="rg-face"><span class="rg-spine"></span><div class="rg-in"><div class="rg-no">FILE 01</div><div class="rg-nm">XTIX</div><div class="rg-ct">B2B SAAS &middot; TECH<br>E-TICKETS PLATFORM</div><div class="rg-rule"></div><div class="rg-fact">Strong vision. Strong product.<br>Zero commercial infrastructure.</div></div></div></div><div class="rg-card" data-i="1" style="--a:90deg;--tc:#E0A458"><span class="rg-tab"></span><div class="rg-face"><span class="rg-spine"></span><div class="rg-in"><div class="rg-no">FILE 02</div><div class="rg-nm">Oasis</div><div class="rg-ct">CEO MANDATE<br>SMART SHADING</div><div class="rg-rule"></div><div class="rg-fact">Not revenue &mdash; a profitable,<br>scalable commercial organization.</div></div></div></div><div class="rg-card" data-i="2" style="--a:180deg;--tc:#5E8FBF"><span class="rg-tab"></span><div class="rg-face"><span class="rg-spine"></span><div class="rg-in"><div class="rg-no">FILE 03</div><div class="rg-nm">Eventer</div><div class="rg-ct">SAAS &middot; EVENT-TECH<br>CROSS-FUNCTIONAL</div><div class="rg-rule"></div><div class="rg-fact">A commercial operation existed.<br>The job: sharpen execution.</div></div></div></div><div class="rg-card" data-i="3" style="--a:270deg;--tc:#C9C4B4"><span class="rg-tab"></span><div class="rg-face"><span class="rg-spine"></span><div class="rg-in"><div class="rg-no">FILE 04</div><div class="rg-nm">Medcoin</div><div class="rg-ct">CRYPTO FINTECH<br>FOUNDER</div><div class="rg-rule"></div><div class="rg-fact">A compliant, scalable<br>crypto-ATM network for Europe.</div></div></div></div></div>
-      <div class="rg-hud"><div class="rg-hl">ARCHIVE DRAWER C-01</div><div class="rg-hn" id="rgName">XTIX</div></div>
-      <button class="rg-enter" id="rgEnter">OPEN FILE &#8250;</button>
-      <span class="rg-hint">DRAG TO TURN &middot; CLICK A FILE</span>
+    <div class="rg-outer">
+      <div class="rg-track" id="rgTrack">
+        <div class="rg-panel rg-intro">
+          <div class="rg-itxt">
+            <div class="rg-ik">04 &middot; THE DRAWER</div>
+            <div class="rg-ih">Four files.<br>One operating system.</div>
+            <div class="rg-ip">Different businesses, different stages, different problems. The same method underneath all four &mdash; which is the only claim in this document that matters.</div>
+            <div class="rg-icue"><b></b>KEEP SCROLLING</div>
+          </div>
+        </div>
+        <div class="rg-panel">
+          <div class="rg-stage" id="rgStage">
+            <div class="rg-horizon"></div><div class="rg-floor"></div><div class="rg-pool"></div>
+            <div class="rg-ring" id="rgRing"><div class="rg-spoke" data-i="0" style="--a:0deg"></div><div class="rg-spoke" data-i="1" style="--a:90deg"></div><div class="rg-spoke" data-i="2" style="--a:180deg"></div><div class="rg-spoke" data-i="3" style="--a:270deg"></div><div class="rg-sh" data-i="0" style="--a:0deg"></div><div class="rg-sh" data-i="1" style="--a:90deg"></div><div class="rg-sh" data-i="2" style="--a:180deg"></div><div class="rg-sh" data-i="3" style="--a:270deg"></div><div class="rg-card" data-i="0" style="--a:0deg;--tc:#2FB380"><span class="rg-tab"></span><div class="rg-face"><span class="rg-guill"></span><span class="rg-fibre"></span><span class="rg-ghost">01</span><span class="rg-perf"></span><span class="rg-spine"></span><div class="rg-in"><div class="rg-no">FILE 01</div><div class="rg-nm">XTIX</div><div class="rg-rule"></div><div class="rg-ct">B2B SAAS &middot; TECH<br>E-TICKETS PLATFORM</div></div><span class="rg-seal"></span></div></div><div class="rg-card" data-i="1" style="--a:90deg;--tc:#E0A458"><span class="rg-tab"></span><div class="rg-face"><span class="rg-guill"></span><span class="rg-fibre"></span><span class="rg-ghost">02</span><span class="rg-perf"></span><span class="rg-spine"></span><div class="rg-in"><div class="rg-no">FILE 02</div><div class="rg-nm">Oasis</div><div class="rg-rule"></div><div class="rg-ct">CEO MANDATE<br>SMART SHADING</div></div><span class="rg-seal"></span></div></div><div class="rg-card" data-i="2" style="--a:180deg;--tc:#5E8FBF"><span class="rg-tab"></span><div class="rg-face"><span class="rg-guill"></span><span class="rg-fibre"></span><span class="rg-ghost">03</span><span class="rg-perf"></span><span class="rg-spine"></span><div class="rg-in"><div class="rg-no">FILE 03</div><div class="rg-nm">Eventer</div><div class="rg-rule"></div><div class="rg-ct">SAAS &middot; EVENT-TECH<br>CROSS-FUNCTIONAL</div></div><span class="rg-seal"></span></div></div><div class="rg-card" data-i="3" style="--a:270deg;--tc:#C9C4B4"><span class="rg-tab"></span><div class="rg-face"><span class="rg-guill"></span><span class="rg-fibre"></span><span class="rg-ghost">04</span><span class="rg-perf"></span><span class="rg-spine"></span><div class="rg-in"><div class="rg-no">FILE 04</div><div class="rg-nm">Medcoin</div><div class="rg-rule"></div><div class="rg-ct">CRYPTO FINTECH<br>FOUNDER</div></div><span class="rg-seal"></span></div></div>
+              <div class="rg-hub"><span class="h-o"></span><span class="h-m"></span><span class="h-i"></span><span class="h-c"></span><span class="h-t">ONE SYSTEM</span></div>
+            </div>
+            <div class="rg-hud"><div class="rg-hl">ARCHIVE DRAWER C-01</div><div class="rg-hn" id="rgName">XTIX</div></div>
+            <span class="rg-hint">DRAG TO TURN &middot; CLICK A FILE</span>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
-  <p class="note">הסיבוב הוא <b>כתיבת סגנון אחת לפריים</b> על הטבעת, בתוספת ארוחת-עומק לכל אחד מארבעת הכרטיסים &mdash; חמש כתיבות סה"כ, ורק בזמן שהטבעת בתנועה. הרצפה, הבריכה והצללים סטטיים לחלוטין. במסמך זה יחליף את המגירה שנוסעת הצידה, ולכן <b>לא מוסיף אורך ולא מוסיף שער</b>: מי שרק גולל ממשיך לתיקים כרגיל.</p>
-  <p class="note" style="color:var(--redink)"><b>הערה טכנית שחשוב שתדע:</b> <code style="font-family:'JetBrains Mono',monospace">preserve-3d</code> נשבר אם יש <code style="font-family:'JetBrains Mono',monospace">filter</code> או <code style="font-family:'JetBrains Mono',monospace">overflow:hidden</code> על אב קדמון. במסמך יש לנו את שניהם באזורים מסוימים, ולכן המיקום המדויק של הטבעת בעץ הוא לא שרירותי &mdash; זה הדבר היחיד שצריך תשומת לב אמיתית ביישום.</p>
+  <p class="note"><b>המרכז</b> הוא טבעת סגורה שמסתובבת-נגד בדיוק כנגד סיבוב הפטיפון, ולכן היא <b>תמיד פונה אל הצופה</b> בזמן שהתיקיות מקיפות אותה &mdash; זה מה שגורם לה להיקרא כגוף במרכז החלל ולא כדיסק שמסתובב איתן. הקווים יוצאים ממנה אל כל תיקייה ודוהים עם העומק.
+  <br><b>העיצוב על התיקיות</b> הוא ג'ילושה &mdash; דפוס המחרטה של שטרות ותעודות מניה &mdash; משתי שכבות גרדיאנט בלבד, ועליו ספרה רפאים, קצה מנוקב לתיוק, וחותם מובלט שהוא <b>הבלטה בלבד, בלי צבע</b>. אפס נכסים.</p>
 </section>
 
 <section class="ex" id="ex36">
-  <div class="exh"><span class="exn">36</span><span class="ext">ההצהרה &mdash; במקום החלקיקים</span><span class="exs">SELF-CORRECTING LINE + NEURAL FILAMENT</span></div>
-  <p class="exd">החלקיקים יוצאים. במקומם המשפט <b>כותב את עצמו מחדש</b>: אינסטינקט ראשוני נמחק בקו אדום, מתכווץ, והמילה הנכונה מוקלדת במקומו. המסמך מגיע לתזה שלו <b>כתיקון</b>, לא כהכרזה &mdash; וזה בדיוק שלב 08 במערכת ההפעלה שלו, <i>שיפור מתמיד</i>.
-  <br>הטקסט ממורכז במסך אבל <b>מיושר לשמאל</b>, ולצדו נימה עצבית נעה בחלל &mdash; לבן מט, בלי זוהר ובלי ברק, נעה כל עוד היא בשדה הראייה.</p>
-  <div class="ra-ctl">
-    <label>SCROLL &rarr;</label>
-    <input type="range" id="smS" min="0" max="100" value="0">
-    <label id="smV">0%</label>
-  </div>
+  <div class="exh"><span class="exn">36</span><span class="ext">ההצהרה &mdash; במקום החלקיקים</span><span class="exs">EXHIBIT 22 MECHANIC + NEURAL FILAMENT</span></div>
+  <p class="exd">המנגנון הוא <b>בדיוק של מוצג 22</b>: אותיות המשפט הראשון מיטשטשות ועולות החוצה בהשהיה מדורגת תו-אחר-תו, והמשפט השני נכנס מלמטה באותה הדרגה. המשפט לא מוחלף &mdash; הוא <b>נודד</b>.
+  <br>הטקסט ממורכז במסך אך מיושר לשמאל, ולצדו הנימה העצבית &mdash; שדרגתי אותה: <b>דחוסה יותר, עם דופק שרץ לאורך הקשרים</b>, בדיוק כמו הירי בין נוירונים.</p>
   <div class="demo dark" style="padding:0;overflow:hidden">
     <div class="sm-stage" id="smStage">
       <div class="nf-holder"><canvas id="nfC"></canvas></div>
       <div class="sm-txt">
         <div class="sm-k">MEMO &middot; FROM THE ARCHIVE</div>
         <div class="sm-line" id="smLine"></div>
-        <div class="sm-sub">STATEMENT &mdash; REVISED ON THE RECORD</div>
       </div>
     </div>
   </div>
-  <p class="note">הנימה היא ~110 צמתים על מסלול תלת-ממדי נודד, מוקרנים בפרספקטיבה ומחוברים בקווים לשכנים <b>קרובים במרחב</b> &mdash; זה מה שנותן את מראה הרשת ולא רק שרשרת. קנבס דו-ממדי, בלי ספרייה, בלי <code style="font-family:'JetBrains Mono',monospace">shadowBlur</code> ובלי bloom (שניהם יקרים ושניהם מבריקים &mdash; ואנחנו מט). <b>שער <code style="font-family:'JetBrains Mono',monospace">IntersectionObserver</code>: אפס פריימים כשהיא מחוץ למסך</b>, וזה קריטי במסמך של 26,000 פיקסלים שבו היא נראית 4% מהזמן.</p>
+  <p class="note">הנימה: ~150 צמתים עטופים סביב עמוד-שדרה תלת-ממדי נודד, מחוברים לשכנים הקרובים <b>במרחב</b>, ומעליהם דופקים שנוסעים לאורך הקשרים ונדלקים בקצה. לבן מט לגמרי &mdash; בלי <code style="font-family:'JetBrains Mono',monospace">shadowBlur</code> ובלי bloom, ששניהם יקרים ושניהם מבריקים. קנבס דו-ממדי, בלי שום ספרייה, ושער <code style="font-family:'JetBrains Mono',monospace">IntersectionObserver</code> שמאפס אותה לחלוטין מחוץ למסך.</p>
 </section>
 
 <section class="ex" id="ex32" style="padding-top:40px">
@@ -2421,172 +2483,177 @@ document.getElementById('abPaper').addEventListener('click',function(){abCard.cl
 </script>
 
 <script>
-/* ===== EX35 — the ring ===== */
+/* ===== EX35 — the approach, then the ring ===== */
 (function(){
-  var stage=document.getElementById('rgStage'),ring=document.getElementById('rgRing');
-  if(!stage||!ring)return;
+  var track=document.getElementById('rgTrack'),stage=document.getElementById('rgStage'),
+      ring=document.getElementById('rgRing'),sl=document.getElementById('rgS'),vv=document.getElementById('rgV');
+  if(!track||!ring)return;
   var cards=[].slice.call(ring.querySelectorAll('.rg-card')),
       shads=[].slice.call(ring.querySelectorAll('.rg-sh')),
+      spokes=[].slice.call(ring.querySelectorAll('.rg-spoke')),
       nameEl=document.getElementById('rgName'),NAMES=['XTIX','Oasis','Eventer','Medcoin'];
-  var spin=0,target=0,vel=0,drag=false,px=0,moved=0,raf=null,idle=0,last=-1;
+  var spin=0,target=0,vel=0,drag=false,px=0,moved=0,idle=0,last=-1;
   function apply(){
     ring.style.setProperty('--spin',spin.toFixed(2)+'deg');
-    /* depth per card: 0 at the front, 1 at the back */
     for(var i=0;i<4;i++){
-      var ang=(spin+i*90)*Math.PI/180;
-      var d=(1-Math.cos(ang))/2;
-      cards[i].style.setProperty('--d',d.toFixed(3));
-      shads[i].style.setProperty('--d',d.toFixed(3));
-      /* the card nearest the front owns the z-order */
+      var ang=(spin+i*90)*Math.PI/180, d=(1-Math.cos(ang))/2, ds=d.toFixed(3);
+      cards[i].style.setProperty('--d',ds);
+      shads[i].style.setProperty('--d',ds);
+      spokes[i].style.setProperty('--d',ds);
       cards[i].style.zIndex=String(100-Math.round(d*100));
     }
     var f=((Math.round(-spin/90)%4)+4)%4;
     if(f!==last){last=f;nameEl.textContent=NAMES[f]}
   }
   function frame(){
-    raf=null;
     if(!drag){
       var diff=target-spin;
-      if(Math.abs(diff)>0.02||Math.abs(vel)>0.02){
-        vel=vel*0.86+diff*0.085;spin+=vel;
-      }else{ spin=target;vel=0;
-        idle++; if(idle>26){target-=0.12;spin=target} }   /* a slow, permanent drift */
+      if(Math.abs(diff)>0.02||Math.abs(vel)>0.02){vel=vel*0.86+diff*0.085;spin+=vel}
+      else{spin=target;vel=0;idle++;if(idle>26){target-=0.12;spin=target}}
     }
-    apply();
-    raf=requestAnimationFrame(frame);
+    apply();requestAnimationFrame(frame);
   }
-  function snap(){ target=Math.round(target/90)*90; idle=0 }
+  function snap(){target=Math.round(target/90)*90;idle=0}
   stage.addEventListener('pointerdown',function(e){
     drag=true;moved=0;px=e.clientX;idle=0;stage.classList.add('drag');
     stage.setPointerCapture&&stage.setPointerCapture(e.pointerId);
   });
   stage.addEventListener('pointermove',function(e){
-    if(!drag)return;
-    var dx=e.clientX-px;px=e.clientX;moved+=Math.abs(dx);
+    if(!drag)return;var dx=e.clientX-px;px=e.clientX;moved+=Math.abs(dx);
     spin+=dx*0.42;target=spin;apply();
   });
-  function release(){ if(!drag)return; drag=false;stage.classList.remove('drag');snap() }
-  stage.addEventListener('pointerup',release);
-  stage.addEventListener('pointercancel',release);
-  stage.addEventListener('pointerleave',release);
+  function release(){if(!drag)return;drag=false;stage.classList.remove('drag');snap()}
+  ['pointerup','pointercancel','pointerleave'].forEach(function(t){stage.addEventListener(t,release)});
   cards.forEach(function(c,i){
     c.addEventListener('click',function(){
-      if(moved>7)return;                      /* a drag must never also open a file */
-      var want=-i*90, cur=target;
+      if(moved>7)return;
+      var want=-i*90,cur=target;
       while(want-cur>180)want-=360; while(want-cur<-180)want+=360;
       target=want;idle=0;
     });
   });
-  stage.addEventListener('wheel',function(e){
-    if(Math.abs(e.deltaX)>Math.abs(e.deltaY)){e.preventDefault();target+=e.deltaX*0.35;idle=0}
-  },{passive:false});
-  document.getElementById('rgEnter').addEventListener('click',function(){
-    var b=this;b.textContent='ENTERING '+NAMES[last].toUpperCase()+'…';
-    setTimeout(function(){b.innerHTML='OPEN FILE ›'},1200);
-  });
+  /* the hand-off: the screen travels sideways from the text into the room */
+  function slide(){
+    var p=+sl.value/100;
+    track.style.setProperty('--sx',p.toFixed(4));
+    vv.textContent = p<0.06?'APPROACH' : p<0.94?'TRAVELLING…' : 'THE ROOM';
+  }
+  sl.addEventListener('input',slide);slide();
   apply();frame();
 })();
-/* ===== EX36 — the neural filament + the self-correcting line ===== */
+/* ===== EX36 — exhibit 22's morph, and the filament ===== */
 (function(){
+  /* ---- the sentence migrates, character by character (exhibit 22) ---- */
+  var el=document.getElementById('smLine');
+  if(el){
+    var reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var A='One intelligence built the world.', B='Two will build the next.';
+    var showingA=true;
+    /* exhibit 22 split on every character AND used a non-breaking space between words,
+       so the browser could not break at a space and broke INSIDE words instead
+       ("built th / e world"). Words are now unbreakable units; only the gaps break. */
+    function render(txt,em){
+      el.innerHTML='';
+      var idx=0, words=txt.split(' ');
+      words.forEach(function(word,wi){
+        var wsp=document.createElement('span');wsp.className='sm-wd';
+        word.split('').forEach(function(ch){
+          var sp=document.createElement('i');
+          sp.textContent=ch;
+          if(em)sp.className='em2';
+          sp.style.transitionDelay=(idx++*14)+'ms';
+          wsp.appendChild(sp);
+        });
+        el.appendChild(wsp);
+        if(wi<words.length-1)el.appendChild(document.createTextNode(' '));
+      });
+    }
+    function swap(){
+      [].slice.call(el.querySelectorAll('i')).forEach(function(c){c.classList.add('out')});
+      setTimeout(function(){
+        showingA=!showingA;
+        render(showingA?A:B,!showingA);
+        var nc=[].slice.call(el.querySelectorAll('i'));
+        nc.forEach(function(c){c.classList.add('inn')});
+        void el.offsetWidth;
+        nc.forEach(function(c){c.classList.remove('inn')});
+      },640);
+    }
+    render(A,false);
+    if(!reduced)setInterval(swap,6200);
+  }
+  /* ---- the filament ---- */
   var cv=document.getElementById('nfC');if(!cv)return;
   var ctx=cv.getContext('2d'),W=0,H=0,DPR=Math.min(devicePixelRatio||1,1.75),live=false,raf=null,t=0;
-  var N=112,P=new Float32Array(N*3),SC=new Float32Array(N*3);
+  var N=150,P=new Float32Array(N*3),SC=new Float32Array(N*3),ORD=new Int32Array(N);
+  var PULSE=[];for(var q=0;q<16;q++)PULSE.push({a:0,b:0,p:Math.random(),s:0.010+Math.random()*0.016});
   function size(){
     var r=cv.getBoundingClientRect();
     W=Math.max(1,r.width);H=Math.max(1,r.height);
     cv.width=Math.round(W*DPR);cv.height=Math.round(H*DPR);
     ctx.setTransform(DPR,0,0,DPR,0,0);
   }
-  /* a wandering filament: layered sines give a smooth 3D curve that never repeats
-     on a short cycle, and costs three trig calls per node instead of a noise field */
-  /* A wandering spine with a sheath of nodes around it. Consecutive nodes link along
-     the body; nodes on opposite sides of the tube link across it. That double set of
-     links is what reads as a network rather than a wire. */
   function shape(tt){
     for(var i=0;i<N;i++){
       var u=i/(N-1);
-      /* the spine: a slow 3D wander, never repeating on a short cycle */
       var sx=Math.sin(u*3.05+tt*0.44)*0.50 + Math.sin(u*6.9-tt*0.27)*0.15;
       var sy=(u-0.5)*1.06 + Math.sin(u*2.3+tt*0.36)*0.15;
       var sz=Math.cos(u*2.55+tt*0.39)*0.46 + Math.cos(u*5.4+tt*0.22)*0.14;
-      /* the sheath: golden-angle spread so the tube fills evenly and never clumps */
-      var an=i*2.39996+tt*0.85, rr=0.115*(0.5+0.5*Math.sin(i*1.31+tt*0.7));
+      var an=i*2.39996+tt*0.85, rr=0.108*(0.5+0.5*Math.sin(i*1.31+tt*0.7));
       P[i*3  ]=sx+Math.cos(an)*rr;
       P[i*3+1]=sy+Math.sin(an*1.27)*rr*0.85;
       P[i*3+2]=sz+Math.sin(an)*rr;
     }
   }
-  function draw(){
-    raf=null;if(!live)return;
+  function body(){
     t+=0.0062;shape(t);
     ctx.clearRect(0,0,W,H);
     var cx=W*0.50,cy=H*0.5,S=Math.min(W,H)*0.50,FOV=2.2;
     var ry=t*0.34,cs=Math.cos(ry),sn=Math.sin(ry);
     for(var i=0;i<N;i++){
       var x=P[i*3],y=P[i*3+1],z=P[i*3+2];
-      var rx=x*cs-z*sn, rz=x*sn+z*cs;
-      var k=FOV/(FOV+rz);
+      var rx=x*cs-z*sn, rz=x*sn+z*cs, k=FOV/(FOV+rz);
       SC[i*3]=cx+rx*S*k; SC[i*3+1]=cy+y*S*k; SC[i*3+2]=k;
+      ORD[i]=i;
     }
-    /* links: the chain, plus any node close in SPACE within a forward window.
-       The window keeps it O(n*k) and stops the two ends wiring across the room. */
     ctx.lineWidth=1;
     for(var i=0;i<N;i++){
       for(var j=i+1;j<Math.min(N,i+30);j++){
-        var dx=P[i*3]-P[j*3], dy=P[i*3+1]-P[j*3+1], dz=P[i*3+2]-P[j*3+2];
+        var dx=P[i*3]-P[j*3],dy=P[i*3+1]-P[j*3+1],dz=P[i*3+2]-P[j*3+2];
         var d2=dx*dx+dy*dy+dz*dz;
         if(j!==i+1 && d2>0.036)continue;
-        var f=j===i+1?1:(1-d2/0.036);
-        var kk=(SC[i*3+2]+SC[j*3+2])*0.5;
+        var f=j===i+1?1:(1-d2/0.036), kk=(SC[i*3+2]+SC[j*3+2])*0.5;
         ctx.strokeStyle='rgba(242,241,237,'+(0.26*f*f*kk*kk).toFixed(3)+')';
         ctx.beginPath();ctx.moveTo(SC[i*3],SC[i*3+1]);ctx.lineTo(SC[j*3],SC[j*3+1]);ctx.stroke();
       }
     }
     for(var i=0;i<N;i++){
-      var kk=SC[i*3+2], r=0.7+kk*1.5;
-      ctx.fillStyle='rgba(242,241,237,'+(0.34*kk*kk).toFixed(3)+')';
+      var kk=SC[i*3+2],r=0.6+kk*1.4;
+      ctx.fillStyle='rgba(242,241,237,'+(0.32*kk*kk).toFixed(3)+')';
       ctx.beginPath();ctx.arc(SC[i*3],SC[i*3+1],r,0,6.284);ctx.fill();
     }
-    raf=requestAnimationFrame(draw);
+    /* signals firing along the body — the thing that makes it read as neural */
+    for(var q=0;q<PULSE.length;q++){
+      var pu=PULSE[q];pu.p+=pu.s;
+      if(pu.p>=1){pu.p=0;pu.a=(Math.random()*(N-2))|0;pu.b=pu.a+1}
+      if(pu.b===0){pu.a=(Math.random()*(N-2))|0;pu.b=pu.a+1}
+      var ia=pu.a*3,ib=pu.b*3,e=pu.p;
+      var X=SC[ia]+(SC[ib]-SC[ia])*e, Y=SC[ia+1]+(SC[ib+1]-SC[ia+1])*e,
+          K=SC[ia+2]+(SC[ib+2]-SC[ia+2])*e;
+      var fade=Math.sin(e*3.1416);
+      ctx.fillStyle='rgba(255,255,255,'+(0.72*fade*K*K).toFixed(3)+')';
+      ctx.beginPath();ctx.arc(X,Y,1.5+K*1.1,0,6.284);ctx.fill();
+    }
   }
+  function draw(){raf=null;if(!live)return;body();raf=requestAnimationFrame(draw)}
   function start(){if(!live){live=true;if(!raf)raf=requestAnimationFrame(draw)}}
   function stop(){live=false;if(raf){cancelAnimationFrame(raf);raf=null}}
-  size();addEventListener('resize',function(){size()});
-  /* paint first, then let the observer be the thing that STOPS it — a canvas that is
-     blank until the first observer callback is a visible defect, and on some engines
-     that callback is late. The gate still does its job: off-screen costs 0 frames. */
+  size();body();
+  addEventListener('resize',function(){size();body()});
   start();
   if(window.IntersectionObserver){
     new IntersectionObserver(function(es){es[0].isIntersecting?start():stop()},{threshold:0.01}).observe(cv);
   }
-
-  /* ---- the line that corrects itself ---- */
-  var line=document.getElementById('smLine'),sl=document.getElementById('smS'),v=document.getElementById('smV');
-  var A={pre:'One ',old:'person',neu:'intelligence',post:' built the world. '};
-  var B={pre:'',old:'One',neu:'Two',post:' will build the next.'};
-  function stage(p,o){   /* 0 idle -> .28 strike -> .46 collapse -> .92 type -> settled */
-    if(p<=0)return {k:0,w:1,n:0,cur:0};
-    if(p<0.28)return {k:p/0.28,w:1,n:0,cur:1};
-    if(p<0.46)return {k:1,w:1-(p-0.28)/0.18,n:0,cur:1};
-    if(p<0.92)return {k:1,w:0,n:(p-0.46)/0.46,cur:1};
-    return {k:1,w:0,n:1,cur:p<0.99?1:0};
-  }
-  function seg(o,st){
-    var out=o.pre;
-    if(st.w>0)out+='<span class="sm-w old" style="--k:'+st.k.toFixed(3)+';max-width:'+(st.w*100).toFixed(1)+'%">'+o.old+'</span>';
-    var m=Math.floor(st.n*o.neu.length);
-    if(m>0)out+='<b style="font-weight:700">'+o.neu.slice(0,m)+'</b>';
-    if(st.cur&&st.n>0&&st.n<1)out+='<span class="sm-cur" style="--cur:1"></span>';
-    if(st.n>=1)out+='';
-    return out+o.post;
-  }
-  function draw2(){
-    var p=+sl.value/100;
-    var pa=Math.min(1,p/0.52), pb=Math.max(0,(p-0.48)/0.52);
-    line.innerHTML=seg(A,stage(pa))+seg(B,stage(pb));
-    v.textContent=Math.round(p*100)+'%';
-  }
-  sl.addEventListener('input',draw2);draw2();
 })();
 </script>
 </body>
