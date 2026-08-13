@@ -256,7 +256,7 @@ body.static .tk,body.static #heromq .row,body.static .crawlp,body.static #hero .
 .tw .w>i{transition:transform .85s var(--ease)}
 .tw.on .w>i,.u.on .tw .w>i{transform:none;transition-delay:calc(var(--wi,0)*50ms + var(--i,0)*60ms)}
 #statement{padding:0}
-#statement .pinh{height:135vh}
+#statement .pinh{height:115vh}
 #statement .pin{position:sticky;top:0;min-height:100svh;display:flex;align-items:center;justify-content:center;padding:0 24px}
 #statement .in{width:100%}
 #statement .w>i{transition:none;opacity:0}
@@ -348,6 +348,9 @@ font-weight:800;font-size:88px;letter-spacing:-.02em;line-height:1;color:transpa
 #hero .barc svg rect:nth-child(7){animation:barbl 4.2s steps(1) infinite}
 #hero .barc svg rect:nth-child(13){animation:barbl 6.4s steps(1) infinite reverse}
 @keyframes barbl{0%,88%{opacity:1}89%,100%{opacity:.2}}
+/* the paper bleeds past the folder by design; the document must not scroll sideways
+   because of it. clip, not hidden, so the vertical axis is left alone. */
+.folder{overflow-x:clip}
 .folder.wcv{will-change:transform}
 
 @media (prefers-reduced-motion:reduce){
@@ -3140,6 +3143,10 @@ var SEC=links.map(function(a){var el=document.querySelector(a.getAttribute('href
 
 /* ---------- statement pinned scene ---------- */
 var stWrap=document.querySelector('#statement .pinh');
+/* the two halves of the pinned scene, so the scrub can give the reader something that
+   answers the scroll everywhere - not only at the three points where an event fires */
+var stTxt=document.querySelector('#statement .sttxt');
+var stFil=document.querySelector('#statement .stfil');
 var stTop=0,stH=0;
 var SPS=[].slice.call(document.querySelectorAll('#statement .sp span'));
 var lastSTP=-1;
@@ -3155,16 +3162,17 @@ function statement(y){
      even at a dead p was removed in round 35. */
   var moved=(p!==lastSTP);lastSTP=p;
   if(window.__stSwap)window.__stSwap(p);
-  function words(list,start,dur){
-    var n=list.length;if(!n)return;
-    for(var i=0;i<n;i++){
-      var st=start+(i/n)*dur*.8;
-      var qq=eo(clamp((p-st)/(dur*.35)));
-      list[i].style.transform='translateY('+((1-qq)*115)+'%)';
-      list[i].style.opacity=String(qq);
-    }
-  }
+  /* words() lived here and raised the headline a word at a time. Nothing has called it
+     since the morph took the sentence over; removed. */
   if(moved){
+    /* THE ANSWER TO THE SCROLL. Measured, this pin had two runs of 107px in which the
+       reader scrolled and the picture did not change: the sub-line spans finish at p .29
+       and the morph is a single event at p .50, so everything between and after them was
+       computing new numbers and writing identical pixels. A slow counter-drift - the
+       sentence rising, the filament sinking - means every pixel of scroll moves something,
+       and it reads as depth rather than as an effect. */
+    if(stTxt)stTxt.style.transform='translateY('+((0.5-p)*84).toFixed(1)+'px)';
+    if(stFil)stFil.style.transform='translateY('+((p-0.5)*48).toFixed(1)+'px)';
     for(var si=0;si<SPS.length;si++){var sq=eo(clamp((p-.02-si*.05)/.22));SPS[si].style.opacity=String(.2+.8*sq);SPS[si].style.transform='translateX(-50%) translateY('+((1-sq)*44)+'px)';}
   }
     /* THE SENTENCE OWNS ITSELF NOW. It is no longer assembled out of particles and no
@@ -3691,13 +3699,14 @@ function frame(){
     if(htrack&&!mob.matches){
       var span=hwH-vh;
       var hp=span>0?clamp((y-hwTop)/span):0;
-      /* HOLD, SWEEP, SETTLE. A linear pan cannot hide a 100vw room inside a 100vw
-         viewport: entering alone consumes ~90% of the travel, so the reader meets its
-         leading edge in the first moments and then watches it crawl. Held at zero for
-         the first fifth of the section the intro card is alone on screen and the room
-         is genuinely absent; the middle sweeps it in on a smoothstep; the last quarter
-         is travel-free, so the room simply stands there and is looked at. */
-      var hs=clamp((hp-0.20)/0.55),hE=hs*hs*(3-2*hs);
+      /* SLOW START, SWEEP, SETTLE - and never a full stop. Round 38 held this at zero
+         for the first fifth of the pin to keep the room hidden, which worked and cost
+         341px of scrolling in which nothing on screen moved at all: the room was off
+         screen and the intro card was standing still. The room's absence is the job of
+         the 58vw of lead, not of a dead pan. The 0.22 term is the floor on the slope -
+         the intro card slides from the first pixel of scroll - and the pan completes at
+         80% so the last fifth is still a settle with the room square in the frame. */
+      var hs=clamp(hp/0.80),hE=0.22*hs+0.78*(hs*hs*(3-2*hs));
       if(!dragging){dragOff+=dragV;dragV*=.94;dragOff*=.90;if(Math.abs(dragOff)<.4)dragOff=0;}
       var X=hE*maxX+dragOff;
       var cw=window.innerWidth;
