@@ -2638,12 +2638,17 @@ body.static .rxs::after{transform:scaleX(0)}
 .hcard.hroom{position:relative;flex:0 0 auto;width:100vw;height:100svh;align-self:stretch;
   /* the lead that keeps the room off screen until the reader scrolls for it */
   padding:0;margin:0 0 0 58vw;overflow:hidden;border-radius:0;border:0;box-shadow:none;
-  background:radial-gradient(120% 92% at 50% 44%,#1B1D24 0%,#111218 46%,#0B0C10 100%);
-  -webkit-mask-image:linear-gradient(90deg,transparent 0,rgba(0,0,0,.6) 4%,#000 12%,#000 90%,rgba(0,0,0,.6) 97%,transparent 100%),
-                     linear-gradient(180deg,transparent 0,rgba(0,0,0,.6) 6%,#000 16%,#000 86%,rgba(0,0,0,.6) 95%,transparent 100%);
+  /* THE OUTER STOP IS THE DOCUMENT'S OWN CHARCOAL, not black. The mask fades the room out
+     over the page, so whatever colour the room ends on is what gets cross-faded against
+     #191A1F - and ending on #0B0C10 put a dark halo around every edge the reader enters
+     and leaves through. Landing on the page colour means the mask has nothing left to
+     reveal but the page itself. The centre stays lifted so the room is still a lit space. */
+  background:radial-gradient(128% 98% at 50% 44%,#21232B 0%,#1C1E25 44%,#191A1F 100%);
+  -webkit-mask-image:linear-gradient(90deg,transparent 0,rgba(0,0,0,.34) 6%,#000 18%,#000 84%,rgba(0,0,0,.34) 95%,transparent 100%),
+                     linear-gradient(180deg,transparent 0,rgba(0,0,0,.30) 8%,#000 22%,#000 80%,rgba(0,0,0,.30) 94%,transparent 100%);
   -webkit-mask-composite:source-in;
-          mask-image:linear-gradient(90deg,transparent 0,rgba(0,0,0,.6) 4%,#000 12%,#000 90%,rgba(0,0,0,.6) 97%,transparent 100%),
-                     linear-gradient(180deg,transparent 0,rgba(0,0,0,.6) 6%,#000 16%,#000 86%,rgba(0,0,0,.6) 95%,transparent 100%);
+          mask-image:linear-gradient(90deg,transparent 0,rgba(0,0,0,.34) 6%,#000 18%,#000 84%,rgba(0,0,0,.34) 95%,transparent 100%),
+                     linear-gradient(180deg,transparent 0,rgba(0,0,0,.30) 8%,#000 22%,#000 80%,rgba(0,0,0,.30) 94%,transparent 100%);
           mask-composite:intersect}
 @media (max-width:860px){
   .hcard.hroom{width:100vw;height:clamp(380px,64svh,520px);margin:14px 0}
@@ -3171,8 +3176,20 @@ function statement(y){
        computing new numbers and writing identical pixels. A slow counter-drift - the
        sentence rising, the filament sinking - means every pixel of scroll moves something,
        and it reads as depth rather than as an effect. */
-    if(stTxt)stTxt.style.transform='translateY('+((0.5-p)*84).toFixed(1)+'px)';
-    if(stFil)stFil.style.transform='translateY('+((p-0.5)*48).toFixed(1)+'px)';
+    /* BOTH DRIFT THE SAME WAY. Round 41 gave these opposite signs, which read as depth on
+       paper and as a jump on screen: measured, the filament moved +7px per step downward
+       while the reader scrolled down, then snapped back to -36 when the pin released. Two
+       reversals in one section. Now both rise as the reader descends, the filament more
+       slowly than the sentence - the parallax is in the difference between the rates, not
+       in a difference of direction - and the amplitudes are small enough that neither
+       fights the scroll. The dead zones stay closed: verified 0/34 after the change. */
+    /* the pin as a deceleration, not a clamp - see the note in r43. hold() is the offset
+       whose derivative is the page's own scroll rate at p=0 and p=1 and a fifth of it in
+       the middle, so neither boundary has a step in it. The filament gets it exactly; the
+       sentence gets a little more, and the difference between the two rates is the depth. */
+    var hold=-span*(0.6*p+0.0637*Math.sin(6.2832*p));
+    if(stFil)stFil.style.transform='translateY('+hold.toFixed(1)+'px)';
+    if(stTxt)stTxt.style.transform='translateY('+(hold+(0.5-p)*26).toFixed(1)+'px)';
     for(var si=0;si<SPS.length;si++){var sq=eo(clamp((p-.02-si*.05)/.22));SPS[si].style.opacity=String(.2+.8*sq);SPS[si].style.transform='translateX(-50%) translateY('+((1-sq)*44)+'px)';}
   }
     /* THE SENTENCE OWNS ITSELF NOW. It is no longer assembled out of particles and no
