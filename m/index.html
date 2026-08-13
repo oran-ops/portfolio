@@ -599,15 +599,26 @@ body.failsafe .frail,body.failsafe .tabrow .tB,body.failsafe .rstampS{opacity:1!
 /* drawer-pull theaters */
 .otx{height:185vh;position:relative;z-index:5}
 .ots{position:sticky;top:0;height:100svh;overflow:hidden;pointer-events:none}
-.otroom{position:absolute;inset:0;perspective:1500px}
+.otroom{position:absolute;inset:0;perspective:2600px;perspective-origin:42% 50%}
 .otf{position:absolute;left:50%;top:50%;width:min(680px,74vw);height:min(60vh,470px);
 margin:calc(min(60vh,470px)/-2) 0 0 calc(min(680px,74vw)/-2);z-index:1;will-change:transform;transform-style:preserve-3d;
 transform:translateY(44vh) scale(.62);background:var(--oc);border-radius:0 22px 18px 18px}
 .otf-cover{position:absolute;inset:0;border-radius:0 22px 18px 18px;
-transform-origin:50% 0;will-change:transform;transform-style:preserve-3d;z-index:3}
+/* THE SPINE. A folder is not hinged along its top edge. */
+transform-origin:0 50%;will-change:transform;transform-style:preserve-3d;z-index:3}
+/* the crease: the hinge is a place on the object, not an axis in the maths */
+.otf-cover:before{content:"";position:absolute;left:0;top:0;bottom:0;width:7px;z-index:6;
+  pointer-events:none;border-radius:0 2px 2px 0;
+  background:linear-gradient(90deg,rgba(25,26,31,.30),rgba(25,26,31,.10) 55%,transparent)}
+/* a sheen the perspective turns into a moving highlight as the cover swings */
+.oc-face:after{content:"";position:absolute;inset:0;pointer-events:none;border-radius:inherit;
+  background:linear-gradient(104deg,rgba(255,255,255,.16) 0%,rgba(255,255,255,.05) 26%,
+             transparent 52%,rgba(25,26,31,.07) 100%)}
 .oc-face{position:absolute;inset:0;backface-visibility:hidden;background:var(--oc);border-radius:inherit;padding:44px 40px}
-.oc-backf{position:absolute;inset:0;backface-visibility:hidden;transform:rotateX(-180deg);border-radius:inherit;
-background:var(--oc);background-image:linear-gradient(rgba(25,26,31,.34),rgba(25,26,31,.34))}
+.oc-backf{position:absolute;inset:0;backface-visibility:hidden;transform:rotateY(180deg);border-radius:inherit;
+background:var(--oc);
+background-image:linear-gradient(rgba(25,26,31,.30),rgba(25,26,31,.30)),
+                 linear-gradient(270deg,rgba(25,26,31,.26),transparent 46%)}
 .oc-backf:before{content:"";position:absolute;inset:16px;border:1.5px solid rgba(25,26,31,.3);border-radius:12px}
 .oc-backf:after{content:"";position:absolute;left:50%;bottom:24px;transform:translateX(-50%);width:130px;height:11px;border-radius:6px;background:rgba(25,26,31,.24)}
 .otf:before{content:"";position:absolute;left:8px;right:8px;top:0;height:1px;background:rgba(255,255,255,.09);z-index:5}
@@ -638,7 +649,11 @@ padding:38px 36px;z-index:1;overflow:hidden}
 .ou-l.dim{margin-top:22px;color:var(--mut)}
 .ou-red{margin-top:14px;height:12px;width:62%;background:#2C2D33;border-radius:2px}
 .ou-red.w2{width:44%;margin-top:8px}
-.otf-veil{position:absolute;inset:14px 12px 12px;background:rgba(25,26,31,.55);border-radius:0 16px 12px 12px;z-index:2;pointer-events:none}
+/* the cover's shadow on the papers: heaviest at the spine, and it RETREATS toward the
+   spine as the cover lifts rather than simply fading out where it stands */
+.otf-veil{position:absolute;inset:14px 12px 12px;border-radius:0 16px 12px 12px;z-index:2;
+  pointer-events:none;will-change:transform,opacity;
+  background:linear-gradient(90deg,rgba(25,26,31,.78) 0%,rgba(25,26,31,.62) 38%,rgba(25,26,31,.34) 78%,rgba(25,26,31,.20) 100%)}
 .otdrw{position:absolute;left:50%;bottom:0;width:min(900px,86vw);transform:translateX(-50%);z-index:4;will-change:transform,opacity}
 .od-face{position:relative;height:17vh;min-height:110px;background:#16171C;border:1px solid var(--grid);border-bottom:0;border-radius:14px 14px 0 0}
 .od-face:before{content:"";position:absolute;left:0;right:0;top:0;height:10px;background:#111217;border-radius:14px 14px 0 0}
@@ -4059,15 +4074,25 @@ function loop(){
       if(th.lp>-1&&th.lp<.5&&tp>=.5&&now-th.sndB>1200){th.sndB=now;flip();}
       th.lp=tp;
       var p=dnew;
+      var cw=window.innerWidth;
       var pull=eo(clamp(p/.36));
       var tilt=7*band(p,.26,.46)*(1-band(p,.52,.86));
-      th.otf.style.transform='translateY('+((1-pull)*44)+'vh) scale('+(.62+.38*pull)+') rotateX('+tilt.toFixed(2)+'deg)';
+      /* the folder travels right as the cover swings left, so the spread re-centres -
+         which is also what happens when a folder is opened on a desk */
+      var slide=eo(band(p,.34,.94))*(cw<861?13:19);
+      th.otf.style.transform='translateY('+((1-pull)*44)+'vh) translateX('+slide.toFixed(2)+'%) scale('+(.62+.38*pull)+') rotateX('+tilt.toFixed(2)+'deg)';
       var dfade=band(p,.34,.5);
       th.drw.style.opacity=String(1-dfade);
       th.drw.style.transform='translateX(-50%) translateY('+(eo(dfade)*9)+'vh)';
-      var open=band(p,.38,.80);
-      th.cover.style.transform='rotateX('+(open*98).toFixed(2)+'deg)';
-      th.veil.style.opacity=String(.6*(1-band(p,.45,.72)));
+      /* eased, because a cover has weight and should not track the finger one to one */
+      var open=eo(band(p,.34,.94));
+      /* the swing needs room. .ots clips at the viewport, and 116 degrees off a left hinge
+         reaches ~300px past the folder's own left edge - so the angle eases back on narrow
+         screens, and the folder itself travels right (see the transform above) to keep the
+         opened spread inside the frame. */
+      th.cover.style.transform='rotateY('+(-open*(cw<861?96:104)).toFixed(2)+'deg)';
+      th.veil.style.opacity=String(.92*(1-band(p,.38,.92)));
+      th.veil.style.transform='translateX('+(-open*22).toFixed(1)+'%)';
       if(th.lines)th.lines.style.transform='translateY('+((1-band(p,.5,.78))*14).toFixed(1)+'px)';
       for(var rj=0;rj<th.reds.length;rj++){
         th.reds[rj].style.transform='scaleX('+(1-band(p,.72+rj*.07,.82+rj*.07)).toFixed(3)+')';
