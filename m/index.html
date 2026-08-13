@@ -2296,8 +2296,9 @@ footer::after{right:0}
 @keyframes lampsweep{0%{opacity:0;transform:translateX(-100%)}
   14%{opacity:1}86%{opacity:1}100%{opacity:0;transform:translateX(100%)}}
 .lampband .lamp{pointer-events:none;flex:none;display:block;line-height:0;position:relative;z-index:2}
-.lampband .lamp svg{width:30px;height:30px;display:block;overflow:visible;filter:none!important}
-.lampband .lbody{fill:none;stroke:#9EA0A6;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;transition:stroke .6s}
+.lampband .lamp svg{width:40px;height:40px;display:block;overflow:visible;filter:none!important}
+.lampband .lamp{margin-right:15px}
+.lampband .lbody{fill:none;stroke:#B6B7BB;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;transition:stroke .6s}
 .lampband .lbulb{fill:#7A7E88;transition:fill .6s,filter .6s}
 .lampband .lcone{opacity:.55;transition:opacity .6s;animation:lampbreath 3.1s ease-in-out infinite;transform-origin:15px 20px}
 .lampband .ls1{stop-color:#F7E7C2;stop-opacity:.92}
@@ -2322,12 +2323,6 @@ footer::after{right:0}
 .case .folder.lampon .lampband .lh2{stop-color:#D2BEFF;stop-opacity:0}
 /* the arrow is the sentence "press this" - drawn on, not decorative. Scaled to
    the new headline: it has to look like it belongs to 20px type, not to 13.5px */
-.lamparrow{flex:none;display:flex;align-items:center;gap:0;margin:0 15px 0 11px;
-  color:var(--fc,var(--emb));transition:color .7s,opacity .7s;opacity:.95;position:relative;z-index:2}
-.lamparrow i{font-style:normal;font-size:19px;line-height:1;font-weight:700;margin-right:-3px}
-.lamparrow s{display:block;width:46px;height:2px;background:currentColor;text-decoration:none;border-radius:1px}
-.case .folder.lampon .lamparrow{color:#A493EA;opacity:.8}
-.lampband:hover .lamparrow{opacity:1}
 .lampwords{display:flex;flex-direction:column;align-items:flex-start;gap:2px;min-width:0;
   position:relative;z-index:2}
 /* deliberately, and by a long way, the loudest label in the document */
@@ -2410,13 +2405,15 @@ body.static .lampband .lcone,body.failsafe .lampband .lcone{animation:none}
   /* 330px of folder to spend: icon 26 + arrow 49 + a 19-character headline at
      15.5px/.06em = 197 -> 272 inside 308 of content box. Measured, not guessed. */
   .lampband{padding:8px 11px;margin-bottom:10px}
-  .lampband .lamp svg{width:26px;height:26px}
-  .lampcall{font-size:15.5px;letter-spacing:.06em}
-  .lampsub{font-size:7px;letter-spacing:.13em}
-  .lamparrow{margin:0 8px 0 7px}
-  .lamparrow s{width:20px}
-  .lamparrow i{font-size:14px}
-  .lampstate{display:none}
+  /* the arrow released about 35px; the instrument takes it, because at 26px the tube,
+     the head and the cone were one smudge */
+  .lampband .lamp svg{width:34px;height:34px}
+  .lampband .lamp{margin-right:11px}
+  .lampcall{font-size:14px;letter-spacing:.02em;white-space:nowrap}
+  .lampsub{font-size:7px;letter-spacing:.08em;white-space:nowrap}
+  /* a control that does not look like a control is not a control. The pill is what
+     makes the strip legible as a switch, and it was the first thing hidden. */
+  .lampstate{display:inline-flex;font-size:8px;letter-spacing:.16em;padding:3px 7px;margin-left:auto}
   .dv-t{font-size:13px}
   .dv-b li{font-size:12.5px}
 }
@@ -2627,7 +2624,6 @@ body.static .rxs::after{transform:scaleX(0)}
    tab, the classification band, and the arrow rule), so they are named here explicitly and
    placed last in source order. Scoped to .lampon, which only ever lands on a case folder -
    the vault cannot see any of this. */
-.folder.lampon .lamparrow s{background:#A493EA!important}
 
 /* ---- UV INVARIANT ----
    The folder tab and the classification band never declare a colour: they read
@@ -2671,7 +2667,7 @@ body.static .rxs::after{transform:scaleX(0)}
                      linear-gradient(180deg,transparent 0,rgba(0,0,0,.30) 8%,#000 22%,#000 80%,rgba(0,0,0,.30) 94%,transparent 100%);
           mask-composite:intersect}
 @media (max-width:860px){
-  .hcard.hroom{width:100vw;height:clamp(380px,64svh,520px);margin:14px 0}
+  .hcard.hroom{width:100%;height:clamp(360px,58svh,470px);margin:14px 0}
 }
 /* --- the room. Every structural line is neutral bone; colour is reserved for files. --- */
 .rg-stage{position:absolute;inset:0;perspective:1500px;perspective-origin:50% 40%;touch-action:pan-y;cursor:grab;user-select:none;-webkit-user-select:none}
@@ -2787,8 +2783,8 @@ body.static .rxs::after{transform:scaleX(0)}
   .rg-arm{transform:translateY(-22px) translateZ(-46px) scale(.76)}}
 /* <=620: a phone cannot hold a 228px radius - the side files would sit off both edges */
 @media (max-width:620px){.rg-stage{perspective:900px}
-  .rg-card{width:178px;height:124px;margin:-62px 0 0 -89px;transform:rotateY(var(--a)) translateZ(190px)}
-  .rg-sh{width:170px;margin-left:-85px;transform:rotateY(var(--a)) translateZ(142px) translateY(80px) rotateX(90deg)}
+  .rg-card{width:166px;height:116px;margin:-58px 0 0 -83px;transform:rotateY(var(--a)) translateZ(168px)}
+  .rg-sh{width:190px;margin-left:-95px;transform:rotateY(var(--a)) translateZ(168px) translateY(66px) rotateX(90deg)}
   .rg-nm{font-size:28px}
   .rg-arm{transform:translateY(-18px) translateZ(-40px) scale(.54)}}
 
@@ -2831,8 +2827,10 @@ loop, so `animation:none` had nothing to cancel. One static frame, then nothing.
 #statement .l1 i.inn{opacity:0;filter:blur(6px);transform:translateY(14px)}
 @media (max-width:860px){
   #statement .in{flex-direction:column;gap:8px}
-  #statement .stfil{flex:none;width:100%;height:clamp(180px,26svh,240px)}
-  #statement .sttxt{min-height:clamp(120px,22vh,190px)}
+  /* the section is built around this object and it was a quarter of the screen. It also
+     has to hold two strands now that the filament separates. */
+  #statement .stfil{flex:none;width:100%;height:clamp(300px,44svh,420px)}
+  #statement .sttxt{min-height:clamp(104px,17svh,150px)}
   #statement .l1.sA{font-size:clamp(19px,5.4vw,26px)}
   #statement .l1.sB{font-size:clamp(27px,8vw,40px)}
 }
@@ -4905,8 +4903,8 @@ CASES.forEach(function(id){
         '<em>03</em> dependencies resting on <em>09</em> builds and <em>06</em> outcomes']]
     ]
   };
-  var OFF='SWITCH ON THE UV LAMP',ON='SWITCH OFF THE UV LAMP',
-      OFFS='365nm · THIS FILE HOLDS MORE THAN THE PRINT',ONS='365nm · FLUORESCING · 03 ZONES';
+  var OFF='TURN ON THE UV LAMP',ON='TURN OFF THE UV LAMP',
+      OFFS='365nm · MORE HERE THAN THE PRINT SHOWS',ONS='365nm · FLUORESCING · 03 ZONES';
   /* frame numbers run up the reel in file order and stop short of 26A/27A, which
      the closing section already occupies - one reel, no two frames alike */
   var FRAMES={xtix:[11,12],oasis:[14,15],eventer:[17,18],medcoin:[20,21]};
@@ -4970,7 +4968,6 @@ CASES.forEach(function(id){
     var b=document.createElement('button');
     b.className='lampband';b.type='button';b.setAttribute('aria-pressed','false');
     b.innerHTML='<span class="lamp">'+lampSVG(id)+'</span>'+
-      '<span class="lamparrow" aria-hidden="true"><i>&#9666;</i><s></s></span>'+
       '<span class="lampwords"><span class="lampcall">'+OFF+'</span>'+
       '<span class="lampsub">'+OFFS+'</span></span>'+
       '<span class="lampstate" aria-hidden="true">OFF</span>'+
