@@ -1,0 +1,374 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Folder grammar — phase 1</title>
+<link rel="stylesheet" href="../fonts/fonts_dossier.css">
+<style>
+:root{--ink:#F2F1ED;--dim:#B6B7BB;--mut:#8D9096;--lbl:#6B6E76;--card:#25262D;--card2:#2B2C33;
+  --grid:#33353C;--grid2:#3A3C44;--hair:#31333A;--emb:#2FB380;--brass:#E0A458;--ice:#5E8FBF;--paper:#E9E7DF}
+*{box-sizing:border-box}
+body{margin:0;background:#191A1F;color:var(--ink);font-family:'Inter',system-ui,sans-serif;
+  -webkit-font-smoothing:antialiased}
+.wrap{max-width:1240px;margin:0 auto;padding:0 26px 130px}
+header{padding:64px 0 30px;border-bottom:1px solid var(--hair)}
+.kick{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.3em;color:var(--emb);
+  text-transform:uppercase;margin-bottom:16px}
+h1{font-family:'Fraunces',serif;font-weight:800;font-size:clamp(30px,4.6vw,50px);line-height:1.05;
+  letter-spacing:-.025em;margin:0 0 14px}
+.sub{color:var(--dim);font-size:16.5px;line-height:1.6;max-width:64ch;margin:0}
+section{padding:56px 0;border-bottom:1px solid #24262C}
+h2{font-family:'Fraunces',serif;font-weight:700;font-size:clamp(21px,2.8vw,28px);margin:0 0 8px;letter-spacing:-.015em}
+.note{color:var(--mut);font-size:14.5px;line-height:1.62;max-width:66ch;margin:0 0 26px}
+.pnum{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.28em;color:var(--lbl);
+  text-transform:uppercase;margin-bottom:10px}
+.pair{display:grid;gap:26px;grid-template-columns:1fr}
+@media(min-width:900px){.pair{grid-template-columns:1fr 1fr}}
+.cell{border:1px solid var(--hair);background:#1C1D23;padding:22px;display:flex;flex-direction:column;gap:16px}
+.cell.now{border-style:dashed}
+.celllab{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.22em;text-transform:uppercase}
+.celllab.a{color:#C9705E}.celllab.b{color:var(--emb)}
+.stagebox{position:relative;min-height:430px;padding:26px 0;display:flex;align-items:center;justify-content:center;
+  background:radial-gradient(120% 96% at 50% 44%,#21232B 0%,#1C1E25 44%,#191A1F 100%);overflow:hidden}
+.hold{position:relative;transform-style:preserve-3d;perspective:1500px}
+
+.rg-stage{position:absolute;inset:0;perspective:1500px;perspective-origin:50% 40%;touch-action:pan-y;cursor:grab;user-select:none;-webkit-user-select:none}
+.rg-stage.drag{cursor:grabbing}
+.rg-horizon{position:absolute;left:-40%;right:-40%;top:0;height:70%;pointer-events:none;
+  background:linear-gradient(180deg,transparent 44%,rgba(233,231,223,.045) 90%,rgba(233,231,223,.075) 100%)}
+.rg-floor{position:absolute;left:50%;top:70%;width:1900px;height:1500px;margin-left:-950px;
+  transform:rotateX(68deg);transform-origin:50% 0;pointer-events:none;
+  background-image:
+    repeating-linear-gradient(0deg,rgba(233,231,223,.22) 0 1px,transparent 1px 305px),
+    repeating-linear-gradient(90deg,rgba(233,231,223,.22) 0 1px,transparent 1px 305px),
+    repeating-linear-gradient(0deg,rgba(233,231,223,.085) 0 1px,transparent 1px 61px),
+    repeating-linear-gradient(90deg,rgba(233,231,223,.085) 0 1px,transparent 1px 61px);
+  -webkit-mask-image:linear-gradient(180deg,#000 0%,rgba(0,0,0,.42) 38%,transparent 72%),
+                     radial-gradient(60% 100% at 50% 0%,#000 0%,transparent 100%);
+  -webkit-mask-composite:source-in;
+          mask-image:linear-gradient(180deg,#000 0%,rgba(0,0,0,.42) 38%,transparent 72%),
+                     radial-gradient(60% 100% at 50% 0%,#000 0%,transparent 100%);
+          mask-composite:intersect}
+.rg-pool{position:absolute;left:50%;top:56%;width:620px;height:210px;margin-left:-310px;pointer-events:none;
+  background:radial-gradient(50% 50% at 50% 50%,rgba(233,231,223,.085),transparent 74%);filter:blur(7px)}
+.rg-ring{position:absolute;left:50%;top:52%;width:0;height:0;transform-style:preserve-3d;
+  transform:rotateX(-11deg) rotateY(var(--spin,0deg))}
+/* --- the armillary: four rings, one per file, each on its own tilt and its own spin,
+       all of them carried round together by the folders --- */
+.rg-arm{position:absolute;left:50%;top:50%;width:0;height:0;transform-style:preserve-3d;
+  transform:translateY(-27px) translateZ(-46px)}
+.rg-ar{position:absolute;left:50%;top:50%;border-radius:50%;
+  width:calc(var(--R)*2px);height:calc(var(--R)*2px);
+  margin:calc(var(--R)*-1px) 0 0 calc(var(--R)*-1px);
+  border:2.6px solid var(--c);
+  box-shadow:0 0 22px color-mix(in srgb,var(--c) 34%,transparent),
+             inset 0 0 22px color-mix(in srgb,var(--c) 14%,transparent),
+             0 1px 0 rgba(255,255,255,.10);
+  transform:rotateZ(var(--tz)) rotateX(var(--tx)) rotateY(var(--ry,0deg))}
+.rg-arm .a-pip{position:absolute;left:50%;top:50%;width:6px;height:6px;margin:-3px 0 0 -3px;
+  border-radius:50%;background:#F2F1ED;box-shadow:0 0 16px rgba(242,241,237,.7)}
+.rg-arm .a-t{position:absolute;left:-90px;top:118px;width:180px;text-align:center;
+  font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:.3em;color:#7E828C}
+/* --- the thread: each ring is tied to its own file, in its own colour --- */
+/* the thread leaves the outer ring exactly and lands on the folder's inner face exactly */
+/* THE THREADS LEAVE THE CARDS' 3D CONTEXT. Each thread is a plane laid radially and turned
+   90deg from its own card, so the front card's thread lies EDGE-ON to the viewer with its
+   plane containing the view axis - and it cuts through every card in the ring. Intersecting
+   polygons force the engine to split geometry into a BSP tree, and a bad split is how a face
+   284px further away came out in front of the near card, straight across the file name.
+   transform-style:flat ends the 3D context here: the four threads composite as one plane,
+   which can slice nothing, and still sort against the cards by depth - which is what a
+   connector at the ring's centre should do anyway. 0x0 at the ring's own origin, so every
+   thread's left/top:50% resolves exactly as before and nothing moves. */
+.rg-thplane{position:absolute;left:0;top:0;width:0;height:0;transform-style:flat;pointer-events:none}
+.rg-thread{position:absolute;left:50%;top:50%;width:216px;height:3px;margin-top:-1.5px;pointer-events:none;
+  transform-origin:0 50%;
+  transform:translateY(-27px) rotateY(calc(var(--a) + 90deg)) translateX(98px);
+  border-radius:2px;
+  background:linear-gradient(180deg,color-mix(in srgb,var(--tc) 70%,#fff) 0 1px,
+                             var(--tc) 1px 2px,color-mix(in srgb,var(--tc) 55%,#000) 2px 3px);
+  box-shadow:0 0 8px color-mix(in srgb,var(--tc) 40%,transparent);
+  opacity:calc(.95 - var(--d,0)*.62)}
+.rg-thread:after{content:"";position:absolute;right:-4px;top:-3px;width:9px;height:9px;border-radius:50%;
+  background:radial-gradient(circle at 36% 32%,#fff,var(--tc) 62%);
+  box-shadow:0 0 12px color-mix(in srgb,var(--tc) 65%,transparent)}
+.rg-thread:before{content:"";position:absolute;left:-5px;top:-2.5px;width:8px;height:8px;border-radius:50%;
+  background:var(--tc);box-shadow:0 0 10px color-mix(in srgb,var(--tc) 55%,transparent)}
+/* --- the folders: one closed object, six faces, no opacity gates anywhere --- */
+.rg-card{--W:214px;--H:288px;--T:11px;
+  position:absolute;width:var(--W);height:var(--H);margin:-171px 0 0 -107px;
+  transform-style:preserve-3d;transform:rotateY(var(--a)) translateZ(320px);cursor:pointer}
+.rg-card>*{transform-style:preserve-3d}
+.fc{position:absolute;backface-visibility:hidden;-webkit-backface-visibility:hidden;overflow:hidden}
+/* the depth fog rides inside every face, so the whole object dims as one */
+.fc:after{content:"";position:absolute;inset:0;pointer-events:none;background:#0C0E13;
+  opacity:calc(var(--d,0)*.72)}
+.f-front{inset:0;border-radius:3px 14px 3px 3px;transform:translateZ(calc(var(--T)/2));
+  /* the stock: lit from the upper left, cooling toward the foot, with a fine laid grain */
+  background:
+    repeating-linear-gradient(0deg,rgba(255,255,255,.045) 0 1px,transparent 1px 3px),
+    linear-gradient(160deg,#F4F0E7 0%,#EAE5D8 26%,#DCD6C6 58%,#CBC5B4 86%,#C1BBAA 100%);
+  box-shadow:0 10px 18px rgba(0,0,0,calc(.30*(1 - var(--d,0)*.55))),
+             0 36px 64px rgba(0,0,0,calc(.46*(1 - var(--d,0)*.55))),
+             inset 0 1px 0 rgba(255,255,255,.75),
+             inset -1px -2px 3px rgba(35,33,28,.10),
+             inset 0 0 0 1px rgba(35,33,28,.12)}
+.f-back{inset:0;border-radius:12px 2px 2px 2px;transform:rotateY(180deg) translateZ(calc(var(--T)/2));
+  background:linear-gradient(168deg,#C9C3B3 0%,#BAB4A4 54%,#ACA696 100%);
+  box-shadow:inset 0 0 0 1px rgba(35,33,28,.14)}
+.f-back:before{content:"ARCHIVE \2014 C-01";position:absolute;left:0;right:0;bottom:24px;text-align:center;
+  font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:.28em;color:rgba(35,33,28,.32)}
+.f-right{top:0;left:50%;width:var(--T);height:var(--H);margin-left:calc(var(--T)/-2);
+  transform:rotateY(90deg) translateZ(calc(var(--W)/2));
+  background:linear-gradient(90deg,#B7B1A2,#DCD7C8 42%,#BDB7A8),
+             repeating-linear-gradient(180deg,rgba(255,255,255,.36) 0 1px,transparent 1px 2.3px);
+  background-blend-mode:overlay,normal}
+.f-left{top:0;left:50%;width:var(--T);height:var(--H);margin-left:calc(var(--T)/-2);
+  transform:rotateY(-90deg) translateZ(calc(var(--W)/2));
+  background:linear-gradient(90deg,#9A9485,#C4BEAF 44%,#A6A091)}
+.f-top{left:0;top:50%;width:var(--W);height:var(--T);margin-top:calc(var(--T)/-2);
+  transform:rotateX(90deg) translateZ(calc(var(--H)/2));
+  background:linear-gradient(180deg,#E9E4D6,#C9C3B3),
+             repeating-linear-gradient(90deg,rgba(255,255,255,.30) 0 1px,transparent 1px 2.3px);
+  background-blend-mode:overlay,normal}
+.f-bot{left:0;top:50%;width:var(--W);height:var(--T);margin-top:calc(var(--T)/-2);
+  transform:rotateX(-90deg) translateZ(calc(var(--H)/2));
+  background:linear-gradient(180deg,#8E8879,#6A6557)}
+/* the tab is welded to the body, not floating in front of it */
+.rg-tabbox{--TW:84px;--TH:23px;
+  position:absolute;left:auto;right:14px;top:calc(var(--TH) * -1);width:var(--TW);height:var(--TH)}
+.tb{position:absolute;backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.tb:after{content:"";position:absolute;inset:0;background:#0C0E13;opacity:calc(var(--d,0)*.72)}
+.t-front{inset:0;border-radius:6px 6px 0 0;transform:translateZ(calc(var(--T)/2));
+  background:linear-gradient(180deg,color-mix(in srgb,var(--tc) 82%,#fff) 0%,var(--tc) 62%,
+             color-mix(in srgb,var(--tc) 86%,#141519) 100%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.5),inset 0 -1px 0 rgba(20,21,25,.18)}
+.t-front:before{content:attr(data-n);position:absolute;inset:0;display:flex;align-items:center;
+  justify-content:center;font-family:'JetBrains Mono',monospace;font-weight:800;font-size:8.5px;
+  letter-spacing:.26em;color:rgba(22,21,16,.60);z-index:2}
+.t-back{inset:0;border-radius:5px 5px 0 0;transform:rotateY(180deg) translateZ(calc(var(--T)/2));
+  background:color-mix(in srgb,var(--tc) 66%,#2A2820)}
+.t-top{left:0;top:50%;width:var(--TW);height:var(--T);margin-top:calc(var(--T)/-2);
+  transform:rotateX(90deg) translateZ(calc(var(--TH)/2));
+  background:linear-gradient(180deg,color-mix(in srgb,var(--tc) 92%,#fff),var(--tc))}
+.t-rgt{top:0;left:50%;width:var(--T);height:var(--TH);margin-left:calc(var(--T)/-2);
+  transform:rotateY(90deg) translateZ(calc(var(--TW)/2));
+  background:color-mix(in srgb,var(--tc) 80%,#2A2820)}
+.t-lft{top:0;left:50%;width:var(--T);height:var(--TH);margin-left:calc(var(--T)/-2);
+  transform:rotateY(-90deg) translateZ(calc(var(--TW)/2));
+  background:color-mix(in srgb,var(--tc) 80%,#2A2820)}
+/* --- the cover: ONE dominant idea. A coloured spine band with the filing holes knocked
+       out of it, and everything else quiet enough to let the name carry. --- */
+.rg-perf2{position:absolute;left:0;top:0;bottom:0;width:26px;pointer-events:none;
+  background:repeating-radial-gradient(circle at 13px 15px,rgba(35,33,28,.26) 0 3.3px,transparent 3.6px 30px);
+  background-size:26px 30px;
+  box-shadow:inset -1px 0 0 rgba(35,33,28,.10)}
+.rg-wash{position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(120% 74% at 26% 6%,rgba(255,255,255,.40),transparent 62%)}
+.rg-guill{position:absolute;left:8%;right:-16%;top:-6%;height:78%;pointer-events:none;
+  mix-blend-mode:multiply;opacity:.11;
+  background:repeating-radial-gradient(circle at 50% 40%,transparent 0 7px,rgba(35,33,28,.55) 7px 7.7px),
+             repeating-conic-gradient(from 0deg at 50% 40%,transparent 0 2.4deg,rgba(35,33,28,.4) 2.4deg 2.8deg);
+  -webkit-mask-image:radial-gradient(closest-side at 50% 40%,#000 22%,transparent 80%);
+          mask-image:radial-gradient(closest-side at 50% 40%,#000 22%,transparent 80%)}
+.rg-in{position:absolute;inset:0;padding:28px 22px 22px 42px;display:flex;flex-direction:column}
+.rg-no{font-family:'JetBrains Mono',monospace;font-weight:800;font-size:8px;letter-spacing:.32em;color:#7C776B}
+.rg-nm{font-family:'Fraunces',serif;font-weight:900;font-size:34px;line-height:.96;color:#1A1813;margin-top:12px;
+  letter-spacing:-.03em;font-variation-settings:'opsz' 144,'SOFT' 16}
+.rg-crule{height:2px;width:40px;background:#1A1813;opacity:.36;margin:16px 0 13px}
+.rg-ct{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:.18em;color:#6B675C;line-height:2}
+.rg-ghost{position:absolute;right:12px;bottom:-20px;font-family:'Fraunces',serif;font-weight:900;
+  font-size:138px;line-height:.74;color:rgba(35,33,28,.08);pointer-events:none;letter-spacing:-.06em;
+  font-variation-settings:'opsz' 144}
+.rg-seal{position:absolute;right:20px;top:24px;width:42px;height:42px;border-radius:50%;pointer-events:none;
+  border:1px solid rgba(35,33,28,.18);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.55),inset 0 -1px 0 rgba(35,33,28,.12);
+  background:repeating-conic-gradient(from 0deg at 50% 50%,transparent 0 8deg,rgba(35,33,28,.085) 8deg 9deg)}
+.rg-seal:after{content:"";position:absolute;inset:7px;border-radius:50%;border:1px dashed rgba(35,33,28,.19)}
+.rg-sh{position:absolute;left:50%;top:50%;width:260px;height:80px;margin:-1px 0 0 -130px;pointer-events:none;
+  transform:rotateY(var(--a)) translateZ(320px) translateY(122px) rotateX(90deg) translateZ(1px);
+  background:radial-gradient(38% 44% at 50% 40%,rgba(0,0,0,.88),rgba(0,0,0,.38) 48%,transparent 74%);
+  opacity:calc(.95 - var(--d,0)*.7);filter:blur(9px)}
+.rg-hud{position:absolute;left:16px;bottom:14px;pointer-events:none}
+.rg-hl{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.3em;color:#6B6E76}
+.rg-hn{font-family:'Fraunces',serif;font-weight:800;font-size:19px;color:#E9E7DF;margin-top:5px}
+/* the stage is 100vw inside a narrower pin, so anchoring to its right edge put the only
+   usage instruction off screen. Anchor it to the left, beside the HUD, and lift it to AA. */
+.rg-hint{position:absolute;left:16px;bottom:14px;font-family:'JetBrains Mono',monospace;font-size:8.5px;
+  letter-spacing:.22em;color:#9EA1A9;pointer-events:none}
+.rg-hud{left:16px;bottom:34px}
+/* 621-860: the room is the viewport, the radius fits inside it */
+@media (max-width:860px){.rg-stage{perspective:1100px}
+  .rg-card{width:170px;height:234px;margin:-139px 0 0 -85px;transform:rotateY(var(--a)) translateZ(228px)}
+  .rg-sh{transform:rotateY(var(--a)) translateZ(228px) translateY(98px) rotateX(90deg)}
+  .rg-thread{width:176px}.rg-nm{font-size:26px}.rg-ghost{font-size:92px}
+  .rg-arm{transform:translateY(-22px) translateZ(-46px) scale(.76)}}
+/* <=620: a phone cannot hold a 228px radius - the side files would sit off both edges */
+@media (max-width:620px){.rg-stage{perspective:900px}
+  .rg-card{width:138px;height:190px;margin:-113px 0 0 -69px;transform:rotateY(var(--a)) translateZ(142px)}
+  .rg-sh{width:170px;margin-left:-85px;transform:rotateY(var(--a)) translateZ(142px) translateY(80px) rotateX(90deg)}
+  .rg-thread{width:96px}.rg-nm{font-size:21px}.rg-ghost{font-size:74px}
+  .rg-arm{transform:translateY(-18px) translateZ(-40px) scale(.54)}}
+
+/* the room's kill-switches live in JS now (RGSTILL): the arms are written from the rAF
+loop, so `animation:none` had nothing to cancel. One static frame, then nothing. */
+
+/* the plate holds the cards still: no ring, no drift, one attitude */
+.plate-ring{position:relative;transform-style:preserve-3d;transform:rotateX(-9deg) rotateY(-16deg)}
+.plate-ring .rg-card{position:relative;left:auto;top:auto;margin:0;transform:none!important}
+.plate-ring .rg-card .fc,.plate-ring .rg-card .tb{}
+.scaled{transform:scale(var(--s,1));transform-origin:50% 50%}
+
+/* ------- today's theatre folder, reproduced from its own rules ------- */
+.otNow{width:330px;height:228px;background:var(--emb);border-radius:0 22px 18px 18px;position:relative}
+.otNow:before{content:"";position:absolute;left:8px;right:8px;top:0;height:1px;background:rgba(255,255,255,.09)}
+.otNow .lip{position:absolute;top:-26px;left:0;height:26px;background:var(--emb);border-radius:8px 16px 0 0;
+  display:flex;align-items:center;gap:9px;padding:0 14px}
+.otNow .lip b{font-family:'Fraunces',serif;font-weight:600;font-size:13px;color:#191A1F}
+.otNow .lip span{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:7.5px;letter-spacing:.18em;color:#191A1F;opacity:.62}
+.otNow .body{padding:26px 24px;font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.24em;color:#191A1F;opacity:.72}
+.otNow .ln{height:7px;background:rgba(25,26,31,.22);border-radius:2px;margin-top:9px}
+.otNow .ln.w2{width:62%}.otNow .ln.w3{width:44%}
+
+/* ------- the document folder: today, and wearing the grammar ------- */
+.fold{position:relative;background:var(--card);border:1px solid var(--hair);padding:26px 30px}
+.fold .tab{position:absolute;top:-25px;left:0;height:25px;background:var(--card);border:1px solid var(--hair);
+  border-bottom:0;display:flex;align-items:center;gap:10px;padding:0 14px}
+.fold .tab b{font-family:'Fraunces',serif;font-weight:700;font-size:13px}
+.fold .tab i{font-style:normal;font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.2em;color:var(--emb)}
+.fold .band{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:8px;letter-spacing:.34em;
+  background:var(--emb);color:#141519;padding:5px 10px;margin:0 -30px 12px;text-align:center}
+.fold .ctl{display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:7.5px;
+  letter-spacing:.07em;color:var(--dim);border-bottom:1px solid var(--hair);padding-bottom:7px;margin-bottom:16px}
+.fold h4{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:9px;letter-spacing:.26em;
+  color:var(--dim);margin:0 0 9px}
+.fold p{font-size:13.5px;line-height:1.66;color:var(--dim);margin:0 0 14px;max-width:52ch}
+.fold .holes{position:absolute;left:9px;top:64px;display:flex;flex-direction:column;gap:26px}
+.fold .holes i{width:7px;height:7px;border-radius:50%;background:#15161A;box-shadow:inset 0 1px 0 rgba(0,0,0,.7),0 1px 0 rgba(255,255,255,.05);display:block}
+
+/* TODAY */
+.fold.now{border-radius:0 18px 18px 18px}
+
+/* PROPOSED — the ring card's grammar, in charcoal */
+.fold.next{border-radius:4px 20px 4px 4px;padding-left:52px;
+  box-shadow:-9px 0 0 0 #1E1F25, -10px 0 0 0 var(--hair), 0 20px 44px rgba(0,0,0,.4)}
+.fold.next .tab{border-radius:4px 14px 0 0;left:34px}
+.fold.next .band{margin-left:-52px}
+.fold.next .holes{left:26px}
+/* the perforated spine, straight off the ring card */
+.fold.next .perf{position:absolute;left:0;top:0;bottom:0;width:20px;pointer-events:none;
+  background-image:radial-gradient(circle at 10px 6px,rgba(0,0,0,.55) 1.7px,transparent 2px);
+  background-size:20px 13px;opacity:.5}
+/* the ghost numeral */
+.fold.next .ghost{position:absolute;right:16px;bottom:-6px;font-family:'Fraunces',serif;font-weight:900;
+  font-size:132px;line-height:.8;color:rgba(242,241,237,.032);pointer-events:none;letter-spacing:-.04em}
+/* the seal */
+.fold.next .seal{position:absolute;right:22px;top:18px;width:40px;height:40px;border-radius:50%;
+  border:1px solid rgba(242,241,237,.14);pointer-events:none;
+  background:radial-gradient(circle at 40% 34%,rgba(242,241,237,.05),transparent 62%)}
+.fold.next .seal:after{content:"";position:absolute;inset:5px;border-radius:50%;
+  border:1px dashed rgba(242,241,237,.11)}
+/* the guilloche, demoted to a corner mark */
+.fold.next .guill{position:absolute;right:70px;top:14px;width:54px;height:54px;pointer-events:none;opacity:.5;
+  background:repeating-radial-gradient(circle at 50% 50%,transparent 0 3px,rgba(242,241,237,.055) 3px 4px)}
+
+.legend{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.chip{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.16em;text-transform:uppercase;
+  border:1px solid var(--hair);color:var(--dim);padding:4px 9px;border-radius:2px}
+.chip.new{border-color:var(--emb);color:var(--emb)}
+footer{padding:46px 0 0;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.2em;
+  color:var(--lbl);text-transform:uppercase}
+</style>
+
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div class="kick">Emerald · phase 1 · nothing is animated on this page</div>
+  <h1>The folder grammar</h1>
+  <p class="sub">Your decision is in: the document folder stays charcoal. So the cream file is the <em>cover</em>, and what is inside it stays on the dossier's dark stock. This plate is only about whether the three objects look like the same object. The side-opening comes next, on its own plate.</p>
+</header>
+
+<section id="p1">
+  <div class="pnum">Plate 1 — the reference</div>
+  <h2>The ring card, exactly as it is today</h2>
+  <p class="note">Copied out of the live document, not redrawn. This is the object everything else has to agree with: cream stock, a boxed edge you can see the thickness of, a punched and perforated spine, a wax seal, a guilloche, and a ghost numeral bled off the corner.</p>
+  <div class="cell">
+    <div class="celllab b">Reference · 214 × 288</div>
+    <div class="stagebox"><div class="plate-ring"><div class="rg-card" data-i="0" style="--a:0deg;--d:0;--tc:#2FB380"><div class="rg-tabbox"><span class="tb t-back"></span><span class="tb t-rgt"></span><span class="tb t-lft"></span><span class="tb t-top"></span><span class="tb t-front" data-n="01"></span></div><span class="fc f-back"></span><span class="fc f-right"></span><span class="fc f-left"></span><span class="fc f-top"></span><span class="fc f-bot"></span><div class="fc f-front"><span class="rg-guill"></span><span class="rg-ghost">01</span><span class="rg-wash"></span><div class="rg-in"><div class="rg-no">FILE 01</div><div class="rg-nm">XTIX</div><div class="rg-crule"></div><div class="rg-ct">B2B SAAS &middot; TECH<br>E-TICKETS PLATFORM</div></div><span class="rg-seal"></span><span class="rg-perf2"></span></div></div></div></div>
+    <div class="legend">
+      <span class="chip">boxed edge</span><span class="chip">punched spine</span><span class="chip">perforated edge</span>
+      <span class="chip">wax seal</span><span class="chip">guilloche</span><span class="chip">ghost numeral</span>
+      <span class="chip">square spine, one cut at the tab</span>
+    </div>
+  </div>
+</section>
+
+<section id="p2">
+  <div class="pnum">Plate 2 — the scene before each case</div>
+  <h2>What comes out of the drawer</h2>
+  <p class="note">Today the file you picked in the ring is replaced by a flat coloured card — emerald for XTIX, brass for Oasis, and so on — with a different silhouette and no archival detail at all. On the right is the same ring card at the size the scene needs. Nothing is redesigned; it is the same component, larger.</p>
+  <div class="pair">
+    <div class="cell now">
+      <div class="celllab a">Today · a coloured panel</div>
+      <div class="stagebox"><div class="otNow"><div class="lip"><b>XTIX</b><span>FILE 01</span></div>
+        <div class="body">CASE FILE · COMMERCIAL ARCHIVE<div class="ln"></div><div class="ln w2"></div><div class="ln w3"></div></div></div></div>
+    </div>
+    <div class="cell">
+      <div class="celllab b">Proposed · the file itself</div>
+      <div class="stagebox"><div class="plate-ring scaled" style="--s:1.34"><div class="rg-card" data-i="0" style="--a:0deg;--d:0;--tc:#2FB380"><div class="rg-tabbox"><span class="tb t-back"></span><span class="tb t-rgt"></span><span class="tb t-lft"></span><span class="tb t-top"></span><span class="tb t-front" data-n="01"></span></div><span class="fc f-back"></span><span class="fc f-right"></span><span class="fc f-left"></span><span class="fc f-top"></span><span class="fc f-bot"></span><div class="fc f-front"><span class="rg-guill"></span><span class="rg-ghost">01</span><span class="rg-wash"></span><div class="rg-in"><div class="rg-no">FILE 01</div><div class="rg-nm">XTIX</div><div class="rg-crule"></div><div class="rg-ct">B2B SAAS &middot; TECH<br>E-TICKETS PLATFORM</div></div><span class="rg-seal"></span><span class="rg-perf2"></span></div></div></div></div>
+    </div>
+  </div>
+</section>
+
+<section id="p3">
+  <div class="pnum">Plate 3 — inside the case</div>
+  <h2>The papers, wearing the same grammar</h2>
+  <p class="note">Charcoal, as you decided. What changes is that it stops being a plain rounded panel and starts being the inside of the file you just opened: a real edge with thickness down the spine, the punch holes and perforation moved to match the ring card exactly, the corner signature (square at the spine, one cut at the tab shoulder), and the seal, guilloche and ghost numeral rendered in charcoal instead of ink.</p>
+  <div class="pair">
+    <div class="cell now">
+      <div class="celllab a">Today</div>
+      <div style="padding:26px 4px 10px">
+        <div class="fold now">
+          <div class="tab"><b>XTIX</b><i>▸ FILE 01</i></div>
+          <div class="band">R E S T R I C T E D · EMERALD ARCHIVE</div>
+          <div class="ctl"><span>CTRL № X-26-0101</span><span>COPY 3 OF 12</span></div>
+          <div class="holes"><i></i><i></i><i></i></div>
+          <h4>01 · THE SITUATION</h4>
+          <p>Strong vision. Strong product. Zero commercial infrastructure.</p>
+          <h4>02 · MISSION OBJECTIVE</h4>
+          <p>Build the commercial operating system from nothing, and make it outlive me.</p>
+        </div>
+      </div>
+    </div>
+    <div class="cell">
+      <div class="celllab b">Proposed</div>
+      <div style="padding:26px 4px 10px">
+        <div class="fold next">
+          <span class="perf"></span><span class="guill"></span><span class="seal"></span><span class="ghost">01</span>
+          <div class="tab"><b>XTIX</b><i>▸ FILE 01</i></div>
+          <div class="band">R E S T R I C T E D · EMERALD ARCHIVE</div>
+          <div class="ctl"><span>CTRL № X-26-0101</span><span>COPY 3 OF 12</span></div>
+          <div class="holes"><i></i><i></i><i></i></div>
+          <h4>01 · THE SITUATION</h4>
+          <p>Strong vision. Strong product. Zero commercial infrastructure.</p>
+          <h4>02 · MISSION OBJECTIVE</h4>
+          <p>Build the commercial operating system from nothing, and make it outlive me.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="legend">
+    <span class="chip new">+ edge with thickness</span><span class="chip new">+ perforated spine</span>
+    <span class="chip new">+ corner signature</span><span class="chip new">+ seal</span>
+    <span class="chip new">+ guilloche</span><span class="chip new">+ ghost numeral</span>
+    <span class="chip">stock unchanged — charcoal</span><span class="chip">text unchanged</span>
+  </div>
+</section>
+
+<footer>Phase 1 · awaiting your yes before the side-opening plate</footer>
+</div>
+
+</body>
+</html>
