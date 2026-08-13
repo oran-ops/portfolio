@@ -923,7 +923,7 @@ font-family:'JetBrains Mono',monospace;font-weight:600;font-size:10px;letter-spa
 .case .insight .qx{font-family:'Fraunces',serif;font-style:italic;font-weight:500;font-size:clamp(17px,2.4vw,22px)}
 .case .insight .qx b{color:var(--fc)}
 .case .insight .who{margin-top:7px;font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.26em;color:var(--dim)}
-.case .stat{border:1px solid var(--grid);border-radius:0 14px 14px 14px;background:var(--card2);position:relative;margin-top:26px;padding:22px 24px;width:max-content;max-width:100%}
+.case .stat{border:1px solid var(--grid);border-radius:0 14px 14px 14px;background:var(--card2);position:relative;margin-top:26px;padding:22px 24px;width:max-content;max-width:100%;min-width:0}
 .case .stat .slip{position:absolute;top:-25px;left:0;height:26px;background:var(--fc);border-radius:7px 15px 0 0;
 display:flex;align-items:center;padding:0 13px;font-family:'JetBrains Mono',monospace;font-weight:700;font-size:8px;letter-spacing:.2em;color:#191A1F}
 .ringlbl,.looplbl{margin-top:8px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.18em;color:var(--lbl);text-align:center}
@@ -1044,7 +1044,7 @@ padding:6px 13px;font-family:'JetBrains Mono',monospace;font-weight:700;font-siz
 <div class="zr rv"><b>A</b><span class="d2"></span>EVIDENCE &mdash; FROM INFRASTRUCTURE TO EXECUTION</div>
         <div class="statrow" style="margin-top:18px">
           <div class="rv" style="--i:1"><div class="bignum"><span class="cur">$</span><span class="cnt" data-n="9" data-suf="M+">9M+</span> <span style="font-size:.45em;color:var(--mut);font-weight:700">ARR</span></div><div class="biglbl"><span class="pmark">(S)</span>PIPELINE MANAGED</div><div class="biglbl" style="color:var(--emb);margin-top:5px">COMMERCIAL OPERATING SYSTEM &mdash; BUILT</div></div>
-          <div class="rv" style="--i:2"><div class="bigtxt">Prioritised Global expansion</div><div class="biglbl">TOP-GROWTH MARKETS</div></div>
+          <div class="rv" style="--i:2"><div class="bigtxt">Prioritized global expansion</div><div class="biglbl">TOP-GROWTH MARKETS</div></div>
           <div class="rv" style="--i:3"><div class="bigtxt">Precision targeting model</div><div class="biglbl">AI SEGMENTATION</div></div>
         </div>
         <div class="cols2" style="margin-top:30px">
@@ -1591,7 +1591,7 @@ body.static .hhint .har,body.failsafe .hhint .har{animation:none!important}
   /* a 286px fixed track inside a 525px column left 217px for a 229px line */
   #xtix .grid2c.apl,#xtix .grid2c{grid-template-columns:repeat(2,minmax(0,1fr));column-gap:22px}
   /* the stat row's first cell floors at 344px, so the two headline cells get
-     298px each: 24px of Inter no longer fits "Prioritised Global expansion" */
+     298px each: 24px of Inter no longer fits "Prioritized global expansion" */
 }
 
 
@@ -1824,7 +1824,7 @@ body.static .hfolder,body.static #hero .mfold{--sx:-320px}
    cascade) - the stat row and the reflection row are inside the folder now, so
    they read across 988px instead of the .wrap's 1120px. The first stat cell
    floors at 344px, leaving 298px for each headline: 24px of Inter no longer
-   holds "Prioritised Global expansion" on one line, and 13.5px no longer holds
+   holds "Prioritized global expansion" on one line, and 13.5px no longer holds
    a reflection on one line. Re-cut so both do. Phone layout untouched. */
 @media (min-width:901px){
   #xtix .statrow{column-gap:24px}
@@ -1878,7 +1878,7 @@ body.static .hfolder,body.static #hero .mfold{--sx:-320px}
   #medcoin .outs td.v{font-size:14px}
   /* M2-3 the drawer hint tells the truth on phones (the files stack downward) */
   #hwrap .hhint .hs,.hhint .hs{display:none!important}
-  .hhint::after{content:"THE FILES STAND BELOW";font-family:'JetBrains Mono',monospace;
+  .hhint::after{content:"THE ROOM IS THROUGH HERE";font-family:'JetBrains Mono',monospace;
     font-size:8.5px;letter-spacing:.22em;color:var(--lbl)}
   /* M2-4 wide diagrams: edge fade signals there is more to swipe */
   #eventer .convwrap,#tech .archw{
@@ -2011,8 +2011,11 @@ body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:214748
 /* classification grammar - case colors via each section's --fc */
 .clsband{background:var(--fc,var(--emb));color:#141519;font-family:'JetBrains Mono',monospace;font-weight:800;font-size:9.5px;letter-spacing:.4em;text-align:center;padding:7px 8px 6px;border-radius:4px;margin:14px 0 0}
 .clsctl{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:.07em;color:var(--dim,#6B6E76);padding:7px 2px;border-bottom:1px solid rgba(107,110,118,.28);margin-bottom:6px}
-#medcoin .clsband{background:#22201C;color:#E9E7DF}
-#medcoin .clsctl{color:#6d675c;border-bottom-color:rgba(34,32,28,.22)}
+/* the other three cases get a solid accent bar; medcoin's was near-black on
+   near-black at 1.01:1 and read as a rendering fault. Its accent is paper. */
+#medcoin .clsband{background:#E9E7DF;color:#141519}
+/* was #6d675c = 2.86:1; the other three inherit --dim #B6B7BB at 8.01:1 */
+#medcoin .clsctl{border-bottom-color:rgba(233,231,223,.20)}
 .pmark{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:.82em;color:var(--fc,var(--emb));margin-right:5px;letter-spacing:.04em}
 #medcoin .pmark{color:#8a5a17}
 .srcline{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.06em;color:var(--dim,#6B6E76);margin-top:6px}
@@ -2054,7 +2057,17 @@ body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:214748
 @keyframes rxflash{0%{background:rgba(47,179,128,.32)}100%{background:rgba(47,179,128,0)}}
 .redx.open::after{transform:translateX(calc(100% + 14px));opacity:0;pointer-events:none}
 
-@media (prefers-reduced-motion:reduce){.redx{color:inherit}.redx::after{transform:scaleX(0)}.sb-imp{opacity:1;animation:none}.stampbox::after{animation:none}}
+@media (prefers-reduced-motion:reduce){.redx{color:inherit}.redx::after{transform:scaleX(0)}
+  .sb-imp{opacity:1;animation:none}.stampbox::after{animation:none}
+  /* the impression is shown, so the prompt that asked for it must go - otherwise
+     "REVIEWED" prints straight on top of "PRESS & HOLD TO STAMP" */
+  .sb-lbl{opacity:0}
+  /* the developed copy is already visible in this mode, so the lamp must not invite
+     the reader to switch on something that is plainly already on */
+  .case .folder .lampband{display:none!important}
+  /* and the statement must not be left on its setup with no conclusion */
+  #statement .l1{font-size:clamp(30px,5vw,60px);line-height:1.08;color:#F2F1ED;letter-spacing:-.028em}
+}
 
 
 
@@ -2066,7 +2079,7 @@ body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:214748
 .es-h{display:flex;justify-content:space-between;gap:8px;font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:.22em;color:#8A8578;margin-bottom:7px}
 .es-h b{color:#1E6B4B}
 .es-row{display:flex;gap:12px;padding:5px 0;border-top:1px solid rgba(34,32,28,.13);font-family:'JetBrains Mono',monospace}
-.es-k{font-size:7.5px;letter-spacing:.2em;color:#8A8578;min-width:50px;padding-top:2px}
+.es-k{font-size:7.5px;letter-spacing:.2em;color:#67624F;min-width:50px;padding-top:2px}
 .es-v{font-size:10px;font-weight:600;letter-spacing:.04em;color:#22201C}
 .es-stamp{position:absolute;right:13px;bottom:11px;font-family:'JetBrains Mono',monospace;font-weight:800;font-size:8.5px;letter-spacing:.24em;color:#1E6B4B;border:2px solid #1E6B4B;border-radius:4px;padding:3px 7px;transform:rotate(5deg);opacity:.85}
 
@@ -2679,7 +2692,7 @@ body.static .rxs::after{transform:scaleX(0)}
                      linear-gradient(180deg,transparent 0,rgba(0,0,0,.6) 6%,#000 16%,#000 86%,rgba(0,0,0,.6) 95%,transparent 100%);
           mask-composite:intersect}
 @media (max-width:860px){
-  .hcard.hroom{width:100%;height:clamp(380px,64svh,520px);margin:14px 0}
+  .hcard.hroom{width:100vw;height:clamp(380px,64svh,520px);margin:14px 0}
 }
 /* --- the room. Every structural line is neutral bone; colour is reserved for files. --- */
 .rg-stage{position:absolute;inset:0;perspective:1500px;perspective-origin:50% 40%;touch-action:pan-y;cursor:grab;user-select:none;-webkit-user-select:none}
@@ -2835,14 +2848,24 @@ body.static .rxs::after{transform:scaleX(0)}
 .rg-hud{position:absolute;left:16px;bottom:14px;pointer-events:none}
 .rg-hl{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.3em;color:#6B6E76}
 .rg-hn{font-family:'Fraunces',serif;font-weight:800;font-size:19px;color:#E9E7DF;margin-top:5px}
-.rg-hint{position:absolute;right:16px;bottom:14px;font-family:'JetBrains Mono',monospace;font-size:8px;
-  letter-spacing:.22em;color:#5A5E68;pointer-events:none}
+/* the stage is 100vw inside a narrower pin, so anchoring to its right edge put the only
+   usage instruction off screen. Anchor it to the left, beside the HUD, and lift it to AA. */
+.rg-hint{position:absolute;left:16px;bottom:14px;font-family:'JetBrains Mono',monospace;font-size:8.5px;
+  letter-spacing:.22em;color:#9EA1A9;pointer-events:none}
+.rg-hud{left:16px;bottom:34px}
 @media (prefers-reduced-motion:reduce){.rg-ar{animation:none}}
-@media (max-width:620px){.rg-outer{height:498px}.rg-stage{perspective:1100px}
-  .rg-card{width:170px;height:234px;margin:-139px 0 0 -85px;transform:rotateY(var(--a)) translateZ(248px)}
-  .rg-sh{transform:rotateY(var(--a)) translateZ(248px) translateY(98px) rotateX(90deg)}
-  .rg-thread{width:196px}.rg-nm{font-size:26px}.rg-ghost{font-size:92px}
-  .rg-arm{transform:translateY(-22px) scale(.76)}}
+/* 621-860: the room is the viewport, the radius fits inside it */
+@media (max-width:860px){.rg-stage{perspective:1100px}
+  .rg-card{width:170px;height:234px;margin:-139px 0 0 -85px;transform:rotateY(var(--a)) translateZ(228px)}
+  .rg-sh{transform:rotateY(var(--a)) translateZ(228px) translateY(98px) rotateX(90deg)}
+  .rg-thread{width:176px}.rg-nm{font-size:26px}.rg-ghost{font-size:92px}
+  .rg-arm{transform:translateY(-22px) translateZ(-46px) scale(.76)}}
+/* <=620: a phone cannot hold a 228px radius - the side files would sit off both edges */
+@media (max-width:620px){.rg-stage{perspective:900px}
+  .rg-card{width:138px;height:190px;margin:-113px 0 0 -69px;transform:rotateY(var(--a)) translateZ(142px)}
+  .rg-sh{width:170px;margin-left:-85px;transform:rotateY(var(--a)) translateZ(142px) translateY(80px) rotateX(90deg)}
+  .rg-thread{width:96px}.rg-nm{font-size:21px}.rg-ghost{font-size:74px}
+  .rg-arm{transform:translateY(-18px) translateZ(-40px) scale(.54)}}
 
 /* the kill-switches must reach the room too: a frozen document shows it still, but nothing
    in it may animate or ask for a frame */
@@ -2924,6 +2947,9 @@ body.static .rg-ar,body.failsafe .rg-ar,html.preopen .rg-ar{animation:none!impor
 .case .folder.lampon::after{color:rgba(127,135,206,.10)}
 .case .folder.lampon::before{border-color:rgba(127,135,206,.20);
   background:repeating-conic-gradient(from 0deg at 50% 50%,transparent 0 8deg,rgba(127,135,206,.09) 8deg 9deg)}
+
+/* an analyst-note word is one unbreakable box; only the gaps between words may break */
+.an-t .an-w{display:inline-block;white-space:nowrap}
 </style>
 <section class="sec" id="leadership" style="--fc:var(--emb)">
   <div class="secnum" aria-hidden="true">07</div>
@@ -2980,7 +3006,7 @@ body.static .rg-ar,body.failsafe .rg-ar,html.preopen .rg-ar{animation:none!impor
       <div class="rub"><span class="d"></span>FINAL THOUGHTS</div>
       <div class="tok">END OF FILE</div>
     </div>
-    <div class="sttl rv" style="--i:1">The Builder's Principles</div>
+    <div class="sttl rv" style="--i:1">The Builder’s Principles</div>
     <div class="smeta rv" style="--i:1">NINE PRINCIPLES &middot; ONE OPERATING SYSTEM</div>
     <div class="folder rv" style="--i:2;margin-top:48px">
       <div class="tabrow"><div class="tA"><span class="nm">The Builder</span><span class="fl">&#9656; END OF FILE</span></div></div>
@@ -3764,7 +3790,8 @@ function frame(){
           hcards[i2].style.setProperty('--sc',String(1.02-Math.min(.1,d*.22)));
           var sd=(ctr-cx)/cw;
           var ry=sd<-.12?Math.max(-54,(sd+.12)*150):0;
-          hcards[i2].style.setProperty('--ry',ry.toFixed(1)+'deg');
+          /* renamed: --ry is inherited, and .rg-ar inside the room reads var(--ry) */
+          hcards[i2].style.setProperty('--hry',ry.toFixed(1)+'deg');
         }
       }
     }
@@ -4303,7 +4330,7 @@ function markReviewed(id){
   var el=document.getElementById('cmn');if(el)el.textContent=reviewedN+'/4';
   var sq=meter.querySelector('.sq[data-c="'+id+'"]');if(sq)sq.classList.add('done');
   try{AU().tick&&AU().tick()}catch(e){}
-  if(ccstamp&&!ceremonyDone&&reviewedN<4)ccstamp.textContent='IN REVIEW · '+reviewedN+'/4';
+  if(ccstamp&&!ceremonyDone)ccstamp.textContent='IN REVIEW · '+Math.min(reviewedN,4)+'/4';
 }
 function ceremony(){
   if(ceremonyDone||!ccstamp)return;
@@ -5492,16 +5519,29 @@ document.querySelectorAll('.redx').forEach(function(r){
   };
   /* deterministic per-glyph strike variance: a real machine never hits twice the same */
   function strike(el){
+    /* one span per GLYPH makes every glyph a line-break opportunity, which broke words
+       in half ("before the tea / m."). Each word becomes one unbreakable box; the spaces
+       between words stay plain text nodes and remain the only place a line may break.
+       The container carries the plain sentence as its accessible name, because a screen
+       reader handed ninety one-character spans will spell them out. */
     var txt=el.textContent;el.textContent='';
+    el.setAttribute('aria-label',txt);
     function pr(i,s2){var x=Math.sin(i*127.1+s2*311.7)*43758.5453;return x-Math.floor(x)}
-    for(var i=0;i<txt.length;i++){
-      if(txt[i]===' '){el.appendChild(document.createTextNode(' '));continue}
-      var sp=document.createElement('span');sp.textContent=txt[i];
-      var dy=(pr(i,1)-.5)*1.5,rot=(pr(i,2)-.5)*2.1,op=.78+pr(i,3)*.22;
-      sp.style.transform='translateY('+dy.toFixed(2)+'px) rotate('+rot.toFixed(2)+'deg)';
-      sp.style.opacity=op.toFixed(2);
-      el.appendChild(sp);
-    }
+    var words=txt.split(' '),idx=0;
+    words.forEach(function(word,wi){
+      if(word.length){
+        var w=document.createElement('span');w.className='an-w';w.setAttribute('aria-hidden','true');
+        for(var i=0;i<word.length;i++){
+          var sp=document.createElement('span');sp.textContent=word[i];
+          var dy=(pr(idx,1)-.5)*1.5,rot=(pr(idx,2)-.5)*2.1,op=.78+pr(idx,3)*.22;idx++;
+          sp.style.transform='translateY('+dy.toFixed(2)+'px) rotate('+rot.toFixed(2)+'deg)';
+          sp.style.opacity=op.toFixed(2);
+          w.appendChild(sp);
+        }
+        el.appendChild(w);
+      }
+      if(wi<words.length-1)el.appendChild(document.createTextNode(' '));
+    });
   }
   Object.keys(NOTES).forEach(function(id){
     var sec=document.getElementById(id);if(!sec)return;
@@ -5866,6 +5906,12 @@ document.querySelectorAll('.redx').forEach(function(r){
   'use strict';
   var ring=document.getElementById('rgRing'),stage=document.getElementById('rgStage');
   if(!ring||!stage)return;
+  /* the CSS switches for this were cancelling `animation` on .rg-ar - a property that no
+     longer exists, because round 33 moved the armillary onto the rAF loop. Motion is now
+     written from JS, so only JS can stop it. One static frame, then nothing. */
+  var RGSTILL=matchMedia('(prefers-reduced-motion: reduce)').matches
+    ||document.body.classList.contains('static')
+    ||document.body.classList.contains('failsafe');
   var cards=[].slice.call(ring.querySelectorAll('.rg-card')),
       shads=[].slice.call(ring.querySelectorAll('.rg-sh')),
       threads=[].slice.call(ring.querySelectorAll('.rg-thread')),
@@ -5884,13 +5930,17 @@ document.querySelectorAll('.redx').forEach(function(r){
       cards[i].style.setProperty('--d',ds);
       if(shads[i])shads[i].style.setProperty('--d',ds);
       if(threads[i])threads[i].style.setProperty('--d',ds);
-      cards[i].style.zIndex=String(100-Math.round(d*100));
+      /* NO z-index here. Inside a 3D rendering context paint order is decided by the
+         3D positions; assigning z-index is exactly what engines disagree about, and it is
+         the strongest lead on the dark rectangle seen on iOS but never in Chrome. Depth
+         sorting alone is correct and portable. */
     }
     var f=((Math.round(-spin/90)%4)+4)%4;
     if(f!==last){last=f;if(nameEl)nameEl.textContent=NAMES[f]}
   }
   function frame(){
     raf=null;
+    if(RGSTILL){apply();return}
     if(!drag){
       var diff=target-spin;
       if(Math.abs(diff)>0.02||Math.abs(vel)>0.02){vel=vel*0.86+diff*0.085;spin+=vel}
@@ -5910,6 +5960,9 @@ document.querySelectorAll('.redx').forEach(function(r){
        auto-scroll the page while dragging — which read as the ring hijacking the
        scroll. The wheel is deliberately untouched: it keeps scrolling the document. */
     if(e.pointerType==='mouse')e.preventDefault();
+    /* and the gesture must not ALSO reach #hpin's drag-inertia handler, which would pan
+       the whole room sideways while the reader is only trying to turn the ring */
+    e.stopPropagation();
     drag=true;moved=0;px=e.clientX;idle=0;stage.classList.add('drag');
     try{stage.setPointerCapture&&stage.setPointerCapture(e.pointerId)}catch(err){}
   });
@@ -5920,7 +5973,19 @@ document.querySelectorAll('.redx').forEach(function(r){
   });
   function release(){if(!drag)return;drag=false;stage.classList.remove('drag');target=Math.round(target/90)*90;idle=0}
   ['pointerup','pointercancel','pointerleave'].forEach(function(t){stage.addEventListener(t,release)});
+  /* the ring was pointer-only: 0 tabbable elements in #files, and #rail is display:none
+     below 1150px, so on any laptop under that width and on every phone the case index had
+     no keyboard or assistive-technology affordance at all. */
   cards.forEach(function(c,i){
+    c.setAttribute('tabindex','0');
+    c.setAttribute('role','button');
+    c.setAttribute('aria-label','File 0'+(i+1)+' — '+NAMES[i]+'. Press Enter to open, arrow keys to turn the ring.');
+    c.addEventListener('keydown',function(e){
+      if(e.key==='Enter'||e.key===' '){e.preventDefault();c.click();return}
+      if(e.key==='ArrowRight'||e.key==='ArrowLeft'){
+        e.preventDefault();target+=(e.key==='ArrowRight'?-90:90);idle=0;
+      }
+    });
     c.addEventListener('click',function(){
       if(moved>7)return;
       var f=((Math.round(-spin/90)%4)+4)%4;
@@ -5947,7 +6012,9 @@ document.querySelectorAll('.redx').forEach(function(r){
   'use strict';
   var el=document.getElementById('stmt1');
   if(!el)return;
-  var reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var reduced=matchMedia('(prefers-reduced-motion: reduce)').matches
+    ||document.body.classList.contains('static')
+    ||document.body.classList.contains('failsafe');
   var A='One intelligence built the world.',B='Two will build the next.';
   var MOBST=innerWidth<861,phase='A',busy=false;
   function render(txt,em){
@@ -5955,6 +6022,7 @@ document.querySelectorAll('.redx').forEach(function(r){
     var idx=0,words=txt.split(' ');
     words.forEach(function(word,wi){
       var wsp=document.createElement('span');wsp.className='sm-wd';
+      wsp.setAttribute('aria-hidden','true');
       word.split('').forEach(function(ch){
         var sp=document.createElement('i');
         sp.textContent=ch;
@@ -5967,8 +6035,13 @@ document.querySelectorAll('.redx').forEach(function(r){
     });
   }
   function setVoice(b){el.classList.toggle('sB',b);el.classList.toggle('sA',!b)}
+  var pend=null;
   function migrate(toB){
-    if(busy||toB===(phase==='B'))return;
+    /* a request that arrives inside the 330ms hand-off used to be dropped. If the reader
+       then stopped scrolling, no further call ever came and the line was stranded on the
+       wrong sentence. Latch it and apply when the hand-off clears. */
+    if(busy){pend=toB;return}
+    if(toB===(phase==='B'))return;
     busy=true;phase=toB?'B':'A';
     if(reduced){render(toB?B:A,false);setVoice(toB);busy=false;return}
     [].slice.call(el.querySelectorAll('i')).forEach(function(c){c.classList.add('out')});
@@ -5978,10 +6051,11 @@ document.querySelectorAll('.redx').forEach(function(r){
       nc.forEach(function(c){c.classList.add('inn')});
       void el.offsetWidth;
       nc.forEach(function(c){c.classList.remove('inn')});
-      setTimeout(function(){busy=false},40);
+      setTimeout(function(){busy=false;if(pend!==null){var q=pend;pend=null;migrate(q)}},40);
     },290);
   }
-  render(A,false);setVoice(false);
+  if(reduced){render(B,false);setVoice(true);phase='B';el.setAttribute('aria-label',A+' '+B)}
+  else{render(A,false);setVoice(false);el.setAttribute('aria-label',A+' '+B)}
   if(MOBST){
     /* phones: the pin scene is frozen below 861, so the crossing cannot drive it —
        a short cycle while in view guarantees both sentences are met */
@@ -6069,7 +6143,8 @@ document.querySelectorAll('.redx').forEach(function(r){
       ctx.beginPath();ctx.arc(X,Y,1.5+K*1.1,0,6.284);ctx.fill();
     }
   }
-  function draw(){raf=null;if(!live)return;body();raf=requestAnimationFrame(draw)}
+  /* the filament is motion too: one frame under reduced motion, then still */
+  function draw(){raf=null;if(!live)return;body();if(reduced)return;raf=requestAnimationFrame(draw)}
   function start(){if(!live){live=true;if(!raf)raf=requestAnimationFrame(draw)}}
   function stop(){live=false;if(raf){cancelAnimationFrame(raf);raf=null}}
   size();body();
