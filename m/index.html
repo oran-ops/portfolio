@@ -348,7 +348,7 @@ font-weight:800;font-size:88px;letter-spacing:-.02em;line-height:1;color:transpa
 #hero .barc svg rect:nth-child(7){animation:barbl 4.2s steps(1) infinite}
 #hero .barc svg rect:nth-child(13){animation:barbl 6.4s steps(1) infinite reverse}
 @keyframes barbl{0%,88%{opacity:1}89%,100%{opacity:.2}}
-.folder{will-change:transform}
+.folder.wcv{will-change:transform}
 
 @media (prefers-reduced-motion:reduce){
  #cur,#curR,#heromq{display:none!important}
@@ -538,11 +538,7 @@ border:2px solid var(--hink);border-radius:8px;padding:11px 18px;transition:tran
  .hfolder{height:auto;min-height:300px;padding:38px 24px 84px}
 }
 
-/* section covers */
 .sec.case{position:relative}
-.seccover{position:absolute;inset:0;z-index:6;display:flex;align-items:center;justify-content:center;
-pointer-events:none;will-change:transform}
-.seccover .sct{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:11px;letter-spacing:.4em;color:var(--lbl)}
 
 /* declassify field report */
 .reality .frow{position:relative}
@@ -574,7 +570,6 @@ font-weight:700;font-size:8.5px;letter-spacing:.22em;color:var(--emb);opacity:0;
 #archclock{color:var(--mut);font-weight:600}
 
 /* kill-switches */
-body.static .seccover,body.failsafe .seccover{display:none!important}
 body.static .hwrap,body.failsafe .hwrap{height:auto}
 body.static .hpin,body.failsafe .hpin{position:static;height:auto;overflow:visible}
 body.static .htrack,body.failsafe .htrack{flex-wrap:wrap;width:auto;padding:0 6vw;gap:70px 4vw;transform:none!important}
@@ -585,7 +580,6 @@ body.static .rstampS{opacity:1!important;animation:none!important}
 body.static .breathe,body.static #boot .dots i{animation:none!important}
 html.preopen body.static #hero .hw{transform:none;opacity:1}
 @media (prefers-reduced-motion:reduce){
- .seccover{display:none!important}
  .redct{transform:scaleX(0)!important}
  .frail,.tabrow .tB{opacity:1!important;transform:none!important}
  .rstampS{opacity:1!important;animation:none!important}
@@ -747,18 +741,16 @@ border:1px solid var(--grid2);border-radius:9px;padding:9px 16px;background:var(
 .ix-chip.c2{right:13%;top:22%}
 .ix-verdict{position:absolute;left:50%;bottom:-13px;transform:translateX(-50%);background:var(--bg);padding:4px 14px;
 font-family:'JetBrains Mono',monospace;font-weight:700;font-size:9px;letter-spacing:.3em;color:var(--lbl)}
-/* index-board string canvas */
-#ixhcv{position:absolute;inset:0;pointer-events:none;z-index:0}
 /* kill-switches */
-@media (max-width:860px){#casemeter,#teaser,#evtag,.uvlayer,.ix-canvas,#ixhcv,.dcsvg{display:none!important}
+@media (max-width:860px){#casemeter,#teaser,#evtag,.uvlayer,.ix-canvas,.dcsvg{display:none!important}
  .ix-board{height:auto;min-height:0;padding:26px 18px 34px}
  .ix-tab,.ix-chip{position:static;display:inline-flex;margin:8px 8px 0 0}
  .ix-verdict{position:static;transform:none;display:block;margin-top:18px;text-align:center}}
-@media (prefers-reduced-motion:reduce){#casemeter,#teaser,#evtag,.uvlayer,#ixhcv{display:none!important}
+@media (prefers-reduced-motion:reduce){#casemeter,#teaser,#evtag,.uvlayer{display:none!important}
  .dcsvg ellipse{stroke-dashoffset:0!important}}
-body.static #casemeter,body.static #teaser,body.static #evtag,body.static .uvlayer,body.static #ixhcv,body.static .ix-canvas{display:none!important}
+body.static #casemeter,body.static #teaser,body.static #evtag,body.static .uvlayer,body.static .ix-canvas{display:none!important}
 body.static .dcsvg ellipse{stroke-dashoffset:0!important;transition:none!important}
-body.failsafe #casemeter,body.failsafe #teaser,body.failsafe #evtag,body.failsafe .uvlayer,body.failsafe #ixhcv,body.failsafe .ix-canvas{display:none!important}
+body.failsafe #casemeter,body.failsafe #teaser,body.failsafe #evtag,body.failsafe .uvlayer,body.failsafe .ix-canvas{display:none!important}
 body.failsafe .dcsvg ellipse{stroke-dashoffset:0!important}
 
 /* clearance chip (role moment) */
@@ -2593,48 +2585,6 @@ body.static .sttl .w>i{font-variation-settings:'wght' 780;letter-spacing:0}
 body.static .rxs::after{transform:scaleX(0)}
 
 
-/* ================= BIG BUILD 5 - THE DRAWER LOUPE =================
-   In a real archive you do not pull a folder to find out what it is - you hold
-   the glass over its spine ticket. Press and hold any file in the drawer.
-   v2 - the whole document is matte, and a lit sphere with a shadow and a glow ring
-   belonged to a different object language. The glass is now an archival instrument:
-   a flat matte inspection plate, hairline-ruled in the case colour, with
-   registration corners at two opposing edges. No gloss, no bloom, no halo, almost
-   no shadow. Every behaviour (hover-dwell, pointer follow, touch hold, the
-   deliberate-pointer guard, the INSPECT hint) is unchanged. */
-#dloupe{position:fixed;width:214px;pointer-events:none;z-index:2147478000;
-  opacity:0;transform:translate(-50%,-52%);transition:opacity .12s linear;
-  background:#141519;border:1px solid var(--dlc,#2FB380);border-radius:2px;
-  box-shadow:0 2px 10px rgba(0,0,0,.3);
-  display:flex;flex-direction:column;align-items:stretch;text-align:left}
-#dloupe.on{opacity:1}
-/* registration corners - the frame reads as a measuring instrument, not a lens */
-#dloupe::before,#dloupe::after{content:"";position:absolute;width:9px;height:9px;
-  border:1px solid var(--dlc,#2FB380);opacity:.6;pointer-events:none}
-#dloupe::before{left:-4px;top:-4px;border-right:0;border-bottom:0}
-#dloupe::after{right:-4px;bottom:-4px;border-left:0;border-top:0}
-#dloupe .dl-k{font-family:'JetBrains Mono',monospace;font-weight:800;font-size:7.5px;letter-spacing:.28em;
-  color:var(--dlc,#2FB380);padding:8px 13px 7px;background:rgba(242,241,237,.03);
-  border-bottom:1px solid rgba(242,241,237,.13)}
-#dloupe .dl-n{font-family:'Fraunces',serif;font-weight:600;font-size:20px;color:#F2F1ED;line-height:1.06;padding:12px 13px 0}
-#dloupe .dl-r{height:1px;margin:11px 13px 0;background:rgba(242,241,237,.16)}
-#dloupe .dl-m{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:.16em;color:#B6B7BB;line-height:1.9;padding:9px 13px 0}
-#dloupe .dl-s{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:.26em;color:#8D9096;
-  margin-top:11px;padding:7px 13px 8px;border-top:1px solid rgba(242,241,237,.13)}
-.hfolder.dl-held{filter:brightness(1.06)}
-@media (max-width:680px){#dloupe{width:192px}#dloupe .dl-n{font-size:17px}}
-@media (prefers-reduced-motion:reduce){#dloupe{transition:opacity .15s}}
-
-/* BIG BUILD 5b — the drawer is a display case: rest on a file and the glass comes up */
-.hfolder{cursor:crosshair}
-.hfolder .dlhint{position:absolute;left:42px;bottom:34px;display:inline-flex;align-items:center;gap:8px;
-  font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;letter-spacing:.2em;
-  color:var(--hink,#191A1F);opacity:.62;transition:opacity .25s,transform .25s;pointer-events:none}
-.hfolder .dlhint i{font-style:normal;font-size:12px;line-height:1}
-.hfolder:hover .dlhint{opacity:.95;transform:translateX(3px)}
-.hfolder.dl-held .dlhint{opacity:0}
-@media (max-width:860px){.hfolder .dlhint{left:18px;bottom:20px;font-size:8px;letter-spacing:.16em}}
-
 
 /* ===== the record closes: the 4/4 ceremony finally has a target ===== */
 #final .vcommit{margin:34px auto 0;max-width:440px;text-align:center}
@@ -2728,9 +2678,6 @@ body.static .rxs::after{transform:scaleX(0)}
              inset 0 0 22px color-mix(in srgb,var(--c) 14%,transparent),
              0 1px 0 rgba(255,255,255,.10);
   transform:rotateZ(var(--tz)) rotateX(var(--tx)) rotateY(var(--ry,0deg))}
-@keyframes rgArm{
-  from{transform:rotateZ(var(--tz)) rotateX(var(--tx)) rotateY(0deg)}
-  to  {transform:rotateZ(var(--tz)) rotateX(var(--tx)) rotateY(360deg)}}
 .rg-arm .a-pip{position:absolute;left:50%;top:50%;width:6px;height:6px;margin:-3px 0 0 -3px;
   border-radius:50%;background:#F2F1ED;box-shadow:0 0 16px rgba(242,241,237,.7)}
 .rg-arm .a-t{position:absolute;left:-90px;top:118px;width:180px;text-align:center;
@@ -2853,7 +2800,6 @@ body.static .rxs::after{transform:scaleX(0)}
 .rg-hint{position:absolute;left:16px;bottom:14px;font-family:'JetBrains Mono',monospace;font-size:8.5px;
   letter-spacing:.22em;color:#9EA1A9;pointer-events:none}
 .rg-hud{left:16px;bottom:34px}
-@media (prefers-reduced-motion:reduce){.rg-ar{animation:none}}
 /* 621-860: the room is the viewport, the radius fits inside it */
 @media (max-width:860px){.rg-stage{perspective:1100px}
   .rg-card{width:170px;height:234px;margin:-139px 0 0 -85px;transform:rotateY(var(--a)) translateZ(228px)}
@@ -2867,14 +2813,9 @@ body.static .rxs::after{transform:scaleX(0)}
   .rg-thread{width:96px}.rg-nm{font-size:21px}.rg-ghost{font-size:74px}
   .rg-arm{transform:translateY(-18px) translateZ(-40px) scale(.54)}}
 
-/* the kill-switches must reach the room too: a frozen document shows it still, but nothing
-   in it may animate or ask for a frame */
-body.static .rg-ar,body.failsafe .rg-ar,html.preopen .rg-ar{animation:none!important}
-@media (prefers-reduced-motion:reduce){.rg-ar{animation:none!important}}
+/* the room's kill-switches live in JS now (RGSTILL): the arms are written from the rAF
+loop, so `animation:none` had nothing to cancel. One static frame, then nothing. */
 
-/* the drawer's intro canvas belonged to a track of cards that no longer exists; with the
-   room in its place it has nothing to draw and only paints over the ring */
-#hpin #ixhcv{display:none!important}
 
 /* the closing card leaves the track so the travel ends the moment the room arrives, and
    reads as a line under the room rather than one more thing to slide past */
@@ -2910,8 +2851,6 @@ body.static .rg-ar,body.failsafe .rg-ar,html.preopen .rg-ar{animation:none!impor
 #statement .l1 i.out{opacity:0;filter:blur(6px);transform:translateY(-14px)}
 #statement .l1 i.inn{opacity:0;filter:blur(6px);transform:translateY(14px)}
 #statement .l1 i.em2{color:var(--emb)}
-/* the particle field's canvas has nothing left to draw here */
-#ai2c{display:none!important}
 @media (max-width:860px){
   #statement .in{flex-direction:column;gap:8px}
   #statement .stfil{flex:none;width:100%;height:clamp(180px,26svh,240px)}
@@ -3202,8 +3141,8 @@ function statement(y){
      dead 0 or 1 and this function was re-writing an identical transform and
      opacity onto every headline word, every stat span and the memo, on every
      scroll frame of the whole document. Same p == same pixels, so it is skipped.
-     __ai2 is deliberately NOT skipped: the particle field owns its own viewport
-     truth and still has to be driven so it can clear itself on the way out. */
+     Nothing here is exempt any more: the particle field that used to need driving
+     even at a dead p was removed in round 35. */
   var moved=(p!==lastSTP);lastSTP=p;
   if(window.__stSwap)window.__stSwap(p);
   function words(list,start,dur){
@@ -3220,9 +3159,8 @@ function statement(y){
   }
     /* THE SENTENCE OWNS ITSELF NOW. It is no longer assembled out of particles and no
        longer raised word by word: the two lines share one line and migrate into each
-       other, character by character. Not calling __ai2 is what stops the particle field
-       - it is driven, never self-running - and #ai2c is hidden so its last frame cannot
-       linger behind the type. */
+       other, character by character. The particle field it replaced is gone from the
+       file entirely - round 35 proved it unreachable and removed all 390 lines. */
   if(moved&&memo){
     var qq=eo(clamp((p-.70)/.14));
     memo.style.opacity=String(qq);
@@ -3685,7 +3623,6 @@ if(!frozen&&window.matchMedia('(pointer:fine)').matches){
 /* ---- ACT 3+8+4+10: scroll-driven systems ---- */
 var hwrap=document.getElementById('hwrap'),hpin=document.getElementById('hpin'),htrack=document.getElementById('htrack');
 var hcards=htrack?[].slice.call(htrack.querySelectorAll('.hcard')):[];
-var covers=[].slice.call(document.querySelectorAll('.seccover')).map(function(c){return {el:c,sec:c.parentElement,t:0,h:0}});
 var LIGHTS=[['hero','#191A1F'],['statement','#191A1F'],['philosophy','#191A1F'],['files','#191A1F'],
  ['xtix','#1A2621'],['oasis','#211E1D'],['eventer','#1A1F28'],['medcoin','#1D1E23'],
  ['leadership','#191A1F'],['tech','#1A2621'],['final','#191A1F']];
@@ -3702,10 +3639,6 @@ function measure(){
     hwH=hwrap.offsetHeight;
     maxX=Math.max(0,htrack.scrollWidth-hpin.clientWidth);
   }
-  covers.forEach(function(c){
-    c.t=c.sec.getBoundingClientRect().top+window.pageYOffset;
-    c.h=c.sec.offsetHeight;
-  });
   lights.forEach(function(l){
     l.t=l.el.getBoundingClientRect().top+window.pageYOffset;
     l.b=l.t+l.el.offsetHeight;
@@ -3713,7 +3646,6 @@ function measure(){
   /* a re-measure can move maxX/hwTop without moving X, so drop the drawer's
      change-gate and let the next frame write the cards again from scratch */
   lastX=null;lastHT='';hcPend=1;
-  covers.forEach(function(c){c.lp=-1});
 }
 window.addEventListener('resize',function(e){if(window.__mSoftRz&&window.__mSoftRz(e,measure))return;measure()});
 window.addEventListener('load',function(){setTimeout(measure,80)});
@@ -3795,14 +3727,6 @@ function frame(){
         }
       }
     }
-    /* section covers */
-    for(var j=0;j<covers.length;j++){
-      var c=covers[j];
-      var pr=clamp((y+vh-c.t)/(vh*.85));
-      if(pr===c.lp)continue;                 /* same pr => same transform string */
-      c.lp=pr;
-      c.el.style.transform='translateY('+(-pr*103)+'%)';
-    }
     /* room relight */
     var mid=y+vh*.5;
     for(var k=0;k<lights.length;k++){
@@ -3829,7 +3753,13 @@ if(!frozen){
     W=dc.width=Math.round(window.innerWidth*DSC);H=dc.height=Math.round(window.innerHeight*DSC);
     dc.style.width=window.innerWidth+'px';dc.style.height=window.innerHeight+'px';
   }
-  dsize();window.addEventListener('resize',dsize);
+  dsize();
+  /* the only resize listener in the file that bypassed the soft-resize guard, so every
+     mobile URL-bar show/hide reallocated the bitmap */
+  window.addEventListener('resize',function(e){
+    if(window.__mSoftRz&&window.__mSoftRz(e,dsize))return;
+    dsize();
+  });
   for(var n=0;n<64;n++){
     pts.push({x:Math.random()*800,y:Math.random()*450,r:Math.random()*.9+.35,
       vx:(Math.random()-.5)*.16,vy:(Math.random()-.5)*.12,o:Math.random()*.35+.1});
@@ -3838,9 +3768,33 @@ if(!frozen){
   window.__dustBurst=function(bx,by){bx*=DSC;by*=DSC;try{for(var q=0;q<pts.length;q++){var dxx=pts[q].x-bx,dyy=pts[q].y-by;var dd=Math.max(60,Math.hypot(dxx,dyy));pts[q].vx+=dxx/dd*(2.6+Math.random()*3.2);pts[q].vy+=dyy/dd*(2.6+Math.random()*3.2);}}catch(e){}};
   window.__dustIdle=function(on){idleF=on?1.6:1};
   var mx=-999,my=-999;
+  /* THE STOP CONDITION. The dust is atmosphere; it has no business holding the compositor
+     while the reader is standing still in the two heaviest rooms in the document. It now
+     stops dead on a hidden tab, and fades out after about seven seconds of no scroll and no
+     pointer - the fade matters, because 64 points vanishing on one frame is a flicker the
+     eye does catch. Any scroll or pointer movement brings it straight back. */
+  var dlive=false,draf=null,dsleep=0,dfade=1;
+  function dwake(){
+    dsleep=0;
+    if(dfade<1){dfade=1;dc.style.opacity='.5'}
+    if(!dlive&&!document.hidden){dlive=true;if(!draf)draf=requestAnimationFrame(dl)}
+  }
+  function dstop(){dlive=false;if(draf){cancelAnimationFrame(draf);draf=null}}
+  addEventListener('scroll',dwake,{passive:true});
+  addEventListener('pointermove',dwake,{passive:true});
+  addEventListener('pointerdown',dwake,{passive:true});
+  document.addEventListener('visibilitychange',function(){document.hidden?dstop():dwake()});
   document.addEventListener('mousemove',function(e){mx=e.clientX*DSC;my=e.clientY*DSC},{passive:true});
-  (function dl(){
-    if(!document.hidden){
+  function dl(){
+    draf=null;
+    if(!dlive)return;
+    if(document.hidden){dstop();return}
+    if(++dsleep>420){
+      dfade-=.042;
+      if(dfade<=0){dc.style.opacity='0';dstop();return}
+      dc.style.opacity=(dfade*.5).toFixed(3);
+    }
+    {
       ctx.clearRect(0,0,W,H);
       ctx.fillStyle='#B6B7BB';
       for(var i2=0;i2<pts.length;i2++){
@@ -3857,8 +3811,11 @@ if(!frozen){
       }
       ctx.globalAlpha=1;
     }
-    requestAnimationFrame(dl);
-  })();
+    draf=requestAnimationFrame(dl);
+  }
+  dlive=true;draf=requestAnimationFrame(dl);
+  var _burst=window.__dustBurst;
+  window.__dustBurst=function(bx,by){dwake();return _burst(bx,by)};
 }
 window.__actsOK=true;
 }catch(err){
@@ -4434,15 +4391,7 @@ var mxG=-9999,myG=-9999;
 document.addEventListener('mousemove',function(e){mxG=e.clientX;myG=e.clientY},{passive:true});
 
 /* index-board strings */
-var hpin=document.getElementById('hpin'),ixhcv=null,ixhctx=null,hRopes=null,hIntro=null,hLips=null;
-if(hpin){
-  ixhcv=document.createElement('canvas');ixhcv.id='ixhcv';
-  hpin.insertBefore(ixhcv,hpin.firstChild);
-  ixhctx=ixhcv.getContext('2d');
-  hIntro=hpin.querySelector('.hintro');
-  hLips=[].slice.call(hpin.querySelectorAll('.hfolder .hlip'));
-  hRopes=hLips.map(function(){return mkRope(12)});
-}
+var hpin=document.getElementById('hpin');
 /* interlude string */
 var ixc=document.querySelector('#interlude .ix-canvas'),ixctx=ixc?ixc.getContext('2d'):null;
 var ixRope=mkRope(16);
@@ -4612,24 +4561,6 @@ function loop(){
      drawer is thousands of px away. #hwrap's document box is already cached, so
      the cheap arithmetic test comes first and the reads only happen in the zone
      where the ropes are actually drawn. Same condition, one layout read fewer. */
-  if(ixhcv&&hIntro&&hwB>0&&y+vh>hwT&&y<hwB){
-    var hr=hpin.getBoundingClientRect();
-    if(hr.bottom>0&&hr.top<vh&&hr.height>10){
-      if(ixhcv.width!==hpin.clientWidth){ixhcv.width=hpin.clientWidth;ixhcv.height=hpin.clientHeight;}
-      ixhctx.clearRect(0,0,ixhcv.width,ixhcv.height);
-      var ir=hIntro.getBoundingClientRect();
-      var ax=ir.right-hr.left-30,ay=ir.top-hr.top+ir.height*.35;
-      for(var hI=0;hI<hLips.length;hI++){
-        var lr=hLips[hI].getBoundingClientRect();
-        if(lr.right<hr.left-120||lr.left>hr.right+120)continue;
-        var bx=lr.left-hr.left+10,by=lr.top-hr.top+lr.height*.85;
-        var rope=hRopes[hI];
-        if(rope[0].x===0&&rope[0].y===0){for(var rp=0;rp<rope.length;rp++){rope[rp].x=rope[rp].px=ax+(bx-ax)*rp/(rope.length-1);rope[rp].y=rope[rp].py=ay+(by-ay)*rp/(rope.length-1);}}
-        ropeStep(rope,ax,ay,bx,by,Math.max(-3,Math.min(3,vs*.06)),mxG-hr.left,myG-hr.top);
-        ropeDraw(ixhctx,rope,RED);
-      }
-    }
-  }
   /* interlude string */
   /* PERF (round 5): same treatment — #interlude's box is already cached, so the
      three rect reads that draw the rope only happen inside the interlude. */
@@ -4704,7 +4635,7 @@ window.__acts3OK=true;
 }catch(err){
   window.__acts3ERR2=String(err&&err.message||err);
   try{
-    ['casemeter','teaser','evtag','ixhcv'].forEach(function(id){var el=document.getElementById(id);if(el)el.remove()});
+    ['casemeter','teaser','evtag'].forEach(function(id){var el=document.getElementById(id);if(el)el.remove()});
     [].slice.call(document.querySelectorAll('svg')).forEach(function(sv){
       [].slice.call(sv.querySelectorAll('*')).forEach(function(el){
         if(el.style){el.style.opacity='';el.style.strokeDashoffset='';el.style.strokeDasharray='';}
@@ -4719,6 +4650,8 @@ window.__acts3OK=true;
 (function(){
   if(matchMedia('(prefers-reduced-motion:reduce)').matches)return;
   if(document.body.classList.contains('static'))return;
+  /* a finger is not a pointer that hovers: on touch this loop only ever burned frames */
+  if(!matchMedia('(pointer:fine)').matches)return;
   var layers=[];
   [['#heromq',18],['.secnum',30]].forEach(function(p){
     [].forEach.call(document.querySelectorAll(p[0]),function(el){layers.push({el:el,d:p[1],x:0,y:0})});
@@ -4740,398 +4673,6 @@ window.__acts3OK=true;
     }
     if(moving){requestAnimationFrame(loop)}else{run=false}
   }
-})();
-</script>
-<script>
-/* SECOND INTELLIGENCE V — every star steers at its own point of the sentence */
-(function(){
-"use strict";
-try{
-var q=new URLSearchParams(location.search);
-if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;
-if(q.get('static')==='1')return;
-/* mobile track: the second intelligence runs on phones too, at a phone-sized
-   particle budget; only very narrow screens sit out (desktop >=861 untouched) */
-var MOBP=innerWidth<861;
-if(MOBP&&innerWidth<360&&q.get('force')!=='1')return;
-var SMF=MOBP?.14:.085; /* phones: snappier settle so a flick still resolves the sentence */
-/* R4: wall-clock physics. Phones measure real frame dt (clamped 8-50ms so a
-   hiccup cannot teleport anything) and every per-frame constant is normalized
-   by dtN=dt/16.667 - at 30/20fps the swarm now converges per SECOND of wall
-   time exactly as it does at 60fps, so nothing hovers around the sentence
-   while the words rise. Desktop: MOBP false keeps dtN identically 1 and every
-   ternary below picks the original arithmetic - behavior byte-identical.
-   Threshold audit (P-leap safety, 20fps flick steps P by .15+): every
-   discrete transition is LEVEL-triggered against current P and latched in
-   st.mode (launch front>st.d, force-land u>.2, re-scatter front<st.d-.05) -
-   re-checked every frame, so a leap can skip none of them; extinguish/
-   solidify/urgency are continuous functions of P (nothing to skip); the only
-   frame-COUNT ramp was st.flare, now decayed in dt units. Reverse unlatches
-   through the same level conditions - symmetric by construction. */
-var dtN=1,lastFT=-1,emaDt=16.7,govN=0,rzRepaint=false,lastPRaw=-1;
-var DPRCAP=MOBP?1.5:2; /* R4 budget: was 1.75 on phones; one-way governor may drop to 1.25 */
-var L2=document.getElementById('stmt2'),L1=document.getElementById('stmt1');
-var stWrap=document.querySelector('#statement .pinh');
-if(!L2||!stWrap)return;
-var W2i=[].slice.call(L2.querySelectorAll('.w>i'));
-var TP=q.get('aip')!==null?parseFloat(q.get('aip')):null;
-var TPRE=q.get('aipre')!==null?parseFloat(q.get('aipre')):null;
-var TELE=q.get('aitele')==='1';
-if(TELE)window.__tele=[];
-
-var CALL0=.20,CALL1=.36,
-    G0=.36,G1=.66,
-    U0=.74,U1=.92,
-    FR0=MOBP?.90:.93,FR1=MOBP?.99:.985;
-
-var NTXT=MOBP?900:1900,FREE=MOBP?100:260,TOTAL=NTXT+FREE; /* R4 budget: 1200/120 -> 900/100, density compensated in build() */
-var cv=null,ctx=null,DPR=1,SPR={};
-var T=null,N=0,key='';
-var ST=null;
-var t=0,fr=0,lastY=-1,kick=0,cleared=true;
-var P=-1,PRE=-1;
-var stTop=0,stH=0,geomKey='';
-var mx=-1e4,my=-1e4,vx=0,vy=0,pmx=0,pmy=0;
-var doneSnd=false;
-
-function rng(i){var x=Math.sin(i*127.1+311.7)*43758.5453;return x-Math.floor(x)}
-function sm(v){return v<=0?0:v>=1?1:v*v*(3-2*v)}
-function clampU(v){return v<0?0:v>1?1:v}
-function band(p,a,b){return clampU((p-a)/(b-a))}
-
-function sprite(mid,core,tight){
-  var c=document.createElement('canvas');c.width=c.height=32;
-  var g=c.getContext('2d');
-  var r=g.createRadialGradient(16,16,0,16,16,16);
-  r.addColorStop(0,core);r.addColorStop(tight?.5:.3,mid);r.addColorStop(1,'rgba(25,26,31,0)');
-  g.fillStyle=r;g.fillRect(0,0,32,32);
-  return c;
-}
-function ensure(){
-  if(cv)return;
-  cv=document.createElement('canvas');cv.id='ai2c';
-  cv.style.cssText='position:fixed;inset:0;z-index:1;pointer-events:none';
-  document.body.appendChild(cv);ctx=cv.getContext('2d');
-  SPR.em=sprite('rgba(47,179,128,.9)','rgba(235,255,246,.95)',false);
-  SPR.wt=sprite('rgba(207,208,212,.85)','rgba(255,255,255,.92)',false);
-  SPR.dm=sprite('rgba(140,142,148,.55)','rgba(200,201,206,.6)',false);
-  SPR.core=sprite('rgba(47,179,128,1)','rgba(240,255,248,1)',true);
-  size();build();
-  addEventListener('resize',function(e){
-    if(window.__mSoftRz&&window.__mSoftRz(e,null)){
-      /* R4: size() resets the bitmap - repaint in the SAME frame or Telegram's
-         toolbar resizes leave a blank flash mid-statement. dtN=0 makes the
-         re-entrant call a pure redraw: smf=0, pow(c,0)=1, pos+=v*0. */
-      if(cv){size();if(MOBP&&!cleared&&lastPRaw>=0){rzRepaint=true;try{window.__ai2(lastPRaw)}catch(e2){}rzRepaint=false;}}
-      return}
-    if(cv){size();key='';geomKey='';build()}
-  },{passive:true});
-}
-function size(){DPR=Math.min(DPRCAP,devicePixelRatio||1);cv.width=Math.round(innerWidth*DPR);cv.height=Math.round(innerHeight*DPR);cv.style.width=innerWidth+'px';cv.style.height=innerHeight+'px';ctx.setTransform(DPR,0,0,DPR,0,0)}
-
-function build(){
-  ST=new Array(TOTAL);
-  var W=innerWidth,H=innerHeight;
-  for(var i=0;i<TOTAL;i++){
-    var z=.25+rng(i*3+1)*.75;
-    var kind=rng(i*7+5);
-    ST[i]={
-      fx:rng(i*11+2)*W, fy:rng(i*13+3)*H,
-      x:0,y:0,vx:0,vy:0,
-      z:z,
-      sz:(3.0+rng(i*17+4)*2.8)*z*(MOBP?1.1:1),
-      d:rng(i*19+6)*.85,
-      k:.013+rng(i*23+7)*.007,
-      dp:.90+rng(i*43+15)*.025,
-      nw:.9+rng(i*29+8)*1.6,
-      ph:rng(i*31+9)*6.28,
-      ph2:rng(i*47+17)*6.28,
-      tw:.8+rng(i*53+19)*1.4,
-      b:rng(i*37+11)*.8,
-      spr:z>.75?(kind>.45?'em':'wt'):(z>.45?(kind>.6?'wt':'dm'):'dm'),
-      a:(.3+z*.5)*(kind>.85?1.25:1)*(MOBP?1.12:1),
-      ssz:(2.2+rng(i*41+13)*.9)*(MOBP?1.16:1),
-      mode:0,flare:0,
-      px:0,py:0,has:false
-    };
-  }
-}
-
-function geom(){
-  var k=innerWidth+'x'+innerHeight;
-  if(k===geomKey)return;
-  geomKey=k;
-  stTop=stWrap.getBoundingClientRect().top+pageYOffset;
-  stH=stWrap.offsetHeight;
-}
-
-function sample(){
-  if(document.fonts&&document.fonts.status!=='loaded')return false;
-  var r=L2.getBoundingClientRect();
-  if(r.width<40)return false;
-  var k=Math.round(r.width)+'x'+Math.round(r.height)+'x'+innerWidth;
-  if(k===key&&T)return true;
-  var cs=getComputedStyle(L2);
-  var w=Math.ceil(r.width),h=Math.ceil(r.height*1.4);
-  var off=document.createElement('canvas');off.width=w;off.height=h;
-  var o=off.getContext('2d');
-  o.fillStyle='#fff';o.textBaseline='middle';
-  o.font=cs.fontWeight+' '+cs.fontSize+' '+cs.fontFamily;
-  try{o.letterSpacing=cs.letterSpacing==='normal'?'0px':cs.letterSpacing}catch(e){}
-  var txt=(L2.textContent||'').replace(/\s+/g,' ').trim();
-  var tw=o.measureText(txt).width;
-  o.fillText(txt,(w-tw)/2,h/2);
-  var data=o.getImageData(0,0,w,h).data;
-  var step=MOBP?2:3,pts;
-  do{
-    pts=[];
-    for(var y=0;y<h;y+=step){for(var x=0;x<w;x+=step){
-      if(data[(y*w+x)*4+3]>140){var jj=pts.length;
-        pts.push(x+(rng(jj*13+29)-.5)*2.6,y-(h-r.height)/2+(rng(jj*17+31)-.5)*2.6)}
-    }}
-    step++;
-  }while(pts.length/2>NTXT*(MOBP?1.5:1)&&step<8);
-  /* R4 phones: never coarsen the grid to hit the budget (step 3 would halve
-     glyph coverage) - keep the dense pass and thin EVENLY to NTXT */
-  if(MOBP&&pts.length/2>NTXT){
-    var cnt=pts.length/2,keep=[];
-    for(var j2=0;j2<cnt;j2++){
-      if(Math.floor((j2+1)*NTXT/cnt)>Math.floor(j2*NTXT/cnt))keep.push(pts[j2*2],pts[j2*2+1]);
-    }
-    pts=keep;
-  }
-  T=pts;N=Math.min(NTXT,pts.length/2);key=k;
-  if(TELE)window.__aiN=[N,step-1];
-  return true;
-}
-
-/* PERF (round 5): the field's viewport-truth gate calls setW2 on the way out and
-   then returns — which meant that for the whole rest of the document every word
-   of the sentence was handed the identical opacity and transform on every frame.
-   The written value is a pure function of (v,rise), so the same pair is a no-op. */
-var lw2v=-2,lw2r=-1;
-function setW2(v,rise){
-  var rr=rise?1:0;
-  if(v===lw2v&&rr===lw2r)return;
-  lw2v=v;lw2r=rr;
-  for(var i=0;i<W2i.length;i++){
-    W2i[i].style.opacity=String(v);
-    W2i[i].style.transform=v>=1?'none':'translateY('+((1-v)*(rise?10:0))+'%)';
-  }
-  if(!W2i.length)L2.style.opacity=String(v);
-}
-
-function flx(x,y,tt){return Math.sin(y*.0022+tt*.25)+Math.cos((x+y)*.0013-tt*.17)}
-function fly(x,y,tt){return Math.cos(x*.0021-tt*.22)+Math.sin((x-y)*.0011+tt*.13)}
-
-document.addEventListener('mousemove',function(e){pmx=mx;pmy=my;mx=e.clientX;my=e.clientY;
-  if(pmx>-1e3){vx=mx-pmx;vy=my-pmy}},{passive:true});
-
-window.__ai2=function(pRaw){
-  if(MOBP&&document.body.classList.contains('failsafe')){setW2(1,false);return;}
-  lastPRaw=pRaw;
-  /* R4 dt measurement (phones only; desktop keeps dtN===1 exactly) */
-  if(MOBP){
-    if(rzRepaint){dtN=0}
-    else{
-      var nowT=performance.now();
-      if(lastFT>=0){
-        var rdt=nowT-lastFT;if(rdt<8)rdt=8;else if(rdt>50)rdt=50;
-        dtN=rdt/16.667;
-        emaDt+=(rdt-emaDt)*.06;
-        /* one-way frame-budget governor: sustained >26ms frames sheds one
-           notch of DPR, once, and repaints at the new size this same frame */
-        if(!govN&&fr>24&&emaDt>26){govN=1;window.__aiGov=1;if(DPRCAP>1.25){DPRCAP=1.25;if(cv)size();}}
-      }
-      lastFT=nowT;
-    }
-    if(TELE)window.__aiDbg=[Math.round(emaDt*10)/10,fr,Math.round(dtN*100)/100,govN];
-  }
-  var smf=dtN===1?SMF:1-Math.pow(1-SMF,dtN);
-  var d90=dtN===1?.9:Math.pow(.9,dtN);
-  var d88=dtN===1?.88:Math.pow(.88,dtN);
-  var d84=dtN===1?.84:Math.pow(.84,dtN);
-  geom();
-  var yNow=pageYOffset,vhh=innerHeight;
-  if(MOBP&&yNow<0)yNow=0; /* iOS top rubber-band */
-  var preRaw=stTop>vhh*.3?clampU((yNow-vhh*.3)/(stTop-vhh*.3)):1;
-  if(pRaw>0)preRaw=1;
-  if(window.__TPO!=null){pRaw=window.__TPO;P=window.__TPO}
-  else if(TP!==null){pRaw=TP;P=TP}
-  if(TPRE!==null){preRaw=TPRE;PRE=TPRE}
-
-  if(P<0)P=pRaw;if(PRE<0)PRE=preRaw;
-  P+=(pRaw-P)*smf;
-  PRE+=(preRaw-PRE)*smf;
-
-  var u=sm(band(P,U0,U1));
-  var freeOut=1-band(P,FR0,FR1);
-  /* phones: the scene exit follows the PAGE, not the smoothed clock - as the
-     statement scrolls away everything scatters down in alpha over ~half a
-     viewport instead of vanishing (desktop: relOut stays 1, identical) */
-  var relOut=1;
-  if(MOBP&&stH>0)relOut=1-clampU((yNow-(stTop+stH-vhh))/(vhh*.55));
-  /* PERF (deep round): the scene's progress is smoothed at 8.5%/call and only
-     advances while the page moves, so after a fast scroll THROUGH the statement
-     P lags far behind reality and the field kept painting ~3,000 sprites a frame
-     over sections that are nowhere near it — exactly during the fastest scrolling.
-     Viewport truth overrides the smoothed clock: once the pinned scene is off
-     screen there is nothing to draw, whatever P still believes. */
-  if(stH>0){
-    var offBelow=yNow>stTop+stH+vhh*.40;
-    var offAbove=yNow+vhh*1.30<stTop;
-    if(offBelow||offAbove){
-      if(cv&&!cleared){ctx.clearRect(0,0,innerWidth,innerHeight);cleared=true}
-      setW2(offBelow?1:0,false);
-      if(offAbove)doneSnd=false;
-      return;
-    }
-  }
-  if(PRE<.003||(P>.99&&freeOut<=.02)||(MOBP&&relOut<=0)){
-    if(cv&&!cleared){ctx.clearRect(0,0,innerWidth,innerHeight);cleared=true}
-    /* phones: a violent conveyor-scroll can exit the zone while smoothed P is
-       still mid-ramp and the engine stops driving the scene - the PAGE being
-       past the ramp is the truth, the sentence must be lit when glanced back */
-    setW2((MOBP&&pRaw>P?pRaw:P)>=U1?1:0,false);
-    if(P<G0)doneSnd=false;
-    return;
-  }
-  ensure();
-  var hasT=sample();
-  cleared=false;
-  t+=.016*dtN;fr++;
-
-  if(lastY>=0)kick+=(yNow-lastY)*.02;
-  lastY=yNow;kick*=d88;
-  vx*=d90;vy*=d90;
-
-  var call=band(P,CALL0,CALL1)*.3;
-  var front=band(P,G0,G1);
-  var W=innerWidth,H=innerHeight;
-  var r=L2.getBoundingClientRect();
-  var R=70+Math.hypot(vx,vy)*2.2;
-
-  if(u>=1){setW2(1,false)}else{setW2(u,true)}
-  if(u>=.999&&!doneSnd){doneSnd=true;
-    try{window.__archAudio&&window.__archAudio.tick&&window.__archAudio.tick()}catch(e){}
-    try{window.__archLog&&window.__archLog('SECOND INTELLIGENCE ONLINE',2600)}catch(e){}
-  }
-
-  ctx.clearRect(0,0,W,H);
-  var tcx=0,tcy=0,scx=0,scy=0,sn=0,nfly=0,nland=0;
-  for(var i=0;i<TOTAL;i++){
-    var st=ST[i];
-    var birth=sm((PRE-st.b)/.16);
-    if(birth<=.01)continue;
-    var isTxt=hasT&&i<N;
-
-    /* the field home keeps drifting in the shared currents */
-    if(st.mode===0){
-      var sp=.4*st.z*dtN;
-      st.fx+=flx(st.fx,st.fy,t)*sp;
-      st.fy+=fly(st.fx,st.fy,t)*sp+kick*st.z*.5*dtN;
-      if(st.fx<-50)st.fx+=W+100;if(st.fx>W+50)st.fx-=W+100;
-      if(st.fy<-50)st.fy+=H+100;if(st.fy>H+50)st.fy-=H+100;
-    }
-
-    var tx=0,ty=0;
-    if(isTxt){
-      tx=T[i*2]+r.left;ty=T[i*2+1]+r.top;
-      if(call>0&&st.mode===0){st.fx+=(tx-st.fx)*.005*call*dtN;st.fy+=(ty-st.fy)*.005*call*dtN}
-      if(st.mode===0&&front>st.d+.001){
-        st.x=st.fx;st.y=st.fy;
-        st.vx=flx(st.fx,st.fy,t)*.4*st.z;st.vy=fly(st.fx,st.fy,t)*.4*st.z;
-        st.mode=1;
-      }else if((st.mode===1||st.mode===2)&&front<Math.max(st.d-.05,.004)){
-        st.mode=3;
-      }
-    }
-
-    var X,Y,ev=0;
-    if(isTxt&&st.mode===1){
-      /* the body steers at its own point of the sentence, always */
-      var dxx=tx-st.x,dyy=ty-st.y;
-      var dist=Math.sqrt(dxx*dxx+dyy*dyy);
-      var namp=2.1*clampU(dist/260);
-      /* phones: as the word band nears, stragglers get urgent - arrival must
-         complete BEFORE the swap, and noise dies so nothing hovers */
-      var urg=MOBP?1+5*clampU((P-.66)/.1):1;
-      if(urg>1)namp*=Math.max(0,1.6-urg);
-      st.vx+=(dxx*st.k*urg+Math.sin(t*st.nw+st.ph)*namp)*dtN;
-      st.vy+=(dyy*st.k*urg+Math.cos(t*st.nw*.93+st.ph2)*namp)*dtN;
-      var dmp=dist<40?d84:(dtN===1?st.dp:Math.pow(st.dp,dtN));
-      st.vx*=dmp;st.vy*=dmp;
-      var vv=Math.sqrt(st.vx*st.vx+st.vy*st.vy);
-      if(vv>18){st.vx*=18/vv;st.vy*=18/vv}
-      st.x+=st.vx*dtN;st.y+=st.vy*dtN;
-      if(dist<2.2&&vv<1.1){st.x=tx;st.y=ty;st.mode=2;st.flare=9}
-      if(MOBP&&u>.2){st.x=tx;st.y=ty;st.mode=2;st.flare=6}
-      X=st.x;Y=st.y;
-      ev=1-clampU(dist/240);
-      nfly++;
-    }else if(isTxt&&st.mode===2){
-      X=tx;Y=ty;ev=1;nland++;
-    }else if(isTxt&&st.mode===3){
-      /* going home: same physics, the target is the living field home */
-      var hx=st.fx,hy=st.fy;
-      var dxx2=hx-st.x,dyy2=hy-st.y;
-      var dist2=Math.sqrt(dxx2*dxx2+dyy2*dyy2);
-      var namp2=1.4*clampU(dist2/240);
-      st.vx+=(dxx2*st.k*.8+Math.sin(t*st.nw+st.ph)*namp2)*dtN;
-      st.vy+=(dyy2*st.k*.8+Math.cos(t*st.nw*.93+st.ph2)*namp2)*dtN;
-      st.vx*=d90;st.vy*=d90;
-      var vv2=Math.sqrt(st.vx*st.vx+st.vy*st.vy);
-      if(vv2>15){st.vx*=15/vv2;st.vy*=15/vv2}
-      st.x+=st.vx*dtN;st.y+=st.vy*dtN;
-      if(dist2<12){st.mode=0}
-      X=st.x;Y=st.y;
-      ev=clampU(1-dist2/240)*.4;
-    }else{X=st.fx;Y=st.fy}
-
-    var pf=isTxt?(1-ev):1;
-    if(mx>-1e3){X+=(mx-W/2)*.012*st.z*pf;Y+=(my-H/2)*.008*st.z*pf}
-
-    if(isTxt&&st.mode===2&&u<.6){
-      var ddx=X-mx,ddy=Y-my,dd=Math.sqrt(ddx*ddx+ddy*ddy);
-      if(dd<R){var f=1-dd/R;X+=f*Math.sin(t*2.2+i)*(6+vx*.7);Y+=f*Math.cos(t*2.2+i)*(6+vy*.7)}
-    }
-
-    var twk=.78+.22*Math.sin(t*st.tw+st.ph);
-    var a=st.a*twk*birth;
-    if(isTxt){
-      a*=(MOBP?(.95+.3*ev):(.8+.4*ev));
-      /* phones: text stars extinguish INTO the glyphs by P=.86, before the
-         sentence fully solidifies at .92 - no dot may outlive the letters */
-      a*=(MOBP?(1-sm(band(P,U0,.86))):(1-u));
-    }else{
-      a*=freeOut;
-      /* phones: post-handoff, ambient stars near the sentence line dim away
-         so nothing reads as a leftover letter */
-      if(MOBP&&u>.3){var bd=Math.abs(Y-(r.top+r.height/2));if(bd<r.height*2.4)a*=(1-.92*u)}
-    }
-    a*=relOut;
-    if(a<=.012)continue;
-
-    var d2=isTxt?(st.sz*(1-ev)+st.ssz*ev)*(1-u*.45):st.sz;
-    if(st.flare>0){d2*=1+.05*st.flare;st.flare-=dtN}
-    if(d2<2.2)d2=2.2;
-    var spr=isTxt&&ev>.7?SPR.core:(isTxt&&ev>.45?SPR.em:SPR[st.spr]);
-    ctx.globalAlpha=Math.min(1,a);
-    if(st.has&&ev<.9){
-      var mvx=X-st.px,mvy=Y-st.py,mv=mvx*mvx+mvy*mvy;
-      if(mv>9&&mv<784){ctx.globalAlpha=Math.min(1,a*.35);ctx.drawImage(spr,st.px-d2,st.py-d2,d2*2,d2*2);ctx.globalAlpha=Math.min(1,a)}
-    }
-    ctx.drawImage(spr,X-d2,Y-d2,d2*2,d2*2);
-    st.px=X;st.py=Y;st.has=true;
-    if(TELE&&isTxt&&(st.mode===1||st.mode===2)){scx+=X;scy+=Y;sn++;tcx+=tx;tcy+=ty}
-  }
-  ctx.globalAlpha=1;
-  if(TELE){
-    window.__tele.push(sn>0?[fr,Math.round(scx/sn),Math.round(scy/sn),
-      Math.round(tcx/sn),Math.round(tcy/sn),nfly,nland]:[fr,0,0,0,0,nfly,nland]);
-  }
-};
-}catch(err){}
 })();
 </script>
 
@@ -5766,88 +5307,6 @@ document.querySelectorAll('.redx').forEach(function(r){
 })();
 </script>
 
-<script>
-/* BIG BUILD 5 — the archivist's glass */
-(function(){
-  'use strict';
-  var META={
-    'XTIX':   ['B2B SAAS \u00B7 TECH','2024\u20132026 \u00B7 2 PARTS','ON RECORD'],
-    'Oasis':  ['CEO MANDATE','2 PARTS \u00B7 P&L OWNED','ON RECORD'],
-    'Eventer':['EVENT-TECH SAAS','CROSS-FUNCTIONAL','ON RECORD'],
-    'Medcoin':['FOUNDER FILE','MODEL \u00B7 COMPLIANCE \u00B7 OPS','ON RECORD']
-  };
-  var cards=[].slice.call(document.querySelectorAll('#files .hfolder'));
-  if(!cards.length)return;
-  var lens=document.createElement('div');lens.id='dloupe';lens.setAttribute('aria-hidden','true');
-  lens.innerHTML='<span class="dl-k"></span><span class="dl-n"></span><span class="dl-r"></span>'+
-                 '<span class="dl-m"></span><span class="dl-s"></span>';
-  document.body.appendChild(lens);
-  var K=lens.querySelector('.dl-k'),N=lens.querySelector('.dl-n'),
-      M=lens.querySelector('.dl-m'),S=lens.querySelector('.dl-s');
-  var timer=null,held=null,sx=0,sy=0,shown=false;
-  /* The drawer is a horizontally-driven track: while the page scrolls, the cards
-     slide sideways UNDER a stationary pointer and each one fires pointerenter.
-     The glass must answer a deliberate pointer, never moving content — so it only
-     opens if the pointer itself moved a moment ago, and never right after a scroll. */
-  var lastMove=-1e9,lastScroll=-1e9;
-  document.addEventListener('pointermove',function(e){if(e.pointerType==='mouse')lastMove=Date.now()},{passive:true});
-  addEventListener('scroll',function(){lastScroll=Date.now();hide()},{passive:true});
-  function pointerIsLive(){return Date.now()-lastMove<170&&Date.now()-lastScroll>280}
-  function fill(card){
-    var nm=(card.querySelector('.hlip .nm')||{}).textContent||'FILE';
-    var fl=(card.querySelector('.hlip .fl')||{}).textContent||'';
-    var m=META[nm.trim()]||['',(card.querySelector('.hcat')||{}).textContent||'','ON RECORD'];
-    K.textContent=fl;
-    N.textContent=nm;
-    M.innerHTML=m[0]+'<br>'+m[1];
-    S.textContent=m[2];
-    var c=getComputedStyle(card).getPropertyValue('--hc').trim()||'#2FB380';
-    lens.style.setProperty('--dlc',c);
-  }
-  function place(x,y){lens.style.left=x+'px';lens.style.top=y+'px'}
-  function show(card,x,y){
-    if(shown)return;
-    shown=true;held=card;card.classList.add('dl-held');
-    fill(card);place(x,y);
-    requestAnimationFrame(function(){lens.classList.add('on')});
-    try{if(navigator.vibrate)navigator.vibrate(9)}catch(e){}
-  }
-  function hide(){
-    if(timer){clearTimeout(timer);timer=null}
-    if(!shown)return;
-    shown=false;lens.classList.remove('on');
-    if(held){held.classList.remove('dl-held');held=null}
-  }
-  cards.forEach(function(card){
-    var hint=document.createElement('span');hint.className='dlhint';
-    hint.innerHTML='<i>\u2315</i>INSPECT';
-    card.appendChild(hint);
-    /* mouse: resting on the file raises the glass, no click needed */
-    card.addEventListener('pointerenter',function(e){
-      if(e.pointerType!=='mouse'||!pointerIsLive())return;
-      sx=e.clientX;sy=e.clientY;
-      if(timer)clearTimeout(timer);
-      show(card,sx,sy);
-    });
-    card.addEventListener('pointerdown',function(e){
-      if(e.pointerType==='mouse'||shown)return;
-      sx=e.clientX;sy=e.clientY;
-      if(timer)clearTimeout(timer);
-      timer=setTimeout(function(){timer=null;show(card,sx,sy)},90);
-    });
-    card.addEventListener('pointermove',function(e){
-      if(shown){place(e.clientX,e.clientY);return}
-      if(e.pointerType==='mouse'){sx=e.clientX;sy=e.clientY;
-        if(Date.now()-lastScroll>280)show(card,sx,sy);
-        return}
-      if(timer&&(Math.abs(e.clientX-sx)>8||Math.abs(e.clientY-sy)>8)){clearTimeout(timer);timer=null}
-    });
-    card.addEventListener('pointerup',function(e){if(e.pointerType!=='mouse')hide()});
-    card.addEventListener('pointercancel',hide);
-    card.addEventListener('pointerleave',hide);
-  });
-})();
-</script>
 
 <script>
 /* PERF — a single rAF pass for the EMERALD II scroll devices */
@@ -5919,14 +5378,29 @@ document.querySelectorAll('.redx').forEach(function(r){
       NAMES=['XTIX','Oasis','Eventer','Medcoin'],
       IDS=['xtix','oasis','eventer','medcoin'];
   var arms=[].slice.call(ring.querySelectorAll('.rg-ar')).map(function(el){
-    var d=parseFloat(el.style.getPropertyValue('--dur'))||10;
-    return {el:el,sp:(360/(d*60))*(el.style.getPropertyValue('--dir').trim()==='reverse'?-1:1),a:0};
+    var d=parseFloat(el.style.getPropertyValue('--dur'))||10,cs2=null;
+    function ax(nm,dv){
+      var v=el.style.getPropertyValue(nm);
+      if(!v){cs2=cs2||getComputedStyle(el);v=cs2.getPropertyValue(nm)}
+      return (v||'').trim()||dv;
+    }
+    return {el:el,sp:(360/(d*60))*(el.style.getPropertyValue('--dir').trim()==='reverse'?-1:1),
+            a:0,tz:ax('--tz','0deg'),tx:ax('--tx','0deg')};
   });
   var spin=0,target=0,vel=0,drag=false,px=0,moved=0,idle=0,last=-1,live=false,raf=null;
+  var lastD=['','','',''];
   function apply(){
-    ring.style.setProperty('--spin',spin.toFixed(2)+'deg');
+    /* NOT setProperty('--spin'): see the note above the module. Inline transform overrides
+       the stylesheet rule .rg-ring{transform:rotateX(-11deg) rotateY(var(--spin,0deg))},
+       which stays as the pre-script paint. */
+    ring.style.transform='rotateX(-11deg) rotateY('+spin.toFixed(2)+'deg)';
     for(var i=0;i<4;i++){
       var ang=(spin+i*90)*Math.PI/180,d=(1-Math.cos(ang))/2,ds=d.toFixed(3);
+      /* --d MUST stay a custom property - twenty-two descendants of each card read it -
+         so the write is gated on the value actually changing. Drifting at .12deg/frame,
+         most frames do not move the third decimal at all. */
+      if(ds===lastD[i])continue;
+      lastD[i]=ds;
       cards[i].style.setProperty('--d',ds);
       if(shads[i])shads[i].style.setProperty('--d',ds);
       if(threads[i])threads[i].style.setProperty('--d',ds);
@@ -5948,7 +5422,9 @@ document.querySelectorAll('.redx').forEach(function(r){
     }
     for(var q=0;q<arms.length;q++){
       var A=arms[q];A.a=(A.a+A.sp)%360;
-      A.el.style.setProperty('--ry',A.a.toFixed(1)+'deg');
+      /* direct transform for the same reason as --spin: --ry is inherited and this
+         one is read by nobody but the arm itself */
+      A.el.style.transform='rotateZ('+A.tz+') rotateX('+A.tx+') rotateY('+A.a.toFixed(1)+'deg)';
     }
     apply();
     if(live)raf=requestAnimationFrame(frame);
@@ -6082,6 +5558,20 @@ document.querySelectorAll('.redx').forEach(function(r){
   var ctx=cv.getContext('2d'),W=0,H=0,DPR=Math.min(devicePixelRatio||1,1.75),live=false,raf=null,t=0;
   var N=176,P=new Float32Array(N*3),SC=new Float32Array(N*3);
   var PULSE=[];for(var q=0;q<22;q++)PULSE.push({a:0,b:0,p:q/22,s:0.010+(q%7)*0.0022});
+  /* taper is a pure function of the node index and was recomputed 176x every frame */
+  var TAPER=new Float32Array(N);
+  for(var ti=0;ti<N;ti++)TAPER[ti]=Math.sin(Math.PI*(ti/(N-1)));
+  /* the batching apparatus: fixed colour strings, and flat buffers reused every frame so
+     the loop allocates nothing at all */
+  var NB=24,AMAX=0.52,LWIN=30,MAXS=N*LWIN;
+  var SEGA=new Float32Array(MAXS*4),SEGB=new Uint8Array(MAXS),SEGO=new Float32Array(MAXS*4);
+  var CNT=new Int32Array(NB),OFF=new Int32Array(NB);
+  var NDB=new Uint8Array(N),NCT=new Int32Array(NB),NOF=new Int32Array(NB),NDO=new Float32Array(N*3);
+  var LCOL=[],NCOL=[];
+  for(var bi=0;bi<NB;bi++){
+    LCOL.push('rgba(242,241,237,'+(((bi+0.5)/NB)*AMAX).toFixed(3)+')');
+    NCOL.push('rgba(242,241,237,'+(((bi+0.5)/NB)*0.82).toFixed(3)+')');
+  }
   function size(){
     var r=cv.getBoundingClientRect();
     W=Math.max(1,r.width);H=Math.max(1,r.height);
@@ -6095,7 +5585,7 @@ document.querySelectorAll('.redx').forEach(function(r){
       var sx=Math.sin(u*2.5+tt*0.42)*0.42 + wav*0.20 + Math.sin(u*5.1-tt*0.9)*0.07;
       var sy=(u-0.5)*1.06 + Math.sin(u*3.2+tt*0.55)*0.13 + wav*0.055;
       var sz=Math.cos(u*2.1+tt*0.37)*0.42 + Math.cos(u*6.6-tt*1.9)*0.15;
-      var taper=Math.sin(Math.PI*u);
+      var taper=TAPER[i];
       var an=i*2.39996+tt*0.95;
       var rr=(0.046+0.122*taper)*(0.62+0.38*Math.sin(i*1.27+tt*0.85));
       P[i*3  ]=sx+Math.cos(an)*rr;
@@ -6115,21 +5605,69 @@ document.querySelectorAll('.redx').forEach(function(r){
       var rx=x*cs-z*sn, rz=x*sn+z*cs, k=FOV/(FOV+rz);
       SC[i*3]=cx+rx*S*k; SC[i*3+1]=cy+y*S*k; SC[i*3+2]=k;
     }
-    ctx.lineWidth=1;
-    for(var i=0;i<N;i++){
-      for(var j=i+1;j<Math.min(N,i+30);j++){
-        var dx=P[i*3]-P[j*3],dy=P[i*3+1]-P[j*3+1],dz=P[i*3+2]-P[j*3+2];
-        var d2=dx*dx+dy*dy+dz*dz;
-        if(j!==i+1 && d2>0.042)continue;
-        var f=j===i+1?1:(1-d2/0.042), kk=(SC[i*3+2]+SC[j*3+2])*0.5;
-        ctx.strokeStyle='rgba(242,241,237,'+(0.26*f*f*kk*kk).toFixed(3)+')';
-        ctx.beginPath();ctx.moveTo(SC[i*3],SC[i*3+1]);ctx.lineTo(SC[j*3],SC[j*3+1]);ctx.stroke();
+    /* ---- links: bucket by alpha, counting-sort, one path and one stroke per bucket ---- */
+    var i,j,b,acc,cur;
+    for(b=0;b<NB;b++)CNT[b]=0;
+    var ns=0,win=LWIN;
+    for(i=0;i<N;i++){
+      var jm=i+win;if(jm>N)jm=N;          /* hoisted: this Math.min ran ~5,100x per frame */
+      var xi=P[i*3],yi=P[i*3+1],zi=P[i*3+2],ki=SC[i*3+2];
+      for(j=i+1;j<jm;j++){
+        var dx=xi-P[j*3],dy=yi-P[j*3+1],dz=zi-P[j*3+2];
+        var d2=dx*dx+dy*dy+dz*dz,spine=(j===i+1);
+        if(!spine&&d2>0.042)continue;
+        var f=spine?1:(1-d2/0.042),kk=(ki+SC[j*3+2])*0.5;
+        var a=0.26*f*f*kk*kk;
+        if(a<0.012)continue;              /* already invisible: 14.8% of every frame's links */
+        b=(a/AMAX*NB)|0;if(b>=NB)b=NB-1;else if(b<0)b=0;
+        var o=ns*4;
+        SEGA[o]=SC[i*3];SEGA[o+1]=SC[i*3+1];SEGA[o+2]=SC[j*3];SEGA[o+3]=SC[j*3+1];
+        SEGB[ns]=b;CNT[b]++;ns++;
       }
     }
-    for(var i=0;i<N;i++){
-      var kk=SC[i*3+2],r=0.5+kk*kk*2.1;
-      ctx.fillStyle='rgba(242,241,237,'+(0.30*kk*kk*kk).toFixed(3)+')';
-      ctx.beginPath();ctx.arc(SC[i*3],SC[i*3+1],r,0,6.284);ctx.fill();
+    acc=0;for(b=0;b<NB;b++){OFF[b]=acc;acc+=CNT[b]}
+    for(i=0;i<ns;i++){
+      var p2=OFF[SEGB[i]]++*4,q2=i*4;
+      SEGO[p2]=SEGA[q2];SEGO[p2+1]=SEGA[q2+1];SEGO[p2+2]=SEGA[q2+2];SEGO[p2+3]=SEGA[q2+3];
+    }
+    ctx.lineWidth=1;
+    cur=0;
+    for(b=0;b<NB;b++){
+      var n2=CNT[b];if(!n2)continue;
+      ctx.strokeStyle=LCOL[b];
+      ctx.beginPath();
+      for(i=0;i<n2;i++){var o2=(cur+i)*4;ctx.moveTo(SEGO[o2],SEGO[o2+1]);ctx.lineTo(SEGO[o2+2],SEGO[o2+3])}
+      ctx.stroke();
+      cur+=n2;
+    }
+    /* ---- nodes: the same treatment. Radii still vary per dot - a path may hold arcs of
+       different sizes, so long as each one starts with a moveTo or canvas draws a
+       connecting line into it. ---- */
+    for(b=0;b<NB;b++)NCT[b]=0;
+    for(i=0;i<N;i++){
+      var kn=SC[i*3+2],an=0.30*kn*kn*kn;
+      if(an<0.012){NDB[i]=255;continue}
+      b=(an/0.82*NB)|0;if(b>=NB)b=NB-1;else if(b<0)b=0;
+      NDB[i]=b;NCT[b]++;
+    }
+    acc=0;for(b=0;b<NB;b++){NOF[b]=acc;acc+=NCT[b]}
+    for(i=0;i<N;i++){
+      if(NDB[i]===255)continue;
+      var p3=NOF[NDB[i]]++*3,k3=SC[i*3+2];
+      NDO[p3]=SC[i*3];NDO[p3+1]=SC[i*3+1];NDO[p3+2]=0.5+k3*k3*2.1;
+    }
+    cur=0;
+    for(b=0;b<NB;b++){
+      var n3=NCT[b];if(!n3)continue;
+      ctx.fillStyle=NCOL[b];
+      ctx.beginPath();
+      for(i=0;i<n3;i++){
+        var o3=(cur+i)*3,rr=NDO[o3+2];
+        ctx.moveTo(NDO[o3]+rr,NDO[o3+1]);
+        ctx.arc(NDO[o3],NDO[o3+1],rr,0,6.284);
+      }
+      ctx.fill();
+      cur+=n3;
     }
     for(var q=0;q<PULSE.length;q++){
       var pu=PULSE[q];pu.p+=pu.s;
@@ -6144,7 +5682,19 @@ document.querySelectorAll('.redx').forEach(function(r){
     }
   }
   /* the filament is motion too: one frame under reduced motion, then still */
-  function draw(){raf=null;if(!live)return;body();if(reduced)return;raf=requestAnimationFrame(draw)}
+  var emaDt=16.7,govFr=0,gov=0,lastTS=0;
+  function draw(ts){
+    raf=null;if(!live)return;
+    /* rescued from the particle field, which was the only place in the document that ever
+       adapted to a slow device - and it never ran. One-way by design: a phone that cannot
+       hold the budget thins the filament once and keeps it thin, so nothing can oscillate. */
+    if(!gov&&ts){
+      if(lastTS){var dd=ts-lastTS;if(dd>0&&dd<200)emaDt+=(dd-emaDt)*.07}
+      lastTS=ts;govFr++;
+      if(govFr>45&&emaDt>26){gov=1;LWIN=16;if(DPR>1.25){DPR=1.25;size()}}
+    }
+    body();if(reduced)return;raf=requestAnimationFrame(draw)
+  }
   function start(){if(!live){live=true;if(!raf)raf=requestAnimationFrame(draw)}}
   function stop(){live=false;if(raf){cancelAnimationFrame(raf);raf=null}}
   size();body();
@@ -6157,6 +5707,20 @@ document.querySelectorAll('.redx').forEach(function(r){
   }else start();
 })();
 </script>
+<script>
+/* PERF r35 — the folders' will-change is now scoped to the folders that are actually near
+   the viewport. Everything else about them is untouched. */
+(function(){
+  if(!('IntersectionObserver' in window))return;
+  var f=[].slice.call(document.querySelectorAll('.folder'));
+  if(!f.length)return;
+  var io=new IntersectionObserver(function(es){
+    for(var i=0;i<es.length;i++)es[i].target.classList.toggle('wcv',es[i].isIntersecting);
+  },{rootMargin:'300px 0px'});
+  for(var i=0;i<f.length;i++)io.observe(f[i]);
+})();
+</script>
+
 
 </body>
 </html>
