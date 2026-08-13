@@ -256,7 +256,7 @@ body.static .tk,body.static #heromq .row,body.static .crawlp,body.static #hero .
 .tw .w>i{transition:transform .85s var(--ease)}
 .tw.on .w>i,.u.on .tw .w>i{transform:none;transition-delay:calc(var(--wi,0)*50ms + var(--i,0)*60ms)}
 #statement{padding:0}
-#statement .pinh{height:115vh}
+#statement .pinh{height:175vh}
 #statement .pin{position:sticky;top:0;min-height:100svh;display:flex;align-items:center;justify-content:center;padding:0 24px}
 #statement .in{width:100%}
 #statement .w>i{transition:none;opacity:0}
@@ -619,8 +619,13 @@ transform-origin:0 50%;will-change:transform;transform-style:preserve-3d;z-index
 background:var(--oc);
 background-image:linear-gradient(rgba(25,26,31,.30),rgba(25,26,31,.30)),
                  linear-gradient(270deg,rgba(25,26,31,.26),transparent 46%)}
-.oc-backf:before{content:"";position:absolute;inset:16px;border:1.5px solid rgba(25,26,31,.3);border-radius:12px}
-.oc-backf:after{content:"";position:absolute;left:50%;bottom:24px;transform:translateX(-50%);width:130px;height:11px;border-radius:6px;background:rgba(25,26,31,.24)}
+.oc-backf:before{content:"ROUTING 4 ARCHIVE C-01\A\A  RECEIVED     444444\A  REVIEWED     444444\A  RETURNED     444444\A\A  THIS FORM STAYS WITH THE FILE";
+  white-space:pre;position:absolute;inset:34px 34px 34px 46px;border:1.5px solid rgba(25,26,31,.26);
+  border-radius:10px;padding:22px 24px;font-family:'JetBrains Mono',monospace;font-weight:700;
+  font-size:11px;line-height:2.05;letter-spacing:.16em;color:rgba(25,26,31,.52)}
+/* the contact shadow at the fold, which a hinge always has and never loses */
+.oc-backf:after{content:"";position:absolute;left:0;top:0;bottom:0;width:26px;
+  background:linear-gradient(90deg,rgba(25,26,31,.34),transparent)}
 .otf:before{content:"";position:absolute;left:8px;right:8px;top:0;height:1px;background:rgba(255,255,255,.09);z-index:5}
 .ou-lines{transform:translateY(14px);will-change:transform}
 .ou-red{transform-origin:right center;will-change:transform}
@@ -964,7 +969,7 @@ padding:6px 13px;font-family:'JetBrains Mono',monospace;font-weight:700;font-siz
 <div class="hcard hroom">
           <div class="rg-stage" id="rgStage">
             <div class="rg-horizon"></div><div class="rg-floor"></div><div class="rg-pool"></div>
-            <div class="rg-ring" id="rgRing"><div class="rg-sh" data-i="0" style="--a:0deg"></div><div class="rg-sh" data-i="1" style="--a:90deg"></div><div class="rg-sh" data-i="2" style="--a:180deg"></div><div class="rg-sh" data-i="3" style="--a:270deg"></div><div class="rg-card" data-i="0" style="--a:0deg;--tc:#2FB380"><div class="rg-tabbox"><span class="tb t-back"></span><span class="tb t-front" data-nm="XTIX"><i>FILE 01</i></span></div><span class="fc f-back"></span><div class="fc f-front"><span class="rg-holes"><i></i><i></i></span><div class="rg-in"><div class="rg-nm">XTIX</div></div></div></div><div class="rg-card" data-i="1" style="--a:90deg;--tc:#E0A458"><div class="rg-tabbox"><span class="tb t-back"></span><span class="tb t-front" data-nm="Oasis"><i>FILE 02</i></span></div><span class="fc f-back"></span><div class="fc f-front"><span class="rg-holes"><i></i><i></i></span><div class="rg-in"><div class="rg-nm">Oasis</div></div></div></div><div class="rg-card" data-i="2" style="--a:180deg;--tc:#5E8FBF"><div class="rg-tabbox"><span class="tb t-back"></span><span class="tb t-front" data-nm="Eventer"><i>FILE 03</i></span></div><span class="fc f-back"></span><div class="fc f-front"><span class="rg-holes"><i></i><i></i></span><div class="rg-in"><div class="rg-nm">Eventer</div></div></div></div><div class="rg-card" data-i="3" style="--a:270deg;--tc:#E9E7DF"><div class="rg-tabbox"><span class="tb t-back"></span><span class="tb t-front" data-nm="Medcoin"><i>FILE 04</i></span></div><span class="fc f-back"></span><div class="fc f-front"><span class="rg-holes"><i></i><i></i></span><div class="rg-in"><div class="rg-nm">Medcoin</div></div></div></div><div class="rg-arm"><span class="rg-ar" style="--R:96;--c:#2FB380;--tz:-8deg;--tx:16deg;--dur:16s"></span><span class="rg-ar" style="--R:77;--c:#E0A458;--tz:34deg;--tx:-30deg;--dur:12.5s;--dir:reverse"></span><span class="rg-ar" style="--R:58;--c:#5E8FBF;--tz:-46deg;--tx:24deg;--dur:9.5s"></span><span class="rg-ar" style="--R:39;--c:#E9E7DF;--tz:68deg;--tx:-38deg;--dur:7s;--dir:reverse"></span><span class="a-pip"></span><span class="a-t">ONE SYSTEM</span></div></div>
+            <div class="rg-ring" id="rgRing"><div class="rg-sh" data-i="0" style="--a:0deg"></div><div class="rg-sh" data-i="1" style="--a:90deg"></div><div class="rg-sh" data-i="2" style="--a:180deg"></div><div class="rg-sh" data-i="3" style="--a:270deg"></div><div class="rg-card" data-i="0" style="--a:0deg;--tc:#2FB380"><div class="rg-tabbox"><span class="tb t-back"></span><span class="tb t-front" data-nm="XTIX"><i>FILE 01</i></span></div><span class="fc f-back"></span><div class="fc f-front"><span class="rg-holes"><i></i><i></i></span><div class="rg-in"><div class="rg-nm">XTIX</div></div></div></div><div class="rg-card" data-i="1" style="--a:90deg;--tc:#E0A458"><div class="rg-tabbox"><span class="tb t-back"></span><span class="tb t-front" data-nm="Oasis"><i>FILE 02</i></span></div><span class="fc f-back"></span><div class="fc f-front"><span class="rg-holes"><i></i><i></i></span><div class="rg-in"><div class="rg-nm">Oasis</div></div></div></div><div class="rg-card" data-i="2" style="--a:180deg;--tc:#5E8FBF"><div class="rg-tabbox"><span class="tb t-back"></span><span class="tb t-front" data-nm="Eventer"><i>FILE 03</i></span></div><span class="fc f-back"></span><div class="fc f-front"><span class="rg-holes"><i></i><i></i></span><div class="rg-in"><div class="rg-nm">Eventer</div></div></div></div><div class="rg-card" data-i="3" style="--a:270deg;--tc:#E9E7DF"><div class="rg-tabbox"><span class="tb t-back"></span><span class="tb t-front" data-nm="Medcoin"><i>FILE 04</i></span></div><span class="fc f-back"></span><div class="fc f-front"><span class="rg-holes"><i></i><i></i></span><div class="rg-in"><div class="rg-nm">Medcoin</div></div></div></div><div class="rg-arm"><span class="rg-ar" style="--R:150;--c:#2FB380;--tz:-8deg;--tx:16deg;--dur:16s"></span><span class="rg-ar" style="--R:121;--c:#E0A458;--tz:34deg;--tx:-30deg;--dur:12.5s;--dir:reverse"></span><span class="rg-ar" style="--R:92;--c:#5E8FBF;--tz:-46deg;--tx:24deg;--dur:9.5s"></span><span class="rg-ar" style="--R:63;--c:#E9E7DF;--tz:68deg;--tx:-38deg;--dur:7s;--dir:reverse"></span><span class="a-pip"></span><span class="a-t">ONE SYSTEM</span></div></div>
             <div class="rg-hud"><div class="rg-hl">ARCHIVE DRAWER C-01</div><div class="rg-hn" id="rgName">XTIX</div></div>
             <span class="rg-hint">DRAG TO TURN &middot; CLICK A FILE</span>
           </div>
@@ -2671,11 +2676,19 @@ body.static .rxs::after{transform:scaleX(0)}
 /* --- the room. Every structural line is neutral bone; colour is reserved for files. --- */
 .rg-stage{position:absolute;inset:0;perspective:1500px;perspective-origin:50% 40%;touch-action:pan-y;cursor:grab;user-select:none;-webkit-user-select:none}
 .rg-stage.drag{cursor:grabbing}
+/* a volume of air behind the ring, so the objects sit IN something rather than on top
+   of a flat void. One gradient, no cost, and it gives the room a depth the grid alone
+   could never suggest. */
+.rg-stage:before{content:"";position:absolute;left:50%;top:43%;width:min(1240px,92%);height:600px;
+  transform:translate(-50%,-50%);pointer-events:none;z-index:0;
+  background:radial-gradient(52% 50% at 50% 50%,rgba(150,175,205,.070),rgba(150,175,205,.022) 52%,transparent 78%)}
 .rg-horizon{position:absolute;left:-40%;right:-40%;top:0;height:70%;pointer-events:none;
   background:linear-gradient(180deg,transparent 44%,rgba(233,231,223,.045) 90%,rgba(233,231,223,.075) 100%)}
 .rg-floor{position:absolute;left:50%;top:70%;width:1900px;height:1500px;margin-left:-950px;
   transform:rotateX(68deg);transform-origin:50% 0;pointer-events:none;
   background-image:
+    /* the pool the ring stands in - the room finally has somewhere its light comes from */
+    radial-gradient(34% 22% at 50% 3%,rgba(233,231,223,.115),rgba(233,231,223,.035) 46%,transparent 76%),
     repeating-linear-gradient(0deg,rgba(233,231,223,.22) 0 1px,transparent 1px 305px),
     repeating-linear-gradient(90deg,rgba(233,231,223,.22) 0 1px,transparent 1px 305px),
     repeating-linear-gradient(0deg,rgba(233,231,223,.085) 0 1px,transparent 1px 61px),
@@ -2710,9 +2723,9 @@ body.static .rxs::after{transform:scaleX(0)}
 /* LANDSCAPE AND FLAT. One colour all over means a box edge has nothing to describe, so
    the card is a single plane - which also leaves nothing in the ring's 3D context that
    can cross anything else, and retires the depth-sort defect for good. */
-.rg-card{--W:268px;--H:186px;
-  position:absolute;width:var(--W);height:var(--H);margin:-93px 0 0 -134px;
-  transform-style:preserve-3d;transform:rotateY(var(--a)) translateZ(330px);cursor:pointer}
+.rg-card{--W:336px;--H:234px;
+  position:absolute;width:var(--W);height:var(--H);margin:-117px 0 0 -168px;
+  transform-style:preserve-3d;transform:rotateY(var(--a)) translateZ(415px);cursor:pointer}
 .rg-card>*{transform-style:preserve-3d}
 .fc{position:absolute;backface-visibility:hidden;-webkit-backface-visibility:hidden;overflow:hidden}
 /* the depth fog rides inside every face, so the whole object dims as one */
@@ -2726,33 +2739,36 @@ body.static .rxs::after{transform:scaleX(0)}
   box-shadow:0 12px 22px rgba(0,0,0,calc(.34*(1 - var(--d,0)*.55))),
              0 40px 70px rgba(0,0,0,calc(.50*(1 - var(--d,0)*.55)))}
 /* the reverse: the same card seen from the other side, with nothing printed on it */
+/* 84% of the tint is right for emerald and wrong for paper - Medcoin's back came out
+   near-white and read as cardboard. The reverse of a folder is the same folder in
+   shadow, whatever its colour. */
 .f-back{inset:0;border-radius:18px 0 16px 16px;transform:rotateY(180deg) translateZ(.5px);
-  background:color-mix(in srgb,var(--tc) 84%,#141519)}
+  background:color-mix(in srgb,var(--tc) 52%,#15161B)}
 .t-back{inset:0;border-radius:14px 6px 0 0;transform:rotateY(180deg) translateZ(.5px);
-  background:color-mix(in srgb,var(--tc) 84%,#141519)}
-.rg-tabbox{--TW:138px;--TH:27px;
+  background:color-mix(in srgb,var(--tc) 52%,#15161B)}
+.rg-tabbox{--TW:170px;--TH:33px;
   position:absolute;right:auto;left:0;top:calc(var(--TH) * -1);width:var(--TW);height:var(--TH)}
 .tb{position:absolute;backface-visibility:hidden;-webkit-backface-visibility:hidden}
 .tb:after{content:"";position:absolute;inset:0;background:#0C0E13;opacity:calc(var(--d,0)*.72)}
 .t-front{inset:0;border-radius:6px 14px 0 0;background:var(--tc)}
 .t-front:before{content:attr(data-nm);position:absolute;left:12px;top:0;bottom:0;display:flex;
-  align-items:center;font-family:'Fraunces',serif;font-weight:700;font-size:15px;letter-spacing:-.012em;
+  align-items:center;font-family:'Fraunces',serif;font-weight:700;font-size:18px;letter-spacing:-.014em;
   color:#191A1F;z-index:2}
 .t-front i{position:absolute;right:13px;top:0;bottom:0;display:flex;align-items:center;
-  font-style:normal;font-family:'JetBrains Mono',monospace;font-weight:700;font-size:8px;
+  font-style:normal;font-family:'JetBrains Mono',monospace;font-weight:700;font-size:9px;
   letter-spacing:.14em;color:rgba(25,26,31,.62);z-index:2}
 /* --- THE FACE. The reference's furniture minus everything the owner struck out: no
        eyebrow, no headline sentence, no classification lines. The name takes the slot the
        headline had, and the punch holes stay because they are the object, not copy. --- */
-.rg-holes{position:absolute;left:13px;top:26px;bottom:26px;width:13px;pointer-events:none;
+.rg-holes{position:absolute;left:16px;top:32px;bottom:32px;width:15px;pointer-events:none;
   display:flex;flex-direction:column;justify-content:space-evenly;align-items:center}
-.rg-holes i{display:block;width:11px;height:11px;border-radius:50%;
+.rg-holes i{display:block;width:13px;height:13px;border-radius:50%;
   border:1.5px solid rgba(25,26,31,.30)}
-.rg-in{position:absolute;inset:0;padding:0 26px 0 44px;display:flex;align-items:center}
-.rg-nm{font-family:'Fraunces',serif;font-weight:900;font-size:38px;line-height:.92;color:#191A1F;
+.rg-in{position:absolute;inset:0;padding:0 30px 0 54px;display:flex;align-items:center}
+.rg-nm{font-family:'Fraunces',serif;font-weight:900;font-size:47px;line-height:.92;color:#191A1F;
   letter-spacing:-.038em;font-variation-settings:'opsz' 144,'SOFT' 8;text-transform:uppercase}
-.rg-sh{position:absolute;left:50%;top:50%;width:300px;height:82px;margin:-1px 0 0 -150px;pointer-events:none;
-  transform:rotateY(var(--a)) translateZ(330px) translateY(104px) rotateX(90deg) translateZ(1px);
+.rg-sh{position:absolute;left:50%;top:50%;width:374px;height:96px;margin:-1px 0 0 -187px;pointer-events:none;
+  transform:rotateY(var(--a)) translateZ(415px) translateY(130px) rotateX(90deg) translateZ(1px);
   background:radial-gradient(38% 44% at 50% 40%,rgba(0,0,0,.88),rgba(0,0,0,.38) 48%,transparent 74%);
   opacity:calc(.95 - var(--d,0)*.7);filter:blur(9px)}
 .rg-hud{position:absolute;left:16px;bottom:14px;pointer-events:none}
@@ -2765,15 +2781,15 @@ body.static .rxs::after{transform:scaleX(0)}
 .rg-hud{left:16px;bottom:34px}
 /* 621-860: the room is the viewport, the radius fits inside it */
 @media (max-width:860px){.rg-stage{perspective:1100px}
-  .rg-card{width:214px;height:150px;margin:-75px 0 0 -107px;transform:rotateY(var(--a)) translateZ(250px)}
+  .rg-card{width:266px;height:186px;margin:-93px 0 0 -133px;transform:rotateY(var(--a)) translateZ(312px)}
   .rg-sh{transform:rotateY(var(--a)) translateZ(228px) translateY(98px) rotateX(90deg)}
-  .rg-nm{font-size:34px}
+  .rg-nm{font-size:41px}
   .rg-arm{transform:translateY(-22px) translateZ(-46px) scale(.76)}}
 /* <=620: a phone cannot hold a 228px radius - the side files would sit off both edges */
 @media (max-width:620px){.rg-stage{perspective:900px}
-  .rg-card{width:150px;height:104px;margin:-52px 0 0 -75px;transform:rotateY(var(--a)) translateZ(162px)}
+  .rg-card{width:178px;height:124px;margin:-62px 0 0 -89px;transform:rotateY(var(--a)) translateZ(190px)}
   .rg-sh{width:170px;margin-left:-85px;transform:rotateY(var(--a)) translateZ(142px) translateY(80px) rotateX(90deg)}
-  .rg-nm{font-size:24px}
+  .rg-nm{font-size:28px}
   .rg-arm{transform:translateY(-18px) translateZ(-40px) scale(.54)}}
 
 /* the room's kill-switches live in JS now (RGSTILL): the arms are written from the rAF
@@ -2791,7 +2807,7 @@ loop, so `animation:none` had nothing to cancel. One static frame, then nothing.
    the frame - so the line reads as a line rather than as a poster. */
 #statement .in{display:flex;align-items:center;justify-content:center;
   gap:clamp(16px,3vw,48px);max-width:1180px;text-align:left}
-#statement .stfil{position:relative;flex:0 0 min(38%,430px);height:min(54svh,440px);pointer-events:none}
+#statement .stfil{position:relative;flex:0 0 min(45%,530px);height:min(62svh,510px);pointer-events:none}
 #statement .stfil canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
 #statement .sttxt{flex:1 1 auto;min-width:0;text-align:left}
 #statement .l2{display:none}
@@ -3131,7 +3147,12 @@ function statement(y){
        whose derivative is the page's own scroll rate at p=0 and p=1 and a fifth of it in
        the middle, so neither boundary has a step in it. The filament gets it exactly; the
        sentence gets a little more, and the difference between the two rates is the depth. */
-    var hold=-span*(0.6*p+0.0637*Math.sin(6.2832*p));
+    /* r43 wrote this as a fraction of the span, which was right while the pin was 135px
+       and would drag the scene 405px up the screen now that it is 675. Absolute distance,
+       same eased profile: page-ish rate at both ends, a near-hold through the middle. */
+    var hold=-210*(p+0.106*Math.sin(6.2832*p));
+    /* THE FILAMENT SEPARATES ON THE WORDS THAT SAY IT DOES */
+    if(window.__stnfSplit)window.__stnfSplit((p-0.34)/0.34);
     if(stFil)stFil.style.transform='translateY('+hold.toFixed(1)+'px)';
     if(stTxt)stTxt.style.transform='translateY('+(hold+(0.5-p)*26).toFixed(1)+'px)';
     for(var si=0;si<SPS.length;si++){var sq=eo(clamp((p-.02-si*.05)/.22));SPS[si].style.opacity=String(.2+.8*sq);SPS[si].style.transform='translateX(-50%) translateY('+((1-sq)*44)+'px)';}
@@ -5570,9 +5591,21 @@ document.querySelectorAll('.redx').forEach(function(r){
   var ctx=cv.getContext('2d'),W=0,H=0,DPR=Math.min(devicePixelRatio||1,1.75),live=false,raf=null,t=0;
   var N=176,P=new Float32Array(N*3),SC=new Float32Array(N*3);
   var PULSE=[];for(var q=0;q<22;q++)PULSE.push({a:0,b:0,p:q/22,s:0.010+(q%7)*0.0022});
-  /* taper is a pure function of the node index and was recomputed 176x every frame */
-  var TAPER=new Float32Array(N);
-  for(var ti=0;ti<N;ti++)TAPER[ti]=Math.sin(Math.PI*(ti/(N-1)));
+  /* taper is a pure function of the node index and was recomputed 176x every frame.
+     TWO tables now: the taper this node has along ONE spine, and the taper it has along
+     its own HALF spine once the filament has separated. Lerping between them keeps the
+     split table-driven instead of putting 176 sines back into the frame. */
+  var HN=N>>1;
+  var TAPER=new Float32Array(N),TAPERH=new Float32Array(N),UH=new Float32Array(N);
+  for(var ti=0;ti<N;ti++){
+    TAPER[ti]=Math.sin(Math.PI*(ti/(N-1)));
+    UH[ti]=(ti<HN?ti:(ti-HN))/(HN-1);
+    TAPERH[ti]=Math.sin(Math.PI*UH[ti]);
+  }
+  /* 0 = one strand, 1 = two. Driven by the statement's own scroll, so the filament
+     separates on exactly the words that say it does. */
+  var split=0;
+  window.__stnfSplit=function(v){split=v<0?0:v>1?1:v};
   /* the batching apparatus: fixed colour strings, and flat buffers reused every frame so
      the loop allocates nothing at all */
   var NB=24,AMAX=0.52,LWIN=30,MAXS=N*LWIN;
@@ -5591,24 +5624,30 @@ document.querySelectorAll('.redx').forEach(function(r){
     ctx.setTransform(DPR,0,0,DPR,0,0);
   }
   function shape(tt){
+    var sp=split, nar=1-sp*0.40;          /* each strand narrows so two of them fit */
     for(var i=0;i<N;i++){
+      /* u travels the whole spine when joined, and its own half once separated */
       var u=i/(N-1);
-      var wav=Math.sin(u*7.4 - tt*2.35);
-      var sx=Math.sin(u*2.5+tt*0.42)*0.42 + wav*0.20 + Math.sin(u*5.1-tt*0.9)*0.07;
-      var sy=(u-0.5)*1.06 + Math.sin(u*3.2+tt*0.55)*0.13 + wav*0.055;
-      var sz=Math.cos(u*2.1+tt*0.37)*0.42 + Math.cos(u*6.6-tt*1.9)*0.15;
-      var taper=TAPER[i];
+      var uu=u+(UH[i]-u)*sp;
+      var side=(i<HN?-1:1)*sp*0.44;       /* and the halves move apart */
+      var wav=Math.sin(uu*7.4 - tt*2.35);
+      var sx=Math.sin(uu*2.5+tt*0.42)*0.42 + wav*0.20 + Math.sin(uu*5.1-tt*0.9)*0.07;
+      var sy=(uu-0.5)*1.06 + Math.sin(uu*3.2+tt*0.55)*0.13 + wav*0.055;
+      var sz=Math.cos(uu*2.1+tt*0.37)*0.42 + Math.cos(uu*6.6-tt*1.9)*0.15;
+      /* not identical twins: the second runs a little ahead and a little deeper */
+      if(i>=HN&&sp>0){sy+=sp*0.05;sz+=sp*0.12;}
+      var taper=TAPER[i]+(TAPERH[i]-TAPER[i])*sp;
       var an=i*2.39996+tt*0.95;
       var rr=(0.046+0.122*taper)*(0.62+0.38*Math.sin(i*1.27+tt*0.85));
-      P[i*3  ]=sx+Math.cos(an)*rr;
+      P[i*3  ]=sx*nar+side+Math.cos(an)*rr;
       P[i*3+1]=sy+Math.sin(an*1.27)*rr*0.88;
-      P[i*3+2]=sz+Math.sin(an)*rr;
+      P[i*3+2]=sz*nar+Math.sin(an)*rr;
     }
   }
   function body(){
     t+=0.0062;shape(t);
     ctx.clearRect(0,0,W,H);
-    var cx=W*0.50,cy=H*0.5,S=Math.min(W,H)*0.56,FOV=2.1;
+    var cx=W*0.50,cy=H*0.5,S=Math.min(W,H)*0.62,FOV=2.1;
     var ry=t*0.30,cs=Math.cos(ry),sn=Math.sin(ry);
     var rp=Math.sin(t*0.21)*0.30,cp=Math.cos(rp),sp2=Math.sin(rp);
     for(var i=0;i<N;i++){
@@ -5626,7 +5665,7 @@ document.querySelectorAll('.redx').forEach(function(r){
       var xi=P[i*3],yi=P[i*3+1],zi=P[i*3+2],ki=SC[i*3+2];
       for(j=i+1;j<jm;j++){
         var dx=xi-P[j*3],dy=yi-P[j*3+1],dz=zi-P[j*3+2];
-        var d2=dx*dx+dy*dy+dz*dz,spine=(j===i+1);
+        var d2=dx*dx+dy*dy+dz*dz,spine=(j===i+1&&!(split>0.03&&i===HN-1));
         if(!spine&&d2>0.042)continue;
         var f=spine?1:(1-d2/0.042),kk=(ki+SC[j*3+2])*0.5;
         var a=0.26*f*f*kk*kk;
