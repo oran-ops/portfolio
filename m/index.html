@@ -508,7 +508,7 @@ html.preopen #drawerlip{transform:translateY(-14px)}
 .hwrap{height:330vh}
 .hpin{position:sticky;top:0;height:100svh;overflow:hidden;display:flex;align-items:center;cursor:grab}
 .hpin.drag{cursor:grabbing}
-.htrack{display:flex;align-items:center;gap:5vw;padding:0 12vw;width:max-content;will-change:transform}
+.htrack{display:flex;align-items:center;gap:5vw;padding:0 0 0 12vw;width:max-content;will-change:transform}
 .hcard{flex:0 0 auto}
 .hintro{width:34vw;min-width:300px}
 .hintro .bigt{font-weight:800;font-size:clamp(40px,5.6vw,72px);line-height:1;letter-spacing:-.03em;text-transform:uppercase}
@@ -2633,7 +2633,8 @@ body.static .rxs::after{transform:scaleX(0)}
    radial that meets the page charcoal, and the mask feathers all four edges, so entering
    from above and leaving below never shows a cut. */
 .hcard.hroom{position:relative;flex:0 0 auto;width:100vw;height:100svh;align-self:stretch;
-  padding:0;margin:0;overflow:hidden;border-radius:0;border:0;box-shadow:none;
+  /* the lead that keeps the room off screen until the reader scrolls for it */
+  padding:0;margin:0 0 0 58vw;overflow:hidden;border-radius:0;border:0;box-shadow:none;
   background:radial-gradient(120% 92% at 50% 44%,#1B1D24 0%,#111218 46%,#0B0C10 100%);
   -webkit-mask-image:linear-gradient(90deg,transparent 0,rgba(0,0,0,.6) 4%,#000 12%,#000 90%,rgba(0,0,0,.6) 97%,transparent 100%),
                      linear-gradient(180deg,transparent 0,rgba(0,0,0,.6) 6%,#000 16%,#000 86%,rgba(0,0,0,.6) 95%,transparent 100%);
@@ -2846,11 +2847,10 @@ loop, so `animation:none` had nothing to cancel. One static frame, then nothing.
 #statement .sttxt{min-height:clamp(150px,26vh,250px);display:flex;flex-direction:column;justify-content:center}
 #statement .l1 .sm-wd{display:inline-block;white-space:nowrap}
 #statement .l1 i{font-style:normal;display:inline-block;opacity:1;
-  transition:opacity .27s cubic-bezier(.4,0,.2,1),filter .27s cubic-bezier(.4,0,.2,1),
-             transform .27s cubic-bezier(.4,0,.2,1)}
+  transition:opacity .23s cubic-bezier(.4,0,.2,1),filter .23s cubic-bezier(.4,0,.2,1),
+             transform .23s cubic-bezier(.4,0,.2,1)}
 #statement .l1 i.out{opacity:0;filter:blur(6px);transform:translateY(-14px)}
 #statement .l1 i.inn{opacity:0;filter:blur(6px);transform:translateY(14px)}
-#statement .l1 i.em2{color:var(--emb)}
 @media (max-width:860px){
   #statement .in{flex-direction:column;gap:8px}
   #statement .stfil{flex:none;width:100%;height:clamp(180px,26svh,240px)}
@@ -3681,8 +3681,15 @@ function frame(){
     if(htrack&&!mob.matches){
       var span=hwH-vh;
       var hp=span>0?clamp((y-hwTop)/span):0;
+      /* HOLD, SWEEP, SETTLE. A linear pan cannot hide a 100vw room inside a 100vw
+         viewport: entering alone consumes ~90% of the travel, so the reader meets its
+         leading edge in the first moments and then watches it crawl. Held at zero for
+         the first fifth of the section the intro card is alone on screen and the room
+         is genuinely absent; the middle sweeps it in on a smoothstep; the last quarter
+         is travel-free, so the room simply stands there and is looked at. */
+      var hs=clamp((hp-0.20)/0.55),hE=hs*hs*(3-2*hs);
       if(!dragging){dragOff+=dragV;dragV*=.94;dragOff*=.90;if(Math.abs(dragOff)<.4)dragOff=0;}
-      var X=hp*maxX+dragOff;
+      var X=hE*maxX+dragOff;
       var cw=window.innerWidth;
       /* PERF (round 5): the drawer's whole geometry follows X and the window
          width, and nothing else. With the track parked — which is true for all
@@ -5500,18 +5507,27 @@ document.querySelectorAll('.redx').forEach(function(r){
     ||document.body.classList.contains('static')
     ||document.body.classList.contains('failsafe');
   var A='One intelligence built the world.',B='Two will build the next.';
+  var INK=[242,241,237],EMB=[47,179,128];
+  function ramp(u){
+    var t=u<=0.25?0:(u-0.25)/0.75;t=t*t*(3-2*t);
+    return 'rgb('+Math.round(INK[0]+(EMB[0]-INK[0])*t)+','
+                 +Math.round(INK[1]+(EMB[1]-INK[1])*t)+','
+                 +Math.round(INK[2]+(EMB[2]-INK[2])*t)+')';
+  }
   var MOBST=innerWidth<861,phase='A',busy=false;
-  function render(txt,em){
+  function render(txt,ramped){
     el.innerHTML='';
-    var idx=0,words=txt.split(' ');
+    var idx=0,words=txt.split(' '),total=txt.replace(/ /g,'').length;
     words.forEach(function(word,wi){
       var wsp=document.createElement('span');wsp.className='sm-wd';
       wsp.setAttribute('aria-hidden','true');
       word.split('').forEach(function(ch){
         var sp=document.createElement('i');
         sp.textContent=ch;
-        if(em)sp.className='em2';
-        sp.style.transitionDelay=(idx++*7)+'ms';
+        if(ramped)sp.style.color=ramp(total>1?idx/(total-1):1);
+        /* 5ms rather than 7: the owner asked for a slightly quicker hand-off, and the
+           stagger is what sets its length - twenty characters, so 95ms end to end. */
+        sp.style.transitionDelay=(idx++*5)+'ms';
         wsp.appendChild(sp);
       });
       el.appendChild(wsp);
@@ -5527,18 +5543,18 @@ document.querySelectorAll('.redx').forEach(function(r){
     if(busy){pend=toB;return}
     if(toB===(phase==='B'))return;
     busy=true;phase=toB?'B':'A';
-    if(reduced){render(toB?B:A,false);setVoice(toB);busy=false;return}
+    if(reduced){render(toB?B:A,toB);setVoice(toB);busy=false;return}
     [].slice.call(el.querySelectorAll('i')).forEach(function(c){c.classList.add('out')});
     setTimeout(function(){
-      render(toB?B:A,false);setVoice(toB);
+      render(toB?B:A,toB);setVoice(toB);
       var nc=[].slice.call(el.querySelectorAll('i'));
       nc.forEach(function(c){c.classList.add('inn')});
       void el.offsetWidth;
       nc.forEach(function(c){c.classList.remove('inn')});
       setTimeout(function(){busy=false;if(pend!==null){var q=pend;pend=null;migrate(q)}},40);
-    },290);
+    },235);
   }
-  if(reduced){render(B,false);setVoice(true);phase='B';el.setAttribute('aria-label',A+' '+B)}
+  if(reduced){render(B,true);setVoice(true);phase='B';el.setAttribute('aria-label',A+' '+B)}
   else{render(A,false);setVoice(false);el.setAttribute('aria-label',A+' '+B)}
   if(MOBST){
     /* phones: the pin scene is frozen below 861, so the crossing cannot drive it —
