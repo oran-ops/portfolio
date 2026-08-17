@@ -846,14 +846,13 @@ body.static #clearance,body.static #idlecue,body.failsafe #clearance,body.failsa
     
     <span class="k">STATUS:</span> <span class="br2 blink">ACTIVE</span>
   </div>
-  <div class="hw"><div class="crumb rv" style="--i:1">ARCHIVE://COMMERCIAL/2026 <b>&#8250;</b> ORAN_CARMON <b>&#8250;</b> MASTER_FILE</div>
-  <div class="mflip rv" style="--i:2"><span class="nm">Oran Carmon</span></div>
+  <div class="hw"><div class="mflip rv" style="--i:2" aria-hidden="true"></div>
   <div class="mfold center rv" style="--i:2">
     <span class="hole" style="top:60px"></span><span class="hole" style="top:104px"></span>
     <div class="kick">E X E C U T I V E &nbsp; P O R T F O L I O</div>
     <h1 class="rv" style="--i:3">THE COMMERCIAL<br>SYSTEMS BUILDER</h1>
     <div class="sub">From Vision to Measurable Growth</div>
-    <div class="by">BY <b>ORAN CARMON</b></div>
+    <div class="by">BY <b>ORAN CARMON</b></div> <div class="ident"><span class="idr"><i>COMMERCIAL GROWTH&nbsp;<b>&middot;</b></i> <i>CROSS-FUNCTIONAL EXECUTION&nbsp;<b>&middot;</b></i> <i>CEO&nbsp;<b>&middot;</b></i> <i>FOUNDER</i></span><span class="idy">FOUR COMPANIES &mdash; 2018&ndash;2026</span></div>
   </div>
   <div id="drawerlip" aria-hidden="true"><span class="dlh"></span></div></div>
   <div class="cue"><span class="ar"></span>SCROLL TO OPEN</div>
@@ -2928,6 +2927,37 @@ loop, so `animation:none` had nothing to cancel. One static frame, then nothing.
 
 /* an analyst-note word is one unbreakable box; only the gaps between words may break */
 .an-t .an-w{display:inline-block;white-space:nowrap}
+
+/* ===== R54 - the cover states who this is =====
+   A reader gave the note that the opening does not say who or what. The cover carried a
+   coined identity ("THE COMMERCIAL SYSTEMS BUILDER") and a promise ("From Vision to
+   Measurable Growth") but no recognisable role, no scope and no proof, and the next two
+   screens add none either. This is the one line of hard fact, and it deliberately leads
+   with the functions that cover XTIX and Eventer rather than opening on CEO/FOUNDER.
+
+   No `rv` class, so it cannot fail to appear: its siblings .sub and .by reveal with the
+   card, and a line whose job is to orient the reader in six seconds must survive
+   body.static, body.failsafe and a scene that never fires. */
+#hero .mfold .ident{margin-top:19px;padding-top:15px;border-top:1px solid rgba(25,26,31,.2);
+  display:flex;flex-direction:column;align-items:center;gap:7px}
+#hero .mfold .ident .idr{font-family:'JetBrains Mono',monospace;font-weight:700;
+  font-size:9.5px;letter-spacing:.19em;color:rgba(25,26,31,.9);
+  white-space:normal;line-height:1.95;text-align:center;text-wrap:balance}
+/* each role is one unbreakable unit carrying its own trailing separator: the hyphen in
+   CROSS-FUNCTIONAL can no longer split, and a separator can never begin a line */
+#hero .mfold .ident .idr i{font-style:normal;white-space:nowrap}
+#hero .mfold .ident .idr b{color:rgba(25,26,31,.42);font-weight:700}
+#hero .mfold .ident .idy{font-family:'JetBrains Mono',monospace;font-weight:500;
+  font-size:9px;letter-spacing:.22em;color:rgba(25,26,31,.6);white-space:nowrap}
+/* the tab head is now empty, so max-content would collapse it to its own padding.
+   An explicit width keeps it reading as a folder tab and not as a stub. */
+#hero .mflip{min-width:128px}
+@media (max-width:860px){
+  #hero .mfold .ident{margin-top:15px;padding-top:12px;gap:5px}
+  #hero .mfold .ident .idr{letter-spacing:.12em;line-height:2.05}
+  #hero .mfold .ident .idy{letter-spacing:.18em}
+  #hero .mflip{min-width:92px}
+}
 </style>
 <section class="sec" id="leadership" style="--fc:var(--emb)">
   <div class="secnum" aria-hidden="true">07</div>
@@ -3986,7 +4016,7 @@ function scrambleTo(el,txt,ms){
     if(p<1)requestAnimationFrame(fr);
   })(t0);
 }
-var LOGMAP=[['hero','MASTER FILE \u2014 ORAN CARMON'],['statement','MEMO \u2014 FROM THE ARCHIVE'],
+var LOGMAP=[['statement','MEMO \u2014 FROM THE ARCHIVE'],
  ['philosophy','OPERATING SYSTEM \u2014 05 LAYERS'],['files','CASE INDEX \u2014 04 FILES'],
  ['xtix','READING FILE 01 \u2014 XTIX'],['oasis','READING FILE 02 \u2014 OASIS'],
  ['eventer','READING FILE 03 \u2014 EVENTER'],['medcoin','READING FILE 04 \u2014 MEDCOIN'],
