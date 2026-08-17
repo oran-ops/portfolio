@@ -1123,6 +1123,11 @@ color:transparent;-webkit-text-stroke:1.1px var(--emb);background:transparent}
 /* p01: the name tab head must start on the card edge (card moved to the 72px frame) */
 .p01b .flip{left:72px}
 
+
+/* PDF cleanup: Oasis zone B removed, so the evidence page is two columns, not
+   three. Without this the deleted child leaves an empty third track. The org-chart
+   svg is capped at max-width:228px, so the wider track cannot make it taller. */
+.p08 .inner{grid-template-columns:1fr 1fr}
 </style></head><body>
 
 <section class="page p01b">
@@ -1294,10 +1299,9 @@ color:transparent;-webkit-text-stroke:1.1px var(--emb);background:transparent}
         </div>
       </div>
       <div>
-        <div class="zr"><b>B</b><span class="d2"></span>OPERATIONS</div>
-        <div class="ops"><div class="lg"><span class="c">&#10003;</span>Built the company's commercial reporting structure</div><div class="lg"><span class="c">&#10003;</span>Implemented forecasting methodology</div><div class="lg"><span class="c">&#10003;</span>Designed KPI framework</div><div class="lg"><span class="c">&#10003;</span>Established pipeline management</div><div class="lg"><span class="c">&#10003;</span>Standardized outbound methodology</div><div class="lg"><span class="c">&#10003;</span>Supported international commercial expansion</div></div>
+        
         <div class="tech">
-          <div class="zr" style="margin-bottom:7px"><b>C</b><span class="d2"></span>TECHNOLOGY</div>
+          <div class="zr" style="margin-bottom:7px"><b>B</b><span class="d2"></span>TECHNOLOGY</div>
           <div class="para">Built an in-house <b>AI commercial intelligence platform</b>.</div><svg viewBox="0 0 224 188" style="width:214px;height:auto;margin:6px auto 0;display:block"><rect x="6" y="8" width="150" height="19" rx="6" fill="#202127" stroke="#4B4E55" stroke-width="1.1"/><text x="81" y="20" text-anchor="middle" font-size="10.2" letter-spacing="1.2" fill="#F2F1ED">LEAD</text><line x1="81" y1="27" x2="81" y2="37" stroke="#2FB380" stroke-width="1.4"/><path d="M81 38 l-3.6 -5 h7.2 z" fill="#2FB380"/><rect x="6" y="38" width="150" height="19" rx="6" fill="#202127" stroke="#4B4E55" stroke-width="1.1"/><text x="81" y="50" text-anchor="middle" font-size="10.2" letter-spacing="1.2" fill="#F2F1ED">RESEARCH</text><line x1="81" y1="57" x2="81" y2="67" stroke="#2FB380" stroke-width="1.4"/><path d="M81 68 l-3.6 -5 h7.2 z" fill="#2FB380"/><rect x="6" y="68" width="150" height="19" rx="6" fill="#202127" stroke="#4B4E55" stroke-width="1.1"/><text x="81" y="80" text-anchor="middle" font-size="10.2" letter-spacing="1.2" fill="#F2F1ED">AI BRAIN</text><line x1="81" y1="87" x2="81" y2="97" stroke="#2FB380" stroke-width="1.4"/><path d="M81 98 l-3.6 -5 h7.2 z" fill="#2FB380"/><rect x="6" y="98" width="150" height="19" rx="6" fill="#202127" stroke="#4B4E55" stroke-width="1.1"/><text x="81" y="110" text-anchor="middle" font-size="10.2" letter-spacing="1.2" fill="#F2F1ED">KNOWLEDGE BASE</text><line x1="81" y1="117" x2="81" y2="127" stroke="#2FB380" stroke-width="1.4"/><path d="M81 128 l-3.6 -5 h7.2 z" fill="#2FB380"/><rect x="6" y="128" width="150" height="19" rx="6" fill="#202127" stroke="#4B4E55" stroke-width="1.1"/><text x="81" y="140" text-anchor="middle" font-size="10.2" letter-spacing="1.2" fill="#F2F1ED">DECISION</text><line x1="81" y1="147" x2="81" y2="157" stroke="#2FB380" stroke-width="1.4"/><path d="M81 158 l-3.6 -5 h7.2 z" fill="#2FB380"/><rect x="6" y="158" width="150" height="19" rx="6" fill="#202127" stroke="#4B4E55" stroke-width="1.1"/><text x="81" y="170" text-anchor="middle" font-size="10.2" letter-spacing="1.2" fill="#F2F1ED">OUTREACH</text><path d="M162 165 C 208 150, 208 40, 162 22" fill="none" stroke="#B6B7BB" stroke-width="1.1" stroke-dasharray="3 4"/><path d="M160 20 l8.5 -1 l-3.4 7.6 z" fill="#B6B7BB"/><text x="204" y="97" text-anchor="middle" font-size="10" letter-spacing="1.3" fill="#CFD0D4" transform="rotate(90 204 97)">LEARNING LOOP</text></svg>
           <div class="pur" style="text-align:center">PURPOSE: BETTER COMMERCIAL DECISIONS &middot; GREATER EXECUTION CAPACITY.</div>
         </div>
@@ -1305,7 +1309,7 @@ color:transparent;-webkit-text-stroke:1.1px var(--emb);background:transparent}
     </div>
     <div class="band">
       <div>
-        <div class="zr"><b>D</b><span class="d2"></span>REFLECTION &mdash; IF I WERE REBUILDING XTIX TODAY</div>
+        <div class="zr"><b>C</b><span class="d2"></span>REFLECTION &mdash; IF I WERE REBUILDING XTIX TODAY</div>
         <div class="refl2"><div class="dash">Position for enterprise before scaling outbound.</div><div class="dash">Build strategic partnerships from day one.</div><div class="dash">Use AI as core infrastructure &mdash; not an add-on.</div></div>
       </div>
       
@@ -1344,7 +1348,7 @@ color:transparent;-webkit-text-stroke:1.1px var(--emb);background:transparent}
       </div>
       <div>
         <div class="zr"><b>03</b><span class="d2"></span>COMMERCIAL SYSTEM BUILT</div>
-        <div class="lg"><span class="c">&#10003;</span>Recruited &amp; onboarded the entire sales team</div><div class="lg"><span class="c">&#10003;</span>Built the profitability-based pricing model from scratch</div><div class="lg"><span class="c">&#10003;</span>Designed the commercial process</div><div class="lg"><span class="c">&#10003;</span>Implemented company-wide KPI framework</div><div class="lg"><span class="c">&#10003;</span>Created sales playbooks &amp; onboarding</div><div class="lg"><span class="c">&#10003;</span>Established weekly business reviews</div><div class="lg"><span class="c">&#10003;</span>Built forecasting &amp; commercial reporting</div><div class="lg"><span class="c">&#10003;</span>Created cross-functional collaboration</div>
+        <div class="lg"><span class="c">&#10003;</span>Recruited &amp; onboarded the entire sales team</div><div class="lg"><span class="c">&#10003;</span>Led a team of 5&ndash;6 sales professionals</div><div class="lg"><span class="c">&#10003;</span>Built the profitability-based pricing model from scratch</div><div class="lg"><span class="c">&#10003;</span>Designed the commercial process</div><div class="lg"><span class="c">&#10003;</span>Implemented company-wide KPI framework</div><div class="lg"><span class="c">&#10003;</span>Created sales playbooks &amp; onboarding</div><div class="lg"><span class="c">&#10003;</span>Established weekly business reviews</div><div class="lg"><span class="c">&#10003;</span>Built forecasting &amp; commercial reporting</div><div class="lg"><span class="c">&#10003;</span>Created cross-functional collaboration</div>
       </div>
     </div>
     <div class="model">
@@ -1382,19 +1386,16 @@ color:transparent;-webkit-text-stroke:1.1px var(--emb);background:transparent}
         </div>
         
       </div>
-      <div>
-        <div class="zr"><b>B</b><span class="d2"></span>COMMERCIAL LEADERSHIP</div>
-        <div class="lg"><span class="c">&#10003;</span>Recruited an entire sales team</div><div class="lg"><span class="c">&#10003;</span>Led a team of 5&ndash;6 sales professionals</div><div class="lg"><span class="c">&#10003;</span>Conducted weekly coaching sessions</div><div class="lg"><span class="c">&#10003;</span>Established KPI-driven management</div><div class="lg"><span class="c">&#10003;</span>Built onboarding documentation</div><div class="lg"><span class="c">&#10003;</span>Standardized commercial processes</div>
-      </div>
+      
       <div class="ringwrap">
-        <div class="zr"><b>C</b><span class="d2"></span>CROSS-FUNCTIONAL LEADERSHIP</div>
+        <div class="zr"><b>B</b><span class="d2"></span>CROSS-FUNCTIONAL LEADERSHIP</div>
         <svg viewBox="0 0 240 196" style="width:100%;max-width:228px;height:auto;margin:0 auto;overflow:visible"><circle cx="120" cy="98" r="58" fill="none" stroke="#33353C" stroke-width="1.2" stroke-dasharray="3 4"/><circle cx="120" cy="98" r="18" fill="#25262D" stroke="#E0A458" stroke-width="2"/><text x="120" y="101" text-anchor="middle" font-size="8.5" font-weight="700" letter-spacing="1.5" fill="#F2F1ED">CEO</text><line x1="120.0" y1="80.0" x2="120.0" y2="47.0" stroke="#4B4E55" stroke-width="1"/><circle cx="120.0" cy="40.0" r="5.5" fill="#202127" stroke="#E0A458" stroke-width="1.6"/><text x="120.0" y="18.4" text-anchor="middle" font-size="7.6" letter-spacing="1" fill="#CFD0D4">OPERATIONS</text><line x1="135.6" y1="89.0" x2="164.2" y2="72.5" stroke="#4B4E55" stroke-width="1"/><circle cx="170.2" cy="69.0" r="5.5" fill="#202127" stroke="#E0A458" stroke-width="1.6"/><text x="191.0" y="59.4" text-anchor="start" font-size="7.6" letter-spacing="1" fill="#CFD0D4">PRODUCTION</text><line x1="135.6" y1="107.0" x2="164.2" y2="123.5" stroke="#4B4E55" stroke-width="1"/><circle cx="170.2" cy="127.0" r="5.5" fill="#202127" stroke="#E0A458" stroke-width="1.6"/><text x="191.0" y="141.4" text-anchor="start" font-size="7.6" letter-spacing="1" fill="#CFD0D4">CUSTOMER SUCCESS</text><line x1="120.0" y1="116.0" x2="120.0" y2="149.0" stroke="#4B4E55" stroke-width="1"/><circle cx="120.0" cy="156.0" r="5.5" fill="#202127" stroke="#E0A458" stroke-width="1.6"/><text x="120.0" y="182.4" text-anchor="middle" font-size="7.6" letter-spacing="1" fill="#CFD0D4">FINANCE</text><line x1="104.4" y1="107.0" x2="75.8" y2="123.5" stroke="#4B4E55" stroke-width="1"/><circle cx="69.8" cy="127.0" r="5.5" fill="#202127" stroke="#E0A458" stroke-width="1.6"/><text x="49.0" y="141.4" text-anchor="end" font-size="7.6" letter-spacing="1" fill="#CFD0D4">MARKETING</text><line x1="104.4" y1="89.0" x2="75.8" y2="72.5" stroke="#4B4E55" stroke-width="1"/><circle cx="69.8" cy="69.0" r="5.5" fill="#202127" stroke="#E0A458" stroke-width="1.6"/><text x="49.0" y="59.4" text-anchor="end" font-size="7.6" letter-spacing="1" fill="#CFD0D4">TECHNICAL TEAMS</text></svg>
         <div class="ringlbl">WORKED CLOSELY WITH &middot; 06 FUNCTIONS</div>
       </div>
     </div>
     <div class="band">
       <div>
-        <div class="zr"><b>D</b><span class="d2"></span>EXECUTIVE REFLECTION</div>
+        <div class="zr"><b>C</b><span class="d2"></span>EXECUTIVE REFLECTION</div>
         <div class="para">The biggest lesson wasn't selling &mdash; it was <b>leadership</b>. The more I managed everything myself, the less the organization scaled.</div>
       </div>
       
@@ -1485,8 +1486,8 @@ color:transparent;-webkit-text-stroke:1.1px var(--emb);background:transparent}
       </div>
       <div>
         <div class="z">
-          <div class="zr"><b>03</b><span class="d2"></span>WHAT WE BUILT</div>
-          <div class="bgrid"><div class="lg2"><span class="c2">&#10003;</span>Founded the company from scratch</div><div class="lg2"><span class="c2">&#10003;</span>Defined the business model</div><div class="lg2"><span class="c2">&#10003;</span>Built the commercial strategy</div><div class="lg2"><span class="c2">&#10003;</span>Established strategic partnerships</div><div class="lg2"><span class="c2">&#10003;</span>Raised external investment</div><div class="lg2"><span class="c2">&#10003;</span>Deployed cryptocurrency ATMs across Europe</div><div class="lg2"><span class="c2">&#10003;</span>Built operational &amp; regulatory processes</div><div class="lg2"><span class="c2">&#10003;</span>Managed financial-service providers &amp; international vendors</div><div class="lg2"><span class="c2">&#10003;</span>Designed the customer journey &amp; user experience</div></div>
+          <div class="zr"><b>03</b><span class="d2"></span>WHAT I BUILT</div>
+          <div class="bgrid"><div class="lg2"><span class="c2">&#10003;</span>Founded the company from scratch</div><div class="lg2"><span class="c2">&#10003;</span>Defined the business model</div><div class="lg2"><span class="c2">&#10003;</span>Built the commercial strategy</div><div class="lg2"><span class="c2">&#10003;</span>Established strategic partnerships</div><div class="lg2"><span class="c2">&#10003;</span>Deployed cryptocurrency ATMs across Europe</div><div class="lg2"><span class="c2">&#10003;</span>Built operational &amp; regulatory processes</div><div class="lg2"><span class="c2">&#10003;</span>Managed financial-service providers &amp; international vendors</div><div class="lg2"><span class="c2">&#10003;</span>Designed the customer journey &amp; user experience</div></div>
         </div>
         <div class="zr"><b>04</b><span class="d2"></span>BUSINESS OUTCOMES</div>
         <div class="outs">
