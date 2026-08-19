@@ -20,17 +20,18 @@ section>p{color:var(--dim);max-width:70ch;margin:0 0 18px;font-size:14.8px}
 /* ---------------- the room ---------------- */
 .room{position:relative;height:520px;border:1px solid var(--hair);border-radius:12px;
   overflow:hidden;background:#15161A;isolation:isolate}
+/* the old grey grid, kept only so it can be compared away */
 .room.grid .floor{background-image:
   linear-gradient(rgba(120,124,134,.14) 1px,transparent 1px),
   linear-gradient(90deg,rgba(120,124,134,.14) 1px,transparent 1px);
-  background-size:44px 44px;background-position:center bottom}
-/* the archive floor: paper fibre and file-drawer runs, not a technical grid */
-.room.paperfloor .floor{background-image:
-  repeating-linear-gradient(90deg,rgba(233,231,223,.05) 0 1px,transparent 1px 118px),
-  repeating-linear-gradient(0deg,rgba(233,231,223,.035) 0 1px,transparent 1px 26px),
-  radial-gradient(120% 80% at 50% 100%,rgba(233,231,223,.05),transparent 70%)}
-.floor{position:absolute;left:-10%;right:-10%;bottom:0;height:46%;
-  transform:perspective(620px) rotateX(62deg);transform-origin:50% 100%}
+  background-size:44px 44px;background-position:center bottom;background-color:transparent}
+/* R62 - the document is flat matte colour everywhere. So is the floor: two solid planes and
+   a skirting, no lines, nothing technical. The room stands on a surface, not on graph paper. */
+.room.matte .floor{background-image:none;
+  background:linear-gradient(180deg,#23252C 0%,#1B1D22 58%,#17181D 100%)}
+.room.matte .skirt{opacity:1}
+.skirt{position:absolute;left:0;right:0;bottom:46%;height:12px;opacity:0;
+  background:#2E313A;border-top:2px solid #3B3F49;transition:opacity .5s}
 .horizon{position:absolute;left:0;right:0;bottom:46%;height:1px;
   background:linear-gradient(90deg,transparent,rgba(233,231,223,.16),transparent)}
 
@@ -45,13 +46,13 @@ section>p{color:var(--dim);max-width:70ch;margin:0 0 18px;font-size:14.8px}
 .bulb{width:26px;height:8px;margin:-4px auto 0;border-radius:50%;
   background:var(--lamp);box-shadow:0 0 22px 7px rgba(240,217,168,.75)}
 .cone{position:absolute;left:50%;top:26px;transform:translateX(-50%);
-  width:900px;height:460px;pointer-events:none;
-  background:linear-gradient(180deg,rgba(240,217,168,.26),rgba(240,217,168,.05) 62%,transparent);
-  clip-path:polygon(44% 0,56% 0,100% 100%,0 100%);
-  filter:blur(2px)}
+  width:1240px;height:500px;pointer-events:none;
+  background:linear-gradient(180deg,rgba(240,217,168,.30),rgba(240,217,168,.07) 58%,transparent);
+  clip-path:polygon(46.5% 0,53.5% 0,100% 100%,0 100%);
+  filter:blur(7px)}
 .pool{position:absolute;left:50%;bottom:6%;transform:translateX(-50%);
-  width:620px;height:120px;border-radius:50%;pointer-events:none;
-  background:radial-gradient(closest-side,rgba(240,217,168,.20),transparent);
+  width:940px;height:170px;border-radius:50%;pointer-events:none;
+  background:radial-gradient(closest-side,rgba(240,217,168,.24),rgba(240,217,168,.07) 55%,transparent);
   opacity:0;transition:opacity .9s ease}
 .room.lit .pool{opacity:1}
 
@@ -75,34 +76,42 @@ section>p{color:var(--dim);max-width:70ch;margin:0 0 18px;font-size:14.8px}
 .fc .back::after{content:"";position:absolute;left:12%;right:12%;top:22%;height:1px;
   background:rgba(233,231,223,.10);box-shadow:0 12px 0 rgba(233,231,223,.07),
     0 24px 0 rgba(233,231,223,.05)}
-.fc .card{position:absolute;inset:0;border-radius:3px 8px 4px 4px;
-  background:linear-gradient(170deg,#2C2E36,#21232A);
-  border:1px solid var(--tc);border-top-width:2px;
-  box-shadow:0 12px 26px rgba(0,0,0,.55);
-  display:flex;align-items:flex-end;justify-content:flex-start;padding:9px 11px}
-.fc .tab{position:absolute;top:-11px;left:8px;width:52px;height:12px;border-radius:3px 6px 0 0;
-  background:var(--tc)}
+/* R62 - the folders are classic GUI icons: one flat matte fill, one heavy dark outline, a
+   tab at the top left. No gradient, no glass - the same drawing language as the rest of the
+   document, in the four file colours. */
+.fc .card{position:absolute;inset:0;background:none;border:0;box-shadow:none;
+  display:block;padding:0}
+.fc .card svg{width:100%;height:100%;display:block;overflow:visible}
+.fc .fsh{fill:rgba(0,0,0,.5)}
+.fc .fbody{fill:var(--tc);stroke:#191A1F;stroke-width:3.4;stroke-linejoin:round}
+.fc .flip{fill:rgba(255,255,255,.16);stroke:#191A1F;stroke-width:3.4;stroke-linejoin:round}
+.fc .nm{position:absolute;left:0;right:0;bottom:-24px;text-align:center;
+  font-family:'Special Elite',Courier,monospace;font-size:14px;color:var(--ink)}
+.fc .no{position:absolute;top:8px;right:10px;font-family:'JetBrains Mono',monospace;
+  font-size:7px;letter-spacing:.16em;color:#191A1F;opacity:.66}
 .fc .nm{font-family:'Special Elite',Courier,monospace;font-size:14px;color:var(--ink)}
 .fc .no{position:absolute;top:9px;right:11px;font-family:'JetBrains Mono',monospace;
   font-size:7px;letter-spacing:.16em;color:var(--mut)}
 /* each folder takes its light from where it stands: the front one is the lit one */
-.fc .lightwash{position:absolute;inset:0;border-radius:3px 8px 4px 4px;pointer-events:none;
-  background:linear-gradient(180deg,rgba(240,217,168,.30),transparent 70%);opacity:0}
+.fc .lightwash{position:absolute;inset:0;pointer-events:none;mix-blend-mode:screen;
+  background:linear-gradient(180deg,rgba(240,217,168,.34),transparent 72%);opacity:0;
+  -webkit-mask:linear-gradient(#000,#000);mask:linear-gradient(#000,#000)}
 .room.lit .fc .lightwash{opacity:calc(.35 + .65 * var(--front,0))}
 
 /* ---------------- cores ---------------- */
 .core{position:absolute;left:50%;top:52%;transform:translate(-50%,-50%);
   width:150px;height:150px;pointer-events:none}
 .core svg{width:100%;height:100%;display:block;overflow:visible}
-.core .cw{stroke:#5A5D66;stroke-width:.8;fill:none}
-.core .cr{fill:none;stroke:var(--emb);stroke-width:2.1;opacity:.85}
-.room.lit .core .cr{stroke:#7BE3B6;filter:drop-shadow(0 0 4px rgba(47,179,128,.7))}
-.core .reel{fill:none;stroke:#6E7178;stroke-width:2}
-.core .tape{fill:none;stroke:var(--brass);stroke-width:3.4;opacity:.9}
-.core .punch{fill:#2A2C34;stroke:#6E7178;stroke-width:1.2}
-.core .hole{fill:#0F1013}
-.corespin{animation:cspin 30s linear infinite;transform-origin:50% 50%}
-@keyframes cspin{to{transform:rotate(360deg)}}
+.core .pl{fill:#2E313A;stroke:#191A1F;stroke-width:3.2}
+.core .pltop{fill:#3A3E48}
+.core .spin{fill:#22242B;stroke:#191A1F;stroke-width:3.2}
+.core .cap{fill:var(--emb);stroke:#191A1F;stroke-width:3.2}
+.core .dr{fill:#2E313A;stroke:#191A1F;stroke-width:3.2}
+.core .drtop{fill:var(--emb);stroke:#191A1F;stroke-width:3.2}
+.core .band{fill:none;stroke:#191A1F;stroke-width:2.2;opacity:.55}
+.room.lit .core .cap,.room.lit .core .drtop{filter:drop-shadow(0 0 10px rgba(47,179,128,.65))}
+.core .pack{transform-origin:50% 50%}
+
 
 /* ---------------- controls ---------------- */
 .ctrls{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0 0}
@@ -139,44 +148,29 @@ section>p{color:var(--dim);max-width:70ch;margin:0 0 18px;font-size:14.8px}
   brightness from where it stands in the rotation &#8212; so the folder at the front is the lit
   one and the rotation itself becomes the lighting.</p>
 
-  <div class="room lit paperfloor" id="room">
-    <div class="floor"></div><div class="horizon"></div>
+  <div class="room lit matte" id="room">
+    <div class="floor"></div><div class="skirt"></div><div class="horizon"></div>
     <div class="lampwrap"><div class="housing"></div><div class="bulb"></div></div>
     <div class="cone"></div><div class="pool"></div>
-    <div class="core" id="core"><svg viewBox="0 0 150 150"><g class="corespin">
-  <g class="cw">
-    <path d="M20 40 H130"/><path d="M20 62 H130"/><path d="M20 84 H130"/><path d="M20 106 H130"/>
-    <path d="M40 20 V130"/><path d="M62 20 V130"/><path d="M84 20 V130"/><path d="M106 20 V130"/>
-    <path d="M24 24 L126 126"/><path d="M126 24 L24 126"/>
+    <div class="core" id="core"><svg viewBox="0 0 150 150">
+  <g class="pack">
+    <ellipse class="pl" cx="75" cy="124" rx="54" ry="15"/>
+    <ellipse class="pl" cx="75" cy="108" rx="54" ry="15"/>
+    <ellipse class="pl" cx="75" cy="92"  rx="54" ry="15"/>
+    <ellipse class="pl" cx="75" cy="76"  rx="54" ry="15"/>
+    <ellipse class="pl pltop" cx="75" cy="60" rx="54" ry="15"/>
+    <rect class="spin" x="66" y="30" width="18" height="86" rx="3"/>
+    <ellipse class="cap" cx="75" cy="30" rx="20" ry="7"/>
   </g>
-  <g class="cr">
-    <ellipse cx="40" cy="40" rx="9" ry="6" transform="rotate(45 40 40)"/>
-    <ellipse cx="62" cy="40" rx="9" ry="6" transform="rotate(45 62 40)"/>
-    <ellipse cx="84" cy="40" rx="9" ry="6" transform="rotate(45 84 40)"/>
-    <ellipse cx="106" cy="40" rx="9" ry="6" transform="rotate(45 106 40)"/>
-    <ellipse cx="40" cy="62" rx="9" ry="6" transform="rotate(45 40 62)"/>
-    <ellipse cx="62" cy="62" rx="9" ry="6" transform="rotate(45 62 62)"/>
-    <ellipse cx="84" cy="62" rx="9" ry="6" transform="rotate(45 84 62)"/>
-    <ellipse cx="106" cy="62" rx="9" ry="6" transform="rotate(45 106 62)"/>
-    <ellipse cx="40" cy="84" rx="9" ry="6" transform="rotate(45 40 84)"/>
-    <ellipse cx="62" cy="84" rx="9" ry="6" transform="rotate(45 62 84)"/>
-    <ellipse cx="84" cy="84" rx="9" ry="6" transform="rotate(45 84 84)"/>
-    <ellipse cx="106" cy="84" rx="9" ry="6" transform="rotate(45 106 84)"/>
-    <ellipse cx="40" cy="106" rx="9" ry="6" transform="rotate(45 40 106)"/>
-    <ellipse cx="62" cy="106" rx="9" ry="6" transform="rotate(45 62 106)"/>
-    <ellipse cx="84" cy="106" rx="9" ry="6" transform="rotate(45 84 106)"/>
-    <ellipse cx="106" cy="106" rx="9" ry="6" transform="rotate(45 106 106)"/>
-  </g>
-</g></svg></div>
-    <div class="ring"><div class="fc" style="--a:0deg;--tc:#2FB380"><div class="tab"></div><div class="back"></div><div class="card"><span class="no">FILE 01</span><span class="nm">XTIX</span><span class="lightwash"></span></div></div><div class="fc" style="--a:90deg;--tc:#E0A458"><div class="tab"></div><div class="back"></div><div class="card"><span class="no">FILE 02</span><span class="nm">Oasis</span><span class="lightwash"></span></div></div><div class="fc" style="--a:180deg;--tc:#5E8FBF"><div class="tab"></div><div class="back"></div><div class="card"><span class="no">FILE 03</span><span class="nm">Eventer</span><span class="lightwash"></span></div></div><div class="fc" style="--a:270deg;--tc:#E9E7DF"><div class="tab"></div><div class="back"></div><div class="card"><span class="no">FILE 04</span><span class="nm">Medcoin</span><span class="lightwash"></span></div></div></div>
+</svg></div>
+    <div class="ring"><div class="fc" style="--a:0deg;--tc:#2FB380"><div class="tab"></div><div class="back"></div><div class="card"><svg viewBox="0 0 132 96" aria-hidden="true"><path class="fsh" d="M9 32 h40 l10 11 h72 a4 4 0 0 1 4 4 v46 a4 4 0 0 1 -4 4 H9 a4 4 0 0 1 -4 -4 V36 a4 4 0 0 1 4 -4 z"/><path class="fbody" d="M5 26 h40 l10 11 h72 a4 4 0 0 1 4 4 v46 a4 4 0 0 1 -4 4 H5 a4 4 0 0 1 -4 -4 V30 a4 4 0 0 1 4 -4 z"/><path class="flip" d="M5 43 h122 a3 3 0 0 1 3 3 l-7 41 a4 4 0 0 1 -4 3 H9 a4 4 0 0 1 -4 -3 z"/></svg><span class="no">FILE 01</span><span class="nm">XTIX</span><span class="lightwash"></span></div></div><div class="fc" style="--a:90deg;--tc:#E0A458"><div class="tab"></div><div class="back"></div><div class="card"><svg viewBox="0 0 132 96" aria-hidden="true"><path class="fsh" d="M9 32 h40 l10 11 h72 a4 4 0 0 1 4 4 v46 a4 4 0 0 1 -4 4 H9 a4 4 0 0 1 -4 -4 V36 a4 4 0 0 1 4 -4 z"/><path class="fbody" d="M5 26 h40 l10 11 h72 a4 4 0 0 1 4 4 v46 a4 4 0 0 1 -4 4 H5 a4 4 0 0 1 -4 -4 V30 a4 4 0 0 1 4 -4 z"/><path class="flip" d="M5 43 h122 a3 3 0 0 1 3 3 l-7 41 a4 4 0 0 1 -4 3 H9 a4 4 0 0 1 -4 -3 z"/></svg><span class="no">FILE 02</span><span class="nm">Oasis</span><span class="lightwash"></span></div></div><div class="fc" style="--a:180deg;--tc:#5E8FBF"><div class="tab"></div><div class="back"></div><div class="card"><svg viewBox="0 0 132 96" aria-hidden="true"><path class="fsh" d="M9 32 h40 l10 11 h72 a4 4 0 0 1 4 4 v46 a4 4 0 0 1 -4 4 H9 a4 4 0 0 1 -4 -4 V36 a4 4 0 0 1 4 -4 z"/><path class="fbody" d="M5 26 h40 l10 11 h72 a4 4 0 0 1 4 4 v46 a4 4 0 0 1 -4 4 H5 a4 4 0 0 1 -4 -4 V30 a4 4 0 0 1 4 -4 z"/><path class="flip" d="M5 43 h122 a3 3 0 0 1 3 3 l-7 41 a4 4 0 0 1 -4 3 H9 a4 4 0 0 1 -4 -3 z"/></svg><span class="no">FILE 03</span><span class="nm">Eventer</span><span class="lightwash"></span></div></div><div class="fc" style="--a:270deg;--tc:#E9E7DF"><div class="tab"></div><div class="back"></div><div class="card"><svg viewBox="0 0 132 96" aria-hidden="true"><path class="fsh" d="M9 32 h40 l10 11 h72 a4 4 0 0 1 4 4 v46 a4 4 0 0 1 -4 4 H9 a4 4 0 0 1 -4 -4 V36 a4 4 0 0 1 4 -4 z"/><path class="fbody" d="M5 26 h40 l10 11 h72 a4 4 0 0 1 4 4 v46 a4 4 0 0 1 -4 4 H5 a4 4 0 0 1 -4 -4 V30 a4 4 0 0 1 4 -4 z"/><path class="flip" d="M5 43 h122 a3 3 0 0 1 3 3 l-7 41 a4 4 0 0 1 -4 3 H9 a4 4 0 0 1 -4 -3 z"/></svg><span class="no">FILE 04</span><span class="nm">Medcoin</span><span class="lightwash"></span></div></div></div>
   </div>
 
   <div class="ctrls">
     <button id="bLamp" aria-pressed="true">LAMP</button>
-    <button id="bFloor" aria-pressed="true">ARCHIVE FLOOR</button>
-    <button class="c" data-c="mem" aria-pressed="true">CORE &#183; MAGNETIC MEMORY</button>
-    <button class="c" data-c="reel" aria-pressed="false">CORE &#183; TAPE REEL</button>
-    <button class="c" data-c="punch" aria-pressed="false">CORE &#183; PUNCH CARDS</button>
+    <button id="bFloor" aria-pressed="true">MATTE FLOOR</button>
+    <button class="c" data-c="pack" aria-pressed="true">CORE &#183; DISK PACK</button>
+    <button class="c" data-c="drum" aria-pressed="false">CORE &#183; MEMORY DRUM</button>
   </div>
 </section>
 
@@ -187,18 +181,20 @@ section>p{color:var(--dim);max-width:70ch;margin:0 0 18px;font-size:14.8px}
   render. One cropped lamp gives the screen a direction and a source, and lets the rotation do
   the work &#8212; nothing needs to animate brightness, because the folder that is at the front
   is simply the folder in the cone.</p>
-  <p class="note"><b>The core: magnetic core memory.</b> A woven lattice of ferrite rings on
-  crossed wires. It is genuinely what a computer's core looked like before the microchip, it is
-  literally called a core, and it is a ring of rings &#8212; the same shape the page already
-  turns. Switch the other two on to compare: the tape reel is the most legible at a glance and
-  the most clich&eacute;d; the punch cards are the most period-accurate and the least readable
-  as a centre.</p>
-  <p class="note"><b>The floor.</b> The grey technical grid belongs to a different document.
-  The archive floor is paper fibre and the runs of a file drawer, so the room stands on the
-  same material as everything around it. Toggle it to see the old grid back.</p>
-  <p class="note"><b>The folders.</b> Same tab, same accent per file, same paper as the folders
-  in the rest of the document &#8212; just seen as objects in a room instead of as cards on a
-  screen. That is the join the current version is missing.</p>
+  <p class="note"><b>The core: a disk pack.</b> The stack of platters on a spindle that literally
+  WAS the core of a mainframe. It is a core in the plain sense of the word, it is unmistakably
+  old computing, and a column of discs reads as a centre from every angle the ring turns to.
+  Drawn the way this document draws everything: one flat matte fill, one heavy dark outline, no
+  gradients. The memory drum beside it is the quieter option - one banded cylinder instead of a
+  stack, more abstract and less busy.</p>
+  <p class="note"><b>The floor.</b> The grid is gone entirely. This document is flat matte colour
+  from end to end, so the floor is too: two solid planes and a skirting, no lines, nothing
+  technical. The room stands on a surface rather than on graph paper. The old grid is one
+  toggle away for comparison.</p>
+  <p class="note"><b>The folders.</b> Classic desktop folder icons - flat fill, one heavy dark
+  outline, a tab at the top left - in the four file colours. That is the join the current
+  version is missing: the room stops being a render and becomes the same drawing as the rest
+  of the document.</p>
 </section>
 
 <section>
@@ -214,16 +210,16 @@ section>p{color:var(--dim);max-width:70ch;margin:0 0 18px;font-size:14.8px}
 </section>
 </div>
 <script>
-var CORES={mem:'<svg viewBox="0 0 150 150"><g class="corespin">  <g class="cw">    <path d="M20 40 H130"/><path d="M20 62 H130"/><path d="M20 84 H130"/><path d="M20 106 H130"/>    <path d="M40 20 V130"/><path d="M62 20 V130"/><path d="M84 20 V130"/><path d="M106 20 V130"/>    <path d="M24 24 L126 126"/><path d="M126 24 L24 126"/>  </g>  <g class="cr">    <ellipse cx="40" cy="40" rx="9" ry="6" transform="rotate(45 40 40)"/>    <ellipse cx="62" cy="40" rx="9" ry="6" transform="rotate(45 62 40)"/>    <ellipse cx="84" cy="40" rx="9" ry="6" transform="rotate(45 84 40)"/>    <ellipse cx="106" cy="40" rx="9" ry="6" transform="rotate(45 106 40)"/>    <ellipse cx="40" cy="62" rx="9" ry="6" transform="rotate(45 40 62)"/>    <ellipse cx="62" cy="62" rx="9" ry="6" transform="rotate(45 62 62)"/>    <ellipse cx="84" cy="62" rx="9" ry="6" transform="rotate(45 84 62)"/>    <ellipse cx="106" cy="62" rx="9" ry="6" transform="rotate(45 106 62)"/>    <ellipse cx="40" cy="84" rx="9" ry="6" transform="rotate(45 40 84)"/>    <ellipse cx="62" cy="84" rx="9" ry="6" transform="rotate(45 62 84)"/>    <ellipse cx="84" cy="84" rx="9" ry="6" transform="rotate(45 84 84)"/>    <ellipse cx="106" cy="84" rx="9" ry="6" transform="rotate(45 106 84)"/>    <ellipse cx="40" cy="106" rx="9" ry="6" transform="rotate(45 40 106)"/>    <ellipse cx="62" cy="106" rx="9" ry="6" transform="rotate(45 62 106)"/>    <ellipse cx="84" cy="106" rx="9" ry="6" transform="rotate(45 84 106)"/>    <ellipse cx="106" cy="106" rx="9" ry="6" transform="rotate(45 106 106)"/>  </g></g></svg>',reel:'<svg viewBox="0 0 150 150"><g class="corespin">  <circle class="reel" cx="75" cy="75" r="54"/>  <circle class="reel" cx="75" cy="75" r="17"/>  <g class="reel"><path d="M75 21 V58"/><path d="M75 92 V129"/><path d="M21 75 H58"/><path d="M92 75 H129"/>  <path d="M37 37 L61 61"/><path d="M113 37 L89 61"/><path d="M37 113 L61 89"/><path d="M113 113 L89 89"/></g>  <circle class="tape" cx="75" cy="75" r="44"/>  <circle class="tape" cx="75" cy="75" r="38" opacity=".55"/></g></svg>',punch:'<svg viewBox="0 0 150 150"><g class="corespin">  <rect class="punch" x="26" y="40" width="98" height="70" rx="2"/>  <rect class="punch" x="22" y="34" width="98" height="70" rx="2" opacity=".8"/>  <rect class="punch" x="18" y="28" width="98" height="70" rx="2" opacity=".6"/>  <g class="hole">    <rect x="26" y="36" width="5" height="9" rx="1"/><rect x="38" y="48" width="5" height="9" rx="1"/>    <rect x="50" y="36" width="5" height="9" rx="1"/><rect x="62" y="60" width="5" height="9" rx="1"/>    <rect x="74" y="48" width="5" height="9" rx="1"/><rect x="86" y="36" width="5" height="9" rx="1"/>    <rect x="98" y="72" width="5" height="9" rx="1"/><rect x="50" y="72" width="5" height="9" rx="1"/>  </g></g></svg>'};
+var CORES={pack:'<svg viewBox="0 0 150 150">   <g class="pack">     <ellipse class="pl" cx="75" cy="124" rx="54" ry="15"/>     <ellipse class="pl" cx="75" cy="108" rx="54" ry="15"/>     <ellipse class="pl" cx="75" cy="92"  rx="54" ry="15"/>     <ellipse class="pl" cx="75" cy="76"  rx="54" ry="15"/>     <ellipse class="pl pltop" cx="75" cy="60" rx="54" ry="15"/>     <rect class="spin" x="66" y="30" width="18" height="86" rx="3"/>     <ellipse class="cap" cx="75" cy="30" rx="20" ry="7"/>   </g> </svg>',drum:'<svg viewBox="0 0 150 150">   <g class="pack">     <path class="dr" d="M28 46 a47 15 0 0 1 94 0 v58 a47 15 0 0 1 -94 0 z"/>     <ellipse class="drtop" cx="75" cy="46" rx="47" ry="15"/>     <g class="band"><path d="M29 62 a47 12 0 0 0 92 0"/><path d="M29 78 a47 12 0 0 0 92 0"/>       <path d="M29 94 a47 12 0 0 0 92 0"/></g>   </g> </svg>'};
 var room=document.getElementById('room'),core=document.getElementById('core');
 document.getElementById('bLamp').addEventListener('click',function(){
   var on=!room.classList.contains('lit');room.classList.toggle('lit',on);
   this.setAttribute('aria-pressed',on?'true':'false');});
 document.getElementById('bFloor').addEventListener('click',function(){
   var on=!room.classList.contains('paperfloor');
-  room.classList.toggle('paperfloor',on);room.classList.toggle('grid',!on);
+  room.classList.toggle('matte',on);room.classList.toggle('grid',!on);
   this.setAttribute('aria-pressed',on?'true':'false');
-  this.textContent=on?'ARCHIVE FLOOR':'GREY GRID (TODAY)';});
+  this.textContent=on?'MATTE FLOOR':'GREY GRID (TODAY)';});
 [].forEach.call(document.querySelectorAll('.ctrls .c'),function(b){
   b.addEventListener('click',function(){
     [].forEach.call(document.querySelectorAll('.ctrls .c'),function(o){o.setAttribute('aria-pressed','false')});
