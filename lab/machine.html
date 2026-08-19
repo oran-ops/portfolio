@@ -1,0 +1,56 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="dark">
+<title>The Machine — Element 1</title><style>
+:root{--ground:#191A1F;--lift:#1E2026;--ink:#F2F1ED;--mut:#85878D;--hair:#31333A}
+*{box-sizing:border-box}
+body{margin:0;background:var(--ground);color:var(--ink);font-family:ui-sans-serif,system-ui,sans-serif}
+.wrap{min-height:100vh;display:grid;place-items:center;
+  background:radial-gradient(120% 90% at 62% 44%,#22242B 0%,#1B1D22 46%,#171820 100%)}
+.lbl{position:fixed;left:22px;top:20px;font-family:ui-monospace,monospace;font-size:9.5px;
+  letter-spacing:.22em;color:var(--mut)}
+.mach{width:min(78vw,760px);height:auto;display:block;
+  filter:drop-shadow(-26px 26px 30px rgba(10,12,20,.62))}
+</style></head><body>
+<span class="lbl">RING SCENE &middot; ELEMENT 1 &middot; THE MACHINE, ALONE</span>
+<div class="wrap">
+<svg class="mach" viewBox="0 0 820 700" aria-label="Old all-in-one computer">
+<defs>
+  <linearGradient id="face" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="#E4DFD4"/><stop offset="1" stop-color="#CFC9BC"/></linearGradient>
+  <linearGradient id="side" x1="0" y1="0" x2="1" y2="0">
+    <stop offset="0" stop-color="#B9B3A6"/><stop offset="1" stop-color="#CDC7BA"/></linearGradient>
+  <linearGradient id="top" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#EFEAE0"/><stop offset="1" stop-color="#DAD4C8"/></linearGradient>
+  <linearGradient id="glass" x1="0" y1="0" x2="0.4" y2="1">
+    <stop offset="0" stop-color="#202229"/><stop offset="1" stop-color="#15161B"/></linearGradient>
+</defs>
+
+<!-- left side panel, the machine is seen from its left -->
+<path fill="url(#side)" d="M96 176 L232 118 L232 596 L104 640 a26 26 0 0 1 -8 -19 Z"/>
+<!-- top plane -->
+<path fill="url(#top)" d="M232 118 L742 62 a30 30 0 0 1 26 24 L286 150 Z"/>
+<!-- front face -->
+<path fill="url(#face)" d="M232 118 L768 86 a30 30 0 0 1 4 14 L772 596
+  a30 30 0 0 1 -26 30 L262 664 a30 30 0 0 1 -30 -26 Z"/>
+
+<!-- screen bezel, recessed -->
+<path fill="#C6C0B3" d="M300 168 L724 142 a16 16 0 0 1 14 16 L738 442
+  a16 16 0 0 1 -14 16 L306 486 a16 16 0 0 1 -14 -16 L292 184 a16 16 0 0 1 8 -16 Z"/>
+<path fill="#B4AEA1" d="M312 182 L714 158 L724 438 L318 470 Z"/>
+<!-- the glass: the page's own ground colour, as specified -->
+<path fill="url(#glass)" d="M322 192 L706 170 L714 428 L328 458 Z"/>
+
+<!-- vent slits, left side -->
+<g stroke="#A49E92" stroke-width="3" stroke-linecap="round">
+  <path d="M126 300 L126 372"/><path d="M140 295 L140 367"/><path d="M154 290 L154 362"/>
+  <path d="M168 285 L168 357"/><path d="M182 280 L182 352"/>
+</g>
+<!-- seam under the screen -->
+<path stroke="#B7B1A4" stroke-width="2.5" fill="none" d="M270 520 L760 492"/>
+<!-- floppy slot -->
+<rect x="330" y="556" width="330" height="16" rx="4" fill="#3B3830" transform="rotate(-3.1 330 556)"/>
+<rect x="330" y="552" width="330" height="5" rx="2" fill="#B0AA9D" transform="rotate(-3.1 330 552)"/>
+<!-- eject button -->
+<rect x="676" y="536" width="26" height="9" rx="3" fill="#C2BCAF" transform="rotate(-3.1 676 536)"/>
+</svg>
+</div></body></html>
