@@ -816,6 +816,8 @@ body.static #clearance,body.static #idlecue,body.failsafe #clearance,body.failsa
 @media (max-width:860px){#clearance,#idlecue{display:none!important}}
 
 #xtix .reality{margin-bottom:18px}
+
+.rt-eof{height:1px;width:100%;pointer-events:none}
 </style>
 <div id="boot" aria-hidden="true">
   
@@ -2040,33 +2042,9 @@ body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:214748
 
 
 /* ===== EMERALD II phase 2 ===== */
-.ritual{display:grid;grid-template-columns:1fr 1.25fr 1fr;gap:26px;align-items:end;margin-top:38px;padding:26px 24px 24px;border-radius:8px;background:rgba(255,255,255,.025);border:1px solid rgba(107,110,118,.22);border-top:2px solid var(--fc,var(--emb));position:relative}
-.rt-end span{display:block;font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.3em;color:#8B8E96}
-.rt-end b{display:block;font-family:'JetBrains Mono',monospace;font-weight:800;font-size:17px;letter-spacing:.06em;color:var(--ink,#F2F1ED);margin-top:5px}
-.rt-end i{display:block;font-style:normal;font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:.12em;color:#9A9DA5;margin-top:6px}
-.rt-sig{display:flex;flex-direction:column;gap:6px}
-.rt-lbl{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:.24em;color:#9CA0A8}
-.rt-line{border-bottom:1px dashed #4B4E55;height:34px;position:relative}
-.rt-line svg{position:absolute;inset:0;width:100%;height:100%}
-.rt-scrib{fill:none;stroke:#CFD0D4;stroke-width:1.7;stroke-linecap:round;opacity:.9}
-.rt-date{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.14em;color:#9A9DA5}
-.rt-date b{color:#CFD0D4;font-weight:600}
-.stampbox{position:relative;color:var(--fc,var(--emb));border:2.5px dashed var(--fc,var(--emb));border-radius:8px;min-height:92px;display:flex;align-items:center;justify-content:center;cursor:pointer;user-select:none;-webkit-user-select:none;touch-action:none;overflow:visible;transition:border-style .3s}
-.stampbox::before{content:"";position:absolute;inset:0;border-radius:6px;overflow:hidden}
-.stampbox::after{content:"";position:absolute;inset:-7px;border-radius:11px;border:1.5px solid var(--fc,var(--emb));opacity:0;pointer-events:none;animation:sbpulse 2.6s ease-in-out infinite}
-.stampbox.done{border-style:solid}
-.stampbox.done::after{animation:none;opacity:0}
-.stampbox.urge{border-style:solid}
-.stampbox.urge::after{animation:sbpulse .8s ease-in-out infinite;opacity:.8}
-@keyframes sbpulse{0%,100%{opacity:0;transform:scale(1)}50%{opacity:.55;transform:scale(1.03)}}
-.sb-lbl{font-family:'JetBrains Mono',monospace;font-size:9.5px;font-weight:600;letter-spacing:.22em;position:relative;z-index:2;transition:opacity .3s;text-align:center;padding:0 12px}
-.sb-fill{position:absolute;left:0;right:0;bottom:0;height:0%;background:var(--fc,var(--emb));opacity:.15;border-radius:5px 5px 4px 4px}
-.sb-imp{position:absolute;font-family:'JetBrains Mono',monospace;font-weight:800;font-size:16px;letter-spacing:.3em;border:3px solid var(--fc,var(--emb));color:var(--fc,var(--emb));border-radius:6px;padding:8px 16px;opacity:0;z-index:3;
-  mask-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="80"><filter id="r"><feTurbulence type="fractalNoise" baseFrequency="0.5" numOctaves="3"/><feComponentTransfer><feFuncA type="discrete" tableValues="0.55 0.85 1 0.92 1 0.75 1"/></feComponentTransfer></filter><rect width="200" height="80" filter="url(%23r)"/></svg>');mask-size:cover;-webkit-mask-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="80"><filter id="r"><feTurbulence type="fractalNoise" baseFrequency="0.5" numOctaves="3"/><feComponentTransfer><feFuncA type="discrete" tableValues="0.55 0.85 1 0.92 1 0.75 1"/></feComponentTransfer></filter><rect width="200" height="80" filter="url(%23r)"/></svg>');-webkit-mask-size:cover}
-.sb-imp.go{animation:stampdrop .45s cubic-bezier(.2,1.4,.3,1) both}
-@media (max-width:640px){.ritual{grid-template-columns:1fr;gap:18px;align-items:stretch}.stampbox{min-height:96px}}
+
 .redx{position:relative;display:inline-block;max-width:100%;vertical-align:bottom;color:transparent;border-radius:2px;transition:color .5s .25s;cursor:pointer;touch-action:pan-y}
-.redx::after{content:"SEALED · TAP TO REVEAL ▸";position:absolute;inset:-1px -3px;display:flex;align-items:center;justify-content:center;overflow:hidden;white-space:nowrap;font-family:'JetBrains Mono',monospace;font-size:7.5px;font-weight:700;letter-spacing:.16em;background:#E4E1D8;color:#4A473F;border:1px solid rgba(20,21,25,.35);border-bottom-color:rgba(20,21,25,.5);border-radius:3px;box-shadow:0 2px 6px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.5);transform:translateX(var(--dx,0px));transform-origin:left center;transition:transform .55s cubic-bezier(.7,0,.2,1),opacity .4s;background-image:linear-gradient(110deg,transparent 32%,rgba(255,255,255,.55) 50%,transparent 68%);background-size:230% 100%;animation:rxsheen 3.4s linear infinite}
+.redx::after{content:"SEALED · TAP TO REVEAL ▸";position:absolute;inset:-1px -3px;display:flex;align-items:center;justify-content:center;overflow:hidden;white-space:nowrap;font-family:'JetBrains Mono',monospace;font-size:7.5px;font-weight:700;letter-spacing:.16em;background:#D8C24A;color:#4A473F;border:1px solid rgba(20,21,25,.35);border-bottom-color:rgba(20,21,25,.5);border-radius:3px;box-shadow:0 2px 6px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.5);transform:translateX(var(--dx,0px));transform-origin:left center;transition:transform .55s cubic-bezier(.7,0,.2,1),opacity .4s;background-image:linear-gradient(110deg,transparent 32%,rgba(255,255,255,.55) 50%,transparent 68%);background-size:230% 100%;animation:rxsheen 3.4s linear infinite}
 
 .redx.open{color:inherit;animation:rxflash 1.4s ease-out .35s}
 @keyframes rxsheen{0%{background-position:135% 0}100%{background-position:-95% 0}}
@@ -2074,10 +2052,10 @@ body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:214748
 .redx.open::after{transform:translateX(calc(100% + 14px));opacity:0;pointer-events:none}
 
 @media (prefers-reduced-motion:reduce){.redx{color:inherit}.redx::after{transform:scaleX(0)}
-  .sb-imp{opacity:1;animation:none}.stampbox::after{animation:none}
+  
   /* the impression is shown, so the prompt that asked for it must go - otherwise
      "REVIEWED" prints straight on top of "PRESS & HOLD TO STAMP" */
-  .sb-lbl{opacity:0}
+  
   /* the developed copy is already visible in this mode, so the lamp must not invite
      the reader to switch on something that is plainly already on */
   .case .folder .lampband{display:none!important}
@@ -2598,11 +2576,11 @@ body.static .sttl .w>i{font-variation-settings:'wght' 780;letter-spacing:0}
    past them, so the reader declassifies the file simply by reading it. One-way
    — once lifted, they stay lifted. */
 .rxs{position:relative;display:inline;color:inherit}
-.rxs::after{content:"";position:absolute;inset:-1px -2px;background:#E4E1D8;border-radius:2px;
+.rxs::after{content:"";position:absolute;inset:-1px -2px;background:#D8C24A;border-radius:2px;
   box-shadow:0 1px 4px rgba(0,0,0,.3),inset 0 1px 0 rgba(255,255,255,.45);
   transform:scaleX(var(--sp,1));transform-origin:right center;
   transition:transform .18s linear;pointer-events:none}
-#medcoin .rxs::after{background:#2A2723;box-shadow:0 1px 4px rgba(0,0,0,.25)}
+
 @media (prefers-reduced-motion:reduce){.rxs::after{transform:scaleX(0)}}
 body.static .rxs::after{transform:scaleX(0)}
 
@@ -4823,48 +4801,26 @@ function openCase(id){
 
 /* clearance gate per case folder */
 CASES.forEach(function(id){
-  var sec=document.getElementById(id);if(!sec)return;
-  var folder=sec.querySelector('.folder');if(!folder)return;
-  var META={xtix:['01','XTIX'],oasis:['02','OASIS'],eventer:['03','EVENTER'],medcoin:['04','MEDCOIN']};
-  var mt=META[id]||['0?',id.toUpperCase()];
-  var g=document.createElement('div');g.className='ritual';
-  g.innerHTML='<div class="rt-end"><span>END OF FILE</span><b>'+mt[0]+' \u2014 '+mt[1]+'</b><i>CASE FILE '+mt[0]+' \u00B7 ON RECORD</i></div>'
-   +'<div class="rt-sig"><span class="rt-lbl">REVIEWING OFFICER</span><div class="rt-line"><svg viewBox="0 0 220 34" preserveAspectRatio="none"><path class="rt-scrib" d="M8,24 C30,8 44,30 62,18 C80,6 92,28 112,16 C130,6 142,26 164,14 C180,6 196,20 212,12"/></svg></div><span class="rt-date">DATE: <b>\u2014</b></span></div>'
-   +'<div class="stampbox"><span class="sb-lbl">PRESS &amp; HOLD TO STAMP \u25B8</span><span class="sb-fill"></span><span class="sb-imp">REVIEWED</span></div>';
-  ((sec.querySelector('.wrap'))||folder).appendChild(g);
-  var box=g.querySelector('.stampbox'),lbl=g.querySelector('.sb-lbl'),fill=g.querySelector('.sb-fill'),
-      imp=g.querySelector('.sb-imp'),scrib=g.querySelector('.rt-scrib'),dt=g.querySelector('.rt-date b');
-  var SL=scrib.getTotalLength();
-  scrib.style.strokeDasharray=SL;scrib.style.strokeDashoffset=SL;
-  var t0=null,raf=null,HOLD=1100;
-  function done(){
-    if(cleared[id])return;
-    cleared[id]=true;clearedN++;
-    box.classList.add('done');
-    lbl.style.opacity='0';
-    fill.style.height='100%';
-    imp.style.setProperty('--srot',((Math.random()*8-4).toFixed(1))+'deg');
-    if(!reduced)requestAnimationFrame(function(){imp.classList.add('go')});else imp.style.opacity=1;
-    scrib.style.transition=reduced?'none':'stroke-dashoffset 1s cubic-bezier(.4,0,.2,1) .15s';
-    scrib.style.strokeDashoffset='0';
-    var d=new Date();
-    dt.textContent=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
-    try{if(window.__markReviewed)window.__markReviewed(id)}catch(e){}
-    try{if(navigator.vibrate)navigator.vibrate([10,50,16])}catch(e){}
-  }
-  function tick(ts){
-    if(t0===null)t0=ts;
-    var pr=Math.min(1,(ts-t0)/HOLD);
-    fill.style.height=(pr*100)+'%';
-    if(pr>=1){t0=null;done();return}
-    raf=requestAnimationFrame(tick);
-  }
-  function down(e){e.preventDefault();if(cleared[id])return;t0=null;raf=requestAnimationFrame(tick)}
-  function up(){if(cleared[id])return;if(raf)cancelAnimationFrame(raf);t0=null;fill.style.height='0%'}
-  box.addEventListener('pointerdown',down);
-  box.addEventListener('pointerup',up);
-  box.addEventListener('pointerleave',up);
-  box.addEventListener('pointercancel',up);
+  /* R55: the end-of-file ritual is gone, but the ceremony it fed is not. The press-and-hold
+     stamp was the ONLY caller of __markReviewed, and that drives the desktop FILES REVIEWED
+     meter and #ccstamp in the vault - the line "FOUR FILES REVIEWED - THE RECORD CLOSES"
+     can only resolve if something still reports a file as read. So the report now comes from
+     the reader reaching the end of the file, which is what pressing the stamp stood for.
+     Strictly better on a phone: the stamp and the whole ceremony were desktop-only, so below
+     861px the four stamps called nothing and the vault could never close. */
+  var sec=document.getElementById(id); if(!sec)return;
+  var host=sec.querySelector('.wrap')||sec;
+  var eof=document.createElement('div'); eof.className='rt-eof'; eof.setAttribute('aria-hidden','true');
+  host.appendChild(eof);
+  var fired=false;
+  function fire(){ if(fired)return; fired=true; cleared[id]=true; clearedN++;
+    try{ if(window.__markReviewed)window.__markReviewed(id); }catch(e){} }
+  if('IntersectionObserver' in window){
+    var eio=new IntersectionObserver(function(es){
+      es.forEach(function(en){ if(en.isIntersecting){ eio.unobserve(en.target); fire(); } });
+    },{threshold:0,rootMargin:'0px 0px -12% 0px'});
+    eio.observe(eof);
+  } else { fire(); }
 });
 
 /* R2: evidence slips on the two money stats */
