@@ -818,6 +818,23 @@ body.static #clearance,body.static #idlecue,body.failsafe #clearance,body.failsa
 #xtix .reality{margin-bottom:18px}
 
 .rt-eof{height:1px;width:100%;pointer-events:none}
+
+/* ===== R56 - the evidence rail (desktop) =====
+   The slip and the note leave the folder and travel with the reader for the length of the
+   file. They must leave: .folder computes `overflow: clip visible`, and sticky is dead inside
+   a clipping ancestor. Gated at 1180px because below it there is no room, and because gating
+   the MOVE (not just the styling) leaves narrow layouts exactly as they were. */
+@media (min-width:1180px){
+  /* widen into the margin .wrap was already wasting, so the folder pays as little as possible */
+  .case>.wrap{max-width:min(1460px,calc(100vw - 72px))}
+  .case .caserow{display:flex;align-items:flex-start;gap:30px}
+  .case .caserow>.folder{flex:1 1 auto;min-width:0}
+  .case .evrail{flex:0 0 300px;position:sticky;top:92px;
+    display:flex;flex-direction:column;gap:18px;z-index:3}
+  /* the panels were revealed by an ancestor they no longer have; state their rest state */
+  .case .evrail>.slipflip,.case .evrail>.an-note{opacity:1;transform:none}
+  .case .evrail .evslip,.case .evrail .mslip{width:100%}
+}
 </style>
 <div id="boot" aria-hidden="true">
   
@@ -5972,7 +5989,41 @@ document.querySelectorAll('.redx').forEach(function(r){
   for(var i=0;i<f.length;i++)io.observe(f[i]);
 })();
 </script>
+<script>
+/* R56 - THE EVIDENCE RAIL. Deliberately the last script in the file.
+   Three earlier blocks build these panels in a fixed order, and the third (the method slip,
+   which adds TURN THE SHEET) carries its own comment saying it must be the last thing to
+   touch the slip. Running before it would move a sheet that is then re-wrapped underneath us.
 
+   The panels are MOVED. appendChild relocates a node with its listeners intact; rebuilding the
+   markup would produce a rail that looks correct and does nothing when pressed.
+
+   The move is driven outward from each slip rather than from an assumed parent: the four
+   folders hold it at four different depths (.statrow in XTIX, a .stat inside .cols2 in Oasis,
+   a bare div in Eventer and Medcoin), so any selector written against one shape misses three. */
+(function(){
+  if(!window.matchMedia||!matchMedia('(min-width:1180px)').matches)return;
+  ['xtix','oasis','eventer','medcoin'].forEach(function(id){
+    try{
+      var sec=document.getElementById(id); if(!sec)return;
+      var wrap=sec.querySelector('.wrap'); if(!wrap)return;
+      var folder=null;
+      for(var i=0;i<wrap.children.length;i++){
+        if(wrap.children[i].classList.contains('folder')){folder=wrap.children[i];break}
+      }
+      if(!folder)return;
+      var slip=sec.querySelector('.slipflip'), note=sec.querySelector('.an-note');
+      if(!slip||!note)return;
+      var row=document.createElement('div'); row.className='caserow';
+      folder.parentNode.insertBefore(row,folder);
+      var rail=document.createElement('div'); rail.className='evrail';
+      rail.setAttribute('aria-label','Evidence for this file');
+      row.appendChild(rail); row.appendChild(folder);
+      rail.appendChild(slip); rail.appendChild(note);
+    }catch(e){}
+  });
+})();
+</script>
 
 </body>
 </html>
