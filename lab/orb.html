@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>orb lab</title>
+<style>
+  :root{ --charcoal:#191A1F; --ink:#F2F1ED; --dim:#B6B7BB; --hair:#31333A; }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%;background:var(--charcoal);color:var(--ink);
+    font:12px/1.5 ui-monospace,"JetBrains Mono",Menlo,Consolas,monospace}
+  #stage{position:fixed;inset:0}
+  canvas{display:block;width:100%;height:100%}
+  #hud{position:fixed;left:14px;top:12px;z-index:5;display:flex;gap:8px;align-items:center;
+    flex-wrap:wrap;max-width:calc(100% - 28px)}
+  #hud button{font:inherit;color:var(--ink);background:#25262D;border:1px solid var(--hair);
+    padding:5px 10px;cursor:pointer;border-radius:2px}
+  #hud button[aria-pressed="true"]{border-color:#2FB380;color:#2FB380}
+  #read{position:fixed;left:14px;bottom:12px;z-index:5;color:var(--dim);white-space:pre}
+  #note{position:fixed;right:14px;bottom:12px;z-index:5;color:#6A6C74;text-align:right;
+    max-width:44ch}
+</style>
+</head><body>
+<div id="stage"><canvas id="c"></canvas></div>
+<div id="hud">
+  <button id="bOne"  aria-pressed="true">ONE</button>
+  <button id="bTwo"  aria-pressed="false">TWO</button>
+  <button id="bHalt" aria-pressed="false">PAUSE MOTION</button>
+</div>
+<div id="read"></div>
+<div id="note">bubbly preset, read from the source: 33,000 points,
+wobble 1 (radial, /6), rotation 0.3 rad/s, camera z=8 fov=50.
+Predicted diameter 0.268H; measured on the real site 0.277H.</div>
+<script>
+(function(){
+  "use strict";
+  var cv = document.getElementById('c');
+  var gl = cv.getContext('webgl', {alpha:true, antialias:false, premultipliedAlpha:true,
+                                   powerPreference:'high-performance'})
+        || cv.getContext('experimental-webgl', {alpha:true, antialias:false});
+  if(!gl){ document.getElementById('read').textContent = 'no webgl'; return; }
+
+  /* ---------------------------------------------------------------- the point cloud
+     A Fibonacci sphere, then shuffled with the same little LCG the original uses. The shuffle
+     is not cosmetic: points are drawn in buffer order, so it decides which of two points
+     landing on one pixel is the one you see. Ordered points would band. */
+  var N = 33000;
+  function lcg(seed){ var e = seed; return function(){ e = (9301*e + 49297) % 233280; return e/233280; }; }
+  function fibonacci(n){
+    var a = new Float32Array(3*n), GA = Math.PI*(3 - Math.sqrt(5));
+    for(var i=0;i<n;i++){
+      var y = 1 - (i/(n-1))*2, r = Math.sqrt(Math.max(0,1-y*y)), th = GA*i;
+      a[3*i] = Math.cos(th)*r; a[3*i+1] = y; a[3*i+2] = Math.sin(th)*r;
+    }
+    return a;
+  }
+  function shuffled(src, seed){
+    var n = src.length/3, out = new Float32Array(src.length), rnd = lcg(seed), idx = new Int32Array(n), i, j, t;
+    for(i=0;i<n;i++) idx[i] = i;
+    for(i=n-1;i>0;i--){ j = Math.floor(rnd()*(i+1)); t = idx[i]; idx[i] = idx[j]; idx[j] = t; }
+    for(i=0;i<n;i++){ var s = 3*idx[i], d = 3*i; out[d]=src[s]; out[d+1]=src[s+1]; out[d+2]=src[s+2]; }
+    return out;
+  }
+  var POS = shuffled(fibonacci(N), 12345);
+
+  /* ---------------------------------------------------------------- program */
+  function sh(type, src){
+    var s = gl.createShader(type); gl.shaderSource(s, src); gl.compileShader(s);
+    if(!gl.getShaderParameter(s, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(s));
+    return s;
+  }
+  var prog = gl.createProgram();
+  gl.attachShader(prog, sh(gl.VERTEX_SHADER,   '\nattribute vec3 aPos;\nuniform mat4 uProj, uView, uModel;\nuniform mat3 uNrm;\nuniform float uTime, uScale, uWobble;\nvarying vec3 vN;\n\nvec4 permute(vec4 x) {\n    return mod(((x * 34.0) + 1.0) * x, 289.0);\n}\nfloat permute(float x) {\n    return floor(mod(((x * 34.0) + 1.0) * x, 289.0));\n}\nvec4 taylorInvSqrt(vec4 r) {\n    return 1.79284291400159 - 0.85373472095314 * r;\n}\nfloat taylorInvSqrt(float r) {\n    return 1.79284291400159 - 0.85373472095314 * r;\n}\n\nvec4 grad4(float j, vec4 ip) {\n    const vec4 ones = vec4(1.0, 1.0, 1.0, -1.0);\n    vec4 p, s;\n\n    p.xyz = floor(fract(vec3(j) * ip.xyz) * 7.0) * ip.z - 1.0;\n    p.w = 1.5 - dot(abs(p.xyz), ones.xyz);\n    s = vec4(lessThan(p, vec4(0.0)));\n    p.xyz = p.xyz + (s.xyz * 2.0 - 1.0) * s.www;\n\n    return p;\n}\n\nfloat snoise(vec4 v) {\n\n  const vec2 C = vec2(0.138196601125010504,  // (5 - sqrt(5))/20  G4\n  0.309016994374947451); // (sqrt(5) - 1)/4   F4\n  // First corner\n  vec4 i = floor(v + dot(v, C.yyyy));\n  vec4 x0 = v - i + dot(i, C.xxxx);\n\n  // Other corners\n\n  // Rank sorting originally contributed by Bill Licea-Kane, AMD (formerly ATI)\n  vec4 i0;\n\n  vec3 isX = step(x0.yzw, x0.xxx);\n  vec3 isYZ = step(x0.zww, x0.yyz);\n  //  i0.x = dot( isX, vec3( 1.0 ) );\n  i0.x = isX.x + isX.y + isX.z;\n  i0.yzw = 1.0 - isX;\n\n  //  i0.y += dot( isYZ.xy, vec2( 1.0 ) );\n  i0.y += isYZ.x + isYZ.y;\n  i0.zw += 1.0 - isYZ.xy;\n\n  i0.z += isYZ.z;\n  i0.w += 1.0 - isYZ.z;\n\n  // i0 now contains the unique values 0,1,2,3 in each channel\n  vec4 i3 = clamp(i0, 0.0, 1.0);\n  vec4 i2 = clamp(i0 - 1.0, 0.0, 1.0);\n  vec4 i1 = clamp(i0 - 2.0, 0.0, 1.0);\n\n  //  x0 = x0 - 0.0 + 0.0 * C \n  vec4 x1 = x0 - i1 + 1.0 * C.xxxx;\n  vec4 x2 = x0 - i2 + 2.0 * C.xxxx;\n  vec4 x3 = x0 - i3 + 3.0 * C.xxxx;\n  vec4 x4 = x0 - 1.0 + 4.0 * C.xxxx;\n\n  // Permutations\n  i = mod(i, 289.0);\n  float j0 = permute(permute(permute(permute(i.w) + i.z) + i.y) + i.x);\n  vec4 j1 = permute(permute(permute(permute(i.w + vec4(i1.w, i2.w, i3.w, 1.0)) + i.z + vec4(i1.z, i2.z, i3.z, 1.0)) + i.y + vec4(i1.y, i2.y, i3.y, 1.0)) + i.x + vec4(i1.x, i2.x, i3.x, 1.0));\n  // Gradients\n  // ( 7*7*6 points uniformly over a cube, mapped onto a 4-octahedron.)\n  // 7*7*6 = 294, which is close to the ring size 17*17 = 289.\n\n  vec4 ip = vec4(1.0 / 294.0, 1.0 / 49.0, 1.0 / 7.0, 0.0);\n\n  vec4 p0 = grad4(j0, ip);\n  vec4 p1 = grad4(j1.x, ip);\n  vec4 p2 = grad4(j1.y, ip);\n  vec4 p3 = grad4(j1.z, ip);\n  vec4 p4 = grad4(j1.w, ip);\n\n  // Normalise gradients\n  vec4 norm = taylorInvSqrt(vec4(dot(p0, p0), dot(p1, p1), dot(p2, p2), dot(p3, p3)));\n  p0 *= norm.x;\n  p1 *= norm.y;\n  p2 *= norm.z;\n  p3 *= norm.w;\n  p4 *= taylorInvSqrt(dot(p4, p4));\n\n  // Mix contributions from the five corners\n  vec3 m0 = max(0.6 - vec3(dot(x0, x0), dot(x1, x1), dot(x2, x2)), 0.0);\n  vec2 m1 = max(0.6 - vec2(dot(x3, x3), dot(x4, x4)), 0.0);\n  m0 = m0 * m0;\n  m1 = m1 * m1;\n  return 49.0 * (dot(m0 * m0, vec3(dot(p0, x0), dot(p1, x1), dot(p2, x2))) + dot(m1 * m1, vec2(dot(p3, x3), dot(p4, x4))));\n}\n\n// === CURL NOISE FUNCTIONS ===\n// 3D Simplex Noise (simpler than 4D for curl noise)\nvec3 mod289_3(vec3 x) {\nreturn x - floor(x * (1.0 / 289.0)) * 289.0;\n}\n\nvec4 mod289_4(vec4 x) {\nreturn x - floor(x * (1.0 / 289.0)) * 289.0;\n}\n\nvec4 permute_curl(vec4 x) {\nreturn mod289_4(((x*34.0)+1.0)*x);\n}\n\nvec4 taylorInvSqrt_curl(vec4 r) {\nreturn 1.79284291400159 - 0.85373472095314 * r;\n}\n\nfloat snoise3(vec3 v) {\nconst vec2 C = vec2(1.0/6.0, 1.0/3.0);\nconst vec4 D = vec4(0.0, 0.5, 1.0, 2.0);\n\n// First corner\nvec3 i  = floor(v + dot(v, C.yyy));\nvec3 x0 = v - i + dot(i, C.xxx);\n\n// Other corners\nvec3 g = step(x0.yzx, x0.xyz);\nvec3 l = 1.0 - g;\nvec3 i1 = min(g.xyz, l.zxy);\nvec3 i2 = max(g.xyz, l.zxy);\n\nvec3 x1 = x0 - i1 + C.xxx;\nvec3 x2 = x0 - i2 + C.yyy;\nvec3 x3 = x0 - D.yyy;\n\n// Permutations\ni = mod289_3(i);\nvec4 p = permute_curl(permute_curl(permute_curl(\n           i.z + vec4(0.0, i1.z, i2.z, 1.0))\n         + i.y + vec4(0.0, i1.y, i2.y, 1.0))\n         + i.x + vec4(0.0, i1.x, i2.x, 1.0));\n\n// Gradients\nfloat n_ = 0.142857142857;\nvec3 ns = n_ * D.wyz - D.xzx;\n\nvec4 j = p - 49.0 * floor(p * ns.z * ns.z);\n\nvec4 x_ = floor(j * ns.z);\nvec4 y_ = floor(j - 7.0 * x_);\n\nvec4 x = x_ * ns.x + ns.yyyy;\nvec4 y = y_ * ns.x + ns.yyyy;\nvec4 h = 1.0 - abs(x) - abs(y);\n\nvec4 b0 = vec4(x.xy, y.xy);\nvec4 b1 = vec4(x.zw, y.zw);\n\nvec4 s0 = floor(b0) * 2.0 + 1.0;\nvec4 s1 = floor(b1) * 2.0 + 1.0;\nvec4 sh = -step(h, vec4(0.0));\n\nvec4 a0 = b0.xzyw + s0.xzyw * sh.xxyy;\nvec4 a1 = b1.xzyw + s1.xzyw * sh.zzww;\n\nvec3 p0 = vec3(a0.xy, h.x);\nvec3 p1 = vec3(a0.zw, h.y);\nvec3 p2 = vec3(a1.xy, h.z);\nvec3 p3 = vec3(a1.zw, h.w);\n\n// Normalise gradients\nvec4 norm = taylorInvSqrt_curl(vec4(dot(p0,p0), dot(p1,p1), dot(p2,p2), dot(p3,p3)));\np0 *= norm.x;\np1 *= norm.y;\np2 *= norm.z;\np3 *= norm.w;\n\n// Mix final noise value\nvec4 m = max(0.6 - vec4(dot(x0,x0), dot(x1,x1), dot(x2,x2), dot(x3,x3)), 0.0);\nm = m * m;\nreturn 42.0 * dot(m*m, vec4(dot(p0,x0), dot(p1,x1), dot(p2,x2), dot(p3,x3)));\n}\n\n// Vectorized noise for curl calculation\n\nvoid main(){\n  /* vanlent\'s bubbly state, as read from its bundle:\n       uPos = p + normalize(p) * snoise(vec4(p / 1.5, t)) * wobble / 6\n     The displacement is radial, so the sphere breathes in and out of itself rather than\n     shearing - that is what makes the silhouette read as a stone rather than as noise. */\n  vec3 sp = aPos * uScale;\n  vec3 n  = normalize(sp + vec3(0.0001));\n  float w = snoise(vec4(sp / 1.5, uTime));\n  vec3 p  = sp + n * w * uWobble / 6.0;\n\n  /* the shading normal is the UNDISPLACED direction, in world space. Using the displaced\n     position instead would make the lighting crawl with the wobble; it does not. */\n  vN = normalize(uNrm * normalize(sp));\n\n  vec4 vp = uView * uModel * vec4(p, 1.0);\n  gl_Position = uProj * vp;\n  gl_PointSize = 5.0 / (-vp.z);\n}\n'));
+  gl.attachShader(prog, sh(gl.FRAGMENT_SHADER, '\nprecision highp float;\nvarying vec3 vN;\nuniform vec3 uBase;\n\nvoid main(){\n  /* Two lights, hard left and hard right, both tipped slightly toward the viewer. They make a\n     bright band around the equator and leave the poles near black - which is the whole reason\n     the orb reads as a solid body and not as a cloud. 0.9 gain, 0.1 floor. */\n  vec3 L = normalize(vec3(-1.0, 0.0, 0.5));\n  vec3 R = normalize(vec3( 1.0, 0.0, 0.5));\n  float lit = (max(dot(vN, L), 0.0) + max(dot(vN, R), 0.0)) * 0.9 + 0.1;\n  gl_FragColor = vec4(uBase * lit, 1.0);\n}\n'));
+  gl.linkProgram(prog);
+  if(!gl.getProgramParameter(prog, gl.LINK_STATUS)) throw new Error(gl.getProgramInfoLog(prog));
+  gl.useProgram(prog);
+
+  var buf = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+  gl.bufferData(gl.ARRAY_BUFFER, POS, gl.STATIC_DRAW);
+  var aPos = gl.getAttribLocation(prog, 'aPos');
+  gl.enableVertexAttribArray(aPos);
+  gl.vertexAttribPointer(aPos, 3, gl.FLOAT, false, 0, 0);
+
+  var U = {};
+  ['uProj','uView','uModel','uNrm','uTime','uScale','uWobble','uBase'].forEach(function(k){
+    U[k] = gl.getUniformLocation(prog, k);
+  });
+
+  /* ---------------------------------------------------------------- matrices, by hand
+     Column-major, the order WebGL wants. Four of them; a library for this would be absurd. */
+  function perspective(fovDeg, aspect, near, far){
+    var f = 1/Math.tan(fovDeg*Math.PI/360), nf = 1/(near-far);
+    return new Float32Array([f/aspect,0,0,0, 0,f,0,0, 0,0,(far+near)*nf,-1, 0,0,2*far*near*nf,0]);
+  }
+  function modelYT(angle, tx){
+    var c = Math.cos(angle), s = Math.sin(angle);
+    return new Float32Array([c,0,-s,0, 0,1,0,0, s,0,c,0, tx,0,0,1]);
+  }
+  function normalOfY(angle){
+    var c = Math.cos(angle), s = Math.sin(angle);
+    return new Float32Array([c,0,-s, 0,1,0, s,0,c]);   /* rotation only: inverse-transpose is itself */
+  }
+  var VIEW = new Float32Array([1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,-8,1]);   /* camera at (0,0,8) */
+
+  /* ---------------------------------------------------------------- loop */
+  var W=0, H=0, DPR=1, PROJ=null, two=false, halted=false, raf=null, t0=null, tPaused=0;
+  var frames=0, fps=0, tFps=0, readEl=document.getElementById('read');
+
+  function size(){
+    DPR = Math.min(window.devicePixelRatio||1, 2);
+    W = cv.clientWidth; H = cv.clientHeight;
+    cv.width = Math.round(W*DPR); cv.height = Math.round(H*DPR);
+    gl.viewport(0,0,cv.width,cv.height);
+    PROJ = perspective(50, W/H, 0.1, 1000);
+  }
+
+  function frame(now){
+    if(t0 === null) t0 = now;
+    var t = halted ? tPaused : (now - t0)/1000;
+    if(!halted) tPaused = t;
+
+    gl.clearColor(0,0,0,0);
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+    gl.enable(gl.DEPTH_TEST);
+    gl.enable(gl.BLEND);
+    gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+
+    gl.uniformMatrix4fv(U.uProj, false, PROJ);
+    gl.uniformMatrix4fv(U.uView, false, VIEW);
+    gl.uniform1f(U.uTime, t);
+    gl.uniform1f(U.uScale, 1.0);
+    gl.uniform1f(U.uWobble, 1.0);
+    gl.uniform3f(U.uBase, 0.85, 0.88, 0.92);
+
+    var ang = t*0.3;
+    if(!two){
+      gl.uniformMatrix4fv(U.uModel, false, modelYT(ang, 0));
+      gl.uniformMatrix3fv(U.uNrm, false, normalOfY(ang));
+      gl.drawArrays(gl.POINTS, 0, N);
+    } else {
+      /* the second is the same body, a half turn out of phase, so the two never read as a
+         mirrored pair */
+      gl.uniformMatrix4fv(U.uModel, false, modelYT(ang, -1.55));
+      gl.uniformMatrix3fv(U.uNrm, false, normalOfY(ang));
+      gl.drawArrays(gl.POINTS, 0, N);
+      gl.uniformMatrix4fv(U.uModel, false, modelYT(ang + Math.PI, 1.55));
+      gl.uniformMatrix3fv(U.uNrm, false, normalOfY(ang + Math.PI));
+      gl.drawArrays(gl.POINTS, 0, N);
+    }
+
+    /* the readout is written twice a second, not sixty times: textContent on a fixed element
+       still costs a style recalc, and a diagnostic has no business competing with the thing it
+       is diagnosing */
+    frames++;
+    if(now - tFps > 500){
+      fps = Math.round(frames*1000/(now - tFps)); frames = 0; tFps = now;
+      readEl.textContent =
+        'points ' + (two ? N*2 : N).toLocaleString() +
+        '   ' + fps + ' fps   ' + W + 'x' + H + ' @' + DPR +
+        '\npredicted diameter ' + (H*0.268).toFixed(0) + 'px  (0.268 x H)';
+    }
+    raf = requestAnimationFrame(frame);
+  }
+
+  addEventListener('resize', size);
+  size();
+  raf = requestAnimationFrame(frame);
+
+  function press(el, on){ el.setAttribute('aria-pressed', on ? 'true' : 'false'); }
+  var bOne = document.getElementById('bOne'), bTwo = document.getElementById('bTwo'),
+      bHalt = document.getElementById('bHalt');
+  bOne.onclick = function(){ two = false; press(bOne,true); press(bTwo,false); };
+  bTwo.onclick = function(){ two = true;  press(bOne,false); press(bTwo,true); };
+  /* WCAG 2.2.2 is Level A for motion that starts by itself and runs past five seconds */
+  bHalt.onclick = function(){ halted = !halted; if(!halted) t0 = null; press(bHalt, halted);
+    bHalt.textContent = halted ? 'RESUME MOTION' : 'PAUSE MOTION'; };
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches) bHalt.onclick();
+})();
+</script>
+</body></html>
