@@ -1973,8 +1973,16 @@ The tell was there and I read it wrong at first: `Age: 0` on a fresh request mea
 problem. Cache-busting query strings are useless here — Pages ignores them for cache keys,
 and the age kept climbing across `?cb=` values.
 
-The job breakdown matters: `build` **succeeded** (Jekyll was fine — there is no `{{` or `{%`
-in the file and no `.nojekyll` is needed), and `deploy` failed with an empty description.
+The job breakdown matters: `build` **succeeded** (Jekyll parsed the file without complaint,
+and at the time no `.nojekyll` was needed), and `deploy` failed with an empty description.
+
+> **Later correction, r73.** The parenthesis above is the sentence that broke the next
+> deployment. To claim Jekyll was fine I typed the two Liquid delimiters as literals, into a
+> Markdown file that Jekyll feeds through Liquid before Markdown — backticks do not protect
+> them, because Liquid runs first and does not know what a code span is. An unterminated tag
+> is a `Liquid::SyntaxError`, and that fails the whole Pages build. The delimiters are
+> deliberately not reproduced here; the repo now carries `.nojekyll`, so there is no Liquid
+> pass at all and prose can no longer break a deploy.
 Nothing was wrong with the content; `raw.githubusercontent` served the correct 672KB build
 the whole time. The deploy step is not independently re-runnable without auth, but any push
 to main starts a fresh run, so an empty commit recovered it.
