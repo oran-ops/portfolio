@@ -18,8 +18,12 @@ section{margin-top:44px}
 section>p{color:var(--dim);max-width:70ch;margin:0 0 18px;font-size:14.8px}
 
 /* ---------------- the room ---------------- */
-.room{position:relative;height:520px;border:1px solid var(--hair);border-radius:12px;
-  overflow:hidden;background:#15161A;isolation:isolate}
+/* R69 - K95's actual mechanism: one saturated field edge to edge, no frame, no floor, no
+   vignette. The colour is the space. A bordered box reads as a display case; a full-bleed
+   field reads as a place. */
+.room{position:relative;height:78vh;min-height:520px;
+  width:100vw;margin-left:calc(50% - 50vw);
+  border:0;border-radius:0;overflow:hidden;background:#191A1F;isolation:isolate}
 /* the old grey grid, kept only so it can be compared away */
 .room.grid .floor{background-image:
   linear-gradient(rgba(120,124,134,.14) 1px,transparent 1px),
@@ -30,7 +34,7 @@ section>p{color:var(--dim);max-width:70ch;margin:0 0 18px;font-size:14.8px}
 .room.matte .floor{background-image:none;
   background:linear-gradient(180deg,#23252C 0%,#1B1D22 58%,#17181D 100%)}
 .room.matte .skirt{opacity:1}
-.skirt{position:absolute;left:0;right:0;bottom:46%;height:12px;opacity:0;
+.skirt{position:absolute;left:0;right:0;bottom:46%;height:12px;opacity:0;display:none;
   background:#2E313A;border-top:2px solid #3B3F49;transition:opacity .5s}
 .horizon{position:absolute;left:0;right:0;bottom:46%;height:1px;
   background:linear-gradient(90deg,transparent,rgba(233,231,223,.16),transparent)}
@@ -47,7 +51,7 @@ section>p{color:var(--dim);max-width:70ch;margin:0 0 18px;font-size:14.8px}
   background:var(--lamp);box-shadow:0 0 22px 7px rgba(240,217,168,.75)}
 .cone{position:absolute;left:50%;top:26px;transform:translateX(-50%);
   width:1240px;height:500px;pointer-events:none;
-  background:linear-gradient(180deg,rgba(240,217,168,.30),rgba(240,217,168,.07) 58%,transparent);
+  background:linear-gradient(180deg,rgba(240,217,168,.17),rgba(240,217,168,.04) 58%,transparent);
   clip-path:polygon(46.5% 0,53.5% 0,100% 100%,0 100%);
   filter:blur(7px)}
 .pool{position:absolute;left:50%;bottom:6%;transform:translateX(-50%);
@@ -75,9 +79,14 @@ section>p{color:var(--dim);max-width:70ch;margin:0 0 18px;font-size:14.8px}
      billboarding had thrown both away. Scale and dim by the card's own angle: at the back it
      is smaller and darker, at the front full size and full value - which is also the
      distance-flattening Firewatch used to keep a 3D scene reading as flat graphic shapes. */
+  /* R69 - every card carries its OWN tilt. Billboarding solved the edge-on problem and
+     created a worse one: cards facing the camera read as a carousel, not as objects in a
+     volume. The orbit is also wide enough that the near cards crop against the viewport -
+     cropping is the strongest signal there is that the space is bigger than the window. */
   --depth:calc((cos(var(--ang)) + 1) / 2);
-  transform:translateX(calc(400px * sin(var(--ang)))) translateZ(calc(400px * cos(var(--ang))))
-            scale(calc(0.58 + 0.42 * var(--depth)))}
+  transform:translateX(calc(620px * sin(var(--ang)))) translateZ(calc(560px * cos(var(--ang))))
+            scale(calc(0.34 + 0.86 * var(--depth)))
+            rotateY(var(--ty)) rotateZ(var(--tz))}
 .fc .card::after{content:"";position:absolute;inset:-4%;pointer-events:none;border-radius:8px;
   background:#15161A;opacity:calc(0.62 - 0.62 * var(--depth))}
 .fc .card{position:absolute;inset:0}
@@ -102,13 +111,13 @@ section>p{color:var(--dim);max-width:70ch;margin:0 0 18px;font-size:14.8px}
 /* ---------------- cores ---------------- */
 .core{position:absolute;left:0;top:0;width:0;height:0;transform-style:preserve-3d}
 /* thickness by stacked slices - the one CSS technique that gives a flat shape real volume */
-.core .ms{position:absolute;width:224px;height:172px;margin:-86px 0 0 -112px;
+.core .ms{position:absolute;width:268px;height:206px;margin:-103px 0 0 -134px;
   border-radius:3px 13px 11px 11px;background:#2A2C34;border:1px solid #16171C;
   transform:translateZ(calc(var(--z,0) * -3.5px))}
-.core .ms.front{background:#23252C;transform:translateZ(4px);
+.core .ms.front{background:#1E1F26;transform:translateZ(4px);
   box-shadow:0 24px 44px rgba(0,0,0,.62)}
 .core .ms.front::before{content:"";position:absolute;top:-14px;left:-1px;width:78px;height:16px;
-  border-radius:3px 9px 0 0;background:#23252C;border:1px solid #16171C;border-bottom:0}
+  border-radius:3px 9px 0 0;background:#1E1F26;border:1px solid #101116;border-bottom:0}
 /* the single behaviour the four do not have */
 .core .seam{position:absolute;left:10px;right:10px;top:56%;height:3px;border-radius:2px;
   background:#FFF6D8;
@@ -154,7 +163,7 @@ section>p{color:var(--dim);max-width:70ch;margin:0 0 18px;font-size:14.8px}
     <div class="floor"></div><div class="skirt"></div><div class="horizon"></div>
     <div class="lampwrap"><div class="housing"></div><div class="bulb"></div></div>
     <div class="cone"></div><div class="pool"></div>
-    <div class="stage3d"><div class="ring"><div class="fc" style="--a:0deg;--tc:#2FB380"><div class="tab"></div><div class="card"><svg viewBox="0 0 136 104" aria-hidden="true"><path class="ftab" d="M4 6 h50 a4 4 0 0 1 4 4 v12 H4 z"/><path class="fbody" d="M4 20 h122 a10 10 0 0 1 10 10 v56 a10 10 0 0 1 -10 10 H14 a10 10 0 0 1 -10 -10 z"/><path class="fshade" d="M4 20 h122 a10 10 0 0 1 10 10 v6 H4 z"/><circle class="fhole" cx="16" cy="48" r="3.4"/><circle class="fhole" cx="16" cy="64" r="3.4"/><g class="frule"><path d="M30 46 h84"/><path d="M30 58 h66"/><path d="M30 70 h76"/></g><path class="fedge" d="M4 92 h132 a10 10 0 0 1 -10 8 H14 a10 10 0 0 1 -10 -8 z"/></svg><span class="spine"></span></div></div><div class="fc" style="--a:90deg;--tc:#E0A458"><div class="tab"></div><div class="card"><svg viewBox="0 0 136 104" aria-hidden="true"><path class="ftab" d="M4 6 h50 a4 4 0 0 1 4 4 v12 H4 z"/><path class="fbody" d="M4 20 h122 a10 10 0 0 1 10 10 v56 a10 10 0 0 1 -10 10 H14 a10 10 0 0 1 -10 -10 z"/><path class="fshade" d="M4 20 h122 a10 10 0 0 1 10 10 v6 H4 z"/><circle class="fhole" cx="16" cy="48" r="3.4"/><circle class="fhole" cx="16" cy="64" r="3.4"/><g class="frule"><path d="M30 46 h84"/><path d="M30 58 h66"/><path d="M30 70 h76"/></g><path class="fedge" d="M4 92 h132 a10 10 0 0 1 -10 8 H14 a10 10 0 0 1 -10 -8 z"/></svg><span class="spine"></span></div></div><div class="fc" style="--a:180deg;--tc:#5E8FBF"><div class="tab"></div><div class="card"><svg viewBox="0 0 136 104" aria-hidden="true"><path class="ftab" d="M4 6 h50 a4 4 0 0 1 4 4 v12 H4 z"/><path class="fbody" d="M4 20 h122 a10 10 0 0 1 10 10 v56 a10 10 0 0 1 -10 10 H14 a10 10 0 0 1 -10 -10 z"/><path class="fshade" d="M4 20 h122 a10 10 0 0 1 10 10 v6 H4 z"/><circle class="fhole" cx="16" cy="48" r="3.4"/><circle class="fhole" cx="16" cy="64" r="3.4"/><g class="frule"><path d="M30 46 h84"/><path d="M30 58 h66"/><path d="M30 70 h76"/></g><path class="fedge" d="M4 92 h132 a10 10 0 0 1 -10 8 H14 a10 10 0 0 1 -10 -8 z"/></svg><span class="spine"></span></div></div><div class="fc" style="--a:270deg;--tc:#E9E7DF"><div class="tab"></div><div class="card"><svg viewBox="0 0 136 104" aria-hidden="true"><path class="ftab" d="M4 6 h50 a4 4 0 0 1 4 4 v12 H4 z"/><path class="fbody" d="M4 20 h122 a10 10 0 0 1 10 10 v56 a10 10 0 0 1 -10 10 H14 a10 10 0 0 1 -10 -10 z"/><path class="fshade" d="M4 20 h122 a10 10 0 0 1 10 10 v6 H4 z"/><circle class="fhole" cx="16" cy="48" r="3.4"/><circle class="fhole" cx="16" cy="64" r="3.4"/><g class="frule"><path d="M30 46 h84"/><path d="M30 58 h66"/><path d="M30 70 h76"/></g><path class="fedge" d="M4 92 h132 a10 10 0 0 1 -10 8 H14 a10 10 0 0 1 -10 -8 z"/></svg><span class="spine"></span></div></div><div class="core"><i class="ms" style="--z:0"></i><i class="ms" style="--z:1"></i><i class="ms" style="--z:2"></i><i class="ms" style="--z:3"></i><i class="ms" style="--z:4"></i><i class="ms" style="--z:5"></i><i class="ms" style="--z:6"></i><i class="ms front"><span class="seam"></span></i></div></div></div>
+    <div class="stage3d"><div class="ring"><div class="fc" style="--a:0deg;--tc:#2FB380;--ty:-13deg;--tz:-3.5deg"><div class="card"><svg viewBox="0 0 136 104" aria-hidden="true"><path class="ftab" d="M4 6 h50 a4 4 0 0 1 4 4 v12 H4 z"/><path class="fbody" d="M4 20 h122 a10 10 0 0 1 10 10 v56 a10 10 0 0 1 -10 10 H14 a10 10 0 0 1 -10 -10 z"/><path class="fshade" d="M4 20 h122 a10 10 0 0 1 10 10 v6 H4 z"/><circle class="fhole" cx="16" cy="48" r="3.4"/><circle class="fhole" cx="16" cy="64" r="3.4"/><g class="frule"><path d="M30 46 h84"/><path d="M30 58 h66"/><path d="M30 70 h76"/></g><path class="fedge" d="M4 92 h132 a10 10 0 0 1 -10 8 H14 a10 10 0 0 1 -10 -8 z"/></svg><span class="spine"></span></div></div><div class="fc" style="--a:90deg;--tc:#E0A458;--ty:9deg;--tz:2.5deg"><div class="card"><svg viewBox="0 0 136 104" aria-hidden="true"><path class="ftab" d="M4 6 h50 a4 4 0 0 1 4 4 v12 H4 z"/><path class="fbody" d="M4 20 h122 a10 10 0 0 1 10 10 v56 a10 10 0 0 1 -10 10 H14 a10 10 0 0 1 -10 -10 z"/><path class="fshade" d="M4 20 h122 a10 10 0 0 1 10 10 v6 H4 z"/><circle class="fhole" cx="16" cy="48" r="3.4"/><circle class="fhole" cx="16" cy="64" r="3.4"/><g class="frule"><path d="M30 46 h84"/><path d="M30 58 h66"/><path d="M30 70 h76"/></g><path class="fedge" d="M4 92 h132 a10 10 0 0 1 -10 8 H14 a10 10 0 0 1 -10 -8 z"/></svg><span class="spine"></span></div></div><div class="fc" style="--a:180deg;--tc:#5E8FBF;--ty:-7deg;--tz:4deg"><div class="card"><svg viewBox="0 0 136 104" aria-hidden="true"><path class="ftab" d="M4 6 h50 a4 4 0 0 1 4 4 v12 H4 z"/><path class="fbody" d="M4 20 h122 a10 10 0 0 1 10 10 v56 a10 10 0 0 1 -10 10 H14 a10 10 0 0 1 -10 -10 z"/><path class="fshade" d="M4 20 h122 a10 10 0 0 1 10 10 v6 H4 z"/><circle class="fhole" cx="16" cy="48" r="3.4"/><circle class="fhole" cx="16" cy="64" r="3.4"/><g class="frule"><path d="M30 46 h84"/><path d="M30 58 h66"/><path d="M30 70 h76"/></g><path class="fedge" d="M4 92 h132 a10 10 0 0 1 -10 8 H14 a10 10 0 0 1 -10 -8 z"/></svg><span class="spine"></span></div></div><div class="fc" style="--a:270deg;--tc:#E9E7DF;--ty:14deg;--tz:-2deg"><div class="card"><svg viewBox="0 0 136 104" aria-hidden="true"><path class="ftab" d="M4 6 h50 a4 4 0 0 1 4 4 v12 H4 z"/><path class="fbody" d="M4 20 h122 a10 10 0 0 1 10 10 v56 a10 10 0 0 1 -10 10 H14 a10 10 0 0 1 -10 -10 z"/><path class="fshade" d="M4 20 h122 a10 10 0 0 1 10 10 v6 H4 z"/><circle class="fhole" cx="16" cy="48" r="3.4"/><circle class="fhole" cx="16" cy="64" r="3.4"/><g class="frule"><path d="M30 46 h84"/><path d="M30 58 h66"/><path d="M30 70 h76"/></g><path class="fedge" d="M4 92 h132 a10 10 0 0 1 -10 8 H14 a10 10 0 0 1 -10 -8 z"/></svg><span class="spine"></span></div></div><div class="core"><i class="ms" style="--z:0"></i><i class="ms" style="--z:1"></i><i class="ms" style="--z:2"></i><i class="ms" style="--z:3"></i><i class="ms" style="--z:4"></i><i class="ms" style="--z:5"></i><i class="ms" style="--z:6"></i><i class="ms front"><span class="seam"></span></i></div></div></div>
   </div>
 
   <div class="ctrls">
