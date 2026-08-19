@@ -69,40 +69,35 @@ section>p{color:var(--dim);max-width:70ch;margin:0 0 18px;font-size:14.8px}
 @property --ry{syntax:'<angle>';inherits:true;initial-value:0deg}
 .fc{position:absolute;width:150px;height:114px;margin:-57px 0 0 -75px;
   --ang:calc(var(--a) + var(--ry));
-  transform:translateX(calc(300px * sin(var(--ang)))) translateZ(calc(300px * cos(var(--ang))))}
+  transform:translateX(calc(400px * sin(var(--ang)))) translateZ(calc(400px * cos(var(--ang))))}
 .fc .card{position:absolute;inset:0}
 .fc .card svg{width:100%;height:100%;display:block;overflow:visible}
-/* R65 - the coherence I kept missing. The document's own cover is not a charcoal card: it is
-   a SOLID accent-coloured folder with a tab and punch holes - #hero .mfold is a full emerald
-   panel. So these are too. Body and tab in the file's colour, dark ink for the detail, the
-   same rounded corner the document uses (square top-left where the tab sits, generous
-   elsewhere). No lettering, and no light wash painted on top - the lamp lights them. */
-.fc .card{filter:drop-shadow(0 20px 30px rgba(0,0,0,.62))}
-.fc .fbody{fill:var(--tc)}
-.fc .ftab{fill:var(--tc)}
-.fc .fshade{fill:rgba(25,26,31,.16)}
-.fc .fhole{fill:rgba(25,26,31,.34)}
-.fc .frule{stroke:rgba(25,26,31,.24);stroke-width:2.4;stroke-linecap:round}
-.fc .fedge{fill:rgba(25,26,31,.30)}
-
-
+/* R67 - the four are IDENTICAL: same drawing, same two values, same tab. One difference
+   only, the colour. That uniformity IS the mechanism - the isolation effect works by the
+   surround being uniform, so if the four differ from each other the dossier stops being the
+   exception. Two hand-picked values, never computed: with no lighting that is the only thing
+   holding the face and the edge apart. No outlines - a constant stroke weight cannot survive
+   four different distances. */
+.fc .card{filter:drop-shadow(0 18px 26px rgba(0,0,0,.6))}
+.fc .fbody,.fc .ftab{fill:var(--tc)}
+.fc .fshade{fill:rgba(22,23,28,.17)}
+.fc .fedge{fill:rgba(22,23,28,.34)}
+.fc .fhole{fill:rgba(22,23,28,.30)}
+.fc .frule{stroke:rgba(22,23,28,.22);stroke-width:2.4;stroke-linecap:round}
 /* ---------------- cores ---------------- */
-.core{position:absolute;left:0;top:0;width:0;height:0;transform-style:preserve-3d;
-  animation:corespin 21s linear infinite}
-@keyframes corespin{to{transform:rotateY(360deg)}}
-/* four folders gripping each other. Each is turned a quarter around the shared centre and
-   pushed out along its own axis, so the tab of one sits across the body of the next - the
-   interlock is produced by the arrangement, not drawn as a picture of one. */
-.core i{position:absolute;width:78px;height:60px;margin:-30px 0 0 -39px;
-  transform:rotateZ(var(--k)) translateY(-25px) rotateY(16deg);
-  transform-style:preserve-3d}
-.core i svg{width:100%;height:100%;display:block;overflow:visible;
-  filter:drop-shadow(0 5px 9px rgba(0,0,0,.55))}
-.core .kt{fill:var(--c)}
-.core .kb{fill:var(--c)}
-.core .ke{fill:var(--d)}
-.room.lit .core i svg{filter:drop-shadow(0 5px 9px rgba(0,0,0,.55)) brightness(1.1)}
-@media (prefers-reduced-motion:reduce){.core{animation:none}}
+.core{position:absolute;left:0;top:0;width:0;height:0;transform-style:preserve-3d}
+/* thickness by stacked slices - the one CSS technique that gives a flat shape real volume */
+.core .ms{position:absolute;width:224px;height:172px;margin:-86px 0 0 -112px;
+  border-radius:3px 13px 11px 11px;background:#2A2C34;border:1px solid #16171C;
+  transform:translateZ(calc(var(--z,0) * -3.5px))}
+.core .ms.front{background:#23252C;transform:translateZ(4px);
+  box-shadow:0 24px 44px rgba(0,0,0,.62)}
+.core .ms.front::before{content:"";position:absolute;top:-14px;left:-1px;width:78px;height:16px;
+  border-radius:3px 9px 0 0;background:#23252C;border:1px solid #16171C;border-bottom:0}
+/* the single behaviour the four do not have */
+.core .seam{position:absolute;left:10px;right:10px;top:56%;height:3px;border-radius:2px;
+  background:#FFF6D8;
+  box-shadow:0 0 18px 6px rgba(240,217,168,.72),0 0 46px 16px rgba(240,217,168,.28)}
 
 /* ---------------- controls ---------------- */
 .ctrls{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0 0}
@@ -143,7 +138,7 @@ section>p{color:var(--dim);max-width:70ch;margin:0 0 18px;font-size:14.8px}
     <div class="floor"></div><div class="skirt"></div><div class="horizon"></div>
     <div class="lampwrap"><div class="housing"></div><div class="bulb"></div></div>
     <div class="cone"></div><div class="pool"></div>
-    <div class="stage3d"><div class="ring"><div class="fc" style="--a:0deg;--tc:#2FB380"><div class="tab"></div><div class="card"><svg viewBox="0 0 136 104" aria-hidden="true"><path class="ftab" d="M4 6 h50 a4 4 0 0 1 4 4 v12 H4 z"/><path class="fbody" d="M4 20 h122 a10 10 0 0 1 10 10 v56 a10 10 0 0 1 -10 10 H14 a10 10 0 0 1 -10 -10 z"/><path class="fshade" d="M4 20 h122 a10 10 0 0 1 10 10 v6 H4 z"/><circle class="fhole" cx="16" cy="48" r="3.4"/><circle class="fhole" cx="16" cy="64" r="3.4"/><g class="frule"><path d="M30 46 h84"/><path d="M30 58 h66"/><path d="M30 70 h76"/></g><path class="fedge" d="M4 92 h132 a10 10 0 0 1 -10 8 H14 a10 10 0 0 1 -10 -8 z"/></svg></div></div><div class="fc" style="--a:90deg;--tc:#E0A458"><div class="tab"></div><div class="card"><svg viewBox="0 0 136 104" aria-hidden="true"><path class="ftab" d="M4 6 h50 a4 4 0 0 1 4 4 v12 H4 z"/><path class="fbody" d="M4 20 h122 a10 10 0 0 1 10 10 v56 a10 10 0 0 1 -10 10 H14 a10 10 0 0 1 -10 -10 z"/><path class="fshade" d="M4 20 h122 a10 10 0 0 1 10 10 v6 H4 z"/><circle class="fhole" cx="16" cy="48" r="3.4"/><circle class="fhole" cx="16" cy="64" r="3.4"/><g class="frule"><path d="M30 46 h84"/><path d="M30 58 h66"/><path d="M30 70 h76"/></g><path class="fedge" d="M4 92 h132 a10 10 0 0 1 -10 8 H14 a10 10 0 0 1 -10 -8 z"/></svg></div></div><div class="fc" style="--a:180deg;--tc:#5E8FBF"><div class="tab"></div><div class="card"><svg viewBox="0 0 136 104" aria-hidden="true"><path class="ftab" d="M4 6 h50 a4 4 0 0 1 4 4 v12 H4 z"/><path class="fbody" d="M4 20 h122 a10 10 0 0 1 10 10 v56 a10 10 0 0 1 -10 10 H14 a10 10 0 0 1 -10 -10 z"/><path class="fshade" d="M4 20 h122 a10 10 0 0 1 10 10 v6 H4 z"/><circle class="fhole" cx="16" cy="48" r="3.4"/><circle class="fhole" cx="16" cy="64" r="3.4"/><g class="frule"><path d="M30 46 h84"/><path d="M30 58 h66"/><path d="M30 70 h76"/></g><path class="fedge" d="M4 92 h132 a10 10 0 0 1 -10 8 H14 a10 10 0 0 1 -10 -8 z"/></svg></div></div><div class="fc" style="--a:270deg;--tc:#E9E7DF"><div class="tab"></div><div class="card"><svg viewBox="0 0 136 104" aria-hidden="true"><path class="ftab" d="M4 6 h50 a4 4 0 0 1 4 4 v12 H4 z"/><path class="fbody" d="M4 20 h122 a10 10 0 0 1 10 10 v56 a10 10 0 0 1 -10 10 H14 a10 10 0 0 1 -10 -10 z"/><path class="fshade" d="M4 20 h122 a10 10 0 0 1 10 10 v6 H4 z"/><circle class="fhole" cx="16" cy="48" r="3.4"/><circle class="fhole" cx="16" cy="64" r="3.4"/><g class="frule"><path d="M30 46 h84"/><path d="M30 58 h66"/><path d="M30 70 h76"/></g><path class="fedge" d="M4 92 h132 a10 10 0 0 1 -10 8 H14 a10 10 0 0 1 -10 -8 z"/></svg></div></div><div class="core"><i style="--c:#2FB380;--d:#1B7A57;--k:0deg"><svg viewBox="0 0 96 74" aria-hidden="true"><path class="kt" d="M4 4 h34 a3 3 0 0 1 3 3 v8 H4 z"/><path class="kb" d="M4 14 h84 a7 7 0 0 1 7 7 v42 a7 7 0 0 1 -7 7 H11 a7 7 0 0 1 -7 -7 z"/><path class="ke" d="M4 60 h91 a7 7 0 0 1 -7 6 H11 a7 7 0 0 1 -7 -6 z"/></svg></i><i style="--c:#E0A458;--d:#9A6D2F;--k:90deg"><svg viewBox="0 0 96 74" aria-hidden="true"><path class="kt" d="M4 4 h34 a3 3 0 0 1 3 3 v8 H4 z"/><path class="kb" d="M4 14 h84 a7 7 0 0 1 7 7 v42 a7 7 0 0 1 -7 7 H11 a7 7 0 0 1 -7 -7 z"/><path class="ke" d="M4 60 h91 a7 7 0 0 1 -7 6 H11 a7 7 0 0 1 -7 -6 z"/></svg></i><i style="--c:#5E8FBF;--d:#3A5F84;--k:180deg"><svg viewBox="0 0 96 74" aria-hidden="true"><path class="kt" d="M4 4 h34 a3 3 0 0 1 3 3 v8 H4 z"/><path class="kb" d="M4 14 h84 a7 7 0 0 1 7 7 v42 a7 7 0 0 1 -7 7 H11 a7 7 0 0 1 -7 -7 z"/><path class="ke" d="M4 60 h91 a7 7 0 0 1 -7 6 H11 a7 7 0 0 1 -7 -6 z"/></svg></i><i style="--c:#E9E7DF;--d:#A6A399;--k:270deg"><svg viewBox="0 0 96 74" aria-hidden="true"><path class="kt" d="M4 4 h34 a3 3 0 0 1 3 3 v8 H4 z"/><path class="kb" d="M4 14 h84 a7 7 0 0 1 7 7 v42 a7 7 0 0 1 -7 7 H11 a7 7 0 0 1 -7 -7 z"/><path class="ke" d="M4 60 h91 a7 7 0 0 1 -7 6 H11 a7 7 0 0 1 -7 -6 z"/></svg></i></div></div></div>
+    <div class="stage3d"><div class="ring"><div class="fc" style="--a:0deg;--tc:#2FB380"><div class="tab"></div><div class="card"><svg viewBox="0 0 136 104" aria-hidden="true"><path class="ftab" d="M4 6 h50 a4 4 0 0 1 4 4 v12 H4 z"/><path class="fbody" d="M4 20 h122 a10 10 0 0 1 10 10 v56 a10 10 0 0 1 -10 10 H14 a10 10 0 0 1 -10 -10 z"/><path class="fshade" d="M4 20 h122 a10 10 0 0 1 10 10 v6 H4 z"/><circle class="fhole" cx="16" cy="48" r="3.4"/><circle class="fhole" cx="16" cy="64" r="3.4"/><g class="frule"><path d="M30 46 h84"/><path d="M30 58 h66"/><path d="M30 70 h76"/></g><path class="fedge" d="M4 92 h132 a10 10 0 0 1 -10 8 H14 a10 10 0 0 1 -10 -8 z"/></svg></div></div><div class="fc" style="--a:90deg;--tc:#E0A458"><div class="tab"></div><div class="card"><svg viewBox="0 0 136 104" aria-hidden="true"><path class="ftab" d="M4 6 h50 a4 4 0 0 1 4 4 v12 H4 z"/><path class="fbody" d="M4 20 h122 a10 10 0 0 1 10 10 v56 a10 10 0 0 1 -10 10 H14 a10 10 0 0 1 -10 -10 z"/><path class="fshade" d="M4 20 h122 a10 10 0 0 1 10 10 v6 H4 z"/><circle class="fhole" cx="16" cy="48" r="3.4"/><circle class="fhole" cx="16" cy="64" r="3.4"/><g class="frule"><path d="M30 46 h84"/><path d="M30 58 h66"/><path d="M30 70 h76"/></g><path class="fedge" d="M4 92 h132 a10 10 0 0 1 -10 8 H14 a10 10 0 0 1 -10 -8 z"/></svg></div></div><div class="fc" style="--a:180deg;--tc:#5E8FBF"><div class="tab"></div><div class="card"><svg viewBox="0 0 136 104" aria-hidden="true"><path class="ftab" d="M4 6 h50 a4 4 0 0 1 4 4 v12 H4 z"/><path class="fbody" d="M4 20 h122 a10 10 0 0 1 10 10 v56 a10 10 0 0 1 -10 10 H14 a10 10 0 0 1 -10 -10 z"/><path class="fshade" d="M4 20 h122 a10 10 0 0 1 10 10 v6 H4 z"/><circle class="fhole" cx="16" cy="48" r="3.4"/><circle class="fhole" cx="16" cy="64" r="3.4"/><g class="frule"><path d="M30 46 h84"/><path d="M30 58 h66"/><path d="M30 70 h76"/></g><path class="fedge" d="M4 92 h132 a10 10 0 0 1 -10 8 H14 a10 10 0 0 1 -10 -8 z"/></svg></div></div><div class="fc" style="--a:270deg;--tc:#E9E7DF"><div class="tab"></div><div class="card"><svg viewBox="0 0 136 104" aria-hidden="true"><path class="ftab" d="M4 6 h50 a4 4 0 0 1 4 4 v12 H4 z"/><path class="fbody" d="M4 20 h122 a10 10 0 0 1 10 10 v56 a10 10 0 0 1 -10 10 H14 a10 10 0 0 1 -10 -10 z"/><path class="fshade" d="M4 20 h122 a10 10 0 0 1 10 10 v6 H4 z"/><circle class="fhole" cx="16" cy="48" r="3.4"/><circle class="fhole" cx="16" cy="64" r="3.4"/><g class="frule"><path d="M30 46 h84"/><path d="M30 58 h66"/><path d="M30 70 h76"/></g><path class="fedge" d="M4 92 h132 a10 10 0 0 1 -10 8 H14 a10 10 0 0 1 -10 -8 z"/></svg></div></div><div class="core"><i class="ms" style="--z:0"></i><i class="ms" style="--z:1"></i><i class="ms" style="--z:2"></i><i class="ms" style="--z:3"></i><i class="ms" style="--z:4"></i><i class="ms" style="--z:5"></i><i class="ms" style="--z:6"></i><i class="ms front"><span class="seam"></span></i></div></div></div>
   </div>
 
   <div class="ctrls">
