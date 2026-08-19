@@ -842,8 +842,13 @@ body.static #clearance,body.static #idlecue,body.failsafe #clearance,body.failsa
      and grew to 1442px starting at x=-13. Shifting the children instead leaves the rail's own
      box at zero width, so the flex line never learns about it and the folder keeps exactly
      the geometry it had before any rail existed. */
+  /* R60: static, not sticky. A panel that travels with the reader is asking for attention
+     the whole way down the file; a panel that waits in one place is something the reader
+     comes ACROSS. align-self:center puts it at the vertical middle of the row - and the row's
+     height is the folder's height - so scrolling down from the head of the file arrives at it
+     halfway through. No position, no offset, nothing tied to scroll. */
   .case .evrail{flex:0 0 0;min-width:0;
-    position:sticky;top:92px;align-self:flex-start;
+    align-self:center;
     display:flex;flex-direction:column;gap:18px;z-index:3}
   .case .evrail>*{width:var(--railw);
     margin-left:calc(-1 * (var(--railw) + var(--railgap)))}
