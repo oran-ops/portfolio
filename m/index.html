@@ -999,6 +999,36 @@ body.static #clearance,body.static #idlecue,body.failsafe #clearance,body.failsa
   .case .evrail>.slipflip::before,.case .evrail>.an-note::before,
   .evdrawer .slipflip::before,.evdrawer .an-note::before{width:54px;height:15px;top:-7px}
 }
+
+/* ===== R61 - the PART division becomes a division =====
+   A file that is split in two was announcing it in the same 10px mono line it used for every
+   other caption, so the reader crossed the seam without noticing there was one. It is now a
+   ruled marker in the folder's own accent, set in Special Elite, with the part 2 marker
+   carrying the extra weight because that is the one the reader has to notice - it is where
+   the file stops describing what was built and starts producing evidence for it.
+   Only XTIX and Oasis are two-part files; the other two carry no .plabel at all. */
+.case .plabel{display:flex!important;align-items:center;gap:15px;
+  font-family:'Special Elite',Courier,monospace!important;
+  font-size:clamp(14px,1.45vw,18.5px)!important;font-weight:400!important;
+  letter-spacing:.045em!important;line-height:1.15;
+  color:var(--fc,var(--emb))!important;
+  margin:30px 0 16px!important;white-space:nowrap}
+.case .plabel::before{content:"";flex:0 0 34px;height:2px;border-radius:1px;
+  background:var(--fc,var(--emb))}
+.case .plabel::after{content:"";flex:1 1 auto;height:1px;min-width:20px;
+  background:linear-gradient(90deg,var(--fc,var(--emb)),transparent);opacity:.55}
+/* part two is the seam the reader must not cross blind */
+.case .plabel.pl2{margin-top:58px!important;padding-top:26px;
+  border-top:1px solid var(--hair,#31333A);
+  font-size:clamp(16px,1.75vw,22px)!important;letter-spacing:.055em!important}
+.case .plabel.pl2::before{flex:0 0 52px;height:3px;
+  box-shadow:0 0 12px var(--fc,var(--emb))}
+@media (max-width:680px){
+  .case .plabel{gap:10px;margin:22px 0 13px!important;white-space:normal}
+  .case .plabel::before{flex:0 0 22px}
+  .case .plabel.pl2{margin-top:40px!important;padding-top:19px}
+  .case .plabel.pl2::before{flex:0 0 32px}
+}
 </style>
 <div id="boot" aria-hidden="true">
   
