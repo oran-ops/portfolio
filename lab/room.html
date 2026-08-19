@@ -61,15 +61,25 @@ section>p{color:var(--dim);max-width:70ch;margin:0 0 18px;font-size:14.8px}
    rotates the cards at all: each one is POSITIONED on a circle with sin/cos of its own angle
    plus the ring's, so it orbits while staying upright and facing the reader - moons around a
    planet. The core is the only thing that spins, on its own axis. */
-.stage3d{position:absolute;left:50%;top:54%;width:0;height:0;
-  transform:translate(-50%,-50%);transform-style:preserve-3d;perspective:900px}
+.stage3d{position:absolute;left:50%;top:58%;width:0;height:0;
+  transform:translate(-50%,-50%);transform-style:preserve-3d;
+  perspective:1150px;perspective-origin:50% 34%}
 .ring{position:absolute;left:0;top:0;width:0;height:0;transform-style:preserve-3d;
   --ry:0deg;animation:spin 30s linear infinite}
 @keyframes spin{to{--ry:360deg}}
 @property --ry{syntax:'<angle>';inherits:true;initial-value:0deg}
 .fc{position:absolute;width:150px;height:114px;margin:-57px 0 0 -75px;
   --ang:calc(var(--a) + var(--ry));
-  transform:translateX(calc(400px * sin(var(--ang)))) translateZ(calc(400px * cos(var(--ang))))}
+  /* R68 - the scene did not read as a space because every card was the same size and the
+     same brightness at every depth. Those are the two strongest depth cues there are, and
+     billboarding had thrown both away. Scale and dim by the card's own angle: at the back it
+     is smaller and darker, at the front full size and full value - which is also the
+     distance-flattening Firewatch used to keep a 3D scene reading as flat graphic shapes. */
+  --depth:calc((cos(var(--ang)) + 1) / 2);
+  transform:translateX(calc(400px * sin(var(--ang)))) translateZ(calc(400px * cos(var(--ang))))
+            scale(calc(0.58 + 0.42 * var(--depth)))}
+.fc .card::after{content:"";position:absolute;inset:-4%;pointer-events:none;border-radius:8px;
+  background:#15161A;opacity:calc(0.62 - 0.62 * var(--depth))}
 .fc .card{position:absolute;inset:0}
 .fc .card svg{width:100%;height:100%;display:block;overflow:visible}
 /* R67 - the four are IDENTICAL: same drawing, same two values, same tab. One difference
@@ -79,6 +89,11 @@ section>p{color:var(--dim);max-width:70ch;margin:0 0 18px;font-size:14.8px}
    holding the face and the edge apart. No outlines - a constant stroke weight cannot survive
    four different distances. */
 .fc .card{filter:drop-shadow(0 18px 26px rgba(0,0,0,.6))}
+/* a plane has zero thickness and genuinely disappears edge-on. A card seen at a grazing
+   angle now shows a real spine instead of vanishing. */
+.fc .spine{position:absolute;left:-5px;top:6%;width:6px;bottom:4%;border-radius:3px 0 0 3px;
+  background:color-mix(in srgb, var(--tc) 62%, #16171C);
+  opacity:calc(1 - var(--depth,1))}
 .fc .fbody,.fc .ftab{fill:var(--tc)}
 .fc .fshade{fill:rgba(22,23,28,.17)}
 .fc .fedge{fill:rgba(22,23,28,.34)}
@@ -109,7 +124,8 @@ section>p{color:var(--dim);max-width:70ch;margin:0 0 18px;font-size:14.8px}
 .note{border-left:2px solid var(--uv);padding:2px 0 2px 15px;color:var(--dim);
   font-size:14.4px;max-width:70ch;margin-top:16px}
 .note b{color:var(--ink);font-weight:600}
-@media (prefers-reduced-motion:reduce){.ring,.corespin{animation:none}}
+@media (prefers-reduced-motion:reduce){.ring{animation:none}}
+.room.still .ring{animation-play-state:paused}
 @media (max-width:700px){.room{height:400px}.cone{width:560px}.pool{width:380px}
   .fc{width:104px;height:76px;margin:-38px 0 0 -52px}
   .fc{transform:rotateY(var(--a)) translateZ(148px)}}
@@ -138,10 +154,11 @@ section>p{color:var(--dim);max-width:70ch;margin:0 0 18px;font-size:14.8px}
     <div class="floor"></div><div class="skirt"></div><div class="horizon"></div>
     <div class="lampwrap"><div class="housing"></div><div class="bulb"></div></div>
     <div class="cone"></div><div class="pool"></div>
-    <div class="stage3d"><div class="ring"><div class="fc" style="--a:0deg;--tc:#2FB380"><div class="tab"></div><div class="card"><svg viewBox="0 0 136 104" aria-hidden="true"><path class="ftab" d="M4 6 h50 a4 4 0 0 1 4 4 v12 H4 z"/><path class="fbody" d="M4 20 h122 a10 10 0 0 1 10 10 v56 a10 10 0 0 1 -10 10 H14 a10 10 0 0 1 -10 -10 z"/><path class="fshade" d="M4 20 h122 a10 10 0 0 1 10 10 v6 H4 z"/><circle class="fhole" cx="16" cy="48" r="3.4"/><circle class="fhole" cx="16" cy="64" r="3.4"/><g class="frule"><path d="M30 46 h84"/><path d="M30 58 h66"/><path d="M30 70 h76"/></g><path class="fedge" d="M4 92 h132 a10 10 0 0 1 -10 8 H14 a10 10 0 0 1 -10 -8 z"/></svg></div></div><div class="fc" style="--a:90deg;--tc:#E0A458"><div class="tab"></div><div class="card"><svg viewBox="0 0 136 104" aria-hidden="true"><path class="ftab" d="M4 6 h50 a4 4 0 0 1 4 4 v12 H4 z"/><path class="fbody" d="M4 20 h122 a10 10 0 0 1 10 10 v56 a10 10 0 0 1 -10 10 H14 a10 10 0 0 1 -10 -10 z"/><path class="fshade" d="M4 20 h122 a10 10 0 0 1 10 10 v6 H4 z"/><circle class="fhole" cx="16" cy="48" r="3.4"/><circle class="fhole" cx="16" cy="64" r="3.4"/><g class="frule"><path d="M30 46 h84"/><path d="M30 58 h66"/><path d="M30 70 h76"/></g><path class="fedge" d="M4 92 h132 a10 10 0 0 1 -10 8 H14 a10 10 0 0 1 -10 -8 z"/></svg></div></div><div class="fc" style="--a:180deg;--tc:#5E8FBF"><div class="tab"></div><div class="card"><svg viewBox="0 0 136 104" aria-hidden="true"><path class="ftab" d="M4 6 h50 a4 4 0 0 1 4 4 v12 H4 z"/><path class="fbody" d="M4 20 h122 a10 10 0 0 1 10 10 v56 a10 10 0 0 1 -10 10 H14 a10 10 0 0 1 -10 -10 z"/><path class="fshade" d="M4 20 h122 a10 10 0 0 1 10 10 v6 H4 z"/><circle class="fhole" cx="16" cy="48" r="3.4"/><circle class="fhole" cx="16" cy="64" r="3.4"/><g class="frule"><path d="M30 46 h84"/><path d="M30 58 h66"/><path d="M30 70 h76"/></g><path class="fedge" d="M4 92 h132 a10 10 0 0 1 -10 8 H14 a10 10 0 0 1 -10 -8 z"/></svg></div></div><div class="fc" style="--a:270deg;--tc:#E9E7DF"><div class="tab"></div><div class="card"><svg viewBox="0 0 136 104" aria-hidden="true"><path class="ftab" d="M4 6 h50 a4 4 0 0 1 4 4 v12 H4 z"/><path class="fbody" d="M4 20 h122 a10 10 0 0 1 10 10 v56 a10 10 0 0 1 -10 10 H14 a10 10 0 0 1 -10 -10 z"/><path class="fshade" d="M4 20 h122 a10 10 0 0 1 10 10 v6 H4 z"/><circle class="fhole" cx="16" cy="48" r="3.4"/><circle class="fhole" cx="16" cy="64" r="3.4"/><g class="frule"><path d="M30 46 h84"/><path d="M30 58 h66"/><path d="M30 70 h76"/></g><path class="fedge" d="M4 92 h132 a10 10 0 0 1 -10 8 H14 a10 10 0 0 1 -10 -8 z"/></svg></div></div><div class="core"><i class="ms" style="--z:0"></i><i class="ms" style="--z:1"></i><i class="ms" style="--z:2"></i><i class="ms" style="--z:3"></i><i class="ms" style="--z:4"></i><i class="ms" style="--z:5"></i><i class="ms" style="--z:6"></i><i class="ms front"><span class="seam"></span></i></div></div></div>
+    <div class="stage3d"><div class="ring"><div class="fc" style="--a:0deg;--tc:#2FB380"><div class="tab"></div><div class="card"><svg viewBox="0 0 136 104" aria-hidden="true"><path class="ftab" d="M4 6 h50 a4 4 0 0 1 4 4 v12 H4 z"/><path class="fbody" d="M4 20 h122 a10 10 0 0 1 10 10 v56 a10 10 0 0 1 -10 10 H14 a10 10 0 0 1 -10 -10 z"/><path class="fshade" d="M4 20 h122 a10 10 0 0 1 10 10 v6 H4 z"/><circle class="fhole" cx="16" cy="48" r="3.4"/><circle class="fhole" cx="16" cy="64" r="3.4"/><g class="frule"><path d="M30 46 h84"/><path d="M30 58 h66"/><path d="M30 70 h76"/></g><path class="fedge" d="M4 92 h132 a10 10 0 0 1 -10 8 H14 a10 10 0 0 1 -10 -8 z"/></svg><span class="spine"></span></div></div><div class="fc" style="--a:90deg;--tc:#E0A458"><div class="tab"></div><div class="card"><svg viewBox="0 0 136 104" aria-hidden="true"><path class="ftab" d="M4 6 h50 a4 4 0 0 1 4 4 v12 H4 z"/><path class="fbody" d="M4 20 h122 a10 10 0 0 1 10 10 v56 a10 10 0 0 1 -10 10 H14 a10 10 0 0 1 -10 -10 z"/><path class="fshade" d="M4 20 h122 a10 10 0 0 1 10 10 v6 H4 z"/><circle class="fhole" cx="16" cy="48" r="3.4"/><circle class="fhole" cx="16" cy="64" r="3.4"/><g class="frule"><path d="M30 46 h84"/><path d="M30 58 h66"/><path d="M30 70 h76"/></g><path class="fedge" d="M4 92 h132 a10 10 0 0 1 -10 8 H14 a10 10 0 0 1 -10 -8 z"/></svg><span class="spine"></span></div></div><div class="fc" style="--a:180deg;--tc:#5E8FBF"><div class="tab"></div><div class="card"><svg viewBox="0 0 136 104" aria-hidden="true"><path class="ftab" d="M4 6 h50 a4 4 0 0 1 4 4 v12 H4 z"/><path class="fbody" d="M4 20 h122 a10 10 0 0 1 10 10 v56 a10 10 0 0 1 -10 10 H14 a10 10 0 0 1 -10 -10 z"/><path class="fshade" d="M4 20 h122 a10 10 0 0 1 10 10 v6 H4 z"/><circle class="fhole" cx="16" cy="48" r="3.4"/><circle class="fhole" cx="16" cy="64" r="3.4"/><g class="frule"><path d="M30 46 h84"/><path d="M30 58 h66"/><path d="M30 70 h76"/></g><path class="fedge" d="M4 92 h132 a10 10 0 0 1 -10 8 H14 a10 10 0 0 1 -10 -8 z"/></svg><span class="spine"></span></div></div><div class="fc" style="--a:270deg;--tc:#E9E7DF"><div class="tab"></div><div class="card"><svg viewBox="0 0 136 104" aria-hidden="true"><path class="ftab" d="M4 6 h50 a4 4 0 0 1 4 4 v12 H4 z"/><path class="fbody" d="M4 20 h122 a10 10 0 0 1 10 10 v56 a10 10 0 0 1 -10 10 H14 a10 10 0 0 1 -10 -10 z"/><path class="fshade" d="M4 20 h122 a10 10 0 0 1 10 10 v6 H4 z"/><circle class="fhole" cx="16" cy="48" r="3.4"/><circle class="fhole" cx="16" cy="64" r="3.4"/><g class="frule"><path d="M30 46 h84"/><path d="M30 58 h66"/><path d="M30 70 h76"/></g><path class="fedge" d="M4 92 h132 a10 10 0 0 1 -10 8 H14 a10 10 0 0 1 -10 -8 z"/></svg><span class="spine"></span></div></div><div class="core"><i class="ms" style="--z:0"></i><i class="ms" style="--z:1"></i><i class="ms" style="--z:2"></i><i class="ms" style="--z:3"></i><i class="ms" style="--z:4"></i><i class="ms" style="--z:5"></i><i class="ms" style="--z:6"></i><i class="ms front"><span class="seam"></span></i></div></div></div>
   </div>
 
   <div class="ctrls">
+    <button id="bMotion" aria-pressed="true">PAUSE MOTION</button>
     <button id="bLamp" aria-pressed="true">LAMP</button>
     <button id="bFloor" aria-pressed="true">MATTE FLOOR</button>
 
@@ -184,6 +201,11 @@ section>p{color:var(--dim);max-width:70ch;margin:0 0 18px;font-size:14.8px}
 </section>
 </div>
 <script>
+/* R68 - WCAG 2.2.2 Pause, Stop, Hide is LEVEL A and applies to motion that starts on its own
+   and runs past five seconds - which this does. Honouring prefers-reduced-motion alone does
+   not satisfy it, so there is a real control. And a hand-rolled rAF loop gets no free
+   off-screen throttling the way a declarative CSS animation does: only a backgrounded TAB is
+   auto-throttled, not an element scrolled out of view. So the loop gates itself. */
 
 var room=document.getElementById('room'),core=document.getElementById('core');
 document.getElementById('bLamp').addEventListener('click',function(){
@@ -209,7 +231,25 @@ document.getElementById('bFloor').addEventListener('click',function(){
     });
     requestAnimationFrame(frame);
   }
-  if(!matchMedia('(prefers-reduced-motion: reduce)').matches)requestAnimationFrame(frame);
+  var paused=matchMedia('(prefers-reduced-motion: reduce)').matches, onScreen=true, live=false;
+  function pump(){ if(!paused && onScreen && !live){ live=true; requestAnimationFrame(frame); } }
+  var _f=frame; frame=function(ts){ if(paused||!onScreen){ live=false; return } _f(ts) };
+  if('IntersectionObserver' in window){
+    new IntersectionObserver(function(es){ onScreen=es[0].isIntersecting; pump(); },
+      {threshold:0}).observe(document.getElementById('room'));
+  }
+  document.addEventListener('visibilitychange',function(){ onScreen=!document.hidden; pump(); });
+  var mb=document.getElementById('bMotion');
+  mb.textContent = paused ? 'RESUME MOTION' : 'PAUSE MOTION';
+  mb.setAttribute('aria-pressed', paused ? 'false' : 'true');
+  mb.addEventListener('click',function(){
+    paused=!paused;
+    document.getElementById('room').classList.toggle('still',paused);
+    mb.textContent = paused ? 'RESUME MOTION' : 'PAUSE MOTION';
+    mb.setAttribute('aria-pressed', paused ? 'false' : 'true');
+    pump();
+  });
+  pump();
 })();
 </script>
 </body></html>
