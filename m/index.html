@@ -848,7 +848,8 @@ body.static #clearance,body.static #idlecue,body.failsafe #clearance,body.failsa
   .case .evrail>*{width:var(--railw);
     margin-left:calc(-1 * (var(--railw) + var(--railgap)))}
   /* the panels were revealed by an ancestor they no longer have; state their rest state */
-  .case .evrail>.slipflip,.case .evrail>.an-note{opacity:1;transform:none}
+  .case .evrail>.slipflip{opacity:1;transform:rotate(-1.15deg)}
+  .case .evrail>.an-note{opacity:1;transform:rotate(.75deg)}
   .case .evrail .evslip,.case .evrail .mslip{width:100%}
 }
 
@@ -886,7 +887,8 @@ body.static #clearance,body.static #idlecue,body.failsafe #clearance,body.failsa
     display:flex;flex-direction:column;gap:14px;
     box-shadow:14px 0 30px rgba(9,10,13,.5)}
   /* the panels lost their reveal ancestor - state the rest state, as the desktop rail does */
-  .evdrawer .slipflip,.evdrawer .an-note{opacity:1;transform:none;width:100%}
+  .evdrawer .slipflip{opacity:1;transform:rotate(-1.15deg);width:100%}
+  .evdrawer .an-note{opacity:1;transform:rotate(.75deg);width:100%}
   .evdrawer .evslip,.evdrawer .mslip{width:100%}
   .evdrawer .evtab{flex:0 0 27px;align-self:center;height:132px;
     background:var(--fc,var(--emb));border:0;border-radius:0 9px 9px 0;
@@ -948,6 +950,49 @@ body.static #clearance,body.static #idlecue,body.failsafe #clearance,body.failsa
   .lampband{padding:11px 13px 10px!important}
   .lampband .lamp svg{width:33px!important;height:33px!important}
   .lampband .lampnm{font-size:14px}
+}
+
+/* ===== R59 - the slips are taped down ===== */
+.case .evrail>.slipflip,.case .evrail>.an-note,
+.evdrawer .slipflip,.evdrawer .an-note{position:relative}
+.case .evrail>.slipflip::before,.case .evrail>.an-note::before,
+.evdrawer .slipflip::before,.evdrawer .an-note::before{
+  content:"";position:absolute;z-index:6;pointer-events:none;
+  width:66px;height:18px;top:-8px;left:14%;
+  background:linear-gradient(180deg,rgba(233,231,223,.34),rgba(233,231,223,.13));
+  border-left:1px solid rgba(255,255,255,.15);
+  border-right:1px solid rgba(255,255,255,.09);
+  box-shadow:0 1px 3px rgba(0,0,0,.34)}
+/* the tape disagrees with the panel it holds - parallel tape reads as printed, not stuck */
+.case .evrail>.slipflip::before,.evdrawer .slipflip::before{transform:rotate(-7deg)}
+.case .evrail>.an-note::before,.evdrawer .an-note::before{
+  left:auto;right:12%;transform:rotate(5.5deg)}
+
+/* ===== R59 - the switch is mounted outside the folder ===== */
+/* align-items must be flex-start: a flex container with height:0 stretches its child to
+   the line height, which is zero, and the plate collapsed 102px -> 30px. */
+.case .uvmount{position:relative;height:0;display:flex;justify-content:flex-end;
+  align-items:flex-start;z-index:6}
+.case .uvmount .lampband{--lift:0px;margin:0!important;
+  transform:translateY(calc(-100% - 10px + var(--lift)));
+  background:linear-gradient(180deg,#2A2C36,#1D1E25)!important;
+  border:1px solid #4A4D58;
+  box-shadow:0 6px 16px rgba(0,0,0,.5),0 1px 0 rgba(255,255,255,.09) inset,
+             0 -1px 0 rgba(0,0,0,.5) inset;
+  transition:transform .12s,box-shadow .2s,border-color .3s,background .35s}
+.case .uvmount .lampband:hover{border-color:#6A6280;
+  background:linear-gradient(180deg,#31333F,#22232B)!important}
+.case .uvmount .lampband:active{--lift:2px;
+  box-shadow:0 2px 7px rgba(0,0,0,.5),0 1px 0 rgba(255,255,255,.05) inset}
+.case .folder.lampon+.uvmount .lampband,
+.case .uvmount .lampband.on{border-color:var(--uvv,#9E7BFF)}
+@media (prefers-reduced-motion:reduce){
+  .case .uvmount .lampband{transition:none}
+}
+@media (max-width:680px){
+  .case .uvmount .lampband{transform:translateY(calc(-100% - 7px + var(--lift)))}
+  .case .evrail>.slipflip::before,.case .evrail>.an-note::before,
+  .evdrawer .slipflip::before,.evdrawer .an-note::before{width:54px;height:15px;top:-7px}
 }
 </style>
 <div id="boot" aria-hidden="true">
@@ -5149,7 +5194,16 @@ CASES.forEach(function(id){
       '<span class="lampsub">'+OFFS+'</span></span>'+
       '<span class="lampstate" aria-hidden="true">OFF</span>'+
       '<span class="lampedge" aria-hidden="true"></span>';
-    band.parentNode.insertBefore(b,band);
+    (function(){
+        /* R59: outside the folder, not inside it. In flow inside the folder the plate cost
+           its own height and opened a large gap at the head of every file. A zero-height
+           mount placed just before the folder lets it hang above the folder's top edge at no
+           vertical cost - and a mount is used rather than position:absolute because absolute
+           would need a `top` measured against furniture that differs in every folder. */
+        var mount=document.createElement('div');mount.className='uvmount';
+        mount.appendChild(b);
+        folder.parentNode.insertBefore(mount,folder);
+      })();
     BANDS.push(b);
 
     var call=b.querySelector('.lampcall'),sub=b.querySelector('.lampsub'),
