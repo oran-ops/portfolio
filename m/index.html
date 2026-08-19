@@ -5910,22 +5910,49 @@ document.querySelectorAll('.redx').forEach(function(r){
 var cv=document.getElementById('stnf');if(!cv)return;
 var ctx=cv.getContext('2d'),W=0,H=0,DPR=1,raf=null,live=false,t0=0;
 
-/* the cloud is generated once. A Fibonacci sphere gives an even spread; quantising the
-   latitude into belts is what produces the banded structure, and jittering each point inside
-   its belt keeps the limb frayed rather than drawn with a compass. */
+/* R72 - rebuilt after looking at the reference under magnification, where two things showed
+   up that a Fibonacci point cloud can never produce:
+
+     1. The interior is a REGULAR dot grid, close to a halftone screen. Fibonacci spacing is
+        deliberately irregular, so it reads as scatter and never as a screen. Points here sit
+        on a lat/long grid instead.
+     2. The silhouette is SCALLOPED - a rim of overlapping rounded lobes standing proud of the
+        sphere. That is not a shading effect, it is geometry: the radius is displaced outward
+        by a field of smooth bumps, and at the limb those bumps break the circle.
+
+   The bump field is evaluated ONCE at build time - the geometry never changes, only the
+   camera turns - so the per-frame cost is unchanged no matter how many bumps there are. */
 var PTS=[],NP=0;
 function build(){
-  NP = W<520 ? 3600 : (W<900 ? 6000 : 9000);
-  PTS.length=0;
-  var GA=Math.PI*(3-Math.sqrt(5)), BELTS=38;
-  for(var i=0;i<NP;i++){
-    var y=1-(i/(NP-1))*2;
-    var band=Math.round(((y+1)/2)*BELTS)/BELTS*2-1;      /* snap to a belt */
-    y = band + (Math.random()-0.5)*0.017;                 /* jitter inside it */
-    if(y> 1)y= 1; if(y<-1)y=-1;
-    var r=Math.sqrt(Math.max(0,1-y*y)), th=GA*i+Math.random()*0.10;
-    PTS.push([Math.cos(th)*r, y, Math.sin(th)*r, 0.55+Math.random()*0.45]);
+  var ROWS = W<520 ? 74 : (W<900 ? 104 : 132);
+  var BUMPS=38, AMP=0.20, SIG=0.20;
+  /* bump centres, fixed for the life of the page */
+  var bc=[];
+  for(var b=0;b<BUMPS;b++){
+    var u=Math.random()*2-1, th=Math.random()*Math.PI*2, rr=Math.sqrt(1-u*u);
+    bc.push([Math.cos(th)*rr, u, Math.sin(th)*rr]);
   }
+  PTS.length=0;
+  for(var i=0;i<ROWS;i++){
+    var v=(i+0.5)/ROWS, phi=Math.acos(1-2*v);          /* equal-area rows */
+    var sp=Math.sin(phi), y=Math.cos(phi);
+    var cols=Math.max(4, Math.round(ROWS*2*sp));       /* even spacing along each row */
+    for(var j=0;j<cols;j++){
+      var th=(j/cols)*Math.PI*2 + (i%2)*(Math.PI/cols); /* half-step offset per row */
+      var x=Math.cos(th)*sp, z=Math.sin(th)*sp;
+      /* displace outward by the bump field */
+      var d=0;
+      for(var k=0;k<BUMPS;k++){
+        var c=bc[k], dot=x*c[0]+y*c[1]+z*c[2];
+        var ang=1-dot;                                  /* 0 at the centre of a bump */
+        if(ang<SIG){ var t=1-ang/SIG; t=t*t*(3-2*t); if(t>d)d=t; }
+      }
+      if(d>1)d=1;
+      var r=1+AMP*d;
+      PTS.push([x*r, y*r, z*r, 0.62+0.38*d]);           /* the lobes read brighter */
+    }
+  }
+  NP=PTS.length;
 }
 function size(){
   var r=cv.getBoundingClientRect();
