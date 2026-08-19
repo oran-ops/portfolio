@@ -824,13 +824,29 @@ body.static #clearance,body.static #idlecue,body.failsafe #clearance,body.failsa
    file. They must leave: .folder computes `overflow: clip visible`, and sticky is dead inside
    a clipping ancestor. Gated at 1180px because below it there is no room, and because gating
    the MOVE (not just the styling) leaves narrow layouts exactly as they were. */
-@media (min-width:1180px){
-  /* widen into the margin .wrap was already wasting, so the folder pays as little as possible */
-  .case>.wrap{max-width:min(1460px,calc(100vw - 72px))}
-  .case .caserow{display:flex;align-items:flex-start;gap:30px}
+/* R58: the rail must cost the folder NOTHING. Anything with width in this row takes that
+   width from the folder, so the rail is flex:0 0 0 - no width at all in the flow - and is
+   pulled into the page margin by a negative margin equal to its own width plus the gap. Its
+   children carry the real width and overflow left, out of the content area. The folder gets
+   the whole row back and sits exactly where it always did. Sticky still applies: the rail is
+   still a flex item in normal flow.
+   The rail therefore only exists where the margin can hold it - below 1580 the drawer does
+   the job instead, so no width is left without one of the two. */
+@media (min-width:1580px){
+  .case .caserow{display:flex;align-items:flex-start;gap:0;
+    --railgap:28px;
+    --railw:clamp(196px,calc((100vw - 1120px)/2 - 34px),320px)}
   .case .caserow>.folder{flex:1 1 auto;min-width:0}
-  .case .evrail{flex:0 0 300px;position:sticky;top:92px;
+  /* the negative offset belongs to the rail's CHILDREN, not the rail. A negative margin on
+     a flex ITEM gives that space back to its siblings - the folder absorbed all 284px of it
+     and grew to 1442px starting at x=-13. Shifting the children instead leaves the rail's own
+     box at zero width, so the flex line never learns about it and the folder keeps exactly
+     the geometry it had before any rail existed. */
+  .case .evrail{flex:0 0 0;min-width:0;
+    position:sticky;top:92px;align-self:flex-start;
     display:flex;flex-direction:column;gap:18px;z-index:3}
+  .case .evrail>*{width:var(--railw);
+    margin-left:calc(-1 * (var(--railw) + var(--railgap)))}
   /* the panels were revealed by an ancestor they no longer have; state their rest state */
   .case .evrail>.slipflip,.case .evrail>.an-note{opacity:1;transform:none}
   .case .evrail .evslip,.case .evrail .mslip{width:100%}
@@ -855,7 +871,7 @@ body.static #clearance,body.static #idlecue,body.failsafe #clearance,body.failsa
    ancestor's overflow and on transforms this file applies to sections, and a body-level
    fixed element depends on nothing above it. Closed, the whole drawer is translated left by
    exactly the body's width, so the tab lands on the screen edge. */
-@media (max-width:1179px){
+@media (max-width:1579px){
   .evdrawer{position:fixed;left:0;top:50%;z-index:60;display:none;align-items:stretch;
     --bw:min(84vw,330px);
     transform:translate(calc(-1 * var(--bw)),-50%);
@@ -885,6 +901,53 @@ body.static #clearance,body.static #idlecue,body.failsafe #clearance,body.failsa
   .evdrawer .evtab .eva{position:absolute;bottom:9px;left:50%;transform:translateX(-50%);
     font-size:11px;line-height:1;color:#191A1F;font-weight:800;pointer-events:none}
   .evdrawer.open .evtab .eva{transform:translateX(-50%) scaleX(-1)}
+}
+
+/* ===== R58 - the UV lamp becomes an instrument, top right of the folder =====
+   It stays where it already sits in the DOM and stays in FLOW. An absolutely positioned plate
+   in the folder's top-right corner would land on the CTRL / CASE FILE / COPY row already
+   there, and .folder clips on X so any overhang would be cut. margin-left:auto puts it top
+   right without either risk.
+   The existing toggle queries .lampcall, .lampsub and .lampstate by class - all three keep
+   those names, so no toggle logic changed. */
+.lampband{width:auto!important;margin:0 0 12px auto!important;
+  display:flex!important;flex-direction:column;align-items:center;justify-content:center;
+  gap:5px;padding:13px 16px 12px!important;border-radius:5px;
+  background:#1E1F25!important;border:1px solid var(--hair2,#3C3F47);
+  transition:background .4s,border-color .4s,box-shadow .4s}
+.lampband .lamp{margin:0!important}
+.lampband .lamp svg{width:38px!important;height:38px!important}
+.lampband .lampnm{font-family:'Special Elite',Courier,monospace;font-size:15.5px;
+  letter-spacing:.05em;color:var(--ink,#F2F1ED);line-height:1}
+.lampband .lampwords{align-items:center;text-align:center}
+.lampband .lampcall{font-family:'JetBrains Mono',monospace;font-weight:800;font-size:8px!important;
+  letter-spacing:.2em;color:var(--mut,#85878D)!important}
+.lampband .lampsub{font-size:7px!important;letter-spacing:.18em;margin-top:2px!important}
+.lampband .lampstate{position:absolute;top:7px;right:8px;margin:0!important;font-size:6.5px!important;
+  padding:2px 4px!important;color:var(--mut,#85878D);border-color:var(--hair2,#3C3F47)}
+.lampband .lampedge{display:none}
+.lampband .swp{fill:#2A2B33;stroke:#6E7178;stroke-width:1.5}
+.lampband .swscr{fill:#575A62}
+.lampband .swrock{fill:#3A3D45;stroke:#7A7E88;stroke-width:1.3;transition:transform .32s,fill .32s,stroke .32s}
+.lampband .swline{stroke:#9EA2AA;stroke-width:1.4;stroke-linecap:round;transition:stroke .32s}
+.lampband:hover{border-color:#5B5570;background:#232430!important}
+/* armed: the violet arrives all at once, and the rocker throws */
+.case .folder.lampon .lampband{background:#221E33!important;border-color:var(--uvv,#9E7BFF);
+  box-shadow:0 0 0 1px rgba(158,123,255,.28),0 12px 30px rgba(120,88,235,.26)}
+.case .folder.lampon .lampband .lampnm{color:#E5DBFF}
+.case .folder.lampon .lampband .lampstate{color:var(--uvv,#9E7BFF);border-color:var(--uvv,#9E7BFF)}
+.case .folder.lampon .lampband .swp{stroke:#B9A4F5}
+.case .folder.lampon .lampband .swrock{fill:#8E75C8;stroke:#D8C9FF;transform:translateY(-4px)}
+.case .folder.lampon .lampband .swline{stroke:#2A2438}
+.case .folder.lampon .lampband .swscr{fill:#8A8FA0}
+@media (prefers-reduced-motion:reduce){
+  .lampband .swrock{transition:none}
+  .case .folder.lampon .lampband .swrock{transform:none}
+}
+@media (max-width:680px){
+  .lampband{padding:11px 13px 10px!important}
+  .lampband .lamp svg{width:33px!important;height:33px!important}
+  .lampband .lampnm{font-size:14px}
 }
 </style>
 <div id="boot" aria-hidden="true">
@@ -2111,7 +2174,7 @@ body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:214748
 /* ===== EMERALD II phase 2 ===== */
 
 .redx{position:relative;display:inline-block;max-width:100%;vertical-align:bottom;color:transparent;border-radius:2px;transition:color .5s .25s;cursor:pointer;touch-action:pan-y}
-.redx::after{content:"SEALED · TAP TO REVEAL ▸";position:absolute;inset:-1px -3px;display:flex;align-items:center;justify-content:center;overflow:hidden;white-space:nowrap;font-family:'JetBrains Mono',monospace;font-size:7.5px;font-weight:700;letter-spacing:.16em;background:#D8C24A;color:#4A473F;border:1px solid rgba(20,21,25,.35);border-bottom-color:rgba(20,21,25,.5);border-radius:3px;box-shadow:0 2px 6px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.5);transform:translateX(var(--dx,0px));transform-origin:left center;transition:transform .55s cubic-bezier(.7,0,.2,1),opacity .4s;background-image:linear-gradient(110deg,transparent 32%,rgba(255,255,255,.55) 50%,transparent 68%);background-size:230% 100%;animation:rxsheen 3.4s linear infinite}
+.redx::after{content:"SEALED · TAP TO REVEAL ▸";position:absolute;inset:-1px -3px;display:flex;align-items:center;justify-content:center;overflow:hidden;white-space:nowrap;font-family:'JetBrains Mono',monospace;font-size:7.5px;font-weight:700;letter-spacing:.16em;background:#9483C6;color:#211C2F;border:1px solid rgba(20,21,25,.35);border-bottom-color:rgba(20,21,25,.5);border-radius:3px;box-shadow:0 2px 6px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.5);transform:translateX(var(--dx,0px));transform-origin:left center;transition:transform .55s cubic-bezier(.7,0,.2,1),opacity .4s;background-image:linear-gradient(110deg,transparent 32%,rgba(255,255,255,.55) 50%,transparent 68%);background-size:230% 100%;animation:rxsheen 3.4s linear infinite}
 
 .redx.open{color:inherit;animation:rxflash 1.4s ease-out .35s}
 @keyframes rxsheen{0%{background-position:135% 0}100%{background-position:-95% 0}}
@@ -2643,7 +2706,7 @@ body.static .sttl .w>i{font-variation-settings:'wght' 780;letter-spacing:0}
    past them, so the reader declassifies the file simply by reading it. One-way
    — once lifted, they stay lifted. */
 .rxs{position:relative;display:inline;color:inherit}
-.rxs::after{content:"";position:absolute;inset:-1px -2px;background:#D8C24A;border-radius:2px;
+.rxs::after{content:"";position:absolute;inset:-1px -2px;background:#9483C6;border-radius:2px;
   box-shadow:0 1px 4px rgba(0,0,0,.3),inset 0 1px 0 rgba(255,255,255,.45);
   transform:scaleX(var(--sp,1));transform-origin:right center;
   transition:transform .18s linear;pointer-events:none}
@@ -5018,23 +5081,23 @@ CASES.forEach(function(id){
         '<em>03</em> dependencies resting on <em>09</em> builds and <em>06</em> outcomes']]
     ]
   };
-  var OFF='TURN ON THE UV LAMP',ON='TURN OFF THE UV LAMP',
-      OFFS='365nm · MORE HERE THAN THE PRINT SHOWS',ONS='365nm · FLUORESCING · 03 ZONES';
+  var OFF='PRESS TO ARM',ON='FLUORESCING',OFFS='365nm \u00B7 LONG WAVE',ONS='365nm \u00B7 03 ZONES';
   /* frame numbers run up the reel in file order and stop short of 26A/27A, which
      the closing section already occupies - one reel, no two frames alike */
   var FRAMES={xtix:[11,12],oasis:[14,15],eventer:[17,18],medcoin:[20,21]};
   var BANDS=[];   /* every strip built, for the off-screen pause + one-shot sweep */
 
   function lampSVG(uid){
-    return '<svg viewBox="0 0 40 40" focusable="false" aria-hidden="true">'+
-      '<defs><linearGradient id="lcg_'+uid+'" x1="0" y1="0" x2="0" y2="1">'+
-      '<stop offset="0" class="ls1"/><stop offset=".62" class="ls2"/><stop offset="1" class="ls3"/></linearGradient>'+
-      '<radialGradient id="lhg_'+uid+'"><stop offset="0" class="lh1"/><stop offset="1" class="lh2"/></radialGradient></defs>'+
-      '<g class="lcone"><path d="M9.2 20.6 L20.8 20.6 L27.5 37 L2.5 37 Z" fill="url(#lcg_'+uid+')"/>'+
-      '<circle cx="15.2" cy="20.3" r="8" fill="url(#lhg_'+uid+')"/></g>'+
-      '<path class="lbody" d="M25.5 35.5 H36.5"/><path class="lbody" d="M31 35.5 V23"/>'+
-      '<path class="lbody" d="M31 23 L20.6 13.4"/><path class="lbody" d="M11 12.5 H19.5 L22.5 20.5 H8 Z"/>'+
-      '<circle class="lbulb" cx="15.2" cy="20.3" r="1.8"/></svg>';
+    /* R58 direction B: a screwed-down wall plate with a rocker. Off it carries no colour at
+       all, so the violet arriving is the whole event - that is what makes pressing it a
+       change of state rather than a brightening. uid is kept in the signature because the
+       call sites pass it; this glyph needs no per-instance gradient ids. */
+    return '<svg viewBox="0 0 46 46" focusable="false" aria-hidden="true">'+
+      '<rect class="swp" x="9" y="5" width="28" height="36" rx="3"/>'+
+      '<circle class="swscr" cx="13.5" cy="9.8" r="1.5"/><circle class="swscr" cx="32.5" cy="9.8" r="1.5"/>'+
+      '<circle class="swscr" cx="13.5" cy="36.2" r="1.5"/><circle class="swscr" cx="32.5" cy="36.2" r="1.5"/>'+
+      '<rect class="swrock" x="16" y="13.5" width="14" height="19" rx="2.5"/>'+
+      '<path class="swline" d="M19 27.5 h8"/></svg>';
   }
   /* scoped to the FOLDER, never the section: a developed zone that cannot be hung
      inside the negative is not built at all, rather than left glowing silver on
@@ -5082,8 +5145,7 @@ CASES.forEach(function(id){
 
     var b=document.createElement('button');
     b.className='lampband';b.type='button';b.setAttribute('aria-pressed','false');
-    b.innerHTML='<span class="lamp">'+lampSVG(id)+'</span>'+
-      '<span class="lampwords"><span class="lampcall">'+OFF+'</span>'+
+    b.innerHTML='<span class="lamp">'+lampSVG(id)+'</span>'+'<span class="lampnm">UV LAMP</span>'+'<span class="lampwords"><span class="lampcall">'+OFF+'</span>'+
       '<span class="lampsub">'+OFFS+'</span></span>'+
       '<span class="lampstate" aria-hidden="true">OFF</span>'+
       '<span class="lampedge" aria-hidden="true"></span>';
@@ -6063,7 +6125,7 @@ document.querySelectorAll('.redx').forEach(function(r){
    folders hold it at four different depths (.statrow in XTIX, a .stat inside .cols2 in Oasis,
    a bare div in Eventer and Medcoin), so any selector written against one shape misses three. */
 (function(){
-  if(!window.matchMedia||!matchMedia('(min-width:1180px)').matches)return;
+  if(!window.matchMedia||!matchMedia('(min-width:1580px)').matches)return;
   ['xtix','oasis','eventer','medcoin'].forEach(function(id){
     try{
       var sec=document.getElementById(id); if(!sec)return;
@@ -6090,7 +6152,7 @@ document.querySelectorAll('.redx').forEach(function(r){
    panels: the two are mutually exclusive by viewport, so every width gets one of them and
    never both. */
 (function(){
-  if(!window.matchMedia||matchMedia('(min-width:1180px)').matches)return;
+  if(!window.matchMedia||matchMedia('(min-width:1580px)').matches)return;
   ['xtix','oasis','eventer','medcoin'].forEach(function(id){
     try{
       var sec=document.getElementById(id); if(!sec)return;
