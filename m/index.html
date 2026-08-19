@@ -835,6 +835,57 @@ body.static #clearance,body.static #idlecue,body.failsafe #clearance,body.failsa
   .case .evrail>.slipflip,.case .evrail>.an-note{opacity:1;transform:none}
   .case .evrail .evslip,.case .evrail .mslip{width:100%}
 }
+
+/* ===== R57 - the four performance facts, re-set =====
+   They were two big text blocks standing beside the $9M+ figure with nothing tying them to
+   it. The PDF sets them as label/value rows under PERFORMANCE, which is what makes them mean
+   something: they are what the pipeline figure was built out of. Same form here - existing
+   type classes reused, so no new typography enters the document. */
+.case .perfrows{display:flex;flex-direction:column;gap:14px;justify-content:center}
+.case .perfrows .prow{border-left:2px solid var(--fc,var(--emb));padding-left:14px}
+.case .perfrows .prow .biglbl{margin-bottom:3px}
+@media (max-width:860px){
+  .case .perfrows{gap:11px}
+  .case .perfrows .prow{padding-left:11px}
+}
+
+/* ===== R57 - the phone drawer =====
+   No gutter exists below 1180, so the rail becomes a drawer: flush left, only the tab head
+   showing. Fixed to the body rather than sticky in the section - sticky depends on every
+   ancestor's overflow and on transforms this file applies to sections, and a body-level
+   fixed element depends on nothing above it. Closed, the whole drawer is translated left by
+   exactly the body's width, so the tab lands on the screen edge. */
+@media (max-width:1179px){
+  .evdrawer{position:fixed;left:0;top:50%;z-index:60;display:none;align-items:stretch;
+    --bw:min(84vw,330px);
+    transform:translate(calc(-1 * var(--bw)),-50%);
+    transition:transform .34s cubic-bezier(.4,0,.2,1)}
+  .evdrawer.live{display:flex}
+  .evdrawer.open{transform:translate(0,-50%)}
+  @media (prefers-reduced-motion:reduce){.evdrawer{transition:none}}
+  .evdrawer .evbody{width:var(--bw);max-height:74vh;overflow-y:auto;overflow-x:hidden;
+    -webkit-overflow-scrolling:touch;
+    background:var(--card,#25262D);border:1px solid var(--hair,#31333A);border-left:0;
+    border-radius:0 13px 13px 0;padding:14px;
+    display:flex;flex-direction:column;gap:14px;
+    box-shadow:14px 0 30px rgba(9,10,13,.5)}
+  /* the panels lost their reveal ancestor - state the rest state, as the desktop rail does */
+  .evdrawer .slipflip,.evdrawer .an-note{opacity:1;transform:none;width:100%}
+  .evdrawer .evslip,.evdrawer .mslip{width:100%}
+  .evdrawer .evtab{flex:0 0 27px;align-self:center;height:132px;
+    background:var(--fc,var(--emb));border:0;border-radius:0 9px 9px 0;
+    padding:0;cursor:pointer;position:relative;
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:5px 0 14px rgba(9,10,13,.45)}
+  .evdrawer .evtab:focus-visible{outline:2px solid var(--ink,#F2F1ED);outline-offset:2px}
+  .evdrawer .evtab .evk{position:absolute;top:50%;left:50%;
+    transform:translate(-50%,-50%) rotate(90deg);transform-origin:center;
+    font-family:'JetBrains Mono',monospace;font-size:7.5px;font-weight:800;
+    letter-spacing:.22em;color:#191A1F;white-space:nowrap;pointer-events:none}
+  .evdrawer .evtab .eva{position:absolute;bottom:9px;left:50%;transform:translateX(-50%);
+    font-size:11px;line-height:1;color:#191A1F;font-weight:800;pointer-events:none}
+  .evdrawer.open .evtab .eva{transform:translateX(-50%) scaleX(-1)}
+}
 </style>
 <div id="boot" aria-hidden="true">
   
@@ -1083,8 +1134,7 @@ padding:6px 13px;font-family:'JetBrains Mono',monospace;font-weight:700;font-siz
 <div class="zr rv"><b>A</b><span class="d2"></span>EVIDENCE &mdash; FROM INFRASTRUCTURE TO EXECUTION</div>
         <div class="statrow" style="margin-top:18px">
           <div class="rv" style="--i:1"><div class="bignum"><span class="cur">$</span><span class="cnt" data-n="9" data-suf="M+">9M+</span> <span style="font-size:.45em;color:var(--mut);font-weight:700">ARR</span></div><div class="biglbl"><span class="pmark">(S)</span>PIPELINE MANAGED</div><div class="biglbl" style="color:var(--emb);margin-top:5px">COMMERCIAL OPERATING SYSTEM &mdash; BUILT</div></div>
-          <div class="rv" style="--i:2"><div class="bigtxt">Prioritized global expansion</div><div class="biglbl">TOP-GROWTH MARKETS</div></div>
-          <div class="rv" style="--i:3"><div class="bigtxt">Precision targeting model</div><div class="biglbl">AI SEGMENTATION</div></div>
+          <div class="perfrows rv" style="--i:2"><div class="prow"><div class="biglbl">TOP-GROWTH MARKETS</div><div class="bigtxt">Prioritized global expansion</div></div><div class="prow"><div class="biglbl">AI SEGMENTATION</div><div class="bigtxt">Precision targeting model</div></div></div>
         </div>
         <div class="cols2" style="margin-top:30px">
           <div class="rv" style="--i:4">
@@ -5289,6 +5339,17 @@ document.querySelectorAll('.redx').forEach(function(r){
     var fitH='';
     function fit(){var h=face().offsetHeight+'px';if(h===fitH)return;fitH=h;stage.style.height=h}
     fit();
+  /* R57: the stage measured once at build time and then only on a flip, so any later change
+     to its width left a stale height - the faces are position:absolute, so a wrong stage
+     height does not clip them, it lets them draw straight over the ANALYST NOTE below. That
+     bit when the panels were relocated into the phone drawer, and it would equally have bitten
+     a rotation or a late-loading font. Re-measure whenever a face changes size. Observing the
+     FACES rather than the stage is what keeps this from looping: a face's height is content
+     driven, so writing the stage height cannot feed back into it. */
+  if('ResizeObserver' in window){
+    var __sfro=new ResizeObserver(function(){fit()});
+    __sfro.observe(slip); __sfro.observe(back);
+  }
     tab.addEventListener('click',function(){
       var t=!wrap.classList.contains('turned');
       wrap.classList.toggle('turned',t);
@@ -6020,6 +6081,65 @@ document.querySelectorAll('.redx').forEach(function(r){
       rail.setAttribute('aria-label','Evidence for this file');
       row.appendChild(rail); row.appendChild(folder);
       rail.appendChild(slip); rail.appendChild(note);
+    }catch(e){}
+  });
+})();
+</script>
+<script>
+/* R57 - THE PHONE DRAWER. Runs after the rail script, and does nothing if the rail took the
+   panels: the two are mutually exclusive by viewport, so every width gets one of them and
+   never both. */
+(function(){
+  if(!window.matchMedia||matchMedia('(min-width:1180px)').matches)return;
+  ['xtix','oasis','eventer','medcoin'].forEach(function(id){
+    try{
+      var sec=document.getElementById(id); if(!sec)return;
+      var slip=sec.querySelector('.slipflip'), note=sec.querySelector('.an-note');
+      if(!slip||!note)return;
+
+      var d=document.createElement('div');
+      d.className='evdrawer'; d.setAttribute('data-for',id);
+      /* the drawer hangs off <body>, so it cannot inherit the folder's accent - copy it */
+      var fc=(getComputedStyle(sec).getPropertyValue('--fc')||'').trim();
+      if(fc)d.style.setProperty('--fc',fc);
+      d.innerHTML='<div class="evbody"></div>'+
+        '<button class="evtab" type="button" aria-expanded="false">'+
+        '<span class="evk">EVIDENCE</span><span class="eva">&#8250;</span></button>';
+      document.body.appendChild(d);
+
+      var body=d.querySelector('.evbody'), tab=d.querySelector('.evtab');
+      body.appendChild(slip); body.appendChild(note);   /* MOVED, listeners intact */
+
+      function setOpen(v){
+        d.classList.toggle('open',v);
+        tab.setAttribute('aria-expanded',v?'true':'false');
+      }
+      tab.addEventListener('click',function(){ setOpen(!d.classList.contains('open')); });
+
+      /* Both listeners are passive, so preventDefault is not available to them: this gesture
+         cannot capture a vertical scroll by construction, not by threshold tuning. Bound to
+         the drawer only - never to the section. */
+      var x0=null,y0=null;
+      d.addEventListener('touchstart',function(e){
+        var t=e.touches[0]; x0=t.clientX; y0=t.clientY;
+      },{passive:true});
+      d.addEventListener('touchmove',function(e){
+        if(x0===null)return;
+        var t=e.touches[0], dx=t.clientX-x0, dy=t.clientY-y0;
+        if(Math.abs(dx)>32 && Math.abs(dx)>Math.abs(dy)*1.4){ setOpen(dx>0); x0=null; }
+      },{passive:true});
+      d.addEventListener('touchend',function(){ x0=null; },{passive:true});
+      d.addEventListener('touchcancel',function(){ x0=null; },{passive:true});
+
+      /* on screen only while its own file is */
+      if('IntersectionObserver' in window){
+        new IntersectionObserver(function(es){
+          es.forEach(function(en){
+            d.classList.toggle('live',en.isIntersecting);
+            if(!en.isIntersecting)setOpen(false);
+          });
+        },{threshold:0}).observe(sec);
+      } else { d.classList.add('live'); }
     }catch(e){}
   });
 })();
