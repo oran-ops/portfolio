@@ -5896,296 +5896,102 @@ document.querySelectorAll('.redx').forEach(function(r){
     drive(0);
   }
 
-  /* ---- the filament: a wandering spine with a sheath of nodes around it, linked to
-     whatever is close in SPACE. A wave travels down the body and the whole thing tumbles
-     on two axes. Matte white, no shadowBlur and no bloom - both are expensive and both
-     are glossy. Zero frames when off screen. ---- */
-  var cv=document.getElementById('stnf');if(!cv)return;
-  var ctx=cv.getContext('2d'),W=0,H=0,DPR=Math.min(devicePixelRatio||1,1.75),live=false,raf=null,t=0;
-  var N=176,P=new Float32Array(N*3),SC=new Float32Array(N*3);
-  var PULSE=[];for(var q=0;q<22;q++)PULSE.push({a:0,b:0,p:q/22,s:0.010+(q%7)*0.0022});
-  /* taper is a pure function of the node index and was recomputed 176x every frame.
-     TWO tables now: the taper this node has along ONE spine, and the taper it has along
-     its own HALF spine once the filament has separated. Lerping between them keeps the
-     split table-driven instead of putting 176 sines back into the frame. */
-  var HN=N>>1;
-  var TAPER=new Float32Array(N),TAPERH=new Float32Array(N),UH=new Float32Array(N);
-  for(var ti=0;ti<N;ti++){
-    TAPER[ti]=Math.sin(Math.PI*(ti/(N-1)));
-    UH[ti]=(ti<HN?ti:(ti-HN))/(HN-1);
-    TAPERH[ti]=Math.sin(Math.PI*UH[ti]);
+  /* ---- R71: the point-cloud spheres. Observed on vanlent.dev, built here rather than lifted.
+   A globe of small points banded into horizontal belts - the banding is what makes a cloud of
+   dots read as a sphere instead of as noise - turning on its own axis, matte, no glow and no
+   shadowBlur (both are expensive and both are glossy).
+
+   ONE becomes TWO, because the sentences say so. "One intelligence built the world." holds a
+   single sphere; "Two will build the next." brings the second in. The count on screen is the
+   count in the line.
+
+   `split` is the same 0..1 the morph already drives, so the spheres and the words move on one
+   clock and cannot drift apart. ---- */
+var cv=document.getElementById('stnf');if(!cv)return;
+var ctx=cv.getContext('2d'),W=0,H=0,DPR=1,raf=null,live=false,t0=0;
+
+/* the cloud is generated once. A Fibonacci sphere gives an even spread; quantising the
+   latitude into belts is what produces the banded structure, and jittering each point inside
+   its belt keeps the limb frayed rather than drawn with a compass. */
+var PTS=[],NP=0;
+function build(){
+  NP = W<520 ? 900 : (W<900 ? 1400 : 2000);
+  PTS.length=0;
+  var GA=Math.PI*(3-Math.sqrt(5)), BELTS=26;
+  for(var i=0;i<NP;i++){
+    var y=1-(i/(NP-1))*2;
+    var band=Math.round(((y+1)/2)*BELTS)/BELTS*2-1;      /* snap to a belt */
+    y = band + (Math.random()-0.5)*0.030;                 /* jitter inside it */
+    if(y> 1)y= 1; if(y<-1)y=-1;
+    var r=Math.sqrt(Math.max(0,1-y*y)), th=GA*i+Math.random()*0.10;
+    PTS.push([Math.cos(th)*r, y, Math.sin(th)*r, 0.55+Math.random()*0.45]);
   }
-  /* 0 = one strand, 1 = two. Driven by the statement's own scroll, so the filament
-     separates on exactly the words that say it does. */
-  /* split is declared with q at the top of this module and set by drive(). One number,
-     one scope, no bridge. */
-  /* the batching apparatus: fixed colour strings, and flat buffers reused every frame so
-     the loop allocates nothing at all */
-  var NB=24,AMAX=0.52,LWIN=30,MAXS=N*LWIN+N+32;  /* +N chords, +the rungs */
-  var SEGA=new Float32Array(MAXS*4),SEGB=new Uint8Array(MAXS),SEGO=new Float32Array(MAXS*4);
-  var CNT=new Int32Array(NB),OFF=new Int32Array(NB);
-  var NDB=new Uint8Array(N),NCT=new Int32Array(NB),NOF=new Int32Array(NB),NDO=new Float32Array(N*3);
-  /* WHITE IS NOT ONE COLOUR. The bucket index is already a depth proxy, so a ramp across
-     the buckets is free - built once here, never touched again. Cool blue-white in the
-     distance, neutral through the middle, warm bright at the front. */
-  function tone(tr){
-    var r,g,b,u;
-    if(tr<0.5){u=tr*2;      r=150+64*u; g=170+46*u; b=196+18*u}
-    else      {u=(tr-0.5)*2;r=214+41*u; g=216+37*u; b=214+30*u}
-    return (r|0)+','+(g|0)+','+(b|0);
+}
+function size(){
+  var r=cv.getBoundingClientRect();
+  DPR=Math.min(window.devicePixelRatio||1, 2);
+  W=Math.max(1,Math.round(r.width)); H=Math.max(1,Math.round(r.height));
+  cv.width=Math.round(W*DPR); cv.height=Math.round(H*DPR);
+  ctx.setTransform(DPR,0,0,DPR,0,0);
+  build();
+}
+
+/* one sphere, drawn at a centre with a radius and an overall alpha */
+function orb(cx,cy,rad,ry,rx,alpha){
+  if(alpha<=0.004)return;
+  var cy0=Math.cos(rx),sy0=Math.sin(rx),cz=Math.cos(ry),sz=Math.sin(ry);
+  for(var i=0;i<NP;i++){
+    var p=PTS[i],x=p[0],y=p[1],z=p[2];
+    var x1=x*cz - z*sz, z1=x*sz + z*cz;          /* yaw */
+    var y1=y*cy0 - z1*sy0, z2=y*sy0 + z1*cy0;    /* pitch */
+    var d=1/(1.9 - z2*0.55);                      /* cheap perspective */
+    var sx=cx + x1*rad*d, sy=cy + y1*rad*d;
+    var near=(z2+1)/2;                            /* 1 at the front */
+    var aa=alpha*p[3]*(0.16+0.84*near*near);
+    if(aa<=0.01)continue;
+    var w=near>0.72 ? 1.5 : 1.0;
+    ctx.globalAlpha=aa;
+    ctx.fillRect(sx,sy,w,w);
   }
-  /* three tables: the link, the sharp dot, and the dot's bloom. Alphas are lower than
-     they were because compositing is additive now and overlaps accumulate. */
-  var LCOL=[],NCOL=[],BCOL=[];
-  for(var bi=0;bi<NB;bi++){
-    var tr=(bi+0.5)/NB,cc=tone(tr);
-    LCOL.push('rgba('+cc+','+(tr*AMAX*0.86).toFixed(3)+')');
-    NCOL.push('rgba('+cc+','+(tr*0.64).toFixed(3)+')');
-    BCOL.push('rgba('+cc+','+(tr*0.085).toFixed(3)+')');
+}
+
+function paintOrbs(){
+  ctx.clearRect(0,0,W,H);
+  var sp=(typeof split==='number'?split:0);
+  if(sp<0)sp=0; if(sp>1)sp=1;
+  var e=sp*sp*(3-2*sp);                            /* the second arrives, it does not pop */
+  var base=Math.min(W,H)*0.30, cy=H*0.5;
+  var t=(performance.now()-t0)/1000;
+
+  ctx.fillStyle='#E9E7DF';
+  if(e<0.999){                                     /* ONE */
+    var gap=W*0.20*e, r1=base*(1-0.16*e);
+    orb(W*0.5-gap, cy, r1, t*0.16, -0.34, 1);
+    if(e>0.004) orb(W*0.5+gap, cy, base*(0.42+0.42*e), -t*0.13-0.6, -0.24, e);
+  } else {                                         /* TWO */
+    var g2=W*0.20;
+    orb(W*0.5-g2, cy, base*0.84, t*0.16, -0.34, 1);
+    orb(W*0.5+g2, cy, base*0.84, -t*0.13-0.6, -0.24, 1);
   }
-  /* hubs: every 13th node is a little larger, so the network has a hierarchy instead of
-     176 identical dots. And one chord offset per node - see the link pass. */
-  var HUB=new Float32Array(N),CHO=new Int32Array(N);
-  for(var hi=0;hi<N;hi++){
-    HUB[hi]=(hi%13===0)?1.85:1;
-    CHO[hi]=46+((hi*7)%23);
-  }
-  function size(){
-    var r=cv.getBoundingClientRect();
-    W=Math.max(1,r.width);H=Math.max(1,r.height);
-    cv.width=Math.round(W*DPR);cv.height=Math.round(H*DPR);
-    ctx.setTransform(DPR,0,0,DPR,0,0);
-  }
-  /* the separation completes on the same number as the last character of the second
-     sentence - see B_LEAD+B_SPREAD+B_DUR above. One number, one finish line. */
-  var SEPN=0.86;
-  function shape(tt){
-    var sp=split/SEPN; if(sp>1)sp=1;
-    var nar=1-sp*0.55;                    /* the wander gets out of the helix's way */
-    /* THE HELIX. Pushing the halves apart in a straight line is a split; winding them
-       around a shared axis is a dance - and it is the right image, because two strands
-       twisting around each other is what anything that builds is made of. The radius
-       grows QUADRATICALLY out of nothing, so they unwind from the single filament rather
-       than jumping apart, and the whole helix turns on its own slow clock. */
-    var hR=sp*0.30, hSp=tt*0.58;
-    var stretch=1+sp*0.24;            /* things that separate get longer */
-    for(var i=0;i<N;i++){
-      /* u travels the whole spine when joined, and its own half once separated */
-      var u=i/(N-1);
-      var uu=u+(UH[i]-u)*sp;
-      var ph=UH[i]*9.4+hSp+(i<HN?0:3.14159);   /* opposite sides of the same axis */
-      var wav=Math.sin(uu*7.4 - tt*2.35);
-      var sx=Math.sin(uu*2.5+tt*0.42)*0.42 + wav*0.20 + Math.sin(uu*5.1-tt*0.9)*0.07;
-      var sy=((uu-0.5)*1.06 + Math.sin(uu*3.2+tt*0.55)*0.13 + wav*0.055)*stretch;
-      var sz=Math.cos(uu*2.1+tt*0.37)*0.42 + Math.cos(uu*6.6-tt*1.9)*0.15;
-      /* not identical twins: the second runs a little ahead along the axis */
-      if(i>=HN&&sp>0){sy+=sp*0.045}
-      var taper=TAPER[i]+(TAPERH[i]-TAPER[i])*sp;
-      var an=i*2.39996+tt*0.95;
-      var rr=(0.046+0.122*taper)*(0.62+0.38*Math.sin(i*1.27+tt*0.85))*(1-sp*0.30);
-      P[i*3  ]=sx*nar+Math.cos(ph)*hR+Math.cos(an)*rr;
-      P[i*3+1]=sy+Math.sin(an*1.27)*rr*0.88;
-      P[i*3+2]=sz*nar+Math.sin(ph)*hR+Math.sin(an)*rr;
-    }
-  }
-  function body(){
-    t+=0.0062;shape(t);
-    ctx.clearRect(0,0,W,H);
-    /* THE ONE LINE. Where two strands cross, their light adds instead of one hiding the
-       other - which is the whole difference between a wireframe and something lit. */
-    ctx.globalCompositeOperation='lighter';
-    /* and the scene breathes: 3% on a ~12s period, slow enough that nobody catches it
-       happening and quick enough that the filament is never quite still */
-    /* the separated helix is taller than the joined filament, so the camera steps back
-       as it opens - measured extent was 4% off the top edge, which is not a margin. */
-    var spn=split/0.86;if(spn>1)spn=1;
-    var cx=W*0.50,cy=H*0.5,FOV=2.1,
-        S=Math.min(W,H)*0.62*(1+0.030*Math.sin(t*0.52))*(1-0.11*spn);
-    /* THE READER'S HAND. ry was time only; it now carries q, so the scroll turns the
-       sculpture about a sixth of a turn through the section and unwinds it on the way
-       back up. The object answers the scroll directly. */
-    var ry=t*0.30+split*1.15,cs=Math.cos(ry),sn=Math.sin(ry);
-    var rp=Math.sin(t*0.21)*0.30,cp=Math.cos(rp),sp2=Math.sin(rp);
-    for(var i=0;i<N;i++){
-      var x=P[i*3],y0=P[i*3+1],z0=P[i*3+2];
-      var y=y0*cp-z0*sp2, z=y0*sp2+z0*cp;
-      var rx=x*cs-z*sn, rz=x*sn+z*cs, k=FOV/(FOV+rz);
-      SC[i*3]=cx+rx*S*k; SC[i*3+1]=cy+y*S*k; SC[i*3+2]=k;
-    }
-    /* ---- links: bucket by alpha, counting-sort, one path and one stroke per bucket ---- */
-    var i,j,b,acc,cur;
-    for(b=0;b<NB;b++)CNT[b]=0;
-    var ns=0,win=LWIN;
-    for(i=0;i<N;i++){
-      var jm=i+win;if(jm>N)jm=N;          /* hoisted: this Math.min ran ~5,100x per frame */
-      var xi=P[i*3],yi=P[i*3+1],zi=P[i*3+2],ki=SC[i*3+2];
-      for(j=i+1;j<jm;j++){
-        var dx=xi-P[j*3],dy=yi-P[j*3+1],dz=zi-P[j*3+2];
-        var d2=dx*dx+dy*dy+dz*dz,spine=(j===i+1&&!(split>0.03&&i===HN-1));
-        if(!spine&&d2>0.042)continue;
-        var f=spine?1:(1-d2/0.042),kk=(ki+SC[j*3+2])*0.5;
-        var a=0.26*f*f*kk*kk;
-        if(a<0.012)continue;              /* already invisible: 14.8% of every frame's links */
-        b=(a/AMAX*NB)|0;if(b>=NB)b=NB-1;else if(b<0)b=0;
-        var o=ns*4;
-        SEGA[o]=SC[i*3];SEGA[o+1]=SC[i*3+1];SEGA[o+2]=SC[j*3];SEGA[o+3]=SC[j*3+1];
-        SEGB[ns]=b;CNT[b]++;ns++;
-      }
-    }
-    /* LONG-RANGE CHORDS. i to i+46..i+68, and only where the strand has folded so that
-       those two ends are genuinely near each other in space. These are the links that
-       could not be predicted from the ordering, and they are what make the thing read as
-       a network rather than as a rope. One distance test per node. */
-    for(i=0;i<N;i++){
-      j=i+CHO[i]; if(j>=N)continue;
-      /* once the strands part, a chord across the halfway boundary is a line drawn
-         through the gap the helix just opened. The rungs own the crossings. */
-      if(split>0.04&&((i<HN)!==(j<HN)))continue;
-      var cdx=P[i*3]-P[j*3],cdy=P[i*3+1]-P[j*3+1],cdz=P[i*3+2]-P[j*3+2];
-      var cd2=cdx*cdx+cdy*cdy+cdz*cdz;
-      if(cd2>0.020)continue;
-      var ckk=(SC[i*3+2]+SC[j*3+2])*0.5,ca=0.20*(1-cd2/0.020)*ckk*ckk;
-      if(ca<0.012)continue;
-      b=(ca/AMAX*NB)|0;if(b>=NB)b=NB-1;else if(b<0)b=0;
-      var co=ns*4;
-      SEGA[co]=SC[i*3];SEGA[co+1]=SC[i*3+1];SEGA[co+2]=SC[j*3];SEGA[co+3]=SC[j*3+1];
-      SEGB[ns]=b;CNT[b]++;ns++;
-    }
-    /* THE RUNGS. Once the strands have parted they stay CONNECTED - a bright link every
-       ninth node between a point on one strand and its opposite number on the other. The
-       sentence says two will build the next one; two things moving apart is not that, and
-       two things moving TOGETHER is. */
-    var spN=split/0.86;if(spN>1)spN=1;
-    if(spN>0.42){
-      var bs=(spN-0.42)/0.58;if(bs>1)bs=1;
-      for(i=0;i<HN;i+=9){
-        j=i+HN;if(j>=N)break;
-        var bkk=(SC[i*3+2]+SC[j*3+2])*0.5,ba=0.34*bs*bkk*bkk;
-        if(ba<0.012)continue;
-        b=(ba/AMAX*NB)|0;if(b>=NB)b=NB-1;else if(b<0)b=0;
-        var bo=ns*4;
-        SEGA[bo]=SC[i*3];SEGA[bo+1]=SC[i*3+1];SEGA[bo+2]=SC[j*3];SEGA[bo+3]=SC[j*3+1];
-        SEGB[ns]=b;CNT[b]++;ns++;
-      }
-    }
-    acc=0;for(b=0;b<NB;b++){OFF[b]=acc;acc+=CNT[b]}
-    for(i=0;i<ns;i++){
-      var p2=OFF[SEGB[i]]++*4,q2=i*4;
-      SEGO[p2]=SEGA[q2];SEGO[p2+1]=SEGA[q2+1];SEGO[p2+2]=SEGA[q2+2];SEGO[p2+3]=SEGA[q2+3];
-    }
-    ctx.lineWidth=1;
-    cur=0;
-    for(b=0;b<NB;b++){
-      var n2=CNT[b];if(!n2)continue;
-      ctx.strokeStyle=LCOL[b];
-      ctx.beginPath();
-      for(i=0;i<n2;i++){var o2=(cur+i)*4;ctx.moveTo(SEGO[o2],SEGO[o2+1]);ctx.lineTo(SEGO[o2+2],SEGO[o2+3])}
-      ctx.stroke();
-      cur+=n2;
-    }
-    /* ---- nodes: the same treatment. Radii still vary per dot - a path may hold arcs of
-       different sizes, so long as each one starts with a moveTo or canvas draws a
-       connecting line into it. ---- */
-    for(b=0;b<NB;b++)NCT[b]=0;
-    for(i=0;i<N;i++){
-      var kn=SC[i*3+2],an=0.30*kn*kn*kn;
-      if(an<0.012){NDB[i]=255;continue}
-      b=(an/0.82*NB)|0;if(b>=NB)b=NB-1;else if(b<0)b=0;
-      NDB[i]=b;NCT[b]++;
-    }
-    acc=0;for(b=0;b<NB;b++){NOF[b]=acc;acc+=NCT[b]}
-    for(i=0;i<N;i++){
-      if(NDB[i]===255)continue;
-      var p3=NOF[NDB[i]]++*3,k3=SC[i*3+2];
-      /* size attenuation WITH A CAP. k reaches ~1.5 at the near edge, so the old
-         uncapped 0.5+k*k*2.1 grew a front node into a 5px disc. */
-      var rn=(0.5+k3*k3*2.1)*HUB[i]; if(rn>3.4)rn=3.4;
-      NDO[p3]=SC[i*3];NDO[p3+1]=SC[i*3+1];NDO[p3+2]=rn;
-    }
-    /* BLOOM first, then the sharp dot on top of it. Under additive compositing a wide,
-       very dim disc under a small bright one reads as light spilling off the node - which
-       is what a bloom pass is, done in the cheapest possible way. Same buffer, same
-       bucket loop, 24 more fills a frame. */
-    cur=0;
-    for(b=0;b<NB;b++){
-      var nb2=NCT[b];if(!nb2)continue;
-      ctx.fillStyle=BCOL[b];
-      ctx.beginPath();
-      for(i=0;i<nb2;i++){
-        var ob=(cur+i)*3,rb=NDO[ob+2]*3.1;
-        ctx.moveTo(NDO[ob]+rb,NDO[ob+1]);
-        ctx.arc(NDO[ob],NDO[ob+1],rb,0,6.284);
-      }
-      ctx.fill();
-      cur+=nb2;
-    }
-    cur=0;
-    for(b=0;b<NB;b++){
-      var n3=NCT[b];if(!n3)continue;
-      ctx.fillStyle=NCOL[b];
-      ctx.beginPath();
-      for(i=0;i<n3;i++){
-        var o3=(cur+i)*3,rr=NDO[o3+2];
-        ctx.moveTo(NDO[o3]+rr,NDO[o3+1]);
-        ctx.arc(NDO[o3],NDO[o3+1],rr,0,6.284);
-      }
-      ctx.fill();
-      cur+=n3;
-    }
-    /* THE PULSES TRAVEL. They used to blink between one fixed adjacent pair and then
-       reset to another fixed pair, which reads as flicker rather than as signal. Each one
-       now WALKS a run of consecutive nodes before respawning somewhere else, and drags a
-       three-dot comet trail behind it, so the eye can follow a thing moving down a
-       strand. Under additive compositing the trail is light, not smear. */
-    for(var q=0;q<PULSE.length;q++){
-      var pu=PULSE[q];pu.p+=pu.s;
-      if(pu.run===undefined){pu.run=0;pu.len=14+((q*5)%22)}
-      if(pu.p>=1){
-        pu.p-=1;pu.a++;pu.run++;
-        if(pu.run>pu.len||pu.a>=N-1){pu.a=((q*37+((t*11)|0))%(N-2));pu.run=0}
-        pu.b=pu.a+1;
-      }
-      if(pu.b===0||pu.b>=N){pu.a=(q*7)%(N-2);pu.b=pu.a+1;pu.p=0}
-      var ia=pu.a*3,ib=pu.b*3,e=pu.p;
-      var K=SC[ia+2]+(SC[ib+2]-SC[ia+2])*e;
-      /* head, then two trailing dots one and two segments back */
-      for(var tq=0;tq<3;tq++){
-        var ta=pu.a-tq; if(ta<0)break;
-        var tb=ta+1; if(tb>=N)break;
-        var t3=ta*3,u3=tb*3;
-        var TX=SC[t3]+(SC[u3]-SC[t3])*e, TY=SC[t3+1]+(SC[u3+1]-SC[t3+1])*e;
-        var al=(tq===0?0.80:tq===1?0.30:0.12)*K*K;
-        if(al<0.01)continue;
-        ctx.fillStyle='rgba(255,252,242,'+al.toFixed(3)+')';
-        ctx.beginPath();ctx.arc(TX,TY,(tq===0?1.7:1.1)+K*1.0,0,6.284);ctx.fill();
-      }
-    }
-    ctx.globalCompositeOperation='source-over';
-  }
-  /* the filament is motion too: one frame under reduced motion, then still */
-  var emaDt=16.7,govFr=0,gov=0,lastTS=0;
-  function draw(ts){
-    raf=null;if(!live)return;
-    /* rescued from the particle field, which was the only place in the document that ever
-       adapted to a slow device - and it never ran. One-way by design: a phone that cannot
-       hold the budget thins the filament once and keeps it thin, so nothing can oscillate. */
-    if(!gov&&ts){
-      if(lastTS){var dd=ts-lastTS;if(dd>0&&dd<200)emaDt+=(dd-emaDt)*.07}
-      lastTS=ts;govFr++;
-      if(govFr>45&&emaDt>26){gov=1;LWIN=16;if(DPR>1.25){DPR=1.25;size()}}
-    }
-    body();if(reduced)return;raf=requestAnimationFrame(draw)
-  }
-  function start(){if(!live){live=true;if(!raf)raf=requestAnimationFrame(draw)}}
-  function stop(){live=false;if(raf){cancelAnimationFrame(raf);raf=null}}
-  size();body();
+  ctx.globalAlpha=1;
+}
+
+function draw(){ paintOrbs(); if(live)raf=requestAnimationFrame(draw); else raf=null; }
+function start(){ if(!live){live=true; if(!t0)t0=performance.now();
+  if(!raf)raf=requestAnimationFrame(draw)} }
+function stop(){ live=false; if(raf){cancelAnimationFrame(raf);raf=null} }
+size();
+if(reduced){ paintOrbs(); }
+else {
   addEventListener('resize',function(e){
-    if(window.__mSoftRz&&window.__mSoftRz(e,function(){size();body()}))return;
-    size();body();
+    if(window.__mSoftRz&&window.__mSoftRz(e,function(){size();paintOrbs()}))return;
+    size();paintOrbs();
   });
   if(window.IntersectionObserver){
-    new IntersectionObserver(function(es){es[0].isIntersecting?start():stop()},{threshold:0.01}).observe(cv);
-  }else start();
+    new IntersectionObserver(function(es){es[0].isIntersecting?start():stop()},
+      {threshold:0.01}).observe(cv);
+  } else start();
+}
 })();
 </script>
 <script>
