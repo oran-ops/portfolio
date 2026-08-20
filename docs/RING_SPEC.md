@@ -121,6 +121,57 @@ Profile as built, in (z, y), z forward, from the top front corner clockwise:
 ( 0.560, -0.250)   the overhang: the face steps out over the base
 ```
 
+## THE MACHINE, BUILD 3 — the work plan that replaces guessing
+
+Builds 1 and 2 were one extruded profile with the whole front painted into the fragment
+shader. That is why it is not one to one and no amount of shader polish would have got it
+there: on the reference the front is an ASSEMBLY, and its parting lines, pocket walls and
+draft angles are geometry. A line painted where a seam should be reads as a line, not a seam.
+
+The reader will also be able to orbit the finished scene, which removes the last excuse: a
+detail that only works from one angle is not allowed anywhere in this model.
+
+### Dimensions — from the product, not from a pixel ruler
+
+Perspective screenshots are a bad ruler; two readings off the same view disagreed by 30% on
+the screen's aspect. The Macintosh 128K is a documented product, so the frame is:
+
+```
+case            9.7 W x 13.5 H x 11.2 D inches      ->  0.97 x 1.35 x 1.12   (1 unit = 10 in)
+CRT active      512 x 342 px at 72 dpi              ->  7.11 x 4.75 in, aspect 1.50
+floppy slot     ~3.6 in wide
+```
+
+The reference supplies what the spec sheet cannot: the part breakdown, where the parting lines
+run, how deep the pockets are, and the finish.
+
+### Parts
+
+| # | part | how it is built |
+| --- | --- | --- |
+| 1 | case shell | profile extrusion, front plane set back to z = 0.500 to leave room for the bezel |
+| 2 | front bezel | rounded-rect FRAME extruded in z, 0.060 thick, with a real opening for the screen |
+| 3 | screen well | the frame's inner wall, drafted, plus a back plate |
+| 4 | tube surround | dark moulding inside the well |
+| 5 | glass | 1.50 aspect, the page's own charcoal |
+| 6 | disk pocket | a second, shallower frame on the bezel face, with its own back plate |
+| 7 | base plinth | rounded box under the bezel, set back — the overhang becomes real |
+| 8 | rear | handle recess, two vent grids, port row |
+
+### The one new primitive
+
+`frameXY(outer, inner, z0, z1, draft)` — a rounded-rectangular frame extruded along z with a
+drafted inner wall. Both outlines are sampled by casting a ray from the centre and bisecting on
+the rounded-rect distance field, which matches outer and inner sample for sample and needs no
+special case at the corners. Everything else is built from the two primitives already written:
+the rounded box and the rounded profile extrusion.
+
+### What stays in the shader, and why
+
+The logo, the vent slits and the mould texture. All three are surface markings with no depth
+worth modelling — the vents get a normal perturbation so they still catch light as grooves.
+Everything with a WALL is geometry now.
+
 ## Build order agreed with the owner
 1. The machine, alone, until it matches the photograph  — **first pass done, `lab/machine.html`**
 2. One floppy, alone — body, texture, sheen
