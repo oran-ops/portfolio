@@ -158,9 +158,54 @@ rAF in a hidden tab. The GPU timing above — which does not depend on rAF caden
 draw is effectively free. **Before believing a frame-rate number, check that the tab was
 visible when it was taken.**
 
+## In page 2 (r73)
+
+Ported into the statement section, reading the same `split` the sentence morph drives: one orb
+while "One intelligence built the world." holds, two when "Two will build the next." arrives.
+The second is held back until split 0.45 and then arrives quickly, so it reads as another one
+appearing rather than as a shape that was always there fading up. Its noise clock runs 11.3s
+off the first, because otherwise the pair is one body drawn twice.
+
+Sizing is ours, not copied, and for a reason. The reference orb has a whole viewport: 244px on
+a 911px-tall window. Ours has a 530x510 panel beside the sentence. Copying the ratio would put
+33,000 points into a 137px orb - four times the reference's density, which turns the lattice
+into a lump. So the diameter comes from the panel and **the point count follows the area**,
+holding dots-per-pixel at the reference's value. Prefixes of the buffer are valid samples
+because the cloud is shuffled, so this costs a draw range and no rebuild.
+
+| | diameter | points | points/px^2 |
+| --- | --- | --- | --- |
+| reference | 244px | 33,000 | 0.706 |
+| desktop panel 530x510 | 212px | 24,900 | 0.705 |
+| phone panel 390x380 | 156px | 13,489 | 0.82 |
+
+Measured on the built page: 205px against 212 predicted on desktop, and both orbs sit inside
+the panel with margins at 390x380.
+
+One correction along the way: the camera was first sized to the nominal unit radius, which drew
+the orb about 8% wide - enough that a pair touched both edges of the panel. The wobble is
+snoise in [-1,1] over 6, so the radius runs 0.833 to 1.167 and the silhouette is the maximum
+around the visible rim. Sizing to 1.15 instead of 1.0 fixed it.
+
+### The bug this round nearly shipped
+
+The renderer is injected into the SAME closure as the sentence engine. It was first called
+`paint` - and so is the sentence's own painter. A second function declaration of that name does
+not shadow or warn; it silently replaces the first. The sentence morph was dead, and nothing
+looked obviously wrong: the orbs still answered the scroll, the text still sat there, and only
+a check of every character's `visibility` showed both sentences stuck on screen at once.
+
+Worse, the collision guard written to catch it reported a clean bill. It found the closure's
+end by searching for `})();` - a string the injected code itself contains - so it compared the
+sentence engine against a third of the new block and missed the clash entirely. Bounding the
+region by the injection marker, which is unique by construction, found it at once.
+
+And then the fixed guard fired on the comment explaining the trap, because that comment
+contains the declaration it warns about. The guard now strips block comments before scanning.
+That is the third time this session a guard has matched prose rather than code; a guard that
+does is a guard against writing documentation.
+
 ## Still open
 
-- Port into page 2 of `/m/`, tied to the sentence morph: one orb on the first line, two on the
-  second.
-- Placement and spacing of the pair against the sentence composition.
-- A true frame-rate reading with the tab visible, on the phone as well as the desktop.
+- A true frame-rate reading with the tab visible, on the phone as well as the desktop. Every
+  reading taken so far came from a hidden tab, where Chrome throttles rAF to about 1fps.

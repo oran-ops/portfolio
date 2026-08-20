@@ -5876,123 +5876,180 @@ document.querySelectorAll('.redx').forEach(function(r){
     drive(0);
   }
 
-  /* ---- R71: the point-cloud spheres. Observed on vanlent.dev, built here rather than lifted.
-   A globe of small points banded into horizontal belts - the banding is what makes a cloud of
-   dots read as a sphere instead of as noise - turning on its own axis, matte, no glow and no
-   shadowBlur (both are expensive and both are glossy).
+  /* ---- R73: the statement orb. Not observed and reconstructed - read out of vanlent.dev's own
+   bundle and rebuilt on its numbers. The hero state there is the preset named `bubbly`:
+   33,000 Fibonacci points, shuffled, displaced radially by snoise(vec4(p/1.5, t)) at
+   amplitude 1/6, turning 0.3 rad/s about Y, lit by two rim lights hard left and hard right,
+   seen from z=8 through a 50-degree field as hard one-pixel points. docs/ORB_SPEC.md carries
+   the derivation and the arithmetic that checks it.
 
-   ONE becomes TWO, because the sentences say so. "One intelligence built the world." holds a
-   single sphere; "Two will build the next." brings the second in. The count on screen is the
-   count in the line.
-
-   `split` is the same 0..1 the morph already drives, so the spheres and the words move on one
-   clock and cannot drift apart. ---- */
+   ONE BECOMES TWO because the sentences say so. "One intelligence built the world." holds a
+   single body; "Two will build the next." brings the second in. The count on screen is the
+   count in the line, and `split` - the same 0..1 the morph already drives - is what carries
+   it, so the orbs and the words move on one clock. ---- */
 var cv=document.getElementById('stnf');if(!cv)return;
-var ctx=cv.getContext('2d'),W=0,H=0,DPR=1,raf=null,live=false,t0=0;
+var gl=null;
+try{
+  gl=cv.getContext('webgl',{alpha:true,antialias:false,premultipliedAlpha:true,
+                            powerPreference:'high-performance'})
+   ||cv.getContext('experimental-webgl',{alpha:true,antialias:false});
+}catch(e){}
+/* no WebGL is not a failure state: the sentence is the content and it carries the section
+   on its own. An empty box beats a broken one. */
+if(!gl)return;
 
-/* R72 - rebuilt after looking at the reference under magnification, where two things showed
-   up that a Fibonacci point cloud can never produce:
-
-     1. The interior is a REGULAR dot grid, close to a halftone screen. Fibonacci spacing is
-        deliberately irregular, so it reads as scatter and never as a screen. Points here sit
-        on a lat/long grid instead.
-     2. The silhouette is SCALLOPED - a rim of overlapping rounded lobes standing proud of the
-        sphere. That is not a shading effect, it is geometry: the radius is displaced outward
-        by a field of smooth bumps, and at the limb those bumps break the circle.
-
-   The bump field is evaluated ONCE at build time - the geometry never changes, only the
-   camera turns - so the per-frame cost is unchanged no matter how many bumps there are. */
-var PTS=[],NP=0;
-function build(){
-  var ROWS = W<520 ? 74 : (W<900 ? 104 : 132);
-  var BUMPS=38, AMP=0.20, SIG=0.20;
-  /* bump centres, fixed for the life of the page */
-  var bc=[];
-  for(var b=0;b<BUMPS;b++){
-    var u=Math.random()*2-1, th=Math.random()*Math.PI*2, rr=Math.sqrt(1-u*u);
-    bc.push([Math.cos(th)*rr, u, Math.sin(th)*rr]);
+/* ---------------------------------------------------------------- the cloud, built once
+   Fibonacci, then Fisher-Yates on the reference's own little LCG. The shuffle is not
+   cosmetic. Every point is opaque and they are drawn in buffer order, so buffer order
+   decides which of two points landing on one pixel is the one you see - ordered points
+   band. It also means ANY PREFIX of the buffer is a uniform sample of the sphere, which is
+   how the density below is tuned without ever rebuilding the geometry. */
+var NMAX=33000, PTS=(function(){
+  var a=new Float32Array(3*NMAX), GA=Math.PI*(3-Math.sqrt(5)), i;
+  for(i=0;i<NMAX;i++){
+    var y=1-(i/(NMAX-1))*2, r=Math.sqrt(Math.max(0,1-y*y)), th=GA*i;
+    a[3*i]=Math.cos(th)*r; a[3*i+1]=y; a[3*i+2]=Math.sin(th)*r;
   }
-  PTS.length=0;
-  for(var i=0;i<ROWS;i++){
-    var v=(i+0.5)/ROWS, phi=Math.acos(1-2*v);          /* equal-area rows */
-    var sp=Math.sin(phi), y=Math.cos(phi);
-    var cols=Math.max(4, Math.round(ROWS*2*sp));       /* even spacing along each row */
-    for(var j=0;j<cols;j++){
-      var th=(j/cols)*Math.PI*2 + (i%2)*(Math.PI/cols); /* half-step offset per row */
-      var x=Math.cos(th)*sp, z=Math.sin(th)*sp;
-      /* displace outward by the bump field */
-      var d=0;
-      for(var k=0;k<BUMPS;k++){
-        var c=bc[k], dot=x*c[0]+y*c[1]+z*c[2];
-        var ang=1-dot;                                  /* 0 at the centre of a bump */
-        if(ang<SIG){ var t=1-ang/SIG; t=t*t*(3-2*t); if(t>d)d=t; }
-      }
-      if(d>1)d=1;
-      var r=1+AMP*d;
-      PTS.push([x*r, y*r, z*r, 0.62+0.38*d]);           /* the lobes read brighter */
-    }
+  var e=12345, idx=new Int32Array(NMAX), j, t;
+  for(i=0;i<NMAX;i++)idx[i]=i;
+  for(i=NMAX-1;i>0;i--){ e=(9301*e+49297)%233280; j=Math.floor((e/233280)*(i+1));
+    t=idx[i];idx[i]=idx[j];idx[j]=t; }
+  var o=new Float32Array(3*NMAX);
+  for(i=0;i<NMAX;i++){ var q=3*idx[i], d=3*i; o[d]=a[q];o[d+1]=a[q+1];o[d+2]=a[q+2]; }
+  return o;
+})();
+
+/* ---------------------------------------------------------------- program */
+var prog=(function(){
+  function sh(ty,src){
+    var x=gl.createShader(ty);gl.shaderSource(x,src);gl.compileShader(x);
+    if(!gl.getShaderParameter(x,gl.COMPILE_STATUS))return null;
+    return x;
   }
-  NP=PTS.length;
+  var v=sh(gl.VERTEX_SHADER,'\nattribute vec3 aPos;\nuniform mat4 uProj, uView, uModel;\nuniform mat3 uNrm;\nuniform float uTime, uPt;\nvarying vec3 vN;\n\nvec4 permute(vec4 x) {\n    return mod(((x * 34.0) + 1.0) * x, 289.0);\n}\nfloat permute(float x) {\n    return floor(mod(((x * 34.0) + 1.0) * x, 289.0));\n}\nvec4 taylorInvSqrt(vec4 r) {\n    return 1.79284291400159 - 0.85373472095314 * r;\n}\nfloat taylorInvSqrt(float r) {\n    return 1.79284291400159 - 0.85373472095314 * r;\n}\n\nvec4 grad4(float j, vec4 ip) {\n    const vec4 ones = vec4(1.0, 1.0, 1.0, -1.0);\n    vec4 p, s;\n\n    p.xyz = floor(fract(vec3(j) * ip.xyz) * 7.0) * ip.z - 1.0;\n    p.w = 1.5 - dot(abs(p.xyz), ones.xyz);\n    s = vec4(lessThan(p, vec4(0.0)));\n    p.xyz = p.xyz + (s.xyz * 2.0 - 1.0) * s.www;\n\n    return p;\n}\n\nfloat snoise(vec4 v) {\n\n  const vec2 C = vec2(0.138196601125010504,  // (5 - sqrt(5))/20  G4\n  0.309016994374947451); // (sqrt(5) - 1)/4   F4\n  // First corner\n  vec4 i = floor(v + dot(v, C.yyyy));\n  vec4 x0 = v - i + dot(i, C.xxxx);\n\n  // Other corners\n\n  // Rank sorting originally contributed by Bill Licea-Kane, AMD (formerly ATI)\n  vec4 i0;\n\n  vec3 isX = step(x0.yzw, x0.xxx);\n  vec3 isYZ = step(x0.zww, x0.yyz);\n  //  i0.x = dot( isX, vec3( 1.0 ) );\n  i0.x = isX.x + isX.y + isX.z;\n  i0.yzw = 1.0 - isX;\n\n  //  i0.y += dot( isYZ.xy, vec2( 1.0 ) );\n  i0.y += isYZ.x + isYZ.y;\n  i0.zw += 1.0 - isYZ.xy;\n\n  i0.z += isYZ.z;\n  i0.w += 1.0 - isYZ.z;\n\n  // i0 now contains the unique values 0,1,2,3 in each channel\n  vec4 i3 = clamp(i0, 0.0, 1.0);\n  vec4 i2 = clamp(i0 - 1.0, 0.0, 1.0);\n  vec4 i1 = clamp(i0 - 2.0, 0.0, 1.0);\n\n  //  x0 = x0 - 0.0 + 0.0 * C \n  vec4 x1 = x0 - i1 + 1.0 * C.xxxx;\n  vec4 x2 = x0 - i2 + 2.0 * C.xxxx;\n  vec4 x3 = x0 - i3 + 3.0 * C.xxxx;\n  vec4 x4 = x0 - 1.0 + 4.0 * C.xxxx;\n\n  // Permutations\n  i = mod(i, 289.0);\n  float j0 = permute(permute(permute(permute(i.w) + i.z) + i.y) + i.x);\n  vec4 j1 = permute(permute(permute(permute(i.w + vec4(i1.w, i2.w, i3.w, 1.0)) + i.z + vec4(i1.z, i2.z, i3.z, 1.0)) + i.y + vec4(i1.y, i2.y, i3.y, 1.0)) + i.x + vec4(i1.x, i2.x, i3.x, 1.0));\n  // Gradients\n  // ( 7*7*6 points uniformly over a cube, mapped onto a 4-octahedron.)\n  // 7*7*6 = 294, which is close to the ring size 17*17 = 289.\n\n  vec4 ip = vec4(1.0 / 294.0, 1.0 / 49.0, 1.0 / 7.0, 0.0);\n\n  vec4 p0 = grad4(j0, ip);\n  vec4 p1 = grad4(j1.x, ip);\n  vec4 p2 = grad4(j1.y, ip);\n  vec4 p3 = grad4(j1.z, ip);\n  vec4 p4 = grad4(j1.w, ip);\n\n  // Normalise gradients\n  vec4 norm = taylorInvSqrt(vec4(dot(p0, p0), dot(p1, p1), dot(p2, p2), dot(p3, p3)));\n  p0 *= norm.x;\n  p1 *= norm.y;\n  p2 *= norm.z;\n  p3 *= norm.w;\n  p4 *= taylorInvSqrt(dot(p4, p4));\n\n  // Mix contributions from the five corners\n  vec3 m0 = max(0.6 - vec3(dot(x0, x0), dot(x1, x1), dot(x2, x2)), 0.0);\n  vec2 m1 = max(0.6 - vec2(dot(x3, x3), dot(x4, x4)), 0.0);\n  m0 = m0 * m0;\n  m1 = m1 * m1;\n  return 49.0 * (dot(m0 * m0, vec3(dot(p0, x0), dot(p1, x1), dot(p2, x2))) + dot(m1 * m1, vec2(dot(p3, x3), dot(p4, x4))));\n}\n\n// === CURL NOISE FUNCTIONS ===\n// 3D Simplex Noise (simpler than 4D for curl noise)\nvec3 mod289_3(vec3 x) {\nreturn x - floor(x * (1.0 / 289.0)) * 289.0;\n}\n\nvec4 mod289_4(vec4 x) {\nreturn x - floor(x * (1.0 / 289.0)) * 289.0;\n}\n\nvec4 permute_curl(vec4 x) {\nreturn mod289_4(((x*34.0)+1.0)*x);\n}\n\nvec4 taylorInvSqrt_curl(vec4 r) {\nreturn 1.79284291400159 - 0.85373472095314 * r;\n}\n\nfloat snoise3(vec3 v) {\nconst vec2 C = vec2(1.0/6.0, 1.0/3.0);\nconst vec4 D = vec4(0.0, 0.5, 1.0, 2.0);\n\n// First corner\nvec3 i  = floor(v + dot(v, C.yyy));\nvec3 x0 = v - i + dot(i, C.xxx);\n\n// Other corners\nvec3 g = step(x0.yzx, x0.xyz);\nvec3 l = 1.0 - g;\nvec3 i1 = min(g.xyz, l.zxy);\nvec3 i2 = max(g.xyz, l.zxy);\n\nvec3 x1 = x0 - i1 + C.xxx;\nvec3 x2 = x0 - i2 + C.yyy;\nvec3 x3 = x0 - D.yyy;\n\n// Permutations\ni = mod289_3(i);\nvec4 p = permute_curl(permute_curl(permute_curl(\n           i.z + vec4(0.0, i1.z, i2.z, 1.0))\n         + i.y + vec4(0.0, i1.y, i2.y, 1.0))\n         + i.x + vec4(0.0, i1.x, i2.x, 1.0));\n\n// Gradients\nfloat n_ = 0.142857142857;\nvec3 ns = n_ * D.wyz - D.xzx;\n\nvec4 j = p - 49.0 * floor(p * ns.z * ns.z);\n\nvec4 x_ = floor(j * ns.z);\nvec4 y_ = floor(j - 7.0 * x_);\n\nvec4 x = x_ * ns.x + ns.yyyy;\nvec4 y = y_ * ns.x + ns.yyyy;\nvec4 h = 1.0 - abs(x) - abs(y);\n\nvec4 b0 = vec4(x.xy, y.xy);\nvec4 b1 = vec4(x.zw, y.zw);\n\nvec4 s0 = floor(b0) * 2.0 + 1.0;\nvec4 s1 = floor(b1) * 2.0 + 1.0;\nvec4 sh = -step(h, vec4(0.0));\n\nvec4 a0 = b0.xzyw + s0.xzyw * sh.xxyy;\nvec4 a1 = b1.xzyw + s1.xzyw * sh.zzww;\n\nvec3 p0 = vec3(a0.xy, h.x);\nvec3 p1 = vec3(a0.zw, h.y);\nvec3 p2 = vec3(a1.xy, h.z);\nvec3 p3 = vec3(a1.zw, h.w);\n\n// Normalise gradients\nvec4 norm = taylorInvSqrt_curl(vec4(dot(p0,p0), dot(p1,p1), dot(p2,p2), dot(p3,p3)));\np0 *= norm.x;\np1 *= norm.y;\np2 *= norm.z;\np3 *= norm.w;\n\n// Mix final noise value\nvec4 m = max(0.6 - vec4(dot(x0,x0), dot(x1,x1), dot(x2,x2), dot(x3,x3)), 0.0);\nm = m * m;\nreturn 42.0 * dot(m*m, vec4(dot(p0,x0), dot(p1,x1), dot(p2,x2), dot(p3,x3)));\n}\n\n// Vectorized noise for curl calculation\n\nvoid main(){\n  /* the reference\'s ORGANIC wobble, verbatim as mathematics: displacement is radial and the\n     fourth noise axis is the clock, so the body swells and dents in place instead of shearing.\n     That is what makes the silhouette read as a stone rather than as noise. */\n  vec3 p0 = aPos;\n  vec3 n  = normalize(p0 + vec3(0.0001));\n  vec3 p  = p0 + n * snoise(vec4(p0 / 1.5, uTime)) / 6.0;\n\n  /* the shading normal is the UNDISPLACED direction. Take it from the displaced surface and\n     the lighting crawls with the wobble; on the reference it does not crawl. */\n  vN = normalize(uNrm * n);\n\n  vec4 vp = uView * uModel * vec4(p, 1.0);\n  gl_Position = uProj * vp;\n  /* 5/-z is the reference\'s own falloff. It lands under a pixel at every depth and every\n     driver clamps to one, so uPt carries device pixel ratio to keep the dot one CSS pixel\n     wide on a retina panel instead of half of one. */\n  gl_PointSize = uPt * 5.0 / (-vp.z);\n}\n'), f=sh(gl.FRAGMENT_SHADER,'\nprecision highp float;\nvarying vec3 vN;\nuniform vec3 uBase;\nuniform float uAlpha;\n\nvoid main(){\n  /* two lights, hard left and hard right, both tipped slightly toward the viewer: a bright\n     band around the equator and near-black poles. 0.9 gain over a 0.1 floor. */\n  vec3 L = normalize(vec3(-1.0, 0.0, 0.5));\n  vec3 R = normalize(vec3( 1.0, 0.0, 0.5));\n  float lit = (max(dot(vN, L), 0.0) + max(dot(vN, R), 0.0)) * 0.9 + 0.1;\n  gl_FragColor = vec4(uBase * lit * uAlpha, uAlpha);\n}\n');
+  if(!v||!f)return null;
+  var p=gl.createProgram();gl.attachShader(p,v);gl.attachShader(p,f);gl.linkProgram(p);
+  return gl.getProgramParameter(p,gl.LINK_STATUS)?p:null;
+})();
+if(!prog)return;
+gl.useProgram(prog);
+
+var vbo=gl.createBuffer();
+gl.bindBuffer(gl.ARRAY_BUFFER,vbo);
+gl.bufferData(gl.ARRAY_BUFFER,PTS,gl.STATIC_DRAW);
+var aLoc=gl.getAttribLocation(prog,'aPos');
+gl.enableVertexAttribArray(aLoc);
+gl.vertexAttribPointer(aLoc,3,gl.FLOAT,false,0,0);
+
+var U={};
+['uProj','uView','uModel','uNrm','uTime','uPt','uBase','uAlpha'].forEach(function(k){
+  U[k]=gl.getUniformLocation(prog,k);
+});
+
+/* ---------------------------------------------------------------- matrices, by hand */
+var TAN25=Math.tan(25*Math.PI/180);
+function perspective(aspect,near,far){
+  var f=1/TAN25;                        /* 1/tan(fov/2) with fov = 50, the reference's field */
+  var nf=1/(near-far);
+  return new Float32Array([f/aspect,0,0,0, 0,f,0,0, 0,0,(far+near)*nf,-1, 0,0,2*far*near*nf,0]);
 }
+/* uniform scale, then a turn about Y, then a slide along X. The scale sits in the MATRIX and
+   not in the shader on purpose: the wobble reads the raw position, so scaling there would
+   change the noise frequency and the body would change shape as it grew. */
+function model(ang,sc,tx){
+  var c=Math.cos(ang), sn=Math.sin(ang);
+  return new Float32Array([sc*c,0,-sc*sn,0, 0,sc,0,0, sc*sn,0,sc*c,0, tx,0,0,1]);
+}
+function nrm(ang){
+  var c=Math.cos(ang), sn=Math.sin(ang);
+  return new Float32Array([c,0,-sn, 0,1,0, sn,0,c]);   /* uniform scale leaves normals alone */
+}
+
+/* ---------------------------------------------------------------- fit
+   The reference draws 33,000 points across 244px. Ours has a panel, not a viewport, so the
+   diameter comes from the panel and the COUNT FOLLOWS THE AREA - that is what holds
+   dots-per-pixel at the reference's value instead of packing four times its density into a
+   third of the room and turning the lattice into a lump. */
+var W=0,H=0,DPR=1,PROJ=null,NP=NMAX,CAMD=8,HW=0,VIEW=new Float32Array([1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]);
 function size(){
   var r=cv.getBoundingClientRect();
-  DPR=Math.min(window.devicePixelRatio||1, 2);
+  DPR=Math.min(window.devicePixelRatio||1,2);
   W=Math.max(1,Math.round(r.width)); H=Math.max(1,Math.round(r.height));
   cv.width=Math.round(W*DPR); cv.height=Math.round(H*DPR);
-  ctx.setTransform(DPR,0,0,DPR,0,0);
-  build();
+  gl.viewport(0,0,cv.width,cv.height);
+
+  var D=Math.min(W*0.40,H*0.44);              /* on-screen diameter, sized so TWO still fit */
+  NP=Math.round(NMAX*(D/244)*(D/244));
+  if(NP<9000)NP=9000; if(NP>NMAX)NP=NMAX;
+  /* 1.15, not 1.0: the wobble is snoise in [-1,1] over 6, so the radius runs 0.833 to 1.167
+     and the SILHOUETTE is the maximum around the visible rim, which sits near the top of that
+     range. Sizing to the nominal radius drew it about 8% wide - enough that a pair touched
+     both edges of the panel. */
+  CAMD=1.15*H/(D*TAN25);
+  VIEW[14]=-CAMD;
+  HW=CAMD*TAN25*(W/H);                        /* half-width at the origin plane, in world units */
+  PROJ=perspective(W/H,0.1,1000);
 }
 
-/* one sphere, drawn at a centre with a radius and an overall alpha */
-function orb(cx,cy,rad,ry,rx,alpha){
-  if(alpha<=0.004)return;
-  var cy0=Math.cos(rx),sy0=Math.sin(rx),cz=Math.cos(ry),sz=Math.sin(ry);
-  for(var i=0;i<NP;i++){
-    var p=PTS[i],x=p[0],y=p[1],z=p[2];
-    var x1=x*cz - z*sz, z1=x*sz + z*cz;          /* yaw */
-    var y1=y*cy0 - z1*sy0, z2=y*sy0 + z1*cy0;    /* pitch */
-    var d=1/(1.9 - z2*0.55);                      /* cheap perspective */
-    var sx=cx + x1*rad*d, sy=cy + y1*rad*d;
-    var near=(z2+1)/2;                            /* 1 at the front */
-    var aa=alpha*p[3]*(0.05+0.95*near*near*near);
-    if(aa<=0.01)continue;
-    var w=1;
-    ctx.globalAlpha=aa;
-    ctx.fillRect(sx,sy,1,1);
+/* ---------------------------------------------------------------- paint
+   NOT named `paint`. The sentence engine above declares `function paint(q)` in this same
+   closure, and a second declaration of that name silently wins - which kills the sentence
+   morph while leaving every other symptom looking normal. */
+var raf=null,live=false,t0=0,tHold=0;
+function drawOrbs(){
+  var e=(typeof split==='number'?split:0); if(e<0)e=0; if(e>1)e=1;
+  var slide=e*e*(3-2*e);
+  /* the second holds off, then arrives quickly - it should read as ANOTHER ONE APPEARING,
+     not as a shape that was always there fading up */
+  var b=(e-0.45)/0.45; if(b<0)b=0; if(b>1)b=1;
+  var grow=b*b*(3-2*b);
+  var t=tHold;
+
+  gl.clearColor(0,0,0,0);
+  gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);
+  gl.enable(gl.DEPTH_TEST);
+  gl.enable(gl.BLEND);
+  gl.blendFunc(gl.ONE,gl.ONE_MINUS_SRC_ALPHA);   /* premultiplied, to match the context */
+
+  gl.uniformMatrix4fv(U.uProj,false,PROJ);
+  gl.uniformMatrix4fv(U.uView,false,VIEW);
+  gl.uniform1f(U.uPt,DPR);
+  gl.uniform3f(U.uBase,0.85,0.88,0.92);
+
+  var sep=HW*0.52, ang=t*0.3;
+
+  gl.uniform1f(U.uTime,t);
+  gl.uniform1f(U.uAlpha,1);
+  gl.uniformMatrix4fv(U.uModel,false,model(ang,1,-sep*slide));
+  gl.uniformMatrix3fv(U.uNrm,false,nrm(ang));
+  gl.drawArrays(gl.POINTS,0,NP);
+
+  if(grow>0.004){
+    /* 11.3 seconds off the first clock, so the pair is two bodies and not one drawn twice */
+    var a2=ang+Math.PI;
+    gl.uniform1f(U.uTime,t+11.3);
+    gl.uniform1f(U.uAlpha,grow);
+    gl.uniformMatrix4fv(U.uModel,false,model(a2,0.55+0.45*grow,sep*slide));
+    gl.uniformMatrix3fv(U.uNrm,false,nrm(a2));
+    gl.drawArrays(gl.POINTS,0,NP);
   }
 }
 
-function paintOrbs(){
-  ctx.clearRect(0,0,W,H);
-  var sp=(typeof split==='number'?split:0);
-  if(sp<0)sp=0; if(sp>1)sp=1;
-  var e=sp*sp*(3-2*sp);                            /* the second arrives, it does not pop */
-  var base=Math.min(W,H)*0.355, cy=H*0.5;
-  var t=(performance.now()-t0)/1000;
-
-  ctx.fillStyle='#E9E7DF';
-  if(e<0.999){                                     /* ONE */
-    var gap=W*0.20*e, r1=base*(1-0.16*e);
-    orb(W*0.5-gap, cy, r1, t*0.16, -0.34, 1);
-    if(e>0.004) orb(W*0.5+gap, cy, base*(0.42+0.42*e), -t*0.13-0.6, -0.24, e);
-  } else {                                         /* TWO */
-    var g2=W*0.20;
-    orb(W*0.5-g2, cy, base*0.84, t*0.16, -0.34, 1);
-    orb(W*0.5+g2, cy, base*0.84, -t*0.13-0.6, -0.24, 1);
-  }
-  ctx.globalAlpha=1;
+function draw(ts){
+  if(!t0)t0=ts;
+  tHold=(ts-t0)/1000;
+  drawOrbs();
+  raf=live?requestAnimationFrame(draw):null;
 }
-
-function draw(){ paintOrbs(); if(live)raf=requestAnimationFrame(draw); else raf=null; }
-function start(){ if(!live){live=true; if(!t0)t0=performance.now();
-  if(!raf)raf=requestAnimationFrame(draw)} }
+function start(){ if(!live){ live=true; t0=0; if(!raf)raf=requestAnimationFrame(draw); } }
 function stop(){ live=false; if(raf){cancelAnimationFrame(raf);raf=null} }
+
 size();
-if(reduced){ paintOrbs(); }
-else {
+if(reduced){ drawOrbs(); }
+else{
   addEventListener('resize',function(e){
-    if(window.__mSoftRz&&window.__mSoftRz(e,function(){size();paintOrbs()}))return;
-    size();paintOrbs();
+    if(window.__mSoftRz&&window.__mSoftRz(e,function(){size();drawOrbs()}))return;
+    size();drawOrbs();
   });
   if(window.IntersectionObserver){
     new IntersectionObserver(function(es){es[0].isIntersecting?start():stop()},
