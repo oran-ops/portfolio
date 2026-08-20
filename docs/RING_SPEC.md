@@ -172,6 +172,72 @@ The logo, the vent slits and the mould texture. All three are surface markings w
 worth modelling — the vents get a normal perturbation so they still catch light as grooves.
 Everything with a WALL is geometry now.
 
+## BUILD 4 — measured, not estimated
+
+Build 3 was still not close, and the owner was right about why: I had been building the whole
+thing and then adjusting it by eye. This pass measured one quantity at a time, checked the model
+against it, and only then moved on.
+
+### The instrument
+
+The reference is a 1920x1080 still from Sketchfab's own CDN, so it can be measured in pixels
+instead of looked at. Two things made the measurements trustworthy:
+
+**A homography, not a scale factor.** The face is turned about 38 degrees and shot with a real
+lens, so pixels-per-inch is not constant across it - the near edge is magnified. A single
+foreshortening factor kept producing contradictions: the case measured 9.6 inches wide from one
+pair of landmarks and 10.3 from another, and the well's left edge appeared to drift 0.45 in down
+its own length. Fitting the homography - which is exactly what perspective does to a plane -
+dissolved that. The same edge then read to within 0.027 in at every height.
+
+It is anchored on the CRT's active area, the one rectangle whose true size is known to the
+millimetre: 512 x 342 at 72 dpi is 7.111 x 4.750 inches. Each of its four edges was fitted from
+20-26 samples rather than read at a corner; residuals came out 0.08 to 0.30 px on three of them.
+
+**The same code on both pictures.** A metric computed one way for the reference and another way
+for our render is not a comparison. Silhouettes, bounding boxes and edge fits all run through
+one module, and the render is POSTed back to the harness as a file so it can go through it.
+
+### What the measurements changed
+
+| | build 3 | measured | error |
+| --- | --- | --- | --- |
+| well opening, half | 0.402 x 0.284 | **0.455 x 0.326** | 13% / 15% small |
+| tube surround, half | 0.378 x 0.258 | **0.395 x 0.292** | 12% short |
+| screen centre, y | +0.245 | **+0.2309** | 0.02 high |
+| screen centre, x | 0 | **+0.0531** | it is off centre |
+| face height | 1.253 | **1.2875** | |
+| face bottom | -0.398 | **-0.578** | the base was a storey, not a foot |
+| slot width, half | 0.186 | **0.2573** | 38% narrow |
+| rear height | 79% of front | **94.8%** | the roof was a cliff |
+| depth | 1.12 | **1.05** | |
+| well depth | 0.06 | **0.11** | the screen is deeply sunk |
+| flank brightness | 0.25 of the face | **0.65** | the loudest error of all, and it was light |
+
+Two of those were solved rather than tried. The silhouette's aspect is
+`(W cos t + D sin t) / H`, whose maximum over all viewing angles is `sqrt(W^2 + D^2)/H`; with
+build 3's numbers that ceiling was 1.029, BELOW the reference's measured 1.044, so no camera
+could ever have matched it and sweeping the camera was wasted effort. And a recess of depth d
+drafted inward by s shows a wall about `d sin 38 + s cos 38` wide; the reference's measures
+0.906 in, which lands on d = 0.11, s = 0.030 - after guessing twice and getting first a wall too
+narrow to see and then a funnel.
+
+### The check that settles it
+
+`overlay.py` pushes the model's own numbers through the homography and draws them on the
+reference photograph. The glass, the tube surround, the well opening, the face outline, the slot
+and the logo all land on their features. That is a check with no camera to solve and no
+silhouette to confound with lens choice.
+
+### One instrument that lied
+
+Silhouette IoU sat at 0.85-0.87 across five builds and would not move, which looked like a
+stubborn shape error. It was not: sweeping the threshold showed the score depends almost
+entirely on how the REFERENCE is thresholded - 0.872 at 0.012, 0.775 at 0.045 - because the
+reference has a soft contact shadow around it that a low threshold includes. The uniform band
+the difference map kept showing was that shadow being cut, not our model being fat. Before
+optimising a number, check that it measures the thing you think.
+
 ## Build order agreed with the owner
 1. The machine, alone, until it matches the photograph  — **first pass done, `lab/machine.html`**
 2. One floppy, alone — body, texture, sheen
