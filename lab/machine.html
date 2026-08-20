@@ -17,7 +17,7 @@
 </style>
 </head><body>
 <canvas id="c"></canvas>
-<span id="lbl">PAGE 4 &middot; ELEMENT 1 &middot; THE MACHINE, ALONE</span>
+<span id="lbl">PAGE 4 &middot; ELEMENT 1 &middot; THE MACHINE, THE KEYBOARD, THE MOUSE</span>
 <div id="read"></div>
 <div id="hint">drag to orbit &middot; scroll to zoom &middot; built, not loaded</div>
 <script>
@@ -296,7 +296,13 @@ function keyField(pitch, gap, keyH, rowDepth, tilt){
      of the spec sheet - it is an artist's model and we are copying IT, not Apple's drawing.
      The face is centred at x=0 and the SCREEN is offset, because the screen is what sits off
      centre: 0.531 in to the right of the face's middle, and 1.996 in above it. */
-  var HW=0.5008;
+  /* APPLE'S DIMENSIONS, not the reference model's. Checking every ratio against photographs
+     of the real product turned up the same -3.2% on three unrelated quantities - the glass, the
+     keyboard and the mouse were each that much small against the case - and one cause explains
+     all three: the Sketchfab model's face measures 10.02 inches where Apple's is 9.7. It is an
+     artist's model and it is 3% wide. Asked for a copy AND for realism, the product wins, so
+     the case is now 9.7 x 13.5 x 11.2 and everything sized against it lands on the real ratio. */
+  var HW=0.485;
   /* The well's wall projects 26 px on the reference. At 28.7 px per inch and a 38 degree
      view that is 1.46 INCHES of depth - the screen is sunk deep into the case, and a 0.6
      inch bezel could never produce the wall the photograph shows. */
@@ -345,13 +351,13 @@ function keyField(pitch, gap, keyH, rowDepth, tilt){
      the parameters say. That let the last correction be solved instead of tried - at the
      measured 38.5 degree view, matching the reference's silhouette aspect of 1.0443 needs
      D/H = 0.784, so D = 1.05 against a case height of 1.34. */
-  var REAR=-0.490;
+  var REAR=-0.560;                 /* 11.2 in deep, Apple's figure */
   var PROFILE=[
-    [ CASE_Z-ROLL,  0.670-ROLL],   /* top front                          */
-    [-0.240,        0.650-ROLL],   /* the roof runs back on a gentle fall */
-    [ REAR+ROLL,    0.629-ROLL],   /* a small chamfer at the very back    */
-    [ REAR+ROLL,   -0.670+ROLL],   /* rear bottom                        */
-    [ CASE_Z-ROLL, -0.670+ROLL]    /* front bottom                       */
+    [ CASE_Z-ROLL,  0.675-ROLL],   /* top front                          */
+    [-0.240,        0.655-ROLL],   /* the roof runs back on a gentle fall */
+    [ REAR+ROLL,    0.634-ROLL],   /* a small chamfer at the very back    */
+    [ REAR+ROLL,   -0.675+ROLL],   /* rear bottom                        */
+    [ CASE_Z-ROLL, -0.675+ROLL]    /* front bottom                       */
   ];
 
   /* MEASURED off the reference, not estimated. Every number here came from mapping the image
@@ -377,7 +383,7 @@ function keyField(pitch, gap, keyH, rowDepth, tilt){
 
   /* ---------------------------------------------------------------- keyboard and mouse
      Real Apple dimensions, in the same tenths of an inch as everything else. */
-  var FLOOR=-0.670;
+  var FLOOR=-0.675;
   var KBX=-0.230, KBZ=0.960;        /* in front of the machine and a little to its left */
   var MSX= 0.760, MSZ=0.760;
   var KB_TILT=0.1286;               /* the deck rises 0.075 over 0.583 of depth */
@@ -409,11 +415,11 @@ function keyField(pitch, gap, keyH, rowDepth, tilt){
   var PARTS=[
     {m:extrudeRounded(PROFILE,HW,ROLL,10,0.072,7),                       mat:0},
     /* the bezel: 0.060 thick, its opening a real drafted well running back to the case face */
-    {m:frameXY([HW,0.6437],0.070,BEZ_C, [0.431,0.3256],0.058,WELL_C,
+    {m:frameXY([HW,0.6437],0.070,BEZ_C, [0.4235,0.3200],0.056,WELL_C,
                CASE_Z, BEZEL_Z, 0.030, 0.013, 132),                      mat:0},
     /* the tube's surround: a moulded grey-brown part filling the well, not a hole. Its face
        sits 0.036 into the well, so the bezel keeps a visible lip of its own. */
-    {m:roundedBox(0.395,0.2920,0.022,0.016,10), t:[SCR_C[0],SCR_C[1],0.452], mat:1},
+    {m:roundedBox(0.3847,0.2843,0.022,0.016,10), t:[SCR_C[0],SCR_C[1],0.452], mat:1},
     /* 7.11 x 4.75 inches of active area - the real one, and 1.50 - set 0.006 behind the
        surround's face so the moulding keeps a lip all the way round */
     {m:roundedBox(0.3555,0.2375,0.004,0.006,8), t:[SCR_C[0],SCR_C[1],0.466], mat:2},
@@ -446,7 +452,7 @@ function keyField(pitch, gap, keyH, rowDepth, tilt){
 
     {m:(function(){ var s=9; return {pos:new Float32Array([-s,0,-s, s,0,-s, s,0,s, -s,0,s]),
         nrm:new Float32Array([0,1,0, 0,1,0, 0,1,0, 0,1,0]),
-        idx:new Uint16Array([0,2,1, 0,3,2]), n:6}; })(), t:[0,-0.670,0], mat:3}
+        idx:new Uint16Array([0,2,1, 0,3,2]), n:6}; })(), t:[0,-0.675,0], mat:3}
   ];
 
   /* ================================================================ program */
@@ -545,7 +551,7 @@ function keyField(pitch, gap, keyH, rowDepth, tilt){
       gl.drawElements(gl.TRIANGLES,P.count,gl.UNSIGNED_SHORT,0);
     }
     read.textContent =
-      'macintosh 128k  measured: 10.02 x 13.4 x 10.5 in   ' + PARTS.length + ' parts, ' +
+      'macintosh 128k + M0110 + M0100   9.7 x 13.5 x 11.2 in, Apple's own   ' + PARTS.length + ' parts, ' +
       TRIS.toLocaleString() + ' triangles\n' +
       'yaw ' + yaw.toFixed(2) + '  pitch ' + pitch.toFixed(2) + '  dist ' + dist.toFixed(2);
   }
