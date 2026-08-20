@@ -238,6 +238,18 @@ reference has a soft contact shadow around it that a low threshold includes. The
 the difference map kept showing was that shadow being cut, not our model being fat. Before
 optimising a number, check that it measures the thing you think.
 
+## Ready for element 2
+
+The floppy reference is captured: a 1920x1080 still of the disk the owner chose, and it is a
+dead-on rear view with almost no perspective, so it can be measured directly - no homography
+needed, which the machine's three-quarter view did need.
+
+The owner has chosen **Caveat** for the sticky notes. It is SIL Open Font License, subsets to
+about 38KB for the letters the notes need, and inlines as base64 like every other asset.
+
+Note the disk in the reference is black; the spec calls for the same cream as the computer, so
+the body colour is ours and only the form is copied.
+
 ## Build order agreed with the owner
 1. The machine, alone, until it matches the photograph  — **first pass done, `lab/machine.html`**
 2. One floppy, alone — body, texture, sheen
