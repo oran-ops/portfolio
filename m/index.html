@@ -5976,14 +5976,24 @@ function perspective(aspect,near,far){
 /* uniform scale, then a turn about Y, then a slide along X. The scale sits in the MATRIX and
    not in the shader on purpose: the wobble reads the raw position, so scaling there would
    change the noise frequency and the body would change shape as it grew. */
-function model(ang,sc,tx){
-  var c=Math.cos(ang), sn=Math.sin(ang);
-  return new Float32Array([sc*c,0,-sc*sn,0, 0,sc,0,0, sc*sn,0,sc*c,0, tx,0,0,1]);
+/* Rotation about an ARBITRARY axis, not just Y. The second orb needs a tilted axis - it is
+   what stops its poles sitting still - and Rodrigues' rotation is four lines. Column-major,
+   the order WebGL wants; the scale rides on the rotation columns because a uniform scale
+   commutes with rotation and so leaves the normal matrix alone. */
+function axisRot(ax,ay,az,ang){
+  var L=Math.sqrt(ax*ax+ay*ay+az*az); ax/=L; ay/=L; az/=L;
+  var c=Math.cos(ang), s=Math.sin(ang), t=1-c;
+  return [t*ax*ax+c,    t*ax*ay+s*az, t*ax*az-s*ay,
+          t*ax*ay-s*az, t*ay*ay+c,    t*ay*az+s*ax,
+          t*ax*az+s*ay, t*ay*az-s*ax, t*az*az+c];
 }
-function nrm(ang){
-  var c=Math.cos(ang), sn=Math.sin(ang);
-  return new Float32Array([c,0,-sn, 0,1,0, sn,0,c]);   /* uniform scale leaves normals alone */
+function model(R,sc,tx){
+  return new Float32Array([sc*R[0],sc*R[1],sc*R[2],0,
+                           sc*R[3],sc*R[4],sc*R[5],0,
+                           sc*R[6],sc*R[7],sc*R[8],0,
+                           tx,0,0,1]);
 }
+function nrm(R){ return new Float32Array(R); }   /* uniform scale leaves normals alone */
 
 /* ---------------------------------------------------------------- fit
    The reference draws 33,000 points across 244px. Ours has a panel, not a viewport, so the
@@ -5999,8 +6009,11 @@ function size(){
   gl.viewport(0,0,cv.width,cv.height);
 
   var D=Math.min(W*0.40,H*0.44);              /* on-screen diameter, sized so TWO still fit */
-  NP=Math.round(NMAX*(D/244)*(D/244));
-  if(NP<9000)NP=9000; if(NP>NMAX)NP=NMAX;
+  /* R74: the whole buffer, every size. r73 scaled the count with the projected area to
+     hold dots-per-pixel constant, which is defensible arithmetic and a worse picture - the
+     shell thins out and the wobble opens gaps wide enough to show the ground through. The
+     reference holds 33,000 at every viewport too. It costs 0.005ms a draw. */
+  NP=NMAX;
   /* 1.15, not 1.0: the wobble is snoise in [-1,1] over 6, so the radius runs 0.833 to 1.167
      and the SILHOUETTE is the maximum around the visible rim, which sits near the top of that
      range. Sizing to the nominal radius drew it about 8% wide - enough that a pair touched
@@ -6036,21 +6049,28 @@ function drawOrbs(){
   gl.uniform1f(U.uPt,DPR);
   gl.uniform3f(U.uBase,0.85,0.88,0.92);
 
-  var sep=HW*0.52, ang=t*0.3;
+  var sep=HW*0.52;
 
+  /* orb A: the reference's own motion, upright axis, 0.3 rad/s */
+  var RA=axisRot(0,1,0, t*0.30);
   gl.uniform1f(U.uTime,t);
   gl.uniform1f(U.uAlpha,1);
-  gl.uniformMatrix4fv(U.uModel,false,model(ang,1,-sep*slide));
-  gl.uniformMatrix3fv(U.uNrm,false,nrm(ang));
+  gl.uniformMatrix4fv(U.uModel,false,model(RA,1,-sep*slide));
+  gl.uniformMatrix3fv(U.uNrm,false,nrm(RA));
   gl.drawArrays(gl.POINTS,0,NP);
 
   if(grow>0.004){
-    /* 11.3 seconds off the first clock, so the pair is two bodies and not one drawn twice */
-    var a2=ang+Math.PI;
-    gl.uniform1f(U.uTime,t+11.3);
+    /* orb B differs in every term that is actually visible. Half a turn of phase - which is
+       all r73 gave it - is nearly nothing on a body this close to symmetric, so the pair read
+       as one object drawn twice. A tilted axis makes its poles wander instead of sitting
+       still; the opposite direction is the single most legible difference between two turning
+       things; the rate is slower; and the noise clock runs faster and offset, so its
+       silhouette changes on its own schedule rather than in step. */
+    var RB=axisRot(0.30,1,-0.20, -t*0.21);
+    gl.uniform1f(U.uTime,t*1.34+11.3);
     gl.uniform1f(U.uAlpha,grow);
-    gl.uniformMatrix4fv(U.uModel,false,model(a2,0.55+0.45*grow,sep*slide));
-    gl.uniformMatrix3fv(U.uNrm,false,nrm(a2));
+    gl.uniformMatrix4fv(U.uModel,false,model(RB,0.55+0.45*grow,sep*slide));
+    gl.uniformMatrix3fv(U.uNrm,false,nrm(RB));
     gl.drawArrays(gl.POINTS,0,NP);
   }
 }
