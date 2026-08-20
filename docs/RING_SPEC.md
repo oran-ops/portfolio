@@ -34,9 +34,9 @@ as if someone pulled them out and tossed them down beside it.
 - Position within the document: keep the existing distances exactly as they are today, so the
   scroll arrival point of page 4 does not move.
 
-## Separate, still outstanding
-The statement spheres on page 2 must match vanlent.dev EXACTLY - same size, motion, density,
-colours, shading. Current build is not close enough.
+## Separate, now DONE
+The statement spheres on page 2 were rebuilt from vanlent.dev's own bundle and are live in
+`/m/`. See `docs/ORB_SPEC.md`.
 
 ---
 
@@ -73,15 +73,56 @@ drawing a picture of a rendered object and will always miss.
 - Floppy disk:
   https://sketchfab.com/3d-models/floppy-disk-4b6d5a8b45aa4beeb9fed31d45d1d153
 
-## Architectural consequence, decide before building
+## Architectural consequence — DECIDED 2026-08-20: build, do not load
+
 site_mobile.html is ONE self-contained file: zero external requests, everything base64
 inlined, no build step. A glTF model plus three textures plus a renderer breaks that premise —
 either the site starts making external requests, or the file grows by the asset size plus 33%
 for base64. Measured earlier: a hand-rolled WebGL scene with 5 lit objects is ~5KB
 unminified; three.js is 357KB minified and is the wrong tool here.
 
+**The models are not used.** Four reasons, in order of weight:
+
+1. Zero external requests is the page's premise, not a preference.
+2. glTF + three textures + a loader is north of a megabyte after base64, on a page that is
+   686KB in total. three.js alone is 357KB to draw a handful of boxes.
+3. A Macintosh 128K is a stepped profile extruded across a width. It is a few hundred lines.
+4. Building it raises no licensing question at all.
+
+The owner also offered the Sketchfab **embed**. That is an iframe to sketchfab.com — external
+requests on every load plus their branding and attribution on the page — so it cannot ship
+either. It is excellent as a *reference*, and orbiting it is where the profile below came from.
+
+If the owner still wants the licensed model, swapping it in is a change of geometry source,
+not a rebuild: the renderer, the light and the panel shader all stay.
+
+## What the reference actually looks like — read by orbiting it
+
+The first attempt modelled the machine as a rounded box and it read as a fridge. Orbiting the
+reference to a side view shows the silhouette is a **stepped profile**, and that is the whole
+character of the object:
+
+- the top runs back on a gentle slope, then breaks into a steeper rear shoulder
+- the back stands about **83%** of the front's height
+- under the front face the body steps **back** before it reaches the floor, so the face
+  overhangs its own base
+- the vents are low on the flanks, not high, and there is a second pair on the top rear
+  flanking a recessed carry handle
+
+Profile as built, in (z, y), z forward, from the top front corner clockwise:
+
+```
+( 0.560,  0.675)   top front
+(-0.100,  0.585)   the gentle run back across the top
+(-0.560,  0.395)   rear shoulder, steeper
+(-0.560, -0.675)   rear bottom
+( 0.500, -0.675)   base, front bottom
+( 0.500, -0.330)   base front, top of it
+( 0.560, -0.250)   the overhang: the face steps out over the base
+```
+
 ## Build order agreed with the owner
-1. The machine, alone, until it matches the photograph
+1. The machine, alone, until it matches the photograph  — **first pass done, `lab/machine.html`**
 2. One floppy, alone — body, texture, sheen
 3. The sticky note — adhered at top, lifting at bottom, handwritten name
 4. Four floppies scattered, genuinely untidy

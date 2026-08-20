@@ -1,56 +1,286 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="dark">
-<title>The Machine — Element 1</title><style>
-:root{--ground:#191A1F;--lift:#1E2026;--ink:#F2F1ED;--mut:#85878D;--hair:#31333A}
-*{box-sizing:border-box}
-body{margin:0;background:var(--ground);color:var(--ink);font-family:ui-sans-serif,system-ui,sans-serif}
-.wrap{min-height:100vh;display:grid;place-items:center;
-  background:radial-gradient(120% 90% at 62% 44%,#22242B 0%,#1B1D22 46%,#171820 100%)}
-.lbl{position:fixed;left:22px;top:20px;font-family:ui-monospace,monospace;font-size:9.5px;
-  letter-spacing:.22em;color:var(--mut)}
-.mach{width:min(78vw,760px);height:auto;display:block;
-  filter:drop-shadow(-26px 26px 30px rgba(10,12,20,.62))}
-</style></head><body>
-<span class="lbl">RING SCENE &middot; ELEMENT 1 &middot; THE MACHINE, ALONE</span>
-<div class="wrap">
-<svg class="mach" viewBox="0 0 820 700" aria-label="Old all-in-one computer">
-<defs>
-  <linearGradient id="face" x1="0" y1="0" x2="1" y2="1">
-    <stop offset="0" stop-color="#E4DFD4"/><stop offset="1" stop-color="#CFC9BC"/></linearGradient>
-  <linearGradient id="side" x1="0" y1="0" x2="1" y2="0">
-    <stop offset="0" stop-color="#B9B3A6"/><stop offset="1" stop-color="#CDC7BA"/></linearGradient>
-  <linearGradient id="top" x1="0" y1="0" x2="0" y2="1">
-    <stop offset="0" stop-color="#EFEAE0"/><stop offset="1" stop-color="#DAD4C8"/></linearGradient>
-  <linearGradient id="glass" x1="0" y1="0" x2="0.4" y2="1">
-    <stop offset="0" stop-color="#202229"/><stop offset="1" stop-color="#15161B"/></linearGradient>
-</defs>
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>The Machine &mdash; Element 1</title>
+<style>
+  :root{ --charcoal:#191A1F; --ink:#F2F1ED; --dim:#85878D; --hair:#31333A; }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%;background:var(--charcoal);color:var(--ink);
+    font:11px/1.6 ui-monospace,"JetBrains Mono",Menlo,Consolas,monospace}
+  canvas{display:block;width:100%;height:100%;position:fixed;inset:0}
+  #lbl{position:fixed;left:20px;top:16px;z-index:5;letter-spacing:.22em;color:var(--dim)}
+  #read{position:fixed;left:20px;bottom:16px;z-index:5;color:var(--dim);white-space:pre}
+  #hint{position:fixed;right:20px;bottom:16px;z-index:5;color:#5E6067;text-align:right}
+</style>
+</head><body>
+<canvas id="c"></canvas>
+<span id="lbl">PAGE 4 &middot; ELEMENT 1 &middot; THE MACHINE, ALONE</span>
+<div id="read"></div>
+<div id="hint">drag to orbit &middot; built, not loaded &middot; no external request</div>
+<script>
+(function(){
+  "use strict";
+  var cv=document.getElementById('c');
+  var gl=cv.getContext('webgl',{alpha:false,antialias:true,depth:true})
+       ||cv.getContext('experimental-webgl',{alpha:false,antialias:true,depth:true});
+  if(!gl){document.getElementById('read').textContent='no webgl';return}
 
-<!-- left side panel, the machine is seen from its left -->
-<path fill="url(#side)" d="M96 176 L232 118 L232 596 L104 640 a26 26 0 0 1 -8 -19 Z"/>
-<!-- top plane -->
-<path fill="url(#top)" d="M232 118 L742 62 a30 30 0 0 1 26 24 L286 150 Z"/>
-<!-- front face -->
-<path fill="url(#face)" d="M232 118 L768 86 a30 30 0 0 1 4 14 L772 596
-  a30 30 0 0 1 -26 30 L262 664 a30 30 0 0 1 -30 -26 Z"/>
+  /* ------------------------------------------------------------ the body
+     NOT a box. Orbiting the reference to a side view shows the silhouette is a stepped
+     profile: the top runs back on a gentle slope, breaks into a steeper rear shoulder, and
+     the back stands about 83% of the front's height. Under the front face the body steps
+     BACK before it reaches the floor, so the face overhangs its own base. A rounded box gets
+     none of that, which is why the first attempt read as a fridge.
 
-<!-- screen bezel, recessed -->
-<path fill="#C6C0B3" d="M300 168 L724 142 a16 16 0 0 1 14 16 L738 442
-  a16 16 0 0 1 -14 16 L306 486 a16 16 0 0 1 -14 -16 L292 184 a16 16 0 0 1 8 -16 Z"/>
-<path fill="#B4AEA1" d="M312 182 L714 158 L724 438 L318 470 Z"/>
-<!-- the glass: the page's own ground colour, as specified -->
-<path fill="url(#glass)" d="M322 192 L706 170 L714 428 L328 458 Z"/>
+     So: extrude a profile, and round it by Minkowski sum with a sphere of radius r. That sum
+     has exactly three kinds of surface, and building each one directly is easier than any
+     approximation -
 
-<!-- vent slits, left side -->
-<g stroke="#A49E92" stroke-width="3" stroke-linecap="round">
-  <path d="M126 300 L126 372"/><path d="M140 295 L140 367"/><path d="M154 290 L154 362"/>
-  <path d="M168 285 L168 357"/><path d="M182 280 L182 352"/>
-</g>
-<!-- seam under the screen -->
-<path stroke="#B7B1A4" stroke-width="2.5" fill="none" d="M270 520 L760 492"/>
-<!-- floppy slot -->
-<rect x="330" y="556" width="330" height="16" rx="4" fill="#3B3830" transform="rotate(-3.1 330 556)"/>
-<rect x="330" y="552" width="330" height="5" rx="2" fill="#B0AA9D" transform="rotate(-3.1 330 552)"/>
-<!-- eject button -->
-<rect x="676" y="536" width="26" height="9" rx="3" fill="#C2BCAF" transform="rotate(-3.1 676 536)"/>
-</svg>
-</div></body></html>
+       flat sides   x = +-hw over the profile interior
+       lateral band the profile pushed out by r along its own normal, swept across the width
+       rolled edge  a quarter-torus joining the two, swept along the profile
+
+     Every convex corner of the profile is rounded by r for free, which is what a moulded
+     plastic shell actually looks like. */
+
+  /* side silhouette in (z, y), z forward, clockwise from the top front corner.
+     Read off the reference's side view; the machine is 9.7 x 13.5 x 11.2 inches. */
+  var PROFILE=[
+    [ 0.560,  0.675],   /* top front                                     */
+    [-0.100,  0.585],   /* the gentle run back across the top            */
+    [-0.560,  0.395],   /* rear shoulder, steeper                        */
+    [-0.560, -0.675],   /* rear bottom                                   */
+    [ 0.500, -0.675],   /* base, front bottom                            */
+    [ 0.500, -0.330],   /* base front, top of it                         */
+    [ 0.560, -0.250]    /* the overhang: the face steps out over the base */
+  ];
+
+  /* Round the profile's corners in 2D FIRST, then extrude.
+     The alternative - extruding the raw polygon and filleting in 3D - needs a separate arc
+     patch at every corner, and the first attempt without them left a black seam down each
+     edge where consecutive faces simply did not meet. Rounding in 2D makes the corners part
+     of the profile, so consecutive segments share vertices and there is nothing to join.
+     It also means one averaged normal per profile vertex is exact: collinear on the straight
+     runs, the true arc normal on the fillets. */
+  function roundProfile(prof,R,SEG){
+    var out=[], n=prof.length, i, k;
+    for(i=0;i<n;i++){
+      var p=prof[(i-1+n)%n], v=prof[i], q=prof[(i+1)%n];
+      var d0=[v[0]-p[0], v[1]-p[1]], l0=Math.hypot(d0[0],d0[1]);
+      var d1=[q[0]-v[0], q[1]-v[1]], l1=Math.hypot(d1[0],d1[1]);
+      d0=[d0[0]/l0,d0[1]/l0]; d1=[d1[0]/l1,d1[1]/l1];
+      var cross=d0[0]*d1[1]-d0[1]*d1[0], dot=d0[0]*d1[0]+d0[1]*d1[1];
+      var turn=Math.atan2(cross,dot);
+      if(Math.abs(turn)<0.02){ out.push([v[0],v[1]]); continue; }
+      var t=Math.min(R*Math.abs(Math.tan(turn/2)), 0.45*Math.min(l0,l1));
+      var rr=t/Math.abs(Math.tan(turn/2));
+      var A=[v[0]-d0[0]*t, v[1]-d0[1]*t];
+      /* the centre sits off the incoming edge, on the inside of the turn */
+      var s=turn>0?1:-1;
+      var C=[A[0]-s*d0[1]*rr, A[1]+s*d0[0]*rr];
+      var a0=Math.atan2(A[1]-C[1], A[0]-C[0]);
+      for(k=0;k<=SEG;k++){
+        var ang=a0+turn*(k/SEG);
+        out.push([C[0]+rr*Math.cos(ang), C[1]+rr*Math.sin(ang)]);
+      }
+    }
+    return out;
+  }
+
+  function extrudeRounded(profRaw,hw,r,NB,R2,SEG){
+    var prof=roundProfile(profRaw,R2,SEG);
+    var P=[],Nm=[],I=[],idx=0, n=prof.length, i, j, k;
+    var ix=hw-r;
+    function push(x,y,z,nx,ny,nz){P.push(x,y,z);Nm.push(nx,ny,nz);return idx++}
+    /* outward 2D normal of each EDGE; the profile is clockwise in (z,y) seen from +x */
+    var en=[];
+    for(i=0;i<n;i++){
+      var a=prof[i], b=prof[(i+1)%n];
+      var dz=b[0]-a[0], dy=b[1]-a[1], L=Math.hypot(dz,dy);
+      if(L<1e-9){ en.push(en.length?en[en.length-1]:[1,0]); continue; }
+      en.push([dy/L, -dz/L]);          /* rotate the edge -90 deg -> points outward */
+    }
+    /* Per-VERTEX normals, averaged from the two edges meeting there. On a straight run the
+       two edges are collinear so the average is exact; on a fillet it is the true arc normal.
+       Sharing them is what closes the seams - the per-edge version left the profile's corners
+       genuinely open, and the charcoal showed through as a black line down every edge. */
+    var vn=[];
+    for(i=0;i<n;i++){
+      var e0=en[(i-1+n)%n], e1=en[i];
+      var nz=e0[0]+e1[0], ny=e0[1]+e1[1], L2=Math.hypot(nz,ny);
+      vn.push(L2<1e-9?[e1[0],e1[1]]:[nz/L2, ny/L2]);
+    }
+
+    /* --- the lateral band: the profile pushed out by r, swept across the width --- */
+    var bandL=[], bandR=[];
+    for(i=0;i<n;i++){
+      var a=prof[i], e=vn[i];
+      bandL.push(push(-ix, a[1]+r*e[1], a[0]+r*e[0], 0, e[1], e[0]));
+      bandR.push(push( ix, a[1]+r*e[1], a[0]+r*e[0], 0, e[1], e[0]));
+    }
+    for(i=0;i<n;i++){
+      var j2=(i+1)%n;
+      I.push(bandL[i],bandR[i],bandL[j2], bandR[i],bandR[j2],bandL[j2]);
+    }
+    /* --- the rolled edge at each end of the width: sweep beta 0..90 --------- */
+    for(var side=-1;side<=1;side+=2){
+      var ring=[];
+      for(i=0;i<n;i++){
+        var a2=prof[i], e2=vn[i], col=[];
+        for(k=0;k<=NB;k++){
+          var beta=(k/NB)*Math.PI/2, cb=Math.cos(beta), sb=Math.sin(beta);
+          col.push(push(side*(ix+r*sb), a2[1]+r*cb*e2[1], a2[0]+r*cb*e2[0],
+                        side*sb, cb*e2[1], cb*e2[0]));
+        }
+        ring.push(col);
+      }
+      for(i=0;i<n;i++){
+        var j3=(i+1)%n;
+        for(k=0;k<NB;k++){
+          var A2=ring[i][k], B2=ring[i][k+1], C2=ring[j3][k], D2=ring[j3][k+1];
+          /* the roll runs along the profile (i) and across beta (k); its winding is the
+             opposite of the band's because beta advances away from the viewer, not with it */
+          if(side>0) I.push(A2,B2,C2, B2,D2,C2); else I.push(A2,C2,B2, B2,C2,D2);
+        }
+      }
+      /* --- the flat side face: a fan over the profile ---------------------- */
+      var cz=0,cy=0;
+      for(i=0;i<n;i++){cz+=prof[i][0];cy+=prof[i][1]}
+      cz/=n;cy/=n;
+      var c0=push(side*hw, cy, cz, side, 0, 0), first=idx;
+      for(i=0;i<n;i++) push(side*hw, prof[i][1], prof[i][0], side, 0, 0);
+      for(i=0;i<n;i++){
+        var p1=first+i, p2=first+((i+1)%n);
+        if(side>0) I.push(c0,p2,p1); else I.push(c0,p1,p2);
+      }
+    }
+    return {pos:new Float32Array(P), nrm:new Float32Array(Nm), idx:new Uint16Array(I)};
+  }
+
+  function plane(sz){
+    return {pos:new Float32Array([-sz,0,-sz, sz,0,-sz, sz,0,sz, -sz,0,sz]),
+            nrm:new Float32Array([0,1,0, 0,1,0, 0,1,0, 0,1,0]),
+            idx:new Uint16Array([0,2,1, 0,3,2])};
+  }
+
+  /* Apple's own dimensions: 9.7 x 13.5 x 11.2 inches -> 1 : 1.392 : 1.155 */
+  var HW=0.485, HH=0.675, HD=0.560, RAD=0.034;
+  /* r is the roll on the two width edges; R2 rounds the profile's own corners. The moulded
+     shell has a generous radius where the faces meet, and a tighter one across the width. */
+  var BODY=extrudeRounded(PROFILE,HW,RAD,8,0.075,5);
+  /* the face runs from the overhang up to the top edge, so it is not centred on the body */
+  var FACE_TOP=0.675, FACE_BOT=-0.250;
+  var FACE=[ (FACE_TOP+FACE_BOT)/2, HW, (FACE_TOP-FACE_BOT)/2, 0.560+RAD ];
+  var FLOOR=plane(9);
+
+  /* ------------------------------------------------------------ program */
+  function sh(t,src){var s=gl.createShader(t);gl.shaderSource(s,src);gl.compileShader(s);
+    if(!gl.getShaderParameter(s,gl.COMPILE_STATUS)){
+      document.getElementById('read').textContent=gl.getShaderInfoLog(s);throw 0}
+    return s}
+  var prog=gl.createProgram();
+  gl.attachShader(prog,sh(gl.VERTEX_SHADER,'\nattribute vec3 aPos;\nattribute vec3 aNrm;\nuniform mat4 uProj, uView, uModel;\nuniform mat3 uNM;\nvarying vec3 vN;\nvarying vec3 vP;      /* object space, for the panel */\nvarying vec3 vW;      /* world space, for the ground shadow and the fog */\nvoid main(){\n  vP = aPos;\n  vN = normalize(uNM * aNrm);\n  vec4 w = uModel * vec4(aPos, 1.0);\n  vW = w.xyz;\n  gl_Position = uProj * uView * w;\n}\n'));
+  gl.attachShader(prog,sh(gl.FRAGMENT_SHADER,'\nprecision highp float;\nvarying vec3 vN;\nvarying vec3 vP;\nvarying vec3 vW;\n\nuniform vec3  uCream;      /* body colour */\nuniform vec3  uGround;     /* page charcoal, and the screen glass */\nuniform float uIsGround;   /* 1 when drawing the floor */\nuniform vec4  uFace;       /* front face: centreY, halfX, halfY, z */\n\n/* ---- helpers ---------------------------------------------------------- */\nfloat box2(vec2 p, vec2 b){                     /* signed distance to a rectangle */\n  vec2 d = abs(p) - b;\n  return min(max(d.x, d.y), 0.0) + length(max(d, 0.0));\n}\nfloat rrect(vec2 p, vec2 b, float r){ return box2(p, b - r) - r; }\n\nvoid main(){\n  vec3 N = normalize(vN);\n  vec3 albedo = uCream;\n  float ao = 1.0;\n\n  if(uIsGround > 0.5){\n    /* matte charcoal, lifted very slightly with grey toward the middle distance, plus a soft\n       contact shadow. The shadow is an ellipse in world space rather than a shadow map: one\n       object, one light, and a map would cost a second pass to look worse. */\n    float lift = 1.0 - smoothstep(0.0, 3.4, length(vW.xz - vec2(0.15, 0.1)));\n    albedo = uGround * (1.0 + 0.22 * lift);\n    float d = length((vW.xz - vec2(0.02, 0.10)) / vec2(0.78, 0.62));\n    float contact = 1.0 - smoothstep(0.55, 1.35, d);\n    albedo *= 1.0 - 0.72 * contact;\n    gl_FragColor = vec4(albedo, 1.0);\n    return;\n  }\n\n  /* ---- the front panel, drawn rather than modelled ----------------------\n     The face runs from the overhang at the bottom to the top edge, so its centre is not the\n     body\'s centre - uFace carries (centreY, halfX, halfY, z). Working in face-local\n     coordinates keeps every feature below expressed as a fraction of the face rather than\n     as a number that has to be re-derived whenever the profile moves. */\n  if(vP.z > uFace.w - 0.010 && N.z > 0.55){\n    vec2 p = vec2(vP.x, vP.y - uFace.x);\n    vec2 H = uFace.yz;\n\n    /* the bezel: a wide inset panel around the tube, occupying the upper half of the face */\n    vec2  bc = vec2(0.0, 0.150);\n    vec2  bb = vec2(H.x - 0.075, 0.232);\n    float dB = rrect(p - bc, bb, 0.030);\n    if(dB < 0.0){\n      float e = clamp(-dB / 0.024, 0.0, 1.0);\n      albedo *= mix(0.80, 0.955, e);       /* darkest right at the wall of the recess */\n    }\n    /* the tube itself, sunk further in and darker still */\n    vec2  tc = vec2(0.0, 0.150);\n    vec2  tb = vec2(0.285, 0.196);\n    float dT = rrect(p - tc, tb, 0.020);\n    if(dT < 0.0){\n      float e2 = clamp(-dT / 0.018, 0.0, 1.0);\n      albedo = mix(albedo * 0.42, albedo * 0.62, e2);\n      ao *= 0.86;\n    }\n    /* the glass: the page\'s own ground value, as specified */\n    vec2  gb = vec2(0.246, 0.163);\n    float dG = rrect(p - tc, gb, 0.012);\n    if(dG < 0.0){ albedo = uGround * 1.10; ao *= 0.5; }\n\n    /* floppy slot, below the tube and right of centre */\n    float dS = rrect(p - vec2(0.100, -0.250), vec2(0.166, 0.017), 0.008);\n    if(dS < 0.0){ albedo = uGround * 0.85; ao *= 0.40; }\n    float dL = rrect(p - vec2(0.100, -0.281), vec2(0.166, 0.007), 0.003);\n    if(dL < 0.0) albedo *= 0.88;\n\n    /* the logo: six stripes, small, below and left of the tube */\n    vec2 lp = p - vec2(-0.330, -0.246);\n    if(abs(lp.x) < 0.026 && abs(lp.y) < 0.033){\n      float band = floor((lp.y + 0.033) / 0.011);\n      vec3 lc = band < 1.0 ? vec3(0.24,0.55,0.80)\n              : band < 2.0 ? vec3(0.45,0.30,0.60)\n              : band < 3.0 ? vec3(0.80,0.22,0.30)\n              : band < 4.0 ? vec3(0.90,0.44,0.14)\n              : band < 5.0 ? vec3(0.95,0.77,0.16)\n                           : vec3(0.42,0.66,0.29);\n      albedo = mix(albedo, lc, 0.80);\n    }\n\n    /* the walls of the two recesses tilt the normal - that is what actually sells depth,\n       far more than the shading step does */\n    float wB = clamp(1.0 - abs(dB) / 0.020, 0.0, 1.0);\n    N = normalize(N + vec3(0.40*wB*sign(p.x), 0.40*wB*sign(p.y - bc.y), 0.0));\n    float wT = clamp(1.0 - abs(dT) / 0.016, 0.0, 1.0);\n    N = normalize(N + vec3(0.45*wT*sign(p.x), 0.45*wT*sign(p.y - tc.y), 0.0));\n  }\n\n  /* ---- vents: low on the flanks, as on the reference -------------------- */\n  if(abs(N.x) > 0.6 && vP.y < -0.30 && vP.y > -0.60 && vP.z < 0.30 && vP.z > -0.40){\n    float g = fract((vP.y + 0.62) / 0.034);\n    float slit = smoothstep(0.30, 0.46, abs(g - 0.5));\n    albedo *= mix(0.74, 1.0, slit);\n  }\n\n  /* ---- light: general and natural, no fixture -------------------------- */\n  vec3 key  = normalize(vec3(-0.55, 0.78, 0.62));   /* soft, upper left, toward the viewer */\n  vec3 fill = normalize(vec3( 0.86, 0.20, 0.34));   /* weak, from the right */\n  float kd = max(dot(N, key), 0.0);\n  kd = kd * 0.80 + 0.20 * max(dot(N, key) * 0.5 + 0.5, 0.0);   /* wrapped, so nothing is black */\n  float fd = max(dot(N, fill), 0.0) * 0.30;\n  float hemi = 0.34 + 0.30 * (N.y * 0.5 + 0.5);      /* room bounce, sky above, floor below */\n\n  /* the floor throws a little of itself back onto the body, and eats light near the base */\n  float base = smoothstep(-0.70, -0.30, vP.y);\n  ao *= mix(0.72, 1.0, base);\n\n  vec3 lit = albedo * (hemi + kd * 0.62 + fd) * ao;\n  gl_FragColor = vec4(lit, 1.0);\n}\n'));
+  gl.linkProgram(prog);
+  if(!gl.getProgramParameter(prog,gl.LINK_STATUS)){
+    document.getElementById('read').textContent=gl.getProgramInfoLog(prog);return}
+  gl.useProgram(prog);
+  var A={pos:gl.getAttribLocation(prog,'aPos'), nrm:gl.getAttribLocation(prog,'aNrm')};
+  var U={};['uProj','uView','uModel','uNM','uCream','uGround','uIsGround','uFace']
+    .forEach(function(k){U[k]=gl.getUniformLocation(prog,k)});
+
+  function upload(m){
+    var o={};
+    o.p=gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER,o.p); gl.bufferData(gl.ARRAY_BUFFER,m.pos,gl.STATIC_DRAW);
+    o.n=gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER,o.n); gl.bufferData(gl.ARRAY_BUFFER,m.nrm,gl.STATIC_DRAW);
+    o.i=gl.createBuffer(); gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER,o.i); gl.bufferData(gl.ELEMENT_ARRAY_BUFFER,m.idx,gl.STATIC_DRAW);
+    o.n_=m.idx.length; return o;
+  }
+  var gBody=upload(BODY), gFloor=upload(FLOOR);
+  function bind(o){
+    gl.bindBuffer(gl.ARRAY_BUFFER,o.p); gl.enableVertexAttribArray(A.pos); gl.vertexAttribPointer(A.pos,3,gl.FLOAT,false,0,0);
+    gl.bindBuffer(gl.ARRAY_BUFFER,o.n); gl.enableVertexAttribArray(A.nrm); gl.vertexAttribPointer(A.nrm,3,gl.FLOAT,false,0,0);
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER,o.i);
+  }
+
+  /* ------------------------------------------------------------ maths */
+  function persp(fovDeg,asp,n,f){var t=1/Math.tan(fovDeg*Math.PI/360),d=1/(n-f);
+    return new Float32Array([t/asp,0,0,0, 0,t,0,0, 0,0,(f+n)*d,-1, 0,0,2*f*n*d,0])}
+  function lookAt(e,c,u){
+    var zx=e[0]-c[0],zy=e[1]-c[1],zz=e[2]-c[2];
+    var zl=Math.hypot(zx,zy,zz); zx/=zl;zy/=zl;zz/=zl;
+    var xx=u[1]*zz-u[2]*zy, xy=u[2]*zx-u[0]*zz, xz=u[0]*zy-u[1]*zx;
+    var xl=Math.hypot(xx,xy,xz); xx/=xl;xy/=xl;xz/=xl;
+    var yx=zy*xz-zz*xy, yy=zz*xx-zx*xz, yz=zx*xy-zy*xx;
+    return new Float32Array([xx,yx,zx,0, xy,yy,zy,0, xz,yz,zz,0,
+      -(xx*e[0]+xy*e[1]+xz*e[2]), -(yx*e[0]+yy*e[1]+yz*e[2]), -(zx*e[0]+zy*e[1]+zz*e[2]), 1]);
+  }
+  function modelY(ang,ty){var c=Math.cos(ang),s=Math.sin(ang);
+    return new Float32Array([c,0,-s,0, 0,1,0,0, s,0,c,0, 0,ty,0,1])}
+  function nmY(ang){var c=Math.cos(ang),s=Math.sin(ang);
+    return new Float32Array([c,0,-s, 0,1,0, s,0,c])}
+
+  /* ------------------------------------------------------------ loop */
+  var W=0,H=0,DPR=1,PROJ=null;
+  /* the reference is a three-quarter view from the front left, a little above the machine */
+  var yaw=-0.46, pitch=0.20, dist=5.6, drag=false, lx=0, ly=0;
+  function size(){
+    DPR=Math.min(window.devicePixelRatio||1,2);
+    W=cv.clientWidth;H=cv.clientHeight;
+    cv.width=Math.round(W*DPR);cv.height=Math.round(H*DPR);
+    gl.viewport(0,0,cv.width,cv.height);
+    PROJ=persp(21,W/H,0.05,60);
+  }
+  function frame(){
+    gl.clearColor(0.098,0.102,0.122,1);
+    gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);
+    gl.enable(gl.DEPTH_TEST); gl.enable(gl.CULL_FACE); gl.cullFace(gl.BACK);
+
+    var ex=Math.sin(yaw)*Math.cos(pitch)*dist,
+        ey=Math.sin(pitch)*dist+0.16,
+        ez=Math.cos(yaw)*Math.cos(pitch)*dist;
+    var VIEW=lookAt([ex,ey,ez],[0,0.02,0],[0,1,0]);
+
+    gl.uniformMatrix4fv(U.uProj,false,PROJ);
+    gl.uniformMatrix4fv(U.uView,false,VIEW);
+    gl.uniform3f(U.uCream,0.855,0.826,0.752);
+    gl.uniform3f(U.uGround,0.098,0.102,0.122);
+    gl.uniform4f(U.uFace,FACE[0],FACE[1],FACE[2],FACE[3]);
+
+    gl.uniform1f(U.uIsGround,1);
+    gl.uniformMatrix4fv(U.uModel,false,modelY(0,-HH));
+    gl.uniformMatrix3fv(U.uNM,false,nmY(0));
+    bind(gFloor); gl.drawElements(gl.TRIANGLES,gFloor.n_,gl.UNSIGNED_SHORT,0);
+
+    gl.uniform1f(U.uIsGround,0);
+    gl.uniformMatrix4fv(U.uModel,false,modelY(0,0));
+    gl.uniformMatrix3fv(U.uNM,false,nmY(0));
+    bind(gBody); gl.drawElements(gl.TRIANGLES,gBody.n_,gl.UNSIGNED_SHORT,0);
+
+    document.getElementById('read').textContent =
+      'macintosh 128k  9.7 x 13.5 x 11.2 in  ->  1 : 1.392 : 1.155\n' +
+      BODY.idx.length/3 + ' triangles   yaw ' + yaw.toFixed(2) + '  pitch ' + pitch.toFixed(2) +
+      '  dist ' + dist.toFixed(2);
+  }
+  function redraw(){ size===null||0; frame(); }
+
+  addEventListener('resize',function(){size();frame()});
+  cv.addEventListener('pointerdown',function(e){drag=true;lx=e.clientX;ly=e.clientY;cv.setPointerCapture(e.pointerId)});
+  cv.addEventListener('pointerup',function(e){drag=false});
+  cv.addEventListener('pointermove',function(e){
+    if(!drag)return;
+    yaw   -= (e.clientX-lx)*0.006;
+    pitch += (e.clientY-ly)*0.005;
+    if(pitch> 1.2)pitch= 1.2; if(pitch<-0.45)pitch=-0.45;
+    lx=e.clientX;ly=e.clientY; frame();
+  });
+  cv.addEventListener('wheel',function(e){
+    e.preventDefault(); dist*=(1+Math.sign(e.deltaY)*0.06);
+    if(dist<1.6)dist=1.6; if(dist>9)dist=9; frame();
+  },{passive:false});
+
+  size(); frame();
+})();
+</script>
+</body></html>
