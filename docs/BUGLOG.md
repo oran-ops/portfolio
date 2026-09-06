@@ -2219,3 +2219,308 @@ eyeballed: 4.97:1, AA.**
 * 1440: no rail, 4 drawers, folder x=141 w=1158.
 * 390 / 360: switch 119×89 inside the folder, tap target over 44px, arms and disarms,
   0 horizontal overflow, 0 JS errors.
+
+## 2026-08-23 - Blender era, the roads-cars-vegetation session
+- kit_scale.json values are WORLD UNITS of the old build (1 u = 8 m), not metres. Importing at face value shrinks everything 8x. Verified against nature-kit (0.5125 x 8 = 4.1 m/unit).
+- city-kit OBJ materials are colormap TEXTURE materials with Kd 1 1 1 - luminance sorting of diffuse_color picks garbage, and untextured ribbon geometry sampling texel (0,0) renders the wrong shade. Sample the palette texture at a real face UV instead.
+- A mesh emitted with hand-ordered quads on a curving path will twist. Triangles + explicit winding checks (cross.z) are immune. Kerbs as per-segment boxes, never as one swept ribbon with side walls.
+- THE BLACK STRIP: a stray street-ribbon quad lay along the main road's diagonal leg, down-facing, z-fighting the asphalt. Every scan missed it because its FACE CENTRE sat outside the visible artifact. Object-bisection renders (hide one object per render) found it in two minutes after five geometric theories failed. Bisect first next time.
+- OBJ import keeps the mesh Y-up and puts the +90 X on the OBJECT. Any mesh-space measurement (asphalt height, kerb side) must go through matrix_world.
+- Blender addon socket timeout is 300 s; long calls complete anyway. Poll the output files instead of resending.
+
+## 2026-08-24 night - the buildings phase
+- A street corridor is a SEGMENT, not an infinite line. Clearance checks that ignore a street's y-extent killed valid parcels twice (houses vs the southern verticals, boulevard trees vs everything). Always test extent.
+- view_layer.update() per placement on a 16k-object scene costs ~1-2 s each; two per building turned a 15 s pass into minutes and socket timeouts. Precompute proto bbox/origin offsets once and place with pure math - 40x faster.
+- Kenney 'retail' names lie: building-30/q/s are open CANOPY frames, not shops; sample-tower-b is a water tower. Judge by the render sheet, not by the class list.
+- Oran's House_20_Pack: objects are diorama scenes with baked terrain discs; textures are NOT packed into the .blend, so appended copies render magenta. Two houses survived a solid-color regrade; two compounds were removed. Deep reuse requires separating house geometry from bases.
+- Objects removed from bpy.data must never be touched again (StructRNA error) - track by NAME, re-get, and guard.
+- appended library objects keep .001 suffixes when re-imported after deletion; always capture the actual loaded names.
+
+## 2026-08-25 - the "floating objects" that were not floating
+- Oran reported elements looking detached from their shadows across the whole map. The obvious hypothesis - objects sitting above the ground - was WRONG. A support-height audit over 12,552 objects (ray-cast each object's footprint against roads/plates/terrain) found 0 floating buildings, 0 floating vegetation, and a worst-case gap of 14.5 cm. Nothing floated.
+- The real cause was the SUN ELEVATION: 30 degrees above the horizon, which makes every shadow 1.73x the object's height. A 7 m tree threw a 12 m shadow, landing far from its trunk and reading as a separate dark blob.
+- Fix: sun raised to 82 degrees (shadow 0.141x height - a 12x reduction) and the sun disc widened from 0.6 to 3.4 degrees so contact points read soft instead of razor-cut.
+- Lesson: when something looks like a placement fault, measure the placement FIRST. If the geometry is clean, the fault is in the light, not the layout. Two separate audits (support height, then caster-to-shadow distance by ray-casting toward the sun) proved it before anything was moved.
+- Second finding, unrelated to shadows: the grass measured #64773A against the target #88A04C - 34% too dark, a calibration gap that had been there the whole time. Corrected in two measured steps (sun energy, then the grass ramp stops), landing at mean abs error 0.064 -> under 0.03. Roads were left alone so their measured value did not drift.
+- FOLLOW-UP, same day: Oran still saw detached shadows AFTER the sun fix - but only on trees, flowers and small props, while buildings and cars looked correct. That split was the clue. The cause was not the scene at all: his VIEWPORT was set to `use_scene_lights = False` and `use_scene_world = False` with `studio_light = forest.exr` (the HDRI from his own download) as the studio light. The viewport was lighting the map with a low-sun forest HDRI and ignoring the scene sun entirely, so the preview showed long detached shadows while the Cycles renders were correct. Fixed by turning scene lights/world on for both Material Preview and Rendered modes, and switching the viewport to Material Preview (EEVEE) since Rendered mode runs Cycles over 18k objects and only ever showed a noisy partial result.
+- LESSON: when the user reports a visual fault, check whether they are looking at the same image you are. Viewport shading settings are part of the file and can silently disagree with the render.
+
+## MEDCOIN stage 0 — parenting to a non-origin empty silently teleports geometry
+
+`MEDCOIN_ROOT` is an empty at world (350, 325, 0) — a locator marking the world centre,
+not a group root. Parenting `MED_GROUND` to it with `ob.parent = root` and no
+`matrix_parent_inverse` applied the empty's translation on top of vertices that were
+already in world coordinates, moving the whole 372 m plate to 514–886, off the terrain
+and out of frame.
+
+**Two things hid it.**
+
+1. The geometry check read `bound_box + location`, which is object-local, so it reported
+   the correct 164–536 while the object rendered 350 m away.
+2. Reading `matrix_world` straight after setting `.parent` returns the **stale** matrix.
+   `bpy.context.view_layer.update()` is required first — without it the fix looked like it
+   had failed and invited a second, wrong fix on top of the right one.
+
+**Caught only by the pixel test:** 99.2 % green inside the square when the geometry test
+said 0 m² of grass. This is the exact failure mode section 2e was written about — the rule
+test passed and the picture was wrong.
+
+**Rules.**
+- Follow the file's own convention: `TERRAIN_Base` is unparented, so MEDCOIN organises by
+  collection and parents nothing. If parenting is ever needed, set
+  `ob.matrix_parent_inverse = parent.matrix_world.inverted()` in the same breath.
+- Never verify placement from `bound_box + location`. Read mesh vertices, or read
+  `matrix_world` **after** a `view_layer.update()`.
+- Anti-aliasing along a zone boundary registers as the neighbouring colour. Inset a pixel
+  mask by ~1 % of its side before counting, or a clean build reports a false failure —
+  here 755 edge pixels that went to exactly 0 once inset.
+
+## MEDCOIN stage 1 — three defects that all pass a geometry check
+
+**1. A junction is 6.4 m wide; a street's endpoint is a line.** H carriageways ran from the
+service-ring centreline, so at each of the 34 perimeter junctions the outer half of the
+junction square had no asphalt on it. Fix: H asphalt runs `K0` past the ring at both ends.
+
+**2. Pavement stubs fronting nothing.** Kerb and pavement were generated on both sides of
+every street, so the four service-ring roads grew a kerb on their outward face, where the
+container yard is — and at each ring corner two such stubs would have overlapped. Fix: two
+rules, both answering *does the crossing street actually continue this way*. The ring gets
+no kerb outward, and a junction corner piece exists only where both streets continue into
+that quadrant. That also turns the perimeter junctions into real T-junctions.
+
+**3. A mouth that dead-ends into a kerb.** The four approach roads reached the main road
+and stopped: the ribbon's kerb and pavement ran unbroken across them. From the whole-city
+view it read as connected. Fix: each mouth opens a GATE — kerb band, pavement band and all
+three risers skipped over those path segments, carriageway extended to the full corridor
+half-width instead. **This is the connectivity failure that looks fine from far out**, and
+the only way it surfaced was cropping the render at the junction and looking at it.
+
+### And a testing lesson worth more than the three fixes
+
+The first overlap test reported 2,304 overlaps on a clean build, because `quad_up` emits
+**two triangles per quad** and their bounding boxes are identical. The counts matched the
+quad counts exactly — 73 asphalt, 859 dashes, 542 pavement, 830 kerb — which is what gave
+it away. Merge triangle pairs before sweeping.
+
+The second version then reported 2,451 on a clean build, because an axis-aligned bounding
+box is only **exact for axis-aligned geometry**. Along the curved main road, neighbouring
+ribbon quads abut on a shared edge while their bboxes overlap heavily. Fix: classify each
+quad by whether its own vertices are axis-aligned, test axis-vs-axis exactly, test
+axis-vs-ribbon conservatively, and argue ribbon-vs-ribbon by construction — bands have
+disjoint lateral offsets, consecutive quads share an edge, and the 34 m fillet exceeds the
+15.3 m half-width so the ribbon cannot fold over itself.
+
+**A test that cries wolf on a clean build is worse than no test**, because the next real
+overlap gets waved through with the false ones.
+
+## MEDCOIN — a clearance check that measured the wrong two points
+
+The main road was checked against the city square at the **midpoint of each edge**: 6.3 m
+west, 2.3 m north, both positive, both reported as passing. Oran spotted the real state of
+it in the render — the boundary bulging outward at the north-west corner.
+
+At a corner the diagonal closes. The 45-degree chamfer connecting the west leg to the north
+leg passed **6.22 m** from the city's corner, so **9.1 m of a 15.3 m half-corridor was lying
+on the city** — over the ground plate, the earth verge and the fence. Two edge samples
+cannot see this, because the corner is the one place neither edge governs.
+
+**Fix:** north leg out from y=528.6 to y=540.0 and a single 90-degree turn instead of the
+chamfer. Solving |arc centre - city corner| <= R - 15.3 - 2 gives a working radius band of
+R in [29.0, 43.3], so the existing 34 m fillet fits with 5.3 m to spare, and north-edge
+clearance rises from 2.3 m to 13.7 m.
+
+**Rule: never check a clearance at sample points you chose by hand.** `verify_main_clearance`
+now measures every path sample against the square — `max(OX-x, 0, x-(OX+CITY))` on each
+axis — and reports the worst point and its coordinates. Result: 21.28 m centreline, 5.98 m
+of corridor clearance, worst at (143.1, 514.8), which is the corner it used to miss.
+
+## MEDCOIN — "do the buildings fit" answered with the wrong measure
+
+Audit 2 checked whether 550 buildings fit by computing **frontage per building**: 1,632 m of
+block edge / 180 core towers = a 9.1 m plot, which reads as comfortable. It never checked
+**footprint against block area**. Measured, the core towers are 101 m2, not the 70 m2
+assumed, and 180 of them need **120 % of the block** — impossible, not merely tight.
+
+Frontage is a perimeter measure and blocks are filled by area. Whenever a count is checked
+against a linear quantity, check it against the area too; the two disagree exactly when the
+buildings are deeper than the plot arithmetic assumed.
+
+Related: `building-148` measured 29.4 units tall where every Kenney model measures 2–5.
+It is authored in **metres**, so the kit's x8 would have made it a 235 m tower on a 74 m
+footprint. **Measure every donor model's bbox; never infer scale from the kit it sits in.**
+
+## MEDCOIN stages 2-3 — three generator faults, each reported as passing
+
+**1. A "no two neighbours share a model" rule that banned one neighbour.** The check
+excluded the model placed on the previous iteration, which in row-major order is the WEST
+neighbour only. Every vertical pair was free to match, and 8 did — while the rule was
+reported as enforced. Ban both already-placed neighbours, west and south.
+
+**2. Equal cells cap variety.** Splitting a block into equal bays makes every building the
+same width by construction, whatever the plan asks for. Unequal bays, with the count
+derived from the block's own dimensions, are what produce a stagger.
+
+**3. Random rotation crushed wide models into shallow bays.** A free 90-degree spin puts a
+16.7 x 7.5 m model side-on into a 9 m bay; the uniform fit then scales it to 4.1 m and it
+reads as a sliver among 10 m neighbours. Orientation is now chosen to fit the bay -- take
+the swap with the larger `min(sx, sy)` -- with a 180-degree flip retained for facing
+variety. **Fix the cause in the generator rather than rejecting the seed**: seed-rejection
+would have hidden a fault that recurs in every zone.
+
+**Testing note.** The sliver only surfaced because the acceptance test recorded `w_min`
+alongside the pass/fail. A bare boolean would have said "no passing seed" and invited
+loosening the threshold -- which would have shipped the slivers.
+
+## MEDCOIN night build — five faults, each caught by a test rather than by Oran
+
+**1. `veh_pre` was inverted — 501 of 532 cars broadside.** A model whose length runs along
+local Y needs a **-90 deg** pre-rotation to point along +X; returning 0 leaves it across the
+road. This is the OASIS bug exactly, and the only reason it cost one run instead of a day is
+that the acceptance test measured each car's world bbox against its lane axis. Measuring the
+length axis per prototype is necessary but not sufficient — **the sign has to be tested too.**
+27 of 38 vehicle models run along Y and 11 along X, so assuming either one would have put
+29 % of traffic sideways.
+
+**2. `inner_blocks()` bounded the sweep by the outermost STREET lines**, so the entire outer
+belt strip — 18 m deep on all four sides, **17,856 m2** — had no blocks at all. It was the
+band that kept rendering empty. The city edge is an edge too.
+
+**3. Largest-first packing.** Filling a yard by drawing at random from a mixed bag let small
+items win every contested spot: 174 crates and 170 barrels against 13 containers, 1 truck
+and 1 crane. Descending size order fixed it in one line — 213 containers, 77 trucks, 13
+cranes — and cost nothing.
+
+**4. Donor kits smuggle green past every geometry test.** `nature-kit` rocks carry a
+material literally named `grass` at #2BD7B7; `lowpoly-city/container-2` had a #29FF00
+placeholder; several lowpoly-city buildings had green facades. **34 materials** in total,
+inside a city whose stage-0 rule is zero green. A material audit is now part of the build.
+
+**5. A kit is not internally consistent.** Per-kit scale factors produced 4 m pallets and a
+0.42 m pallet in the same pass, and passed a "traffic light" that was only the light head.
+The fix that caught all of them was a **plausibility gate**: declare the real-world size
+range for each category and reject anything outside it. It rejected five models on the first
+run, every one genuinely wrong.
+
+### And two tests that were wrong about a correct build
+
+- Zipping `plan` against `collection.objects` assumes Blender preserves insertion order.
+  Judge each object from the object itself.
+- A car near an H-street line but 50 m from any V-street line was called "on an H street"
+  and failed — it was on the **main road**, correctly aligned. Classify by where a thing
+  actually is before testing how it is oriented; 22 false failures came from that alone.
+
+## MEDCOIN — a missing texture is magenta, and no colour test can see it
+
+Street lamps rendered bright pink through three separate colour fixes. The cause was not a
+palette choice at all: **`retro-urban-kit` ships `.mtl` files pointing at
+`Textures/metal.png` and `Textures/planks.png`, and the kit has no `Textures` folder.**
+Blender renders an unresolvable image as magenta, and that kit supplies all 226 street
+lamps plus the pallets and benches.
+
+Every fix aimed at the palette missed it, because the material was fine — the *file
+reference* was broken. **Check `bpy.data.images` for unresolvable filepaths as part of the
+build**, not only when something looks wrong: the failure mode is a colour, so it is
+indistinguishable from a design decision until you look at the file list.
+
+Also: the tint materials built on top of a broken image inherit the fault, so they have to
+be purged before re-running the fix, or the repair silently does nothing.
+
+## MEDCOIN — rooftop plant: raycast the roof, never trust the bounding box
+
+547 tanks, vents and aerials sit on the roofs. Each is placed by casting a ray straight
+down onto **its own building** and taking the hit height. A prism's bbox top is its roof;
+a stepped or masted model's is not, and the gap is exactly the floating Oran objected to
+three times in OASIS. Verified: **0 of 547 props are off a building.**
+
+First attempt rejected 73 % of them by demanding the hit be within 1 m of the bbox top —
+which is wrong in the other direction, since a lift overrun or a mast lifts the bbox well
+above the roof deck. A downward ray hits the topmost surface at that point, which IS the
+roof there; the only real rejection is no hit at all.
+
+## The sun move to 75 degrees, and the three faults the double-check found
+
+Oran approved 75 degrees for OASIS and asked for the checks to be run twice. Running them
+twice is the only reason this section exists — **the first pass produced a wrong fix that
+the second pass caught.**
+
+### Fault 1 — the sun-energy formula was wrong in both value and direction
+
+`MEDCOIN_PLAN` 2e said energy is rescaled by "cos(8)/cos(15) = 0.955". **cos(8)/cos(15) is
+1.025, not 0.955**, and lowering a sun needs MORE energy on the ground, not less. MEDCOIN
+had been built with 0.820 = 0.8589 x 0.955, i.e. the factor was mis-evaluated AND applied
+backwards.
+
+**Fixed by measurement, not arithmetic.** The scene has an ambient world at strength 0.4
+contributing 59.6 % of the ground value, so no closed form applies. Three renders — one at
+82 deg and two at 75 deg with different energies — give a straight line per channel, and
+solving it gives **0.8835**. All three channels agreed to within 0.0003, and the predicted
+ground value matched the 82-degree reference to 1.6e-5.
+
+### Fault 2 — reading a socket that is not connected to anything
+
+To match MEDCOIN's country grass to OASIS's I read OASIS's `MAT_country_grass` Base Color
+and got #88A04C, the known anchor. Applied to MEDCOIN, its grass came out **32 % too dark**.
+
+OASIS's material **drives Base Color from a Z-position ColorRamp** — the terrain bands. The
+Base Color socket is LINKED, so its stored value is a leftover default that never renders.
+Evaluated properly, the ramp at the terrain height z = 0 gives linear
+**(0.363, 0.518, 0.107) = #A2BF5C**, which is 1.47x the unused default — and which matches,
+to three decimals, the albedo independently fitted from MEDCOIN's own render response.
+
+**Rule: before trusting a socket's default value, check `input.links`.** A linked socket's
+default is dead data. Dumping only the BSDF and not the whole node graph is what hid it.
+
+### Fault 3 — MEDCOIN's country grass was 60 % too bright all along
+
+With the ramp value known, the original palette entry — the anchor multiplied by 1.474 —
+was **1.6x too bright**. In one world that is the same grass rendering as two different
+greens. Now matched: MEDCOIN's country renders **#869E4C, identical hex to OASIS, 0.00 %
+difference on all three channels.**
+
+### The shadow check, done two different ways
+
+- **Geometry**, per unique mesh from real vertices: base radius vs widest radius and its
+  height, so only narrow-base/wide-top shapes are tested at all. **0 detached of 11,492
+  vegetation objects**, 68 unique meshes, tightest margin 0.42 m.
+- **Pixels**, from a render: an isolated tree shot straight down at 40 px/m, then connected
+  components. Canopy 2,947 px and shadow 7,622 px sum exactly to the largest component's
+  10,569 px — **one blob, therefore attached**. Measured offset 0.55 m against a 1.23 m
+  canopy radius.
+
+A first version of the geometry check reported 3,093 detached and every offender was a
+**skyscraper** — because it applied the canopy rule to prisms. Section 2e already says a
+building's shadow starts at its own base and can never detach. A check that does not
+encode the rule it is testing will fail the wrong things.
+
+## Traffic direction — two faults, and why the axis test could not see either
+
+Oran, zooming in: cars in the same lane facing each other. Two separate causes.
+
+**1. Every car in the city drove backwards.** `veh_pre` measures which local axis a model's
+LENGTH runs along, and aligns it to the lane heading. That is necessary and it fixed the
+broadside bug -- but aligning an AXIS still leaves a 180-degree choice, and no axis test can
+see it. Determined by rendering all 38 prototypes aligned to +Y and photographing them from
+-Y: every one showed its grille, so on every model in this library the **front is at MINUS
+the length axis**. Without the extra pi the REAR points the way the car travels.
+
+**2. Parked cars faced the wrong way relative to the lane beside them.** Bays sit at
+PARK_OFF 2.05 m and moving lanes at LANE_OFF 1.6 m -- **0.45 m apart, which at this scale is
+the same lane.** `_park_runs` gave every H bay heading 0 while the north-side lane heads
+west, so a parked car and a moving car stood nose to nose half a metre apart, on every
+street in the city. That is the pair Oran actually saw.
+
+**Measured before: 307 of 522 wrong-way, 17 lanes entirely reversed, 17 lanes mixed.
+After: 0, 0, 0.**
+
+The audit that found it computes each car's forward vector from its own rotation and its own
+front axis, compares it to the direction its lane runs, and **reports per lane** -- so a lane
+with a mixed direction is named, not merely counted. Counting alone would have shown "307
+wrong" and hidden the fact that two different bugs were producing it.
+
+Confirmed independently by rendering along a street: the oncoming lane shows grilles, the
+same-direction lane shows tails.
+
+**Main road set to right-hand traffic**, as in British Columbia. The path normal
+n = (-t.y, t.x) points 90 degrees LEFT of travel, so the -n side carries the route direction.
+MEDCOIN is the last city on the route, so route traffic arrives on the south leg and leaves
+east -- the direction of increasing path parameter.

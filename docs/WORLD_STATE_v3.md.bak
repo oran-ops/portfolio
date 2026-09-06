@@ -1,0 +1,210 @@
+# WORLD — state of play, end of 2026-08-22 session
+
+Page 1 of the new document is an old-game world map: a PATH through the four companies, each
+with an arrow above it pointing up to its label (`XTIX — BUILT FROM ZERO`). This file is the
+handoff. It records what exists, what is honestly wrong with it, and the ordered plan to fix
+it — enough to resume cold without re-deriving anything.
+
+Read with: `ARCHITECTURE.md` (the contract), `DECISIONS.md` (why), `KIT_OPTIONS.md` (D1–D27).
+
+---
+
+## 1. Where the files are
+
+| What | Path |
+|---|---|
+| Generator (authored blueprints → binary blob) | `world-build/tools/world3_gen.py` |
+| Viewer (WebGL2 instanced renderer → one HTML) | `world-build/tools/world2_view.py` |
+| Model index, 824 models across 11 kits | `world-build/kits/all/index.json` |
+| Raw-bbox measuring tool | `world-build/tools/measure.py` |
+| Built page (4.7 MB, base64 blob inline) | `repo/lab/world.html` |
+| Local server (also accepts frames back) | `world-build/tools/serve.py` — port 8732 |
+| Label compositor (pins are DOM, not canvas) | `world-build/tools/pinlabel.py` |
+| **Headless renderer — works with the screen locked** | `world-build/tools/shoot.py` |
+
+Rebuild and view:
+
+```bash
+cd "C:/Users/Alex/Desktop/Oran_Personal_Brand/world-build/tools" && python world3_gen.py && python world2_view.py
+```
+
+Everything lives in `Oran_Personal_Brand/world-build/` — deliberately outside the repo, since
+31 MB of source models are build inputs, not site output. It is **not** in the scratchpad any
+more; that folder is wiped at the end of a session.
+
+To view interactively, run `serve.py` and open `http://127.0.0.1:8732/lab/world.html`. In the
+console, `__cam(yaw,pitch,dist,tx,tz)` frames it and `__shot('name.png')` POSTs the canvas to
+`world-build/shots/`. For unattended work use `shoot.py` instead — see below.
+
+**Whole-map framing used for the review shot:** `__cam(-0.79, 0.72, 80, 0.5, -1.5)` at a
+1600×1000 viewport.
+
+### Rendering without a display
+
+`shoot.py` is the one that matters for unattended work. The interactive browser cannot
+screenshot a pane that is not being shown — an occluded window stops compositing frames — so
+every render step died the moment the screen was locked. Headless Chrome with SwiftShader
+rasterises WebGL2 in software: no GPU, no display, no unlocked desktop.
+
+```bash
+python world-build/tools/shoot.py all
+```
+
+7-11 s per 1600x1000 frame for the full 266,805-triangle world, and it captures the whole
+**page**, so the DOM labels and arrows are included. The viewer takes its camera from the URL
+(`world.html?clean#yaw,pitch,dist,tx,tz`), so a frame needs no console and no interaction.
+
+Measured power settings on this machine: on AC, `STANDBYIDLE = 0` and `HIBERNATEIDLE = 0` —
+it never sleeps, so a locked screen does not interrupt a build. On battery it sleeps after
+**20 minutes**, which does. Long unattended runs must be on mains.
+
+---
+
+## 2. What the current build actually contains
+
+Reported by the renderer: **104 distinct models · 6,337 instances · 266,805 drawn triangles**,
+on a 46 × 34 tile grid where 1 tile = 8 m.
+
+Composed, not scattered — this was the fix for the previous rejection:
+
+- **93 groves (656 trees).** A grove picks ONE dominant species and clusters around a centre.
+  A tree that would land alone in open ground is not placed at all.
+- **16 avenue trees** in even rows along both sides of the road either side of OASIS — the
+  visible difference between land that grew and land somebody arranged.
+- **96 riparian** plants crowding the river bank and thinning inland.
+- **265 undergrowth** props, only where there is forest to be under.
+- **The land rises** from XTIX to MEDCOIN; **the forest thins** along the same line. Elevation
+  is the career, not decoration.
+- The route surface changes with the story: **dirt track** where nothing is built yet, **made
+  road** once there is a settlement to serve.
+
+---
+
+## 3. Honest verdict on the current build
+
+Shown to Oran as `v5_MAP_labelled.png`. **Not at reference level. Do not ship it.**
+
+What works, and should be kept:
+
+1. **OASIS reads as a settlement.** Houses *face* a square, with fences, front paths, planters,
+   a market row and people. This is the one place that works, and it works because it was
+   authored tile by tile. It is the template for the other three.
+2. **The groves read as forest**, not scatter. The rule earned that.
+3. **The road reads as a road** — proper tiles, markings, autotiled corners.
+4. **The four arrows and labels are correct** and land above their places.
+
+What is wrong, in severity order:
+
+| # | Problem | Cause |
+|---|---|---|
+| **W1** | **XTIX is invisible.** From the map view it is a few green specks in the trees. It reads as scattered debris, not BUILT FROM ZERO. | Its blueprint is all survival-kit ground clutter — tools, crates, a bedroll. Zero vertical mass. At 8 m per tile a workbench is correctly ~¼ tile, so realistic scale is exactly what makes it vanish. |
+| **W2** | **MEDCOIN is one small grey blob.** No presence as a summit. | Only 8 props, and industrial `building-f` is small at this scale. |
+| **W3** | **EVENTER is a scatter of blue specks.** The crossing does not cross anything. | The route is a single staircase line, so there is no second road to meet it. ALIGNMENT has nothing to align. |
+| **W4** | **The terraces are ugly** — long straight dark-brown rectangular walls chopping the map into arbitrary blocks. | `height()` rounds a smooth field to 0.5 steps, so contours come out straight and long; cliff blocks tint into the **bark** (brown) family and read as wood, not rock; the terrace lip is bare, so nothing breaks the geometry. |
+| **W5** | **~70% of the map is undifferentiated forest** with nothing in it. | The four places occupy a tiny fraction of 46 × 34. Either the map shrinks or the places grow. |
+| **W6** | **Everything is one dark green.** Low contrast, no light direction, no time of day. | Ground tint jitter is ±14 % per tile, which reads as a visible chequerboard rather than variation. |
+| **W7** | **The dirt track is a thin wobbly brown line** — the exact "a path that isn't a path, just a coloured line" criticism from before. | nature-kit `ground_path*` is a narrow track inset in a grass tile. Wrong asset. |
+| **W8** | **Road tiles leave gaps** at their edges. | `SCALE['city-kit-roads'] = 0.85` shrinks the tile itself. See §5 — this is a real bug. |
+| **W9** | Some props render as near-black silhouettes. | Unconfirmed; suspect degenerate triangles giving garbage normals, or no ambient floor in the shader. |
+
+---
+
+## 4. Measured facts — do not re-derive these
+
+Raw bounding boxes, **before** `SCALE` is applied (`python measure.py <name> ...`):
+
+| Model | Kit | W × H × D |
+|---|---|---|
+| `ground_grass` | nature-kit | 1.000 × 0.000 × 1.000 |
+| `road-straight`, `road-crossroad` | city-kit-roads | **1.000** × 0.020 × 1.000 |
+| `wall-a`, `-corner`, `-door`, `-window`, `-open` | retro-urban-kit | **1.000 × 1.000 × 1.000** |
+| `wall-a-low`, `wall-a-roof` | retro-urban-kit | 1.000 × 0.500 × 1.000 |
+| `wall-a-column` | retro-urban-kit | 0.250 × 1.000 × 0.250 |
+| `scaffolding-poles`, `scaffolding-structure` | retro-urban-kit | **1.000 × 1.000 × 1.000** |
+| `scaffolding-floor` | retro-urban-kit | 1.000 × 0.070 × 1.000 |
+| `pallet` | retro-urban-kit | 1.000 × 0.150 × 1.000 |
+| `road-dirt-straight` | retro-urban-kit | 1.000 × 0.050 × **2.000** (two tiles long) |
+| `truck-flat` | retro-urban-kit | 0.830 × 1.006 × 1.643 |
+| `detail-bricks-type-a` | retro-urban-kit | 0.571 × 0.200 × 0.534 |
+
+**The key finding: the retro-urban wall and scaffolding modules are exactly 1 × 1 × 1**, the
+same footprint as a ground tile. They snap to the grid with no fitting. That is what makes a
+half-built building possible to author precisely rather than by eye.
+
+Scale anchor, already validated: nature-kit tile = 8 m, cross-checked by person-to-tree ratio
+0.185 against a real 0.18.
+
+---
+
+## 5. Confirmed bug: `TILE_KITS` is declared and never used
+
+`world3_gen.py:47` declares `TILE_KITS = {'city-kit-roads'}` with the comment "road tiles keep
+the grid, only props shrink". Nothing reads it. `load()` at line 103 applies
+`sc = SCALE.get(kit, 1.0)` unconditionally, so every road tile is drawn at **0.85** and leaves a
+15 % gap on each side — visible as grass showing between road tiles.
+
+`road-straight` measures 1.000 raw, identical to `ground_grass`. Road tiles must be scale
+**1.0**; the 0.85 was measured for the kit's *props*. Fix as a per-model override, not a
+per-kit one.
+
+---
+
+## 6. The plan for tomorrow, in order
+
+**W1 — rebuild XTIX as a construction site.** This is the biggest win and the clearest reading
+of BUILT FROM ZERO: a building going *up*. The retro-urban kit has everything, all on a 1×1
+grid: `wall-a` / `-corner` / `-door` / `-window` / `-open` for a ground floor that is finished,
+`wall-broken-type-a` and bare `wall-a-column` for the floor above that is not, plus
+`scaffolding-poles` / `-floor` / `-structure` on two sides, `pallet`, `planks`,
+`detail-bricks-type-a`, `detail-beam`, `detail-dumpster-open`, `truck-flat` delivering,
+`construction-fence` and `construction-cone` around the plot, and workers. Raw forest presses
+right up to the plot edge. Vertical mass plus an unmistakable story.
+
+**W3 — give EVENTER a real crossing.** Branch a second road off the main route so two roads
+actually meet at right angles. Then the existing signals, signs and waiting traffic mean
+something. ALIGNMENT needs two things to align.
+
+**W2 — give MEDCOIN a summit.** Scale the tower up, add `chimney-large` and a mast, put it on
+bare rock with a single road climbing to it. What is *missing* there is the point: no forest,
+no crowd, no street furniture.
+
+**W4 — fix the terrain.** Tint cliff faces into the **grid** (grey rock) family, not **bark**.
+Raise the contour noise frequency so terrace edges wander instead of running straight. Plant
+rocks and bushes along every terrace lip so the geometry is broken by growth. Consider
+`cliff_top_rock` and `cliff_blockDiagonal_rock` at the corners.
+
+**W5 — close the empty ground.** Shrink the grid, or push the four places apart and enlarge
+each footprint. Prefer enlarging: the places are the content.
+
+**W6 — reduce ground jitter** to roughly ±7 % so it reads as variation, not a chequerboard.
+Revisit light direction and contrast at the same time.
+
+**W7 — replace the dirt track** with retro-urban `road-dirt-*` full-square tiles.
+
+**W8 — fix the road-tile scale** per §5.
+
+**W9 — find the black props.** Skip degenerate triangles in `load()` and add an ambient floor
+in the shader so nothing renders pure black.
+
+Then, and only then: phases D–J — page 1 final, page 3 as a folder, page 4 approach and the
+click into the machine, the desktop with seven documents, copy, mobile, checks.
+
+---
+
+## 7. Standing constraints, unchanged
+
+- The shell is 1984. The content is 2026.
+- Publish at `/portfolio/m/`. The root `index.html` is never touched by a build.
+- Zero external requests except the one LinkedIn link.
+- No new colours beyond the fixed tokens; every token stays a stop in its own ramp.
+- Painter's sort for isometric is `x + y`, then `z`, then insertion order — never `x + y + z`.
+- Variation comes from a hash, never from modulo; modulo produces visible periodic patterns.
+- Downloading any file needs explicit permission first.
+
+## 8. The two lessons this world has already cost
+
+1. **Design before building.** Both rejections so far were the same note: elements thrown down
+   with no plan. The blueprint tables in `world3_gen.py` are the fix, and they are why OASIS is
+   the one place that works.
+2. **Measure one parameter at a time; never eye-adjust.** §4 exists so that tomorrow's XTIX is
+   laid out against measured module sizes rather than nudged until it looks about right.

@@ -1,0 +1,27 @@
+/*--0--*/
+
+#xtix .reality{margin-bottom:18px}/*--1--*/
+
+
+/* R8 — the approach list stays attached to its heading */
+#xtix .grid2c.apl,#xtix .grid2c{grid-template-columns:286px minmax(0,1fr);justify-content:start;column-gap:54px}/*--2--*/#xtix .grid2c.apl,#xtix .grid2c{grid-template-columns:1fr}/*--3--*/
+  /* a 286px fixed track inside a 525px column left 217px for a 229px line */
+  #xtix .grid2c.apl,#xtix .grid2c{grid-template-columns:repeat(2,minmax(0,1fr));column-gap:22px}/*--4--*/
+#xtix .then{font-size:16px;font-weight:600}/*--5--*/
+#xtix .bigtxt{font-weight:700;font-size:clamp(18px,1.9vw,24px);line-height:1.2;color:var(--ink);letter-spacing:-.01em}/*--6--*/
+#xtix .refl3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px 30px}/*--7--*/#xtix .refl3{grid-template-columns:1fr}/*--8--*/
+
+
+/* agent-3 pass, site parity: XTIX evidence stat row on an even 3-column rhythm */
+#xtix .statrow{display:grid;grid-template-columns:repeat(3,1fr);gap:12px 30px;align-items:end}/*--9--*/#xtix .statrow{grid-template-columns:1fr;gap:26px}/*--10--*/
+  #xtix .statrow{column-gap:24px}/*--11--*/
+  #xtix .bigtxt{font-size:clamp(18px,1.5vw,21px)}/*--12--*/
+  #xtix .refl3{column-gap:22px}/*--13--*/
+  #xtix .refl3 .dash{font-size:12.5px}/*--14--*/
+
+/* ================= THE RING'S LANGUAGE ON THE CASE FOLDERS =================
+   The same design as the cards on the turntable, in each case's own colour on the
+   existing dark ground: the ghost numeral, the blind seal, and the tab brought to the
+   ring tab's finish. The scrub already puts a transform on every folder, so a negative
+   z-index child sits above the folder's ground and under its content. */
+#xtix .folder{--cn:"01"}

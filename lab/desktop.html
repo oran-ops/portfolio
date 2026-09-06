@@ -1,0 +1,557 @@
+<title>Master File</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* The palette is docs/ARCHITECTURE.md 8.1, unchanged, and the faces are the five the project
+   already ships. This page commits to ONE theme on purpose: the artwork is a white 1-bit
+   raster, and a raster only reads as a lit screen against a dark ground. So there is no light
+   variant -- but every colour, the body ground included, is painted from a token, so the page
+   holds whatever ground the viewer's own theme paints behind it. */
+:root{
+  --bg:#191A1F; --card:#202127; --card2:#25262D; --ink:#F2F1ED; --mut:#B6B7BB; --lbl:#CFD0D4;
+  --grid:#33353C; --hair:rgba(255,255,255,.09); --dim:#7E828C; --void:#0E0F12;
+  --emb:#2FB380; --brass:#E0A458; --ice:#5E8FBF;
+  --ease:cubic-bezier(.22,.61,.2,1);
+  --step:clamp(15px,1.05vw,16px);
+}
+*{box-sizing:border-box}
+html{color-scheme:dark}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;
+  font-size:var(--step);-webkit-font-smoothing:antialiased}
+.wrap{max-width:1120px;margin:0 auto;padding:52px 24px 96px;display:flex;flex-direction:column;gap:44px}
+section{display:flex;flex-direction:column;gap:16px}
+.kick{font-family:'JetBrains Mono',ui-monospace,Menlo,monospace;font-size:10px;letter-spacing:.3em;
+  color:var(--emb);text-transform:uppercase}
+h1{font-family:'Fraunces','Iowan Old Style',Georgia,serif;font-weight:800;
+  font-size:clamp(30px,4.4vw,46px);line-height:1.04;letter-spacing:-.022em;margin:0;
+  text-wrap:balance}
+h2{font-family:'Fraunces','Iowan Old Style',Georgia,serif;font-weight:600;
+  font-size:clamp(19px,2.1vw,23px);line-height:1.2;letter-spacing:-.012em;margin:0;
+  text-wrap:balance}
+p{margin:0;max-width:64ch;line-height:1.62;color:var(--mut)}
+p b{color:var(--ink);font-weight:600}
+p.lead{font-size:calc(var(--step) + 1.5px);color:var(--lbl)}
+p.small{font-size:13.5px;line-height:1.66;color:var(--dim);max-width:72ch}
+code{font-family:'JetBrains Mono',ui-monospace,monospace;font-size:.88em;color:var(--lbl)}
+.rule{border:0;border-top:1px solid var(--hair);margin:0}
+.stage{display:flex;gap:36px;align-items:flex-start;flex-wrap:wrap;justify-content:center}
+.hold{display:flex;flex-direction:column;align-items:center;gap:11px}
+.frame{padding:10px;background:var(--void);border:1px solid var(--grid);line-height:0;
+  max-width:100%;overflow-x:auto}
+canvas{display:block;image-rendering:pixelated;image-rendering:crisp-edges}
+canvas.live{cursor:default}
+.meta{font-family:'JetBrains Mono',ui-monospace,Menlo,monospace;font-size:10px;letter-spacing:.18em;
+  color:var(--dim);text-transform:uppercase}
+.bar{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+button{font:inherit;font-size:12.5px;color:var(--lbl);background:var(--card);
+  border:1px solid var(--grid);padding:8px 14px;cursor:pointer;
+  transition:border-color .18s var(--ease),color .18s var(--ease),background .18s var(--ease)}
+button:hover{border-color:var(--emb);color:var(--ink);background:var(--card2)}
+button:focus-visible,canvas:focus-visible{outline:2px solid var(--emb);outline-offset:3px}
+.plate{display:flex;flex-direction:column;gap:10px;align-items:flex-start}
+.keys{display:flex;gap:8px;flex-wrap:wrap}
+.keys{margin-top:-4px}
+.keys button{padding:6px 11px;font-family:'JetBrains Mono',ui-monospace,monospace;font-size:10.5px;letter-spacing:.1em}
+.keys button span{display:inline-block;width:8px;height:8px;margin-right:7px;
+  transform:translateY(1px);border:1px solid rgba(0,0,0,.6)}
+.calls{display:grid;gap:2px 26px;grid-template-columns:1fr;margin:0;padding:0;list-style:none}
+.calls li{display:grid;grid-template-columns:132px 1fr;gap:16px;padding:11px 0;
+  border-top:1px solid var(--hair);align-items:baseline}
+.calls dt,.calls .t{font-family:'JetBrains Mono',ui-monospace,monospace;font-size:10.5px;
+  letter-spacing:.16em;text-transform:uppercase;color:var(--emb)}
+.calls .t.ask{color:var(--brass)}
+.calls .d{color:var(--mut);font-size:14px;line-height:1.6}
+.calls .d b{color:var(--ink);font-weight:600}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+@media(max-width:720px){
+  .calls li{grid-template-columns:1fr;gap:5px}
+  .wrap{gap:36px;padding:40px 20px 72px}
+}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+
+<div class="wrap">
+  <section>
+    <div class="kick">Stage 5 &middot; the folder</div>
+    <h1>Oran Carmon &mdash; Master File</h1>
+    <p class="lead">The screen the camera lands on when it finishes flying into the CRT. Seven
+    icons: four case files for the companies, a notepad, a system suitcase, and the sealed letter
+    that ends the document. Drawn at <b>512&nbsp;&times;&nbsp;342</b> &mdash; the Macintosh 128K's
+    own framebuffer &mdash; and shown at a whole&nbsp;&times;2, so no pixel is ever half a pixel.</p>
+    <p><b>One click opens a document</b>, never two, because a phone cannot do two. The counter in
+    the middle of the status line remembers what you opened, and it survives a reload.</p>
+  </section>
+
+  <section>
+    <div class="stage">
+      <div class="hold">
+        <div class="frame"><canvas id="c-desk" class="live" width="1024" height="684" tabindex="0"
+          role="img" aria-label="The Master File window on a desktop: four columns"></canvas></div>
+        <div class="meta">desktop &middot; 512 &times; 342 at &times;2 &middot; four columns</div>
+      </div>
+      <div class="hold">
+        <div class="frame"><canvas id="c-mob" class="live" width="390" height="844" tabindex="0"
+          role="img" aria-label="The same window on a phone: two columns, four rows"></canvas></div>
+        <div class="meta">mobile &middot; 195 &times; 422 at &times;2 &middot; two columns</div>
+      </div>
+    </div>
+
+    <div class="bar">
+      <button id="b-open" type="button">Open the folder</button>
+      <button id="b-close" type="button">Close it</button>
+      <button id="b-reset" type="button">Forget what I opened</button>
+      <span class="meta" id="b-state"></span>
+    </div>
+    <div class="keys" id="keys" aria-label="Open a document without the canvas"></div>
+  </section>
+
+  <hr class="rule">
+
+  <section>
+    <h2>The seven, on both grounds</h2>
+    <p>Every icon twice: on the white of an open window, and on the 50&nbsp;per&nbsp;cent
+    checkerboard of the desktop. The second row is the test that matters &mdash; it is where a
+    paper-white icon goes missing.</p>
+    <div class="plate">
+      <div class="frame"><canvas id="c-plate" width="920" height="212"
+        role="img" aria-label="The seven icons at 32 by 32, shown on white and on the desktop dither"></canvas></div>
+      <div class="meta">32 &times; 32, shown at &times;2</div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Why each one looks the way it does</h2>
+    <ul class="calls">
+      <li><span class="t">Row break</span><span class="d">The first row is the four companies, in
+      the order they happened. The second is everything that is not a company &mdash; and
+      <b>READ&nbsp;ME</b> sits at the end of it, where a reader finishes rather than starts. On a
+      phone the same break lands as four rows of two, with READ&nbsp;ME alone at the bottom.</span></li>
+      <li><span class="t">Four case files</span><span class="d">They share one silhouette on
+      purpose: they are the same kind of thing, and <b>colour is what separates them</b>. The three
+      that are not companies differ in outline alone &mdash; which is how a desktop said
+      &ldquo;different kind of thing&rdquo; without a word of explanation.</span></li>
+      <li><span class="t">MEDCOIN</span><span class="d">Paper white, which would vanish on a white
+      window &mdash; so its <b>keyline is drawn twice</b>. That is the period answer to a light
+      icon. The fix is in the idiom, not in the palette; the colour is untouched.</span></li>
+      <li><span class="t">Selection</span><span class="d">A 1-bit Finder selected by inverting the
+      bitmap. On a colour icon that turns emerald into magenta, so this dims inside the mask and
+      inverts only the label &mdash; which is what System&nbsp;7 did once icons had colour.</span></li>
+      <li><span class="t">The chrome</span><span class="d">The title bar is built to the measured
+      System&nbsp;1 figures: 1&nbsp;black, 3&nbsp;white, <b>11&nbsp;striped</b>, 3&nbsp;white,
+      1&nbsp;black, with the title punched through the stripes with 6&nbsp;px of white either side.
+      Scroll bars are present and empty &mdash; in 1-bit there is no greying, and that absence
+      <i>is</i> the inactive state.</span></li>
+      <li><span class="t">Nothing borrowed</span><span class="d">Chicago, Geneva and the System&nbsp;6
+      icons are Apple's, and <code>docs/KIT_OPTIONS.md</code> rules them out. The face here is drawn
+      from scratch on a 5&nbsp;&times;&nbsp;7 cell and the icons on a 32&nbsp;&times;&nbsp;32 grid,
+      so <b>the whole kit is ours</b> &mdash; menu mark included.</span></li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Two places the machine lost the argument</h2>
+    <p>Both of these were open questions. Both are now settled, and in both the reader won over the
+    period.</p>
+    <ul class="calls">
+      <li><span class="t ask">The count</span><span class="d">It reads
+      <b>7&nbsp;files &middot; 0&nbsp;of&nbsp;7&nbsp;opened &middot; 2018&ndash;2026</b>. The
+      earlier figure of six treated READ&nbsp;ME as something other than a file; it is a file, a
+      reader opens it like the rest, and a Finder counted what the window held. A wrong count is
+      the one thing a Mac user spots instantly. Both numbers are now read off the icon list itself,
+      so they cannot drift from what is on the screen.</span></li>
+      <li><span class="t ask">The close box</span><span class="d">System&nbsp;1 drew this square
+      <b>empty</b> and filled it on press. It carries an <b>X</b> instead, deliberately: an empty
+      square does not read as an exit to anyone who never used the machine. Clarity beat
+      authenticity, which is the right way round &mdash; the shell exists to be understood, not to
+      pass an inspection.</span></li>
+    </ul>
+  </section>
+
+  <p class="sr" id="sr-live" aria-live="polite"></p>
+</div>
+
+<script>// GENERATED by tools/mac_kit.py -- do not edit by hand.
+window.KIT={"font":{"A":["01110","10001","10001","11111","10001","10001","10001","00000"],"B":["11110","10001","10001","11110","10001","10001","11110","00000"],"C":["01110","10001","10000","10000","10000","10001","01110","00000"],"D":["11110","10001","10001","10001","10001","10001","11110","00000"],"E":["11111","10000","10000","11110","10000","10000","11111","00000"],"F":["11111","10000","10000","11110","10000","10000","10000","00000"],"G":["01110","10001","10000","10111","10001","10001","01111","00000"],"H":["10001","10001","10001","11111","10001","10001","10001","00000"],"I":["111","010","010","010","010","010","111","000"],"J":["00111","00010","00010","00010","00010","10010","01100","00000"],"K":["10001","10010","10100","11000","10100","10010","10001","00000"],"L":["10000","10000","10000","10000","10000","10000","11111","00000"],"M":["10001","11011","10101","10101","10001","10001","10001","00000"],"N":["10001","11001","10101","10011","10001","10001","10001","00000"],"O":["01110","10001","10001","10001","10001","10001","01110","00000"],"P":["11110","10001","10001","11110","10000","10000","10000","00000"],"Q":["01110","10001","10001","10001","10101","10010","01101","00000"],"R":["11110","10001","10001","11110","10100","10010","10001","00000"],"S":["01111","10000","10000","01110","00001","00001","11110","00000"],"T":["11111","00100","00100","00100","00100","00100","00100","00000"],"U":["10001","10001","10001","10001","10001","10001","01110","00000"],"V":["10001","10001","10001","10001","10001","01010","00100","00000"],"W":["10001","10001","10001","10101","10101","11011","10001","00000"],"X":["10001","10001","01010","00100","01010","10001","10001","00000"],"Y":["10001","10001","01010","00100","00100","00100","00100","00000"],"Z":["11111","00001","00010","00100","01000","10000","11111","00000"],"0":["01110","10011","10011","10101","11001","11001","01110","00000"],"1":["00100","01100","00100","00100","00100","00100","01110","00000"],"2":["01110","10001","00001","00010","00100","01000","11111","00000"],"3":["11111","00010","00100","00010","00001","10001","01110","00000"],"4":["00010","00110","01010","10010","11111","00010","00010","00000"],"5":["11111","10000","11110","00001","00001","10001","01110","00000"],"6":["00110","01000","10000","11110","10001","10001","01110","00000"],"7":["11111","00001","00010","00100","01000","01000","01000","00000"],"8":["01110","10001","10001","01110","10001","10001","01110","00000"],"9":["01110","10001","10001","01111","00001","00010","01100","00000"],"a":["00000","00000","01110","00001","01111","10001","01111","00000"],"b":["10000","10000","11110","10001","10001","10001","11110","00000"],"c":["00000","00000","01110","10001","10000","10001","01110","00000"],"d":["00001","00001","01111","10001","10001","10001","01111","00000"],"e":["00000","00000","01110","10001","11111","10000","01110","00000"],"f":["00110","01001","01000","11110","01000","01000","01000","00000"],"g":["00000","00000","01111","10001","10001","01111","00001","01110"],"h":["10000","10000","11110","10001","10001","10001","10001","00000"],"i":["010","000","110","010","010","010","111","000"],"j":["00010","00000","00110","00010","00010","00010","10010","01100"],"k":["10000","10000","10010","10100","11000","10100","10010","00000"],"l":["110","010","010","010","010","010","111","000"],"m":["00000","00000","11010","10101","10101","10101","10101","00000"],"n":["00000","00000","11110","10001","10001","10001","10001","00000"],"o":["00000","00000","01110","10001","10001","10001","01110","00000"],"p":["00000","00000","11110","10001","10001","11110","10000","10000"],"q":["00000","00000","01111","10001","10001","01111","00001","00001"],"r":["00000","00000","10110","11001","10000","10000","10000","00000"],"s":["00000","00000","01111","10000","01110","00001","11110","00000"],"t":["01000","01000","11110","01000","01000","01001","00110","00000"],"u":["00000","00000","10001","10001","10001","10011","01101","00000"],"v":["00000","00000","10001","10001","10001","01010","00100","00000"],"w":["00000","00000","10001","10001","10101","10101","01010","00000"],"x":["00000","00000","10001","01010","00100","01010","10001","00000"],"y":["00000","00000","10001","10001","10001","01111","00001","01110"],"z":["00000","00000","11111","00010","00100","01000","11111","00000"]," ":["00","00","00","00","00","00","00","00"],"-":["000","000","000","111","000","000","000","000"],"–":["00000","00000","00000","11111","00000","00000","00000","00000"],"—":["0000000","0000000","0000000","1111111","0000000","0000000","0000000","0000000"],".":["0","0","0","0","0","0","1","0"],",":["00","00","00","00","00","00","01","10"],"/":["00001","00001","00010","00100","01000","10000","10000","00000"]},"icons":{"xtix":["................................","................................","................................",".......KKKKKKKKKK...............",".......KCCCCCCCCLK..............",".......KCCCCCCCCLLK.............",".......KCCCCCCCCLLLK............",".......KCCCCCCCCLLLLK...........",".......KCCCCCCCCLLLLLK..........",".......KCCCCCCCCLLLLLLK.........",".......KCCCCCCCCLLLLLLLK........",".......KCCCCCCCCLLLLLLLLK.......",".......KKKKKKKKKKKKKKKKKK.......",".......KLLLLLLLLLLLLLLLLK.......",".......KLCCCCCCCCCCCCCCSK.......",".......KLCCCCCCCCCCCCCCSK.......",".......KLCSSSSSSSSSSSSCSK.......",".......KLCCCCCCCCCCCCCCSK.......",".......KLCCCCCCCCCCCCCCSK.......",".......KLCSSSSSSSSSSSSCSK.......",".......KLCCCCCCCCCCCCCCSK.......",".......KLCCCCCCCCCCCCCCSK.......",".......KLCSSSSSSSSSSSSCSK.......",".......KLCCCCCCCCCCCCCCSK.......",".......KLCCCCCCCCCCCCCCSK.......",".......KLCSSSSSSSSCCCCCSK.......",".......KLCCCCCCCCCCCCCCSK.......",".......KLCCCCCCCCCCCCCCSK.......",".......KCSSSSSSSSSSSSSSSK.......",".......KKKKKKKKKKKKKKKKKK.......","................................","................................"],"oasis":["................................","................................","................................",".......KKKKKKKKKK...............",".......KCCCCCCCCLK..............",".......KCCCCCCCCLLK.............",".......KCCCCCCCCLLLK............",".......KCCCCCCCCLLLLK...........",".......KCCCCCCCCLLLLLK..........",".......KCCCCCCCCLLLLLLK.........",".......KCCCCCCCCLLLLLLLK........",".......KCCCCCCCCLLLLLLLLK.......",".......KKKKKKKKKKKKKKKKKK.......",".......KLLLLLLLLLLLLLLLLK.......",".......KLCCCCCCCCCCCCCCSK.......",".......KLCCCCCCCCCCCCCCSK.......",".......KLCSSSSSSSSSSSSCSK.......",".......KLCCCCCCCCCCCCCCSK.......",".......KLCCCCCCCCCCCCCCSK.......",".......KLCSSSSSSSSSSSSCSK.......",".......KLCCCCCCCCCCCCCCSK.......",".......KLCCCCCCCCCCCCCCSK.......",".......KLCSSSSSSSSSSSSCSK.......",".......KLCCCCCCCCCCCCCCSK.......",".......KLCCCCCCCCCCCCCCSK.......",".......KLCSSSSSSSSCCCCCSK.......",".......KLCCCCCCCCCCCCCCSK.......",".......KLCCCCCCCCCCCCCCSK.......",".......KCSSSSSSSSSSSSSSSK.......",".......KKKKKKKKKKKKKKKKKK.......","................................","................................"],"eventer":["................................","................................","................................",".......KKKKKKKKKK...............",".......KCCCCCCCCLK..............",".......KCCCCCCCCLLK.............",".......KCCCCCCCCLLLK............",".......KCCCCCCCCLLLLK...........",".......KCCCCCCCCLLLLLK..........",".......KCCCCCCCCLLLLLLK.........",".......KCCCCCCCCLLLLLLLK........",".......KCCCCCCCCLLLLLLLLK.......",".......KKKKKKKKKKKKKKKKKK.......",".......KLLLLLLLLLLLLLLLLK.......",".......KLCCCCCCCCCCCCCCSK.......",".......KLCCCCCCCCCCCCCCSK.......",".......KLCSSSSSSSSSSSSCSK.......",".......KLCCCCCCCCCCCCCCSK.......",".......KLCCCCCCCCCCCCCCSK.......",".......KLCSSSSSSSSSSSSCSK.......",".......KLCCCCCCCCCCCCCCSK.......",".......KLCCCCCCCCCCCCCCSK.......",".......KLCSSSSSSSSSSSSCSK.......",".......KLCCCCCCCCCCCCCCSK.......",".......KLCCCCCCCCCCCCCCSK.......",".......KLCSSSSSSSSCCCCCSK.......",".......KLCCCCCCCCCCCCCCSK.......",".......KLCCCCCCCCCCCCCCSK.......",".......KCSSSSSSSSSSSSSSSK.......",".......KKKKKKKKKKKKKKKKKK.......","................................","................................"],"medcoin":["................................","................................","......KKKKKKKKKKKK..............","......KKKKKKKKKKKKK.............","......KKCCCCCCCCLKKK............","......KKCCCCCCCCLLKKK...........","......KKCCCCCCCCLLLKKK..........","......KKCCCCCCCCLLLLKKK.........","......KKCCCCCCCCLLLLLKKK........","......KKCCCCCCCCLLLLLLKKK.......","......KKCCCCCCCCLLLLLLLKKK......","......KKCCCCCCCCLLLLLLLLKK......","......KKKKKKKKKKKKKKKKKKKK......","......KKLLLLLLLLLLLLLLLLKK......","......KKLCCCCCCCCCCCCCCSKK......","......KKLCCCCCCCCCCCCCCSKK......","......KKLCSSSSSSSSSSSSCSKK......","......KKLCCCCCCCCCCCCCCSKK......","......KKLCCCCCCCCCCCCCCSKK......","......KKLCSSSSSSSSSSSSCSKK......","......KKLCCCCCCCCCCCCCCSKK......","......KKLCCCCCCCCCCCCCCSKK......","......KKLCSSSSSSSSSSSSCSKK......","......KKLCCCCCCCCCCCCCCSKK......","......KKLCCCCCCCCCCCCCCSKK......","......KKLCSSSSSSSSCCCCCSKK......","......KKLCCCCCCCCCCCCCCSKK......","......KKLCCCCCCCCCCCCCCSKK......","......KKCSSSSSSSSSSSSSSSKK......","......KKKKKKKKKKKKKKKKKKKK......","......KKKKKKKKKKKKKKKKKKKK......","................................"],"leadership":["................................","................................","................................","................................","................................","........KKKK...KKKK...KKKK......","........KWWK...KWWK...KWWK......","........KWWK...KWWK...KWWK......","........KWWK...KWWK...KWWK......","....KKKKKWWKKKKKWWKKKKKWWKKK....","....KSSSKWWKSSSKWWKSSSKWWKSK....","....KSSSKKKKSSSKKKKSSSKKKKSK....","....KSSSSSSSSSSSSSSSSSSSSSSK....","....KSSSSSSSSSSSSSSSSSSSSSSK....","....KSSSSSSSSSSSSSSSSSSSSSSK....","....KKKKKKKKKKKKKKKKKKKKKKKK....","....KLLLLLLLLLLLLLLLLLLLLLLK....","....KLCCCCCCCCCCCCCCCCCCCCSK....","....KLCCCCCCCCCCCCCCCCCCCCSK....","....KLCCSSSSSSSSSSSSSSSSCCSK....","....KLCCCCCCCCCCCCCCCCCCCCSK....","....KLCCCCCCCCCCCCCCCCCCCCSK....","....KLCCSSSSSSSSSSSSSSSSCCSK....","....KLCCCCCCCCCCCCCCCCCCCCSK....","....KLCCCCCCCCCCCCCCCCCCCCSK....","....KLCCSSSSSSSSSSSSSSSSCCSK....","....KLCCCCCCCCCCCCCCCCCCCCSK....","....KLCCCCCCCCCCCCCCCCCCCCSK....","....KLSSSSSSSSSSSSSSSSSSSSSK....","....KKKKKKKKKKKKKKKKKKKKKKKK....","................................","................................"],"tech":["................................","................................","................................","................................","................................","............KKKKKKKK............","............KKKKKKKK............","............KK....KK............","............KK....KK............","............KK....KK............","...KKKKKKKKKKKKKKKKKKKKKKKKKK...","...KLLLLLLLLLLLLLLLLLLLLLLLLK...","...KLCCCCCCCCCCCCCCCCCCCCCCSK...","...KLCCCCCCCCCCCCCCCCCCCCCCSK...","...KLCCCCCCCCCCCCCCCCCCCCCCSK...","...KLCCCCCCCCCCCCCCCCCCCCCCSK...","...KLCCCCCCCCKKKKKKCCCCCCCCSK...","...KLCCCCCCCCKLLLLKCCCCCCCCSK...","...KKKKKKKKKKKSSSSKKKKKKKKKKK...","...KLLLLLLLLLKLLLLKLLLLLLLLLK...","...KLCCCCCCCCKLLLLKCCCCCCCCSK...","...KLCCCCCCCCKKKKKKCCCCCCCCSK...","...KLCCCCCCCCCCCCCCCCCCCCCCSK...","...KLCCCCCCCCCCCCCCCCCCCCCCSK...","...KLCCCCCCCCCCCCCCCCCCCCCCSK...","...KLCCCCCCCCCCCCCCCCCCCCCCSK...","...KCSSSSSSSSSSSSSSSSSSSSSSSK...","...KKKKKKKKKKKKKKKKKKKKKKKKKK...","................................","................................","................................","................................"],"final":["................................","................................","................................","................................","................................","................................","................................","................................","................................","...KKKKKKKKKKKKKKKKKKKKKKKKKK...","...KLLLLLLLLLLLLLLLLLLLLLLLLK...","...KCCCKKLLLLLLLLLLLLLLKKCCCK...","...KCCCCCKKLLLLLLLLLLKKCCCCCK...","...KCCCCCCCKKLLLLLLKKCCCCCCCK...","...KCCCCCCCCCKKKKKKCCCCCCCCCK...","...KCCCCCCCCKWWWWWWKCCCCCCCCK...","...KCCCCCCCCKWWWWWWKCCCCCCCCK...","...KCCCCCCCCKWWSSSWKCCCCCCCCK...","...KCCCCCCCCKWSSSWWKCCCCCCCCK...","...KCCCCCCCCKWWWWWWKCCCCCCCCK...","...KCCCCCCCCKWWWWWWKCCCCCCCCK...","...KCCCCCCCCCKKKKKKCCCCCCCCCK...","...KCCCCCCCCCCCCCCCCCCCCCCCCK...","...KCCCCCCCCCCCCCCCCCCCCCCCCK...","...KCCCCCCCCCCCCCCCCCCCCCCCCK...","...KSSSSSSSSSSSSSSSSSSSSSSSSK...","...KKKKKKKKKKKKKKKKKKKKKKKKKK...","................................","................................","................................","................................","................................"],"folder":["................................","................................","................................","................................","................................","................................","................................","...KKKKKKKKKKKK.................","...KLLLLLLLLLLLK................","...KCCCCCCCCCCCKK...............","...KCCCCCCCCCCCCKKCCCCCCCCCC....","...KCCCCCCCCCCCKCKCCCCCCCCCCK...","...CCCCCCCCCCCCCCCCCCCCCCCCCK...","...KKKKKKKKKKKKKKKKKKKKKKKKKK...","...KLLLLLLLLLLLLLLLLLLLLLLLLK...","...KLCCCCCCCCCCCCCCCCCCCCCCSK...","...KLCCCCCCCCCCCCCCCCCCCCCCSK...","...KLCCCCCCCCCCCCCCCCCCCCCCSK...","...KLCCCCCCCCCCCCCCCCCCCCCCSK...","...KLCCCCCCCCCCCCCCCCCCCCCCSK...","...KLCCCCCCCCCCCCCCCCCCCCCCSK...","...KLCCCCCCCCCCCCCCCCCCCCCCSK...","...KLCCCCCCCCCCCCCCCCCCCCCCSK...","...KLCCCCCCCCCCCCCCCCCCCCCCSK...","...KLCCCCCCCCCCCCCCCCCCCCCCSK...","...KLCCCCCCCCCCCCCCCCCCCCCCSK...","...KCSSSSSSSSSSSSSSSSSSSSSSSK...","...KKKKKKKKKKKKKKKKKKKKKKKKKK...","................................","................................","................................","................................"]},"colour":{"xtix":{"C":[47,179,128],"L":[141,213,185],"S":[32,122,87],"K":[0,0,0],"W":[255,255,255]},"oasis":{"C":[224,164,88],"L":[238,205,163],"S":[152,112,60],"K":[0,0,0],"W":[255,255,255]},"eventer":{"C":[94,143,191],"L":[166,193,220],"S":[64,97,130],"K":[0,0,0],"W":[255,255,255]},"medcoin":{"C":[242,241,237],"L":[248,247,245],"S":[165,164,161],"K":[0,0,0],"W":[255,255,255]},"leadership":{"C":[47,179,128],"L":[141,213,185],"S":[32,122,87],"K":[0,0,0],"W":[255,255,255]},"tech":{"C":[47,179,128],"L":[141,213,185],"S":[32,122,87],"K":[0,0,0],"W":[255,255,255]},"final":{"C":[47,179,128],"L":[141,213,185],"S":[32,122,87],"K":[0,0,0],"W":[255,255,255]},"folder":{"C":[47,179,128],"L":[141,213,185],"S":[32,122,87],"K":[0,0,0],"W":[255,255,255]}},"labels":{"xtix":"XTIX","oasis":"OASIS","eventer":"EVENTER","medcoin":"MEDCOIN","leadership":"LEADERSHIP","tech":"TECH","final":"READ ME","folder":"Oran Carmon — Master File"},"order":["xtix","oasis","eventer","medcoin","leadership","tech","final"]};</script>
+<script>
+"use strict";
+// GENERATED FROM tools/screen.js -- the pure renderer, shared by the browser and by
+// tools/shoot_crt.js, which bakes the CRT texture for Blender. ONE renderer: the pixels
+// the camera flies INTO and the pixels it lands ON cannot differ, because they are made
+// by the same function.
+"use strict";
+var K = (typeof window !== "undefined" && window.KIT) || (typeof global !== "undefined" && global.KIT);
+
+
+/* ------------------------------------------------------------------ the pixel buffer
+   Everything is drawn at 1x into a plain byte array and blitted once. Nothing is drawn at a
+   fractional coordinate, so nothing can land off-grid however the page is zoomed. */
+function Buf(w, h) { this.w = w; this.h = h; this.d = new Uint8ClampedArray(w * h * 4); }
+Buf.prototype.set = function (x, y, c) {
+  x |= 0; y |= 0;
+  if (x < 0 || y < 0 || x >= this.w || y >= this.h) return;
+  var i = (y * this.w + x) * 4;
+  this.d[i] = c[0]; this.d[i + 1] = c[1]; this.d[i + 2] = c[2]; this.d[i + 3] = 255;
+};
+Buf.prototype.rect = function (x0, y0, x1, y1, c) {
+  for (var y = y0; y <= y1; y++) for (var x = x0; x <= x1; x++) this.set(x, y, c);
+};
+Buf.prototype.frame = function (x0, y0, x1, y1, c) {
+  for (var x = x0; x <= x1; x++) { this.set(x, y0, c); this.set(x, y1, c); }
+  for (var y = y0; y <= y1; y++) { this.set(x0, y, c); this.set(x1, y, c); }
+};
+Buf.prototype.hl = function (y, x0, x1, c) { for (var x = x0; x <= x1; x++) this.set(x, y, c); };
+Buf.prototype.vl = function (x, y0, y1, c) { for (var y = y0; y <= y1; y++) this.set(x, y, c); };
+Buf.prototype.invert = function (x0, y0, x1, y1) {
+  for (var y = Math.max(0, y0); y <= Math.min(this.h - 1, y1); y++)
+    for (var x = Math.max(0, x0); x <= Math.min(this.w - 1, x1); x++) {
+      var i = (y * this.w + x) * 4;
+      this.d[i] = 255 - this.d[i]; this.d[i + 1] = 255 - this.d[i + 1];
+      this.d[i + 2] = 255 - this.d[i + 2];
+    }
+};
+
+var BLACK = [0, 0, 0], WHITE = [255, 255, 255];
+
+/* the 50 per cent checkerboard the Macintosh desktop actually was */
+function dither(b, x0, y0, x1, y1) {
+  for (var y = y0; y <= y1; y++)
+    for (var x = x0; x <= x1; x++) b.set(x, y, ((x + y) & 1) ? WHITE : BLACK);
+}
+
+/* ------------------------------------------------------------------ the face */
+function gly(ch) { return K.font[ch] || K.font["."]; }
+function adv(ch) { return gly(ch)[0].length + 1; }
+function tw(s) { var n = 0; for (var i = 0; i < s.length; i++) n += adv(s[i]); return n ? n - 1 : 0; }
+function txt(b, s, x, y, c) {
+  for (var i = 0; i < s.length; i++) {
+    var g = gly(s[i]);
+    for (var j = 0; j < g.length; j++)
+      for (var k = 0; k < g[j].length; k++) if (g[j][k] === "1") b.set(x + k, y + j, c);
+    x += adv(s[i]);
+  }
+  return x;
+}
+
+/* ------------------------------------------------------------------ the icons
+   `dim` is the selected state. A 1-bit Finder selected by INVERTING the bitmap; on a colour
+   icon that turns emerald into magenta, so System 7 dimmed inside the mask instead and left
+   the inversion to the label. Oran chose colour, so the colour rule is the one that applies.
+   Either way it happens inside the mask -- the white window behind the icon is untouched. */
+function ico(b, name, x, y, dim) {
+  var rows = K.icons[name], pal = K.colour[name], k = 1 - (dim || 0);
+  for (var j = 0; j < 32; j++)
+    for (var i = 0; i < 32; i++) {
+      var ch = rows[j][i];
+      if (ch === ".") continue;
+      var c = pal[ch];
+      b.set(x + i, y + j, k === 1 ? c : [c[0] * k, c[1] * k, c[2] * k]);
+    }
+}
+
+/* ------------------------------------------------------------------ the window chrome
+   docs/KIT_OPTIONS.md measures the System 1 title bar exactly: rows 0-18 of the bar read
+   1 black / 3 white / 11 striped / 3 white / 1 black, black rules on bar rows 4,6,8,10,12,14.
+   One frame is used by the desktop window and by every document (ARCHITECTURE 8.3). */
+var BAR = 19;
+function titlebar(b, x0, y0, x1, title, active, closebox) {
+  b.rect(x0, y0, x1, y0 + BAR - 1, WHITE);
+  b.hl(y0, x0, x1, BLACK);
+  b.hl(y0 + 18, x0, x1, BLACK);
+  if (active) for (var r = 4; r <= 14; r += 2) b.hl(y0 + r, x0 + 1, x1 - 1, BLACK);
+  var t = tw(title), cx = ((x0 + x1) >> 1) - (t >> 1);
+  b.rect(cx - 6, y0 + 1, cx + t + 5, y0 + 17, WHITE);       /* punched through the stripes */
+  txt(b, title, cx, y0 + 6, BLACK);
+  if (active && closebox) {
+    b.rect(x0 + 5, y0 + 1, x0 + 19, y0 + 17, WHITE);
+    b.frame(x0 + 7, y0 + 4, x0 + 17, y0 + 14, BLACK);
+    // System 1 drew this square EMPTY and filled it on press. Oran overrode that on
+    // purpose: an empty square does not read as an exit to anyone who never used the
+    // machine. Clarity beats authenticity here, and it is his call.
+    for (var d = 0; d < 7; d++) {
+      b.set(x0 + 9 + d, y0 + 6 + d, BLACK);
+      b.set(x0 + 15 - d, y0 + 6 + d, BLACK);
+    }
+    return [x0 + 7, y0 + 4, x0 + 17, y0 + 14];
+  }
+  return null;
+}
+
+/* present, but with nothing to scroll: the track is drawn and left empty, and the arrow boxes
+   are drawn without their triangles. In 1-bit there is no greying -- the absence IS the state. */
+function scrollbars(b, x0, y0, x1, y1) {
+  var S = 15;
+  b.rect(x1 - S + 1, y0, x1, y1, WHITE);
+  b.rect(x0, y1 - S + 1, x1, y1, WHITE);
+  b.vl(x1 - S, y0, y1, BLACK);
+  b.hl(y1 - S, x0, x1, BLACK);
+  b.hl(y0 + S, x1 - S, x1, BLACK);
+  b.hl(y1 - 2 * S, x1 - S, x1, BLACK);
+  b.vl(x0 + S, y1 - S, y1, BLACK);
+  b.vl(x1 - 2 * S, y1 - S, y1, BLACK);
+}
+
+/* ------------------------------------------------------------------ the screen */
+var MENU = 20;
+var MENUS = ["File", "Edit", "View", "Special"];
+/* the 1977 Apple mark is Apple's. This is a lozenge, which is ours. */
+function mark(b, x, y) {
+  for (var j = 0; j < 9; j++) for (var i = 0; i < 9; i++)
+    if (Math.abs(i - 4) + Math.abs(j - 4) <= 4) b.set(x + i, y + j, BLACK);
+  b.set(x + 4, y + 4, WHITE); b.set(x + 3, y + 4, WHITE); b.set(x + 5, y + 4, WHITE);
+  b.set(x + 4, y + 3, WHITE); b.set(x + 4, y + 5, WHITE);
+}
+
+function menubar(b, W) {
+  b.rect(0, 0, W - 1, MENU - 1, WHITE);
+  b.hl(MENU - 1, 0, W - 1, BLACK);
+  mark(b, 11, 5);
+  var x = 30;
+  for (var i = 0; i < MENUS.length; i++) {
+    if (x + tw(MENUS[i]) > W - 6) break;
+    x = txt(b, MENUS[i], x, 6, BLACK) + 9;
+  }
+}
+
+var LAYOUT = { inset: 10, gap: 8, labelGap: 3 };
+
+/* A real Mac truncated rather than overlapped. Pick the longest form that fits, never both. */
+function fits(opts, room) {
+  for (var i = 0; i < opts.length; i++) if (tw(opts[i]) <= room) return opts[i];
+  return opts[opts.length - 1];
+}
+
+/* ONE layout function. The 512x342 CRT texture and the phone are the same code with different
+   arguments -- two copies of a layout drift, one cannot. Returns the hit boxes. */
+function drawScreen(b, W, H, cols, st) {
+  var L = LAYOUT, hits = [];
+  b.rect(0, 0, W - 1, H - 1, WHITE);
+  dither(b, 0, MENU, W - 1, H - 1);
+  menubar(b, W);
+
+  if (!st.open) {                                   /* the folder, shut, on the desktop */
+    var fx = (W >> 1) - 16, fy = MENU + (((H - MENU) * 38 / 100) | 0);
+    ico(b, "folder", fx, fy);
+    var lab = K.labels.folder, lw = tw(lab), lx = (W >> 1) - (lw >> 1);
+    b.rect(lx - 3, fy + 35, lx + lw + 2, fy + 44, WHITE);
+    txt(b, lab, lx, fy + 36, BLACK);
+    hits.push({ id: "folder", x0: fx - 4, y0: fy - 2, x1: fx + 35, y1: fy + 45 });
+    return hits;
+  }
+
+  var x0 = L.inset, x1 = W - 1 - L.inset;
+  var y0 = MENU + L.gap, y1 = H - 1 - L.inset;
+  b.rect(x0, y0, x1, y1, WHITE);
+  b.frame(x0, y0, x1, y1, BLACK);
+  var title = fits([K.labels.folder, "Master File"], (x1 - x0) - 52);
+  var close = titlebar(b, x0, y0, x1, title, true, true);
+  if (close) hits.push({ id: "close", x0: close[0] - 2, y0: close[1] - 2, x1: close[2] + 2, y1: close[3] + 2 });
+
+  /* the status line sits directly UNDER the title bar, as it did on a real Mac */
+  var sy = y0 + BAR;
+  // BOTH counts come from the icon list, so they cannot disagree with what is drawn.
+  // Oran ruled seven: the Finder counted what the window held, and READ ME is a file a
+  // reader opens like the rest. His word is "files".
+  var N = K.order.length;
+  var st1 = N + " files", st2 = st.opened + " of " + N + " opened", st3 = "2018–2026";
+  var room = x1 - x0 - 30;
+  txt(b, st1, x0 + 8, sy + 3, BLACK);
+  if (tw(st1) + tw(st2) + tw(st3) + 34 <= room) {
+    txt(b, st2, ((x0 + x1) >> 1) - (tw(st2) >> 1), sy + 3, BLACK);
+    txt(b, st3, x1 - 22 - tw(st3), sy + 3, BLACK);
+  } else if (tw(st1) + tw(st2) + 18 <= room) {
+    txt(b, st2, x1 - 22 - tw(st2), sy + 3, BLACK);
+  }
+  b.hl(sy + 13, x0, x1, BLACK);
+
+  scrollbars(b, x0, y0 + BAR, x1, y1);
+
+  /* the icon grid, packed to the top of the window as the Finder packed it */
+  var cx0 = x0 + 1, cx1 = x1 - 15, cy0 = sy + 14;
+  var cw = (cx1 - cx0 + 1) / cols;
+  var nrow = Math.ceil(K.order.length / cols);
+  var top = cy0 + 16;
+  var pitch = Math.max(66, Math.min(120, (((y1 - 15 - top - 52) / (nrow - 1)) | 0)));
+  for (var i = 0; i < K.order.length; i++) {
+    var id = K.order[i], r = (i / cols) | 0, c = i % cols;
+    var ix = (cx0 + cw * (c + 0.5)) | 0, iy = top + r * pitch;
+    var on = (st.sel === id);
+    ico(b, id, ix - 16, iy, on ? 0.5 : 0);
+    var lab2 = K.labels[id], lw2 = tw(lab2), lx2 = ix - (lw2 >> 1);
+    b.rect(lx2 - 3, iy + 32 + L.labelGap, lx2 + lw2 + 2, iy + 42 + L.labelGap, WHITE);
+    txt(b, lab2, lx2, iy + 33 + L.labelGap, BLACK);
+    if (on) b.invert(lx2 - 3, iy + 32 + L.labelGap, lx2 + lw2 + 2, iy + 42 + L.labelGap);
+    hits.push({ id: id, x0: ix - 20, y0: iy - 2, x1: ix + 19, y1: iy + 44 });
+  }
+
+  if (st.doc) {                                     /* a document, in the SAME frame */
+    var dx0 = x0 + ((W < 300) ? 6 : 26), dx1 = x1 - ((W < 300) ? 6 : 26);
+    var dy0 = y0 + ((H < 420) ? 60 : 74), dy1 = y1 - ((H < 420) ? 20 : 34);
+    b.rect(dx0 + 3, dy0 + 3, dx1 + 3, dy1 + 3, BLACK);   /* the drop shadow System 1 drew */
+    b.rect(dx0, dy0, dx1, dy1, WHITE);
+    b.frame(dx0, dy0, dx1, dy1, BLACK);
+    var dc = titlebar(b, dx0, dy0, dx1, K.labels[st.doc], true, true);
+    hits.push({ id: "docclose", x0: dc[0] - 2, y0: dc[1] - 2, x1: dc[2] + 2, y1: dc[3] + 2 });
+    ico(b, st.doc, dx0 + 12, dy0 + BAR + 12);
+    var ty = dy0 + BAR + 16;
+    txt(b, K.labels[st.doc], dx0 + 54, ty, BLACK);
+    txt(b, st.opened + " of " + K.order.length + " opened", dx0 + 54, ty + 12, BLACK);
+    b.hl(dy0 + BAR + 54, dx0 + 10, dx1 - 10, BLACK);
+    var lines = ["The document arrives here, in this",
+                 "same frame. One frame is used by the",
+                 "folder and by every document."];
+    for (var q = 0; q < lines.length; q++) {
+      if (tw(lines[q]) > dx1 - dx0 - 24) continue;
+      txt(b, lines[q], dx0 + 12, dy0 + BAR + 62 + q * 11, BLACK);
+    }
+  }
+  return hits;
+}
+
+
+if (typeof module !== "undefined" && module.exports)
+  module.exports = { Buf: Buf, drawScreen: drawScreen, dither: dither, ico: ico,
+                     txt: txt, tw: tw, BLACK: BLACK, WHITE: WHITE };
+if (typeof window !== "undefined") {
+  window.Buf = Buf; window.drawScreen = drawScreen; window.dither = dither;
+  window.ico = ico; window.txt = txt; window.tw = tw;
+  window.BLACK = BLACK; window.WHITE = WHITE;
+}
+/* ------------------------------------------------------------------ the two screens */
+var STORE = "ocmf.opened";
+var opened = [];
+try { opened = JSON.parse(localStorage.getItem(STORE) || "[]") || []; } catch (e) { opened = []; }
+
+var state = { open: true, sel: null, doc: null, opened: opened.length };
+
+function Screen(canvas, W, H, cols, S) {
+  this.c = canvas; this.W = W; this.H = H; this.cols = cols; this.S = S;
+  this.c.width = W * S; this.c.height = H * S;
+  this.x = this.c.getContext("2d");
+  this.off = document.createElement("canvas");
+  this.off.width = W; this.off.height = H;
+  this.ox = this.off.getContext("2d");
+  this.hits = [];
+  var self = this;
+  canvas.addEventListener("click", function (e) { self.click(e); });
+  canvas.addEventListener("mousemove", function (e) {
+    canvas.style.cursor = self.at(e) ? "pointer" : "default";
+  });
+}
+Screen.prototype.draw = function () {
+  var b = new Buf(this.W, this.H);
+  this.hits = drawScreen(b, this.W, this.H, this.cols, state);
+  var img = this.ox.createImageData(this.W, this.H);
+  img.data.set(b.d);
+  this.ox.putImageData(img, 0, 0);
+  this.x.imageSmoothingEnabled = false;
+  this.x.clearRect(0, 0, this.c.width, this.c.height);
+  this.x.drawImage(this.off, 0, 0, this.c.width, this.c.height);
+};
+Screen.prototype.at = function (e) {
+  var r = this.c.getBoundingClientRect();
+  var x = (e.clientX - r.left) * (this.W / r.width);
+  var y = (e.clientY - r.top) * (this.H / r.height);
+  for (var i = 0; i < this.hits.length; i++) {
+    var h = this.hits[i];
+    if (x >= h.x0 && x <= h.x1 && y >= h.y0 && y <= h.y1) return h.id;
+  }
+  return null;
+};
+Screen.prototype.click = function (e) {
+  var id = this.at(e);
+  if (id) act(id);
+};
+
+var screens = [];
+function redraw() {
+  for (var i = 0; i < screens.length; i++) screens[i].draw();
+  var s = state.doc ? ("document: " + K.labels[state.doc])
+    : (state.open ? "folder open" : "folder shut");
+  document.getElementById("b-state").textContent = s + " · " + state.opened + " of " + K.order.length + " opened";
+  document.getElementById("sr-live").textContent = s;
+}
+
+/* ONE CLICK opens a document -- never two. A phone cannot do two. */
+function act(id) {
+  if (id === "close") { state.open = false; state.doc = null; state.sel = null; redraw(); return; }
+  if (id === "folder") { state.open = true; redraw(); return; }
+  if (id === "docclose") { state.doc = null; state.sel = null; redraw(); return; }
+  if (K.labels[id] === undefined) return;
+  state.sel = id;
+  state.doc = id;
+  if (opened.indexOf(id) < 0) {
+    opened.push(id);
+    state.opened = opened.length;
+    try { localStorage.setItem(STORE, JSON.stringify(opened)); } catch (e) { }
+  }
+  redraw();
+}
+
+/* ------------------------------------------------------------------ the plate
+   The same seven icons, on the two grounds they actually appear against. Drawn with the same
+   ico() the screen uses, so it cannot show something the screen does not. */
+function plate() {
+  var cv = document.getElementById("c-plate");
+  var W = 460, H = 106, COL = 64, X0 = 6;
+  var b = new Buf(W, H);
+  b.rect(0, 0, W - 1, H - 1, [14, 15, 18]);
+  b.rect(X0 - 2, 4, X0 + 7 * COL - 3, 40, WHITE);
+  dither(b, X0 - 2, 44, X0 + 7 * COL - 3, 80);
+  for (var i = 0; i < K.order.length; i++) {
+    var id = K.order[i], x = X0 + i * COL + 16;
+    ico(b, id, x, 6);
+    ico(b, id, x, 46);
+    var s = K.labels[id], w = tw(s);
+    txt(b, s, X0 + i * COL + ((COL - w) >> 1), 86, [182, 183, 187]);
+  }
+  var off = document.createElement("canvas");
+  off.width = W; off.height = H;
+  var ox = off.getContext("2d"), im = ox.createImageData(W, H);
+  im.data.set(b.d); ox.putImageData(im, 0, 0);
+  var x = cv.getContext("2d");
+  x.imageSmoothingEnabled = false;
+  x.drawImage(off, 0, 0, cv.width, cv.height);
+}
+
+/* Everything the canvas can do, the keyboard can do too. */
+function keys() {
+  var box = document.getElementById("keys");
+  for (var i = 0; i < K.order.length; i++) {
+    (function (id) {
+      var c = K.colour[id].C;
+      var btn = document.createElement("button");
+      btn.type = "button";
+      btn.innerHTML = '<span style="background:rgb(' + c.join(",") + ')"></span>';
+      btn.appendChild(document.createTextNode("Open " + K.labels[id]));
+      btn.onclick = function () { act(id); };
+      box.appendChild(btn);
+    })(K.order[i]);
+  }
+}
+
+screens.push(new Screen(document.getElementById("c-desk"), 512, 342, 4, 2));
+screens.push(new Screen(document.getElementById("c-mob"), 195, 422, 2, 2));
+plate();
+keys();
+document.getElementById("b-open").onclick = function () { state.open = true; state.doc = null; redraw(); };
+document.getElementById("b-close").onclick = function () { state.open = false; state.doc = null; state.sel = null; redraw(); };
+document.getElementById("b-reset").onclick = function () {
+  opened = []; state.opened = 0;
+  try { localStorage.removeItem(STORE); } catch (e) { }
+  redraw();
+};
+redraw();
+
+/* the CRT texture is a screenshot of this exact screen, so the pixels the camera flies into
+   and the pixels it lands on cannot differ. tools/shoot_crt.py reads this. */
+window.crtPNG = function (open) {
+  var b = new Buf(512, 342);
+  drawScreen(b, 512, 342, 4, { open: open, sel: null, doc: null, opened: 0 });
+  var cv = document.createElement("canvas"); cv.width = 512; cv.height = 342;
+  var cx = cv.getContext("2d"), im = cx.createImageData(512, 342);
+  im.data.set(b.d); cx.putImageData(im, 0, 0);
+  return cv.toDataURL("image/png");
+};
+</script>

@@ -1,0 +1,11 @@
+/*--0--*/
+  /* item 7 - oasis hub-and-spoke: the radial labels spill past the 260-unit
+     viewBox by design (overflow:visible); desktop columns absorb it, a 390px
+     column does not. Cap the rendered size so the spill lands inside the
+     zone instead of escaping its frame. */
+  /* the svg carries an inline max-width:280px - the override must out-rank it */
+  #oasis svg[viewBox="0 0 260 210"]{max-width:215px!important}/*--1--*/
+  /* the 420px cap stays at every width. The evidence slip has always carried it,
+     and #oasis's slip sits in a container that is 967px wide on a 390 phone -
+     lifting the cap here silently stretched the slip to 967px. */
+  .ms-t{font-size:10.5px;line-height:1.5}/*--2--*/#oasis .folder{--cn:"02"}

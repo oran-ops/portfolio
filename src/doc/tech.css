@@ -1,0 +1,45 @@
+/*--0--*/
+#tech .archw{margin-top:40px}/*--1--*/
+#tech .stackr{display:flex;flex-wrap:wrap;gap:8px}/*--2--*/
+#tech .stackr span{border:1px solid var(--grid);border-radius:8px;padding:6px 11px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.12em;color:var(--mut)}/*--3--*/
+#tech .stackr span b{color:var(--ink);font-weight:600}/*--4--*/
+#tech .lessq{margin-top:14px}/*--5--*/
+
+/* ============ TECH & AI ============ */
+#tech .lead{font-family:'Fraunces',serif;font-style:italic;font-weight:500;font-size:clamp(14px,1.9vw,17px);line-height:1.6;color:var(--mut)}/*--6--*/
+#tech .lead b{color:var(--ink);font-weight:500}/*--7--*/
+#tech .stacks{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:40px}/*--8--*/#tech .stacks{grid-template-columns:repeat(2,1fr)}/*--9--*/#tech .stacks{grid-template-columns:1fr}/*--10--*/
+#tech .sc{position:relative;border:1px solid var(--grid);border-radius:0 12px 12px 12px;background:var(--card2);padding:30px 16px 14px;margin-top:24px}/*--11--*/
+#tech .sc .sl{position:absolute;top:-23px;left:0;height:24px;background:var(--emb);border-radius:7px 15px 0 0;
+display:flex;align-items:center;padding:0 12px;font-family:'JetBrains Mono',monospace;font-weight:700;font-size:8px;letter-spacing:.18em;color:#191A1F}/*--12--*/
+#tech .sc .tools{font-weight:700;font-size:14.5px;letter-spacing:-.01em;margin-bottom:10px}/*--13--*/
+#tech .sc .it{display:flex;align-items:center;gap:8px;font-size:11.5px;color:var(--mut);margin-bottom:6px}/*--14--*/
+#tech .sc .it::before{content:"";flex:none;width:8px;height:2px;background:var(--emb)}/*--15--*/
+#tech .bot{display:grid;grid-template-columns:36fr 64fr;gap:40px;margin-top:40px;padding-top:30px;border-top:1px solid var(--grid)}/*--16--*/#tech .bot{grid-template-columns:1fr}/*--17--*/
+#tech .phil{margin-top:14px;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.14em;color:var(--emb);line-height:1.8}/*--18--*/
+#tech .loopc{animation:crawl 9s linear infinite}/*--19--*/#tech .loopc{animation:none}/*--20--*/
+#tech .grid2c{display:grid;grid-template-columns:1fr 1fr;gap:9px 22px}/*--21--*/#tech .grid2c{grid-template-columns:1fr}/*--22--*/
+
+
+/* R8 — breathing room in the system list, feedback loop reads clearly */
+#tech .list{display:grid;gap:11px}/*--23--*/
+#tech .list .lg{align-items:flex-start;line-height:1.45}/*--24--*/
+#tech .list .lg .c{margin-top:1px}/*--25--*/
+#tech .stackr{gap:9px}/*--26--*/
+#tech .phil{margin-top:22px;padding-top:14px;border-top:1px solid var(--grid);line-height:1.9}/*--27--*/
+#tech .archw svg{overflow:visible}/*--28--*/
+
+
+/* ============ R10 — the signal hops wire to wire ============ */
+#tech .hop{opacity:0}/*--29--*/
+#tech .h0{animation:hopx 5s cubic-bezier(.5,0,.5,1) infinite}/*--30--*/
+#tech .h1{animation:hopx 5s cubic-bezier(.5,0,.5,1) .62s infinite}/*--31--*/
+#tech .h2{animation:hopx 5s cubic-bezier(.5,0,.5,1) 1.24s infinite}/*--32--*/
+#tech .h3{animation:hopx 5s cubic-bezier(.5,0,.5,1) 1.86s infinite}/*--33--*/
+#tech .h4{animation:hopx 5s cubic-bezier(.5,0,.5,1) 2.48s infinite}/*--34--*/
+#tech .archw .pdraw{transition:opacity .3s linear}/*--35--*/
+
+
+/* corrections p12 (tech) — lead */
+#tech .lead{font-family:inherit;font-style:normal;font-weight:700;
+  font-size:clamp(14px,1.8vw,17px);letter-spacing:.01em;color:var(--ink)}
