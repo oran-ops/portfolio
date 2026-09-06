@@ -692,11 +692,11 @@ font-size:9px;letter-spacing:.28em;color:var(--lbl);pointer-events:none;display:
 /* graph bar hover */
 .bar0:hover rect:first-child{fill:#3DD598}
 /* kill-switches */
-@media (max-width:860px){.otx,#loglin,#recled,{display:none!important}.sec>.wrap{transform:none}}
-@media (prefers-reduced-motion:reduce){.otx,#loglin,#recled,{display:none!important}.sec>.wrap{transform:none!important}}
-body.static .otx,body.static #loglin,body.static #recled,{display:none!important}
+@media (max-width:860px){.otx,#loglin,#recled{display:none!important}.sec>.wrap{transform:none}}
+@media (prefers-reduced-motion:reduce){.otx,#loglin,#recled{display:none!important}.sec>.wrap{transform:none!important}}
+body.static .otx,body.static #loglin,body.static #recled{display:none!important}
 body.static .sec>.wrap{transform:none!important}
-body.failsafe .otx,body.failsafe #loglin,body.failsafe #recled,{display:none!important}
+body.failsafe .otx,body.failsafe #loglin,body.failsafe #recled{display:none!important}
 body.failsafe .sec>.wrap{transform:none!important}
 html.jscur #bootgate,html.jscur button{cursor:none}
 
