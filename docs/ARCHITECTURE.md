@@ -548,13 +548,31 @@ Numbers, not intentions. Check 7 enforces them.
 |---|---|---|
 | first paint (`index.html` + `app.css` + `app.js`) | **≤ 200 KB** | 688 KB |
 | fonts, shell face | **0 KB** — the 5×7 face is drawn in code | 0 KB ✓ |
-| fonts, document faces | **≤ 300 KB inlined** — see the ruling below | 299.7 KB ✓ |
-| sprite sheet | ~30 KB | — |
-| machine, mobile | ≤ 60 KB | 23,506 tris — measured, §11 |
-| machine, desktop | ≤ 520 KB | 61,081 tris — measured, §11 |
-| any one document | ≤ 60 KB | largest is XTIX at 15.8 KB ✓ |
-| sound | **0 KB** | 0 KB ✓ — the layer is removed entirely, not merely unsampled |
+| fonts, document faces | **≤ 300 KB inlined** | 299.7 KB ✓ |
+| fonts, the machine's hand | **≤ 60 KB** — Caveat, the floppy labels | 49.6 KB ✓ |
+| sprite sheet | ~30 KB | not built — the map is parked |
+| **the machine, one build for both** | **≤ 130 KB** | **117.3 KB ✓** — 25 parts, 23,506 tris |
+| the Macintosh shell | ≤ 150 KB | 136.4 KB ✓ |
+| any one document | ≤ 60 KB | largest is XTIX at 13.7 KB ✓ |
+| sound | **0 KB** | 0 KB ✓ — removed entirely, not merely unsampled |
+| first paint, whole page | ≤ 200 KB | **928.9 KB — over, and knowingly** |
 | time to first meaningful paint, 4G | ≤ 2.0 s | not measured |
+
+**The machine is now one row, not two.** It was budgeted as a 60 KB phone build and a 520 KB
+desktop build because there were two of it: a procedural machine and a 933 KB baked mesh. The
+mesh does not ship. The procedural one is 117.3 KB and serves both, so a single figure is the
+honest one, and the pair of numbers that no longer describes anything has gone.
+
+**First paint is over, and the reason is worth stating rather than hiding in a red cell.** The
+200 KB came from a measurement in §1.4 and it is a good number for a page that paints as it
+arrives. This page does not: it opens on a loading screen, deliberately, and the weight lands
+behind it. What actually costs the reader is the wait before that screen clears, and that is
+worth measuring properly rather than inferring from a byte count — it is the row below, and it
+is still marked not measured, which is the honest state.
+
+The composition, measured: fonts 350.9 KB (37.8%), the machine 117.3 (12.6%), the shell 136.4
+(14.7%), the seven documents 72.5 (7.8%), everything else 251.8 (27.1%). Two fifths of the page
+is typefaces, and the ruling below is why they stay that way.
 
 **The font budget was rewritten, and the reason is the interesting part.** It used to read
 "shell faces only, ~5 KB inlined" against a measured 299 KB, which made the table permanently

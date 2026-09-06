@@ -1,5 +1,11 @@
 # Build plan
 
+> **STATUS: BUILT.** Steps A through H are done and on the live site. What follows was written
+> before any of it and is left as it was written, because a plan edited to match what happened
+> stops being a record of what was decided. Where the build departed from it, the departure is
+> in the commit that made it and in the closing summary at the foot of this file.
+
+
 The restructure, as settled with Oran across nine planning stages. Nothing here was invented
 by me: every decision below is one he made, and where I recommended something he overruled,
 his ruling is what is written.
@@ -230,3 +236,73 @@ The three numbers that establish the scene engine is alive, all under real scrol
   and the doc should be corrected so nobody reaches for Geneva later.
 - **The isometric world map is parked**, by his decision, with its own handover in
   `HANDOVER_BLENDER.md`. Nothing here depends on it.
+
+---
+
+## 6. What was built, and where it departed from the plan
+
+Written after the fact. Every departure below was a decision taken while Oran was away, under
+his instruction to decide rather than wait, and each is here so he can overturn any of them.
+
+### Decisions taken without him
+
+**The procedural machine ships, not the mesh.** `lab/machine.html` is 1,050 KB and 933 of them
+are one baked geometry blob. The same file builds the machine from code — 25 parts, 23,506
+triangles — and that is what ships, at 117 KB. The mesh misses this document's own desktop
+budget by about 2× and the phone one by fifteen. It also settles the one question the plan left
+open, whether the machine should be real-time or a pre-rendered turntable: real-time was the
+recommendation, and procedural real-time is that answer at a tenth of the weight.
+
+**The folder is screen.js's, not the frame's.** The frame arrived from the lab drawing seven
+icons loose on a dithered desk. The folder Oran approved is a window with a striped title bar,
+a close box at the left and a three-column status line, and `screen.js` already drew exactly
+that — in one layout function that also bakes the CRT texture, so the pixels the camera flies
+into cannot drift from the ones it lands on. Two renderers now: the folder is screen.js's, the
+document window is the frame's.
+
+**The rail lost eight of its eleven entries.** COVER pointed at a section that no longer exists,
+and the seven documents are not scroll destinations any more — their hashes belong to the
+router, so a rail link would have opened a document directly. That is the one thing Oran ruled
+out explicitly: every file is reached through the folder, only through there.
+
+**Page 3's subtitle was rewritten.** It read `EXECUTIVE PORTFOLIO · 04 DOSSIERS · 2018–2026` —
+a phrase Oran had removed from the hero, and a count of four when there are seven. It reads
+`SEVEN FILES · ONE MACHINE · 2018–2026`.
+
+**The middle beat of the entry is a held pause.** Oran's order is: the machine straightens, then
+the folder opens, then the zoom begins. The first and third are camera moves and are built. The
+second would mean re-uploading the CRT texture mid-flight, which is a piece of work of its own;
+the beat is honoured so the sequence reads correctly, and what fills it is smaller than it will
+be. This is the one place the build is thinner than the plan.
+
+**A Macintosh arrow was drawn.** The plan said the pointer inside the machine is the machine's
+own but never said where it came from. Apple's is Apple's, like Chicago and the Apple mark, so
+it is drawn on a 16×16 grid in `tools/make_cursor.py`, with an I-beam over running text.
+
+### Left alone, deliberately
+
+The marquee, `ARCHIVE N°` and `STATUS: ACTIVE` came with the harvested hero card. They are its
+furniture rather than its copy, and whether they belong at the bottom of page 1 is a judgement
+Oran has not made.
+
+`EMERALD ARCHIVE · REEL 04` on the film-strip edge, and the orphaned review-counter JavaScript
+with its hard-coded 4. Neither was on any approved list.
+
+### Faults found and fixed while building
+
+Each of these was found by measuring, and none of them announced itself:
+
+- Cutting `.clsband` took the UV lamp and twelve developed zones down **silently**, because the
+  lamp module used that strip as its entry condition. Found by counting the same selectors in
+  the published page and the new one. `tools/depends.py` exists so it cannot recur.
+- Removing `#sndtg` from four grouped selectors left them ending in a comma, which made every
+  one of those rules invalid — so the archive HUD stopped hiding under `prefers-reduced-motion`.
+  Build check 10 refuses it now.
+- The shell shipped at `z-index:auto` and drew underneath the hero card.
+- The live layer built twice: 24 developed zones for 12, 8 lamps for 4.
+- The machine's lab stylesheet would have taken the site's `body` and covered the viewport.
+- Its no-WebGL message wrote to an element that is not shipped, so the one machine that cannot
+  render would have thrown on its way to saying so.
+- The entry flight is driven by `requestAnimationFrame`, which does not fire in a hidden tab —
+  so the reader clicked the machine and nothing happened. The arrival is on a deadline now.
+  **An animation must never be the only way into a state.**
