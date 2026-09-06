@@ -220,7 +220,12 @@ canvas{display:block;image-rendering:pixelated;image-rendering:crisp-edges}
 <script>
 "use strict";
 var S = 2;                                   /* logical pixel -> CSS pixel. Whole, always. */
-var IDS = ["xtix", "oasis", "eventer", "medcoin", "leadership", "tech"];
+/* SEVEN, and taken from the kit rather than written out here.
+   FINAL is FILE 07: Oran's correction, and the reason is arithmetic — a reader who opens all
+   six documents and then READ ME must be able to reach "7 of 7". A list hard-coded to six
+   could not, and would have disagreed silently with the folder, whose renderer has always
+   counted K.order.length. One source of truth for what the seven files are. */
+var IDS = K.order.slice();
 var STORE = "ocmf.opened";                   /* the same key the folder page reads */
 
 function cv(id) { return document.getElementById(id); }

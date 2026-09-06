@@ -47,6 +47,11 @@ DOCS = [
     dict(id="medcoin", old=None, new=None, tok=None, n=dict()),
     dict(id="leadership", old=None, new=None, tok=None, n=dict()),
     dict(id="tech", old=None, new=None, tok=None, n=dict()),
+    # FILE 07. It was not in this list because the sample was built to show Stage 6, the six
+    # documents; the ending was Stage 7 and had not been settled yet. It is settled now, and it
+    # is a file like the rest — the folder's status line counts it, and the counter cannot
+    # reach 7 of 7 without it.
+    dict(id="final", old=None, new=None, tok=None, n=dict()),
 ]
 
 # What the page must already carry when it reaches this tool. If step A is ever reverted, or a
