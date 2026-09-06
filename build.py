@@ -136,6 +136,28 @@ def main():
             raise SystemExit('selector list ends in a comma, so the browser will discard the '
                              'whole rule:\n    %s' % ' '.join(bad.group(0).split())[-110:])
 
+    # CHECK 11: no id may appear twice in the output.
+    #
+    # The frame's icon box was called #files, and page 3 is a section that has always been called
+    # #files too. getElementById answers with the first match, so drawFiles() ran innerHTML="" on
+    # PAGE 3 and erased it, and the Macintosh inside it, the moment the reader entered the shell.
+    # Nothing errored. The damage was only visible after coming back out to an empty page.
+    #
+    # Two documents cannot share a name, and the build is the right place to say so — it is the
+    # only point that sees every fragment assembled together.
+    # Markup only. The stylesheet carries SVG filters inside data: URIs — mask-image with a
+    # <filter id="r"> in it, twice — and each data URI is its own document, so those are not a
+    # collision. The first version of this check reported them, which is the same mistake check
+    # 10 was written to avoid: look where the thing actually lives.
+    markup_only = re.sub(r'<style[^>]*>.*?</style>', '', body, flags=re.S)
+    counts = {}
+    for m in re.finditer(r'\sid="([^"]+)"', markup_only):
+        counts[m.group(1)] = counts.get(m.group(1), 0) + 1
+    dupes = ['%s x%d' % (k, n) for k, n in sorted(counts.items()) if n > 1]
+    if dupes:
+        raise SystemExit('the same id appears more than once, so getElementById will answer with '
+                         'whichever came first:\n    ' + ', '.join(dupes))
+
     html = head + body + '\n</body>\n</html>'
 
     io.open(OUT, 'w', encoding='utf-8', newline='').write(html)

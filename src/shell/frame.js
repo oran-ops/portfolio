@@ -33,7 +33,7 @@ function drawMenu() {
 
 /* ---------------------------------------------------------------- the files on the desktop */
 function drawFiles() {
-  var box = cv("files");
+  var box = cv("mw-files");
   box.innerHTML = "";
   IDS.forEach(function (id) {
     var w = 76, h = 50, b = new Buf(w, h);
@@ -1143,7 +1143,7 @@ function note(s) { var n = cv("rvw-note"); if (n) { n.innerHTML = "<em>" + s + "
 function show(id) {
   setTimeout(function () { if (typeof window.__folderRedraw === "function") { window.__folderRedraw(); } if (typeof window.__mwOpened === "function") { window.__mwOpened(id); } }, 0);
   if (openId === id) return;
-  var btn = cv("files").querySelector('[data-id="' + id + '"]') || cv("files");
+  var btn = cv("mw-files").querySelector('[data-id="' + id + '"]') || cv("mw-files");
   var finish = function () {
     IDS.forEach(function (x) { secOf(x).classList.toggle("mw-show", x === id); });
     openId = id;
@@ -1194,7 +1194,7 @@ function show(id) {
     setTimeout(function () { cv("docs").classList.remove("mw-all"); finish(); }, 150);
   };
   if (openId) { go(); refitSheets(secOf(id)); return; }   /* swap documents, no zoom */
-  cv("files").style.visibility = "hidden";
+  cv("mw-files").style.visibility = "hidden";
   zoomOpen(btn, go);
 }
 function shut() {
@@ -1202,7 +1202,7 @@ function shut() {
   if (!openId) return;
   openId = null;
   cv("win").hidden = true;
-  cv("files").style.visibility = "";
+  cv("mw-files").style.visibility = "";
   IDS.forEach(function (x) { secOf(x).classList.remove("mw-show"); });
   note("closed — click a file to open it");
 }

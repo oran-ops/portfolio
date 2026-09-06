@@ -185,6 +185,19 @@ def main():
             print('  REFUSED: review-bar id #%s is inside the frame markup' % i)
             return 1
 
+    # #files BELONGS TO THE PAGE, NOT TO THE FRAME.
+    #
+    # The lab page called the frame's icon box #files, and the site's page 3 is a section that
+    # has always been called #files too. getElementById returns the first match in the document,
+    # which is page 3 — so drawFiles() ran box.innerHTML = "" against the wrong element and
+    # ERASED PAGE 3 AND THE MACHINE INSIDE IT the moment the reader entered. Leaving the machine
+    # then landed them on an empty page.
+    #
+    # It cost nothing to find and everything to miss: no error, no failed build, and the damage
+    # only visible after coming back out. The frame's box is namespaced now, and build check 11
+    # refuses any future id the page already owns.
+    markup = markup.replace('id="files"', 'id="mw-files"')
+
     # ---- JS: the last script block
     i = s.rfind('<script>')
     js = s[i + 8: s.find('</script>', i)]
@@ -242,6 +255,13 @@ def main():
                         ' { window.__folderRedraw(); }'
                         ' if (typeof %s === "function") { %s; } }, 0);'
                         % (tell.split('(')[0], tell), 1)
+
+    # and every lookup follows the rename
+    n_files = js.count('cv("files")')
+    if n_files < 1:
+        print("  REFUSED: the frame no longer looks up its icon box by id")
+        return 1
+    js = js.replace('cv("files")', 'cv("mw-files")')
 
     # note() targets the review bar, and is called from a dozen places
     js = js.replace('function note(s) { cv("rvw-note").innerHTML = "<em>" + s + "</em>"; }',

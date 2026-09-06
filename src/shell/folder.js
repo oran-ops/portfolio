@@ -96,8 +96,10 @@
   window.__folderInit = function () {
     var desk = document.getElementById("desk");
     if (!desk) { return; }
-    /* the frame's loose icons step aside for the folder */
-    var files = document.getElementById("files");
+    /* The frame's loose icons step aside for the folder.
+       #mw-files, not #files: the page's own page 3 is a section called #files, and this line
+       was hiding THAT — which is half of why the machine vanished on entry. */
+    var files = document.getElementById("mw-files");
     if (files) { files.style.display = "none"; }
     if (!canvas) {
       canvas = document.createElement("canvas");
