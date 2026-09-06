@@ -181,3 +181,19 @@ html.mw-on .evdrawer,html.mw-on #dust,html.mw-on #heromq
 /* the page behind is not merely covered, it is taken out of the reading order */
 html.mw-on body>.sec,html.mw-on body>#hero{visibility:hidden}
 html.mw-on .mw,html.mw-on .mw *{visibility:visible}
+
+/* ---- the folder screen ------------------------------------------------
+   screen.js draws the whole folder — menu bar, dithered ground, the window with
+   its striped title bar and the status line — into one canvas that fills the desk.
+   The frame's own menu bar sits above it and is hidden, because two menu bars in
+   one machine is one too many. */
+.mw-folder{position:absolute;inset:0;width:100%;height:100%;display:block;
+  image-rendering:pixelated}
+html.mw-on .mw-menu{display:none}
+
+/* The document window clears the folder's menu bar. --mw-gap was 16px, measured
+   from a desk that began below the frame's own menu element; with that element
+   hidden the desk starts at the top and the folder paints its menu bar into the
+   first 40 CSS pixels of the canvas, so the window covered 24 of them and File,
+   Edit, View and Special were cut in half. */
+html.mw-on{--mw-gap:calc(var(--mw-menu) + 16px)}

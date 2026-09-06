@@ -1141,6 +1141,7 @@ function record(id) {
 function note(s) { var n = cv("rvw-note"); if (n) { n.innerHTML = "<em>" + s + "</em>"; } }
 
 function show(id) {
+  setTimeout(function () { if (typeof window.__folderRedraw === "function") { window.__folderRedraw(); } }, 0);
   if (openId === id) return;
   var btn = cv("files").querySelector('[data-id="' + id + '"]') || cv("files");
   var finish = function () {
@@ -1197,6 +1198,7 @@ function show(id) {
   zoomOpen(btn, go);
 }
 function shut() {
+  setTimeout(function () { if (typeof window.__folderRedraw === "function") { window.__folderRedraw(); } }, 0);
   if (!openId) return;
   openId = null;
   cv("win").hidden = true;
@@ -1235,6 +1237,10 @@ window.__shellInit = function () {
     });
   }
   relayout();
+  /* The folder is screen.js's window, not the frame's loose icons on a desk. See
+     src/shell/folder.js: the frame keeps the document window, screen.js keeps the
+     folder, and the same layout function draws the CRT texture the camera flies into. */
+  if (typeof window.__folderInit === "function") { window.__folderInit(); }
 };
 window.addEventListener("resize", function () {
   if (cv("mw") && cv("mw").offsetParent !== null) { relayout(); }

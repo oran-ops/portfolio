@@ -123,7 +123,23 @@ def main():
             '\n'
             '/* the page behind is not merely covered, it is taken out of the reading order */\n'
             'html.mw-on body>.sec,html.mw-on body>#hero{visibility:hidden}\n'
-            'html.mw-on .mw,html.mw-on .mw *{visibility:visible}\n')
+            'html.mw-on .mw,html.mw-on .mw *{visibility:visible}\n'
+            '\n'
+            '/* ---- the folder screen ------------------------------------------------\n'
+            '   screen.js draws the whole folder — menu bar, dithered ground, the window with\n'
+            '   its striped title bar and the status line — into one canvas that fills the desk.\n'
+            '   The frame\'s own menu bar sits above it and is hidden, because two menu bars in\n'
+            '   one machine is one too many. */\n'
+            '.mw-folder{position:absolute;inset:0;width:100%;height:100%;display:block;\n'
+            '  image-rendering:pixelated}\n'
+            'html.mw-on .mw-menu{display:none}\n'
+            '\n'
+            '/* The document window clears the folder\'s menu bar. --mw-gap was 16px, measured\n'
+            '   from a desk that began below the frame\'s own menu element; with that element\n'
+            '   hidden the desk starts at the top and the folder paints its menu bar into the\n'
+            '   first 40 CSS pixels of the canvas, so the window covered 24 of them and File,\n'
+            '   Edit, View and Special were cut in half. */\n'
+            'html.mw-on{--mw-gap:calc(var(--mw-menu) + 16px)}\n')
 
     # ---- markup: the frame only, never the review bar
     a = s.index('<div class="mw"')
@@ -196,6 +212,18 @@ def main():
         return 1
     js = js.replace(lv, lv + '\n  if (document.querySelector(".lampband")) { return; }', 1)
 
+    # THE FOLDER REDRAWS AFTER EVERY OPEN AND CLOSE, because its status line carries the count
+    # and the count has just moved. Both the frame and the folder read "ocmf.opened" from
+    # storage, so nothing is passed between them — the folder simply re-reads.
+    for fn, sig in (('show', 'function show(id) {'), ('shut', 'function shut() {')):
+        if js.count(sig) != 1:
+            print('  REFUSED: %s() did not match' % fn)
+            return 1
+        js = js.replace(sig, sig +
+                        '\n  setTimeout(function () {'
+                        ' if (typeof window.__folderRedraw === "function")'
+                        ' { window.__folderRedraw(); } }, 0);', 1)
+
     # note() targets the review bar, and is called from a dozen places
     js = js.replace('function note(s) { cv("rvw-note").innerHTML = "<em>" + s + "</em>"; }',
                     'function note(s) { var n = cv("rvw-note"); '
@@ -231,6 +259,10 @@ def main():
         '    });\n'
         '  }\n'
         '  relayout();\n'
+        '  /* The folder is screen.js\'s window, not the frame\'s loose icons on a desk. See\n'
+        '     src/shell/folder.js: the frame keeps the document window, screen.js keeps the\n'
+        '     folder, and the same layout function draws the CRT texture the camera flies into. */\n'
+        '  if (typeof window.__folderInit === "function") { window.__folderInit(); }\n'
         '};\n'
         'window.addEventListener("resize", function () {\n'
         '  if (cv("mw") && cv("mw").offsetParent !== null) { relayout(); }\n'
