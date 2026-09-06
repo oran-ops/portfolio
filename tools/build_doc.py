@@ -33,22 +33,33 @@ TPL = os.path.join(HERE, "doc_page.html")
 OUT = os.path.join(REPO, "lab", "document.html")
 
 # id, .secnum today -> in document order, .tok rewrite, and the expected count of each cut
+# THE CUTS AND THE RENUMBERING HAVE MOVED UPSTREAM. When this file was written they were done
+# here, against a live page that still carried them, because nothing was allowed to touch
+# m/index.html. Step A of the build has since applied all of them properly in src/, where they
+# are checked against a byte-exact baseline and recorded with a reason, so m/index.html arrives
+# already cut. Doing them twice is not merely redundant — the second pass would find nothing and,
+# were the counts not asserted, would have looked exactly like a pass that worked. They are kept
+# at zero rather than deleted so that a cut reappearing upstream is noticed here immediately.
 DOCS = [
-    dict(id="xtix", old="03", new="01", tok=None,
-         n=dict(otx=1, clsband=1, clsctl=1, pmark=1, frail=1, srcline=0)),
-    dict(id="oasis", old="04", new="02", tok=None,
-         n=dict(otx=1, clsband=1, clsctl=1, pmark=1, frail=1, srcline=1)),
-    dict(id="eventer", old="05", new="03", tok=None,
-         n=dict(otx=1, clsband=1, clsctl=1, pmark=0, frail=1, srcline=0)),
-    dict(id="medcoin", old="06", new="04", tok=None,
-         n=dict(otx=1, clsband=1, clsctl=1, pmark=0, frail=1, srcline=0)),
-    dict(id="leadership", old="07", new="05",
-         tok=("MANAGEMENT FILE", "FILE 05 &middot; MANAGEMENT"),
-         n=dict(otx=0, clsband=0, clsctl=0, pmark=0, frail=1, srcline=0)),
-    dict(id="tech", old="08", new="06",
-         tok=("SYSTEM FILE &middot; AI", "FILE 06 &middot; SYSTEM"),
-         n=dict(otx=0, clsband=0, clsctl=0, pmark=0, frail=0, srcline=0)),
+    dict(id="xtix", old=None, new=None, tok=None, n=dict()),
+    dict(id="oasis", old=None, new=None, tok=None, n=dict()),
+    dict(id="eventer", old=None, new=None, tok=None, n=dict()),
+    dict(id="medcoin", old=None, new=None, tok=None, n=dict()),
+    dict(id="leadership", old=None, new=None, tok=None, n=dict()),
+    dict(id="tech", old=None, new=None, tok=None, n=dict()),
 ]
+
+# What the page must already carry when it reaches this tool. If step A is ever reverted, or a
+# cut is undone upstream, this fails loudly here rather than producing a sample that quietly
+# disagrees with the live site.
+# Each entry names MARKUP, not a phrase. An earlier version listed bare strings and fired on
+# three legitimate survivors: "ARCHIVE DRAWER" in the page-3 carousel, which belongs to a
+# section not yet restructured; a `.frail` in #philosophy, which is page 2 and deliberately
+# untouched; and five "IN REVIEW" in JavaScript, where the counter machinery is now orphaned
+# but harmless because #ccstamp no longer exists. Checking for the element is checking the
+# thing that was actually cut.
+ALREADY_CUT = ['class="otx"', 'class="clsband"', 'class="clsctl"', 'class="pmark"',
+               'class="vcommit"', 'R E S T R I C T E D', 'COPY 3 OF 12', '__archAudio']
 
 CUTS = [
     ("otx", None, '<div class="otx"'),                    # drawer + folder-cover lift
@@ -86,6 +97,14 @@ def block(s, start, open_tag="<div", close_tag="</div>"):
 src = read(SRC)
 print("m/index.html  %d bytes  (READ ONLY)" % len(src.encode("utf-8")))
 
+# Step A must already have happened upstream. Refuse rather than build a sample that shows the
+# reader something the live site no longer does.
+_still = [k for k in ALREADY_CUT if k in src]
+if _still:
+    raise SystemExit("m/index.html still carries %s — step A has not been applied upstream, or "
+                     "has been reverted." % ", ".join(repr(k) for k in _still))
+print("   step A confirmed upstream: all %d cut markers absent\n" % len(ALREADY_CUT))
+
 # ---------------------------------------------------------------- the stylesheet, whole
 css = []
 for m in re.finditer(r"<style>(.*?)</style>", src, re.S):
@@ -108,7 +127,9 @@ for d in DOCS:
     before = len(sec.encode("utf-8"))
     got = []
     for name, pattern, anchor in CUTS:
-        want = d["n"][name]
+        # absent means zero: every cut now happens upstream in src/, so the expected count here
+        # is nil, and a non-zero find is an upstream regression rather than work to do.
+        want = d["n"].get(name, 0)
         if anchor is not None:
             found = sec.count(anchor)
             if found != want:
@@ -125,11 +146,19 @@ for d in DOCS:
             got.append("%s x%d" % (name, found))
         totals[name] = totals.get(name, 0) + found
 
-    # the numbering: today's values are positions on the old scrolling page
-    old = '<div class="secnum" aria-hidden="true">%s</div>' % d["old"]
-    if old not in sec:
-        raise SystemExit("%s: .secnum %s not found" % (d["id"], d["old"]))
-    sec = sec.replace(old, '<div class="secnum" aria-hidden="true">%s</div>' % d["new"])
+    # The numbering also moved upstream. It used to be corrected here, from positions on the
+    # old scrolling page to file numbers; src/ now ships 01-07 already, so there is nothing to
+    # rewrite and the assertion below would fail against numbers that are already right.
+    if d["old"] is None:
+        expect = '<div class="secnum" aria-hidden="true">'
+        if expect not in sec:
+            raise SystemExit("%s: no .secnum at all — upstream renumbering is missing" % d["id"])
+        got.append("secnum ok")
+    else:
+        old = '<div class="secnum" aria-hidden="true">%s</div>' % d["old"]
+        if old not in sec:
+            raise SystemExit("%s: .secnum %s not found" % (d["id"], d["old"]))
+        sec = sec.replace(old, '<div class="secnum" aria-hidden="true">%s</div>' % d["new"])
 
     # the last two documents carry no file number at all today
     if d["tok"]:
@@ -203,7 +232,14 @@ def iife_at(needle, label, reroot=False):
 # scenes advance continuously, and an observer only reports crossings.
 print("")
 lines = src.split("\n")
-b0s = next(i for i, l in enumerate(lines) if l.strip() == "<script>" and i > 3200)
+# Located by CONTENT, not by line number. This read `i > 3200` and broke the moment the
+# monolith shifted: removing the sound layer moved every line after it, so the search found a
+# different block, lifted 2,284 bytes of the wrong code, and failed further down on a string
+# that was never in it. A line number is not an address for a thing that moves.
+_marker = next((i for i, l in enumerate(lines) if "function top0(" in l), None)
+if _marker is None:
+    raise SystemExit("cannot find the scroll engine: no `function top0(` anywhere in the page")
+b0s = max(i for i, l in enumerate(lines[:_marker + 1]) if l.strip() == "<script>")
 b0e = next(i for i in range(b0s, len(lines)) if lines[i].strip() == "</script>")
 engine = "\n".join(lines[b0s + 1:b0e])
 print("   lifted %-22s %6d bytes  (block 0, lines %d-%d)"
@@ -386,10 +422,17 @@ edits = [
     ("ctrl prop, method slip", MS_CTRL, ""),
     ("ctrl render, evidence slip", EV_RENDER, EV_CLEAN),
     ("ctrl render, method slip", MS_RENDER, MS_CLEAN),
-    ("the lamp's guard on the deleted .clsband", LAMP_GUARD, LAMP_CLEAN),
+    # Already repaired upstream, so finding nothing here is success. The guard read
+    # `var band=sec.querySelector('.clsband'); if(!band)return;` and used the RESTRICTED strip
+    # as a proxy for "is this a case folder"; cutting the strip took the lamp and twelve
+    # developed zones down with it, silently. src/ no longer carries it. Marked optional rather
+    # than deleted, so that a revert upstream is patched here instead of shipping a dead lamp.
+    ("the lamp's guard on the deleted .clsband", LAMP_GUARD, LAMP_CLEAN, True),
 ]
 print("")
-for label, old, new in edits:
+for _e in edits:
+    label, old, new = _e[0], _e[1], _e[2]
+    optional = len(_e) > 3 and _e[3]
     if hasattr(old, "sub"):
         n = len(old.findall(live))
         live = old.sub(new, live)
@@ -397,6 +440,9 @@ for label, old, new in edits:
         n = live.count(old)
         live = live.replace(old, new)
     if not n:
+        if optional:
+            print("   live layer: %-40s already fixed upstream" % label)
+            continue
         raise SystemExit("MISSING in live layer: %s" % label)
     print("   live layer: %-40s %d" % (label, n))
 if "ctrl" in live:
