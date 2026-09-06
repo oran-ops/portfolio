@@ -77,7 +77,29 @@ def main():
                 raise SystemExit('rule marker %s is missing from the monolith' % mark)
             body = body.replace(mark, rule, 1)
 
-    left = re.findall(r'<!--DOC:\w+-->|/\*D:\w+:\d+\*/', body)
+    # and the Macintosh shell, lifted out of the lab template by tools/extract_shell.py.
+    #
+    # It ships INERT: the entry gate at the end of frame.css keeps .mw out of the document
+    # until <html> carries mw-on. Without that the shell is a white sheet over the whole page,
+    # because in the lab it WAS the whole page.
+    #
+    # Order matters and is asserted by the marker names: the kit defines what the seven files
+    # are, the folder renderer counts them, and the frame reads K.order on its first line.
+    shelldir = os.path.join(SRC, 'shell')
+    for mark, name in (('/*SHELL:css*/', 'frame.css'),
+                       ('<!--SHELL:html-->', 'frame.html'),
+                       ('/*SHELL:kit*/', 'kit.js'),
+                       ('/*SHELL:screen*/', 'screen.js'),
+                       ('/*SHELL:js*/', 'frame.js')):
+        if body.count(mark) != 1:
+            raise SystemExit('shell marker %s appears %d times, expected 1'
+                             % (mark, body.count(mark)))
+        path = os.path.join(shelldir, name)
+        if not os.path.exists(path):
+            raise SystemExit('%s is missing; run tools/extract_shell.py --write' % path)
+        body = body.replace(mark, io.open(path, encoding='utf-8').read(), 1)
+
+    left = re.findall(r'<!--DOC:\w+-->|/\*D:\w+:\d+\*/|/\*SHELL:\w+\*/|<!--SHELL:\w+-->', body)
     if left:
         raise SystemExit('unexpanded markers remain: %s' % left)
 

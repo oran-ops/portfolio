@@ -1,0 +1,183 @@
+
+/* ===========================================================================================
+   THE FRAME. A white 1-bit 1984 window around a dark 2026 document. The boundary is meant to
+   be hard and visible -- that contrast is the thesis, so nothing here softens it.
+
+   The folder is a raster: one buffer at 512 x 342, scaled by a whole number. A document
+   cannot be, because its content is live HTML at real sizes that reflows. So the frame is CSS
+   boxes and the CHROME inside them is drawn by the SAME functions at 1x and scaled by the
+   same whole number: 1 logical pixel = 2 CSS pixels, everywhere below.
+   =========================================================================================== */
+:root{
+  --mw-menu:40px;      /* 20 logical */
+  --mw-bar:38px;       /* 19 logical: 1 black, 3 white, 11 striped, 3 white, 1 black */
+  --mw-scroll:30px;    /* 15 logical */
+  --mw-in:20px;        /* the inset that lets the dither show around the window */
+  --mw-gap:16px;
+  --mw-edge:2px;
+}
+html,body{height:100%}
+body{margin:0;overflow:hidden;background:#000}
+.mw{position:fixed;inset:0;display:flex;flex-direction:column;background:#fff;
+  font-family:'JetBrains Mono',ui-monospace,monospace}
+canvas{display:block;image-rendering:pixelated;image-rendering:crisp-edges}
+.mw-menu{flex:none;width:100%;height:var(--mw-menu)}
+/* The 50 per cent checkerboard: a true 2 x 2 cell at the same whole scale the chrome uses,
+   so one dither pixel is exactly 2 CSS pixels and matches the folder's raster. 45-degree
+   gradients make triangles, not a checkerboard -- a conic quarter-turn makes the real thing. */
+.mw-desk{position:relative;flex:1;min-height:0;background-color:#fff;
+  background-image:conic-gradient(#000 25%,#fff 0 50%,#000 0 75%,#fff 0);
+  background-size:4px 4px}
+
+/* --- the shut state: the six files on the desktop --- */
+.mw-files{position:absolute;left:30px;top:26px;right:30px;display:flex;flex-wrap:wrap;
+  gap:14px 22px}
+.mw-icon{padding:0;border:0;background:none;cursor:pointer;line-height:0}
+.mw-icon:focus-visible{outline:2px solid #000;outline-offset:3px}
+
+/* --- the open state --- */
+.mw-win{position:absolute;left:var(--mw-in);right:var(--mw-in);top:var(--mw-gap);
+  bottom:var(--mw-in);display:flex;flex-direction:column;background:#fff;
+  border:var(--mw-edge) solid #000;border-top:0}
+.mw-win[hidden]{display:none}
+.mw-title{flex:none;width:100%;height:var(--mw-bar)}
+.mw-x{position:absolute;left:6px;top:0;width:44px;height:var(--mw-bar);padding:0;border:0;
+  background:transparent;cursor:pointer}
+.mw-x:focus-visible{outline:2px solid #000;outline-offset:-4px}
+.mw-body{flex:1;min-height:0;display:flex}
+.mw-view{flex:1;min-width:0;overflow-y:auto;overflow-x:hidden;background:#191A1F;
+  overscroll-behavior:contain;scrollbar-width:none}
+.mw-view::-webkit-scrollbar{display:none}
+.mw-bar{flex:none;width:var(--mw-scroll);cursor:default}
+
+/* one document at a time; the id gives these the specificity to beat the site's own .sec */
+#docs>section{display:none}
+#docs>section.mw-show,#docs.mw-all>section{display:block}
+
+/* the zoom rectangle: what the machine drew when a file opened */
+.mw-zoom{position:absolute;border:2px solid #000;pointer-events:none;display:none}
+
+/* DONE -- the only piece of 1984 inside the content area, at the point the reader is leaving */
+.mw-end{padding:16px 0 72px;text-align:center;background:#191A1F}
+.mw-done{padding:0;border:0;background:none;cursor:pointer;line-height:0}
+.mw-done:focus-visible{outline:2px solid #2FB380;outline-offset:6px}
+/* 860, because that is the number the DOCUMENT switches on: 23 of the site's CSS
+   rules and every one of its script gates use it. At 760 the frame stayed in its
+   desktop layout for a hundred pixels during which the document was already in its
+   phone one -- a seam of my own making, in a page whose whole point is that the two
+   agree. */
+@media(max-width:860px){
+  :root{--mw-in:8px;--mw-gap:8px;--mw-menu:36px}
+  .mw-bar{display:none}                    /* 15px of 1-bit chrome on a phone is neither
+                                              usable nor authentic to anything */
+  .mw-view{-webkit-overflow-scrolling:touch}
+  /* The close box is drawn at 2x -- 22 CSS px -- which is not a tap target. The title bar is
+     only 38 px tall, so a 44 px target has to reach 3 px past it at each end; above is the
+     window's own border and below is the document's top margin, so nothing is stolen. */
+  .mw-x{top:-3px;height:44px}
+  /* TWO COLUMNS ON A PHONE, like the folder's own icon grid -- and never more, never an
+     overflow. Left as a wrapping flex row the 152 px icons packed as many as fitted, which is
+     six-in-a-column at 300 px and a marginal two at 375. auto-fit with a 152 px floor gives
+     two wherever two fit and one where they do not, and the cell can never be narrower than
+     the icon it holds. */
+  .mw-files{left:14px;top:14px;right:14px;display:grid;gap:10px 14px;
+    grid-template-columns:repeat(auto-fit,minmax(152px,1fr));justify-items:center}
+}
+@media(prefers-reduced-motion:reduce){.mw-zoom{display:none!important}}
+
+/* ===========================================================================================
+   The site's stylesheet came across whole and untouched, because the documents' design is not
+   changing. These are the only overrides, and every one exists because a document now lives in
+   a WINDOW rather than on a scrolling page.
+   =========================================================================================== */
+.mw-view .sec{min-height:0;height:auto;padding-left:0;padding-right:0}
+.mw-view .sec.case{padding-top:26px}
+.mw-view .secnum{position:static;display:block;margin:0 0 4px 26px}
+
+/* THE REVEAL. Elements start at opacity 0 and are revealed against the PAGE viewport.
+   Scrolling now happens inside the window, so opened cold a document rendered blank. The pass
+   is re-rooted to the window's scroller (see the script); these rules only raise specificity
+   enough to beat the page-scroll engine's own, which set `.case .folder{opacity:0}` and
+   expected inline styles from a scrub loop that no longer runs. The animation is unchanged --
+   same easing, same stagger. */
+/* LEADERSHIP is not a `.case`, and its folder is held down by `#leadership .folder{opacity:0}`
+   -- an ID selector, which no amount of class stacking beats. A rule written only against
+   `.case` left that one document's folder permanently invisible while every case file was
+   fine, which is exactly the way a treatment designed against XTIX fails on the two documents
+   that are not XTIX. Both selectors, so both documents behave the same. */
+.mw-view .case .folder,.mw-view #leadership .folder{opacity:0;transform:translateY(26px);
+  transition:opacity .8s var(--ease),transform .8s var(--ease)}
+.mw-view .case .folder.on,.mw-view #leadership .folder.on{opacity:1;transform:none}
+.mw-view .u.on .garc,.mw-view .u.on .pdraw{stroke-dashoffset:0}
+.mw-view .u.on .ndot{opacity:1;transform:scale(1)}
+
+/* the marquee bands and the page rail belong to the scrolling page, not to a window */
+.mw-view .bigmq,.mw-view #rail{display:none}
+
+/* OASIS AT 375. `.case .stat` is `width:max-content`, and the live layer injects the analyst
+   note INSIDE it -- the note's own content wants 706 px, so the stat grew to 759 inside a
+   289 px grid track and hung 437 px off the right edge. It does not happen on the live page
+   because the phone drawer lifts those panels out to <body> below 1580 px; this sample keeps
+   them in flow, so nothing lifts them. Measured against the live page at the same 375: live
+   `.stat` 227, here 759.
+
+   `width:auto` on a phone lets the stat be as wide as its column and its children wrap, which
+   costs nothing -- `max-content` exists so the box hugs a short figure like "$2M", and at
+   375 there is no spare width to hug into. It changes no content and moves nothing. Where
+   those panels should actually live in a window is a design decision, and this is the
+   containment until it is made. */
+@media(max-width:860px){
+  .mw-view .case .stat{width:auto;max-width:100%}
+
+  /* THE UV LAMP TAKES ITS OWN ROW ON A PHONE.
+     R59 mounts the lamp in a ZERO-HEIGHT flex row and pulls it up by its own height, so on a
+     wide screen it hangs above the folder's top edge at no vertical cost. That is the right
+     call there. At 375 there is no horizontal room beside the title for it to occupy, so it
+     landed on the text: measured, the 121 px band covered 121 px of `.sttl`, `.smeta` and
+     `.plabel` in turn -- 37 per cent of a 323 px column, three consecutive lines, the headline
+     cut mid-word.
+
+     The mount stays a mount: still in flow, still never absolutely positioned, so nothing has
+     to be measured against furniture that differs in every folder -- which is the thing R59
+     exists to avoid. All that changes is its height budget. On a phone vertical space is the
+     cheap axis and horizontal space is the scarce one, so the lamp spends the cheap one. It is
+     not shrunk: PRESS TO ARM keeps its 121 x 91 target. */
+  /* top clearance as well as bottom: with only a bottom margin the row still met the line
+     above it by 5-12 px, because what precedes the folder differs per document (.plabel in
+     XTIX and OASIS, .smeta in EVENTER and MEDCOIN) and each carries its own spacing */
+  .mw-view .case .uvmount{height:auto;margin:16px 0 10px}
+  .mw-view .case .uvmount .lampband{transform:none}
+  .mw-view .case .uvmount .lampband:active{transform:translateY(2px)}
+}
+
+
+/* ---- the entry gate --------------------------------------------------
+   .mw is a fixed sheet over the whole viewport. It stays out of the document
+   until the router puts the reader inside the machine. */
+.mw{display:none}
+html.mw-on .mw{display:flex}
+html.mw-on{overflow:hidden}
+
+/* Above everything the page floats. The site carries a HUD at z-index 56-99 and a
+   custom cursor at 100001-2; .mw shipped with z-index:auto and lost to all of it,
+   so the first activation drew the shell underneath the hero card. */
+.mw{z-index:100050}
+
+/* ---- and the world outside the machine closes -------------------------
+   Oran's ruling: the floating archive HUD lives on the three scrolling pages and
+   DISAPPEARS once the reader is inside the machine. It is the same archive fiction
+   that was cut from inside the documents, and a red ARCHIVE LIVE lamp floating over
+   a Macintosh window is the one thing that would break the illusion outright.
+
+   The circle-and-dot cursor goes with them, because inside the machine the pointer
+   is the machine's own. Hiding it here restores the system cursor; the Macintosh
+   arrow replaces it in its own step. */
+html.mw-on #rail,html.mw-on #pbar,html.mw-on #loglin,html.mw-on #recled,
+html.mw-on #casemeter,html.mw-on #evtag,html.mw-on #clearance,html.mw-on #idlecue,
+html.mw-on #teaser,html.mw-on #curlbl,html.mw-on #cur,html.mw-on #curR,
+html.mw-on .evdrawer,html.mw-on #dust,html.mw-on #heromq
+{display:none!important}
+
+/* the page behind is not merely covered, it is taken out of the reading order */
+html.mw-on body>.sec,html.mw-on body>#hero{visibility:hidden}
+html.mw-on .mw,html.mw-on .mw *{visibility:visible}
