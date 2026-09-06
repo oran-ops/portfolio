@@ -139,7 +139,17 @@ def main():
             '   hidden the desk starts at the top and the folder paints its menu bar into the\n'
             '   first 40 CSS pixels of the canvas, so the window covered 24 of them and File,\n'
             '   Edit, View and Special were cut in half. */\n'
-            'html.mw-on{--mw-gap:calc(var(--mw-menu) + 16px)}\n')
+            'html.mw-on{--mw-gap:calc(var(--mw-menu) + 16px)}\n'
+            '\n'
+            '/* ---- and the UV lamp keeps clear of the part label on a phone ----------\n'
+            '   The lamp hangs at the top right of the folder. In the lab page it cleared\n'
+            "   PART 1 OF 2 by sixteen pixels; inside the real page, with the window's own gap\n"
+            '   below a menu bar, the layout landed two pixels short and the lamp sat on the\n'
+            '   label. Sixteen pixels of luck is not a margin, so this asks for the clearance\n'
+            '   rather than hoping the sums keep working out. */\n'
+            '@media (max-width:700px){\n'
+            '  html.mw-on .mw-view .case .uvmount{margin-top:30px}\n'
+            '}\n')
 
     # ---- markup: the frame only, never the review bar
     a = s.index('<div class="mw"')

@@ -197,3 +197,13 @@ html.mw-on .mw-menu{display:none}
    first 40 CSS pixels of the canvas, so the window covered 24 of them and File,
    Edit, View and Special were cut in half. */
 html.mw-on{--mw-gap:calc(var(--mw-menu) + 16px)}
+
+/* ---- and the UV lamp keeps clear of the part label on a phone ----------
+   The lamp hangs at the top right of the folder. In the lab page it cleared
+   PART 1 OF 2 by sixteen pixels; inside the real page, with the window's own gap
+   below a menu bar, the layout landed two pixels short and the lamp sat on the
+   label. Sixteen pixels of luck is not a margin, so this asks for the clearance
+   rather than hoping the sums keep working out. */
+@media (max-width:700px){
+  html.mw-on .mw-view .case .uvmount{margin-top:30px}
+}
