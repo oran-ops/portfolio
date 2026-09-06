@@ -215,14 +215,23 @@ def main():
     # THE FOLDER REDRAWS AFTER EVERY OPEN AND CLOSE, because its status line carries the count
     # and the count has just moved. Both the frame and the folder read "ocmf.opened" from
     # storage, so nothing is passed between them — the folder simply re-reads.
-    for fn, sig in (('show', 'function show(id) {'), ('shut', 'function shut() {')):
+    #
+    # AND THE ROUTER HEARS ABOUT IT. The folder calls show() directly rather than going through
+    # the router, which is right — the folder is the thing that opened the file. So the router
+    # is told after the fact and keeps one state object, instead of there being two code paths
+    # that both half-know how to open a document.
+    for fn, sig, tell in (
+            ('show', 'function show(id) {', 'window.__mwOpened(id)'),
+            ('shut', 'function shut() {', 'window.__mwClosed()')):
         if js.count(sig) != 1:
             print('  REFUSED: %s() did not match' % fn)
             return 1
         js = js.replace(sig, sig +
                         '\n  setTimeout(function () {'
                         ' if (typeof window.__folderRedraw === "function")'
-                        ' { window.__folderRedraw(); } }, 0);', 1)
+                        ' { window.__folderRedraw(); }'
+                        ' if (typeof %s === "function") { %s; } }, 0);'
+                        % (tell.split('(')[0], tell), 1)
 
     # note() targets the review bar, and is called from a dozen places
     js = js.replace('function note(s) { cv("rvw-note").innerHTML = "<em>" + s + "</em>"; }',

@@ -1141,7 +1141,7 @@ function record(id) {
 function note(s) { var n = cv("rvw-note"); if (n) { n.innerHTML = "<em>" + s + "</em>"; } }
 
 function show(id) {
-  setTimeout(function () { if (typeof window.__folderRedraw === "function") { window.__folderRedraw(); } }, 0);
+  setTimeout(function () { if (typeof window.__folderRedraw === "function") { window.__folderRedraw(); } if (typeof window.__mwOpened === "function") { window.__mwOpened(id); } }, 0);
   if (openId === id) return;
   var btn = cv("files").querySelector('[data-id="' + id + '"]') || cv("files");
   var finish = function () {
@@ -1198,7 +1198,7 @@ function show(id) {
   zoomOpen(btn, go);
 }
 function shut() {
-  setTimeout(function () { if (typeof window.__folderRedraw === "function") { window.__folderRedraw(); } }, 0);
+  setTimeout(function () { if (typeof window.__folderRedraw === "function") { window.__folderRedraw(); } if (typeof window.__mwClosed === "function") { window.__mwClosed(); } }, 0);
   if (!openId) return;
   openId = null;
   cv("win").hidden = true;
