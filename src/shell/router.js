@@ -42,10 +42,84 @@
   }
 
   /* ---------------------------------------------------------------- rendering a state */
-  function enterShell() {
+  /* THE CHOREOGRAPHY, IN THE ORDER ORAN SET IT.
+   *
+   *   "קודם המחשב מתיישר ואז התיקייה נפתחת... רק אחרי שהתיקייה נפתחה מתחיל אפקט הזום אין"
+   *
+   * The machine straightens. THEN the folder opens. Only then does the zoom begin. He was
+   * explicit that the order is the point, so it is three beats and not one movement.
+   *
+   * The middle beat is a held pause rather than the folder actually opening on the CRT. The
+   * screen is a texture baked from the same drawScreen() that renders the folder — that is why
+   * the pixels the camera flies into and the pixels it lands on cannot drift — and swapping it
+   * mid-flight means re-uploading it, which is a piece of work of its own. The beat is honoured
+   * so the sequence reads correctly; what fills it is a smaller thing than it will be.
+   */
+  var REST = { yaw: -0.46, pitch: 0.20, dist: 5.60 };
+  var FLAT = { yaw: 0, pitch: 0.06, dist: 5.20 };
+  var IN = { yaw: 0, pitch: 0.02, dist: 1.15 };
+
+  function ease(t) { return t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2; }
+
+  function fly(from, to, ms, then) {
+    if (typeof window.__cam !== "function" ||
+        matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      if (typeof window.__cam === "function") { window.__cam(to.yaw, to.pitch, to.dist, null); }
+      then();
+      return;
+    }
+    var t0 = performance.now();
+    (function step(now) {
+      var t = Math.min(1, (now - t0) / ms), k = ease(t);
+      window.__cam(from.yaw + (to.yaw - from.yaw) * k,
+                   from.pitch + (to.pitch - from.pitch) * k,
+                   from.dist + (to.dist - from.dist) * k, null);
+      if (t < 1) { requestAnimationFrame(step); } else { then(); }
+    })(t0);
+  }
+
+  var flying = false;
+
+  function enterShell(animate) {
     if (html.classList.contains("mw-on")) { return; }
-    html.classList.add("mw-on");
-    if (typeof window.__shellInit === "function") { window.__shellInit(); }
+    if (!animate || flying || typeof window.__cam !== "function") {
+      html.classList.add("mw-on");
+      if (typeof window.__shellInit === "function") { window.__shellInit(); }
+      return;
+    }
+    flying = true;
+
+    /* AN ANIMATION MUST NEVER BE THE ONLY WAY IN.
+     *
+     * The flight is driven by requestAnimationFrame, and rAF does not fire in a background tab
+     * or a hidden window. Measured: with the pane hidden the camera never moved and the shell
+     * never opened — the reader clicks the machine and nothing happens, with no error to say
+     * why. So the arrival is on a deadline, and the flight is decoration in front of it. If the
+     * frames do not come, the reader still gets where they asked to go, just without the trip.
+     */
+    var arrived = false;
+    function arrive() {
+      if (arrived) { return; }
+      arrived = true;
+      flying = false;
+      html.classList.add("mw-on");
+      if (typeof window.__shellInit === "function") { window.__shellInit(); }
+      /* put the machine back where it was, unseen behind the shell, so leaving it does not land
+         the reader on a camera halfway inside a cathode ray tube. Oran: the machine resets its
+         angle. */
+      if (typeof window.__cam === "function") {
+        window.__cam(REST.yaw, REST.pitch, REST.dist, null);
+      }
+    }
+    setTimeout(arrive, 1600);                   /* the flight is 480 + 260 + 620 = 1360 */
+
+    fly(REST, FLAT, 480, function () {          /* 1. the machine straightens */
+      if (arrived) { return; }
+      setTimeout(function () {                  /* 2. the folder opens */
+        if (arrived) { return; }
+        fly(FLAT, IN, 620, arrive);             /* 3. and only then, the zoom */
+      }, 260);
+    });
   }
 
   function leaveShell() {
@@ -60,7 +134,10 @@
       if (s.screen === "pages") {
         leaveShell();
       } else {
-        enterShell();
+        /* the flight belongs to the reader clicking the machine. Arriving on a link, or coming
+           back with the Back button, should put them where they asked to be at once — a camera
+           move they did not ask for reads as the page being slow. */
+        enterShell(s.via === "click");
         if (s.screen === "doc" && s.id) {
           if (typeof show === "function") { show(s.id); }
         } else if (typeof shut === "function") {
@@ -71,8 +148,8 @@
   }
 
   /* ---------------------------------------------------------------- moving between them */
-  function go(screen, id, replace) {
-    var next = { screen: screen, id: id || null };
+  function go(screen, id, replace, via) {
+    var next = { screen: screen, id: id || null, via: via || null };
     if (next.screen === state.screen && next.id === state.id) { return; }
     state = next;
     var url = location.pathname + location.search + hashFor(next);
@@ -92,7 +169,10 @@
   /* ---------------------------------------------------------------- the doors */
 
   /* into the machine — page 3 calls this when the reader clicks the screen */
-  window.__enterMachine = function () { go("machine", null); };
+  window.__enterMachine = function () {
+    state.via = "click";
+    go("machine", null, false, "click");
+  };
 
   /* CLICKING THE MACHINE GOES IN; DRAGGING IT DOES NOT.
    *
