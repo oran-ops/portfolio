@@ -85,6 +85,20 @@ def main():
     #
     # Order matters and is asserted by the marker names: the kit defines what the seven files
     # are, the folder renderer counts them, and the frame reads K.order on its first line.
+    # and the Macintosh itself — page 3. Procedural, 117 KB; the 933 KB baked mesh stays in
+    # the lab, where it does not have to fit a 520 KB budget. See tools/extract_machine.py.
+    machdir = os.path.join(SRC, 'machine')
+    for mark, name in (('/*MACHINE:css*/', 'machine.css'),
+                       ('<!--MACHINE:html-->', 'machine.html'),
+                       ('/*MACHINE:js*/', 'machine.js')):
+        if body.count(mark) != 1:
+            raise SystemExit('machine marker %s appears %d times, expected 1'
+                             % (mark, body.count(mark)))
+        path = os.path.join(machdir, name)
+        if not os.path.exists(path):
+            raise SystemExit('%s is missing; run tools/extract_machine.py --write' % path)
+        body = body.replace(mark, io.open(path, encoding='utf-8').read(), 1)
+
     shelldir = os.path.join(SRC, 'shell')
     for mark, name in (('/*SHELL:css*/', 'frame.css'),
                        ('<!--SHELL:html-->', 'frame.html'),
@@ -101,7 +115,7 @@ def main():
             raise SystemExit('%s is missing; run tools/extract_shell.py --write' % path)
         body = body.replace(mark, io.open(path, encoding='utf-8').read(), 1)
 
-    left = re.findall(r'<!--DOC:\w+-->|/\*D:\w+:\d+\*/|/\*SHELL:\w+\*/|<!--SHELL:\w+-->', body)
+    left = re.findall(r'<!--DOC:\w+-->|/\*D:\w+:\d+\*/|/\*SHELL:\w+\*/|<!--SHELL:\w+-->' + r'|/\*MACHINE:\w+\*/|<!--MACHINE:\w+-->', body)
     if left:
         raise SystemExit('unexpanded markers remain: %s' % left)
 

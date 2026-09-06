@@ -94,6 +94,28 @@
   /* into the machine — page 3 calls this when the reader clicks the screen */
   window.__enterMachine = function () { go("machine", null); };
 
+  /* CLICKING THE MACHINE GOES IN; DRAGGING IT DOES NOT.
+   *
+   * The canvas already owns pointerdown for orbiting, so a plain click listener would fire at
+   * the end of every drag and throw the reader inside the machine every time they turned it
+   * round to look. The distance the pointer travelled separates the two: under six pixels is a
+   * click, past it the reader was orbiting and meant nothing by letting go. */
+  (function () {
+    var cv = document.getElementById("mach-gl");
+    if (!cv) { return; }
+    var x0 = 0, y0 = 0, down = false;
+    cv.addEventListener("pointerdown", function (e) {
+      down = true; x0 = e.clientX; y0 = e.clientY;
+    }, { passive: true });
+    cv.addEventListener("pointerup", function (e) {
+      if (!down) { return; }
+      down = false;
+      var moved = Math.abs(e.clientX - x0) + Math.abs(e.clientY - y0);
+      if (moved < 6) { window.__enterMachine(); }
+    }, { passive: true });
+    cv.addEventListener("pointercancel", function () { down = false; }, { passive: true });
+  })();
+
   /* out of it — the folder's own close box */
   window.__mwExit = function () { go("pages", null); };
 
