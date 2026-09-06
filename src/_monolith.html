@@ -284,9 +284,9 @@ font-family:'JetBrains Mono',monospace;font-weight:600;font-size:10.5px;letter-s
 
 /* ===================== ALIVE LAYER ===================== */
 @media (pointer:fine){html.jscur,html.jscur body,html.jscur a{cursor:none}}
-#cur{position:fixed;top:0;left:0;width:9px;height:9px;background:var(--emb);transform:translate(-100px,-100px) rotate(45deg);
+#cur{position:fixed;will-change:transform;top:0;left:0;width:9px;height:9px;background:var(--emb);transform:translate(-100px,-100px) rotate(45deg);
 pointer-events:none;z-index:100002}
-#curR{position:fixed;top:0;left:0;width:36px;height:36px;border:1px solid rgba(242,241,237,.35);border-radius:50%;
+#curR{position:fixed;will-change:transform;top:0;left:0;width:36px;height:36px;border:1px solid rgba(242,241,237,.35);border-radius:50%;
 transform:translate(-120px,-120px);pointer-events:none;z-index:100001;transition:width .25s var(--ease),height .25s var(--ease),border-color .25s var(--ease)}
 #curR.hot{width:56px;height:56px;border-color:var(--emb)}
 
@@ -2383,6 +2383,8 @@ loop, so `animation:none` had nothing to cancel. One static frame, then nothing.
 /*SHELL:css*/
 
 /*MACHINE:css*/
+
+/*SHELL:cursor*/
 </style>
 <!--DOC:leadership-->
 
@@ -2822,12 +2824,20 @@ if(fine){
   var curRun=false;
   function curKick(){if(!curRun){curRun=true;requestAnimationFrame(loop)}}
   document.addEventListener('mousemove',function(e){mx=e.clientX;my=e.clientY;
-    var hot=e.target.closest&&e.target.closest('a,button,#files .tab,.crow,.chip');
-    ring.classList.toggle('hot',!!hot);
+    /* the hover test used to run here, on every pointer event: closest() against
+       five selectors, up the whole ancestor chain, 60-120 times a second. It runs
+       in the frame loop now, which only turns while the ring is still catching up. */
+    hotEl=e.target;
     curKick();
   },{passive:true});
+  var hotEl=null;
   function loop(){
-    cx+=(mx-cx)*.4;cy+=(my-cy)*.4;rx+=(mx-rx)*.16;ry+=(my-ry)*.16;
+    /* THE DOT IS EXACT. It was eased at 0.40, which is about two frames behind the
+       pointer the reader can see, and a dot that trails reads as lag rather than as
+       an effect. The RING still trails at 0.16, because that one is the effect. */
+    cx=mx;cy=my;rx+=(mx-rx)*.16;ry+=(my-ry)*.16;
+    if(hotEl){var h=hotEl.closest&&hotEl.closest('a,button,#files .tab,.crow,.chip');
+      ring.classList.toggle('hot',!!h);hotEl=null;}
     cur.style.transform='translate('+(cx-4.5)+'px,'+(cy-4.5)+'px) rotate(45deg)';
     ring.style.transform='translate('+(rx-18)+'px,'+(ry-18)+'px)';
     if(Math.abs(mx-cx)>.05||Math.abs(my-cy)>.05||Math.abs(mx-rx)>.05||Math.abs(my-ry)>.05)requestAnimationFrame(loop);
