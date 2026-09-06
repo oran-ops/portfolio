@@ -1,0 +1,663 @@
+<meta charset="utf-8">
+<title>The Case Files</title>
+<style>
+/* ===========================================================================================
+   THE FRAME. A white 1-bit 1984 window around a dark 2026 document. The boundary is meant to
+   be hard and visible -- that contrast is the thesis, so nothing here softens it.
+
+   The folder is a raster: one buffer at 512 x 342, scaled by a whole number. A document
+   cannot be, because its content is live HTML at real sizes that reflows. So the frame is CSS
+   boxes and the CHROME inside them is drawn by the SAME functions at 1x and scaled by the
+   same whole number: 1 logical pixel = 2 CSS pixels, everywhere below.
+   =========================================================================================== */
+:root{
+  --mw-menu:40px;      /* 20 logical */
+  --mw-bar:38px;       /* 19 logical: 1 black, 3 white, 11 striped, 3 white, 1 black */
+  --mw-scroll:30px;    /* 15 logical */
+  --mw-in:20px;        /* the inset that lets the dither show around the window */
+  --mw-gap:16px;
+  --mw-edge:2px;
+}
+html,body{height:100%}
+body{margin:0;overflow:hidden;background:#000}
+.mw{position:fixed;inset:0;display:flex;flex-direction:column;background:#fff;
+  font-family:'JetBrains Mono',ui-monospace,monospace}
+canvas{display:block;image-rendering:pixelated;image-rendering:crisp-edges}
+.mw-menu{flex:none;width:100%;height:var(--mw-menu)}
+/* The 50 per cent checkerboard: a true 2 x 2 cell at the same whole scale the chrome uses,
+   so one dither pixel is exactly 2 CSS pixels and matches the folder's raster. 45-degree
+   gradients make triangles, not a checkerboard -- a conic quarter-turn makes the real thing. */
+.mw-desk{position:relative;flex:1;min-height:0;background-color:#fff;
+  background-image:conic-gradient(#000 25%,#fff 0 50%,#000 0 75%,#fff 0);
+  background-size:4px 4px}
+
+/* --- the shut state: the six files on the desktop --- */
+.mw-files{position:absolute;left:30px;top:26px;right:30px;display:flex;flex-wrap:wrap;
+  gap:14px 22px}
+.mw-icon{padding:0;border:0;background:none;cursor:pointer;line-height:0}
+.mw-icon:focus-visible{outline:2px solid #000;outline-offset:3px}
+
+/* --- the open state --- */
+.mw-win{position:absolute;left:var(--mw-in);right:var(--mw-in);top:var(--mw-gap);
+  bottom:var(--mw-in);display:flex;flex-direction:column;background:#fff;
+  border:var(--mw-edge) solid #000;border-top:0}
+.mw-win[hidden]{display:none}
+.mw-title{flex:none;width:100%;height:var(--mw-bar)}
+.mw-x{position:absolute;left:6px;top:0;width:44px;height:var(--mw-bar);padding:0;border:0;
+  background:transparent;cursor:pointer}
+.mw-x:focus-visible{outline:2px solid #000;outline-offset:-4px}
+.mw-body{flex:1;min-height:0;display:flex}
+.mw-view{flex:1;min-width:0;overflow-y:auto;overflow-x:hidden;background:#191A1F;
+  overscroll-behavior:contain;scrollbar-width:none}
+.mw-view::-webkit-scrollbar{display:none}
+.mw-bar{flex:none;width:var(--mw-scroll);cursor:default}
+
+/* one document at a time; the id gives these the specificity to beat the site's own .sec */
+#docs>section{display:none}
+#docs>section.mw-show,#docs.mw-all>section{display:block}
+
+/* the zoom rectangle: what the machine drew when a file opened */
+.mw-zoom{position:absolute;border:2px solid #000;pointer-events:none;display:none}
+
+/* DONE -- the only piece of 1984 inside the content area, at the point the reader is leaving */
+.mw-end{padding:16px 0 72px;text-align:center;background:#191A1F}
+.mw-done{padding:0;border:0;background:none;cursor:pointer;line-height:0}
+.mw-done:focus-visible{outline:2px solid #2FB380;outline-offset:6px}
+
+/* the review strip -- not part of the product; it is how this page gets judged */
+.rvw{position:fixed;left:0;right:0;bottom:0;z-index:40;display:flex;gap:12px;align-items:center;
+  flex-wrap:wrap;padding:9px 16px;background:rgba(12,13,16,.94);border-top:1px solid #33353C;
+  color:#B6B7BB;font:400 11.5px/1.5 'Inter',system-ui,sans-serif;letter-spacing:.01em}
+.rvw b{color:#F2F1ED;font-weight:600}
+.rvw em{color:#7E828C;font-style:normal}
+.rvw button{font:500 11px/1 'JetBrains Mono',ui-monospace,monospace;letter-spacing:.1em;
+  color:#CFD0D4;background:#202127;border:1px solid #33353C;padding:6px 10px;cursor:pointer;
+  text-transform:uppercase}
+.rvw button:hover{border-color:#2FB380;color:#F2F1ED}
+.rvw button:focus-visible{outline:2px solid #2FB380;outline-offset:2px}
+.rvw .sp{flex:1}
+/* 860, because that is the number the DOCUMENT switches on: 23 of the site's CSS
+   rules and every one of its script gates use it. At 760 the frame stayed in its
+   desktop layout for a hundred pixels during which the document was already in its
+   phone one -- a seam of my own making, in a page whose whole point is that the two
+   agree. */
+@media(max-width:860px){
+  :root{--mw-in:8px;--mw-gap:8px;--mw-menu:36px}
+  .mw-bar{display:none}                    /* 15px of 1-bit chrome on a phone is neither
+                                              usable nor authentic to anything */
+  .mw-view{-webkit-overflow-scrolling:touch}
+  /* The close box is drawn at 2x -- 22 CSS px -- which is not a tap target. The title bar is
+     only 38 px tall, so a 44 px target has to reach 3 px past it at each end; above is the
+     window's own border and below is the document's top margin, so nothing is stolen. */
+  .mw-x{top:-3px;height:44px}
+  /* TWO COLUMNS ON A PHONE, like the folder's own icon grid -- and never more, never an
+     overflow. Left as a wrapping flex row the 152 px icons packed as many as fitted, which is
+     six-in-a-column at 300 px and a marginal two at 375. auto-fit with a 152 px floor gives
+     two wherever two fit and one where they do not, and the cell can never be narrower than
+     the icon it holds. */
+  .mw-files{left:14px;top:14px;right:14px;display:grid;gap:10px 14px;
+    grid-template-columns:repeat(auto-fit,minmax(152px,1fr));justify-items:center}
+  /* the strip is test chrome, and on a 375 px screen its three wrapped lines were covering
+     90 px of the machine it exists to let you look at */
+  .rvw{font-size:10.5px;padding:6px 8px;gap:6px;flex-wrap:nowrap;overflow-x:auto}
+  .rvw .intro{display:none}
+  .rvw button{padding:6px 8px;white-space:nowrap}
+}
+@media(prefers-reduced-motion:reduce){.mw-zoom{display:none!important}}
+</style>
+
+<style>/*DOCCSS*/</style>
+
+<style>
+/* ===========================================================================================
+   The site's stylesheet came across whole and untouched, because the documents' design is not
+   changing. These are the only overrides, and every one exists because a document now lives in
+   a WINDOW rather than on a scrolling page.
+   =========================================================================================== */
+.mw-view .sec{min-height:0;height:auto;padding-left:0;padding-right:0}
+.mw-view .sec.case{padding-top:26px}
+.mw-view .secnum{position:static;display:block;margin:0 0 4px 26px}
+
+/* THE REVEAL. Elements start at opacity 0 and are revealed against the PAGE viewport.
+   Scrolling now happens inside the window, so opened cold a document rendered blank. The pass
+   is re-rooted to the window's scroller (see the script); these rules only raise specificity
+   enough to beat the page-scroll engine's own, which set `.case .folder{opacity:0}` and
+   expected inline styles from a scrub loop that no longer runs. The animation is unchanged --
+   same easing, same stagger. */
+/* LEADERSHIP is not a `.case`, and its folder is held down by `#leadership .folder{opacity:0}`
+   -- an ID selector, which no amount of class stacking beats. A rule written only against
+   `.case` left that one document's folder permanently invisible while every case file was
+   fine, which is exactly the way a treatment designed against XTIX fails on the two documents
+   that are not XTIX. Both selectors, so both documents behave the same. */
+.mw-view .case .folder,.mw-view #leadership .folder{opacity:0;transform:translateY(26px);
+  transition:opacity .8s var(--ease),transform .8s var(--ease)}
+.mw-view .case .folder.on,.mw-view #leadership .folder.on{opacity:1;transform:none}
+.mw-view .u.on .garc,.mw-view .u.on .pdraw{stroke-dashoffset:0}
+.mw-view .u.on .ndot{opacity:1;transform:scale(1)}
+
+/* the marquee bands and the page rail belong to the scrolling page, not to a window */
+.mw-view .bigmq,.mw-view #rail{display:none}
+
+/* OASIS AT 375. `.case .stat` is `width:max-content`, and the live layer injects the analyst
+   note INSIDE it -- the note's own content wants 706 px, so the stat grew to 759 inside a
+   289 px grid track and hung 437 px off the right edge. It does not happen on the live page
+   because the phone drawer lifts those panels out to <body> below 1580 px; this sample keeps
+   them in flow, so nothing lifts them. Measured against the live page at the same 375: live
+   `.stat` 227, here 759.
+
+   `width:auto` on a phone lets the stat be as wide as its column and its children wrap, which
+   costs nothing -- `max-content` exists so the box hugs a short figure like "$2M", and at
+   375 there is no spare width to hug into. It changes no content and moves nothing. Where
+   those panels should actually live in a window is a design decision, and this is the
+   containment until it is made. */
+@media(max-width:860px){
+  .mw-view .case .stat{width:auto;max-width:100%}
+
+  /* THE UV LAMP TAKES ITS OWN ROW ON A PHONE.
+     R59 mounts the lamp in a ZERO-HEIGHT flex row and pulls it up by its own height, so on a
+     wide screen it hangs above the folder's top edge at no vertical cost. That is the right
+     call there. At 375 there is no horizontal room beside the title for it to occupy, so it
+     landed on the text: measured, the 121 px band covered 121 px of `.sttl`, `.smeta` and
+     `.plabel` in turn -- 37 per cent of a 323 px column, three consecutive lines, the headline
+     cut mid-word.
+
+     The mount stays a mount: still in flow, still never absolutely positioned, so nothing has
+     to be measured against furniture that differs in every folder -- which is the thing R59
+     exists to avoid. All that changes is its height budget. On a phone vertical space is the
+     cheap axis and horizontal space is the scarce one, so the lamp spends the cheap one. It is
+     not shrunk: PRESS TO ARM keeps its 121 x 91 target. */
+  /* top clearance as well as bottom: with only a bottom margin the row still met the line
+     above it by 5-12 px, because what precedes the folder differs per document (.plabel in
+     XTIX and OASIS, .smeta in EVENTER and MEDCOIN) and each carries its own spacing */
+  .mw-view .case .uvmount{height:auto;margin:16px 0 10px}
+  .mw-view .case .uvmount .lampband{transform:none}
+  .mw-view .case .uvmount .lampband:active{transform:translateY(2px)}
+}
+</style>
+
+<div class="mw" id="mw">
+  <canvas class="mw-menu" id="c-menu" aria-hidden="true"></canvas>
+  <div class="mw-desk" id="desk">
+
+    <div class="mw-files" id="files"></div>
+
+    <div class="mw-win" id="win" hidden>
+      <canvas class="mw-title" id="c-title" aria-hidden="true"></canvas>
+      <button class="mw-x" id="xbtn" type="button" aria-label="Close this file"></button>
+      <div class="mw-body">
+        <div class="mw-view" id="view" tabindex="0" role="document" aria-label="Case file">
+          <div id="docs">
+            <!--DOCHTML-->
+          </div>
+          <div class="mw-end">
+            <button class="mw-done" id="done" type="button" aria-label="Done">
+              <canvas id="c-done" width="240" height="56"></canvas>
+            </button>
+          </div>
+        </div>
+        <canvas class="mw-bar" id="c-bar" aria-hidden="true"></canvas>
+      </div>
+    </div>
+
+    <div class="mw-zoom" id="zoom" aria-hidden="true"></div>
+  </div>
+</div>
+
+<div class="rvw">
+  <span class="intro"><b>Stage 6</b> &middot; six files in the document window. The frame is
+  1984; the documents are untouched.</span>
+  <span class="sp"></span>
+  <span id="rvw-note"><em>click a file to open it</em></span>
+  <button id="b-close" type="button">Close</button>
+  <button id="b-check" type="button">Check reveal</button>
+  <button id="b-all" type="button">Check all six</button>
+  <button id="b-forget" type="button">Forget</button>
+  <span class="meta" id="rvw-engine" title="frames the scroll engine has run">engine 0</span>
+</div>
+
+<script>/*KIT*/</script>
+<script>/*SCREEN*/</script>
+<script>
+"use strict";
+var S = 2;                                   /* logical pixel -> CSS pixel. Whole, always. */
+var IDS = ["xtix", "oasis", "eventer", "medcoin", "leadership", "tech"];
+var STORE = "ocmf.opened";                   /* the same key the folder page reads */
+
+function cv(id) { return document.getElementById(id); }
+function secOf(id) { return document.getElementById(id); }
+function blit(canvas, b, w, h) {
+  canvas.width = w * S; canvas.height = h * S;
+  var off = document.createElement("canvas");
+  off.width = w; off.height = h;
+  var ox = off.getContext("2d"), im = ox.createImageData(w, h);
+  im.data.set(b.d); ox.putImageData(im, 0, 0);
+  var x = canvas.getContext("2d");
+  x.imageSmoothingEnabled = false;
+  x.clearRect(0, 0, canvas.width, canvas.height);
+  x.drawImage(off, 0, 0, canvas.width, canvas.height);
+}
+
+/* ---------------------------------------------------------------- the menu bar */
+function drawMenu() {
+  var w = Math.ceil(cv("c-menu").clientWidth / S) || 400;
+  var b = new Buf(w, 20);
+  menubar(b, w);
+  blit(cv("c-menu"), b, w, 20);
+}
+
+/* ---------------------------------------------------------------- the files on the desktop */
+function drawFiles() {
+  var box = cv("files");
+  box.innerHTML = "";
+  IDS.forEach(function (id) {
+    var w = 76, h = 50, b = new Buf(w, h);
+    ico(b, id, (w >> 1) - 16, 2);
+    var lab = K.labels[id], lw = tw(lab), lx = (w >> 1) - (lw >> 1);
+    b.rect(lx - 3, 38, lx + lw + 2, 48, WHITE);
+    txt(b, lab, lx, 39, BLACK);
+    var btn = document.createElement("button");
+    btn.className = "mw-icon";
+    btn.type = "button";
+    btn.setAttribute("aria-label", "Open " + lab);
+    btn.setAttribute("data-id", id);
+    var c = document.createElement("canvas");
+    btn.appendChild(c);
+    box.appendChild(btn);
+    blit(c, b, w, h);
+    c.style.width = (w * S) + "px";
+    c.style.height = (h * S) + "px";
+    btn.onclick = function () { show(id); };
+  });
+}
+
+/* ---------------------------------------------------------------- the title bar
+   The file's NAME alone, as the Finder showed it. The full identification already appears
+   inside the document. Close box at the left, with the X Oran asked for. */
+function drawTitle() {
+  var el = cv("c-title"), w = Math.ceil(el.clientWidth / S);
+  if (!w || !openId) return;
+  var b = new Buf(w, 19);
+  titlebar(b, 0, 0, w - 1, K.labels[openId], true, true);
+  blit(el, b, w, 19);
+}
+
+/* ---------------------------------------------------------------- the live scroll bar */
+var hit = null;
+function drawBar() {
+  var el = cv("c-bar"), v = cv("view");
+  var h = Math.floor(el.clientHeight / S), w = 15;
+  if (!h || el.offsetParent === null) { hit = null; return; }
+  var range = v.scrollHeight - v.clientHeight;
+  var b = new Buf(w, h);
+  hit = vscroll(b, 0, 0, w - 1, h - 1,
+                range > 0 ? v.scrollTop / range : 0,
+                v.scrollHeight ? v.clientHeight / v.scrollHeight : 1,
+                range > 0);
+  blit(el, b, w, h);
+}
+
+/* ---------------------------------------------------------------- DONE */
+function drawDone() {
+  var w = 120, h = 28, b = new Buf(w, h);
+  pushbutton(b, 0, 0, w - 1, h - 1, "DONE", true);
+  blit(cv("c-done"), b, w, h);
+}
+
+/* ---------------------------------------------------------------- the document's own script
+   Lifted verbatim from the site. Re-writing any of it by hand is how a frame-only change
+   quietly becomes a content change. */
+/* THE SCROLL ENGINE, lifted whole with its clock swapped from the page to the window's own
+   scroller -- see build_doc.py for the exact substitutions. It owns the counting figures, the
+   ten-column chart, the SVG ring arcs, the path drawing, the .rv reveal and the .st/--i
+   stagger. It is progress-driven, not observer-driven: scenes advance continuously against
+   travel and lead values, which is why it is NOT converted to IntersectionObserver -- an
+   observer reports crossings, and that would change how every one of them feels. */
+function scrollEngine() {
+  /*ENGINE*/
+}
+function redaction(root) {
+  /*REDX*/
+}
+function redactionBars(root) {
+  /*RXS*/
+}
+/* The whole live layer: evidence slip, UV lamp and its zones, analyst note, method slip and
+   the sheet flip. It runs ONCE, with every section on screen, because the sheet flip measures
+   both faces and a measurement taken while display is none is zero. Only the four CASE files
+   appear in its tables; LEADERSHIP and TECH never had a live layer and do not get one. */
+function liveLayer() {
+  /*LIVE*/
+}
+
+/* ---------------------------------------------------------------- re-fitting the sheet stage
+   THE LIVE LAYER IS BUILT ONCE, WITH EVERY SECTION ON SCREEN, AND FIVE OF THE SIX ARE THEN
+   HIDDEN. The sheet flip sizes its stage from whichever face is showing, and caches the last
+   value it wrote so it does not invalidate layout for nothing. Hiding a section measures its
+   face at zero, writes `height:0px`, and caches that -- and because the cached value only
+   changes when a FACE changes size, showing the section again never rewrites it. Measured at
+   375: XTIX (the one never hidden) 132 against a 132 face; OASIS, EVENTER and MEDCOIN all
+   `0px` against faces of 144, 145 and 134.
+
+   That matters because both faces are position:absolute inside the stage, so a stage of zero
+   does not clip them -- it lets them draw over whatever follows, which is precisely the
+   failure the R57 comment in the source describes.
+
+   This is a problem of my own making: the live page never hides a section. So the repair
+   belongs here rather than in the document. Reading with the stage at `auto` lets the face
+   report its own content height; writing it back leaves the component exactly where its own
+   fit() would have left it. */
+function refitSheets(sec) {
+  sec.querySelectorAll(".sf-stage").forEach(function (st) {
+    var wrap = st.closest(".slipflip");
+    var face = st.querySelector(wrap && wrap.classList.contains("turned") ? ".mslip" : ".evslip");
+    if (!face) return;
+    st.style.height = "auto";
+    var h = Math.round(face.getBoundingClientRect().height);
+    if (h > 0) st.style.height = h + "px";
+  });
+}
+
+/* ---------------------------------------------------------------- per-document state
+   The .rxs bar-lifter keeps its own `done` flags in a closure, so one instance covering all
+   six documents would mark another document's bars finished while that document was hidden
+   and measuring zero. One instance per document, captured as it is built. */
+var RXS = {}, prepared = {}, liveBuilt = false;
+function prepare(id) {
+  if (prepared[id]) return;
+  var sec = secOf(id);
+  redaction(sec);
+  redactionBars(sec);
+  /* Once the frame sizes the stage at all, it has to size it in BOTH states. Sizing only the
+     front left the component's own fit() and this one disagreeing: the front was right and the
+     back overflowed its stage by 200-330 px. Half-owning a measurement is worse than not
+     owning it -- so the flip re-fits through here too. */
+  sec.querySelectorAll(".sf-tab").forEach(function (tab) {
+    tab.addEventListener("click", function () { setTimeout(function () { refitSheets(sec); }, 60); });
+  });
+  RXS[id] = { upd: window.__rxsUpd || function () {},
+              measure: window.__rxsMeasure || function () {} };
+  prepared[id] = true;
+}
+
+/* ---------------------------------------------------------------- the reveal, re-rooted
+   The site reveals against a GATE, not against what happens to be intersecting: everything
+   whose top has passed 94 per cent of the viewport is revealed, and nothing is ever
+   un-revealed. An IntersectionObserver is the wrong shape for that -- scroll past a block
+   faster than a frame and it never fires, so the reader arrives at a paragraph that is still
+   invisible. This is the site's own revealPass(), with the page viewport swapped for the
+   window's scroller. */
+var pend = [];
+function passReveal() {
+  var root = cv("view"), rr = root.getBoundingClientRect();
+  var gate = rr.top + root.clientHeight * 0.94;
+  for (var i = 0; i < pend.length; i++) {
+    var el = pend[i];
+    if (!el) continue;
+    if (el.getBoundingClientRect().top < gate) { el.classList.add("on"); pend[i] = null; }
+  }
+}
+function queueReveal() {
+  passReveal();
+  var root = cv("view"), r = RXS[openId];
+  if (!r) return;
+  /* re-measured every pass: revealing an element moves it, so a position cached once is a
+     position wrong by the height of everything that has appeared since */
+  r.measure();
+  var y = root.scrollTop;
+  /* THE END OF THE DOCUMENT IS A CASE OF ITS OWN. On the scrolling page these bars finished
+     lifting because the next section kept coming; in a window the document simply stops, and
+     the last lines were left part-covered with nowhere further to scroll. Reaching the bottom
+     means the reader has finished it, so nothing may still be hidden. */
+  if (y + root.clientHeight >= root.scrollHeight - 2) {
+    y += root.clientHeight;
+    for (var i = 0; i < pend.length; i++) {
+      if (pend[i]) { pend[i].classList.add("on"); pend[i] = null; }
+    }
+  }
+  r.upd(y, root.clientHeight);
+}
+
+/* ---------------------------------------------------------------- the zoom rectangle
+   What the machine drew when a file opened: a few expanding outlines from the icon to the
+   window, then the window. Four to six frames, about 180 ms, costs nothing. */
+function zoomOpen(fromEl, then) {
+  var d = cv("desk").getBoundingClientRect();
+  var a = fromEl.getBoundingClientRect();
+  var z = cv("zoom");
+  var cs = getComputedStyle(document.documentElement);
+  var from = { l: a.left - d.left, t: a.top - d.top, w: a.width, h: a.height };
+  var to = { l: parseInt(cs.getPropertyValue("--mw-in")),
+             t: parseInt(cs.getPropertyValue("--mw-gap")) };
+  to.w = d.width - to.l * 2; to.h = d.height - to.t - to.l;
+  var N = 5;
+  /* Nobody is watching a hidden tab, and animating one is worse than pointless: a browser
+     clamps timers there to whole seconds, so the sequence stalls and the window never opens. */
+  if (document.hidden || matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    then();
+    return;
+  }
+  z.style.display = "block";
+  /* Every frame is scheduled from HERE, at an absolute offset. Chaining them -- each timeout
+     starting the next -- is what a browser throttles once the nesting passes five deep. */
+  for (var i = 1; i <= N; i++) {
+    (function (k) {
+      setTimeout(function () {
+        var f = k / N;
+        z.style.left = Math.round(from.l + (to.l - from.l) * f) + "px";
+        z.style.top = Math.round(from.t + (to.t - from.t) * f) + "px";
+        z.style.width = Math.round(from.w + (to.w - from.w) * f) + "px";
+        z.style.height = Math.round(from.h + (to.h - from.h) * f) + "px";
+      }, k * 36);
+    })(i);
+  }
+  setTimeout(function () { z.style.display = "none"; then(); }, (N + 1) * 36);
+}
+
+/* ---------------------------------------------------------------- open and close */
+var openId = null, auditing = false;
+function record(id) {
+  /* The audit button opens all six to measure them. Those are not a reader opening a file,
+     and counting them made the status line read "6 of 7 opened" after one real open. A
+     counter that counts its own test harness is telling you about the harness. */
+  if (auditing) return;
+  try {
+    var had = JSON.parse(localStorage.getItem(STORE) || "[]") || [];
+    if (had.indexOf(id) < 0) { had.push(id); localStorage.setItem(STORE, JSON.stringify(had)); }
+    /* the total comes from the icon list, never from a literal. The counter this replaces
+       hard-coded 4 in several places and a phone-only copy of itself; when the phone path
+       lost its function the stamp sat at 0/4 through 24,674 px of scrolling and nothing
+       said so. One implementation, no width gate, and a total that cannot go stale. */
+    note(K.labels[id] + " · " + had.length + " of " + K.order.length + " opened");
+  } catch (e) { note(K.labels[id]); }
+}
+function note(s) { cv("rvw-note").innerHTML = "<em>" + s + "</em>"; }
+
+function show(id) {
+  if (openId === id) return;
+  var btn = cv("files").querySelector('[data-id="' + id + '"]') || cv("files");
+  var finish = function () {
+    IDS.forEach(function (x) { secOf(x).classList.toggle("mw-show", x === id); });
+    openId = id;
+    prepare(id);
+    /* NOTHING. The engine owns every reveal -- .rv, .rvs, .u and the folder, which has its own
+       scene. This list used to include the SECTION, and `.sec.on .rv{opacity:1}` reveals every
+       element inside one in a single step: putting `.on` on the section undid the whole
+       stagger the engine had just been repaired to produce. Measured: XTIX went from 8 units
+       revealed at the top to all 18 the moment the section was marked. The list stays only so
+       the end-of-document sweep below has something to iterate. */
+    pend = [];
+    cv("view").scrollTop = 0;
+    /* This document's units were measured while it was hidden -- at the top of the scroller,
+       which is inside the reveal gate -- so they were all marked done before anyone saw them.
+       Re-arm them, then re-measure now that the section is on screen and its trigger points
+       are real. Order matters: re-arming after measuring would leave the old positions. */
+    if (window.__mwRearm) window.__mwRearm(secOf(id));
+    if (window.__mwMeasure) window.__mwMeasure();
+    /* NOT requestAnimationFrame: it does not fire at all in a hidden tab, and the whole open
+       sequence silently stalls there. Every draw below measures first, so there is nothing
+       to wait for. */
+    drawTitle(); drawDone(); drawBar();
+    refitSheets(secOf(id));                /* the section was hidden; its stage cached a zero */
+    queueReveal();                         /* the counter moves on OPEN, not on DONE */
+    record(id);
+    cv("view").focus({ preventScroll: true });
+  };
+
+  var go = function () {
+    cv("win").hidden = false;
+    if (liveBuilt) { finish(); return; }
+    /* One pass with every section laid out. The live layer goes first; the scroll engine
+       second, because it registers its scenes against the elements the live layer has just
+       injected and caches every trigger point when it measures.
+
+       AND THE OTHER FIVE STAY ON SCREEN UNTIL THE ENGINE HAS MEASURED. Its init() runs on a
+       60 ms timer, and a hidden section measures at the very top of the scroller -- so with
+       the others already hidden, every unit in all six documents cleared the reveal gate on
+       the engine's first frame and was marked done for good. Opening any of them afterwards
+       showed a document whose entrance had already been spent: everything landing flat and at
+       once, which is precisely what Oran saw. Measured while stacked, each document's units
+       have real, distinct positions and only the genuinely-top ones fire. */
+    cv("docs").classList.add("mw-all");
+    liveLayer();
+    window.__mwScroller = cv("view");      /* the engine's clock, before it starts */
+    scrollEngine();
+    liveBuilt = true;
+    setTimeout(function () { cv("docs").classList.remove("mw-all"); finish(); }, 150);
+  };
+  if (openId) { go(); refitSheets(secOf(id)); return; }   /* swap documents, no zoom */
+  cv("files").style.visibility = "hidden";
+  zoomOpen(btn, go);
+}
+function shut() {
+  if (!openId) return;
+  openId = null;
+  cv("win").hidden = true;
+  cv("files").style.visibility = "";
+  IDS.forEach(function (x) { secOf(x).classList.remove("mw-show"); });
+  note("closed — click a file to open it");
+}
+
+/* X and DONE do the same thing. X is "I am leaving", DONE is "I finished". */
+cv("xbtn").onclick = shut;
+cv("done").onclick = shut;
+cv("b-close").onclick = shut;
+/* The count persists on purpose, so it survives a reload -- which also means a count
+   inflated by an earlier build's audit button stays inflated until something clears it.
+   This is that something. */
+cv("b-forget").onclick = function () {
+  try { localStorage.removeItem(STORE); } catch (e) { }
+  note("forgotten — 0 of " + K.order.length + " opened");
+};
+document.addEventListener("keydown", function (e) { if (e.key === "Escape") shut(); });
+
+/* ---------------------------------------------------------------- driving the scroll bar */
+var v = cv("view"), bar = cv("c-bar");
+v.addEventListener("scroll", function () { drawBar(); queueReveal(); }, { passive: true });
+function barY(e) { return (e.clientY - bar.getBoundingClientRect().top) / S; }
+var dragging = false, grab = 0;
+bar.addEventListener("mousedown", function (e) {
+  if (!hit) return;
+  var y = barY(e);
+  if (y < hit.up) { v.scrollTop -= 40; return; }
+  if (y >= hit.down && y < hit.trackBot + 16) { v.scrollTop += 40; return; }
+  if (y >= hit.thumbTop && y <= hit.thumbTop + hit.thumbH) {
+    dragging = true; grab = y - hit.thumbTop; e.preventDefault(); return;
+  }
+  if (y < hit.thumbTop) v.scrollTop -= v.clientHeight * 0.9;
+  else if (y <= hit.trackBot) v.scrollTop += v.clientHeight * 0.9;
+});
+window.addEventListener("mousemove", function (e) {
+  if (!dragging || !hit) return;
+  var y = barY(e) - grab, span = (hit.trackBot - hit.trackTop + 1) - hit.thumbH;
+  var k = span > 0 ? (y - hit.trackTop) / span : 0;
+  v.scrollTop = Math.max(0, Math.min(1, k)) * (v.scrollHeight - v.clientHeight);
+});
+window.addEventListener("mouseup", function () { dragging = false; });
+
+/* ---------------------------------------------------------------- a check, not a hope
+   Walks what is actually rendered and reports anything still invisible. */
+function checkOne() {
+  if (!openId) return null;
+  var vw = cv("view");
+  /* The engine advances on requestAnimationFrame, so on a machine that is not producing
+     frames -- a background tab, or this project's preview pane, which reports itself visible
+     and still paints nothing -- scrolling alone reveals nothing and the check would report a
+     perfectly good document as entirely hidden. Stepping the engine at each position measures
+     what a reader with a compositor would see. */
+  for (var i = 0; i < 60; i++) {
+    vw.scrollTop = i * (vw.clientHeight * 0.5);
+    queueReveal();
+    if (window.__mwStep) window.__mwStep();
+  }
+  vw.scrollTop = vw.scrollHeight;
+  queueReveal();
+  if (window.__mwStep) window.__mwStep();
+  /* Transitions are switched off for the measurement and back on after. What is checked is
+     whether the reveal logic puts every element in the VISIBLE state -- not whether an
+     animation has finished playing. Without this the check reports dozens of hidden elements
+     on any machine where the transitions have not started, which says nothing about the thing
+     it is meant to test. */
+  var off = document.createElement("style");
+  off.textContent = "#view *,#view *::before,#view *::after{transition:none!important}";
+  document.head.appendChild(off);
+  void vw.offsetHeight;
+  /* The threshold is "effectively invisible", not "not fully opaque". Two of the documents'
+     own effects live in between and are not faults: the analyst note is struck glyph by glyph
+     at 0.78-1.00, and the developed zones sit at 0 until the UV lamp is armed. */
+  var lampOn = !!secOf(openId).querySelector(".folder.lampon");
+  var bad = [], all = secOf(openId).querySelectorAll("*"), n = 0, gated = 0;
+  for (var j = 0; j < all.length; j++) {
+    var el = all[j], cs = getComputedStyle(el), r = el.getBoundingClientRect();
+    if (cs.display === "none" || cs.visibility === "hidden") continue;
+    if (!r.width && !r.height) continue;
+    if (!lampOn && el.closest(".devz")) { gated++; continue; }
+    /* TECH's five .hop packets run a 5 s infinite loop and are visible for about a tenth of
+       it, so a sample taken at any instant finds most of them at zero. That is a moment in a
+       cycle, not a stuck element -- reading it as a fault is the same mistake as reading a
+       transition that has not started. */
+    if (cs.animationName !== "none" && cs.animationIterationCount === "infinite") {
+      gated++;
+      continue;
+    }
+    n++;
+    if (parseFloat(cs.opacity) < 0.05) bad.push(el.getAttribute("class") || el.tagName);
+  }
+  off.remove();
+  vw.scrollTop = 0;
+  return { id: openId, counted: n, hidden: bad, gated: gated };
+}
+cv("b-check").onclick = function () {
+  var r = checkOne();
+  if (!r) { note("open a file first — nothing to measure while they are shut"); return; }
+  window.__last = r;
+  note(r.hidden.length
+    ? r.hidden.length + " of " + r.counted + " still hidden: " + r.hidden.slice(0, 3).join(", ")
+    : "all " + r.counted + " painted elements reach the visible state");
+};
+cv("b-all").onclick = function () {
+  var out = [];
+  auditing = true;
+  IDS.forEach(function (id) { show(id); out.push(checkOne()); });
+  auditing = false;
+  shut();
+  window.__all = out;
+  note(out.map(function (r) {
+    return K.labels[r.id] + " " + (r.hidden.length ? r.hidden.length + " HIDDEN" : "ok " + r.counted);
+  }).join(" · "));
+};
+
+/* THE ENGINE'S PULSE, ON SCREEN. Whether the scrub loop is alive was argued about twice
+   from symptoms; it is one number. If this stops climbing while you scroll, the loop is
+   dead and nothing else about the animation is worth discussing. */
+setInterval(function () {
+  var n = window.__mwFrames || 0;
+  cv("rvw-engine").textContent = "engine " + n + (n ? "" : " — NOT RUNNING");
+}, 500);
+
+function relayout() {
+  drawMenu(); drawFiles(); drawDone();
+  if (openId) { drawTitle(); drawBar(); }
+}
+window.addEventListener("resize", relayout);
+relayout();
+</script>

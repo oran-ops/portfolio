@@ -689,22 +689,16 @@ font-weight:700;font-size:9.5px;letter-spacing:.22em;color:var(--lbl);pointer-ev
 font-size:9px;letter-spacing:.28em;color:var(--lbl);pointer-events:none;display:flex;align-items:center;gap:7px}
 #recled i{width:7px;height:7px;border-radius:50%;background:var(--emb);animation:recb 2.4s ease-in-out infinite}
 @keyframes recb{0%,100%{opacity:1}50%{opacity:.2}}
-/* sound toggle */
-#sndtg{position:fixed;right:18px;bottom:16px;z-index:70;background:transparent;border:1px solid var(--grid2);border-radius:6px;
-color:var(--lbl);font-family:'JetBrains Mono',monospace;font-weight:700;font-size:9px;letter-spacing:.26em;
-padding:7px 12px;cursor:pointer}
-#sndtg.off{color:var(--dim);border-color:var(--grid)}
-#sndtg:hover{border-color:var(--emb);color:var(--emb)}
 /* graph bar hover */
 .bar0:hover rect:first-child{fill:#3DD598}
 /* kill-switches */
-@media (max-width:860px){.otx,#loglin,#recled,#sndtg{display:none!important}.sec>.wrap{transform:none}}
-@media (prefers-reduced-motion:reduce){.otx,#loglin,#recled,#sndtg{display:none!important}.sec>.wrap{transform:none!important}}
-body.static .otx,body.static #loglin,body.static #recled,body.static #sndtg{display:none!important}
+@media (max-width:860px){.otx,#loglin,#recled,{display:none!important}.sec>.wrap{transform:none}}
+@media (prefers-reduced-motion:reduce){.otx,#loglin,#recled,{display:none!important}.sec>.wrap{transform:none!important}}
+body.static .otx,body.static #loglin,body.static #recled,{display:none!important}
 body.static .sec>.wrap{transform:none!important}
-body.failsafe .otx,body.failsafe #loglin,body.failsafe #recled,body.failsafe #sndtg{display:none!important}
+body.failsafe .otx,body.failsafe #loglin,body.failsafe #recled,{display:none!important}
 body.failsafe .sec>.wrap{transform:none!important}
-html.jscur #bootgate,html.jscur #sndtg,html.jscur button{cursor:none}
+html.jscur #bootgate,html.jscur button{cursor:none}
 
 @media (max-width:560px){
  .cols2,.grid2c{grid-template-columns:1fr!important}
@@ -3978,61 +3972,6 @@ var frozen=reduced||q.get('static')==='1'||(window.innerWidth<861&&q.get('force'
 function clamp(v){return v<0?0:v>1?1:v}
 function eo(p){return 1-Math.pow(1-p,3)}
 
-/* ================= archive audio ================= */
-var AC=null,master=null;
-var sndOn=true;
-try{sndOn=(localStorage.getItem('arch_snd')||'1')==='1'}catch(e){}
-function ac(){
-  if(!AC){
-    var C=window.AudioContext||window.webkitAudioContext;if(!C)return null;
-    AC=new C();master=AC.createGain();master.gain.value=.13;master.connect(AC.destination);
-  }
-  if(AC.state==='suspended')AC.resume();
-  return AC;
-}
-function nz(dur,f0,f1,g){
-  if(!sndOn||frozen)return;
-  try{var c=ac();if(!c)return;
-    var b=c.createBuffer(1,Math.max(1,Math.floor(c.sampleRate*dur)),c.sampleRate),d=b.getChannelData(0);
-    for(var i=0;i<d.length;i++)d[i]=(Math.random()*2-1)*(1-i/d.length);
-    var src=c.createBufferSource();src.buffer=b;
-    var f=c.createBiquadFilter();f.type='lowpass';
-    f.frequency.setValueAtTime(f0,c.currentTime);
-    f.frequency.exponentialRampToValueAtTime(Math.max(40,f1),c.currentTime+dur);
-    var gg=c.createGain();gg.gain.setValueAtTime(g,c.currentTime);
-    gg.gain.exponentialRampToValueAtTime(.001,c.currentTime+dur);
-    src.connect(f);f.connect(gg);gg.connect(master);src.start();
-  }catch(e){}
-}
-function tn(fr,dur,g,type){
-  if(!sndOn||frozen)return;
-  try{var c=ac();if(!c)return;
-    var o=c.createOscillator();o.type=type||'sine';o.frequency.value=fr;
-    var gg=c.createGain();gg.gain.setValueAtTime(g,c.currentTime);
-    gg.gain.exponentialRampToValueAtTime(.001,c.currentTime+dur);
-    o.connect(gg);gg.connect(master);o.start();o.stop(c.currentTime+dur);
-  }catch(e){}
-}
-var paper=function(){nz(.30,900,220,.5)};
-var flip=function(){nz(.13,1500,480,.34);tn(520,.06,.10,'triangle')};
-var thunk=function(){tn(72,.15,.5,'sine');nz(.05,420,160,.35)};
-var tick=function(){tn(1500,.02,.07,'square')};
-window.__archAudio={paper:paper,flip:flip,thunk:thunk,tick:tick,nz:nz};
-if(!frozen){
-  var tg=document.createElement('button');tg.id='sndtg';tg.type='button';
-  tg.textContent=sndOn?'SND ON':'SND OFF';tg.classList.toggle('off',!sndOn);
-  document.body.appendChild(tg);
-  tg.addEventListener('click',function(){
-    sndOn=!sndOn;
-    try{localStorage.setItem('arch_snd',sndOn?'1':'0')}catch(e){}
-    tg.textContent=sndOn?'SND ON':'SND OFF';tg.classList.toggle('off',!sndOn);
-    if(sndOn){ac();tick();}
-  });
-  var oldOpen=window.__bootOpen;
-  if(oldOpen){window.__bootOpen=function(){ac();paper();oldOpen()}}
-  document.addEventListener('click',function first(){document.removeEventListener('click',first);ac();paper();},{once:true});
-}
-
 /* ================= theaters ================= */
 var THS=[].slice.call(document.querySelectorAll('.otx')).map(function(x){
   return {x:x,ots:x.querySelector('.ots'),otf:x.querySelector('.otf'),
@@ -4376,7 +4315,6 @@ if(frozen){
 }
 function clamp(v){return v<0?0:v>1?1:v}
 function bnd(v,a,b){var t=(v-a)/(b-a);t=t<0?0:t>1?1:t;return t*t*(3-2*t)}
-var AU=function(){return window.__archAudio||{}};
 var CASES=['xtix','oasis','eventer','medcoin'];
 var CCOL={xtix:'#2FB380',oasis:'#E0A458',eventer:'#5E8FBF',medcoin:'#F2F1ED'};
 
@@ -4439,7 +4377,6 @@ function markReviewed(id){
   reviewed[id]=true;reviewedN++;
   var el=document.getElementById('cmn');if(el)el.textContent=reviewedN+'/4';
   var sq=meter.querySelector('.sq[data-c="'+id+'"]');if(sq)sq.classList.add('done');
-  try{AU().tick&&AU().tick()}catch(e){}
   if(ccstamp&&!ceremonyDone)ccstamp.textContent='IN REVIEW · '+Math.min(reviewedN,4)+'/4';
 }
 function ceremony(){
@@ -4452,7 +4389,6 @@ function ceremony(){
   void ccstamp.offsetWidth;
   ccstamp.classList.add('ceremony');
   var md=document.querySelector('.minidrawer');if(md)md.classList.add('closed');
-  try{AU().thunk&&AU().thunk()}catch(e){}
   if(window.__archLog)window.__archLog('REVIEW COMPLETE · 4/4 FILES',4200);
 }
 
@@ -4616,7 +4552,6 @@ function evPlay(){
   P.paths.forEach(function(pp,i){pp.style.transition='stroke-dashoffset .9s cubic-bezier(.5,0,.3,1) '+(0.35+i*0.14)+'s';pp.style.strokeDashoffset='0';});
   P.rings.forEach(function(rr,i){rr.style.transition='stroke-dashoffset 1s cubic-bezier(.5,0,.3,1) '+(1.1+i*.2)+'s';rr.style.strokeDashoffset='0';});
   P.tris.forEach(function(tt,i){tt.style.transition='opacity .4s ease '+(1.5+i*.2)+'s';tt.style.opacity='1';});
-  try{AU().tick&&AU().tick()}catch(e){}
 }
 
 /* ---------- 9. medcoin timeline tape ---------- */
@@ -4644,7 +4579,6 @@ function mdPlay(){
   P.texts.forEach(function(tx,i){tx.style.transition='opacity .4s ease '+(0.35+i*.2)+'s';tx.style.opacity='1';});
   P.dashp.forEach(function(dp){dp.style.transition='opacity .5s ease 1.6s';dp.style.opacity='1';});
   P.tris.forEach(function(tt){tt.style.transition='opacity .4s ease 1.85s';tt.style.opacity='1';});
-  try{AU().tick&&AU().tick()}catch(e){}
 }
 
 /* ---------- master loop ---------- */
@@ -4740,7 +4674,6 @@ function loop(){
     var mr=mdSvg.getBoundingClientRect();if(mr.top<vh*.8&&mr.bottom>0)mdPlay();}
   /* whoosh */
   if(Math.abs(vs)>12&&now-whooshAt>280){whooshAt=now;
-    try{if(AU().nz)AU().nz(.22,Math.min(1300,420+Math.abs(vs)*6),170,.09)}catch(e){}
   }
   /* magnetic completion */
   for(var mg=0;mg<CASES.length;mg++){

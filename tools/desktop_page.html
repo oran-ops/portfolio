@@ -1,0 +1,315 @@
+<title>Master File</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* The palette is docs/ARCHITECTURE.md 8.1, unchanged, and the faces are the five the project
+   already ships. This page commits to ONE theme on purpose: the artwork is a white 1-bit
+   raster, and a raster only reads as a lit screen against a dark ground. So there is no light
+   variant -- but every colour, the body ground included, is painted from a token, so the page
+   holds whatever ground the viewer's own theme paints behind it. */
+:root{
+  --bg:#191A1F; --card:#202127; --card2:#25262D; --ink:#F2F1ED; --mut:#B6B7BB; --lbl:#CFD0D4;
+  --grid:#33353C; --hair:rgba(255,255,255,.09); --dim:#7E828C; --void:#0E0F12;
+  --emb:#2FB380; --brass:#E0A458; --ice:#5E8FBF;
+  --ease:cubic-bezier(.22,.61,.2,1);
+  --step:clamp(15px,1.05vw,16px);
+}
+*{box-sizing:border-box}
+html{color-scheme:dark}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;
+  font-size:var(--step);-webkit-font-smoothing:antialiased}
+.wrap{max-width:1120px;margin:0 auto;padding:52px 24px 96px;display:flex;flex-direction:column;gap:44px}
+section{display:flex;flex-direction:column;gap:16px}
+.kick{font-family:'JetBrains Mono',ui-monospace,Menlo,monospace;font-size:10px;letter-spacing:.3em;
+  color:var(--emb);text-transform:uppercase}
+h1{font-family:'Fraunces','Iowan Old Style',Georgia,serif;font-weight:800;
+  font-size:clamp(30px,4.4vw,46px);line-height:1.04;letter-spacing:-.022em;margin:0;
+  text-wrap:balance}
+h2{font-family:'Fraunces','Iowan Old Style',Georgia,serif;font-weight:600;
+  font-size:clamp(19px,2.1vw,23px);line-height:1.2;letter-spacing:-.012em;margin:0;
+  text-wrap:balance}
+p{margin:0;max-width:64ch;line-height:1.62;color:var(--mut)}
+p b{color:var(--ink);font-weight:600}
+p.lead{font-size:calc(var(--step) + 1.5px);color:var(--lbl)}
+p.small{font-size:13.5px;line-height:1.66;color:var(--dim);max-width:72ch}
+code{font-family:'JetBrains Mono',ui-monospace,monospace;font-size:.88em;color:var(--lbl)}
+.rule{border:0;border-top:1px solid var(--hair);margin:0}
+.stage{display:flex;gap:36px;align-items:flex-start;flex-wrap:wrap;justify-content:center}
+.hold{display:flex;flex-direction:column;align-items:center;gap:11px}
+.frame{padding:10px;background:var(--void);border:1px solid var(--grid);line-height:0;
+  max-width:100%;overflow-x:auto}
+canvas{display:block;image-rendering:pixelated;image-rendering:crisp-edges}
+canvas.live{cursor:default}
+.meta{font-family:'JetBrains Mono',ui-monospace,Menlo,monospace;font-size:10px;letter-spacing:.18em;
+  color:var(--dim);text-transform:uppercase}
+.bar{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+button{font:inherit;font-size:12.5px;color:var(--lbl);background:var(--card);
+  border:1px solid var(--grid);padding:8px 14px;cursor:pointer;
+  transition:border-color .18s var(--ease),color .18s var(--ease),background .18s var(--ease)}
+button:hover{border-color:var(--emb);color:var(--ink);background:var(--card2)}
+button:focus-visible,canvas:focus-visible{outline:2px solid var(--emb);outline-offset:3px}
+.plate{display:flex;flex-direction:column;gap:10px;align-items:flex-start}
+.keys{display:flex;gap:8px;flex-wrap:wrap}
+.keys{margin-top:-4px}
+.keys button{padding:6px 11px;font-family:'JetBrains Mono',ui-monospace,monospace;font-size:10.5px;letter-spacing:.1em}
+.keys button span{display:inline-block;width:8px;height:8px;margin-right:7px;
+  transform:translateY(1px);border:1px solid rgba(0,0,0,.6)}
+.calls{display:grid;gap:2px 26px;grid-template-columns:1fr;margin:0;padding:0;list-style:none}
+.calls li{display:grid;grid-template-columns:132px 1fr;gap:16px;padding:11px 0;
+  border-top:1px solid var(--hair);align-items:baseline}
+.calls dt,.calls .t{font-family:'JetBrains Mono',ui-monospace,monospace;font-size:10.5px;
+  letter-spacing:.16em;text-transform:uppercase;color:var(--emb)}
+.calls .t.ask{color:var(--brass)}
+.calls .d{color:var(--mut);font-size:14px;line-height:1.6}
+.calls .d b{color:var(--ink);font-weight:600}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+@media(max-width:720px){
+  .calls li{grid-template-columns:1fr;gap:5px}
+  .wrap{gap:36px;padding:40px 20px 72px}
+}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+
+<div class="wrap">
+  <section>
+    <div class="kick">Stage 5 &middot; the folder</div>
+    <h1>Oran Carmon &mdash; Master File</h1>
+    <p class="lead">The screen the camera lands on when it finishes flying into the CRT. Seven
+    icons: four case files for the companies, a notepad, a system suitcase, and the sealed letter
+    that ends the document. Drawn at <b>512&nbsp;&times;&nbsp;342</b> &mdash; the Macintosh 128K's
+    own framebuffer &mdash; and shown at a whole&nbsp;&times;2, so no pixel is ever half a pixel.</p>
+    <p><b>One click opens a document</b>, never two, because a phone cannot do two. The counter in
+    the middle of the status line remembers what you opened, and it survives a reload.</p>
+  </section>
+
+  <section>
+    <div class="stage">
+      <div class="hold">
+        <div class="frame"><canvas id="c-desk" class="live" width="1024" height="684" tabindex="0"
+          role="img" aria-label="The Master File window on a desktop: four columns"></canvas></div>
+        <div class="meta">desktop &middot; 512 &times; 342 at &times;2 &middot; four columns</div>
+      </div>
+      <div class="hold">
+        <div class="frame"><canvas id="c-mob" class="live" width="390" height="844" tabindex="0"
+          role="img" aria-label="The same window on a phone: two columns, four rows"></canvas></div>
+        <div class="meta">mobile &middot; 195 &times; 422 at &times;2 &middot; two columns</div>
+      </div>
+    </div>
+
+    <div class="bar">
+      <button id="b-open" type="button">Open the folder</button>
+      <button id="b-close" type="button">Close it</button>
+      <button id="b-reset" type="button">Forget what I opened</button>
+      <span class="meta" id="b-state"></span>
+    </div>
+    <div class="keys" id="keys" aria-label="Open a document without the canvas"></div>
+  </section>
+
+  <hr class="rule">
+
+  <section>
+    <h2>The seven, on both grounds</h2>
+    <p>Every icon twice: on the white of an open window, and on the 50&nbsp;per&nbsp;cent
+    checkerboard of the desktop. The second row is the test that matters &mdash; it is where a
+    paper-white icon goes missing.</p>
+    <div class="plate">
+      <div class="frame"><canvas id="c-plate" width="920" height="212"
+        role="img" aria-label="The seven icons at 32 by 32, shown on white and on the desktop dither"></canvas></div>
+      <div class="meta">32 &times; 32, shown at &times;2</div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Why each one looks the way it does</h2>
+    <ul class="calls">
+      <li><span class="t">Row break</span><span class="d">The first row is the four companies, in
+      the order they happened. The second is everything that is not a company &mdash; and
+      <b>READ&nbsp;ME</b> sits at the end of it, where a reader finishes rather than starts. On a
+      phone the same break lands as four rows of two, with READ&nbsp;ME alone at the bottom.</span></li>
+      <li><span class="t">Four case files</span><span class="d">They share one silhouette on
+      purpose: they are the same kind of thing, and <b>colour is what separates them</b>. The three
+      that are not companies differ in outline alone &mdash; which is how a desktop said
+      &ldquo;different kind of thing&rdquo; without a word of explanation.</span></li>
+      <li><span class="t">MEDCOIN</span><span class="d">Paper white, which would vanish on a white
+      window &mdash; so its <b>keyline is drawn twice</b>. That is the period answer to a light
+      icon. The fix is in the idiom, not in the palette; the colour is untouched.</span></li>
+      <li><span class="t">Selection</span><span class="d">A 1-bit Finder selected by inverting the
+      bitmap. On a colour icon that turns emerald into magenta, so this dims inside the mask and
+      inverts only the label &mdash; which is what System&nbsp;7 did once icons had colour.</span></li>
+      <li><span class="t">The chrome</span><span class="d">The title bar is built to the measured
+      System&nbsp;1 figures: 1&nbsp;black, 3&nbsp;white, <b>11&nbsp;striped</b>, 3&nbsp;white,
+      1&nbsp;black, with the title punched through the stripes with 6&nbsp;px of white either side.
+      Scroll bars are present and empty &mdash; in 1-bit there is no greying, and that absence
+      <i>is</i> the inactive state.</span></li>
+      <li><span class="t">Nothing borrowed</span><span class="d">Chicago, Geneva and the System&nbsp;6
+      icons are Apple's, and <code>docs/KIT_OPTIONS.md</code> rules them out. The face here is drawn
+      from scratch on a 5&nbsp;&times;&nbsp;7 cell and the icons on a 32&nbsp;&times;&nbsp;32 grid,
+      so <b>the whole kit is ours</b> &mdash; menu mark included.</span></li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Two places the machine lost the argument</h2>
+    <p>Both of these were open questions. Both are now settled, and in both the reader won over the
+    period.</p>
+    <ul class="calls">
+      <li><span class="t ask">The count</span><span class="d">It reads
+      <b>7&nbsp;files &middot; 0&nbsp;of&nbsp;7&nbsp;opened &middot; 2018&ndash;2026</b>. The
+      earlier figure of six treated READ&nbsp;ME as something other than a file; it is a file, a
+      reader opens it like the rest, and a Finder counted what the window held. A wrong count is
+      the one thing a Mac user spots instantly. Both numbers are now read off the icon list itself,
+      so they cannot drift from what is on the screen.</span></li>
+      <li><span class="t ask">The close box</span><span class="d">System&nbsp;1 drew this square
+      <b>empty</b> and filled it on press. It carries an <b>X</b> instead, deliberately: an empty
+      square does not read as an exit to anyone who never used the machine. Clarity beat
+      authenticity, which is the right way round &mdash; the shell exists to be understood, not to
+      pass an inspection.</span></li>
+    </ul>
+  </section>
+
+  <p class="sr" id="sr-live" aria-live="polite"></p>
+</div>
+
+<script>/*KIT*/</script>
+<script>
+"use strict";
+/*SCREEN*/
+/* ------------------------------------------------------------------ the two screens */
+var STORE = "ocmf.opened";
+var opened = [];
+try { opened = JSON.parse(localStorage.getItem(STORE) || "[]") || []; } catch (e) { opened = []; }
+
+var state = { open: true, sel: null, doc: null, opened: opened.length };
+
+function Screen(canvas, W, H, cols, S) {
+  this.c = canvas; this.W = W; this.H = H; this.cols = cols; this.S = S;
+  this.c.width = W * S; this.c.height = H * S;
+  this.x = this.c.getContext("2d");
+  this.off = document.createElement("canvas");
+  this.off.width = W; this.off.height = H;
+  this.ox = this.off.getContext("2d");
+  this.hits = [];
+  var self = this;
+  canvas.addEventListener("click", function (e) { self.click(e); });
+  canvas.addEventListener("mousemove", function (e) {
+    canvas.style.cursor = self.at(e) ? "pointer" : "default";
+  });
+}
+Screen.prototype.draw = function () {
+  var b = new Buf(this.W, this.H);
+  this.hits = drawScreen(b, this.W, this.H, this.cols, state);
+  var img = this.ox.createImageData(this.W, this.H);
+  img.data.set(b.d);
+  this.ox.putImageData(img, 0, 0);
+  this.x.imageSmoothingEnabled = false;
+  this.x.clearRect(0, 0, this.c.width, this.c.height);
+  this.x.drawImage(this.off, 0, 0, this.c.width, this.c.height);
+};
+Screen.prototype.at = function (e) {
+  var r = this.c.getBoundingClientRect();
+  var x = (e.clientX - r.left) * (this.W / r.width);
+  var y = (e.clientY - r.top) * (this.H / r.height);
+  for (var i = 0; i < this.hits.length; i++) {
+    var h = this.hits[i];
+    if (x >= h.x0 && x <= h.x1 && y >= h.y0 && y <= h.y1) return h.id;
+  }
+  return null;
+};
+Screen.prototype.click = function (e) {
+  var id = this.at(e);
+  if (id) act(id);
+};
+
+var screens = [];
+function redraw() {
+  for (var i = 0; i < screens.length; i++) screens[i].draw();
+  var s = state.doc ? ("document: " + K.labels[state.doc])
+    : (state.open ? "folder open" : "folder shut");
+  document.getElementById("b-state").textContent = s + " · " + state.opened + " of " + K.order.length + " opened";
+  document.getElementById("sr-live").textContent = s;
+}
+
+/* ONE CLICK opens a document -- never two. A phone cannot do two. */
+function act(id) {
+  if (id === "close") { state.open = false; state.doc = null; state.sel = null; redraw(); return; }
+  if (id === "folder") { state.open = true; redraw(); return; }
+  if (id === "docclose") { state.doc = null; state.sel = null; redraw(); return; }
+  if (K.labels[id] === undefined) return;
+  state.sel = id;
+  state.doc = id;
+  if (opened.indexOf(id) < 0) {
+    opened.push(id);
+    state.opened = opened.length;
+    try { localStorage.setItem(STORE, JSON.stringify(opened)); } catch (e) { }
+  }
+  redraw();
+}
+
+/* ------------------------------------------------------------------ the plate
+   The same seven icons, on the two grounds they actually appear against. Drawn with the same
+   ico() the screen uses, so it cannot show something the screen does not. */
+function plate() {
+  var cv = document.getElementById("c-plate");
+  var W = 460, H = 106, COL = 64, X0 = 6;
+  var b = new Buf(W, H);
+  b.rect(0, 0, W - 1, H - 1, [14, 15, 18]);
+  b.rect(X0 - 2, 4, X0 + 7 * COL - 3, 40, WHITE);
+  dither(b, X0 - 2, 44, X0 + 7 * COL - 3, 80);
+  for (var i = 0; i < K.order.length; i++) {
+    var id = K.order[i], x = X0 + i * COL + 16;
+    ico(b, id, x, 6);
+    ico(b, id, x, 46);
+    var s = K.labels[id], w = tw(s);
+    txt(b, s, X0 + i * COL + ((COL - w) >> 1), 86, [182, 183, 187]);
+  }
+  var off = document.createElement("canvas");
+  off.width = W; off.height = H;
+  var ox = off.getContext("2d"), im = ox.createImageData(W, H);
+  im.data.set(b.d); ox.putImageData(im, 0, 0);
+  var x = cv.getContext("2d");
+  x.imageSmoothingEnabled = false;
+  x.drawImage(off, 0, 0, cv.width, cv.height);
+}
+
+/* Everything the canvas can do, the keyboard can do too. */
+function keys() {
+  var box = document.getElementById("keys");
+  for (var i = 0; i < K.order.length; i++) {
+    (function (id) {
+      var c = K.colour[id].C;
+      var btn = document.createElement("button");
+      btn.type = "button";
+      btn.innerHTML = '<span style="background:rgb(' + c.join(",") + ')"></span>';
+      btn.appendChild(document.createTextNode("Open " + K.labels[id]));
+      btn.onclick = function () { act(id); };
+      box.appendChild(btn);
+    })(K.order[i]);
+  }
+}
+
+screens.push(new Screen(document.getElementById("c-desk"), 512, 342, 4, 2));
+screens.push(new Screen(document.getElementById("c-mob"), 195, 422, 2, 2));
+plate();
+keys();
+document.getElementById("b-open").onclick = function () { state.open = true; state.doc = null; redraw(); };
+document.getElementById("b-close").onclick = function () { state.open = false; state.doc = null; state.sel = null; redraw(); };
+document.getElementById("b-reset").onclick = function () {
+  opened = []; state.opened = 0;
+  try { localStorage.removeItem(STORE); } catch (e) { }
+  redraw();
+};
+redraw();
+
+/* the CRT texture is a screenshot of this exact screen, so the pixels the camera flies into
+   and the pixels it lands on cannot differ. tools/shoot_crt.py reads this. */
+window.crtPNG = function (open) {
+  var b = new Buf(512, 342);
+  drawScreen(b, 512, 342, 4, { open: open, sel: null, doc: null, opened: 0 });
+  var cv = document.createElement("canvas"); cv.width = 512; cv.height = 342;
+  var cx = cv.getContext("2d"), im = cx.createImageData(512, 342);
+  im.data.set(b.d); cx.putImageData(im, 0, 0);
+  return cv.toDataURL("image/png");
+};
+</script>
