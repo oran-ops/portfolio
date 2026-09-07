@@ -3,30 +3,53 @@
 
 /* The machine sits in page 3, not over it. The lab page styled this canvas
    position:fixed;inset:0 because there it WAS the page. */
+/* min-height is a floor, and a floor taller than the room it stands in crops the
+   canvas. .hcard.hroom is clamp(360px,58svh,470px) under 860px, so on a 1024-tall
+   portrait tablet 52svh is 532px of wrap inside a 470px room and 62px of the machine
+   is cut off by the room overflow:hidden. The floor is for the desktop card, which
+   is 100svh anyway; below 860 the room sets the height and the wrap follows it. */
 #mach-wrap{position:relative;width:100%;height:100%;min-height:52svh;
   background:#191A1F;overflow:hidden}
 #mach-gl{display:block;width:100%;height:100%;cursor:grab;touch-action:none}
 #mach-gl:active{cursor:grabbing}
-/* "CLICK ON THE SCREEN" -- and why it was invisible.
-   Oran: "the line is missing. Put it top centre, delicate but visible, in the top third of
-   the scroll area and not over the machine, and keep inside the phone's bounds."
+/* "CLICK ON THE SCREEN" — and why no top: value on its own can work.
+   Oran: "it is not in a good position. If I move the machine and play with it there are
+   places where it does not look right and it disappears, because it is stuck right above the
+   machine. Give it space. Make it more prominent."
 
-   It was never missing from the page; it was sitting where the page cannot show anything.
-   The room carries a mask that feathers all four of its edges -- vertically it is opaque
-   only between 22% and 80%, and fades to nothing by 100%. The cue was at bottom:18px, which
-   on an 820px room is 97.8% of the way down: inside the fade, and effectively erased. A rule
-   that reads perfectly well on its own, in a container written six hundred lines away.
+   The first half is a placement problem and the second half is not, but there is a third
+   thing underneath both. The reader can now turn the machine through a full circle on two
+   axes, and the case is not a sphere: its farthest vertex is 1.124 units from the pivot while
+   the near-side half-height of the frame is 1.086, so at some perfectly reachable pose a
+   corner of the case leaves the top of the frame ENTIRELY. There is no percentage that is
+   always clear of it. A line that must survive any orientation has to carry its own ground.
 
-   So it moves to 24% -- just inside the opaque band, in the top third as asked, and clear
-   above the machine, which is centred and reaches no higher than about 30%. */
-.machcue{position:absolute;left:0;right:0;top:24%;text-align:center;
-  font-family:'JetBrains Mono',ui-monospace,monospace;font-size:10px;
-  letter-spacing:.24em;text-transform:uppercase;color:var(--emb);
-  pointer-events:none;opacity:.9;
-  /* it must never run to the edge of a phone, and it must not wrap into two lines there */
-  padding:0 18px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-/* the short room on a phone is 360-470px tall, so 24% of it is only ~100px down and the
-   machine sits higher in frame. 15% keeps the same clearance in a third of the height. */
+   So the cue is not moved, it is BACKED. A soft radial scrim, no border and no box, darkens
+   whatever happens to be behind the words without drawing a shape the reader could mistake
+   for a button — the screen is the button, and nothing else here should look like one.
+
+   Then the placement, with room to breathe: 11% of the room, which at the default pose leaves
+   about 50 px of clear air above a machine whose crown reaches 22%, and which sits just
+   inside the mask band that now begins at 10%. And the type is set to be read: 11px at .30em
+   in near-white instead of 10px at .24em in emerald, which was the archive label voice used
+   for the one line on this page that is an instruction. */
+.machcue{position:absolute;left:0;right:0;top:11%;text-align:center;
+  padding:14px 20px;z-index:3;pointer-events:none;
+  font-family:'JetBrains Mono',ui-monospace,monospace;font-size:11px;font-weight:700;
+  letter-spacing:.30em;text-transform:uppercase;color:#E7ECE9;opacity:1;
+  background:radial-gradient(38% 300% at 50% 50%,
+             rgba(9,10,13,.82) 0%,rgba(9,10,13,.44) 55%,rgba(9,10,13,0) 100%);
+  text-shadow:0 1px 10px rgba(0,0,0,.85);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+/* a short emerald rule under it, which is the archive's own mark for "this is live" and the
+   only colour the line needs */
+.machcue::after{content:"";display:block;width:26px;height:2px;margin:9px auto 0;
+  background:var(--emb);opacity:.85}
+/* the short room on a phone is 360-470px tall, so the same 11% is only ~50px down and the
+   machine sits higher in a narrower frame. 7% keeps the same clear air in a third of the
+   height, and the type comes down a step so it cannot run to the edges. */
 @media (max-width:860px){
-  .machcue{top:15%;font-size:8.5px;letter-spacing:.18em;padding:0 12px}
+  #mach-wrap{min-height:0}
+  .machcue{top:7%;font-size:9px;letter-spacing:.20em;padding:10px 14px}
+  .machcue::after{width:20px;margin-top:7px}
 }

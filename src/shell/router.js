@@ -60,23 +60,52 @@
      These match the defaults in machine.js exactly. */
   var REST = { yaw: -0.52, pitch: 0.26, dist: 7.20 };
   var FLAT = { yaw: 0, pitch: 0.08, dist: 6.40 };
+  /* IN is worked out at flight time, not written down: it aims at the raster's own centre
+     and stands at the distance that fills 86% of the frame height with it, which is what
+     makes the last frame of the zoom and the first frame of the folder the same picture.
+     1.15 was a distance from the CASE centre, and it left the top half of the screen outside
+     the frame. */
   var IN = { yaw: 0, pitch: 0.02, dist: 1.15 };
+  function inKeyframe() {
+    if (typeof window.__screen !== "function" || typeof window.__camFill !== "function") {
+      return IN;
+    }
+    var s = window.__screen();
+    return { yaw: 0, pitch: 0.02, dist: window.__camFill(0.86), aim: [s.x, s.y, s.z] };
+  }
 
   function ease(t) { return t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2; }
 
+  /* the aim travels with the camera. A keyframe without one means the case centre, which is
+     where the orbit sits when nobody is flying. */
+  var HOME = null;
+  function aimOf(k) {
+    if (k.aim) { return k.aim; }
+    if (!HOME && typeof window.__camAim === "function") { HOME = window.__camAim(); }
+    return HOME || [0, 0.06, 0];
+  }
+  function setCam(yaw, pitch, dist, aim) {
+    window.__cam(yaw, pitch, dist, null);
+    if (aim && typeof window.__camAim === "function") { window.__camAim(aim); }
+  }
+
   function fly(from, to, ms, then) {
+    var a0 = aimOf(from), a1 = aimOf(to);
     if (typeof window.__cam !== "function" ||
         matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      if (typeof window.__cam === "function") { window.__cam(to.yaw, to.pitch, to.dist, null); }
+      if (typeof window.__cam === "function") { setCam(to.yaw, to.pitch, to.dist, a1); }
       then();
       return;
     }
     var t0 = performance.now();
     (function step(now) {
       var t = Math.min(1, (now - t0) / ms), k = ease(t);
-      window.__cam(from.yaw + (to.yaw - from.yaw) * k,
-                   from.pitch + (to.pitch - from.pitch) * k,
-                   from.dist + (to.dist - from.dist) * k, null);
+      setCam(from.yaw + (to.yaw - from.yaw) * k,
+             from.pitch + (to.pitch - from.pitch) * k,
+             from.dist + (to.dist - from.dist) * k,
+             [a0[0] + (a1[0] - a0[0]) * k,
+              a0[1] + (a1[1] - a0[1]) * k,
+              a0[2] + (a1[2] - a0[2]) * k]);
       if (t < 1) { requestAnimationFrame(step); } else { then(); }
     })(t0);
   }
@@ -124,7 +153,10 @@
          the reader on a camera halfway inside a cathode ray tube. Oran: the machine resets its
          angle. */
       if (typeof window.__cam === "function") {
+        /* and the aim goes back to the case with it, or leaving the machine would land the
+           reader on a camera still pointed at the middle of a cathode ray tube. */
         window.__cam(REST.yaw, REST.pitch, REST.dist, null);
+        if (typeof window.__camAim === "function") { window.__camAim(null); }
       }
     }
     setTimeout(arrive, 1600);                   /* the flight is 480 + 260 + 620 = 1360 */
@@ -146,7 +178,7 @@
       if (arrived) { return; }
       setTimeout(function () {                  /* 2. the folder opens */
         if (arrived) { return; }
-        fly(FLAT, IN, 620, arrive);             /* 3. and only then, the zoom */
+        fly(FLAT, inKeyframe(), 620, arrive);   /* 3. and only then, the zoom */
       }, 260);
     });
   }

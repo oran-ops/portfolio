@@ -171,7 +171,13 @@
    .mw is a fixed sheet over the whole viewport. It stays out of the document
    until the router puts the reader inside the machine. */
 .mw{display:none}
-html.mw-on .mw{display:flex}
+/* THE ZOOM ENDED IN A CUT. display:none to display:flex is not something that can be
+   eased, so the last frame of a 620 ms flight into the screen was followed by a white
+   window appearing instantly on top of it. Six frames of fade is enough to read as the
+   screen becoming the window rather than replacing it, and it costs nothing. */
+html.mw-on .mw{display:flex;animation:mw-arrive .19s ease-out both}
+@keyframes mw-arrive{from{opacity:0}to{opacity:1}}
+@media (prefers-reduced-motion:reduce){html.mw-on .mw{animation:none}}
 html.mw-on{overflow:hidden}
 
 /* Above everything the page floats. The site carries a HUD at z-index 56-99 and a
