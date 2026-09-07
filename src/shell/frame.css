@@ -159,6 +159,16 @@
    a WINDOW rather than on a scrolling page.
    =========================================================================================== */
 .mw-view .sec{min-height:0;height:auto;padding-left:0;padding-right:0}
+/* AND ONE THAT AN ID CANNOT BEAT. The rule above is two classes; #final carries
+   `padding-left:74px` (52 at 860, 40 at 560) from the scrolling page, where that inset is the
+   vault's own margin -- and one id outranks any number of classes, so READ ME was the only
+   document that kept its page padding inside the window.
+   It does not show on a wide screen because .wrap is max-width:1120 with slack either side.
+   It shows on a phone, where there is no slack: measured at 375, READ ME's folder was 243px
+   wide against 323px for every other file -- a quarter of the reading width gone, in the last
+   document the reader opens. #docs makes this an id too, so it wins, and it will keep winning
+   for any document that grows its own inset later. */
+.mw-view #docs>section{padding-left:0;padding-right:0}
 .mw-view .sec.case{padding-top:26px}
 /* THE SECTION NUMBER IS NOW SAID TWICE. Every file opens on a card that reads FILE 01 in the
    document's own colour; four lines below it the document's own 01 repeated the same fact in a
