@@ -606,8 +606,15 @@ function redactionBars(root) {
 function liveLayer() {
   if (document.querySelector(".lampband")) { return; }
   (function(){
-  var d=new Date();
-  var filed=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');
+  /* FROZEN WITH THE REST OF THE ARCHIVE. Every other dated string in here is fixed by
+     hand -- the eight CTRL numbers (X-26-0101 and its siblings), both REVIEWING DESK,
+     2026 signatures, the 2018-2026 strapline -- and this one was recomputed from the
+     system clock on every load. They agree today and split on 1 January 2027, when the
+     same card would read FILED 2027-01 beside CTRL No X-26-0101 inside an archive
+     captioned 2018-2026. 2026-04 is the month the archive already stamps on its own
+     case number. A document whose conceit is that it was filed at a fixed moment must
+     not have one field ageing on its own. */
+  var filed='2026-04';
   function zoneHost(sec,needle){
     var zs=document.querySelectorAll('#'+sec+' .zr');
     for(var i=0;i<zs.length;i++){
@@ -617,7 +624,7 @@ function liveLayer() {
   }
   var DEFS=[
     {get:function(){var el=document.querySelector('.cnt[data-n="9"]');return el&&el.closest('.bignum')},
-     rows:[['SOURCE','CRM PIPELINE RECORDS \u00B7 FY24\u201326'],['CLAIM','COMMERCIAL OS \u2014 BUILT FROM ZERO'],['FILED','__F__']]},
+     rows:[['SOURCE','CRM PIPELINE RECORDS \u00B7 ON FILE'],['CLAIM','COMMERCIAL OS \u2014 BUILT FROM ZERO'],['FILED','__F__']]},
     {get:function(){var el=document.querySelector('.cnt[data-n="2"]');return el&&el.parentElement},
      rows:[['SOURCE','SIGNED AGREEMENT \u00B7 ON FILE'],['CLAIM','LARGEST CONTRACT \u2014 CLOSED AS CEO'],['FILED','__F__']]},
     {get:function(){return zoneHost('eventer','EVIDENCE')},
@@ -674,8 +681,8 @@ function liveLayer() {
         'The same cadence returns in PART 2 as evidence, not intention',
         '<em>06</em> functions alongside &mdash; <em>01</em> team actually reporting in']],
       ['EXECUTIVE REFLECTION','ON RE-EXAMINATION',
-       'Eight built. Seven installed to run them.',
-       ['<em>08</em> systems in PART 1, then <em>07</em> standing cadences to hold them',
+       'Ten built. Seven installed to run them.',
+       ['<em>10</em> systems in PART 1, then <em>07</em> standing cadences to hold them',
         'Onboarding and documentation appear on both lists',
         'Neither list contains a deal &mdash; the <b>$2M</b> sits outside the system']]
     ],
@@ -697,8 +704,8 @@ function liveLayer() {
     ],
     medcoin:[
       ['THE VISION','FINDING OF FACT',
-       'Nine builds stand under one sentence.',
-       ['<em>09</em> items were built to make that sentence true',
+       'Eight builds stand under one sentence.',
+       ['<em>08</em> items were built to make that sentence true',
         'Two of them are regulation and providers &mdash; the compliant half',
         'One is money, and it was raised before the network existed']],
       ['BUSINESS OUTCOMES','THE METHOD',
@@ -709,7 +716,7 @@ function liveLayer() {
        'Three dependencies. One of them has a row.',
        ['Operations is recorded in the outcomes; profitability and survival are not',
         'Operations runs through the challenge, the build list and the outcomes',
-        '<em>03</em> dependencies resting on <em>09</em> builds and <em>06</em> outcomes']]
+        '<em>03</em> dependencies resting on <em>08</em> builds and <em>06</em> outcomes']]
     ]
   };
   var OFF='PRESS TO ARM',ON='FLUORESCING',OFFS='365nm \u00B7 LONG WAVE',ONS='365nm \u00B7 03 ZONES';
@@ -901,8 +908,15 @@ function liveLayer() {
 })();
 (function(){
   'use strict';
-  var d=new Date();
-  var filed=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');
+  /* FROZEN WITH THE REST OF THE ARCHIVE. Every other dated string in here is fixed by
+     hand -- the eight CTRL numbers (X-26-0101 and its siblings), both REVIEWING DESK,
+     2026 signatures, the 2018-2026 strapline -- and this one was recomputed from the
+     system clock on every load. They agree today and split on 1 January 2027, when the
+     same card would read FILED 2027-01 beside CTRL No X-26-0101 inside an archive
+     captioned 2018-2026. 2026-04 is the month the archive already stamps on its own
+     case number. A document whose conceit is that it was filed at a fixed moment must
+     not have one field ageing on its own. */
+  var filed='2026-04';
   /* every value below is this section's own copy or its own figures */
   var M={
     xtix:{
