@@ -4229,6 +4229,31 @@ var hwTop=0,hwH=0,vh=window.innerHeight,maxX=0,hcC=[];
 /* the room card, resolved once. Its offsetLeft is read live every frame (see frame()); it is
    only the querySelector that does not need repeating. */
 var roomC=htrack?htrack.querySelector('.hcard.hroom'):null;
+
+/* ---------------------------------------------------------------- ?diag=1
+   Every number the pan's end position depends on, live, in the corner. Oran has reported the
+   machine off centre at the end of the scroll five times and I have measured it centred every
+   time -- because I can only ever evaluate this arithmetic by hand: both browsers I can drive
+   run the page with document.hidden true, so requestAnimationFrame never fires and frame() has
+   never once executed in anything I have observed. One screenshot of this panel at the bottom
+   of his scroll says which number disagrees. Nothing is built unless the flag is present. */
+var DIAG=/[?&]diag=1/.test(location.search),diagEl=null,diagN=0;
+if(DIAG){
+  diagEl=document.createElement('pre');
+  diagEl.style.cssText='position:fixed;left:8px;top:8px;z-index:2147483647;margin:0;padding:8px 10px;'+
+    'background:rgba(0,0,0,.86);color:#7CE3B4;font:11px/1.45 ui-monospace,Menlo,Consolas,monospace;'+
+    'white-space:pre;pointer-events:none;border:1px solid #2FB380;border-radius:4px;max-width:46vw';
+  diagEl.textContent='diag: waiting for a frame...';
+  (document.body||document.documentElement).appendChild(diagEl);
+}
+function diagWrite(o){
+  if(!diagEl)return;
+  if((++diagN&3))return;                      /* every 4th frame is plenty to read */
+  var L=[];
+  for(var k in o){ if(Object.prototype.hasOwnProperty.call(o,k)){
+    L.push((k+'                    ').slice(0,18)+' '+o[k]); } }
+  diagEl.textContent=L.join('\n');
+}
 var dragOff=0,dragV=0,dragging=false,lastPX=0,lastPT=0;
 function measure(){
   vh=window.innerHeight;
@@ -4288,10 +4313,12 @@ var mob=window.matchMedia('(max-width:860px)');
    the work in a try and the re-arm in a finally, and reports the first failure of each loop
    once so that a fault is still findable without printing sixty messages a second. */
 var __rafSaid={};
+window.__rafErr=null;
 function __rafGuard(name,body){
   return function tick(){
     try{ body(); }
     catch(e){
+      window.__rafErr=name+': '+(e&&e.message?e.message:String(e));
       if(!__rafSaid[name]){
         __rafSaid[name]=1;
         try{ console.error('['+name+'] threw; the frame was skipped and the loop kept running',e); }catch(e2){}
@@ -4363,6 +4390,30 @@ function frameBody(){
                          - document.documentElement.clientWidth/2);
       var X=hE*mx+dragOff;
       var cw=window.innerWidth;
+      if(DIAG){
+        var _se2=document.scrollingElement||document.documentElement;
+        var _cvd=document.getElementById('mach-gl');
+        var _cr=_cvd?_cvd.getBoundingClientRect():null;
+        var _mid=document.documentElement.clientWidth/2;
+        diagWrite({
+          viewport:  innerWidth+' x '+innerHeight+'   visible '+document.documentElement.clientWidth,
+          scroll:    Math.round(pageYOffset)+' / '+Math.round(_se2.scrollHeight-innerHeight)+
+                     (pageYOffset>=_se2.scrollHeight-innerHeight-1?'   AT BOTTOM':'   not at bottom'),
+          wrapTop:   Math.round(wr.top)+'   height '+Math.round(wr.height),
+          pinHeight: Math.round(pr.height)+'   left '+Math.round(pr.left)+'   width '+Math.round(pr.width),
+          span:      Math.round(span),
+          hp:        hp.toFixed(5),
+          hE:        hE.toFixed(5),
+          roomLeft:  roomC.offsetLeft+'   width '+roomC.offsetWidth,
+          target_mx: Math.round(mx),
+          drag:      Math.round(dragOff)+(dragging?'   DRAGGING':''),
+          X_written: Math.round(X),
+          machine:   _cr?(Math.round(_cr.left+_cr.width/2)+'  vs screen '+Math.round(_mid)+
+                     '   OFF BY '+Math.round(_cr.left+_cr.width/2-_mid)):'no canvas',
+          loopError: window.__rafErr||'none',
+          mobGate:   mob.matches?'MOBILE (pan disabled)':'desktop'
+        });
+      }
       /* PERF (round 5): the drawer's whole geometry follows X and the window
          width, and nothing else. With the track parked — which is true for all
          but one section of the document — every rect below reads the same number
