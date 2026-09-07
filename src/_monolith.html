@@ -4995,7 +4995,34 @@ document.querySelectorAll('.redx').forEach(function(r){
     /* DESKTOP: the pin's own scroll is q, and nothing is thresholded. The reader can pull
        the sentence apart and push it back together at whatever speed they like, and the
        filament separates at exactly the same rate because it is the same number. */
-    window.__stSwap=function(p){drive(smeo((p-0.20)/0.58))};
+    /* AND IT FOLLOWS THE SCROLL RATHER THAN BEING WELDED TO IT.
+       This was drive(...) called straight from the scroll pass, so q WAS the scroll position:
+       one wheel notch, one step of the sentence. A mouse wheel does not deliver a smooth
+       quantity -- it delivers about 100px at a time -- so thirty-one characters each jumped
+       a discrete distance per notch, and that is the "bad when scrolling" Oran describes.
+       He asked for it to be "super super smooth, organic".
+
+       So the scroll sets a TARGET and the paint chases it at 16% of the remaining distance
+       per frame. Every property downstream is still a pure function of one number, the reader
+       can still pull the sentence apart and push it back, and reversing mid-swap still works
+       -- the number simply arrives continuously instead of in steps. The loop stops itself
+       the moment it has caught up, so a settled sentence costs nothing.
+
+       0.0006 is under a third of the smallest visible step: opacity is written to three
+       decimals and the rise is 30px, so a residual of 0.0006 is 0.018px and 0.0006 alpha. */
+    var qT=0,qC=0,sraf=null;
+    function sstep(){
+      sraf=null;
+      var d=qT-qC;
+      if(d<0.0006&&d>-0.0006){qC=qT;drive(qC);return}
+      qC+=d*0.16;
+      drive(qC);
+      sraf=requestAnimationFrame(sstep);
+    }
+    window.__stSwap=function(p){
+      qT=smeo((p-0.20)/0.58);
+      if(sraf===null)sraf=requestAnimationFrame(sstep);
+    };
   }else{
     /* PHONES: the pin is frozen below 861, so q gets its own clock - but a continuous
        eased cycle with holds at both ends, never a snap. Hold on the first sentence,
