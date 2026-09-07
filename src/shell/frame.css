@@ -169,7 +169,12 @@
    document the reader opens. #docs makes this an id too, so it wins, and it will keep winning
    for any document that grows its own inset later. */
 .mw-view #docs>section{padding-left:0;padding-right:0}
-.mw-view .sec.case{padding-top:26px}
+/* ALL SEVEN, NOT JUST THE FOUR CASE FILES. .sec carries padding:110px 24px from the
+   scrolling page; line 161 above zeroes left and right inside the window and this line
+   reduced the top -- but only for .case, so LEADERSHIP, TECH and READ ME kept all 110.
+   Their title card is exactly one window tall, so it began 84px down and hung 84px past
+   the fold with its contents 42px off centre, while FILES 01-04 landed correctly. */
+.mw-view .sec{padding-top:26px}
 /* THE SECTION NUMBER IS NOW SAID TWICE. Every file opens on a card that reads FILE 01 in the
    document's own colour; four lines below it the document's own 01 repeated the same fact in a
    weaker voice. The card is the one that carries it, so this one stands down INSIDE the window

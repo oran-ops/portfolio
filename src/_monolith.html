@@ -392,7 +392,20 @@ font-family:'JetBrains Mono',monospace;font-weight:600;font-size:8.5px;letter-sp
 font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.28em;color:var(--dim);white-space:nowrap}
 .rstampS{position:absolute;top:-15px;right:24px;transform:rotate(-6deg);border:2px solid var(--fc,var(--emb));border-radius:6px;
 padding:5px 13px;font-family:'JetBrains Mono',monospace;font-weight:700;font-size:10px;letter-spacing:.22em;color:var(--fc,var(--emb));background:var(--bg);z-index:6}
-@media (max-width:860px){.case .folder,#philosophy .folder,#leadership .folder,#final .folder{padding-left:38px}.frail{width:24px}.frail .vlab,.frail .hole{display:none}.tabrow .tB{display:none}}
+/* .frail{display:none} HERE, at the width the gutter is flattened, not 180px further down.
+   The 860 block below reduces the folder's padding-left from 38px to 16px and its comment
+   gives the reason: "The folder rail that justified the 38px is display:none at this width."
+   It was not: the only .frail{display:none} was inside @media (max-width:680px), so from 681
+   to 860 the rail was still drawn at 24px into a gutter that had been cut to 16.
+
+   MEASURED, and it did not overlap the text -- the audit predicted eight pixels of collision
+   and there are none. The one .frail that ships is in #philosophy, whose .folder is not
+   position:relative (only .case .folder is), so the rail's containing block is further out and
+   it hangs entirely to the LEFT of the folder box rather than inside its gutter. That is a
+   separate oddity, noted and not touched here.
+   The change stands on the smaller claim: this block flattens the gutter that justified the
+   rail, so the rail should go at the same width, and the comment below stops being false. */
+@media (max-width:860px){.case .folder,#philosophy .folder,#leadership .folder,#final .folder{padding-left:38px}.frail{display:none}.frail .vlab,.frail .hole{display:none}.tabrow .tB{display:none}}
 /* field report rows */
 .reality .fh{display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-weight:600;font-size:9.5px;letter-spacing:.2em;color:var(--lbl);margin-bottom:9px}
 .reality .fh b{color:var(--emb)}
@@ -1094,7 +1107,13 @@ body.static #clearance,body.static #idlecue,body.failsafe #clearance,body.failsa
 .case .list>*{margin-bottom:9px}
 .case .grid2c{display:grid;grid-template-columns:1fr 1fr;gap:9px 22px}
 @media (max-width:640px){.case .grid2c{grid-template-columns:1fr}}
-.case .hairtop{margin-top:26px;padding-top:24px;border-top:1px solid var(--grid)}
+/* THE BORDER COMES OFF, and line 181 is why. `.case .hairtop{border-top:0}` was written
+   so the animated pseudo-element on line 182 could be the only rule; this line has the
+   same specificity and sits 916 lines later, so it won and put the border back. Every
+   divider in the four case files was drawing a static 1px line AND a 1px pseudo on top of
+   it -- two pixels where one was designed -- and the 1.1s draw-on could not be seen,
+   because the line it draws was already there before it started. */
+.case .hairtop{margin-top:26px;padding-top:24px}
 .case .reality{border:1px solid var(--grid);border-radius:12px;padding:16px 18px;background:var(--card2)}
 .case .subl{display:block;font-family:'JetBrains Mono',monospace;font-weight:600;font-size:9px;letter-spacing:.24em;color:var(--dim);margin-bottom:12px}
 .case .then{margin-top:12px;font-family:'Fraunces',serif;font-style:italic;font-size:15px;color:var(--fc)}
