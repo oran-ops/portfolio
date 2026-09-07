@@ -22,14 +22,19 @@
    scrolls at all. 68vh, not 100: the top of the real content shows at the bottom edge, and a
    screen with nothing at all peeking off it reads as the end of a page rather than the start
    of one. */
-/* THE CARD IS SIZED TO THE WINDOW, NOT TO THE VIEWPORT.
+/* A WHOLE SCREEN, AND NOTHING UNDER IT.
+   This was 0.68 of the window, which by construction leaves a third of a screen of the document
+   showing the moment a file opens. Oran asked twice for the opposite: the file opens on its name
+   and nothing else, and the content begins when the reader scrolls. One screen exactly, so the
+   first content element sits at the fold.
+   THE CARD IS SIZED TO THE WINDOW, NOT TO THE VIEWPORT.
    vh is the viewport, and this card lives inside a window that is inset 22 px, sits under a
    44 px menu bar and a 38 px title bar, and is bordered: about 88 px shorter than the screen
    on a laptop and 62 on a phone. So 68vh was 74% of the box it is actually in, and the peek of
    real content underneath -- the entire reason the number is 68 and not 100 -- shrank to almost
    nothing on a short window. --dth is the scroller's own height, written by paintCards(), and
    the fallback keeps the card correct in the one frame before it is measured. */
-.doctitle{min-height:calc(var(--dth,100vh)*.68);display:flex;flex-direction:column;align-items:center;
+.doctitle{min-height:var(--dth,100vh);display:flex;flex-direction:column;align-items:center;
   justify-content:center;gap:20px;text-align:center;padding:8px 16px 44px;
   position:relative;z-index:2}
 /* AND THEY ARE CENTRED ON THEIR INK, NOT ON THEIR ADVANCE.
@@ -50,11 +55,11 @@
   font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:#7E8189;
   margin-right:-.28em}
 @media (max-width:860px){
-  .doctitle{min-height:calc(var(--dth,100vh)*.62);gap:15px;padding-bottom:32px}
+  .doctitle{min-height:var(--dth,100vh);gap:15px;padding-bottom:32px}
   .doctitle .dt-no{font-size:9.5px;letter-spacing:.26em;margin-right:-.26em}
   .doctitle .dt-cue{font-size:8px;letter-spacing:.2em;margin-right:-.2em}
 }
-@media (prefers-reduced-motion:reduce){.doctitle{min-height:calc(var(--dth,100vh)*.46)}}
+/* the same height under reduced motion: the card is not an animation, it is a screen. */
 
 /* WHAT THE LAB'S BODY RULE DID TO THE SITE.
    Extracted from the lab page, this block began with a height:100% on html and body and an

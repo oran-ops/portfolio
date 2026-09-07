@@ -3161,7 +3161,7 @@ var hwTop=0,hwH=0,vh=window.innerHeight,maxX=0,hcC=[];
 /* the room card, resolved once. Its offsetLeft is read live every frame (see frame()); it is
    only the querySelector that does not need repeating. */
 var roomC=htrack?htrack.querySelector('.hcard.hroom'):null;
-var dragOff=0,dragV=0,dragging=false,lastPX=0;
+var dragOff=0,dragV=0,dragging=false,lastPX=0,lastPT=0;
 function measure(){
   vh=window.innerHeight;
   if(hwrap&&hpin&&htrack){
@@ -3192,14 +3192,18 @@ setTimeout(measure,120);setTimeout(measure,1200);
 if(hpin&&!frozen&&window.matchMedia('(pointer:fine)').matches){
   hpin.addEventListener('pointerdown',function(e){
     if(window.innerWidth<860)return;
-    dragging=true;lastPX=e.clientX;dragV=0;hpin.classList.add('drag');
+    dragging=true;lastPX=e.clientX;lastPT=performance.now();dragV=0;hpin.classList.add('drag');
   });
   window.addEventListener('pointermove',function(e){
     if(!dragging)return;
-    var dx=e.clientX-lastPX;lastPX=e.clientX;
+    var dx=e.clientX-lastPX;lastPX=e.clientX;lastPT=performance.now();
     dragOff-=dx*1.15;dragV=-dx*1.15;
   },{passive:true});
-  window.addEventListener('pointerup',function(){dragging=false;hpin.classList.remove('drag');});
+  /* EVERY WAY A DRAG CAN END. pointerup alone is not enough: released outside the window it is
+     never delivered, and `dragging` stuck true stops the offset from ever decaying. */
+  function endDrag(){dragging=false;try{hpin.classList.remove('drag')}catch(e){}}
+  ['pointerup','pointercancel','blur'].forEach(function(ev){window.addEventListener(ev,endDrag);});
+  document.addEventListener('visibilitychange',function(){if(document.hidden)endDrag();});
 }
 
 var mob=window.matchMedia('(max-width:860px)');
@@ -3242,6 +3246,14 @@ function frameBody(){
       var wr=hwrap.getBoundingClientRect(), pr=hpin.getBoundingClientRect();
       var span=wr.height-pr.height;
       var hp=span>0?clamp(-wr.top/span):0;
+      /* AND THE END OF THE SCROLL IS THE END OF THE PAN, which needs no geometry and cannot
+         round. Measured at 1782x885 scrolled to the very bottom -- scrollY 4624 against a
+         maxScroll of 4624 -- the line above returned 0.99997. Every guarantee written for the
+         landing was gated on hs>=1 and therefore never once ran. The reader is at the bottom of
+         the page: there is nowhere else for the pan to be. */
+      var _se=document.scrollingElement||document.documentElement;
+      if(window.pageYOffset>=_se.scrollHeight-window.innerHeight-1) hp=1;
+      else if(hp>0.999) hp=1;
       /* SLOW START, SWEEP, SETTLE - and never a full stop, and never a dead zone either.
          Twice before, this ended early and left the last stretch of the pin doing nothing:
          at 80% that was 356px of scrolling in which the reader pushed and the screen did not
@@ -3256,13 +3268,24 @@ function frameBody(){
          the pan settles rather than stopping, and no dead zone at all because it uses the
          whole pin. f' > 0 throughout: its roots are at u=1 and u=-0.041. */
       var hs=clamp(hp), hE=hs>=1?1:hs*(0.22+hs*(2.56-1.78*hs));
+      /* A DRAG THAT HAS NOT BEEN FED FOR 400ms IS OVER. pointerup is registered on window, and
+         Windows does not deliver it when the button is released outside the browser. There was
+         no pointercancel handler and nothing on blur, so `dragging` could stay true for the
+         rest of the visit -- and while it is true the offset below never decays. */
+      if(dragging&&performance.now()-lastPT>400){dragging=false;try{hpin.classList.remove('drag')}catch(e){}}
       if(!dragging){dragOff+=dragV;dragV*=.94;dragOff*=.90;if(Math.abs(dragOff)<.4)dragOff=0;}
+      /* AND IT IS A NUDGE, NOT A PARKING SPACE. dragOff had no bound of any kind: a long drag,
+         or one whose release was lost, could put the room anywhere and leave it there. An eighth
+         of the viewport is enough for the gesture to feel live and not enough to hide the
+         machine. */
+      var _lim=window.innerWidth*0.125;
+      if(dragOff>_lim)dragOff=_lim; else if(dragOff<-_lim)dragOff=-_lim;
       /* AND AT THE END, NOTHING IS LEFT OVER. hE is pinned to exactly 1 above rather than
          1.0000000000000002, and the drag residue -- which decays by 0.90 a frame and can still
          be carrying a fraction of a pixel a second after the reader let go -- is cleared. Oran
          asked for the machine to be exactly in the middle at the end of the scroll, and this is
          the line that makes that an assignment instead of a limit. */
-      if(hs>=1){dragOff=0;dragV=0;}
+      if(hs>=1){dragOff=0;dragV=0;}   /* and this line can finally run -- see hp above */
       /* AND THE TARGET IS THE MIDDLE OF THE SCREEN, NOT THE MIDDLE OF #hpin.
          #hpin is the section's content box: at 1440 it sits 24px in from the left and 33px in
          from the right, so centring the room on the pin left the machine 4.5px left of centre.
