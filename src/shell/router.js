@@ -85,8 +85,13 @@
     return HOME || [0, 0.06, 0];
   }
   function setCam(yaw, pitch, dist, aim) {
+    /* THE AIM IS SET FIRST AND QUIETLY, THEN THE CAMERA DRAWS ONCE.
+       Both __cam and __camAim end in frame(), so this function was rendering 55,723
+       triangles twice per animation frame -- 62 draw calls where 31 will do -- on the one
+       beat in the whole page where the frame budget is tightest. Identical pixels either
+       way; the second draw only ever overwrote the first. */
+    if (aim && typeof window.__camAim === "function") { window.__camAim(aim, true); }
     window.__cam(yaw, pitch, dist, null);
-    if (aim && typeof window.__camAim === "function") { window.__camAim(aim); }
   }
 
   function fly(from, to, ms, then) {
@@ -100,9 +105,16 @@
     var t0 = performance.now();
     (function step(now) {
       var t = Math.min(1, (now - t0) / ms), k = ease(t);
+      /* DISTANCE IS INTERPOLATED IN LOG, NOT LINEARLY, AND THIS IS THE ZOOM HE KEEPS
+         CALLING UNSMOOTH. The leg falls from 5.90 to about 1.52 -- a 3.88x change -- and
+         perceived zoom goes as the RATIO, not the difference. Interpolated linearly, the
+         halfway point of the leg delivers only 34% of the perceived movement and the last
+         quarter delivers the rest in a rush. In log the halfway point is 50%: the object
+         grows at a constant rate, which is what a dolly does and what the eye expects.
+         Same endpoints, same duration, same easing -- only the space it is eased in. */
       setCam(from.yaw + (to.yaw - from.yaw) * k,
              from.pitch + (to.pitch - from.pitch) * k,
-             from.dist + (to.dist - from.dist) * k,
+             Math.exp(Math.log(from.dist) + (Math.log(to.dist) - Math.log(from.dist)) * k),
              [a0[0] + (a1[0] - a0[0]) * k,
               a0[1] + (a1[1] - a0[1]) * k,
               a0[2] + (a1[2] - a0[2]) * k]);
@@ -169,6 +181,7 @@
       return;
     }
     flying = true;
+    html.classList.add("mw-fly");          /* the cue stands down -- see .machcue in machine.css */
 
     /* AN ANIMATION MUST NEVER BE THE ONLY WAY IN.
      *
@@ -183,6 +196,7 @@
       if (arrived) { return; }
       arrived = true;
       flying = false;
+      html.classList.remove("mw-fly");
       html.classList.add("mw-on");
       if (typeof window.__shellInit === "function") { window.__shellInit(); }
       /* put the machine back where it was, unseen behind the shell, so leaving it does not land
@@ -304,6 +318,17 @@
       if (moved < 6) { window.__enterMachine(); }
     }, { passive: true });
     cv.addEventListener("pointercancel", function () { down = false; }, { passive: true });
+    /* AND THE SAME DOOR, FOR SOMEBODY WHO IS NOT HOLDING A MOUSE. The canvas carries
+       role="button" and a name (see machine/machine.html); a thing that announces itself as a
+       button has to answer Enter and Space, or it is a lie told to a screen reader. Space is
+       also the page's scroll key, so it is prevented here and only here -- on the one element
+       that has said it is a button. */
+    cv.addEventListener("keydown", function (e) {
+      if (e.key === "Enter" || e.key === " " || e.key === "Spacebar") {
+        e.preventDefault();
+        window.__enterMachine();
+      }
+    });
   })();
 
   /* out of it — the folder's own close box */

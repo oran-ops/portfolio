@@ -22,23 +22,39 @@
    scrolls at all. 68vh, not 100: the top of the real content shows at the bottom edge, and a
    screen with nothing at all peeking off it reads as the end of a page rather than the start
    of one. */
-.doctitle{min-height:68vh;display:flex;flex-direction:column;align-items:center;
+/* THE CARD IS SIZED TO THE WINDOW, NOT TO THE VIEWPORT.
+   vh is the viewport, and this card lives inside a window that is inset 22 px, sits under a
+   44 px menu bar and a 38 px title bar, and is bordered: about 88 px shorter than the screen
+   on a laptop and 62 on a phone. So 68vh was 74% of the box it is actually in, and the peek of
+   real content underneath -- the entire reason the number is 68 and not 100 -- shrank to almost
+   nothing on a short window. --dth is the scroller's own height, written by paintCards(), and
+   the fallback keeps the card correct in the one frame before it is measured. */
+.doctitle{min-height:calc(var(--dth,100vh)*.68);display:flex;flex-direction:column;align-items:center;
   justify-content:center;gap:20px;text-align:center;padding:8px 16px 44px;
   position:relative;z-index:2}
+/* AND THEY ARE CENTRED ON THEIR INK, NOT ON THEIR ADVANCE.
+   letter-spacing adds its space after EVERY character, the last one included, so a tracked
+   label carries .34em of empty air on its right that the centring counts as part of the word.
+   The ink therefore sits half the tracking left of true centre -- 1.9 px here, 1.3 px on the
+   cue, against a 52 px rule that is centred exactly. Small, and visible precisely because the
+   rule under it is not wrong. .doctitle is a column flex with align-items:center, so the child
+   is centred on its OWN width: a negative right margin of exactly one tracking removes the
+   trailing space from that width and nothing else. */
 .doctitle .dt-no{font-family:'JetBrains Mono',ui-monospace,monospace;font-size:11px;
-  font-weight:700;letter-spacing:.34em;opacity:.9}
+  font-weight:700;letter-spacing:.34em;opacity:.9;margin-right:-.34em}
 /* pixelated AND max-width: the scale is chosen as a whole number to fit, and this is only the
    guard for a window narrower than the smallest whole number allows */
 .doctitle .dt-art{display:block;max-width:100%;height:auto;image-rendering:pixelated}
 .doctitle .dt-rule{width:52px;height:3px;opacity:.85}
 .doctitle .dt-cue{font-family:'JetBrains Mono',ui-monospace,monospace;font-size:9px;
-  font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:#7E8189}
+  font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:#7E8189;
+  margin-right:-.28em}
 @media (max-width:860px){
-  .doctitle{min-height:62vh;gap:15px;padding-bottom:32px}
-  .doctitle .dt-no{font-size:9.5px;letter-spacing:.26em}
-  .doctitle .dt-cue{font-size:8px;letter-spacing:.2em}
+  .doctitle{min-height:calc(var(--dth,100vh)*.62);gap:15px;padding-bottom:32px}
+  .doctitle .dt-no{font-size:9.5px;letter-spacing:.26em;margin-right:-.26em}
+  .doctitle .dt-cue{font-size:8px;letter-spacing:.2em;margin-right:-.2em}
 }
-@media (prefers-reduced-motion:reduce){.doctitle{min-height:46vh}}
+@media (prefers-reduced-motion:reduce){.doctitle{min-height:calc(var(--dth,100vh)*.46)}}
 
 /* WHAT THE LAB'S BODY RULE DID TO THE SITE.
    Extracted from the lab page, this block began with a height:100% on html and body and an
@@ -61,6 +77,13 @@
    down. image-rendering:pixelated throws that filtering away and hands back the aliased
    original. The 1-bit chrome wants hard pixels; nothing outside the window does. */
 .mw canvas{display:block;image-rendering:pixelated;image-rendering:crisp-edges}
+/* AND THIS RULE IS WHY THE SCROLLBAR WOULD NOT HIDE ON A PHONE.
+   `.mw-bar{display:none}` in the 860 query is one class; `.mw canvas{display:block}` is a
+   class and a type, which is more specific -- and the scroll bar IS a canvas inside .mw. So
+   the phone rule lost every time and 30 px of 1-bit chrome, 8% of a 375 px screen, stayed on
+   a device that has no pointer to drag it with. Stating the display here, where the winning
+   specificity already lives, is the fix; the query below keeps its comment and its intent. */
+@media(max-width:860px){.mw canvas.mw-bar{display:none}}
 .mw-menu{flex:none;width:100%;height:var(--mw-menu)}
 /* The 50 per cent checkerboard: a true 2 x 2 cell at the same whole scale the chrome uses,
    so one dither pixel is exactly 2 CSS pixels and matches the folder's raster. 45-degree
@@ -132,7 +155,12 @@
    =========================================================================================== */
 .mw-view .sec{min-height:0;height:auto;padding-left:0;padding-right:0}
 .mw-view .sec.case{padding-top:26px}
-.mw-view .secnum{position:static;display:block;margin:0 0 4px 26px}
+/* THE SECTION NUMBER IS NOW SAID TWICE. Every file opens on a card that reads FILE 01 in the
+   document's own colour; four lines below it the document's own 01 repeated the same fact in a
+   weaker voice. The card is the one that carries it, so this one stands down INSIDE the window
+   only -- on the scrolling page, where there is no card, the number is untouched and still the
+   210 px ghost it has always been. */
+.mw-view .secnum{display:none}
 
 /* THE REVEAL. Elements start at opacity 0 and are revealed against the PAGE viewport.
    Scrolling now happens inside the window, so opened cold a document rendered blank. The pass
@@ -145,9 +173,18 @@
    `.case` left that one document's folder permanently invisible while every case file was
    fine, which is exactly the way a treatment designed against XTIX fails on the two documents
    that are not XTIX. Both selectors, so both documents behave the same. */
-.mw-view .case .folder,.mw-view #leadership .folder{opacity:0;transform:translateY(26px);
+/* AND #final IS THE THIRD ONE. The site holds four ids down at opacity 0 --
+   `.case .folder,#philosophy .folder,#leadership .folder,#final .folder{opacity:0}` -- and this
+   override named two of them. #philosophy never enters the window, so it does not matter; #final
+   is FILE 07, READ ME, the last thing the reader opens and the only document whose whole body is
+   one folder. Its card was at opacity 0 for the entire visit. Nothing errored: an ID selector
+   simply outranked a class one, on the one document nobody built the treatment against.
+   That is the same failure as the LEADERSHIP note above, found the same way, one file later. */
+.mw-view .case .folder,.mw-view #leadership .folder,.mw-view #final .folder{
+  opacity:0;transform:translateY(26px);
   transition:opacity .8s var(--ease),transform .8s var(--ease)}
-.mw-view .case .folder.on,.mw-view #leadership .folder.on{opacity:1;transform:none}
+.mw-view .case .folder.on,.mw-view #leadership .folder.on,.mw-view #final .folder.on{
+  opacity:1;transform:none}
 .mw-view .u.on .garc,.mw-view .u.on .pdraw{stroke-dashoffset:0}
 .mw-view .u.on .ndot{opacity:1;transform:scale(1)}
 

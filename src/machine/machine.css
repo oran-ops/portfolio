@@ -33,8 +33,16 @@
    inside the mask band that now begins at 10%. And the type is set to be read: 11px at .30em
    in near-white instead of 10px at .24em in emerald, which was the archive label voice used
    for the one line on this page that is an instruction. */
-.machcue{position:absolute;left:0;right:0;top:11%;text-align:center;
+/* text-indent, and it is the same trailing letter-space as the title card's labels: with
+   text-align:center a first-line indent moves the line right by half of itself, so an indent of
+   exactly one tracking cancels exactly one half-tracking of leftward drift. The line sits over a
+   26 px rule that is centred honestly, which is what makes 1.6 px visible. */
+/* and the door shows where it is when the reader is on a keyboard. Not :focus -- a click
+   would ring the machine every time; :focus-visible is exactly the case this is for. */
+#mach-gl:focus-visible{outline:2px solid var(--emb);outline-offset:4px;border-radius:2px}
+.machcue{position:absolute;left:0;right:0;top:11%;text-align:center;text-indent:.30em;
   padding:14px 20px;z-index:3;pointer-events:none;
+  transition:opacity .26s ease-out;
   font-family:'JetBrains Mono',ui-monospace,monospace;font-size:11px;font-weight:700;
   letter-spacing:.30em;text-transform:uppercase;color:#E7ECE9;opacity:1;
   background:radial-gradient(38% 300% at 50% 50%,
@@ -44,12 +52,20 @@
 /* a short emerald rule under it, which is the archive's own mark for "this is live" and the
    only colour the line needs */
 .machcue::after{content:"";display:block;width:26px;height:2px;margin:9px auto 0;
-  background:var(--emb);opacity:.85}
+  background:var(--emb);opacity:.85;text-indent:0}
+/* AND IT STOPS TALKING ONCE IT HAS BEEN OBEYED. The reader clicks the screen; the machine
+   straightens, the folder opens on the CRT and the camera flies in -- and for all 1,540 ms of
+   that, an instruction to click the screen sat across the top of it in near-white, over the one
+   shot in the page that is meant to be watched. It leaves on the first beat, in a quarter of a
+   second, well before the zoom. Held out afterwards rather than removed: leaving the machine
+   restores it, because then it is true again. */
+html.mw-fly .machcue,html.mw-on .machcue{opacity:0}
+@media (prefers-reduced-motion:reduce){.machcue{transition:none}}
 /* the short room on a phone is 360-470px tall, so the same 11% is only ~50px down and the
    machine sits higher in a narrower frame. 7% keeps the same clear air in a third of the
    height, and the type comes down a step so it cannot run to the edges. */
 @media (max-width:860px){
   #mach-wrap{min-height:0}
-  .machcue{top:7%;font-size:9px;letter-spacing:.20em;padding:10px 14px}
+  .machcue{top:7%;font-size:9px;letter-spacing:.20em;text-indent:.20em;padding:10px 14px}
   .machcue::after{width:20px;margin-top:7px}
 }

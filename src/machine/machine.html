@@ -1,4 +1,12 @@
 <div id="mach-wrap">
-  <canvas id="mach-gl"></canvas>
+  <!-- THE CANVAS IS THE CONTROL, SO IT SAYS SO.
+       Everything inside the machine is already reachable from a keyboard — the seven icons
+       are <button>s, the close box is a button, the scroller takes focus — and none of it
+       could be reached, because the one door into it was a pointerup on an unlabelled canvas.
+       A reader on a keyboard, or on a screen reader, met a 3D render with no name and no way
+       in, and the whole archive was behind it. role, name and tabindex here; the Enter/Space
+       handler is in router.js beside the click it mirrors. -->
+  <canvas id="mach-gl" role="button" tabindex="0"
+          aria-label="Open the case files"></canvas>
   <div class="machcue">Click on the Screen</div>
 </div>

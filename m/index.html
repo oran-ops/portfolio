@@ -85,7 +85,10 @@ body.static .rv,body.static .rvs{opacity:1;transform:none;transition:none}
 .tok{display:inline-flex;align-items:center;gap:8px;font-family:'JetBrains Mono',monospace;font-weight:600;font-size:10px;letter-spacing:.16em;
 border:1px solid var(--grid);border-radius:7px;padding:7px 13px;color:var(--fc,var(--emb))}
 .shead{display:flex;justify-content:space-between;align-items:center;margin-bottom:26px}
-.sttl{font-weight:800;font-size:clamp(26px,3.6vw,40px);letter-spacing:-.028em;line-height:1.08}
+/* margin:0 because these are <h2> now. Every other UA default for a heading -- size,
+   weight, family, display -- was already written out here and at .sttl below, so the
+   margin is the whole difference between the element it was and the element it is. */
+.sttl{margin:0;font-weight:800;font-size:clamp(26px,3.6vw,40px);letter-spacing:-.028em;line-height:1.08}
 .smeta{margin-top:10px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.22em;color:var(--mut)}
 
 /* folder */
@@ -517,7 +520,10 @@ html.preopen #hero .hw{transform:perspective(1400px) translateY(11vh) rotateX(7d
 .htrack{display:flex;align-items:center;gap:5vw;padding:0 0 0 12vw;width:max-content;will-change:transform}
 .hcard{flex:0 0 auto}
 .hintro{width:34vw;min-width:300px}
-.hintro .bigt{font-weight:800;font-size:clamp(40px,5.6vw,72px);line-height:1;letter-spacing:-.03em;text-transform:uppercase}
+/* and margin:0 here for the same reason: THE CASE FILES is an <h2> now -- the title of
+   page 3, under the page's own h1 on page 2. It was already the largest type in this
+   section; it simply was not an element that said so. */
+.hintro .bigt{margin:0;font-weight:800;font-size:clamp(40px,5.6vw,72px);line-height:1;letter-spacing:-.03em;text-transform:uppercase}
 .hintro .fmeta{margin-top:16px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.2em;color:var(--mut)}
 .hhint{margin-top:26px;font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.26em;color:var(--lbl)}
 .hfolder{position:relative;width:56vw;max-width:720px;height:min(58vh,480px);background:var(--hc);
@@ -628,7 +634,7 @@ transform-origin:0 50%;will-change:transform;transform-style:preserve-3d;z-index
 background:var(--oc);
 background-image:linear-gradient(rgba(25,26,31,.30),rgba(25,26,31,.30)),
                  linear-gradient(270deg,rgba(25,26,31,.26),transparent 46%)}
-.oc-backf:before{content:"ROUTING 4 ARCHIVE C-01\A\A  RECEIVED     444444\A  REVIEWED     444444\A  RETURNED     444444\A\A  THIS FORM STAYS WITH THE FILE";
+.oc-backf:before{content:"ROUTING — ARCHIVE C-01\A\A  RECEIVED     ——————\A  REVIEWED     ——————\A  RETURNED     ——————\A\A  THIS FORM STAYS WITH THE FILE";
   white-space:pre;position:absolute;inset:34px 34px 34px 46px;border:1.5px solid rgba(25,26,31,.26);
   border-radius:10px;padding:22px 24px;font-family:'JetBrains Mono',monospace;font-weight:700;
   font-size:11px;line-height:2.05;letter-spacing:.16em;color:rgba(25,26,31,.52)}
@@ -936,17 +942,17 @@ body.static #clearance,body.static #idlecue,body.failsafe #clearance,body.failsa
 .lampband .swline{stroke:#9EA2AA;stroke-width:1.4;stroke-linecap:round;transition:stroke .32s}
 .lampband:hover{border-color:#5B5570;background:#232430!important}
 /* armed: the violet arrives all at once, and the rocker throws */
-.case .folder.lampon .lampband{background:#221E33!important;border-color:var(--uvv,#9E7BFF);
+.case .uvmount.lampon .lampband{background:#221E33!important;border-color:var(--uvv,#9E7BFF);
   box-shadow:0 0 0 1px rgba(158,123,255,.28),0 12px 30px rgba(120,88,235,.26)}
-.case .folder.lampon .lampband .lampnm{color:#E5DBFF}
-.case .folder.lampon .lampband .lampstate{color:var(--uvv,#9E7BFF);border-color:var(--uvv,#9E7BFF)}
-.case .folder.lampon .lampband .swp{stroke:#B9A4F5}
-.case .folder.lampon .lampband .swrock{fill:#8E75C8;stroke:#D8C9FF;transform:translateY(-4px)}
-.case .folder.lampon .lampband .swline{stroke:#2A2438}
-.case .folder.lampon .lampband .swscr{fill:#8A8FA0}
+.case .uvmount.lampon .lampband .lampnm{color:#E5DBFF}
+.case .uvmount.lampon .lampband .lampstate{color:var(--uvv,#9E7BFF);border-color:var(--uvv,#9E7BFF)}
+.case .uvmount.lampon .lampband .swp{stroke:#B9A4F5}
+.case .uvmount.lampon .lampband .swrock{fill:#8E75C8;stroke:#D8C9FF;transform:translateY(-4px)}
+.case .uvmount.lampon .lampband .swline{stroke:#2A2438}
+.case .uvmount.lampon .lampband .swscr{fill:#8A8FA0}
 @media (prefers-reduced-motion:reduce){
   .lampband .swrock{transition:none}
-  .case .folder.lampon .lampband .swrock{transform:none}
+  .case .uvmount.lampon .lampband .swrock{transform:none}
 }
 @media (max-width:680px){
   .lampband{padding:11px 13px 10px!important}
@@ -986,7 +992,9 @@ body.static #clearance,body.static #idlecue,body.failsafe #clearance,body.failsa
   background:linear-gradient(180deg,#31333F,#22232B)!important}
 .case .uvmount .lampband:active{--lift:2px;
   box-shadow:0 2px 7px rgba(0,0,0,.5),0 1px 0 rgba(255,255,255,.05) inset}
-.case .folder.lampon+.uvmount .lampband,
+/* was `.folder.lampon+.uvmount`, which selects the sibling AFTER the folder; the mount
+   is inserted before it. .on is set on the plate by the toggle. */
+.case .uvmount.lampon .lampband,
 .case .uvmount .lampband.on{border-color:var(--uvv,#9E7BFF)}
 @media (prefers-reduced-motion:reduce){
   .case .uvmount .lampband{transition:none}
@@ -1068,7 +1076,7 @@ body.static #clearance,body.static #idlecue,body.failsafe #clearance,body.failsa
         SCROLL TO OPEN
 
      Page 1 is the pinned statement and nothing else now: the neural net, the two sentences,
-     and then page 2. The #hero rules stay in the stylesheet -- cutting CSS for an element
+     and then page 2. The #hero rules stay in the stylesheet — cutting CSS for an element
      that no longer exists buys nothing and has broken things here before. -->
 
 </section>
@@ -1080,11 +1088,11 @@ body.static #clearance,body.static #idlecue,body.failsafe #clearance,body.failsa
       <div class="rub"><span class="d"></span>MY COMMERCIAL PHILOSOPHY</div>
       <div class="tok">THE OPERATING SYSTEM &#8250;</div>
     </div>
-    <div class="sttl rv" style="--i:1"><span class="ln">Every Business Is Different.</span><br><span class="ln g2">The Principles of Growth Are Not.</span></div>
+    <h1 class="sttl rv" style="--i:1"><span class="ln">Every Business Is Different.</span><br><span class="ln g2">The Principles of Growth Are Not.</span></h1>
     <div class="folder rv" style="--i:2;margin-top:56px">
       <div class="tabrow"><div class="tA"><span class="nm">Playbook</span><span class="fl">&#9656; MASTER FILE</span></div></div>
       <div class="frail"><span class="hole" style="top:76px"></span><span class="hole" style="top:114px"></span></div>
-      <div class="grid"><div class="rvs" style="--i:0"><div class="node"><svg viewBox="0 0 48 48"><path d="M6 40h36"/><path d="M6 40c6-1.5 9-5 10-9"/><circle cx="14.5" cy="15.5" r="3.4"/><path d="M14.5 18.9v7.6"/><path d="M14.5 21.5l4.4-2.2"/><path d="M14.5 21.5l-4 3"/><path d="M14.5 26.5l3.2 5.5"/><path d="M14.5 26.5l-2.6 6"/><path class="dsh" d="M21.5 14.5h14"/><circle class="f" cx="40" cy="14.5" r="2.6"/></svg></div><div class="snum">STEP 01</div><div class="sname">Vision</div><div class="sdesc">Define where the business is going.</div></div><div class="rvs" style="--i:1"><div class="node"><svg viewBox="0 0 48 48"><path d="M10 22l14-8 14 8"/><path d="M13 20.5V34c0 1.4 4.9 4 11 4s11-2.6 11-4V20.5"/><path d="M13 27c0 1.4 4.9 4 11 4s11-2.6 11-4"/><circle class="f" cx="24" cy="22.5" r="2"/><path class="dsh" d="M24 14V7"/></svg></div><div class="snum">STEP 02</div><div class="sname">Business Understanding</div><div class="sdesc">Understand the business before improving it.</div></div><div class="rvs" style="--i:2"><div class="node"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="17"/><circle class="dsh" cx="24" cy="24" r="9.5"/><path d="M24 24L35.5 12.5"/><circle class="f" cx="17" cy="28.5" r="2"/><circle class="f" cx="30" cy="31" r="2"/><circle class="f" cx="19" cy="15.5" r="2"/></svg></div><div class="snum">STEP 03</div><div class="sname">Market Understanding</div><div class="sdesc">Understand the customer before creating the message.</div></div><div class="rvs" style="--i:3"><div class="node"><svg viewBox="0 0 48 48"><path d="M8 40h32"/><rect x="11" y="30" width="9" height="10"/><rect x="21.5" y="24" width="9" height="16"/><path d="M37 40V12h-13"/><path d="M26 12l2.5 3.4"/><path class="dsh" d="M28.5 12v6"/><rect class="em" x="25.8" y="18" width="5.4" height="5"/></svg></div><div class="snum">STEP 04</div><div class="sname">Commercial Architecture</div><div class="sdesc">Build the commercial engine before scaling it.</div></div><div class="rvs" style="--i:4"><div class="node"><svg viewBox="0 0 48 48"><path d="M8 39.5h32"/><circle cx="13" cy="19" r="3.2"/><path d="M8.6 32c0-4 2-6.6 4.4-6.6s4.4 2.6 4.4 6.6"/><circle class="em" cx="24" cy="13.5" r="3.6"/><path class="em" d="M19 28c0-4.6 2.2-7.4 5-7.4s5 2.8 5 7.4"/><circle cx="35" cy="19" r="3.2"/><path d="M30.6 32c0-4 2-6.6 4.4-6.6s4.4 2.6 4.4 6.6"/><path class="dsh" d="M18.5 34.5h11"/></svg></div><div class="snum">STEP 05</div><div class="sname">People &amp; Leadership</div><div class="sdesc">Create ownership, not dependency.</div></div><div class="rvs" style="--i:5"><div class="node"><svg viewBox="0 0 48 48"><path class="dsh" d="M7 32c4 2 9 .8 9.8-2.4.6-2.6-3.4-3.4-4-.8-.7 3 4.6 4.6 9.2 2.8"/><path d="M24 30L42 11l-6.2 21-4.6-6.4-7.2 4.4z"/><path class="em" d="M31.2 25.6L42 11"/></svg></div><div class="snum">STEP 06</div><div class="sname">Execution</div><div class="sdesc">Turn strategy into consistent execution.</div></div><div class="rvs" style="--i:6"><div class="node"><svg viewBox="0 0 48 48"><path d="M9 39V9"/><path d="M9 39h30"/><path d="M9 31h3M9 23h3M9 15h3"/><path d="M14 33l7-6 6 3.6 10-11"/><circle class="f" cx="37" cy="19.6" r="2.4"/><path class="dsh" d="M37 17V9.5"/></svg></div><div class="snum">STEP 07</div><div class="sname">Measurement</div><div class="sdesc">Measure decisions, not assumptions.</div></div><div class="rvs" style="--i:7"><div class="node"><svg viewBox="0 0 48 48"><path d="M37 27a13 13 0 1 1-4.6-9.9"/><path class="em" d="M31 9.5L39.5 9l.5 8.5"/><path class="em" d="M39.5 9L31.8 16.8"/><circle class="f" cx="24" cy="27" r="1.8"/></svg></div><div class="snum">STEP 08</div><div class="sname">Continuous Improvement</div><div class="sdesc">Learn faster than the market evolves.</div></div></div>
+      <div class="grid"><div class="rvs" style="--i:0"><div class="node"><svg viewBox="0 0 48 48" aria-hidden="true" focusable="false"><path d="M6 40h36"/><path d="M6 40c6-1.5 9-5 10-9"/><circle cx="14.5" cy="15.5" r="3.4"/><path d="M14.5 18.9v7.6"/><path d="M14.5 21.5l4.4-2.2"/><path d="M14.5 21.5l-4 3"/><path d="M14.5 26.5l3.2 5.5"/><path d="M14.5 26.5l-2.6 6"/><path class="dsh" d="M21.5 14.5h14"/><circle class="f" cx="40" cy="14.5" r="2.6"/></svg></div><div class="snum">STEP 01</div><div class="sname">Vision</div><div class="sdesc">Define where the business is going.</div></div><div class="rvs" style="--i:1"><div class="node"><svg viewBox="0 0 48 48" aria-hidden="true" focusable="false"><path d="M10 22l14-8 14 8"/><path d="M13 20.5V34c0 1.4 4.9 4 11 4s11-2.6 11-4V20.5"/><path d="M13 27c0 1.4 4.9 4 11 4s11-2.6 11-4"/><circle class="f" cx="24" cy="22.5" r="2"/><path class="dsh" d="M24 14V7"/></svg></div><div class="snum">STEP 02</div><div class="sname">Business Understanding</div><div class="sdesc">Understand the business before improving it.</div></div><div class="rvs" style="--i:2"><div class="node"><svg viewBox="0 0 48 48" aria-hidden="true" focusable="false"><circle cx="24" cy="24" r="17"/><circle class="dsh" cx="24" cy="24" r="9.5"/><path d="M24 24L35.5 12.5"/><circle class="f" cx="17" cy="28.5" r="2"/><circle class="f" cx="30" cy="31" r="2"/><circle class="f" cx="19" cy="15.5" r="2"/></svg></div><div class="snum">STEP 03</div><div class="sname">Market Understanding</div><div class="sdesc">Understand the customer before creating the message.</div></div><div class="rvs" style="--i:3"><div class="node"><svg viewBox="0 0 48 48" aria-hidden="true" focusable="false"><path d="M8 40h32"/><rect x="11" y="30" width="9" height="10"/><rect x="21.5" y="24" width="9" height="16"/><path d="M37 40V12h-13"/><path d="M26 12l2.5 3.4"/><path class="dsh" d="M28.5 12v6"/><rect class="em" x="25.8" y="18" width="5.4" height="5"/></svg></div><div class="snum">STEP 04</div><div class="sname">Commercial Architecture</div><div class="sdesc">Build the commercial engine before scaling it.</div></div><div class="rvs" style="--i:4"><div class="node"><svg viewBox="0 0 48 48" aria-hidden="true" focusable="false"><path d="M8 39.5h32"/><circle cx="13" cy="19" r="3.2"/><path d="M8.6 32c0-4 2-6.6 4.4-6.6s4.4 2.6 4.4 6.6"/><circle class="em" cx="24" cy="13.5" r="3.6"/><path class="em" d="M19 28c0-4.6 2.2-7.4 5-7.4s5 2.8 5 7.4"/><circle cx="35" cy="19" r="3.2"/><path d="M30.6 32c0-4 2-6.6 4.4-6.6s4.4 2.6 4.4 6.6"/><path class="dsh" d="M18.5 34.5h11"/></svg></div><div class="snum">STEP 05</div><div class="sname">People &amp; Leadership</div><div class="sdesc">Create ownership, not dependency.</div></div><div class="rvs" style="--i:5"><div class="node"><svg viewBox="0 0 48 48" aria-hidden="true" focusable="false"><path class="dsh" d="M7 32c4 2 9 .8 9.8-2.4.6-2.6-3.4-3.4-4-.8-.7 3 4.6 4.6 9.2 2.8"/><path d="M24 30L42 11l-6.2 21-4.6-6.4-7.2 4.4z"/><path class="em" d="M31.2 25.6L42 11"/></svg></div><div class="snum">STEP 06</div><div class="sname">Execution</div><div class="sdesc">Turn strategy into consistent execution.</div></div><div class="rvs" style="--i:6"><div class="node"><svg viewBox="0 0 48 48" aria-hidden="true" focusable="false"><path d="M9 39V9"/><path d="M9 39h30"/><path d="M9 31h3M9 23h3M9 15h3"/><path d="M14 33l7-6 6 3.6 10-11"/><circle class="f" cx="37" cy="19.6" r="2.4"/><path class="dsh" d="M37 17V9.5"/></svg></div><div class="snum">STEP 07</div><div class="sname">Measurement</div><div class="sdesc">Measure decisions, not assumptions.</div></div><div class="rvs" style="--i:7"><div class="node"><svg viewBox="0 0 48 48" aria-hidden="true" focusable="false"><path d="M37 27a13 13 0 1 1-4.6-9.9"/><path class="em" d="M31 9.5L39.5 9l.5 8.5"/><path class="em" d="M39.5 9L31.8 16.8"/><circle class="f" cx="24" cy="27" r="1.8"/></svg></div><div class="snum">STEP 08</div><div class="sname">Continuous Improvement</div><div class="sdesc">Learn faster than the market evolves.</div></div></div>
     </div>
     <div class="sigp rv" style="--i:3">
       <div class="qx">First build a system that works. <b>Then build a business that scales.</b></div>
@@ -1172,13 +1180,21 @@ padding:6px 13px;font-family:'JetBrains Mono',monospace;font-weight:700;font-siz
     <div class="hpin" id="hpin">
       <div class="htrack" id="htrack">
         <div class="hcard hintro rv" style="--i:0">
-          <div class="bigt">THE CASE<br>FILES</div>
+          <h2 class="bigt">THE CASE<br>FILES</h2>
           <div class="fmeta">SEVEN FILES &middot; ONE MACHINE &middot; 2018&ndash;2026</div>
           <div class="hhint"><span class="hk">KEEP SCROLLING</span><span class="har">&#8595;</span><span class="hs">THE ROOM IS THROUGH HERE</span></div>
         </div>
 <div class="hcard hroom">
           <div id="mach-wrap">
-  <canvas id="mach-gl"></canvas>
+  <!-- THE CANVAS IS THE CONTROL, SO IT SAYS SO.
+       Everything inside the machine is already reachable from a keyboard — the seven icons
+       are <button>s, the close box is a button, the scroller takes focus — and none of it
+       could be reached, because the one door into it was a pointerup on an unlabelled canvas.
+       A reader on a keyboard, or on a screen reader, met a 3D render with no name and no way
+       in, and the whole archive was behind it. role, name and tabindex here; the Enter/Space
+       handler is in router.js beside the click it mirrors. -->
+  <canvas id="mach-gl" role="button" tabindex="0"
+          aria-label="Open the case files"></canvas>
   <div class="machcue">Click on the Screen</div>
 </div>
         </div>
@@ -1187,7 +1203,7 @@ padding:6px 13px;font-family:'JetBrains Mono',monospace;font-weight:700;font-siz
     </div>
   </div>
   <!-- NOTHING FOLLOWS THE MACHINE.
-     Oran, describing the reader's path: "the moment the machine is centred the scroll stops --
+     Oran, describing the reader's path: "the moment the machine is centred the scroll stops —
      there is no more going down, or sideways, or anything; there is only scrolling up to go
      back." That cannot be true while three things sit underneath it, so the three are gone:
 
@@ -1200,7 +1216,7 @@ padding:6px 13px;font-family:'JetBrains Mono',monospace;font-weight:700;font-siz
      I flagged the first two to him last round and did not touch them, because they are his
      words. This instruction settles it: he wants the document to end at the machine, and they
      were the only things stopping it. The <b id="archclock"> reader is guarded with if(ck),
-     and .ticker's two references both tolerate absence -- checked with tools/depends.py. -->
+     and .ticker's two references both tolerate absence — checked with tools/depends.py. -->
 </section>
 
 <section class="sec case" id="xtix" style="--fc:var(--emb)">
@@ -1210,7 +1226,7 @@ padding:6px 13px;font-family:'JetBrains Mono',monospace;font-weight:700;font-siz
       <div class="rub"><span class="d"></span>CASE STUDY 01</div>
       <div class="tok">FILE 01 &middot; INTAKE</div>
     </div>
-    <div class="sttl rv" style="--i:1">Building a Commercial Function From Zero</div>
+    <h2 class="sttl rv" style="--i:1">Building a Commercial Function From Zero</h2>
     <div class="smeta rv" style="--i:2">XTIX &middot; B2B SAAS &middot; TECH &middot; E-TICKETS PLATFORM</div>
     <div class="plabel rv" style="--i:2">PART 1 OF 2 &mdash; THE BUILD</div>
     <div class="folder rv" style="--i:3">
@@ -1273,7 +1289,7 @@ padding:6px 13px;font-family:'JetBrains Mono',monospace;font-weight:700;font-siz
       <div class="rub"><span class="d"></span>CASE STUDY 02</div>
       <div class="tok">FILE 02 &middot; COMMAND</div>
     </div>
-    <div class="sttl rv" style="--i:1">Building Leaders, Not Just Sales Teams</div>
+    <h2 class="sttl rv" style="--i:1">Building Leaders, Not Just Sales Teams</h2>
     <div class="smeta rv" style="--i:2">OASIS &middot; CEO &middot; SMART SHADING TECHNOLOGIES</div>
     <div class="plabel rv" style="--i:2">PART 1 OF 2 &mdash; THE MANDATE</div>
     <div class="folder rv" style="--i:3">
@@ -1328,7 +1344,7 @@ padding:6px 13px;font-family:'JetBrains Mono',monospace;font-weight:700;font-siz
       <div class="rub"><span class="d"></span>CASE STUDY 03</div>
       <div class="tok">FILE 03 &middot; SYNC</div>
     </div>
-    <div class="sttl rv" style="--i:1">Aligning Commercial Execution Across Teams</div>
+    <h2 class="sttl rv" style="--i:1">Aligning Commercial Execution Across Teams</h2>
     <div class="smeta rv" style="--i:2">EVENTER &middot; SAAS &middot; EVENT-TECH PLATFORM</div>
     <div class="folder rv" style="--i:3">
       <div class="tabrow"><div class="tA"><span class="nm">Eventer</span><span class="fl">&#9656; FILE 03</span></div></div>
@@ -1363,7 +1379,7 @@ padding:6px 13px;font-family:'JetBrains Mono',monospace;font-weight:700;font-siz
       <div class="rub"><span class="d"></span>CASE STUDY 04 · FOUNDER</div>
       <div class="tok">FILE 04 &middot; ORIGIN</div>
     </div>
-    <div class="sttl rv" style="--i:1">Building a Business From Vision</div>
+    <h2 class="sttl rv" style="--i:1">Building a Business From Vision</h2>
     <div class="smeta rv" style="--i:2">MEDCOIN TEKNOLOJI &middot; CRYPTO FINTECH &middot; FOUNDER</div>
     <div class="folder rv" style="--i:3">
       <div class="tabrow"><div class="tA"><span class="nm">Medcoin</span><span class="fl">&#9656; FILE 04</span></div></div>
@@ -2361,14 +2377,14 @@ body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:214748
 .lampband:focus-visible{outline:1px dashed rgba(242,241,237,.6);outline-offset:5px}
 /* lit: the bulb is the only light source left in a black-and-white file */
 /* lit: a UV tube glows violet, and its cone is violet too */
-.case .folder.lampon .lampband .lbody{stroke:#C3B2FF}
-.case .folder.lampon .lampband .lbulb{fill:#D9C9FF;filter:drop-shadow(0 0 7px rgba(150,110,255,.95))}
-.case .folder.lampon .lampband .lcone{opacity:1;animation:none}
-.case .folder.lampon .lampband .ls1{stop-color:#9E7BFF;stop-opacity:1}
-.case .folder.lampon .lampband .ls2{stop-color:#9E7BFF;stop-opacity:.32}
-.case .folder.lampon .lampband .ls3{stop-color:#9E7BFF;stop-opacity:0}
-.case .folder.lampon .lampband .lh1{stop-color:#D2BEFF;stop-opacity:.95}
-.case .folder.lampon .lampband .lh2{stop-color:#D2BEFF;stop-opacity:0}
+.case .uvmount.lampon .lampband .lbody{stroke:#C3B2FF}
+.case .uvmount.lampon .lampband .lbulb{fill:#D9C9FF;filter:drop-shadow(0 0 7px rgba(150,110,255,.95))}
+.case .uvmount.lampon .lampband .lcone{opacity:1;animation:none}
+.case .uvmount.lampon .lampband .ls1{stop-color:#9E7BFF;stop-opacity:1}
+.case .uvmount.lampon .lampband .ls2{stop-color:#9E7BFF;stop-opacity:.32}
+.case .uvmount.lampon .lampband .ls3{stop-color:#9E7BFF;stop-opacity:0}
+.case .uvmount.lampon .lampband .lh1{stop-color:#D2BEFF;stop-opacity:.95}
+.case .uvmount.lampon .lampband .lh2{stop-color:#D2BEFF;stop-opacity:0}
 /* the arrow is the sentence "press this" - drawn on, not decorative. Scaled to
    the new headline: it has to look like it belongs to 20px type, not to 13.5px */
 .lampwords{display:flex;flex-direction:column;align-items:flex-start;gap:2px;min-width:0;
@@ -2378,11 +2394,11 @@ body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:214748
   line-height:1.02;color:#FFFFFF;text-align:left;text-shadow:0 1px 2px rgba(0,0,0,.55);
   transition:color .6s}
 .lampband:hover .lampcall{color:#FFFFFF}
-.case .folder.lampon .lampcall{color:#CFC2FF}
+.case .uvmount.lampon .lampcall{color:#CFC2FF}
 /* kept, and now unmistakably subordinate: 20px against 8.5px */
 .lampsub{font-family:'JetBrains Mono',monospace;font-weight:600;font-size:8.5px;letter-spacing:.2em;
   line-height:1.2;color:#9EA0A6;transition:color .6s}
-.case .folder.lampon .lampsub{color:#6A6296}
+.case .uvmount.lampon .lampsub{color:#6A6296}
 /* a switch should say which way it is thrown. Fills the right end of a strip that
    runs the full width of the file, and turns the band into a control with state. */
 .lampstate{margin-left:auto;flex:none;position:relative;z-index:2;
@@ -3038,23 +3054,39 @@ loop, so `animation:none` had nothing to cancel. One static frame, then nothing.
    scrolls at all. 68vh, not 100: the top of the real content shows at the bottom edge, and a
    screen with nothing at all peeking off it reads as the end of a page rather than the start
    of one. */
-.doctitle{min-height:68vh;display:flex;flex-direction:column;align-items:center;
+/* THE CARD IS SIZED TO THE WINDOW, NOT TO THE VIEWPORT.
+   vh is the viewport, and this card lives inside a window that is inset 22 px, sits under a
+   44 px menu bar and a 38 px title bar, and is bordered: about 88 px shorter than the screen
+   on a laptop and 62 on a phone. So 68vh was 74% of the box it is actually in, and the peek of
+   real content underneath -- the entire reason the number is 68 and not 100 -- shrank to almost
+   nothing on a short window. --dth is the scroller's own height, written by paintCards(), and
+   the fallback keeps the card correct in the one frame before it is measured. */
+.doctitle{min-height:calc(var(--dth,100vh)*.68);display:flex;flex-direction:column;align-items:center;
   justify-content:center;gap:20px;text-align:center;padding:8px 16px 44px;
   position:relative;z-index:2}
+/* AND THEY ARE CENTRED ON THEIR INK, NOT ON THEIR ADVANCE.
+   letter-spacing adds its space after EVERY character, the last one included, so a tracked
+   label carries .34em of empty air on its right that the centring counts as part of the word.
+   The ink therefore sits half the tracking left of true centre -- 1.9 px here, 1.3 px on the
+   cue, against a 52 px rule that is centred exactly. Small, and visible precisely because the
+   rule under it is not wrong. .doctitle is a column flex with align-items:center, so the child
+   is centred on its OWN width: a negative right margin of exactly one tracking removes the
+   trailing space from that width and nothing else. */
 .doctitle .dt-no{font-family:'JetBrains Mono',ui-monospace,monospace;font-size:11px;
-  font-weight:700;letter-spacing:.34em;opacity:.9}
+  font-weight:700;letter-spacing:.34em;opacity:.9;margin-right:-.34em}
 /* pixelated AND max-width: the scale is chosen as a whole number to fit, and this is only the
    guard for a window narrower than the smallest whole number allows */
 .doctitle .dt-art{display:block;max-width:100%;height:auto;image-rendering:pixelated}
 .doctitle .dt-rule{width:52px;height:3px;opacity:.85}
 .doctitle .dt-cue{font-family:'JetBrains Mono',ui-monospace,monospace;font-size:9px;
-  font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:#7E8189}
+  font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:#7E8189;
+  margin-right:-.28em}
 @media (max-width:860px){
-  .doctitle{min-height:62vh;gap:15px;padding-bottom:32px}
-  .doctitle .dt-no{font-size:9.5px;letter-spacing:.26em}
-  .doctitle .dt-cue{font-size:8px;letter-spacing:.2em}
+  .doctitle{min-height:calc(var(--dth,100vh)*.62);gap:15px;padding-bottom:32px}
+  .doctitle .dt-no{font-size:9.5px;letter-spacing:.26em;margin-right:-.26em}
+  .doctitle .dt-cue{font-size:8px;letter-spacing:.2em;margin-right:-.2em}
 }
-@media (prefers-reduced-motion:reduce){.doctitle{min-height:46vh}}
+@media (prefers-reduced-motion:reduce){.doctitle{min-height:calc(var(--dth,100vh)*.46)}}
 
 /* WHAT THE LAB'S BODY RULE DID TO THE SITE.
    Extracted from the lab page, this block began with a height:100% on html and body and an
@@ -3077,6 +3109,13 @@ loop, so `animation:none` had nothing to cancel. One static frame, then nothing.
    down. image-rendering:pixelated throws that filtering away and hands back the aliased
    original. The 1-bit chrome wants hard pixels; nothing outside the window does. */
 .mw canvas{display:block;image-rendering:pixelated;image-rendering:crisp-edges}
+/* AND THIS RULE IS WHY THE SCROLLBAR WOULD NOT HIDE ON A PHONE.
+   `.mw-bar{display:none}` in the 860 query is one class; `.mw canvas{display:block}` is a
+   class and a type, which is more specific -- and the scroll bar IS a canvas inside .mw. So
+   the phone rule lost every time and 30 px of 1-bit chrome, 8% of a 375 px screen, stayed on
+   a device that has no pointer to drag it with. Stating the display here, where the winning
+   specificity already lives, is the fix; the query below keeps its comment and its intent. */
+@media(max-width:860px){.mw canvas.mw-bar{display:none}}
 .mw-menu{flex:none;width:100%;height:var(--mw-menu)}
 /* The 50 per cent checkerboard: a true 2 x 2 cell at the same whole scale the chrome uses,
    so one dither pixel is exactly 2 CSS pixels and matches the folder's raster. 45-degree
@@ -3148,7 +3187,12 @@ loop, so `animation:none` had nothing to cancel. One static frame, then nothing.
    =========================================================================================== */
 .mw-view .sec{min-height:0;height:auto;padding-left:0;padding-right:0}
 .mw-view .sec.case{padding-top:26px}
-.mw-view .secnum{position:static;display:block;margin:0 0 4px 26px}
+/* THE SECTION NUMBER IS NOW SAID TWICE. Every file opens on a card that reads FILE 01 in the
+   document's own colour; four lines below it the document's own 01 repeated the same fact in a
+   weaker voice. The card is the one that carries it, so this one stands down INSIDE the window
+   only -- on the scrolling page, where there is no card, the number is untouched and still the
+   210 px ghost it has always been. */
+.mw-view .secnum{display:none}
 
 /* THE REVEAL. Elements start at opacity 0 and are revealed against the PAGE viewport.
    Scrolling now happens inside the window, so opened cold a document rendered blank. The pass
@@ -3161,9 +3205,18 @@ loop, so `animation:none` had nothing to cancel. One static frame, then nothing.
    `.case` left that one document's folder permanently invisible while every case file was
    fine, which is exactly the way a treatment designed against XTIX fails on the two documents
    that are not XTIX. Both selectors, so both documents behave the same. */
-.mw-view .case .folder,.mw-view #leadership .folder{opacity:0;transform:translateY(26px);
+/* AND #final IS THE THIRD ONE. The site holds four ids down at opacity 0 --
+   `.case .folder,#philosophy .folder,#leadership .folder,#final .folder{opacity:0}` -- and this
+   override named two of them. #philosophy never enters the window, so it does not matter; #final
+   is FILE 07, READ ME, the last thing the reader opens and the only document whose whole body is
+   one folder. Its card was at opacity 0 for the entire visit. Nothing errored: an ID selector
+   simply outranked a class one, on the one document nobody built the treatment against.
+   That is the same failure as the LEADERSHIP note above, found the same way, one file later. */
+.mw-view .case .folder,.mw-view #leadership .folder,.mw-view #final .folder{
+  opacity:0;transform:translateY(26px);
   transition:opacity .8s var(--ease),transform .8s var(--ease)}
-.mw-view .case .folder.on,.mw-view #leadership .folder.on{opacity:1;transform:none}
+.mw-view .case .folder.on,.mw-view #leadership .folder.on,.mw-view #final .folder.on{
+  opacity:1;transform:none}
 .mw-view .u.on .garc,.mw-view .u.on .pdraw{stroke-dashoffset:0}
 .mw-view .u.on .ndot{opacity:1;transform:scale(1)}
 
@@ -3306,8 +3359,16 @@ html.mw-on{--mw-gap:calc(var(--mw-menu) + 16px)}
    inside the mask band that now begins at 10%. And the type is set to be read: 11px at .30em
    in near-white instead of 10px at .24em in emerald, which was the archive label voice used
    for the one line on this page that is an instruction. */
-.machcue{position:absolute;left:0;right:0;top:11%;text-align:center;
+/* text-indent, and it is the same trailing letter-space as the title card's labels: with
+   text-align:center a first-line indent moves the line right by half of itself, so an indent of
+   exactly one tracking cancels exactly one half-tracking of leftward drift. The line sits over a
+   26 px rule that is centred honestly, which is what makes 1.6 px visible. */
+/* and the door shows where it is when the reader is on a keyboard. Not :focus -- a click
+   would ring the machine every time; :focus-visible is exactly the case this is for. */
+#mach-gl:focus-visible{outline:2px solid var(--emb);outline-offset:4px;border-radius:2px}
+.machcue{position:absolute;left:0;right:0;top:11%;text-align:center;text-indent:.30em;
   padding:14px 20px;z-index:3;pointer-events:none;
+  transition:opacity .26s ease-out;
   font-family:'JetBrains Mono',ui-monospace,monospace;font-size:11px;font-weight:700;
   letter-spacing:.30em;text-transform:uppercase;color:#E7ECE9;opacity:1;
   background:radial-gradient(38% 300% at 50% 50%,
@@ -3317,13 +3378,21 @@ html.mw-on{--mw-gap:calc(var(--mw-menu) + 16px)}
 /* a short emerald rule under it, which is the archive's own mark for "this is live" and the
    only colour the line needs */
 .machcue::after{content:"";display:block;width:26px;height:2px;margin:9px auto 0;
-  background:var(--emb);opacity:.85}
+  background:var(--emb);opacity:.85;text-indent:0}
+/* AND IT STOPS TALKING ONCE IT HAS BEEN OBEYED. The reader clicks the screen; the machine
+   straightens, the folder opens on the CRT and the camera flies in -- and for all 1,540 ms of
+   that, an instruction to click the screen sat across the top of it in near-white, over the one
+   shot in the page that is meant to be watched. It leaves on the first beat, in a quarter of a
+   second, well before the zoom. Held out afterwards rather than removed: leaving the machine
+   restores it, because then it is true again. */
+html.mw-fly .machcue,html.mw-on .machcue{opacity:0}
+@media (prefers-reduced-motion:reduce){.machcue{transition:none}}
 /* the short room on a phone is 360-470px tall, so the same 11% is only ~50px down and the
    machine sits higher in a narrower frame. 7% keeps the same clear air in a third of the
    height, and the type comes down a step so it cannot run to the edges. */
 @media (max-width:860px){
   #mach-wrap{min-height:0}
-  .machcue{top:7%;font-size:9px;letter-spacing:.20em;padding:10px 14px}
+  .machcue{top:7%;font-size:9px;letter-spacing:.20em;text-indent:.20em;padding:10px 14px}
   .machcue::after{width:20px;margin-top:7px}
 }
 
@@ -3349,7 +3418,7 @@ html.mw-on .mw-view .lead, html.mw-on .mw-view .qx{cursor:url("data:image/svg+xm
       <div class="rub"><span class="d"></span>LEADERSHIP</div>
       <div class="tok">FILE 05 &middot; MANAGEMENT</div>
     </div>
-    <div class="sttl rv" style="--i:1">Building People. Building Systems.<br>Building Accountability.</div>
+    <h2 class="sttl rv" style="--i:1">Building People. Building Systems.<br>Building Accountability.</h2>
     <div class="folder rv" style="--i:2;margin-top:52px">
       <div class="tabrow"><div class="tA"><span class="nm">Leadership</span><span class="fl">&#9656; DOCTRINE</span></div></div>
       <div class="lead"><span class="rxs">Great leaders build people who <b>no longer depend on them</b>.</span></div>
@@ -3378,7 +3447,7 @@ html.mw-on .mw-view .lead, html.mw-on .mw-view .qx{cursor:url("data:image/svg+xm
       <div class="rub"><span class="d"></span>COMMERCIAL TECHNOLOGY &amp; AI</div>
       <div class="tok">FILE 06 &middot; SYSTEM</div>
     </div>
-    <div class="sttl rv" style="--i:1">How I use technology to improve<br>commercial decisions.</div>
+    <h2 class="sttl rv" style="--i:1">How I use technology to improve<br>commercial decisions.</h2>
     <div class="lead rv" style="--i:2;margin-top:22px"><span class="rxs">Technology should amplify commercial thinking &mdash; not replace it.</span> The platform I designed &amp; implemented:</div>
     <div class="intb rv" style="--i:3">AI BUILT FOR INTERNAL COMMERCIAL OPERATIONS &mdash; NOT A SELLABLE PRODUCT</div>
     <div class="archw u" style="margin-top:40px"><div class="zr"><b>A</b><span class="d2"></span>COMMERCIAL INTELLIGENCE PLATFORM &mdash; SYSTEM ARCHITECTURE</div><svg viewBox="0 0 872 100" style="width:100%;height:auto"><rect class="ndot" style="--i:0" x="4" y="30" width="112" height="30" rx="9" fill="#25262D" stroke="#2FB380" stroke-width="1.6"/><text x="60.0" y="49" text-anchor="middle" font-size="9.4" letter-spacing="1.2" fill="#F2F1ED">LEAD SOURCES</text><rect class="ndot" style="--i:1" x="148" y="30" width="104" height="30" rx="9" fill="#25262D" stroke="#2FB380" stroke-width="1.6"/><text x="200.0" y="49" text-anchor="middle" font-size="9.4" letter-spacing="1.2" fill="#F2F1ED">AI RESEARCH</text><rect class="ndot" style="--i:2" x="284" y="30" width="128" height="30" rx="9" fill="#25262D" stroke="#2FB380" stroke-width="1.6"/><text x="348.0" y="49" text-anchor="middle" font-size="9.4" letter-spacing="1.2" fill="#F2F1ED">KNOWLEDGE BASE</text><rect class="ndot" style="--i:3" x="444" y="30" width="130" height="30" rx="9" fill="#25262D" stroke="#2FB380" stroke-width="1.6"/><text x="509.0" y="49" text-anchor="middle" font-size="9.4" letter-spacing="1.2" fill="#F2F1ED">DECISION ENGINE</text><rect class="ndot" style="--i:4" x="606" y="30" width="172" height="30" rx="9" fill="#25262D" stroke="#2FB380" stroke-width="1.6"/><text x="692.0" y="49" text-anchor="middle" font-size="9.4" letter-spacing="1.2" fill="#F2F1ED">PERSONALIZED OUTREACH</text><rect class="ndot" style="--i:5" x="810" y="30" width="58" height="30" rx="9" fill="#25262D" stroke="#2FB380" stroke-width="1.6"/><text x="839.0" y="49" text-anchor="middle" font-size="9.4" letter-spacing="1.2" fill="#F2F1ED">CRM</text><line class="pdraw" pathLength="1" style="--i:0" x1="118" y1="45" x2="140" y2="45" stroke="#2FB380" stroke-width="1.6"/><path d="M147 45 l-6.5 -3.8 v7.6 z" fill="#2FB380"/><line class="pdraw" pathLength="1" style="--i:1" x1="254" y1="45" x2="276" y2="45" stroke="#2FB380" stroke-width="1.6"/><path d="M283 45 l-6.5 -3.8 v7.6 z" fill="#2FB380"/><line class="pdraw" pathLength="1" style="--i:2" x1="414" y1="45" x2="436" y2="45" stroke="#2FB380" stroke-width="1.6"/><path d="M443 45 l-6.5 -3.8 v7.6 z" fill="#2FB380"/><line class="pdraw" pathLength="1" style="--i:3" x1="576" y1="45" x2="598" y2="45" stroke="#2FB380" stroke-width="1.6"/><path d="M605 45 l-6.5 -3.8 v7.6 z" fill="#2FB380"/><line class="pdraw" pathLength="1" style="--i:4" x1="780" y1="45" x2="802" y2="45" stroke="#2FB380" stroke-width="1.6"/><path d="M809 45 l-6.5 -3.8 v7.6 z" fill="#2FB380"/><path class="crawlp" d="M839.0 60 C 839.0 94, 200.0 94, 200.0 62" fill="none" stroke="#B6B7BB" stroke-width="1.2" stroke-dasharray="3 4"/><text x="519.5" y="76" text-anchor="middle" font-size="7.6" letter-spacing="2" fill="#CFD0D4">LEARNING FEEDBACK &mdash; EVERY INTERACTION IMPROVES THE SYSTEM</text><circle class="hop h0" cx="118" cy="45" r="3.4" fill="#2FB380"/><circle class="hop h1" cx="254" cy="45" r="3.4" fill="#2FB380"/><circle class="hop h2" cx="414" cy="45" r="3.4" fill="#2FB380"/><circle class="hop h3" cx="576" cy="45" r="3.4" fill="#2FB380"/><circle class="hop h4" cx="780" cy="45" r="3.4" fill="#2FB380"/></svg></div>
@@ -3396,7 +3465,7 @@ html.mw-on .mw-view .lead, html.mw-on .mw-view .qx{cursor:url("data:image/svg+xm
       <div class="rub"><span class="d"></span>FINAL THOUGHTS</div>
       <div class="tok">FILE 07 &middot; PRINCIPLES</div>
     </div>
-    <div class="sttl rv" style="--i:1">The Builder’s Principles</div>
+    <h2 class="sttl rv" style="--i:1">The Builder’s Principles</h2>
     <div class="smeta rv" style="--i:1">NINE PRINCIPLES &middot; ONE OPERATING SYSTEM</div>
     <div class="folder rv" style="--i:2;margin-top:48px">
       <div class="tabrow"><div class="tA"><span class="nm">The Builder</span><span class="fl">&#9656; FILE 07</span></div></div>
@@ -4202,19 +4271,20 @@ function frame(){
     if(htrack&&!mob.matches){
       var span=hwH-vh;
       var hp=span>0?clamp((y-hwTop)/span):0;
-      /* SLOW START, SWEEP, SETTLE - and never a full stop. Round 38 held this at zero
-         for the first fifth of the pin to keep the room hidden, which worked and cost
-         341px of scrolling in which nothing on screen moved at all: the room was off
-         screen and the intro card was standing still. The room's absence is the job of
-         the 58vw of lead, not of a dead pan. The 0.22 term is the floor on the slope -
-         the intro card slides from the first pixel of scroll - and the pan completes at
-         80% so the last fifth is still a settle with the room square in the frame. */
-      /* 0.96, NOT 0.80. The pan used to finish four fifths of the way through the pin,
-         which left 356px of scrolling in which the reader pushed and nothing whatever moved,
-         and then the page ended. That is the "the scroll gets stuck there" in his note. It
-         finishes at 96% now: 71px of settle with the machine square in the frame, and then
-         the document is over, which is what he asked for. */
-      var hs=clamp(hp/0.96),hE=0.22*hs+0.78*(hs*hs*(3-2*hs));
+      /* SLOW START, SWEEP, SETTLE - and never a full stop, and never a dead zone either.
+         Twice before, this ended early and left the last stretch of the pin doing nothing:
+         at 80% that was 356px of scrolling in which the reader pushed and the screen did not
+         move, and the 0.96 that replaced it was the same fault made small rather than removed.
+         Both are gone; what follows is the curve that is actually here. */
+      /* ONE CURVE OVER THE WHOLE PIN, ENDING AT REST.
+         This was smoothstep(hp/0.96): a curve that reaches 1 at 96% of the pin and then a
+         dead 4% in which the reader pushes and nothing moves. The /0.96 was my own patch for
+         an earlier version that ended at 0.80, and it traded a large dead zone for a small
+         one instead of removing it. hE below is a cubic with f(0)=0, f(1)=1, f'(0)=0.22 and
+         f'(1)=0 exactly -- the same lead-in slope the old one had, a true zero at the end so
+         the pan settles rather than stopping, and no dead zone at all because it uses the
+         whole pin. f' > 0 throughout: its roots are at u=1 and u=-0.041. */
+      var hs=clamp(hp), hE=hs*(0.22+hs*(2.56-1.78*hs));
       if(!dragging){dragOff+=dragV;dragV*=.94;dragOff*=.90;if(Math.abs(dragOff)<.4)dragOff=0;}
       var X=hE*maxX+dragOff;
       var cw=window.innerWidth;
@@ -4457,7 +4527,8 @@ if(!frozen){
       var nmEl=card.querySelector('.hcat');
       cl.innerHTML='<span>'+(nmEl?nmEl.textContent:'FILE')+'</span>';
       document.body.appendChild(cl);
-      paper();
+      /* `paper()` stood here and threw, which is why this transition never ran: the clone was
+         appended and the two frames that expand it were never scheduled. */
       requestAnimationFrame(function(){requestAnimationFrame(function(){
         cl.style.left='0px';cl.style.top='0px';cl.style.width='100vw';cl.style.height='100vh';cl.style.borderRadius='0';
       })});
@@ -4469,7 +4540,6 @@ if(!frozen){
           Y=(oR.top+window.pageYOffset)+(otx.offsetHeight-innerHeight)*.88;
         }
         window.scrollTo({top:Y,left:0,behavior:'instant'});
-        flip();
         cl.style.opacity='0';
         setTimeout(function(){try{cl.remove()}catch(e){}},430);
       },560);
@@ -4575,9 +4645,10 @@ function loop(){
       if(Math.abs(tp-dnew)<.0012)dnew=tp;
       if(tp===th.lp&&dnew===th.disp)continue;
       th.disp=dnew;
-      var now=performance.now();
-      if(th.lp>-1&&th.lp<.04&&tp>=.04&&now-th.sndA>1200){th.sndA=now;paper();}
-      if(th.lp>-1&&th.lp<.5&&tp>=.5&&now-th.sndB>1200){th.sndB=now;flip();}
+      /* TWO SOUND CUES USED TO FIRE HERE, at 4% and at 50% of the pull, throttled 1200ms apart
+         by th.sndA and th.sndB. Sound is gone and so are the functions; the calls were still
+         being made, and a ReferenceError on this line is a ReferenceError inside loop(), which
+         re-arms itself on its own last line. The loop died at the first folder-pull. */
       th.lp=tp;
       var p=dnew;
       var cw=window.innerWidth;
@@ -4613,7 +4684,9 @@ function loop(){
       if(act>-1&&act!==logCur&&performance.now()>logHold){
         logCur=act;
         scrambleTo(logEl,'> '+logSecs[act].txt,420);
-        tick();
+        /* and `tick()` here, the archive clock's own updater -- it is declared inside
+           `if(ck){...}` for an #archclock that left with the HUD, so it was never in scope
+           from this block at all. Second landmine in the same loop. */
       }
     }
   }
@@ -4621,16 +4694,9 @@ function loop(){
 }
 if(!frozen)requestAnimationFrame(loop);
 
-/* stamp thunk when final CASE CLOSED reveals */
-if(!frozen&&'IntersectionObserver' in window){
-  var fin=document.querySelector('#final .folder');
-  if(fin){
-    var fio=new IntersectionObserver(function(es){
-      es.forEach(function(en){if(en.isIntersecting){thunk();fio.disconnect();}});
-    },{threshold:.5});
-    fio.observe(fin);
-  }
-}
+/* THE STAMP THUNK ON FILE 07 was an IntersectionObserver whose entire body was thunk() -- one
+   more call into the removed sound layer. It threw before fio.disconnect() on the next line, so
+   it never disconnected and threw again on every intersection. Nothing else was in it. */
 var qy=q.get('y');
 if(qy){
   var yv=parseInt(qy,10)||0;
@@ -5440,13 +5506,14 @@ CASES.forEach(function(id){
       '<span class="lampsub">'+OFFS+'</span></span>'+
       '<span class="lampstate" aria-hidden="true">OFF</span>'+
       '<span class="lampedge" aria-hidden="true"></span>';
+    var mount;
     (function(){
         /* R59: outside the folder, not inside it. In flow inside the folder the plate cost
            its own height and opened a large gap at the head of every file. A zero-height
            mount placed just before the folder lets it hang above the folder's top edge at no
            vertical cost - and a mount is used rather than position:absolute because absolute
            would need a `top` measured against furniture that differs in every folder. */
-        var mount=document.createElement('div');mount.className='uvmount';
+        mount=document.createElement('div');mount.className='uvmount';
         mount.appendChild(b);
         folder.parentNode.insertBefore(mount,folder);
       })();
@@ -5457,6 +5524,20 @@ CASES.forEach(function(id){
         b.addEventListener('click',function(){
       lit=!lit;
       folder.classList.toggle('lampon',lit);
+      /* AND THE PLATE, WHICH IS NO LONGER INSIDE THE FOLDER.
+         R59 moved the switch out of .folder and into a zero-height .uvmount placed BEFORE it,
+         to stop it opening a gap at the head of every file. Every armed-state rule was written
+         as `.case .folder.lampon .lampband ...` -- a DESCENDANT selector -- so the moment the
+         plate stopped being a descendant, all seventeen of them stopped matching. The folder
+         still went violet; the instrument the reader had just pressed did not change at all:
+         no lit bulb, no thrown rocker, no ON pill, no border. A switch that does not look
+         thrown reads as a switch that did not work.
+         The sibling rule written for this, `.folder.lampon+.uvmount`, cannot match either --
+         the mount is inserted BEFORE the folder, and + selects the one after. So the class
+         goes on the mount itself, which is the only element that is an ancestor of the plate
+         and knows the state. */
+      mount.classList.toggle('lampon',lit);
+      b.classList.toggle('on',lit);
       call.textContent=lit?ON:OFF;
       sub.textContent=lit?ONS:OFFS;
       if(st)st.textContent=lit?'ON':'OFF';
@@ -6493,10 +6574,18 @@ else{
 (function(){
   "use strict";
   var cv=document.getElementById('mach-gl');
-  /* preserveDrawingBuffer so the frame can be read back and measured. It costs a copy per
-     frame and is worth it: a render that cannot be measured can only be judged by looking,
-     which is how three builds in a row came out not close. */
-  var GLOPT={alpha:false,antialias:true,depth:true,preserveDrawingBuffer:true};
+  /* preserveDrawingBuffer so the frame can be read back and measured: a render that cannot be
+     measured can only be judged by looking, which is how three builds in a row came out not
+     close. BUT IT IS A COPY OF THE WHOLE COLOUR BUFFER, EVERY FRAME, AND NOTHING SHIPPED READS
+     IT. The only two callers are the harness's __shot and __sweep, both of which need
+     toDataURL; the page itself never reads a pixel back. At 1.75x on a 1512-wide screen that is
+     a 2646 x 1653 copy the compositor makes and throws away 60 times a second, on the same
+     device that is drawing 55,723 triangles. So the flag follows the same ?dbg=1 the geometry
+     keeps itself for -- the harness asks for it and gets it; a reader does not and does not pay
+     for it. (A synchronous frame() followed by readPixels in the same task still works without
+     it, which is how the measurements in this file are actually taken.) */
+  var GLOPT={alpha:false,antialias:true,depth:true,
+             preserveDrawingBuffer:/[?&]dbg=1/.test(location.search)};
   var gl=cv.getContext('webgl',GLOPT)||cv.getContext('experimental-webgl',GLOPT);
   /* the lab's on-screen readout is not shipped; the assignments are kept because one of
      them is the no-WebGL message, and a page that cannot render should say so rather
@@ -7459,7 +7548,15 @@ function decodeMach(b64, xform){
     gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE);
     gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE);
     gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.LINEAR_MIPMAP_LINEAR);
-    gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.LINEAR);
+    /* NEAREST ON MAGNIFICATION, AND THIS IS THE POP AT THE END OF THE ZOOM.
+       At the flight's last keyframe the 342-row raster covers about 1,346 device rows, so
+       every screen pixel is a bilinear blend of a 1-bit source -- soft. The shell that
+       fades in over it renders the same picture through image-rendering:pixelated -- hard.
+       The reader sees the resolution change at the exact moment of the handover, and reads
+       it as a jump. NEAREST makes the machine's own screen as hard as the window that
+       replaces it. Minification keeps its mipmaps: a 1-pixel checkerboard seen small is
+       the one case where filtering is the right answer. */
+    gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.NEAREST);
   }
 
   function screenTexture(){
@@ -7913,9 +8010,11 @@ function decodeMach(b64, xform){
     return L/FIT;
   };
   /* pass an [x,y,z] to aim there; pass nothing to put it back on the case. */
-  window.__camAim=function(a){
+  window.__camAim=function(a,quiet){
     if(a){ AIMX=a[0]; AIMY=a[1]; AIMZ=a[2]; } else { AIMX=AIMX0; AIMY=CY; AIMZ=CZ; }
-    frame();
+    /* quiet: the caller is about to set the camera too and will draw then. Without it the
+       flight drew the whole machine twice a frame -- see setCam in router.js. */
+    if(!quiet){ frame(); }
     return [AIMX,AIMY,AIMZ];
   };
   window.__parts=PARTS;
@@ -7925,6 +8024,15 @@ function decodeMach(b64, xform){
              .then(function(r){return r.text()});
   };
   window.__cam=function(y,p,d,f){
+    /* A SETTER MEANS SET. The release glide decays at 0.80 a frame, which is about 325ms of
+       coasting, and a click is admitted after only 6px of travel -- so a reader who flicked
+       the machine and then clicked had the glide still writing yaw for two thirds of the
+       straighten beat, fighting the flight for the same variable. Cancel it here, where
+       every caller already assumes it has. */
+    if(y!=null||p!=null||d!=null){
+      vYaw=0; vPitch=0;
+      if(raf){ cancelAnimationFrame(raf); raf=null; }
+    }
     if(y!=null)yaw=y; if(p!=null)pitch=p; if(d!=null)dist=d;
     if(f!=null){FOV=f; size();}
     frame();
@@ -9447,6 +9555,11 @@ function show(id) {
        sequence silently stalls there. Every draw below measures first, so there is nothing
        to wait for. */
     drawTitle(); drawDone(); drawBar();
+    /* and the title card, for the same reason as refitSheets on the next line: #win is
+       [hidden] until a file opens, so #view measured 0 x 0 on entry and the card was drawn
+       against the SCREEN's height instead of the window's. This is the first moment the
+       scroller has a size. */
+    paintCards();
     refitSheets(secOf(id));                /* the section was hidden; its stage cached a zero */
     queueReveal();                         /* the counter moves on OPEN, not on DONE */
     record(id);
@@ -9494,6 +9607,9 @@ cv("xbtn").onclick = shut;
 cv("done").onclick = shut;
 
 
+/* DRAW EVERYTHING AT THE SIZE IT IS NOW.
+   Called on entry (once the window is displayed and can be measured) and on every resize
+   after that. Both callers are guarded on mw-on, so this never measures a hidden box. */
 function relayout() {
   drawMenu(); drawFiles(); drawDone(); paintCards();
   if (openId) { drawTitle(); drawBar(); }
@@ -9642,6 +9758,11 @@ function paintCards() {
   var view = cv("view");
   var w = (view && view.clientWidth) || window.innerWidth || 900;
   var h = (view && view.clientHeight) || window.innerHeight || 700;
+  /* the card's height is a fraction of THIS box, not of the screen -- see .doctitle in
+     frame.css. Written on the root so the media queries can use the same number. */
+  if (view && view.clientHeight) {
+    document.documentElement.style.setProperty("--dth", view.clientHeight + "px");
+  }
   CARDS.forEach(function (c) {
     drawArcade(c.el.querySelector(".dt-art"), K.labels[c.id], c.rgb,
                Math.max(260, w), Math.max(220, h));
@@ -9683,8 +9804,57 @@ window.__shellInit = function () {
   if (typeof window.__folderInit === "function") { window.__folderInit(); }
 };
 window.addEventListener("resize", function () {
-  if (cv("mw") && cv("mw").offsetParent !== null) { relayout(); }
+  /* THIS GUARD COULD NEVER BE TRUE, AND SO THE SHELL HAS NEVER REDRAWN ITSELF.
+     offsetParent is null for a position:fixed element -- always, by specification, whether it
+     is on screen or not -- and `.mw` is `position:fixed;inset:0`. So the test read "is the
+     window laid out inside a positioned ancestor", which it is not and cannot be, and every
+     resize since this line was written has been dropped.
+
+     What that costs: all six pieces of 1-bit chrome are canvases drawn ONCE at the pixel size
+     they found at load. Measured: with the shell open at 1280 x 860 the title bar was a 300 px
+     raster stretched across 1236 CSS pixels, and calling relayout() by hand redrew it as a true
+     1236 -- the checkerboard had been smeared to four times its pitch on a page whose entire
+     claim is that one dither pixel is exactly two screen pixels. Rotate a phone, drag a window,
+     open the console: the Macintosh stops being drawn and starts being scaled. And because
+     paintCards() lives in this function, the title cards and --dth were never measured against
+     the window either -- which is the thread that led here.
+
+     The right question is the one the shell actually answers: is the reader inside the
+     machine. That is a class on <html>, it is what puts .mw on the screen in the first place,
+     and it needs no layout to read. */
+  if (document.documentElement.classList.contains("mw-on")) { relayout(); }
 });
+
+/* AND THE BOX IS WATCHED AS WELL AS THE EVENT.
+   The event is not quite what the shell depends on. Six canvases have to match the size of a
+   BOX, and a box can change size while the window does not: the phone browser's address bar
+   slides away, a zoom level changes, the reader's own text-size setting reflows the window's
+   insets, the document's media queries cross 860. A ResizeObserver on the scroller sees all of
+   those, and it also delivers once at registration -- which is the first moment the shell is
+   measurable at all, and so covers the load-time case where #view is still 0 x 0.
+
+   A redraw at a size already drawn is dropped: relayout() writes --dth on <html>, and a write
+   that reflowed the observed box would otherwise feed itself. Observer callbacks are already
+   delivered once per frame, so nothing else needs debouncing.
+
+   The listener above stays. Both are cheap, they cannot both be wrong in the same way, and on
+   this page a redraw that does not happen is not a slow frame -- it is a Macintosh drawn at
+   the wrong pitch. */
+(function () {
+  if (typeof ResizeObserver !== "function") { return; }
+  var target = cv("view");
+  if (!target) { return; }
+  var lastW = -1, lastH = -1;
+  var ro = new ResizeObserver(function () {
+    if (!document.documentElement.classList.contains("mw-on")) { return; }
+    var w = target.clientWidth, h = target.clientHeight;
+    if (!w || !h) { return; }                   /* the window is not on screen yet */
+    if (w === lastW && h === lastH) { return; }
+    lastW = w; lastH = h;
+    relayout();
+  });
+  ro.observe(target);
+})();
 
 /* ---------------------------------------------------------------- and do it now.
    The reader must not be able to scroll into a document. This is the line that stops them,
@@ -9928,8 +10098,13 @@ if (window.console && document.body) {
     return HOME || [0, 0.06, 0];
   }
   function setCam(yaw, pitch, dist, aim) {
+    /* THE AIM IS SET FIRST AND QUIETLY, THEN THE CAMERA DRAWS ONCE.
+       Both __cam and __camAim end in frame(), so this function was rendering 55,723
+       triangles twice per animation frame -- 62 draw calls where 31 will do -- on the one
+       beat in the whole page where the frame budget is tightest. Identical pixels either
+       way; the second draw only ever overwrote the first. */
+    if (aim && typeof window.__camAim === "function") { window.__camAim(aim, true); }
     window.__cam(yaw, pitch, dist, null);
-    if (aim && typeof window.__camAim === "function") { window.__camAim(aim); }
   }
 
   function fly(from, to, ms, then) {
@@ -9943,9 +10118,16 @@ if (window.console && document.body) {
     var t0 = performance.now();
     (function step(now) {
       var t = Math.min(1, (now - t0) / ms), k = ease(t);
+      /* DISTANCE IS INTERPOLATED IN LOG, NOT LINEARLY, AND THIS IS THE ZOOM HE KEEPS
+         CALLING UNSMOOTH. The leg falls from 5.90 to about 1.52 -- a 3.88x change -- and
+         perceived zoom goes as the RATIO, not the difference. Interpolated linearly, the
+         halfway point of the leg delivers only 34% of the perceived movement and the last
+         quarter delivers the rest in a rush. In log the halfway point is 50%: the object
+         grows at a constant rate, which is what a dolly does and what the eye expects.
+         Same endpoints, same duration, same easing -- only the space it is eased in. */
       setCam(from.yaw + (to.yaw - from.yaw) * k,
              from.pitch + (to.pitch - from.pitch) * k,
-             from.dist + (to.dist - from.dist) * k,
+             Math.exp(Math.log(from.dist) + (Math.log(to.dist) - Math.log(from.dist)) * k),
              [a0[0] + (a1[0] - a0[0]) * k,
               a0[1] + (a1[1] - a0[1]) * k,
               a0[2] + (a1[2] - a0[2]) * k]);
@@ -10012,6 +10194,7 @@ if (window.console && document.body) {
       return;
     }
     flying = true;
+    html.classList.add("mw-fly");          /* the cue stands down -- see .machcue in machine.css */
 
     /* AN ANIMATION MUST NEVER BE THE ONLY WAY IN.
      *
@@ -10026,6 +10209,7 @@ if (window.console && document.body) {
       if (arrived) { return; }
       arrived = true;
       flying = false;
+      html.classList.remove("mw-fly");
       html.classList.add("mw-on");
       if (typeof window.__shellInit === "function") { window.__shellInit(); }
       /* put the machine back where it was, unseen behind the shell, so leaving it does not land
@@ -10147,6 +10331,17 @@ if (window.console && document.body) {
       if (moved < 6) { window.__enterMachine(); }
     }, { passive: true });
     cv.addEventListener("pointercancel", function () { down = false; }, { passive: true });
+    /* AND THE SAME DOOR, FOR SOMEBODY WHO IS NOT HOLDING A MOUSE. The canvas carries
+       role="button" and a name (see machine/machine.html); a thing that announces itself as a
+       button has to answer Enter and Space, or it is a lie told to a screen reader. Space is
+       also the page's scroll key, so it is prevented here and only here -- on the one element
+       that has said it is a button. */
+    cv.addEventListener("keydown", function (e) {
+      if (e.key === "Enter" || e.key === " " || e.key === "Spacebar") {
+        e.preventDefault();
+        window.__enterMachine();
+      }
+    });
   })();
 
   /* out of it — the folder's own close box */

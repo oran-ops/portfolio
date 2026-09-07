@@ -3,10 +3,18 @@
 (function(){
   "use strict";
   var cv=document.getElementById('mach-gl');
-  /* preserveDrawingBuffer so the frame can be read back and measured. It costs a copy per
-     frame and is worth it: a render that cannot be measured can only be judged by looking,
-     which is how three builds in a row came out not close. */
-  var GLOPT={alpha:false,antialias:true,depth:true,preserveDrawingBuffer:true};
+  /* preserveDrawingBuffer so the frame can be read back and measured: a render that cannot be
+     measured can only be judged by looking, which is how three builds in a row came out not
+     close. BUT IT IS A COPY OF THE WHOLE COLOUR BUFFER, EVERY FRAME, AND NOTHING SHIPPED READS
+     IT. The only two callers are the harness's __shot and __sweep, both of which need
+     toDataURL; the page itself never reads a pixel back. At 1.75x on a 1512-wide screen that is
+     a 2646 x 1653 copy the compositor makes and throws away 60 times a second, on the same
+     device that is drawing 55,723 triangles. So the flag follows the same ?dbg=1 the geometry
+     keeps itself for -- the harness asks for it and gets it; a reader does not and does not pay
+     for it. (A synchronous frame() followed by readPixels in the same task still works without
+     it, which is how the measurements in this file are actually taken.) */
+  var GLOPT={alpha:false,antialias:true,depth:true,
+             preserveDrawingBuffer:/[?&]dbg=1/.test(location.search)};
   var gl=cv.getContext('webgl',GLOPT)||cv.getContext('experimental-webgl',GLOPT);
   /* the lab's on-screen readout is not shipped; the assignments are kept because one of
      them is the no-WebGL message, and a page that cannot render should say so rather
@@ -969,7 +977,15 @@ function decodeMach(b64, xform){
     gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE);
     gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE);
     gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.LINEAR_MIPMAP_LINEAR);
-    gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.LINEAR);
+    /* NEAREST ON MAGNIFICATION, AND THIS IS THE POP AT THE END OF THE ZOOM.
+       At the flight's last keyframe the 342-row raster covers about 1,346 device rows, so
+       every screen pixel is a bilinear blend of a 1-bit source -- soft. The shell that
+       fades in over it renders the same picture through image-rendering:pixelated -- hard.
+       The reader sees the resolution change at the exact moment of the handover, and reads
+       it as a jump. NEAREST makes the machine's own screen as hard as the window that
+       replaces it. Minification keeps its mipmaps: a 1-pixel checkerboard seen small is
+       the one case where filtering is the right answer. */
+    gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.NEAREST);
   }
 
   function screenTexture(){
@@ -1423,9 +1439,11 @@ function decodeMach(b64, xform){
     return L/FIT;
   };
   /* pass an [x,y,z] to aim there; pass nothing to put it back on the case. */
-  window.__camAim=function(a){
+  window.__camAim=function(a,quiet){
     if(a){ AIMX=a[0]; AIMY=a[1]; AIMZ=a[2]; } else { AIMX=AIMX0; AIMY=CY; AIMZ=CZ; }
-    frame();
+    /* quiet: the caller is about to set the camera too and will draw then. Without it the
+       flight drew the whole machine twice a frame -- see setCam in router.js. */
+    if(!quiet){ frame(); }
     return [AIMX,AIMY,AIMZ];
   };
   window.__parts=PARTS;
@@ -1435,6 +1453,15 @@ function decodeMach(b64, xform){
              .then(function(r){return r.text()});
   };
   window.__cam=function(y,p,d,f){
+    /* A SETTER MEANS SET. The release glide decays at 0.80 a frame, which is about 325ms of
+       coasting, and a click is admitted after only 6px of travel -- so a reader who flicked
+       the machine and then clicked had the glide still writing yaw for two thirds of the
+       straighten beat, fighting the flight for the same variable. Cancel it here, where
+       every caller already assumes it has. */
+    if(y!=null||p!=null||d!=null){
+      vYaw=0; vPitch=0;
+      if(raf){ cancelAnimationFrame(raf); raf=null; }
+    }
     if(y!=null)yaw=y; if(p!=null)pitch=p; if(d!=null)dist=d;
     if(f!=null){FOV=f; size();}
     frame();

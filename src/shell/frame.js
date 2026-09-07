@@ -1197,6 +1197,11 @@ function show(id) {
        sequence silently stalls there. Every draw below measures first, so there is nothing
        to wait for. */
     drawTitle(); drawDone(); drawBar();
+    /* and the title card, for the same reason as refitSheets on the next line: #win is
+       [hidden] until a file opens, so #view measured 0 x 0 on entry and the card was drawn
+       against the SCREEN's height instead of the window's. This is the first moment the
+       scroller has a size. */
+    paintCards();
     refitSheets(secOf(id));                /* the section was hidden; its stage cached a zero */
     queueReveal();                         /* the counter moves on OPEN, not on DONE */
     record(id);
@@ -1244,6 +1249,9 @@ cv("xbtn").onclick = shut;
 cv("done").onclick = shut;
 
 
+/* DRAW EVERYTHING AT THE SIZE IT IS NOW.
+   Called on entry (once the window is displayed and can be measured) and on every resize
+   after that. Both callers are guarded on mw-on, so this never measures a hidden box. */
 function relayout() {
   drawMenu(); drawFiles(); drawDone(); paintCards();
   if (openId) { drawTitle(); drawBar(); }
@@ -1392,6 +1400,11 @@ function paintCards() {
   var view = cv("view");
   var w = (view && view.clientWidth) || window.innerWidth || 900;
   var h = (view && view.clientHeight) || window.innerHeight || 700;
+  /* the card's height is a fraction of THIS box, not of the screen -- see .doctitle in
+     frame.css. Written on the root so the media queries can use the same number. */
+  if (view && view.clientHeight) {
+    document.documentElement.style.setProperty("--dth", view.clientHeight + "px");
+  }
   CARDS.forEach(function (c) {
     drawArcade(c.el.querySelector(".dt-art"), K.labels[c.id], c.rgb,
                Math.max(260, w), Math.max(220, h));
@@ -1433,8 +1446,57 @@ window.__shellInit = function () {
   if (typeof window.__folderInit === "function") { window.__folderInit(); }
 };
 window.addEventListener("resize", function () {
-  if (cv("mw") && cv("mw").offsetParent !== null) { relayout(); }
+  /* THIS GUARD COULD NEVER BE TRUE, AND SO THE SHELL HAS NEVER REDRAWN ITSELF.
+     offsetParent is null for a position:fixed element -- always, by specification, whether it
+     is on screen or not -- and `.mw` is `position:fixed;inset:0`. So the test read "is the
+     window laid out inside a positioned ancestor", which it is not and cannot be, and every
+     resize since this line was written has been dropped.
+
+     What that costs: all six pieces of 1-bit chrome are canvases drawn ONCE at the pixel size
+     they found at load. Measured: with the shell open at 1280 x 860 the title bar was a 300 px
+     raster stretched across 1236 CSS pixels, and calling relayout() by hand redrew it as a true
+     1236 -- the checkerboard had been smeared to four times its pitch on a page whose entire
+     claim is that one dither pixel is exactly two screen pixels. Rotate a phone, drag a window,
+     open the console: the Macintosh stops being drawn and starts being scaled. And because
+     paintCards() lives in this function, the title cards and --dth were never measured against
+     the window either -- which is the thread that led here.
+
+     The right question is the one the shell actually answers: is the reader inside the
+     machine. That is a class on <html>, it is what puts .mw on the screen in the first place,
+     and it needs no layout to read. */
+  if (document.documentElement.classList.contains("mw-on")) { relayout(); }
 });
+
+/* AND THE BOX IS WATCHED AS WELL AS THE EVENT.
+   The event is not quite what the shell depends on. Six canvases have to match the size of a
+   BOX, and a box can change size while the window does not: the phone browser's address bar
+   slides away, a zoom level changes, the reader's own text-size setting reflows the window's
+   insets, the document's media queries cross 860. A ResizeObserver on the scroller sees all of
+   those, and it also delivers once at registration -- which is the first moment the shell is
+   measurable at all, and so covers the load-time case where #view is still 0 x 0.
+
+   A redraw at a size already drawn is dropped: relayout() writes --dth on <html>, and a write
+   that reflowed the observed box would otherwise feed itself. Observer callbacks are already
+   delivered once per frame, so nothing else needs debouncing.
+
+   The listener above stays. Both are cheap, they cannot both be wrong in the same way, and on
+   this page a redraw that does not happen is not a slow frame -- it is a Macintosh drawn at
+   the wrong pitch. */
+(function () {
+  if (typeof ResizeObserver !== "function") { return; }
+  var target = cv("view");
+  if (!target) { return; }
+  var lastW = -1, lastH = -1;
+  var ro = new ResizeObserver(function () {
+    if (!document.documentElement.classList.contains("mw-on")) { return; }
+    var w = target.clientWidth, h = target.clientHeight;
+    if (!w || !h) { return; }                   /* the window is not on screen yet */
+    if (w === lastW && h === lastH) { return; }
+    lastW = w; lastH = h;
+    relayout();
+  });
+  ro.observe(target);
+})();
 
 /* ---------------------------------------------------------------- and do it now.
    The reader must not be able to scroll into a document. This is the line that stops them,

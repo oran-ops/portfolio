@@ -65,7 +65,10 @@ body.static .rv,body.static .rvs{opacity:1;transform:none;transition:none}
 .tok{display:inline-flex;align-items:center;gap:8px;font-family:'JetBrains Mono',monospace;font-weight:600;font-size:10px;letter-spacing:.16em;
 border:1px solid var(--grid);border-radius:7px;padding:7px 13px;color:var(--fc,var(--emb))}
 .shead{display:flex;justify-content:space-between;align-items:center;margin-bottom:26px}
-.sttl{font-weight:800;font-size:clamp(26px,3.6vw,40px);letter-spacing:-.028em;line-height:1.08}
+/* margin:0 because these are <h2> now. Every other UA default for a heading -- size,
+   weight, family, display -- was already written out here and at .sttl below, so the
+   margin is the whole difference between the element it was and the element it is. */
+.sttl{margin:0;font-weight:800;font-size:clamp(26px,3.6vw,40px);letter-spacing:-.028em;line-height:1.08}
 .smeta{margin-top:10px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.22em;color:var(--mut)}
 
 /* folder */
@@ -478,7 +481,10 @@ html.preopen #hero .hw{transform:perspective(1400px) translateY(11vh) rotateX(7d
 .htrack{display:flex;align-items:center;gap:5vw;padding:0 0 0 12vw;width:max-content;will-change:transform}
 .hcard{flex:0 0 auto}
 .hintro{width:34vw;min-width:300px}
-.hintro .bigt{font-weight:800;font-size:clamp(40px,5.6vw,72px);line-height:1;letter-spacing:-.03em;text-transform:uppercase}
+/* and margin:0 here for the same reason: THE CASE FILES is an <h2> now -- the title of
+   page 3, under the page's own h1 on page 2. It was already the largest type in this
+   section; it simply was not an element that said so. */
+.hintro .bigt{margin:0;font-weight:800;font-size:clamp(40px,5.6vw,72px);line-height:1;letter-spacing:-.03em;text-transform:uppercase}
 .hintro .fmeta{margin-top:16px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.2em;color:var(--mut)}
 .hhint{margin-top:26px;font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.26em;color:var(--lbl)}
 .hfolder{position:relative;width:56vw;max-width:720px;height:min(58vh,480px);background:var(--hc);
@@ -589,7 +595,7 @@ transform-origin:0 50%;will-change:transform;transform-style:preserve-3d;z-index
 background:var(--oc);
 background-image:linear-gradient(rgba(25,26,31,.30),rgba(25,26,31,.30)),
                  linear-gradient(270deg,rgba(25,26,31,.26),transparent 46%)}
-.oc-backf:before{content:"ROUTING 4 ARCHIVE C-01\A\A  RECEIVED     444444\A  REVIEWED     444444\A  RETURNED     444444\A\A  THIS FORM STAYS WITH THE FILE";
+.oc-backf:before{content:"ROUTING — ARCHIVE C-01\A\A  RECEIVED     ——————\A  REVIEWED     ——————\A  RETURNED     ——————\A\A  THIS FORM STAYS WITH THE FILE";
   white-space:pre;position:absolute;inset:34px 34px 34px 46px;border:1.5px solid rgba(25,26,31,.26);
   border-radius:10px;padding:22px 24px;font-family:'JetBrains Mono',monospace;font-weight:700;
   font-size:11px;line-height:2.05;letter-spacing:.16em;color:rgba(25,26,31,.52)}
@@ -895,17 +901,17 @@ body.static #clearance,body.static #idlecue,body.failsafe #clearance,body.failsa
 .lampband .swline{stroke:#9EA2AA;stroke-width:1.4;stroke-linecap:round;transition:stroke .32s}
 .lampband:hover{border-color:#5B5570;background:#232430!important}
 /* armed: the violet arrives all at once, and the rocker throws */
-.case .folder.lampon .lampband{background:#221E33!important;border-color:var(--uvv,#9E7BFF);
+.case .uvmount.lampon .lampband{background:#221E33!important;border-color:var(--uvv,#9E7BFF);
   box-shadow:0 0 0 1px rgba(158,123,255,.28),0 12px 30px rgba(120,88,235,.26)}
-.case .folder.lampon .lampband .lampnm{color:#E5DBFF}
-.case .folder.lampon .lampband .lampstate{color:var(--uvv,#9E7BFF);border-color:var(--uvv,#9E7BFF)}
-.case .folder.lampon .lampband .swp{stroke:#B9A4F5}
-.case .folder.lampon .lampband .swrock{fill:#8E75C8;stroke:#D8C9FF;transform:translateY(-4px)}
-.case .folder.lampon .lampband .swline{stroke:#2A2438}
-.case .folder.lampon .lampband .swscr{fill:#8A8FA0}
+.case .uvmount.lampon .lampband .lampnm{color:#E5DBFF}
+.case .uvmount.lampon .lampband .lampstate{color:var(--uvv,#9E7BFF);border-color:var(--uvv,#9E7BFF)}
+.case .uvmount.lampon .lampband .swp{stroke:#B9A4F5}
+.case .uvmount.lampon .lampband .swrock{fill:#8E75C8;stroke:#D8C9FF;transform:translateY(-4px)}
+.case .uvmount.lampon .lampband .swline{stroke:#2A2438}
+.case .uvmount.lampon .lampband .swscr{fill:#8A8FA0}
 @media (prefers-reduced-motion:reduce){
   .lampband .swrock{transition:none}
-  .case .folder.lampon .lampband .swrock{transform:none}
+  .case .uvmount.lampon .lampband .swrock{transform:none}
 }
 @media (max-width:680px){
   .lampband{padding:11px 13px 10px!important}
@@ -945,7 +951,9 @@ body.static #clearance,body.static #idlecue,body.failsafe #clearance,body.failsa
   background:linear-gradient(180deg,#31333F,#22232B)!important}
 .case .uvmount .lampband:active{--lift:2px;
   box-shadow:0 2px 7px rgba(0,0,0,.5),0 1px 0 rgba(255,255,255,.05) inset}
-.case .folder.lampon+.uvmount .lampband,
+/* was `.folder.lampon+.uvmount`, which selects the sibling AFTER the folder; the mount
+   is inserted before it. .on is set on the plate by the toggle. */
+.case .uvmount.lampon .lampband,
 .case .uvmount .lampband.on{border-color:var(--uvv,#9E7BFF)}
 @media (prefers-reduced-motion:reduce){
   .case .uvmount .lampband{transition:none}
@@ -1027,7 +1035,7 @@ body.static #clearance,body.static #idlecue,body.failsafe #clearance,body.failsa
         SCROLL TO OPEN
 
      Page 1 is the pinned statement and nothing else now: the neural net, the two sentences,
-     and then page 2. The #hero rules stay in the stylesheet -- cutting CSS for an element
+     and then page 2. The #hero rules stay in the stylesheet — cutting CSS for an element
      that no longer exists buys nothing and has broken things here before. -->
 
 </section>
@@ -1039,11 +1047,11 @@ body.static #clearance,body.static #idlecue,body.failsafe #clearance,body.failsa
       <div class="rub"><span class="d"></span>MY COMMERCIAL PHILOSOPHY</div>
       <div class="tok">THE OPERATING SYSTEM &#8250;</div>
     </div>
-    <div class="sttl rv" style="--i:1"><span class="ln">Every Business Is Different.</span><br><span class="ln g2">The Principles of Growth Are Not.</span></div>
+    <h1 class="sttl rv" style="--i:1"><span class="ln">Every Business Is Different.</span><br><span class="ln g2">The Principles of Growth Are Not.</span></h1>
     <div class="folder rv" style="--i:2;margin-top:56px">
       <div class="tabrow"><div class="tA"><span class="nm">Playbook</span><span class="fl">&#9656; MASTER FILE</span></div></div>
       <div class="frail"><span class="hole" style="top:76px"></span><span class="hole" style="top:114px"></span></div>
-      <div class="grid"><div class="rvs" style="--i:0"><div class="node"><svg viewBox="0 0 48 48"><path d="M6 40h36"/><path d="M6 40c6-1.5 9-5 10-9"/><circle cx="14.5" cy="15.5" r="3.4"/><path d="M14.5 18.9v7.6"/><path d="M14.5 21.5l4.4-2.2"/><path d="M14.5 21.5l-4 3"/><path d="M14.5 26.5l3.2 5.5"/><path d="M14.5 26.5l-2.6 6"/><path class="dsh" d="M21.5 14.5h14"/><circle class="f" cx="40" cy="14.5" r="2.6"/></svg></div><div class="snum">STEP 01</div><div class="sname">Vision</div><div class="sdesc">Define where the business is going.</div></div><div class="rvs" style="--i:1"><div class="node"><svg viewBox="0 0 48 48"><path d="M10 22l14-8 14 8"/><path d="M13 20.5V34c0 1.4 4.9 4 11 4s11-2.6 11-4V20.5"/><path d="M13 27c0 1.4 4.9 4 11 4s11-2.6 11-4"/><circle class="f" cx="24" cy="22.5" r="2"/><path class="dsh" d="M24 14V7"/></svg></div><div class="snum">STEP 02</div><div class="sname">Business Understanding</div><div class="sdesc">Understand the business before improving it.</div></div><div class="rvs" style="--i:2"><div class="node"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="17"/><circle class="dsh" cx="24" cy="24" r="9.5"/><path d="M24 24L35.5 12.5"/><circle class="f" cx="17" cy="28.5" r="2"/><circle class="f" cx="30" cy="31" r="2"/><circle class="f" cx="19" cy="15.5" r="2"/></svg></div><div class="snum">STEP 03</div><div class="sname">Market Understanding</div><div class="sdesc">Understand the customer before creating the message.</div></div><div class="rvs" style="--i:3"><div class="node"><svg viewBox="0 0 48 48"><path d="M8 40h32"/><rect x="11" y="30" width="9" height="10"/><rect x="21.5" y="24" width="9" height="16"/><path d="M37 40V12h-13"/><path d="M26 12l2.5 3.4"/><path class="dsh" d="M28.5 12v6"/><rect class="em" x="25.8" y="18" width="5.4" height="5"/></svg></div><div class="snum">STEP 04</div><div class="sname">Commercial Architecture</div><div class="sdesc">Build the commercial engine before scaling it.</div></div><div class="rvs" style="--i:4"><div class="node"><svg viewBox="0 0 48 48"><path d="M8 39.5h32"/><circle cx="13" cy="19" r="3.2"/><path d="M8.6 32c0-4 2-6.6 4.4-6.6s4.4 2.6 4.4 6.6"/><circle class="em" cx="24" cy="13.5" r="3.6"/><path class="em" d="M19 28c0-4.6 2.2-7.4 5-7.4s5 2.8 5 7.4"/><circle cx="35" cy="19" r="3.2"/><path d="M30.6 32c0-4 2-6.6 4.4-6.6s4.4 2.6 4.4 6.6"/><path class="dsh" d="M18.5 34.5h11"/></svg></div><div class="snum">STEP 05</div><div class="sname">People &amp; Leadership</div><div class="sdesc">Create ownership, not dependency.</div></div><div class="rvs" style="--i:5"><div class="node"><svg viewBox="0 0 48 48"><path class="dsh" d="M7 32c4 2 9 .8 9.8-2.4.6-2.6-3.4-3.4-4-.8-.7 3 4.6 4.6 9.2 2.8"/><path d="M24 30L42 11l-6.2 21-4.6-6.4-7.2 4.4z"/><path class="em" d="M31.2 25.6L42 11"/></svg></div><div class="snum">STEP 06</div><div class="sname">Execution</div><div class="sdesc">Turn strategy into consistent execution.</div></div><div class="rvs" style="--i:6"><div class="node"><svg viewBox="0 0 48 48"><path d="M9 39V9"/><path d="M9 39h30"/><path d="M9 31h3M9 23h3M9 15h3"/><path d="M14 33l7-6 6 3.6 10-11"/><circle class="f" cx="37" cy="19.6" r="2.4"/><path class="dsh" d="M37 17V9.5"/></svg></div><div class="snum">STEP 07</div><div class="sname">Measurement</div><div class="sdesc">Measure decisions, not assumptions.</div></div><div class="rvs" style="--i:7"><div class="node"><svg viewBox="0 0 48 48"><path d="M37 27a13 13 0 1 1-4.6-9.9"/><path class="em" d="M31 9.5L39.5 9l.5 8.5"/><path class="em" d="M39.5 9L31.8 16.8"/><circle class="f" cx="24" cy="27" r="1.8"/></svg></div><div class="snum">STEP 08</div><div class="sname">Continuous Improvement</div><div class="sdesc">Learn faster than the market evolves.</div></div></div>
+      <div class="grid"><div class="rvs" style="--i:0"><div class="node"><svg viewBox="0 0 48 48" aria-hidden="true" focusable="false"><path d="M6 40h36"/><path d="M6 40c6-1.5 9-5 10-9"/><circle cx="14.5" cy="15.5" r="3.4"/><path d="M14.5 18.9v7.6"/><path d="M14.5 21.5l4.4-2.2"/><path d="M14.5 21.5l-4 3"/><path d="M14.5 26.5l3.2 5.5"/><path d="M14.5 26.5l-2.6 6"/><path class="dsh" d="M21.5 14.5h14"/><circle class="f" cx="40" cy="14.5" r="2.6"/></svg></div><div class="snum">STEP 01</div><div class="sname">Vision</div><div class="sdesc">Define where the business is going.</div></div><div class="rvs" style="--i:1"><div class="node"><svg viewBox="0 0 48 48" aria-hidden="true" focusable="false"><path d="M10 22l14-8 14 8"/><path d="M13 20.5V34c0 1.4 4.9 4 11 4s11-2.6 11-4V20.5"/><path d="M13 27c0 1.4 4.9 4 11 4s11-2.6 11-4"/><circle class="f" cx="24" cy="22.5" r="2"/><path class="dsh" d="M24 14V7"/></svg></div><div class="snum">STEP 02</div><div class="sname">Business Understanding</div><div class="sdesc">Understand the business before improving it.</div></div><div class="rvs" style="--i:2"><div class="node"><svg viewBox="0 0 48 48" aria-hidden="true" focusable="false"><circle cx="24" cy="24" r="17"/><circle class="dsh" cx="24" cy="24" r="9.5"/><path d="M24 24L35.5 12.5"/><circle class="f" cx="17" cy="28.5" r="2"/><circle class="f" cx="30" cy="31" r="2"/><circle class="f" cx="19" cy="15.5" r="2"/></svg></div><div class="snum">STEP 03</div><div class="sname">Market Understanding</div><div class="sdesc">Understand the customer before creating the message.</div></div><div class="rvs" style="--i:3"><div class="node"><svg viewBox="0 0 48 48" aria-hidden="true" focusable="false"><path d="M8 40h32"/><rect x="11" y="30" width="9" height="10"/><rect x="21.5" y="24" width="9" height="16"/><path d="M37 40V12h-13"/><path d="M26 12l2.5 3.4"/><path class="dsh" d="M28.5 12v6"/><rect class="em" x="25.8" y="18" width="5.4" height="5"/></svg></div><div class="snum">STEP 04</div><div class="sname">Commercial Architecture</div><div class="sdesc">Build the commercial engine before scaling it.</div></div><div class="rvs" style="--i:4"><div class="node"><svg viewBox="0 0 48 48" aria-hidden="true" focusable="false"><path d="M8 39.5h32"/><circle cx="13" cy="19" r="3.2"/><path d="M8.6 32c0-4 2-6.6 4.4-6.6s4.4 2.6 4.4 6.6"/><circle class="em" cx="24" cy="13.5" r="3.6"/><path class="em" d="M19 28c0-4.6 2.2-7.4 5-7.4s5 2.8 5 7.4"/><circle cx="35" cy="19" r="3.2"/><path d="M30.6 32c0-4 2-6.6 4.4-6.6s4.4 2.6 4.4 6.6"/><path class="dsh" d="M18.5 34.5h11"/></svg></div><div class="snum">STEP 05</div><div class="sname">People &amp; Leadership</div><div class="sdesc">Create ownership, not dependency.</div></div><div class="rvs" style="--i:5"><div class="node"><svg viewBox="0 0 48 48" aria-hidden="true" focusable="false"><path class="dsh" d="M7 32c4 2 9 .8 9.8-2.4.6-2.6-3.4-3.4-4-.8-.7 3 4.6 4.6 9.2 2.8"/><path d="M24 30L42 11l-6.2 21-4.6-6.4-7.2 4.4z"/><path class="em" d="M31.2 25.6L42 11"/></svg></div><div class="snum">STEP 06</div><div class="sname">Execution</div><div class="sdesc">Turn strategy into consistent execution.</div></div><div class="rvs" style="--i:6"><div class="node"><svg viewBox="0 0 48 48" aria-hidden="true" focusable="false"><path d="M9 39V9"/><path d="M9 39h30"/><path d="M9 31h3M9 23h3M9 15h3"/><path d="M14 33l7-6 6 3.6 10-11"/><circle class="f" cx="37" cy="19.6" r="2.4"/><path class="dsh" d="M37 17V9.5"/></svg></div><div class="snum">STEP 07</div><div class="sname">Measurement</div><div class="sdesc">Measure decisions, not assumptions.</div></div><div class="rvs" style="--i:7"><div class="node"><svg viewBox="0 0 48 48" aria-hidden="true" focusable="false"><path d="M37 27a13 13 0 1 1-4.6-9.9"/><path class="em" d="M31 9.5L39.5 9l.5 8.5"/><path class="em" d="M39.5 9L31.8 16.8"/><circle class="f" cx="24" cy="27" r="1.8"/></svg></div><div class="snum">STEP 08</div><div class="sname">Continuous Improvement</div><div class="sdesc">Learn faster than the market evolves.</div></div></div>
     </div>
     <div class="sigp rv" style="--i:3">
       <div class="qx">First build a system that works. <b>Then build a business that scales.</b></div>
@@ -1119,7 +1127,7 @@ display:flex;align-items:center;padding:0 13px;font-family:'JetBrains Mono',mono
     <div class="hpin" id="hpin">
       <div class="htrack" id="htrack">
         <div class="hcard hintro rv" style="--i:0">
-          <div class="bigt">THE CASE<br>FILES</div>
+          <h2 class="bigt">THE CASE<br>FILES</h2>
           <div class="fmeta">SEVEN FILES &middot; ONE MACHINE &middot; 2018&ndash;2026</div>
           <div class="hhint"><span class="hk">KEEP SCROLLING</span><span class="har">&#8595;</span><span class="hs">THE ROOM IS THROUGH HERE</span></div>
         </div>
@@ -1131,7 +1139,7 @@ display:flex;align-items:center;padding:0 13px;font-family:'JetBrains Mono',mono
     </div>
   </div>
   <!-- NOTHING FOLLOWS THE MACHINE.
-     Oran, describing the reader's path: "the moment the machine is centred the scroll stops --
+     Oran, describing the reader's path: "the moment the machine is centred the scroll stops —
      there is no more going down, or sideways, or anything; there is only scrolling up to go
      back." That cannot be true while three things sit underneath it, so the three are gone:
 
@@ -1144,7 +1152,7 @@ display:flex;align-items:center;padding:0 13px;font-family:'JetBrains Mono',mono
      I flagged the first two to him last round and did not touch them, because they are his
      words. This instruction settles it: he wants the document to end at the machine, and they
      were the only things stopping it. The <b id="archclock"> reader is guarded with if(ck),
-     and .ticker's two references both tolerate absence -- checked with tools/depends.py. -->
+     and .ticker's two references both tolerate absence — checked with tools/depends.py. -->
 </section>
 
 <!--DOC:xtix-->
@@ -1783,14 +1791,14 @@ body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:214748
 .lampband:focus-visible{outline:1px dashed rgba(242,241,237,.6);outline-offset:5px}
 /* lit: the bulb is the only light source left in a black-and-white file */
 /* lit: a UV tube glows violet, and its cone is violet too */
-.case .folder.lampon .lampband .lbody{stroke:#C3B2FF}
-.case .folder.lampon .lampband .lbulb{fill:#D9C9FF;filter:drop-shadow(0 0 7px rgba(150,110,255,.95))}
-.case .folder.lampon .lampband .lcone{opacity:1;animation:none}
-.case .folder.lampon .lampband .ls1{stop-color:#9E7BFF;stop-opacity:1}
-.case .folder.lampon .lampband .ls2{stop-color:#9E7BFF;stop-opacity:.32}
-.case .folder.lampon .lampband .ls3{stop-color:#9E7BFF;stop-opacity:0}
-.case .folder.lampon .lampband .lh1{stop-color:#D2BEFF;stop-opacity:.95}
-.case .folder.lampon .lampband .lh2{stop-color:#D2BEFF;stop-opacity:0}
+.case .uvmount.lampon .lampband .lbody{stroke:#C3B2FF}
+.case .uvmount.lampon .lampband .lbulb{fill:#D9C9FF;filter:drop-shadow(0 0 7px rgba(150,110,255,.95))}
+.case .uvmount.lampon .lampband .lcone{opacity:1;animation:none}
+.case .uvmount.lampon .lampband .ls1{stop-color:#9E7BFF;stop-opacity:1}
+.case .uvmount.lampon .lampband .ls2{stop-color:#9E7BFF;stop-opacity:.32}
+.case .uvmount.lampon .lampband .ls3{stop-color:#9E7BFF;stop-opacity:0}
+.case .uvmount.lampon .lampband .lh1{stop-color:#D2BEFF;stop-opacity:.95}
+.case .uvmount.lampon .lampband .lh2{stop-color:#D2BEFF;stop-opacity:0}
 /* the arrow is the sentence "press this" - drawn on, not decorative. Scaled to
    the new headline: it has to look like it belongs to 20px type, not to 13.5px */
 .lampwords{display:flex;flex-direction:column;align-items:flex-start;gap:2px;min-width:0;
@@ -1800,11 +1808,11 @@ body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:214748
   line-height:1.02;color:#FFFFFF;text-align:left;text-shadow:0 1px 2px rgba(0,0,0,.55);
   transition:color .6s}
 .lampband:hover .lampcall{color:#FFFFFF}
-.case .folder.lampon .lampcall{color:#CFC2FF}
+.case .uvmount.lampon .lampcall{color:#CFC2FF}
 /* kept, and now unmistakably subordinate: 20px against 8.5px */
 .lampsub{font-family:'JetBrains Mono',monospace;font-weight:600;font-size:8.5px;letter-spacing:.2em;
   line-height:1.2;color:#9EA0A6;transition:color .6s}
-.case .folder.lampon .lampsub{color:#6A6296}
+.case .uvmount.lampon .lampsub{color:#6A6296}
 /* a switch should say which way it is thrown. Fills the right end of a strip that
    runs the full width of the file, and turns the band into a control with state. */
 .lampstate{margin-left:auto;flex:none;position:relative;z-index:2;
@@ -3203,19 +3211,20 @@ function frame(){
     if(htrack&&!mob.matches){
       var span=hwH-vh;
       var hp=span>0?clamp((y-hwTop)/span):0;
-      /* SLOW START, SWEEP, SETTLE - and never a full stop. Round 38 held this at zero
-         for the first fifth of the pin to keep the room hidden, which worked and cost
-         341px of scrolling in which nothing on screen moved at all: the room was off
-         screen and the intro card was standing still. The room's absence is the job of
-         the 58vw of lead, not of a dead pan. The 0.22 term is the floor on the slope -
-         the intro card slides from the first pixel of scroll - and the pan completes at
-         80% so the last fifth is still a settle with the room square in the frame. */
-      /* 0.96, NOT 0.80. The pan used to finish four fifths of the way through the pin,
-         which left 356px of scrolling in which the reader pushed and nothing whatever moved,
-         and then the page ended. That is the "the scroll gets stuck there" in his note. It
-         finishes at 96% now: 71px of settle with the machine square in the frame, and then
-         the document is over, which is what he asked for. */
-      var hs=clamp(hp/0.96),hE=0.22*hs+0.78*(hs*hs*(3-2*hs));
+      /* SLOW START, SWEEP, SETTLE - and never a full stop, and never a dead zone either.
+         Twice before, this ended early and left the last stretch of the pin doing nothing:
+         at 80% that was 356px of scrolling in which the reader pushed and the screen did not
+         move, and the 0.96 that replaced it was the same fault made small rather than removed.
+         Both are gone; what follows is the curve that is actually here. */
+      /* ONE CURVE OVER THE WHOLE PIN, ENDING AT REST.
+         This was smoothstep(hp/0.96): a curve that reaches 1 at 96% of the pin and then a
+         dead 4% in which the reader pushes and nothing moves. The /0.96 was my own patch for
+         an earlier version that ended at 0.80, and it traded a large dead zone for a small
+         one instead of removing it. hE below is a cubic with f(0)=0, f(1)=1, f'(0)=0.22 and
+         f'(1)=0 exactly -- the same lead-in slope the old one had, a true zero at the end so
+         the pan settles rather than stopping, and no dead zone at all because it uses the
+         whole pin. f' > 0 throughout: its roots are at u=1 and u=-0.041. */
+      var hs=clamp(hp), hE=hs*(0.22+hs*(2.56-1.78*hs));
       if(!dragging){dragOff+=dragV;dragV*=.94;dragOff*=.90;if(Math.abs(dragOff)<.4)dragOff=0;}
       var X=hE*maxX+dragOff;
       var cw=window.innerWidth;
@@ -3458,7 +3467,8 @@ if(!frozen){
       var nmEl=card.querySelector('.hcat');
       cl.innerHTML='<span>'+(nmEl?nmEl.textContent:'FILE')+'</span>';
       document.body.appendChild(cl);
-      paper();
+      /* `paper()` stood here and threw, which is why this transition never ran: the clone was
+         appended and the two frames that expand it were never scheduled. */
       requestAnimationFrame(function(){requestAnimationFrame(function(){
         cl.style.left='0px';cl.style.top='0px';cl.style.width='100vw';cl.style.height='100vh';cl.style.borderRadius='0';
       })});
@@ -3470,7 +3480,6 @@ if(!frozen){
           Y=(oR.top+window.pageYOffset)+(otx.offsetHeight-innerHeight)*.88;
         }
         window.scrollTo({top:Y,left:0,behavior:'instant'});
-        flip();
         cl.style.opacity='0';
         setTimeout(function(){try{cl.remove()}catch(e){}},430);
       },560);
@@ -3576,9 +3585,10 @@ function loop(){
       if(Math.abs(tp-dnew)<.0012)dnew=tp;
       if(tp===th.lp&&dnew===th.disp)continue;
       th.disp=dnew;
-      var now=performance.now();
-      if(th.lp>-1&&th.lp<.04&&tp>=.04&&now-th.sndA>1200){th.sndA=now;paper();}
-      if(th.lp>-1&&th.lp<.5&&tp>=.5&&now-th.sndB>1200){th.sndB=now;flip();}
+      /* TWO SOUND CUES USED TO FIRE HERE, at 4% and at 50% of the pull, throttled 1200ms apart
+         by th.sndA and th.sndB. Sound is gone and so are the functions; the calls were still
+         being made, and a ReferenceError on this line is a ReferenceError inside loop(), which
+         re-arms itself on its own last line. The loop died at the first folder-pull. */
       th.lp=tp;
       var p=dnew;
       var cw=window.innerWidth;
@@ -3614,7 +3624,9 @@ function loop(){
       if(act>-1&&act!==logCur&&performance.now()>logHold){
         logCur=act;
         scrambleTo(logEl,'> '+logSecs[act].txt,420);
-        tick();
+        /* and `tick()` here, the archive clock's own updater -- it is declared inside
+           `if(ck){...}` for an #archclock that left with the HUD, so it was never in scope
+           from this block at all. Second landmine in the same loop. */
       }
     }
   }
@@ -3622,16 +3634,9 @@ function loop(){
 }
 if(!frozen)requestAnimationFrame(loop);
 
-/* stamp thunk when final CASE CLOSED reveals */
-if(!frozen&&'IntersectionObserver' in window){
-  var fin=document.querySelector('#final .folder');
-  if(fin){
-    var fio=new IntersectionObserver(function(es){
-      es.forEach(function(en){if(en.isIntersecting){thunk();fio.disconnect();}});
-    },{threshold:.5});
-    fio.observe(fin);
-  }
-}
+/* THE STAMP THUNK ON FILE 07 was an IntersectionObserver whose entire body was thunk() -- one
+   more call into the removed sound layer. It threw before fio.disconnect() on the next line, so
+   it never disconnected and threw again on every intersection. Nothing else was in it. */
 var qy=q.get('y');
 if(qy){
   var yv=parseInt(qy,10)||0;
@@ -4441,13 +4446,14 @@ CASES.forEach(function(id){
       '<span class="lampsub">'+OFFS+'</span></span>'+
       '<span class="lampstate" aria-hidden="true">OFF</span>'+
       '<span class="lampedge" aria-hidden="true"></span>';
+    var mount;
     (function(){
         /* R59: outside the folder, not inside it. In flow inside the folder the plate cost
            its own height and opened a large gap at the head of every file. A zero-height
            mount placed just before the folder lets it hang above the folder's top edge at no
            vertical cost - and a mount is used rather than position:absolute because absolute
            would need a `top` measured against furniture that differs in every folder. */
-        var mount=document.createElement('div');mount.className='uvmount';
+        mount=document.createElement('div');mount.className='uvmount';
         mount.appendChild(b);
         folder.parentNode.insertBefore(mount,folder);
       })();
@@ -4458,6 +4464,20 @@ CASES.forEach(function(id){
         b.addEventListener('click',function(){
       lit=!lit;
       folder.classList.toggle('lampon',lit);
+      /* AND THE PLATE, WHICH IS NO LONGER INSIDE THE FOLDER.
+         R59 moved the switch out of .folder and into a zero-height .uvmount placed BEFORE it,
+         to stop it opening a gap at the head of every file. Every armed-state rule was written
+         as `.case .folder.lampon .lampband ...` -- a DESCENDANT selector -- so the moment the
+         plate stopped being a descendant, all seventeen of them stopped matching. The folder
+         still went violet; the instrument the reader had just pressed did not change at all:
+         no lit bulb, no thrown rocker, no ON pill, no border. A switch that does not look
+         thrown reads as a switch that did not work.
+         The sibling rule written for this, `.folder.lampon+.uvmount`, cannot match either --
+         the mount is inserted BEFORE the folder, and + selects the one after. So the class
+         goes on the mount itself, which is the only element that is an ancestor of the plate
+         and knows the state. */
+      mount.classList.toggle('lampon',lit);
+      b.classList.toggle('on',lit);
       call.textContent=lit?ON:OFF;
       sub.textContent=lit?ONS:OFFS;
       if(st)st.textContent=lit?'ON':'OFF';

@@ -208,6 +208,69 @@ def main():
         except OSError:
             pass
 
+    # CHECK 13: nothing may CALL a function the page never defines.
+    #
+    # CHECK 12 proves each block parses. Parsing is not resolving. Sound was removed from this
+    # page and its functions went with it -- paper(), flip(), thunk() -- while the CALLS
+    # stayed, along with tick(), whose definition left with the HUD. Five of them. Every one
+    # parses perfectly and throws ReferenceError the moment it runs, and two were inside
+    # loop(), the page's main requestAnimationFrame body, which re-arms itself on its own last
+    # line: the first folder-pull past 4% of its travel killed the scroll loop for the rest of
+    # the visit. It shipped, and every check we had called the build clean.
+    #
+    # This models no scope, deliberately. A name declared anywhere in the page counts as
+    # declared, so the check under-reports and can never cry wolf. What it does catch is the
+    # exact shape of the fault above: code deleted, call sites left behind.
+    JS_GLOBALS = set('''
+        window document console Math JSON Date Object Array String Number Boolean RegExp Error
+        TypeError RangeError SyntaxError Promise Set Map WeakMap WeakSet Symbol Function
+        parseInt parseFloat isNaN isFinite encodeURIComponent decodeURIComponent encodeURI
+        decodeURI setTimeout setInterval clearTimeout clearInterval requestAnimationFrame
+        cancelAnimationFrame matchMedia getComputedStyle fetch Image Audio Uint8Array
+        Uint8ClampedArray Uint16Array Uint32Array Int8Array Int16Array Int32Array Float32Array
+        Float64Array ArrayBuffer DataView atob btoa IntersectionObserver ResizeObserver
+        MutationObserver PerformanceObserver performance navigator location history screen
+        localStorage sessionStorage CustomEvent Event KeyboardEvent PointerEvent MouseEvent
+        URL URLSearchParams Blob FileReader TextDecoder TextEncoder Intl Proxy Reflect
+        structuredClone queueMicrotask AbortController DOMParser XMLHttpRequest WebSocket
+        addEventListener removeEventListener dispatchEvent scrollTo scrollBy getSelection
+        if for while switch return typeof new delete void in of instanceof do else try catch
+        finally throw break continue case default class extends super this function var let
+        const yield await async static get set eval arguments
+    '''.split())
+    # ONE left-to-right pass over strings and comments together, so a quote inside another
+    # kind of quote cannot open a string of its own -- which it did on my first attempt, and
+    # the machine's GLSL leaked out of a single-quoted literal and reported nine of its own
+    # functions as missing.
+    NOISE = re.compile(r'"(?:[^"\\]|\\.)*"' r"|'(?:[^'\\]|\\.)*'" r'|`(?:[^`\\]|\\.)*`'
+                       r'|/\*.*?\*/|//[^\n]*', re.S)
+    js = NOISE.sub(' ', '\n;\n'.join(blocks))
+    declared = set()
+    for pat in (r'\bfunction\s+([A-Za-z_$][\w$]*)',
+                r'\b(?:var|let|const)\s+([A-Za-z_$][\w$]*)',
+                r'([A-Za-z_$][\w$]*)\s*=\s*function',
+                r'window\.([A-Za-z_$][\w$]*)\s*=',
+                r'\bcatch\s*\(\s*([A-Za-z_$][\w$]*)',
+                r'\bfunction\b[^(]*\(([^)]*)\)'):
+        for m in re.finditer(pat, js):
+            for part in re.split(r'[,\s]+', m.group(1)):
+                if re.match(r'^[A-Za-z_$][\w$]*$', part or ''):
+                    declared.add(part)
+    for m in re.finditer(r'\b(?:var|let|const)\s+([^;\n{]{0,400})', js):
+        for part in re.findall(r'([A-Za-z_$][\w$]*)\s*(?==|,|$)', m.group(1)):
+            declared.add(part)
+    ghosts = {}
+    for m in re.finditer(r'(?<![.\w$])([A-Za-z_$][\w$]*)\s*\(', js):
+        name = m.group(1)
+        if name not in JS_GLOBALS and name not in declared:
+            ghosts[name] = ghosts.get(name, 0) + 1
+    if ghosts:
+        raise SystemExit('the page calls a function it never defines, so this parses and then '
+                         'throws ReferenceError when it runs:\n    '
+                         + '\n    '.join('%s()  called %d time(s)' % (k, ghosts[k])
+                                         for k in sorted(ghosts)))
+    print('  no calls to undefined functions')
+
     io.open(OUT, 'w', encoding='utf-8', newline='').write(html)
     got = md5(html)
     want = read('.baseline').strip()
