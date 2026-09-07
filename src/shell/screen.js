@@ -297,4 +297,11 @@ if (typeof window !== "undefined") {
   window.titlebar = titlebar; window.menubar = menubar; window.vscroll = vscroll;
   window.pushbutton = pushbutton; window.BAR = BAR; window.MENU = MENU;
   window.BLACK = BLACK; window.WHITE = WHITE;
+  /* AND THE MACHINE'S SCREEN IS REDRAWN THE MOMENT THIS ENGINE EXISTS.
+     machine.js is expanded before this file, so its first paint of the CRT necessarily used a
+     fallback -- a blank white panel and an empty menu bar. It cannot know when the real drawing
+     functions arrive, and a setTimeout(0) from inside it is a guess about parse order that is
+     wrong often enough to matter (it was wrong here: the machine showed the fallback for the
+     whole of page 3). This line is not a guess. It is the exact instant the engine is ready. */
+  if (typeof window.__crt === "function") { try { window.__crt("title"); } catch (e) { } }
 }

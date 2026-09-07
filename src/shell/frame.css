@@ -259,7 +259,7 @@
 /* 340ms, and the ease of a dolly coming to rest rather than a generic ease-out -- the camera
    is still pushing underneath for exactly this long (see arrive() in router.js), and the two
    have to land together or the handover is a cut again. */
-html.mw-on .mw{display:flex;animation:mw-arrive .34s cubic-bezier(.22,.61,.36,1) both}
+html.mw-on .mw{display:flex;animation:mw-arrive .34s var(--ease-out) both}
 @keyframes mw-arrive{from{opacity:0}to{opacity:1}}
 @media (prefers-reduced-motion:reduce){html.mw-on .mw{animation:none}}
 html.mw-on{overflow:hidden}

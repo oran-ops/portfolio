@@ -886,63 +886,124 @@ function decodeMach(b64, xform){
      grey edges are the first thing that gives a fake screen away. */
   var SCR_W=512, SCR_H=342;
   var SCR_CV=null, SCR_X=null, SCR_TEXTURE=null, SCR_MODE='';
-
-  function crtGround(){
-    var x=SCR_X, W=SCR_W, H=SCR_H, i, j, o;
-    /* the desktop: the 50% stipple the Finder actually showed, built as pixels rather than as
-       175,000 fill calls */
-    var img=x.createImageData(W,H), d=img.data;
-    for(j=0;j<H;j++) for(i=0;i<W;i++){
-      o=(j*W+i)*4; var on=((i+j)&1)===0?0:255;
-      d[o]=d[o+1]=d[o+2]=on; d[o+3]=255;
-    }
-    x.putImageData(img,0,0);
-    x.fillStyle='#fff'; x.fillRect(0,0,W,20);          /* the menu bar */
-    x.fillStyle='#000'; x.fillRect(0,20,W,1);
-    x.font='13px Geneva, Chicago, "Lucida Grande", Verdana, sans-serif';
-    x.textBaseline='middle'; x.textAlign='left';
-    x.fillText('\u2318', 12, 10);
-    var menus=['File','Edit','View','Special'], mx=40;
-    for(i=0;i<menus.length;i++){ x.fillText(menus[i], mx, 10); mx+=x.measureText(menus[i]).width+22 }
-  }
+  /* whether what is on the texture right now was drawn by screen.js or by the one-frame
+     fallback. The fallback is what the very first paint gets, because screen.js is expanded
+     after this file -- and without this flag __crt() would skip the redraw for ever after,
+     since the MODE has not changed even though the drawing engine has arrived. */
+  var SCR_REAL=false;
 
   /* the title panel's own rectangle, which is also where the zoom starts from */
   var TP={x:96, y:112, w:320, h:126};
   /* and where it ends: the folder window, inset from the screen under the menu bar */
   var FW={x:16, y:32, w:SCR_W-32, h:SCR_H-48};
 
+  /* ---------------------------------------------------------------- the screen, one engine
+     Both CRT states are drawn by screen.js -- the same file that draws the folder window the
+     camera lands in. Before this they were two systems: the folder in K.font, a real 5x7
+     bitmap face, and the title in canvas fillText with the stack
+     `Geneva, Chicago, "Lucida Grande", Verdana`, which on Windows resolves to VERDANA and is
+     antialiased by the browser before crtUpload() thresholds it to one bit. The comment above
+     warns about precisely that failure and the code went and made it.
+     Worse, the two states carried two different MENU BARS, so the bar changed shape in the
+     middle of the flight -- the one shot on the page that has to be continuous. */
+  function haveScreen(){
+    return typeof window.Buf==='function' && typeof window.menubar==='function'
+        && typeof window.titlebar==='function' && typeof window.txt==='function'
+        && typeof window.dither==='function';
+  }
+
+  function paint(b){                       /* a Buf onto the CRT canvas */
+    var im=SCR_X.createImageData(SCR_W,SCR_H);
+    im.data.set(b.d);
+    SCR_X.putImageData(im,0,0);
+  }
+
+  /* the desktop and the menu bar, exactly as the folder draws them */
+  function crtGroundBuf(){
+    var b=new window.Buf(SCR_W,SCR_H);
+    b.rect(0,0,SCR_W-1,SCR_H-1,window.WHITE);
+    window.dither(b,0,window.MENU,SCR_W-1,SCR_H-1);
+    window.menubar(b,SCR_W);
+    return b;
+  }
+
+  /* THE ONLY WAY TO GET BIG TYPE ON A ONE-BIT SCREEN. Render at 1x with the same txt() the
+     folder uses, then blit one source pixel to a k x k block. A whole number, so the grid
+     survives; no antialiasing to threshold and no fallback face to fall back to. */
+  function bigText(b,str,cx,y,k){
+    var w=window.tw(str), h=8;
+    var t=new window.Buf(w+2,h+2);
+    t.rect(0,0,w+1,h+1,window.WHITE);
+    window.txt(t,str,0,0,window.BLACK);
+    var x0=cx-((w*k)>>1), i,j,ii,jj;
+    for(j=0;j<h;j++) for(i=0;i<w;i++){
+      if(t.d[(j*(w+2)+i)*4]<128){
+        for(jj=0;jj<k;jj++) for(ii=0;ii<k;ii++) b.set(x0+i*k+ii, y+j*k+jj, window.BLACK);
+      }
+    }
+    return w*k;
+  }
+
   function crtTitle(){
-    var x=SCR_X;
-    crtGround();
+    if(!haveScreen()){ crtTitleLegacy(); SCR_REAL=false; return }
+    SCR_REAL=true;
+    var b=crtGroundBuf();
+    var x0=TP.x, y0=TP.y, x1=TP.x+TP.w-1, y1=TP.y+TP.h-1, cx=(x0+x1)>>1;
+    /* a real window: white body, one-pixel frame, lined title bar with a close box. The zoom
+       that follows therefore grows a WINDOW into a window, which is what the three trailing
+       outlines have always been miming. */
+    b.rect(x0,y0,x1,y1,window.WHITE);
+    b.frame(x0,y0,x1,y1,window.BLACK);
+    window.titlebar(b,x0,y0,x1,'Oran Carmon',true,true);
+    var t=y0+window.BAR;
+    window.txt(b,'THE ARCHIVE', cx-(window.tw('THE ARCHIVE')>>1), t+13, window.BLACK);
+    b.hl(t+27, x0+34, x1-34, window.BLACK);
+    bigText(b,'THE CASE FILES', cx, t+40, 3);
+    var sub='SEVEN FILES \u00b7 ONE MACHINE \u00b7 2018\u20132026';
+    window.txt(b,sub, cx-(window.tw(sub)>>1), t+76, window.BLACK);
+    paint(b);
+  }
+
+  /* the first frame only: screen.js is expanded after this file, so for one paint none of the
+     above exists. screenTexture() schedules the real one on the next task. */
+  function crtTitleLegacy(){
+    var x=SCR_X, W=SCR_W, H=SCR_H, i, j, o;
+    var img=x.createImageData(W,H), d=img.data;
+    for(j=0;j<H;j++) for(i=0;i<W;i++){
+      o=(j*W+i)*4; var on=((i+j)&1)===0?0:255;
+      d[o]=d[o+1]=d[o+2]=on; d[o+3]=255;
+    }
+    x.putImageData(img,0,0);
+    x.fillStyle='#fff'; x.fillRect(0,0,W,20);
+    x.fillStyle='#000'; x.fillRect(0,20,W,1);
     x.fillStyle='#fff'; x.fillRect(TP.x,TP.y,TP.w,TP.h);
     x.strokeStyle='#000'; x.lineWidth=2; x.strokeRect(TP.x+1,TP.y+1,TP.w-2,TP.h-2);
-    x.textAlign='center'; x.fillStyle='#000';
-    x.font='15px Geneva, Chicago, "Lucida Grande", Verdana, sans-serif';
-    x.fillText('ORAN CARMON', SCR_W/2, TP.y+30);
-    x.fillRect(TP.x+40, TP.y+46, TP.w-80, 1);
-    x.font='bold 30px Chicago, Geneva, "Lucida Grande", Verdana, sans-serif';
-    x.fillText('THE CASE FILES', SCR_W/2, TP.y+74);
-    x.font='11px Geneva, Chicago, "Lucida Grande", Verdana, sans-serif';
-    x.fillText('SEVEN FILES \u00b7 ONE MACHINE \u00b7 2018\u20132026', SCR_W/2, TP.y+104);
   }
 
   /* the zoom rectangle. Three outlines a step apart, so the growth reads as motion rather
      than as a rectangle that happens to be a different size each time. */
   function crtOpen(t){
-    var x=SCR_X, k;
-    crtGround();
+    if(!haveScreen()){ return }
+    SCR_REAL=true;
+    /* the middle beat, on the same ground as the two states either side of it, so the desktop
+       and the menu bar do not flicker between them. The window being zoomed keeps its own
+       title bar until it is well on its way, because a Macintosh zoom grew the WINDOW. */
+    var b=crtGroundBuf(), k;
     if(t<0.34){
-      x.fillStyle='#fff'; x.fillRect(TP.x,TP.y,TP.w,TP.h);
-      x.strokeStyle='#000'; x.lineWidth=2; x.strokeRect(TP.x+1,TP.y+1,TP.w-2,TP.h-2);
+      var x0=TP.x, y0=TP.y, x1=TP.x+TP.w-1, y1=TP.y+TP.h-1;
+      b.rect(x0,y0,x1,y1,window.WHITE);
+      b.frame(x0,y0,x1,y1,window.BLACK);
+      window.titlebar(b,x0,y0,x1,'Oran Carmon',true,true);
     }
-    x.strokeStyle='#000'; x.lineWidth=2;
     for(k=0;k<3;k++){
       var u=t-k*0.17; if(u<=0) continue;
       if(u>1) u=1;
       var e=u*u*(3-2*u);
-      x.strokeRect(TP.x+(FW.x-TP.x)*e, TP.y+(FW.y-TP.y)*e,
-                   TP.w+(FW.w-TP.w)*e, TP.h+(FW.h-TP.h)*e);
+      var rx=Math.round(TP.x+(FW.x-TP.x)*e), ry=Math.round(TP.y+(FW.y-TP.y)*e);
+      var rw=Math.round(TP.w+(FW.w-TP.w)*e), rh=Math.round(TP.h+(FW.h-TP.h)*e);
+      b.frame(rx,ry,rx+rw-1,ry+rh-1,window.BLACK);
     }
+    paint(b);
   }
 
   /* and the folder itself, drawn by the SAME function the shell uses for the window the
@@ -952,11 +1013,10 @@ function decodeMach(b64, xform){
      does not, the title stays up rather than the screen going blank. */
   function crtFolder(){
     if(typeof window.drawScreen!=='function' || typeof window.Buf!=='function'){ crtTitle(); return }
+    SCR_REAL=true;
     var b=new window.Buf(SCR_W,SCR_H);
     window.drawScreen(b, SCR_W, SCR_H, 4, {open:true, sel:null, doc:null, opened:0});
-    var im=SCR_X.createImageData(SCR_W,SCR_H);
-    im.data.set(b.d);
-    SCR_X.putImageData(im,0,0);
+    paint(b);
   }
 
   function crtUpload(){
@@ -994,6 +1054,10 @@ function decodeMach(b64, xform){
     SCR_X=SCR_CV.getContext('2d');
     SCR_TEXTURE=gl.createTexture();
     crtTitle(); crtUpload(); SCR_MODE='title';
+    /* screen.js is expanded after this file, so the paint above necessarily used the fallback.
+       It calls __crt('title') itself the moment its own exports are in place -- see the tail of
+       shell/screen.js -- which is the one instant that is not a guess about parse order. The
+       timer that used to stand here was such a guess, and it was wrong. */
     return SCR_TEXTURE;
   }
 
@@ -1003,7 +1067,11 @@ function decodeMach(b64, xform){
   window.__crt=function(mode,t){
     if(!SCR_X) return;
     var key=mode+(mode==='open'?(':'+Math.round(t*8)):'');
-    if(key===SCR_MODE) return;
+    /* AND a repaint is not a no-op if the last one came from the fallback. Without the
+       SCR_REAL half of this test the first paint -- made before screen.js existed -- was
+       final: every later __crt('title') matched the mode and returned, so the machine showed
+       an empty white panel and a blank menu bar for the whole of page 3. */
+    if(key===SCR_MODE && SCR_REAL) return;
     SCR_MODE=key;
     if(mode==='open'){ crtOpen(t); }
     else if(mode==='folder'){ crtFolder(); }
