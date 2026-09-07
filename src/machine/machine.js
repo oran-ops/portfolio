@@ -1338,6 +1338,21 @@ function decodeMach(b64, xform){
   }
   cv.style.touchAction='none';
   cv.addEventListener('pointerdown',function(e){
+    /* ONE GESTURE, ONE MEANING -- and this is the wheel bug again, wearing a different coat.
+       #hpin carries a drag-inertia handler that pans the whole horizontal track: pointerdown
+       anywhere inside it sets dragging=true, and a window-level pointermove then adds
+       dx * 1.15 to the track's offset. This canvas is inside #hpin. So every drag meant to
+       TURN the machine was also DRAGGING THE ROOM sideways, and left it parked off centre
+       when the reader let go.
+
+       That is both of Oran's notes at once: "the machine still gets pulled to the sides and
+       does not turn on its own axis", and "at the end of the scroll the machine is still
+       stuck on the right". He pointed at k95.it, where the object stands still and only
+       spins -- which is what this is, once the room stops being dragged along with it.
+
+       The author of the ring scene hit this and wrote the same line for the same reason.
+       The machine never got one. */
+    e.stopPropagation();
     drag=true; lx=e.clientX; ly=e.clientY; lt=e.timeStamp; vYaw=0; vPitch=0;
     cv.setPointerCapture(e.pointerId);
   });

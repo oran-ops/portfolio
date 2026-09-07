@@ -188,12 +188,15 @@
       /* put the machine back where it was, unseen behind the shell, so leaving it does not land
          the reader on a camera halfway inside a cathode ray tube. Oran: the machine resets its
          angle. */
-      if (typeof window.__cam === "function") {
-        /* and the aim goes back to the case with it, or leaving the machine would land the
-           reader on a camera still pointed at the middle of a cathode ray tube. */
-        window.__cam(REST.yaw, REST.pitch, REST.dist, null);
-        if (typeof window.__camAim === "function") { window.__camAim(null); }
-      }
+      /* THE CAMERA IS NOT RESET HERE ANY MORE, AND THAT IS THE JUMP AT THE END OF THE ZOOM.
+         This ran in the same frame that added mw-on. The shell fades in over 190 ms, so for
+         those 190 ms the reader was watching the machine SNAP from the end of the zoom back
+         to its resting angle, through a window that had not finished arriving. Oran: "there
+         is a jump at the end of the zoom-in."
+         The reset still has to happen -- leaving the machine on a camera parked inside a
+         cathode ray tube is the fault it was written for -- so it happens in leaveShell(),
+         while the shell is still covering everything. Nobody can see it there, which is the
+         whole point. */
     }
     setTimeout(arrive, 1900);                   /* the flight is 480 + 440 + 620 = 1540 */
 
@@ -222,6 +225,12 @@
   function leaveShell() {
     if (!html.classList.contains("mw-on")) { return; }
     if (typeof shut === "function") { shut(); }
+    /* put the machine back BEFORE uncovering it: the reset that used to run at the end of the
+       flight, moved to the one moment at which it cannot be seen. */
+    if (typeof window.__cam === "function") {
+      window.__cam(REST.yaw, REST.pitch, REST.dist, null);
+      if (typeof window.__camAim === "function") { window.__camAim(null); }
+    }
     html.classList.remove("mw-on");
     wheelToPage(true);
     /* the machine goes back to showing its title, so the next reader through -- or the same
