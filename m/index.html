@@ -1050,7 +1050,6 @@ body.static #clearance,body.static #idlecue,body.failsafe #clearance,body.failsa
   </div></div></div>
 
 <div id="hero" class="harvested">
-  <div id="heromq" aria-hidden="true"><div class="row r1"><span>COMMERCIAL SYSTEMS BUILDER &mdash; ORAN CARMON &mdash; ARCHIVE 2026 &mdash; COMMERCIAL SYSTEMS BUILDER &mdash; ORAN CARMON &mdash; ARCHIVE 2026 &mdash; COMMERCIAL SYSTEMS BUILDER &mdash; ORAN CARMON &mdash; ARCHIVE 2026 &mdash; </span><span>COMMERCIAL SYSTEMS BUILDER &mdash; ORAN CARMON &mdash; ARCHIVE 2026 &mdash; COMMERCIAL SYSTEMS BUILDER &mdash; ORAN CARMON &mdash; ARCHIVE 2026 &mdash; COMMERCIAL SYSTEMS BUILDER &mdash; ORAN CARMON &mdash; ARCHIVE 2026 &mdash; </span></div><div class="row r2"><span>COMMERCIAL SYSTEMS BUILDER &mdash; ORAN CARMON &mdash; ARCHIVE 2026 &mdash; COMMERCIAL SYSTEMS BUILDER &mdash; ORAN CARMON &mdash; ARCHIVE 2026 &mdash; COMMERCIAL SYSTEMS BUILDER &mdash; ORAN CARMON &mdash; ARCHIVE 2026 &mdash; </span><span>COMMERCIAL SYSTEMS BUILDER &mdash; ORAN CARMON &mdash; ARCHIVE 2026 &mdash; COMMERCIAL SYSTEMS BUILDER &mdash; ORAN CARMON &mdash; ARCHIVE 2026 &mdash; COMMERCIAL SYSTEMS BUILDER &mdash; ORAN CARMON &mdash; ARCHIVE 2026 &mdash; </span></div></div>
   <div class="idx rv" style="--i:0">
     <span class="k">ARCHIVE N&deg;</span> 2026-Present<br>
     <span class="k">STATUS:</span> <span class="br2 blink">ACTIVE</span>
@@ -1250,7 +1249,6 @@ padding:6px 13px;font-family:'JetBrains Mono',monospace;font-weight:700;font-siz
   </div>
 </section>
 
-<div class="bigmq" style="--mqc:rgba(224,164,88,.20)" aria-hidden="true"><div class="in2"><span>FILE 02 &middot; OASIS &middot; LEADERSHIP &mdash; FILE 02 &middot; OASIS &middot; LEADERSHIP &mdash; FILE 02 &middot; OASIS &middot; LEADERSHIP &mdash; FILE 02 &middot; OASIS &middot; LEADERSHIP &mdash; </span><span>FILE 02 &middot; OASIS &middot; LEADERSHIP &mdash; FILE 02 &middot; OASIS &middot; LEADERSHIP &mdash; FILE 02 &middot; OASIS &middot; LEADERSHIP &mdash; FILE 02 &middot; OASIS &middot; LEADERSHIP &mdash; </span></div></div>
 <section class="sec case" id="oasis" style="--fc:var(--brass)">
   <div class="secnum" aria-hidden="true">02</div>
   <div class="wrap">
@@ -1306,7 +1304,6 @@ padding:6px 13px;font-family:'JetBrains Mono',monospace;font-weight:700;font-siz
   </div>
 </section>
 
-<div class="bigmq" style="--mqc:rgba(94,143,191,.22)" aria-hidden="true"><div class="in2"><span>FILE 03 &middot; EVENTER &middot; ALIGNMENT &mdash; FILE 03 &middot; EVENTER &middot; ALIGNMENT &mdash; FILE 03 &middot; EVENTER &middot; ALIGNMENT &mdash; FILE 03 &middot; EVENTER &middot; ALIGNMENT &mdash; </span><span>FILE 03 &middot; EVENTER &middot; ALIGNMENT &mdash; FILE 03 &middot; EVENTER &middot; ALIGNMENT &mdash; FILE 03 &middot; EVENTER &middot; ALIGNMENT &mdash; FILE 03 &middot; EVENTER &middot; ALIGNMENT &mdash; </span></div></div>
 <section class="sec case" id="eventer" style="--fc:var(--ice)">
   <div class="secnum" aria-hidden="true">03</div>
   <div class="wrap">
@@ -1342,7 +1339,6 @@ padding:6px 13px;font-family:'JetBrains Mono',monospace;font-weight:700;font-siz
   </div>
 </section>
 
-<div class="bigmq" style="--mqc:rgba(242,241,237,.15)" aria-hidden="true"><div class="in2"><span>FILE 04 &middot; MEDCOIN &middot; FOUNDER &mdash; FILE 04 &middot; MEDCOIN &middot; FOUNDER &mdash; FILE 04 &middot; MEDCOIN &middot; FOUNDER &mdash; FILE 04 &middot; MEDCOIN &middot; FOUNDER &mdash; </span><span>FILE 04 &middot; MEDCOIN &middot; FOUNDER &mdash; FILE 04 &middot; MEDCOIN &middot; FOUNDER &mdash; FILE 04 &middot; MEDCOIN &middot; FOUNDER &mdash; FILE 04 &middot; MEDCOIN &middot; FOUNDER &mdash; </span></div></div>
 <section class="sec case" id="medcoin" style="--fc:var(--ink)">
   <div class="secnum" aria-hidden="true">04</div>
   <div class="wrap">
@@ -3005,11 +3001,27 @@ loop, so `animation:none` had nothing to cancel. One static frame, then nothing.
   --mw-gap:16px;
   --mw-edge:2px;
 }
-html,body{height:100%}
-body{margin:0;overflow:hidden;background:#000}
+/* WHAT THE LAB'S BODY RULE DID TO THE SITE.
+   Extracted from the lab page, this block began with a height:100% on html and body and an
+   overflow:hidden on body. In the lab that was right -- the page WAS the machine, one
+   screen, nothing to scroll. On the site it pins the document to a single viewport and clips
+   everything past it: body carried 5,433px of content inside an 812px box with its overflow
+   hidden, so html had nothing left to scroll and the page stopped after the first screen.
+   Measured at 375px: scrollHeight 812, maxY 0, page 3 ending at 5,339 and unreachable.
+
+   extract_machine.py refuses exactly this rule, in as many words -- "shipping either would
+   have taken the site's body" -- and then extract_shell.py let the same rule through for the
+   shell. The lesson was written down for one file and never applied to its neighbour.
+
+   The shell does not need it: .mw is position:fixed;inset:0, which takes the viewport on its
+   own and owes nothing to the height of body. */
 .mw{position:fixed;inset:0;display:flex;flex-direction:column;background:#fff;
   font-family:'JetBrains Mono',ui-monospace,monospace}
-canvas{display:block;image-rendering:pixelated;image-rendering:crisp-edges}
+/* SCOPED. Unqualified, this reached every canvas on the site -- the dust field and, worse,
+   the machine, whose whole quality argument is that it renders at 1.75x and is filtered back
+   down. image-rendering:pixelated throws that filtering away and hands back the aliased
+   original. The 1-bit chrome wants hard pixels; nothing outside the window does. */
+.mw canvas{display:block;image-rendering:pixelated;image-rendering:crisp-edges}
 .mw-menu{flex:none;width:100%;height:var(--mw-menu)}
 /* The 50 per cent checkerboard: a true 2 x 2 cell at the same whole scale the chrome uses,
    so one dither pixel is exactly 2 CSS pixels and matches the folder's raster. 45-degree
@@ -3207,10 +3219,29 @@ html.mw-on{--mw-gap:calc(var(--mw-menu) + 16px)}
   background:#191A1F;overflow:hidden}
 #mach-gl{display:block;width:100%;height:100%;cursor:grab;touch-action:none}
 #mach-gl:active{cursor:grabbing}
-.machcue{position:absolute;left:0;right:0;bottom:18px;text-align:center;
+/* "CLICK ON THE SCREEN" -- and why it was invisible.
+   Oran: "the line is missing. Put it top centre, delicate but visible, in the top third of
+   the scroll area and not over the machine, and keep inside the phone's bounds."
+
+   It was never missing from the page; it was sitting where the page cannot show anything.
+   The room carries a mask that feathers all four of its edges -- vertically it is opaque
+   only between 22% and 80%, and fades to nothing by 100%. The cue was at bottom:18px, which
+   on an 820px room is 97.8% of the way down: inside the fade, and effectively erased. A rule
+   that reads perfectly well on its own, in a container written six hundred lines away.
+
+   So it moves to 24% -- just inside the opaque band, in the top third as asked, and clear
+   above the machine, which is centred and reaches no higher than about 30%. */
+.machcue{position:absolute;left:0;right:0;top:24%;text-align:center;
   font-family:'JetBrains Mono',ui-monospace,monospace;font-size:10px;
   letter-spacing:.24em;text-transform:uppercase;color:var(--emb);
-  pointer-events:none;opacity:.9}
+  pointer-events:none;opacity:.9;
+  /* it must never run to the edge of a phone, and it must not wrap into two lines there */
+  padding:0 18px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+/* the short room on a phone is 360-470px tall, so 24% of it is only ~100px down and the
+   machine sits higher in frame. 15% keeps the same clearance in a third of the height. */
+@media (max-width:860px){
+  .machcue{top:15%;font-size:8.5px;letter-spacing:.18em;padding:0 12px}
+}
 
 
 /* THE MACHINE'S OWN POINTER.
@@ -3256,7 +3287,6 @@ html.mw-on .mw-view .lead, html.mw-on .mw-view .qx{cursor:url("data:image/svg+xm
   </div>
 </section>
 
-<div class="bigmq" style="--mqc:rgba(47,179,128,.20)" aria-hidden="true"><div class="in2"><span>SYSTEM FILE &middot; AI &middot; COMMERCIAL INTELLIGENCE &mdash; SYSTEM FILE &middot; AI &middot; COMMERCIAL INTELLIGENCE &mdash; SYSTEM FILE &middot; AI &middot; COMMERCIAL INTELLIGENCE &mdash; SYSTEM FILE &middot; AI &middot; COMMERCIAL INTELLIGENCE &mdash; </span><span>SYSTEM FILE &middot; AI &middot; COMMERCIAL INTELLIGENCE &mdash; SYSTEM FILE &middot; AI &middot; COMMERCIAL INTELLIGENCE &mdash; SYSTEM FILE &middot; AI &middot; COMMERCIAL INTELLIGENCE &mdash; SYSTEM FILE &middot; AI &middot; COMMERCIAL INTELLIGENCE &mdash; </span></div></div>
 <section class="sec" id="tech" style="--fc:var(--emb)">
   <div class="secnum" aria-hidden="true">06</div>
   <div class="wrap">
@@ -4244,9 +4274,13 @@ var LOGMAP=[['statement','MEMO \u2014 FROM THE ARCHIVE'],
 var logEl=null,logSecs=[],logCur=-1,logHold=0;
 if(!frozen){
   logEl=document.createElement('div');logEl.id='loglin';logEl.textContent='> ARCHIVE://2026';
-  document.body.appendChild(logEl);
-  var led=document.createElement('div');led.id='recled';led.innerHTML='<i></i>ARCHIVE LIVE';
-  document.body.appendChild(led);
+  /* NOT APPENDED. Oran asked for the archive HUD off the page: the log line bottom-left, the
+     ARCHIVE LIVE lamp and its blinking dot top-right, and the FILES REVIEWED meter with its
+     four coloured squares under it. The elements are still BUILT and left detached, because
+     __archLog calls scrambleTo(logEl,...) and markReviewed() calls meter.querySelector -- and
+     cutting a thing another module holds is exactly how removing the RESTRICTED strip took
+     twelve developed zones and four UV lamps with it, in silence. A node that was never
+     appended is not on the page by any measure the reader has, and every caller still works. */
   window.__archLog=function(txt,hold){if(!logEl)return;scrambleTo(logEl,'> '+txt,460);logHold=performance.now()+(hold||0);};
   window.__archLogReset=function(){logCur=-1;logHold=0;};
   logSecs=LOGMAP.map(function(a){var el=document.getElementById(a[0]);return el?{el:el,txt:a[1],t:0,b:0}:null}).filter(Boolean);
@@ -4604,7 +4638,8 @@ function showClearance(){
 var meter=document.createElement('div');meter.id='casemeter';
 meter.innerHTML='<div class="cml">FILES REVIEWED · <b id="cmn">0/4</b></div><div class="cmb">'+
   CASES.map(function(id){return '<span class="sq" data-c="'+id+'" style="background:'+CCOL[id]+'"></span>'}).join('')+'</div>';
-document.body.appendChild(meter);
+/* NOT APPENDED -- see the log line above. markReviewed() still queries it and still finds its
+   squares; the reader simply never sees the meter. */
 var reviewed={},reviewedN=0;
 var ccstamp=document.getElementById('ccstamp'),ceremonyDone=false;
 if(ccstamp){ccstamp.classList.add('lk');ccstamp.textContent='IN REVIEW · 0/4';}
@@ -4821,7 +4856,12 @@ function mdPlay(){
 /* ---------- master loop ---------- */
 var whooshAt=0,idleAt=performance.now(),idleOn=false;
 var idlecue=document.createElement('div');idlecue.id='idlecue';
-idlecue.textContent='\u25BE CONTINUE REVIEW';document.body.appendChild(idlecue);
+idlecue.textContent='\u25BE CONTINUE REVIEW';
+/* NOT APPENDED, for two reasons that agree. It is the visible half of the same idle state as
+   the ARCHIVE IDLE log line Oran asked to remove -- it comes up after eight still seconds and
+   writes that very line. And it is an arrow pointing DOWN at what comes next, and after the
+   restructure nothing comes next: page 3 is the machine, and the documents are behind its
+   folder. Left on, it would be inviting the reader to keep scrolling into nothing. */
 ['scroll','mousemove','keydown','wheel','pointerdown'].forEach(function(ev){
   addEventListener(ev,function(){
     idleAt=performance.now();
@@ -7155,6 +7195,12 @@ function decodeMach(b64, xform){
   function qn(k,d){ var v=parseFloat(Q.get(k)); return isNaN(v)?d:v }
   var yaw=qn('yaw',-0.46), pitch=qn('pitch',0.20), dist=qn('dist',5.6);
   var FOV=qn('fov',21), BGF=qn('bg',0);
+  /* the orbit's centre. The framing lift used to be added to the EYE alone -- eye y got
+     +0.16 while the target stayed at 0.02 -- which is not an orbit but a sphere looked at
+     off its own axis. Harmless inside a 1.5 rad limit and not harmless once the pitch goes
+     all the way round, because the skew then swings through the vertical. Same framing,
+     one centre. */
+  var CY=0.16;
   var vYaw=0, vPitch=0, drag=false, lx=0, ly=0, lt=0, raf=null;
 
   function size(){
@@ -7174,11 +7220,28 @@ function decodeMach(b64, xform){
     gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);
     gl.enable(gl.DEPTH_TEST); gl.enable(gl.CULL_FACE); gl.cullFace(gl.BACK);
 
-    var ex=Math.sin(yaw)*Math.cos(pitch)*dist,
-        ey=Math.sin(pitch)*dist+0.16,
-        ez=Math.cos(yaw)*Math.cos(pitch)*dist;
+    /* A TRUE ORBIT, AND A GIMBAL THAT DOES NOT LOCK.
+       Oran: "it has to be fixed in place, and turn freely 360 on every axis like a
+       gyroscope -- right now the X axis stops at a limit." It did: the pitch was held
+       between -0.40 and 1.15 rad, so the machine could not be tipped far enough to show
+       its roof or its underside at all.
+
+       Removing that limit is not enough by itself. lookAt was given world up, [0,1,0], and
+       at pitch = +-pi/2 the eye is directly over the target: up and forward are parallel,
+       their cross product collapses, and the picture turns over. That is the lock, and it
+       is why the limit was there. So up is DERIVED from the orbit instead -- the tangent of
+       the pitch circle, which is dir rotated a quarter turn along its own path:
+
+           dir = ( sin(yaw)cos(pitch),  sin(pitch),  cos(yaw)cos(pitch) )
+           up  = (-sin(yaw)sin(pitch),  cos(pitch), -cos(yaw)sin(pitch) )
+
+       Perpendicular at every angle, degenerate at none, so the rotation runs the whole way
+       round on both axes with nothing to hit. */
+    var sy=Math.sin(yaw), cy=Math.cos(yaw), sp=Math.sin(pitch), cp=Math.cos(pitch);
+    var ex=sy*cp*dist, ey=sp*dist+CY, ez=cy*cp*dist;
     gl.uniformMatrix4fv(U.uProj,false,PROJ);
-    gl.uniformMatrix4fv(U.uView,false,lookAt([ex,ey,ez],[0,0.02,0],[0,1,0]));
+    gl.uniformMatrix4fv(U.uView,false,
+      lookAt([ex,ey,ez],[0,CY,0],[-sy*sp, cp, -cy*sp]));
     gl.uniform3f(U.uCam,ex,ey,ez);
     gl.uniform3f(U.uCream,0.874,0.845,0.768);
     gl.uniform3f(U.uGround,0.098,0.102,0.122);
@@ -7214,12 +7277,11 @@ function decodeMach(b64, xform){
     raf=null;
     if(drag) return;
     if(Math.abs(vYaw)<1e-4 && Math.abs(vPitch)<1e-4){ vYaw=0; vPitch=0; return }
-    yaw+=vYaw; pitch+=clampPitch(pitch+vPitch)-pitch;
-    vYaw*=0.92; vPitch*=0.92;
+    yaw+=vYaw; pitch+=vPitch;
+    vYaw*=0.80; vPitch*=0.80;
     frame();
     raf=requestAnimationFrame(glide);
   }
-  function clampPitch(p){ return p>1.15?1.15:(p<-0.40?-0.40:p) }
   function kick(){ if(!raf) raf=requestAnimationFrame(glide) }
 
   addEventListener('resize',function(){size();frame()});
@@ -7231,8 +7293,13 @@ function decodeMach(b64, xform){
   cv.addEventListener('pointermove',function(e){
     if(!drag)return;
     var dx=(e.clientX-lx)*0.0062, dy=(e.clientY-ly)*0.0052;
-    yaw-=dx; pitch=clampPitch(pitch+dy);
-    vYaw=-dx*0.55; vPitch=dy*0.55;
+    /* IT STOPS WHERE IT IS PUT. "the machine goes wild" -- it did: a release handed the
+       glide 55% of the pointer's last velocity and decayed it at 0.92 a frame, which is a
+       ninety-frame coast. A flick spun it most of a turn on its own and then hit the limit
+       and stopped dead. 25% at 0.80 settles inside a quarter second and travels about a
+       twelfth as far: the object still has weight, and it no longer runs off with it. */
+    yaw-=dx; pitch+=dy;
+    vYaw=-dx*0.25; vPitch=dy*0.25;
     lx=e.clientX; ly=e.clientY; lt=e.timeStamp;
     frame();
   });
@@ -8806,8 +8873,42 @@ function relayout() {
    canvas sized while its container is display:none measures zero and paints nothing,
    so drawing early would produce an empty menu bar and empty icons that never repair
    themselves. The router calls this once the shell is on screen. */
+/* AND THEY MOVE AT LOAD, NOT ON ENTRY.
+ *
+ * THE FAULT THIS FIXES. The move used to happen inside __shellInit, which the router calls
+ * when the reader enters the machine. Until then all seven documents sat in the page's own
+ * scroll flow, directly after page 3 -- so the page was 15,557 px tall and a reader who
+ * simply kept scrolling went straight past the Macintosh and into FILE 01. Oran: "there is
+ * an option to keep scrolling after the machine into the document -- we said there is no
+ * continuation."
+ *
+ * He is right, and he is right about how it got through as well: I verified the JOURNEY --
+ * click the screen, open a file, close it, come back -- and never once asked what happens to
+ * someone who does not click at all. A check that only walks the intended path cannot fail on
+ * the unintended one. The check at the bottom of this file now measures the page's height
+ * instead, which is a question the reader's actual behaviour cannot dodge.
+ *
+ * Moving at load is safe: the page's live layer -- the lamps, the developed zones, the
+ * evidence slips -- is built synchronously during load, before this script runs. Measured:
+ * 4 lampbands, 4 uvmounts and 5 slips are all present at the first frame this file can see.
+ * And the move cannot disturb the three pages that remain, because every document sat AFTER
+ * them: removing them changes the document's height and not one section top. */
+function adopt() {
+  var docs = cv("docs");
+  if (!docs) { return 0; }
+  var n = 0;
+  IDS.forEach(function (id) {
+    var sec = secOf(id);
+    if (sec && sec.parentNode !== docs) { docs.appendChild(sec); n++; }
+  });
+  return n;
+}
+
 window.__shellInit = function () {
-  /* THE DOCUMENTS MOVE INTO THE WINDOW.
+  /* THE DOCUMENTS ARE ALREADY IN THE WINDOW -- adopt() ran at load. This call is the
+     idempotent second pass, and it is kept because a state the shell depends on should be
+     asserted where the shell starts, not assumed from somewhere else in the file.
+     THE DOCUMENTS MOVE INTO THE WINDOW.
      In the lab page they were written straight into #docs, because that page was
      nothing but the shell. On the site they begin in the scrolling flow, and the frame
      only marks them with .mw-show — it never fetches them, so left where they are it
@@ -8815,13 +8916,7 @@ window.__shellInit = function () {
      This is a move, not a copy, and it is right: once the reader is inside the machine
      there is no page left to scroll, and the finished structure has the documents
      living in the window and nowhere else. Done once, and idempotent. */
-  var docs = cv("docs");
-  if (docs) {
-    IDS.forEach(function (id) {
-      var sec = secOf(id);
-      if (sec && sec.parentNode !== docs) { docs.appendChild(sec); }
-    });
-  }
+  adopt();
   relayout();
   /* The folder is screen.js's window, not the frame's loose icons on a desk. See
      src/shell/folder.js: the frame keeps the document window, screen.js keeps the
@@ -8831,6 +8926,18 @@ window.__shellInit = function () {
 window.addEventListener("resize", function () {
   if (cv("mw") && cv("mw").offsetParent !== null) { relayout(); }
 });
+
+/* ---------------------------------------------------------------- and do it now.
+   The reader must not be able to scroll into a document. This is the line that stops them,
+   and the assertion under it is the check that would have caught the fault in the first
+   place: page 3 is the last thing in the flow, so the page ends with it. */
+adopt();
+if (window.console && document.body) {
+  var tail = secOf(IDS[0]);
+  if (tail && tail.closest && tail.closest("#mw") === null) {
+    console.warn("the documents are still in the page flow; scrolling will run past the machine");
+  }
+}
 </script>
 <script>"use strict";
 /* THE FOLDER SCREEN — what the reader lands on inside the machine.
@@ -9045,8 +9152,21 @@ window.addEventListener("resize", function () {
 
   var flying = false;
 
+  /* THE PAGE'S WHEEL HANDLER MUST STAND DOWN INSIDE THE MACHINE.
+   *
+   * The scrolling pages run an inertia scroller: a window-level wheel listener, {passive:false},
+   * that calls preventDefault() on every notch and drives window.scrollTo itself. Inside the
+   * machine there is no window scroll -- html.mw-on is overflow:hidden -- so it went on eating
+   * every wheel event and scrolling nothing, and the document window, which is a perfectly
+   * ordinary overflow-y:auto box, could not be scrolled at all. Every one of the seven files
+   * was frozen at its first screen. Nothing errored; the page simply did not move.
+   *
+   * The scroller already reads a flag for exactly this, so this is the flag and not a patch. */
+  function wheelToPage(on) { window.__wheelOff = !on; }
+
   function enterShell(animate) {
     if (html.classList.contains("mw-on")) { return; }
+    wheelToPage(false);
     if (!animate || flying || typeof window.__cam !== "function") {
       html.classList.add("mw-on");
       if (typeof window.__shellInit === "function") { window.__shellInit(); }
@@ -9091,6 +9211,7 @@ window.addEventListener("resize", function () {
     if (!html.classList.contains("mw-on")) { return; }
     if (typeof shut === "function") { shut(); }
     html.classList.remove("mw-on");
+    wheelToPage(true);
   }
 
   function render(s) {

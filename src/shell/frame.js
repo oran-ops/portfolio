@@ -1220,8 +1220,42 @@ function relayout() {
    canvas sized while its container is display:none measures zero and paints nothing,
    so drawing early would produce an empty menu bar and empty icons that never repair
    themselves. The router calls this once the shell is on screen. */
+/* AND THEY MOVE AT LOAD, NOT ON ENTRY.
+ *
+ * THE FAULT THIS FIXES. The move used to happen inside __shellInit, which the router calls
+ * when the reader enters the machine. Until then all seven documents sat in the page's own
+ * scroll flow, directly after page 3 -- so the page was 15,557 px tall and a reader who
+ * simply kept scrolling went straight past the Macintosh and into FILE 01. Oran: "there is
+ * an option to keep scrolling after the machine into the document -- we said there is no
+ * continuation."
+ *
+ * He is right, and he is right about how it got through as well: I verified the JOURNEY --
+ * click the screen, open a file, close it, come back -- and never once asked what happens to
+ * someone who does not click at all. A check that only walks the intended path cannot fail on
+ * the unintended one. The check at the bottom of this file now measures the page's height
+ * instead, which is a question the reader's actual behaviour cannot dodge.
+ *
+ * Moving at load is safe: the page's live layer -- the lamps, the developed zones, the
+ * evidence slips -- is built synchronously during load, before this script runs. Measured:
+ * 4 lampbands, 4 uvmounts and 5 slips are all present at the first frame this file can see.
+ * And the move cannot disturb the three pages that remain, because every document sat AFTER
+ * them: removing them changes the document's height and not one section top. */
+function adopt() {
+  var docs = cv("docs");
+  if (!docs) { return 0; }
+  var n = 0;
+  IDS.forEach(function (id) {
+    var sec = secOf(id);
+    if (sec && sec.parentNode !== docs) { docs.appendChild(sec); n++; }
+  });
+  return n;
+}
+
 window.__shellInit = function () {
-  /* THE DOCUMENTS MOVE INTO THE WINDOW.
+  /* THE DOCUMENTS ARE ALREADY IN THE WINDOW -- adopt() ran at load. This call is the
+     idempotent second pass, and it is kept because a state the shell depends on should be
+     asserted where the shell starts, not assumed from somewhere else in the file.
+     THE DOCUMENTS MOVE INTO THE WINDOW.
      In the lab page they were written straight into #docs, because that page was
      nothing but the shell. On the site they begin in the scrolling flow, and the frame
      only marks them with .mw-show — it never fetches them, so left where they are it
@@ -1229,13 +1263,7 @@ window.__shellInit = function () {
      This is a move, not a copy, and it is right: once the reader is inside the machine
      there is no page left to scroll, and the finished structure has the documents
      living in the window and nowhere else. Done once, and idempotent. */
-  var docs = cv("docs");
-  if (docs) {
-    IDS.forEach(function (id) {
-      var sec = secOf(id);
-      if (sec && sec.parentNode !== docs) { docs.appendChild(sec); }
-    });
-  }
+  adopt();
   relayout();
   /* The folder is screen.js's window, not the frame's loose icons on a desk. See
      src/shell/folder.js: the frame keeps the document window, screen.js keeps the
@@ -1245,3 +1273,15 @@ window.__shellInit = function () {
 window.addEventListener("resize", function () {
   if (cv("mw") && cv("mw").offsetParent !== null) { relayout(); }
 });
+
+/* ---------------------------------------------------------------- and do it now.
+   The reader must not be able to scroll into a document. This is the line that stops them,
+   and the assertion under it is the check that would have caught the fault in the first
+   place: page 3 is the last thing in the flow, so the page ends with it. */
+adopt();
+if (window.console && document.body) {
+  var tail = secOf(IDS[0]);
+  if (tail && tail.closest && tail.closest("#mw") === null) {
+    console.warn("the documents are still in the page flow; scrolling will run past the machine");
+  }
+}

@@ -1009,7 +1009,6 @@ body.static #clearance,body.static #idlecue,body.failsafe #clearance,body.failsa
   </div></div></div>
 
 <div id="hero" class="harvested">
-  <div id="heromq" aria-hidden="true"><div class="row r1"><span>COMMERCIAL SYSTEMS BUILDER &mdash; ORAN CARMON &mdash; ARCHIVE 2026 &mdash; COMMERCIAL SYSTEMS BUILDER &mdash; ORAN CARMON &mdash; ARCHIVE 2026 &mdash; COMMERCIAL SYSTEMS BUILDER &mdash; ORAN CARMON &mdash; ARCHIVE 2026 &mdash; </span><span>COMMERCIAL SYSTEMS BUILDER &mdash; ORAN CARMON &mdash; ARCHIVE 2026 &mdash; COMMERCIAL SYSTEMS BUILDER &mdash; ORAN CARMON &mdash; ARCHIVE 2026 &mdash; COMMERCIAL SYSTEMS BUILDER &mdash; ORAN CARMON &mdash; ARCHIVE 2026 &mdash; </span></div><div class="row r2"><span>COMMERCIAL SYSTEMS BUILDER &mdash; ORAN CARMON &mdash; ARCHIVE 2026 &mdash; COMMERCIAL SYSTEMS BUILDER &mdash; ORAN CARMON &mdash; ARCHIVE 2026 &mdash; COMMERCIAL SYSTEMS BUILDER &mdash; ORAN CARMON &mdash; ARCHIVE 2026 &mdash; </span><span>COMMERCIAL SYSTEMS BUILDER &mdash; ORAN CARMON &mdash; ARCHIVE 2026 &mdash; COMMERCIAL SYSTEMS BUILDER &mdash; ORAN CARMON &mdash; ARCHIVE 2026 &mdash; COMMERCIAL SYSTEMS BUILDER &mdash; ORAN CARMON &mdash; ARCHIVE 2026 &mdash; </span></div></div>
   <div class="idx rv" style="--i:0">
     <span class="k">ARCHIVE N&deg;</span> 2026-Present<br>
     <span class="k">STATUS:</span> <span class="br2 blink">ACTIVE</span>
@@ -1133,13 +1132,10 @@ display:flex;align-items:center;padding:0 13px;font-family:'JetBrains Mono',mono
 
 <!--DOC:xtix-->
 
-<div class="bigmq" style="--mqc:rgba(224,164,88,.20)" aria-hidden="true"><div class="in2"><span>FILE 02 &middot; OASIS &middot; LEADERSHIP &mdash; FILE 02 &middot; OASIS &middot; LEADERSHIP &mdash; FILE 02 &middot; OASIS &middot; LEADERSHIP &mdash; FILE 02 &middot; OASIS &middot; LEADERSHIP &mdash; </span><span>FILE 02 &middot; OASIS &middot; LEADERSHIP &mdash; FILE 02 &middot; OASIS &middot; LEADERSHIP &mdash; FILE 02 &middot; OASIS &middot; LEADERSHIP &mdash; FILE 02 &middot; OASIS &middot; LEADERSHIP &mdash; </span></div></div>
 <!--DOC:oasis-->
 
-<div class="bigmq" style="--mqc:rgba(94,143,191,.22)" aria-hidden="true"><div class="in2"><span>FILE 03 &middot; EVENTER &middot; ALIGNMENT &mdash; FILE 03 &middot; EVENTER &middot; ALIGNMENT &mdash; FILE 03 &middot; EVENTER &middot; ALIGNMENT &mdash; FILE 03 &middot; EVENTER &middot; ALIGNMENT &mdash; </span><span>FILE 03 &middot; EVENTER &middot; ALIGNMENT &mdash; FILE 03 &middot; EVENTER &middot; ALIGNMENT &mdash; FILE 03 &middot; EVENTER &middot; ALIGNMENT &mdash; FILE 03 &middot; EVENTER &middot; ALIGNMENT &mdash; </span></div></div>
 <!--DOC:eventer-->
 
-<div class="bigmq" style="--mqc:rgba(242,241,237,.15)" aria-hidden="true"><div class="in2"><span>FILE 04 &middot; MEDCOIN &middot; FOUNDER &mdash; FILE 04 &middot; MEDCOIN &middot; FOUNDER &mdash; FILE 04 &middot; MEDCOIN &middot; FOUNDER &mdash; FILE 04 &middot; MEDCOIN &middot; FOUNDER &mdash; </span><span>FILE 04 &middot; MEDCOIN &middot; FOUNDER &mdash; FILE 04 &middot; MEDCOIN &middot; FOUNDER &mdash; FILE 04 &middot; MEDCOIN &middot; FOUNDER &mdash; FILE 04 &middot; MEDCOIN &middot; FOUNDER &mdash; </span></div></div>
 <!--DOC:medcoin-->
 
 <style>/*D:leadership:2*//*D:leadership:3*//*D:leadership:4*/
@@ -2380,7 +2376,6 @@ loop, so `animation:none` had nothing to cancel. One static frame, then nothing.
 </style>
 <!--DOC:leadership-->
 
-<div class="bigmq" style="--mqc:rgba(47,179,128,.20)" aria-hidden="true"><div class="in2"><span>SYSTEM FILE &middot; AI &middot; COMMERCIAL INTELLIGENCE &mdash; SYSTEM FILE &middot; AI &middot; COMMERCIAL INTELLIGENCE &mdash; SYSTEM FILE &middot; AI &middot; COMMERCIAL INTELLIGENCE &mdash; SYSTEM FILE &middot; AI &middot; COMMERCIAL INTELLIGENCE &mdash; </span><span>SYSTEM FILE &middot; AI &middot; COMMERCIAL INTELLIGENCE &mdash; SYSTEM FILE &middot; AI &middot; COMMERCIAL INTELLIGENCE &mdash; SYSTEM FILE &middot; AI &middot; COMMERCIAL INTELLIGENCE &mdash; SYSTEM FILE &middot; AI &middot; COMMERCIAL INTELLIGENCE &mdash; </span></div></div>
 <!--DOC:tech-->
 
 <!--DOC:final-->
@@ -3333,9 +3328,13 @@ var LOGMAP=[['statement','MEMO \u2014 FROM THE ARCHIVE'],
 var logEl=null,logSecs=[],logCur=-1,logHold=0;
 if(!frozen){
   logEl=document.createElement('div');logEl.id='loglin';logEl.textContent='> ARCHIVE://2026';
-  document.body.appendChild(logEl);
-  var led=document.createElement('div');led.id='recled';led.innerHTML='<i></i>ARCHIVE LIVE';
-  document.body.appendChild(led);
+  /* NOT APPENDED. Oran asked for the archive HUD off the page: the log line bottom-left, the
+     ARCHIVE LIVE lamp and its blinking dot top-right, and the FILES REVIEWED meter with its
+     four coloured squares under it. The elements are still BUILT and left detached, because
+     __archLog calls scrambleTo(logEl,...) and markReviewed() calls meter.querySelector -- and
+     cutting a thing another module holds is exactly how removing the RESTRICTED strip took
+     twelve developed zones and four UV lamps with it, in silence. A node that was never
+     appended is not on the page by any measure the reader has, and every caller still works. */
   window.__archLog=function(txt,hold){if(!logEl)return;scrambleTo(logEl,'> '+txt,460);logHold=performance.now()+(hold||0);};
   window.__archLogReset=function(){logCur=-1;logHold=0;};
   logSecs=LOGMAP.map(function(a){var el=document.getElementById(a[0]);return el?{el:el,txt:a[1],t:0,b:0}:null}).filter(Boolean);
@@ -3693,7 +3692,8 @@ function showClearance(){
 var meter=document.createElement('div');meter.id='casemeter';
 meter.innerHTML='<div class="cml">FILES REVIEWED · <b id="cmn">0/4</b></div><div class="cmb">'+
   CASES.map(function(id){return '<span class="sq" data-c="'+id+'" style="background:'+CCOL[id]+'"></span>'}).join('')+'</div>';
-document.body.appendChild(meter);
+/* NOT APPENDED -- see the log line above. markReviewed() still queries it and still finds its
+   squares; the reader simply never sees the meter. */
 var reviewed={},reviewedN=0;
 var ccstamp=document.getElementById('ccstamp'),ceremonyDone=false;
 if(ccstamp){ccstamp.classList.add('lk');ccstamp.textContent='IN REVIEW · 0/4';}
@@ -3910,7 +3910,12 @@ function mdPlay(){
 /* ---------- master loop ---------- */
 var whooshAt=0,idleAt=performance.now(),idleOn=false;
 var idlecue=document.createElement('div');idlecue.id='idlecue';
-idlecue.textContent='\u25BE CONTINUE REVIEW';document.body.appendChild(idlecue);
+idlecue.textContent='\u25BE CONTINUE REVIEW';
+/* NOT APPENDED, for two reasons that agree. It is the visible half of the same idle state as
+   the ARCHIVE IDLE log line Oran asked to remove -- it comes up after eight still seconds and
+   writes that very line. And it is an arrow pointing DOWN at what comes next, and after the
+   restructure nothing comes next: page 3 is the machine, and the documents are behind its
+   folder. Left on, it would be inviting the reader to keep scrolling into nothing. */
 ['scroll','mousemove','keydown','wheel','pointerdown'].forEach(function(ev){
   addEventListener(ev,function(){
     idleAt=performance.now();

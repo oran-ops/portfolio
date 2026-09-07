@@ -891,6 +891,12 @@ function decodeMach(b64, xform){
   function qn(k,d){ var v=parseFloat(Q.get(k)); return isNaN(v)?d:v }
   var yaw=qn('yaw',-0.46), pitch=qn('pitch',0.20), dist=qn('dist',5.6);
   var FOV=qn('fov',21), BGF=qn('bg',0);
+  /* the orbit's centre. The framing lift used to be added to the EYE alone -- eye y got
+     +0.16 while the target stayed at 0.02 -- which is not an orbit but a sphere looked at
+     off its own axis. Harmless inside a 1.5 rad limit and not harmless once the pitch goes
+     all the way round, because the skew then swings through the vertical. Same framing,
+     one centre. */
+  var CY=0.16;
   var vYaw=0, vPitch=0, drag=false, lx=0, ly=0, lt=0, raf=null;
 
   function size(){
@@ -910,11 +916,28 @@ function decodeMach(b64, xform){
     gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);
     gl.enable(gl.DEPTH_TEST); gl.enable(gl.CULL_FACE); gl.cullFace(gl.BACK);
 
-    var ex=Math.sin(yaw)*Math.cos(pitch)*dist,
-        ey=Math.sin(pitch)*dist+0.16,
-        ez=Math.cos(yaw)*Math.cos(pitch)*dist;
+    /* A TRUE ORBIT, AND A GIMBAL THAT DOES NOT LOCK.
+       Oran: "it has to be fixed in place, and turn freely 360 on every axis like a
+       gyroscope -- right now the X axis stops at a limit." It did: the pitch was held
+       between -0.40 and 1.15 rad, so the machine could not be tipped far enough to show
+       its roof or its underside at all.
+
+       Removing that limit is not enough by itself. lookAt was given world up, [0,1,0], and
+       at pitch = +-pi/2 the eye is directly over the target: up and forward are parallel,
+       their cross product collapses, and the picture turns over. That is the lock, and it
+       is why the limit was there. So up is DERIVED from the orbit instead -- the tangent of
+       the pitch circle, which is dir rotated a quarter turn along its own path:
+
+           dir = ( sin(yaw)cos(pitch),  sin(pitch),  cos(yaw)cos(pitch) )
+           up  = (-sin(yaw)sin(pitch),  cos(pitch), -cos(yaw)sin(pitch) )
+
+       Perpendicular at every angle, degenerate at none, so the rotation runs the whole way
+       round on both axes with nothing to hit. */
+    var sy=Math.sin(yaw), cy=Math.cos(yaw), sp=Math.sin(pitch), cp=Math.cos(pitch);
+    var ex=sy*cp*dist, ey=sp*dist+CY, ez=cy*cp*dist;
     gl.uniformMatrix4fv(U.uProj,false,PROJ);
-    gl.uniformMatrix4fv(U.uView,false,lookAt([ex,ey,ez],[0,0.02,0],[0,1,0]));
+    gl.uniformMatrix4fv(U.uView,false,
+      lookAt([ex,ey,ez],[0,CY,0],[-sy*sp, cp, -cy*sp]));
     gl.uniform3f(U.uCam,ex,ey,ez);
     gl.uniform3f(U.uCream,0.874,0.845,0.768);
     gl.uniform3f(U.uGround,0.098,0.102,0.122);
@@ -950,12 +973,11 @@ function decodeMach(b64, xform){
     raf=null;
     if(drag) return;
     if(Math.abs(vYaw)<1e-4 && Math.abs(vPitch)<1e-4){ vYaw=0; vPitch=0; return }
-    yaw+=vYaw; pitch+=clampPitch(pitch+vPitch)-pitch;
-    vYaw*=0.92; vPitch*=0.92;
+    yaw+=vYaw; pitch+=vPitch;
+    vYaw*=0.80; vPitch*=0.80;
     frame();
     raf=requestAnimationFrame(glide);
   }
-  function clampPitch(p){ return p>1.15?1.15:(p<-0.40?-0.40:p) }
   function kick(){ if(!raf) raf=requestAnimationFrame(glide) }
 
   addEventListener('resize',function(){size();frame()});
@@ -967,8 +989,13 @@ function decodeMach(b64, xform){
   cv.addEventListener('pointermove',function(e){
     if(!drag)return;
     var dx=(e.clientX-lx)*0.0062, dy=(e.clientY-ly)*0.0052;
-    yaw-=dx; pitch=clampPitch(pitch+dy);
-    vYaw=-dx*0.55; vPitch=dy*0.55;
+    /* IT STOPS WHERE IT IS PUT. "the machine goes wild" -- it did: a release handed the
+       glide 55% of the pointer's last velocity and decayed it at 0.92 a frame, which is a
+       ninety-frame coast. A flick spun it most of a turn on its own and then hit the limit
+       and stopped dead. 25% at 0.80 settles inside a quarter second and travels about a
+       twelfth as far: the object still has weight, and it no longer runs off with it. */
+    yaw-=dx; pitch+=dy;
+    vYaw=-dx*0.25; vPitch=dy*0.25;
     lx=e.clientX; ly=e.clientY; lt=e.timeStamp;
     frame();
   });

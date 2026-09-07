@@ -16,11 +16,27 @@
   --mw-gap:16px;
   --mw-edge:2px;
 }
-html,body{height:100%}
-body{margin:0;overflow:hidden;background:#000}
+/* WHAT THE LAB'S BODY RULE DID TO THE SITE.
+   Extracted from the lab page, this block began with a height:100% on html and body and an
+   overflow:hidden on body. In the lab that was right -- the page WAS the machine, one
+   screen, nothing to scroll. On the site it pins the document to a single viewport and clips
+   everything past it: body carried 5,433px of content inside an 812px box with its overflow
+   hidden, so html had nothing left to scroll and the page stopped after the first screen.
+   Measured at 375px: scrollHeight 812, maxY 0, page 3 ending at 5,339 and unreachable.
+
+   extract_machine.py refuses exactly this rule, in as many words -- "shipping either would
+   have taken the site's body" -- and then extract_shell.py let the same rule through for the
+   shell. The lesson was written down for one file and never applied to its neighbour.
+
+   The shell does not need it: .mw is position:fixed;inset:0, which takes the viewport on its
+   own and owes nothing to the height of body. */
 .mw{position:fixed;inset:0;display:flex;flex-direction:column;background:#fff;
   font-family:'JetBrains Mono',ui-monospace,monospace}
-canvas{display:block;image-rendering:pixelated;image-rendering:crisp-edges}
+/* SCOPED. Unqualified, this reached every canvas on the site -- the dust field and, worse,
+   the machine, whose whole quality argument is that it renders at 1.75x and is filtered back
+   down. image-rendering:pixelated throws that filtering away and hands back the aliased
+   original. The 1-bit chrome wants hard pixels; nothing outside the window does. */
+.mw canvas{display:block;image-rendering:pixelated;image-rendering:crisp-edges}
 .mw-menu{flex:none;width:100%;height:var(--mw-menu)}
 /* The 50 per cent checkerboard: a true 2 x 2 cell at the same whole scale the chrome uses,
    so one dither pixel is exactly 2 CSS pixels and matches the folder's raster. 45-degree

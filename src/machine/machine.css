@@ -7,7 +7,26 @@
   background:#191A1F;overflow:hidden}
 #mach-gl{display:block;width:100%;height:100%;cursor:grab;touch-action:none}
 #mach-gl:active{cursor:grabbing}
-.machcue{position:absolute;left:0;right:0;bottom:18px;text-align:center;
+/* "CLICK ON THE SCREEN" -- and why it was invisible.
+   Oran: "the line is missing. Put it top centre, delicate but visible, in the top third of
+   the scroll area and not over the machine, and keep inside the phone's bounds."
+
+   It was never missing from the page; it was sitting where the page cannot show anything.
+   The room carries a mask that feathers all four of its edges -- vertically it is opaque
+   only between 22% and 80%, and fades to nothing by 100%. The cue was at bottom:18px, which
+   on an 820px room is 97.8% of the way down: inside the fade, and effectively erased. A rule
+   that reads perfectly well on its own, in a container written six hundred lines away.
+
+   So it moves to 24% -- just inside the opaque band, in the top third as asked, and clear
+   above the machine, which is centred and reaches no higher than about 30%. */
+.machcue{position:absolute;left:0;right:0;top:24%;text-align:center;
   font-family:'JetBrains Mono',ui-monospace,monospace;font-size:10px;
   letter-spacing:.24em;text-transform:uppercase;color:var(--emb);
-  pointer-events:none;opacity:.9}
+  pointer-events:none;opacity:.9;
+  /* it must never run to the edge of a phone, and it must not wrap into two lines there */
+  padding:0 18px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+/* the short room on a phone is 360-470px tall, so 24% of it is only ~100px down and the
+   machine sits higher in frame. 15% keeps the same clearance in a third of the height. */
+@media (max-width:860px){
+  .machcue{top:15%;font-size:8.5px;letter-spacing:.18em;padding:0 12px}
+}

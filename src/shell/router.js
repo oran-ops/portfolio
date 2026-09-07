@@ -80,8 +80,21 @@
 
   var flying = false;
 
+  /* THE PAGE'S WHEEL HANDLER MUST STAND DOWN INSIDE THE MACHINE.
+   *
+   * The scrolling pages run an inertia scroller: a window-level wheel listener, {passive:false},
+   * that calls preventDefault() on every notch and drives window.scrollTo itself. Inside the
+   * machine there is no window scroll -- html.mw-on is overflow:hidden -- so it went on eating
+   * every wheel event and scrolling nothing, and the document window, which is a perfectly
+   * ordinary overflow-y:auto box, could not be scrolled at all. Every one of the seven files
+   * was frozen at its first screen. Nothing errored; the page simply did not move.
+   *
+   * The scroller already reads a flag for exactly this, so this is the flag and not a patch. */
+  function wheelToPage(on) { window.__wheelOff = !on; }
+
   function enterShell(animate) {
     if (html.classList.contains("mw-on")) { return; }
+    wheelToPage(false);
     if (!animate || flying || typeof window.__cam !== "function") {
       html.classList.add("mw-on");
       if (typeof window.__shellInit === "function") { window.__shellInit(); }
@@ -126,6 +139,7 @@
     if (!html.classList.contains("mw-on")) { return; }
     if (typeof shut === "function") { shut(); }
     html.classList.remove("mw-on");
+    wheelToPage(true);
   }
 
   function render(s) {
