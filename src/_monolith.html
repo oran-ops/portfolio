@@ -137,7 +137,9 @@ padding:9px 17px;font-family:'JetBrains Mono',monospace;font-weight:700;font-siz
 #statement .l2{font-weight:800;font-size:clamp(26px,4.6vw,50px);letter-spacing:-.03em;line-height:1.18;color:var(--emb);margin-top:26px}
 
 /* ============ PHILOSOPHY ============ */
-#philosophy .folder{margin-top:34px}
+/* the 34px that lived here never applied: the markup carried an inline margin-top:56px on
+   the same element, and an inline declaration beats any selector. The one rule that owns
+   this measurement for all eight folders is at .case .folder below; the inlines are gone. */
 #philosophy .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:38px 30px}
 @media (max-width:960px){#philosophy .grid{grid-template-columns:repeat(2,1fr)}}
 @media (max-width:540px){#philosophy .grid{grid-template-columns:1fr}}
@@ -1048,7 +1050,7 @@ body.static #clearance,body.static #idlecue,body.failsafe #clearance,body.failsa
       <div class="tok">THE OPERATING SYSTEM &#8250;</div>
     </div>
     <h1 class="sttl rv" style="--i:1"><span class="ln">Every Business Is Different.</span><br><span class="ln g2">The Principles of Growth Are Not.</span></h1>
-    <div class="folder rv" style="--i:2;margin-top:56px">
+    <div class="folder rv" style="--i:2">
       <div class="tabrow"><div class="tA"><span class="nm">Playbook</span><span class="fl">&#9656; MASTER FILE</span></div></div>
       <div class="frail"><span class="hole" style="top:76px"></span><span class="hole" style="top:114px"></span></div>
       <div class="grid"><div class="rvs" style="--i:0"><div class="node"><svg viewBox="0 0 48 48" aria-hidden="true" focusable="false"><path d="M6 40h36"/><path d="M6 40c6-1.5 9-5 10-9"/><circle cx="14.5" cy="15.5" r="3.4"/><path d="M14.5 18.9v7.6"/><path d="M14.5 21.5l4.4-2.2"/><path d="M14.5 21.5l-4 3"/><path d="M14.5 26.5l3.2 5.5"/><path d="M14.5 26.5l-2.6 6"/><path class="dsh" d="M21.5 14.5h14"/><circle class="f" cx="40" cy="14.5" r="2.6"/></svg></div><div class="snum">STEP 01</div><div class="sname">Vision</div><div class="sdesc">Define where the business is going.</div></div><div class="rvs" style="--i:1"><div class="node"><svg viewBox="0 0 48 48" aria-hidden="true" focusable="false"><path d="M10 22l14-8 14 8"/><path d="M13 20.5V34c0 1.4 4.9 4 11 4s11-2.6 11-4V20.5"/><path d="M13 27c0 1.4 4.9 4 11 4s11-2.6 11-4"/><circle class="f" cx="24" cy="22.5" r="2"/><path class="dsh" d="M24 14V7"/></svg></div><div class="snum">STEP 02</div><div class="sname">Business Understanding</div><div class="sdesc">Understand the business before improving it.</div></div><div class="rvs" style="--i:2"><div class="node"><svg viewBox="0 0 48 48" aria-hidden="true" focusable="false"><circle cx="24" cy="24" r="17"/><circle class="dsh" cx="24" cy="24" r="9.5"/><path d="M24 24L35.5 12.5"/><circle class="f" cx="17" cy="28.5" r="2"/><circle class="f" cx="30" cy="31" r="2"/><circle class="f" cx="19" cy="15.5" r="2"/></svg></div><div class="snum">STEP 03</div><div class="sname">Market Understanding</div><div class="sdesc">Understand the customer before creating the message.</div></div><div class="rvs" style="--i:3"><div class="node"><svg viewBox="0 0 48 48" aria-hidden="true" focusable="false"><path d="M8 40h32"/><rect x="11" y="30" width="9" height="10"/><rect x="21.5" y="24" width="9" height="16"/><path d="M37 40V12h-13"/><path d="M26 12l2.5 3.4"/><path class="dsh" d="M28.5 12v6"/><rect class="em" x="25.8" y="18" width="5.4" height="5"/></svg></div><div class="snum">STEP 04</div><div class="sname">Commercial Architecture</div><div class="sdesc">Build the commercial engine before scaling it.</div></div><div class="rvs" style="--i:4"><div class="node"><svg viewBox="0 0 48 48" aria-hidden="true" focusable="false"><path d="M8 39.5h32"/><circle cx="13" cy="19" r="3.2"/><path d="M8.6 32c0-4 2-6.6 4.4-6.6s4.4 2.6 4.4 6.6"/><circle class="em" cx="24" cy="13.5" r="3.6"/><path class="em" d="M19 28c0-4.6 2.2-7.4 5-7.4s5 2.8 5 7.4"/><circle cx="35" cy="19" r="3.2"/><path d="M30.6 32c0-4 2-6.6 4.4-6.6s4.4 2.6 4.4 6.6"/><path class="dsh" d="M18.5 34.5h11"/></svg></div><div class="snum">STEP 05</div><div class="sname">People &amp; Leadership</div><div class="sdesc">Create ownership, not dependency.</div></div><div class="rvs" style="--i:5"><div class="node"><svg viewBox="0 0 48 48" aria-hidden="true" focusable="false"><path class="dsh" d="M7 32c4 2 9 .8 9.8-2.4.6-2.6-3.4-3.4-4-.8-.7 3 4.6 4.6 9.2 2.8"/><path d="M24 30L42 11l-6.2 21-4.6-6.4-7.2 4.4z"/><path class="em" d="M31.2 25.6L42 11"/></svg></div><div class="snum">STEP 06</div><div class="sname">Execution</div><div class="sdesc">Turn strategy into consistent execution.</div></div><div class="rvs" style="--i:6"><div class="node"><svg viewBox="0 0 48 48" aria-hidden="true" focusable="false"><path d="M9 39V9"/><path d="M9 39h30"/><path d="M9 31h3M9 23h3M9 15h3"/><path d="M14 33l7-6 6 3.6 10-11"/><circle class="f" cx="37" cy="19.6" r="2.4"/><path class="dsh" d="M37 17V9.5"/></svg></div><div class="snum">STEP 07</div><div class="sname">Measurement</div><div class="sdesc">Measure decisions, not assumptions.</div></div><div class="rvs" style="--i:7"><div class="node"><svg viewBox="0 0 48 48" aria-hidden="true" focusable="false"><path d="M37 27a13 13 0 1 1-4.6-9.9"/><path class="em" d="M31 9.5L39.5 9l.5 8.5"/><path class="em" d="M39.5 9L31.8 16.8"/><circle class="f" cx="24" cy="27" r="1.8"/></svg></div><div class="snum">STEP 08</div><div class="sname">Continuous Improvement</div><div class="sdesc">Learn faster than the market evolves.</div></div></div>
@@ -1079,7 +1081,13 @@ body.static #clearance,body.static #idlecue,body.failsafe #clearance,body.failsa
 @media (max-width:700px){#files .cat{display:none}}
 
 /* ============ CASE SECTIONS SHARED ============ */
-.case .folder{margin-top:56px}
+/* THE HEAD OF A DOCUMENT MEASURES THE SAME EVERYWHERE.
+   Measured at 1440x900 across all seven files: the gap from the meta line to the folder was
+   56px in EVENTER and MEDCOIN, 52 in LEADERSHIP and 48 in READ ME -- the same three elements
+   in the same order, three different numbers. The two odd ones were inline attributes typed
+   into doc/leadership.html and doc/final.html, so no stylesheet could see them and nothing
+   could keep them in step. This selector is now the only place the measurement exists. */
+.case .folder,#philosophy .folder,#leadership .folder,#final .folder{margin-top:56px}
 .case .cols2{display:grid;grid-template-columns:1fr 1fr;gap:34px}
 @media (max-width:900px){.case .cols2{grid-template-columns:1fr}}
 .case .z{margin-bottom:22px}

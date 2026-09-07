@@ -95,7 +95,9 @@ color:transparent;-webkit-text-stroke:1.2px var(--emb);background:transparent}/*
 
 /* ============ R8 — THE CLOSING: ten principles, one system ============ */
 #final .secnum{display:none}/*--75--*/
-#final .smeta{margin-top:14px;font-family:'JetBrains Mono',monospace;font-weight:600;
+/* margin-top dropped: .smeta carries 10px for every other file that has one, and READ ME's
+   head is the same three elements in the same order. 14 was the only disagreement. */
+#final .smeta{font-family:'JetBrains Mono',monospace;font-weight:600;
   font-size:10px;letter-spacing:.34em;color:var(--lbl)}/*--76--*/
 #final .osmap{position:relative;display:grid;grid-template-columns:1fr 104px 1fr;margin-top:10px;padding:6px 0 22px}/*--77--*/
 #final .osmap .spine{position:absolute;left:50%;top:0;bottom:22px;width:2px;margin-left:-1px;
