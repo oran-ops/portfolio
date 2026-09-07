@@ -1354,7 +1354,12 @@ function decodeMach(b64, xform){
        The machine never got one. */
     e.stopPropagation();
     drag=true; lx=e.clientX; ly=e.clientY; lt=e.timeStamp; vYaw=0; vPitch=0;
-    cv.setPointerCapture(e.pointerId);
+    /* capture is an optimisation, not a requirement: it keeps the turn alive if the pointer
+       leaves the canvas mid-drag. It throws NotFoundError whenever the pointer is not active
+       -- a synthetic event, or a real one whose pointer was released between dispatch and
+       handler -- and an uncaught throw here aborts the rest of the handler. drag is already
+       true by this line, so the turn survives either way; the try is so the console does. */
+    try{ cv.setPointerCapture(e.pointerId); }catch(err){}
   });
   cv.addEventListener('pointermove',function(e){
     if(!drag)return;

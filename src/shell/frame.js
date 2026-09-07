@@ -1245,7 +1245,7 @@ cv("done").onclick = shut;
 
 
 function relayout() {
-  drawMenu(); drawFiles(); drawDone();
+  drawMenu(); drawFiles(); drawDone(); paintCards();
   if (openId) { drawTitle(); drawBar(); }
 }
 /* The shell draws when the reader enters the machine, not when the page loads. A
@@ -1272,6 +1272,135 @@ function relayout() {
  * 4 lampbands, 4 uvmounts and 5 slips are all present at the first frame this file can see.
  * And the move cannot disturb the three pages that remain, because every document sat AFTER
  * them: removing them changes the document's height and not one section top. */
+/* ---------------------------------------------------------------- the title card
+   Oran: "in every folder you enter, all the content starts lower down, and at the top of the
+   folder itself the name of the document, large -- in a cool old game font like GOLDEN AXE or
+   SUPER MARIO, in the document's colour -- and only when you start scrolling do you see
+   everything."
+
+   THE FONT IS DRAWN, NOT LOADED. Stage 8 of the plan says nothing licensed ships and the page
+   makes no external request, so a real arcade face is out. What makes those titles read as
+   arcade is not the letterforms, it is the PIXEL GRID: a small bitmap blown up with hard
+   edges, a black key line round every glyph, a drop shadow and a lighter band across the top
+   of the letters. So the name is rendered once at a 14px cap height in the weight-800 Inter
+   the page already carries, thresholded to one bit, composed at that low resolution, and then
+   blown up by a WHOLE number. The whole number is the point: a fractional scale gives some
+   pixels two screen-pixels and some three, and the grid stops reading as a grid.
+
+   Rebuilt when the fonts report ready, because a mask drawn before Inter arrives is a mask of
+   the fallback face, and it would never be redrawn otherwise. */
+function pxMask(text, cap) {
+  var m = document.createElement("canvas"), x = m.getContext("2d");
+  var font = '800 ' + cap + 'px Inter, system-ui, -apple-system, sans-serif';
+  x.font = font;
+  m.width = Math.max(2, Math.ceil(x.measureText(text).width) + 2);
+  m.height = Math.ceil(cap * 1.34);
+  x = m.getContext("2d");
+  x.font = font; x.textBaseline = "middle"; x.fillStyle = "#fff";
+  x.fillText(text, 1, Math.round(m.height / 2));
+  /* one bit. Grey edges are exactly what a blown-up bitmap must not have. */
+  var d = x.getImageData(0, 0, m.width, m.height), q = d.data, i;
+  for (i = 0; i < q.length; i += 4) {
+    var a = q[i + 3] >= 110 ? 255 : 0;
+    q[i] = q[i + 1] = q[i + 2] = 255; q[i + 3] = a;
+  }
+  x.putImageData(d, 0, 0);
+  return m;
+}
+
+function tinted(mask, css) {
+  var c = document.createElement("canvas");
+  c.width = mask.width; c.height = mask.height;
+  var x = c.getContext("2d");
+  x.imageSmoothingEnabled = false;
+  x.drawImage(mask, 0, 0);
+  x.globalCompositeOperation = "source-in";
+  x.fillStyle = css; x.fillRect(0, 0, c.width, c.height);
+  return c;
+}
+
+function drawArcade(canvas, text, rgb, availW, availH) {
+  var CAP = 14, PAD = 3;
+  var M = pxMask(text, CAP);
+  var lo = document.createElement("canvas");
+  lo.width = M.width + PAD * 2; lo.height = M.height + PAD * 2;
+  var lx = lo.getContext("2d");
+  lx.imageSmoothingEnabled = false;
+  var ink  = tinted(M, "#0A0B0D");
+  var body = tinted(M, "rgb(" + rgb.join(",") + ")");
+  var lite = tinted(M, "rgb(" + rgb.map(function (v) {
+    return Math.min(255, Math.round(v + (255 - v) * 0.5));
+  }).join(",") + ")");
+  var dx, dy;
+  lx.drawImage(ink, PAD + 2, PAD + 3);                       /* the drop shadow */
+  for (dx = -1; dx <= 1; dx++) {                             /* the key line */
+    for (dy = -1; dy <= 1; dy++) { if (dx || dy) { lx.drawImage(ink, PAD + dx, PAD + dy); } }
+  }
+  lx.drawImage(body, PAD, PAD);                              /* the face */
+  lx.save();                                                 /* and the bevel across its top */
+  lx.beginPath();
+  lx.rect(0, 0, lo.width, PAD + Math.round(M.height * 0.42));
+  lx.clip();
+  lx.drawImage(lite, PAD, PAD);
+  lx.restore();
+
+  /* THE SCALE IS A WHOLE NUMBER, AND IT HAS TO SATISFY BOTH AXES.
+     Width alone was enough while the window was tall; on a short one -- a laptop in a small
+     browser window, a phone in landscape -- a title sized to 86% of the width filled the
+     whole view and there was nothing left for the content to peek from under, which is the
+     one thing this card exists to do. So it is the smaller of the two fits, and never less
+     than 3: below that the key line and the bevel stop being separable and it reads as mush
+     rather than as pixels. */
+  var S = Math.min(Math.floor((availW * 0.86) / lo.width),
+                   Math.floor((availH * 0.30) / lo.height));
+  S = Math.max(3, Math.min(11, S));
+  canvas.width = lo.width * S; canvas.height = lo.height * S;
+  var cx = canvas.getContext("2d");
+  cx.imageSmoothingEnabled = false;
+  cx.clearRect(0, 0, canvas.width, canvas.height);
+  cx.drawImage(lo, 0, 0, lo.width, lo.height, 0, 0, canvas.width, canvas.height);
+  canvas.style.width = canvas.width + "px";
+}
+
+var CARDS = [];
+function titleCards() {
+  IDS.forEach(function (id, i) {
+    var sec = secOf(id);
+    if (!sec || sec.querySelector(".doctitle")) { return; }
+    var rgb = (K.colour[id] && K.colour[id].C) || [47, 179, 128];
+    var css = "rgb(" + rgb.join(",") + ")";
+    var d = document.createElement("div");
+    d.className = "doctitle";
+    d.innerHTML = '<div class="dt-no"></div>' +
+                  '<canvas class="dt-art" aria-hidden="true"></canvas>' +
+                  '<div class="dt-rule"></div>' +
+                  '<div class="dt-cue">scroll to read the file</div>';
+    d.querySelector(".dt-no").textContent = "FILE " + (i < 9 ? "0" : "") + (i + 1);
+    d.querySelector(".dt-no").style.color = css;
+    d.querySelector(".dt-rule").style.background = css;
+    /* the canvas is decoration; the NAME still has to reach a screen reader */
+    d.setAttribute("role", "heading");
+    d.setAttribute("aria-level", "1");
+    d.setAttribute("aria-label", K.labels[id]);
+    sec.insertBefore(d, sec.firstChild);
+    CARDS.push({ el: d, id: id, rgb: rgb });
+  });
+  paintCards();
+}
+
+function paintCards() {
+  var view = cv("view");
+  var w = (view && view.clientWidth) || window.innerWidth || 900;
+  var h = (view && view.clientHeight) || window.innerHeight || 700;
+  CARDS.forEach(function (c) {
+    drawArcade(c.el.querySelector(".dt-art"), K.labels[c.id], c.rgb,
+               Math.max(260, w), Math.max(220, h));
+  });
+}
+if (document.fonts && document.fonts.ready) {
+  document.fonts.ready.then(function () { if (CARDS.length) { paintCards(); } });
+}
+
 function adopt() {
   var docs = cv("docs");
   if (!docs) { return 0; }
@@ -1280,6 +1409,7 @@ function adopt() {
     var sec = secOf(id);
     if (sec && sec.parentNode !== docs) { docs.appendChild(sec); n++; }
   });
+  titleCards();          /* every file opens on its own name */
   return n;
 }
 

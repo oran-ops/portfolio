@@ -16,6 +16,30 @@
   --mw-gap:16px;
   --mw-edge:2px;
 }
+/* ---------------------------------------------------------------- the document title card
+   A file opens on its own name and the content begins below the fold, so the first thing the
+   reader does inside a document is scroll -- which is also what tells them the document
+   scrolls at all. 68vh, not 100: the top of the real content shows at the bottom edge, and a
+   screen with nothing at all peeking off it reads as the end of a page rather than the start
+   of one. */
+.doctitle{min-height:68vh;display:flex;flex-direction:column;align-items:center;
+  justify-content:center;gap:20px;text-align:center;padding:8px 16px 44px;
+  position:relative;z-index:2}
+.doctitle .dt-no{font-family:'JetBrains Mono',ui-monospace,monospace;font-size:11px;
+  font-weight:700;letter-spacing:.34em;opacity:.9}
+/* pixelated AND max-width: the scale is chosen as a whole number to fit, and this is only the
+   guard for a window narrower than the smallest whole number allows */
+.doctitle .dt-art{display:block;max-width:100%;height:auto;image-rendering:pixelated}
+.doctitle .dt-rule{width:52px;height:3px;opacity:.85}
+.doctitle .dt-cue{font-family:'JetBrains Mono',ui-monospace,monospace;font-size:9px;
+  font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:#7E8189}
+@media (max-width:860px){
+  .doctitle{min-height:62vh;gap:15px;padding-bottom:32px}
+  .doctitle .dt-no{font-size:9.5px;letter-spacing:.26em}
+  .doctitle .dt-cue{font-size:8px;letter-spacing:.2em}
+}
+@media (prefers-reduced-motion:reduce){.doctitle{min-height:46vh}}
+
 /* WHAT THE LAB'S BODY RULE DID TO THE SITE.
    Extracted from the lab page, this block began with a height:100% on html and body and an
    overflow:hidden on body. In the lab that was right -- the page WAS the machine, one
