@@ -862,62 +862,106 @@ function decodeMach(b64, xform){
      Everything is thresholded to pure black and white at the end. That one step is what makes
      a modern font read as 1984: the Macintosh had one bit per pixel and no antialiasing, and
      grey edges are the first thing that gives a fake screen away. */
-  function screenTexture(){
-    var W=512, H=342, cv2=document.createElement('canvas');
-    cv2.width=W; cv2.height=512;      /* padded to a power of two, see below */
-    var x=cv2.getContext('2d');
+  /* THE SCREEN HAS THREE STATES, AND THE MIDDLE ONE IS AN ANIMATION.
+     From outside, the machine shows a title. Click it and the folder OPENS on the screen --
+     the Macintosh zoom rectangle, stepping outward from the title panel to the window's own
+     bounds -- and only then does the camera fly in. That is Oran's "the screen passes into
+     the folder while the reader watches", and it is also the beat the plan has always
+     described and never filled: straighten, THEN the folder opens, THEN the zoom.
 
+     One canvas, one texture, re-uploaded on each change of state. The open animation is
+     stepped rather than driven per frame: a 512x512 RGBA upload is a megabyte, and eight
+     steps across 420 ms reads as motion while sixty would be a bandwidth problem for nothing.
+
+     Everything is thresholded to pure black and white at the end. That one step is what makes
+     a modern font read as 1984: the Macintosh had one bit per pixel and no antialiasing, and
+     grey edges are the first thing that gives a fake screen away. */
+  var SCR_W=512, SCR_H=342;
+  var SCR_CV=null, SCR_X=null, SCR_TEXTURE=null, SCR_MODE='';
+
+  function crtGround(){
+    var x=SCR_X, W=SCR_W, H=SCR_H, i, j, o;
     /* the desktop: the 50% stipple the Finder actually showed, built as pixels rather than as
        175,000 fill calls */
-    var img=x.createImageData(W,H), d=img.data, i, j, o;
+    var img=x.createImageData(W,H), d=img.data;
     for(j=0;j<H;j++) for(i=0;i<W;i++){
       o=(j*W+i)*4; var on=((i+j)&1)===0?0:255;
       d[o]=d[o+1]=d[o+2]=on; d[o+3]=255;
     }
     x.putImageData(img,0,0);
-
-    /* the menu bar */
-    x.fillStyle='#fff'; x.fillRect(0,0,W,20);
+    x.fillStyle='#fff'; x.fillRect(0,0,W,20);          /* the menu bar */
     x.fillStyle='#000'; x.fillRect(0,20,W,1);
     x.font='13px Geneva, Chicago, "Lucida Grande", Verdana, sans-serif';
-    x.textBaseline='middle';
-    x.fillText('⌘', 12, 10);
+    x.textBaseline='middle'; x.textAlign='left';
+    x.fillText('\u2318', 12, 10);
     var menus=['File','Edit','View','Special'], mx=40;
     for(i=0;i<menus.length;i++){ x.fillText(menus[i], mx, 10); mx+=x.measureText(menus[i]).width+22 }
+  }
 
-    /* the folder, white and matte, drawn the way the Finder drew one: a tab, a body, and a
-       one-pixel black rule round the outside */
-    var fw=104, fh=80, fx=(W-fw)/2, fy=104;
-    x.fillStyle='#fff';
-    x.beginPath();
-    x.moveTo(fx, fy+10); x.lineTo(fx+34, fy+10); x.lineTo(fx+42, fy+2); x.lineTo(fx+fw, fy+2);
-    x.lineTo(fx+fw, fy+fh); x.lineTo(fx, fy+fh); x.closePath();
-    x.fill();
-    x.strokeStyle='#000'; x.lineWidth=2; x.stroke();
-    x.beginPath(); x.moveTo(fx+2, fy+18); x.lineTo(fx+fw-2, fy+18); x.stroke();
+  /* the title panel's own rectangle, which is also where the zoom starts from */
+  var TP={x:96, y:112, w:320, h:126};
+  /* and where it ends: the folder window, inset from the screen under the menu bar */
+  var FW={x:16, y:32, w:SCR_W-32, h:SCR_H-48};
 
-    /* the name, on a white slip the way a selected icon carries its label */
-    x.font='16px Geneva, Chicago, "Lucida Grande", Verdana, sans-serif';
-    x.textAlign='center';
-    var label='Oran Carmon — Master File';
-    var tw=x.measureText(label).width;
-    x.fillStyle='#fff'; x.fillRect(W/2-tw/2-8, fy+fh+12, tw+16, 24);
-    x.fillStyle='#000'; x.fillText(label, W/2, fy+fh+24);
+  function crtTitle(){
+    var x=SCR_X;
+    crtGround();
+    x.fillStyle='#fff'; x.fillRect(TP.x,TP.y,TP.w,TP.h);
+    x.strokeStyle='#000'; x.lineWidth=2; x.strokeRect(TP.x+1,TP.y+1,TP.w-2,TP.h-2);
+    x.textAlign='center'; x.fillStyle='#000';
+    x.font='15px Geneva, Chicago, "Lucida Grande", Verdana, sans-serif';
+    x.fillText('ORAN CARMON', SCR_W/2, TP.y+30);
+    x.fillRect(TP.x+40, TP.y+46, TP.w-80, 1);
+    x.font='bold 30px Chicago, Geneva, "Lucida Grande", Verdana, sans-serif';
+    x.fillText('THE CASE FILES', SCR_W/2, TP.y+74);
+    x.font='11px Geneva, Chicago, "Lucida Grande", Verdana, sans-serif';
+    x.fillText('SEVEN FILES \u00b7 ONE MACHINE \u00b7 2018\u20132026', SCR_W/2, TP.y+104);
+  }
 
-    /* one bit per pixel, no antialiasing */
+  /* the zoom rectangle. Three outlines a step apart, so the growth reads as motion rather
+     than as a rectangle that happens to be a different size each time. */
+  function crtOpen(t){
+    var x=SCR_X, k;
+    crtGround();
+    if(t<0.34){
+      x.fillStyle='#fff'; x.fillRect(TP.x,TP.y,TP.w,TP.h);
+      x.strokeStyle='#000'; x.lineWidth=2; x.strokeRect(TP.x+1,TP.y+1,TP.w-2,TP.h-2);
+    }
+    x.strokeStyle='#000'; x.lineWidth=2;
+    for(k=0;k<3;k++){
+      var u=t-k*0.17; if(u<=0) continue;
+      if(u>1) u=1;
+      var e=u*u*(3-2*u);
+      x.strokeRect(TP.x+(FW.x-TP.x)*e, TP.y+(FW.y-TP.y)*e,
+                   TP.w+(FW.w-TP.w)*e, TP.h+(FW.h-TP.h)*e);
+    }
+  }
+
+  /* and the folder itself, drawn by the SAME function the shell uses for the window the
+     reader lands in. That is what makes the last frame of the flight and the first frame of
+     the shell the same picture. screen.js is expanded after this file, so it cannot be called
+     at startup -- it is called here, on the click, by which time it exists. If it somehow
+     does not, the title stays up rather than the screen going blank. */
+  function crtFolder(){
+    if(typeof window.drawScreen!=='function' || typeof window.Buf!=='function'){ crtTitle(); return }
+    var b=new window.Buf(SCR_W,SCR_H);
+    window.drawScreen(b, SCR_W, SCR_H, 4, {open:true, sel:null, doc:null, opened:0});
+    var im=SCR_X.createImageData(SCR_W,SCR_H);
+    im.data.set(b.d);
+    SCR_X.putImageData(im,0,0);
+  }
+
+  function crtUpload(){
+    var x=SCR_X, W=SCR_W, H=SCR_H, i;
     var px=x.getImageData(0,0,W,H), q=px.data;
     for(i=0;i<q.length;i+=4){
       var v=(q[i]*0.299+q[i+1]*0.587+q[i+2]*0.114)>=128?255:0;
       q[i]=q[i+1]=q[i+2]=v;
     }
     x.putImageData(px,0,0);
-
-    var tex=gl.createTexture();
-    gl.bindTexture(gl.TEXTURE_2D,tex);
+    gl.bindTexture(gl.TEXTURE_2D,SCR_TEXTURE);
     gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL,false);
-    gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,cv2);
-    /* 512x342 is not a power of two, so clamp and no mipmaps - WebGL1 allows that combination
-       and nothing else */
+    gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,SCR_CV);
     /* a one-pixel checkerboard is the worst case for aliasing and it crawled badly without
        these. WebGL1 allows mipmaps only on power-of-two textures, which is the whole reason
        the canvas is 512x512 with the raster in its top 342 rows. */
@@ -926,8 +970,31 @@ function decodeMach(b64, xform){
     gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE);
     gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.LINEAR_MIPMAP_LINEAR);
     gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.LINEAR);
-    return tex;
   }
+
+  function screenTexture(){
+    SCR_CV=document.createElement('canvas');
+    SCR_CV.width=SCR_W; SCR_CV.height=512;      /* padded to a power of two, see above */
+    SCR_X=SCR_CV.getContext('2d');
+    SCR_TEXTURE=gl.createTexture();
+    crtTitle(); crtUpload(); SCR_MODE='title';
+    return SCR_TEXTURE;
+  }
+
+  /* the router drives this: 'title' outside, ('open', t) during the middle beat, 'folder'
+     when it has finished. Re-drawing the same state twice is skipped, so a caller may be
+     as lazy as it likes. */
+  window.__crt=function(mode,t){
+    if(!SCR_X) return;
+    var key=mode+(mode==='open'?(':'+Math.round(t*8)):'');
+    if(key===SCR_MODE) return;
+    SCR_MODE=key;
+    if(mode==='open'){ crtOpen(t); }
+    else if(mode==='folder'){ crtFolder(); }
+    else { crtTitle(); }
+    crtUpload();
+    frame();
+  };
 
   var U={};['uProj','uView','uModel','uNM','uCream','uGround','uCam','uMat','uDetail','uBody','uScreen','uScreenRect','uNoteTex','uNoteTile','uNoteCol','uNoteHalf']
     .forEach(function(k){U[k]=gl.getUniformLocation(prog,k)});
@@ -1082,7 +1149,16 @@ function decodeMach(b64, xform){
      to the mouse at +0.95, and at that distance the pile ran off the bottom-left corner and
      the keyboard was cut in half. 7.2 holds the whole desk and the machine is still plainly
      the subject rather than an object in a wide shot. Chosen against the render. */
-  var yaw=qn('yaw',-0.52), pitch=qn('pitch',0.26), dist=qn('dist',7.2);
+  /* FRONT ON, AND THE SCREEN FACING THE READER. Oran, describing the arrival: "the reader
+     keeps scrolling until the machine is in a position where it is exactly in the centre of
+     the screen and completely static, with the machine's screen facing the reader."
+     -0.52 was a three-quarter view, which is the prettier product shot and is not what he
+     asked for -- and it is the wrong pose for a screen the reader is about to be told to
+     click, and which is about to carry a title. Head on, looking slightly down.
+     6.6 rather than 7.2 because a Macintosh seen head on is narrow: at 7.2 the case spanned
+     28% of the frame width and the top quarter of the room was empty. Projected the case's
+     eight bounding corners at each candidate rather than judging it by eye. */
+  var yaw=qn('yaw',0), pitch=qn('pitch',0.20), dist=qn('dist',6.6);
   var FOV=qn('fov',21), BGF=qn('bg',0);
   /* the orbit's centre. The framing lift used to be added to the EYE alone -- eye y got
      +0.16 while the target stayed at 0.02 -- which is not an orbit but a sphere looked at
@@ -1092,7 +1168,13 @@ function decodeMach(b64, xform){
   /* 0.06, not 0.16: the pivot is the point the frame is centred on, and with a pile on the
      desk the interesting half of this scene is BELOW the machine's middle. Dropping the pivot
      lifts the disks off the bottom edge without pushing the camera further out. */
-  var CY=0.06;
+  /* THE ORBIT CENTRE IS THE MACHINE'S OWN CENTRE, not a height above the floor.
+     Its box is x -0.485..0.485, y -0.675..0.701, z -0.699..0.543, so its middle is
+     (0, 0.013, -0.078). Aiming there is what puts the case at exactly 50% of the frame
+     width and holds it there at every yaw and pitch -- which is the whole of "the machine
+     always stays centred in the same place, like a gyro ball on a stand". Verified by
+     projection: cx is 50.0 at every angle tried, by construction. */
+  var CY=0.013, CZ=-0.078;
   /* THE ORBIT GETS A CENTRE, NOT JUST A HEIGHT.
      It had one: [0, CY, 0], which is the middle of the case. That is the right thing to turn
      the machine about and the wrong thing to fly INTO, and the flight had no way to say so —
@@ -1102,7 +1184,7 @@ function decodeMach(b64, xform){
      exact moment the reader is being told to look at it. Then the shell cut in over it.
      A three-component aim, defaulting to exactly what it was, lets the flight move the point
      it is flying at instead of only how far away it stands. */
-  var AIMX=0, AIMY=CY, AIMZ=0;
+  var AIMX=0, AIMY=CY, AIMZ=CZ;
   /* AND ON A NARROW SCREEN THE FRAME HAS TO CHOOSE. The desk is 2.83 units across and its
      pivot is the machine, at x=0, so what the frame must hold is 1.667 either side. On a
      laptop room -- aspect 1.56 -- that needs a distance of 5.8 and it stands at 7.2, so it
@@ -1143,9 +1225,16 @@ function decodeMach(b64, xform){
     DPR=Math.min((window.devicePixelRatio||1)*1.75, 2.6);
     W=cv.clientWidth;H=cv.clientHeight;
     FIT=fitFor(W/Math.max(1,H));
-    var wasHome=(AIMX===AIMX0 && AIMY===CY && AIMZ===0);
-    AIMX0=(W/Math.max(1,H) < 1.0) ? -0.25 : 0;
-    if(wasHome){ AIMX=AIMX0; AIMY=CY; AIMZ=0; }   /* only if nobody is flying it right now */
+    var wasHome=(AIMX===AIMX0 && AIMY===CY && AIMZ===CZ);
+    /* AND IT STAYS 0 ON A PHONE TOO. This slid to -0.25 on a narrow room so the whole pile
+       came into frame, trading the mouse for the labels. That was the right trade while the
+       machine was a three-quarter view and the frame was a compromise anyway; it is the wrong
+       one now. Oran: "the machine always stays centred in the same place." An aim that moves
+       with the viewport is a machine centred on a laptop and a quarter of a unit off on a
+       phone, which is exactly the thing he is asking me to stop doing. The pile runs off the
+       left edge on a narrow screen instead, which reads as a pile that continues. */
+    AIMX0=0;
+    if(wasHome){ AIMX=AIMX0; AIMY=CY; AIMZ=CZ; }   /* only if nobody is flying it right now */
     cv.width=Math.round(W*DPR);cv.height=Math.round(H*DPR);
     gl.viewport(0,0,cv.width,cv.height);
     PROJ=persp(FOV,W/H,0.05,60);
@@ -1315,7 +1404,7 @@ function decodeMach(b64, xform){
   };
   /* pass an [x,y,z] to aim there; pass nothing to put it back on the case. */
   window.__camAim=function(a){
-    if(a){ AIMX=a[0]; AIMY=a[1]; AIMZ=a[2]; } else { AIMX=AIMX0; AIMY=CY; AIMZ=0; }
+    if(a){ AIMX=a[0]; AIMY=a[1]; AIMZ=a[2]; } else { AIMX=AIMX0; AIMY=CY; AIMZ=CZ; }
     frame();
     return [AIMX,AIMY,AIMZ];
   };

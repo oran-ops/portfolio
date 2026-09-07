@@ -20,12 +20,24 @@
  * not need telling what was opened — it re-reads after every open and redraws.
  */
 (function () {
+  /* sessionStorage, NOT localStorage. The counter is not stuck -- it is REMEMBERED, and that
+     is worse. Both writers kept the opened set in localStorage, which survives every visit, so
+     a reader who has been through the file once arrives to a folder that already says
+     "7 of 7 opened" and can never move again. Simulated a returning visitor and got exactly
+     that. Oran has been testing this for days; his browser has had all seven since round two.
+     A line that reads "N of 7 opened" is a progress cue for THIS read. sessionStorage is per
+     tab and per visit, which is what that sentence means. */
   var STORE = "ocmf.opened";
+  var MEM = (function(){
+    try { window.sessionStorage.setItem("ocmf.t","1"); window.sessionStorage.removeItem("ocmf.t");
+          return window.sessionStorage; }
+    catch (e) { return null; }          /* private windows can refuse it; then nothing is kept */
+  })();
   var S = 2;                         /* logical pixel -> CSS pixel. Whole, always. */
   var canvas = null, hits = [], W = 0, H = 0;
 
   function loadOpened() {
-    try { return JSON.parse(localStorage.getItem(STORE) || "[]") || []; }
+    try { return MEM ? (JSON.parse(MEM.getItem(STORE) || "[]") || []) : []; }
     catch (e) { return []; }
   }
 

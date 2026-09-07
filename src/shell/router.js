@@ -58,8 +58,8 @@
   /* REST must BE the machine's resting camera and not a copy of an older one: the flight
      starts by snapping to `from`, so a stale REST makes the first frame of the entry a jump.
      These match the defaults in machine.js exactly. */
-  var REST = { yaw: -0.52, pitch: 0.26, dist: 7.20 };
-  var FLAT = { yaw: 0, pitch: 0.08, dist: 6.40 };
+  var REST = { yaw: 0, pitch: 0.20, dist: 6.60 };
+  var FLAT = { yaw: 0, pitch: 0.09, dist: 5.90 };
   /* IN is worked out at flight time, not written down: it aims at the raster's own centre
      and stands at the distance that fills 86% of the frame height with it, which is what
      makes the last frame of the zoom and the first frame of the folder the same picture.
@@ -112,6 +112,42 @@
 
   var flying = false;
 
+  /* BEAT TWO, WHICH USED TO BE A HELD PAUSE WITH NOTHING IN IT.
+     The plan has said since stage 4 that the machine straightens, THEN the folder opens, THEN
+     the zoom begins -- and the middle beat was 260 ms of nothing, because swapping the CRT's
+     texture mid-flight was a piece of work of its own and the note in this file said so.
+     It is that piece of work. machine.js draws the screen in three states now; this steps it
+     from the title through the Macintosh zoom rectangle into the folder, so what the reader
+     watches during the pause is the screen opening. Oran: "make an effect during the zoom, so
+     the screen passes into the folder while the reader watches."
+
+     Stepped, not per frame: each step re-uploads a 512x512 texture, and __crt collapses any
+     step it has already drawn, so this asks for about eight uploads across the beat.
+     Under prefers-reduced-motion, and if rAF is not running, it lands on the end state at
+     once rather than not at all. */
+  function openOnScreen(ms, then) {
+    if (typeof window.__crt !== "function") { then(); return; }
+    if (matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      window.__crt("folder");
+      then();
+      return;
+    }
+    var t0 = performance.now(), done = false;
+    var land = function () {
+      if (done) { return; }
+      done = true;
+      window.__crt("folder");
+      then();
+    };
+    setTimeout(land, ms + 120);                 /* the same deadline discipline as the flight */
+    (function step(now) {
+      if (done) { return; }
+      var t = Math.min(1, (now - t0) / ms);
+      window.__crt("open", t);
+      if (t < 1) { requestAnimationFrame(step); } else { land(); }
+    })(t0);
+  }
+
   /* THE PAGE'S WHEEL HANDLER MUST STAND DOWN INSIDE THE MACHINE.
    *
    * The scrolling pages run an inertia scroller: a window-level wheel listener, {passive:false},
@@ -159,7 +195,7 @@
         if (typeof window.__camAim === "function") { window.__camAim(null); }
       }
     }
-    setTimeout(arrive, 1600);                   /* the flight is 480 + 260 + 620 = 1360 */
+    setTimeout(arrive, 1900);                   /* the flight is 480 + 440 + 620 = 1540 */
 
     /* FROM WHERE THE CAMERA IS, NOT FROM WHERE IT STARTED.
        This flew from REST, and REST is only where the camera sits if the reader has not
@@ -176,10 +212,10 @@
     var from = now ? { yaw: now[0], pitch: now[1], dist: now[2] } : REST;
     fly(from, FLAT, 480, function () {          /* 1. the machine straightens */
       if (arrived) { return; }
-      setTimeout(function () {                  /* 2. the folder opens */
+      openOnScreen(440, function () {           /* 2. THE FOLDER OPENS, on the screen itself */
         if (arrived) { return; }
         fly(FLAT, inKeyframe(), 620, arrive);   /* 3. and only then, the zoom */
-      }, 260);
+      });
     });
   }
 
@@ -188,6 +224,9 @@
     if (typeof shut === "function") { shut(); }
     html.classList.remove("mw-on");
     wheelToPage(true);
+    /* the machine goes back to showing its title, so the next reader through -- or the same
+       one, coming back -- gets the whole sequence rather than a screen already open. */
+    if (typeof window.__crt === "function") { window.__crt("title"); }
   }
 
   function render(s) {

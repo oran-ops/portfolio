@@ -466,6 +466,13 @@ html.preopen #hero .hw{transform:perspective(1400px) translateY(11vh) rotateX(7d
 
 /* horizontal case index */
 .hwrap{height:330vh}
+/* AND THE DOCUMENT ENDS WHERE THE PIN DOES.
+   .sec carries 110px of padding top and bottom, which is right for a section with something
+   after it. Nothing follows this one any more: Oran asked for the scroll to stop the moment
+   the machine is centred, and 110px of section padding under the pin is 110px of scrolling
+   after the pin has already released and carried the machine up off the screen. The lead-in
+   at the top stays; only the tail goes. */
+#files{padding-bottom:0}
 .hpin{position:sticky;top:0;height:100svh;overflow:hidden;display:flex;align-items:center;cursor:grab}
 .hpin.drag{cursor:grabbing}
 .htrack{display:flex;align-items:center;gap:5vw;padding:0 0 0 12vw;width:max-content;will-change:transform}
@@ -1119,16 +1126,21 @@ display:flex;align-items:center;padding:0 13px;font-family:'JetBrains Mono',mono
       </div>
     </div>
   </div>
-  <div class="wrap"><div class="ticker rv" style="--i:5"><div class="tk"><span>FILE 01 <b>XTIX</b> &mdash; BUILT FROM ZERO <em>&#9670;</em> FILE 02 <b>OASIS</b> &mdash; LEADERSHIP <em>&#9670;</em> FILE 03 <b>EVENTER</b> &mdash; ALIGNMENT <em>&#9670;</em> FILE 04 <b>MEDCOIN</b> &mdash; FOUNDER <em>&#9670;</em> EXECUTIVE PORTFOLIO &middot; 04 DOSSIERS &middot; 2018&ndash;2026 <em>&#9670;</em> </span><span>FILE 01 <b>XTIX</b> &mdash; BUILT FROM ZERO <em>&#9670;</em> FILE 02 <b>OASIS</b> &mdash; LEADERSHIP <em>&#9670;</em> FILE 03 <b>EVENTER</b> &mdash; ALIGNMENT <em>&#9670;</em> FILE 04 <b>MEDCOIN</b> &mdash; FOUNDER <em>&#9670;</em> EXECUTIVE PORTFOLIO &middot; 04 DOSSIERS &middot; 2018&ndash;2026 <em>&#9670;</em> </span></div></div></div>
-  <div class="hendflow"><div class="hcard hend rv" style="--i:5">
-          <div class="hendt">04 FILES &middot; ONE SYSTEM</div>
-          <!-- "CONTINUE v" REMOVED. It sat under the machine and pointed DOWN, and after the
-     restructure there is nothing down there: page 3 is the last screen and the seven files are
-     behind the machine's folder. Oran called scrolling past the machine a critical error, and
-     this line was the page inviting exactly that, in words. The other .hhint - "KEEP SCROLLING /
-     THE ROOM IS THROUGH HERE", on the intro card - stays, because that one is still true: it
-     leads into the horizontal travel that brings the room. -->
-        </div></div>
+  <!-- NOTHING FOLLOWS THE MACHINE.
+     Oran, describing the reader's path: "the moment the machine is centred the scroll stops --
+     there is no more going down, or sideways, or anything; there is only scrolling up to go
+     back." That cannot be true while three things sit underneath it, so the three are gone:
+
+       the FILE 01-04 ticker  - an index of four case files, written when page 3 WAS the case
+                                index. The folder holds seven and they are behind the machine.
+       "04 FILES . ONE SYSTEM" - the same count, and the same reason.
+       the page footer        - the name, the archive line and a live clock. Its own rule is
+                                still in the stylesheet; only the element is gone from the flow.
+
+     I flagged the first two to him last round and did not touch them, because they are his
+     words. This instruction settles it: he wants the document to end at the machine, and they
+     were the only things stopping it. The <b id="archclock"> reader is guarded with if(ck),
+     and .ticker's two references both tolerate absence -- checked with tools/depends.py. -->
 </section>
 
 <!--DOC:xtix-->
@@ -2395,10 +2407,6 @@ loop, so `animation:none` had nothing to cancel. One static frame, then nothing.
 
 <!--DOC:final-->
 
-<footer>
-  <span><b>ORAN CARMON</b></span>
-  <span>EXECUTIVE PORTFOLIO &middot; DOSSIER ARCHIVE &middot; <b id="archclock">--:--:--</b></span>
-</footer>
 
 <script>
 (function(){
@@ -2648,7 +2656,7 @@ var hero=document.getElementById('hero');
 var hc=hero.querySelector('.hw')||hero.querySelector('.center'),hd=hero.querySelector('.drawer'),
     hx=hero.querySelector('.idx'),hb=hero.querySelector('.barc'),hcue=hero.querySelector('.cue'),
     htabs=hd?[].slice.call(hd.children):[];
-var hcKill=false,heroB=0,heroFar=false;
+var hcKill=false,heroB=0,heroT=0,heroFar=false;
 function heroFx(y){
   /* phones: the moment real scrolling starts, the scrub owns the transform -
      otherwise the boot-open transition retargets every frame write and the
@@ -2663,10 +2671,23 @@ function heroFx(y){
   var far=(heroB>0&&y>heroB+vh*.6);
   if(far&&heroFar)return;
   heroFar=far;
-  var p=clamp(y/(vh*.9));
+  /* MEASURED FROM THE HERO, NOT FROM THE TOP OF THE DOCUMENT.
+     This was clamp(y/(vh*.9)) -- the absolute page scroll -- which is exactly right for a hero
+     that IS the first screen, and exactly wrong for one that is not. The hero was harvested to
+     the bottom of page 1 and its driver never came with it: the fade completes at y=697 and the
+     reader does not arrive until y=1355, so by then the card sat at opacity 0.05, translated
+     238px up the screen. Measured on the live page, at the very scroll position Oran keeps
+     photographing. That is his "dead area with the green folder submerged in the background" --
+     it is not submerged, it is 95% transparent.
+
+     rel is 0 when the hero exactly fills the screen. Below that it is negative and clamps to 0,
+     so the card is at full strength for the whole time it is arriving and on screen; above it
+     the card fades and drifts as it leaves upward, which is what the effect was always for. */
+  var rel=y-heroT;
+  var p=clamp(rel/(vh*.9));
   hc.style.opacity=String(1-p*.95);
-  hc.style.transform='translateY('+(-y*.17)+'px) scale('+(1-p*.05)+')';
-  if(hd){hd.style.opacity=String(1-p*1.1);hd.style.transform='translateY('+(-y*.06)+'px)';
+  hc.style.transform='translateY('+(-Math.max(0,rel)*.17)+'px) scale('+(1-p*.05)+')';
+  if(hd){hd.style.opacity=String(1-p*1.1);hd.style.transform='translateY('+(-Math.max(0,rel)*.06)+'px)';
     htabs.forEach(function(t,i){if(!t.matches(':hover'))t.style.transform='translateX('+((i-1.5)*p*16)+'px)'});}
   if(hx)hx.style.opacity=String(1-p*1.5);
   if(hb)hb.style.opacity=String(1-p*1.5);
@@ -2689,7 +2710,7 @@ function measure(){
   units.forEach(function(u){u.t=top0(u.el)});
   SEC.forEach(function(x){x.t=top0(x.el);x.b=x.t+x.el.offsetHeight});
   if(stWrap){stTop=top0(stWrap);stH=stWrap.offsetHeight}
-  heroB=top0(hero)+hero.offsetHeight;heroFar=false;
+  heroT=top0(hero);heroB=heroT+hero.offsetHeight;heroFar=false;
 }
 
 /* ---------- master loop ---------- */
@@ -3120,7 +3141,14 @@ function measure(){
   if(hwrap&&hpin&&htrack){
     hwTop=hwrap.getBoundingClientRect().top+window.pageYOffset;
     hwH=hwrap.offsetHeight;
-    maxX=Math.max(0,htrack.scrollWidth-hpin.clientWidth);
+    /* THE TRAVEL ENDS WITH THE ROOM CENTRED, not with the track's right edge flush against
+       the pin's. Those are not the same place: the room is 100vw and the pin is the section's
+       content width, so scrolling until the track ran out left the room 33px off centre and
+       the machine with it. Measured. Centring the room's own middle on the pin's middle is
+       what "the machine is exactly in the centre of the screen" means, and it is one line. */
+    var roomEl=htrack.querySelector('.hcard.hroom');
+    maxX=roomEl ? Math.max(0, roomEl.offsetLeft + roomEl.offsetWidth/2 - hpin.clientWidth/2)
+                : Math.max(0, htrack.scrollWidth-hpin.clientWidth);
   }
   lights.forEach(function(l){
     l.t=l.el.getBoundingClientRect().top+window.pageYOffset;
@@ -3171,7 +3199,12 @@ function frame(){
          the 58vw of lead, not of a dead pan. The 0.22 term is the floor on the slope -
          the intro card slides from the first pixel of scroll - and the pan completes at
          80% so the last fifth is still a settle with the room square in the frame. */
-      var hs=clamp(hp/0.80),hE=0.22*hs+0.78*(hs*hs*(3-2*hs));
+      /* 0.96, NOT 0.80. The pan used to finish four fifths of the way through the pin,
+         which left 356px of scrolling in which the reader pushed and nothing whatever moved,
+         and then the page ended. That is the "the scroll gets stuck there" in his note. It
+         finishes at 96% now: 71px of settle with the machine square in the frame, and then
+         the document is over, which is what he asked for. */
+      var hs=clamp(hp/0.96),hE=0.22*hs+0.78*(hs*hs*(3-2*hs));
       if(!dragging){dragOff+=dragV;dragV*=.94;dragOff*=.90;if(Math.abs(dragOff)<.4)dragOff=0;}
       var X=hE*maxX+dragOff;
       var cw=window.innerWidth;

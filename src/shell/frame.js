@@ -8,6 +8,15 @@ var S = 2;                                   /* logical pixel -> CSS pixel. Whol
    counted K.order.length. One source of truth for what the seven files are. */
 var IDS = K.order.slice();
 var STORE = "ocmf.opened";                   /* the same key the folder page reads */
+/* AND THE SAME STORAGE. If this writes localStorage while folder.js reads sessionStorage the
+   counter is not merely wrong, it is wrong in a way that looks intermittent. See the note in
+   folder.js: the set is per-visit now, because "N of 7 opened" is a progress cue for this read
+   and a reader who has been through once was arriving to a folder that already said 7 of 7. */
+var MEM = (function () {
+  try { window.sessionStorage.setItem("ocmf.t", "1"); window.sessionStorage.removeItem("ocmf.t");
+        return window.sessionStorage; }
+  catch (e) { return null; }
+})();
 
 function cv(id) { return document.getElementById(id); }
 function secOf(id) { return document.getElementById(id); }
@@ -1147,8 +1156,8 @@ function record(id) {
      counter that counts its own test harness is telling you about the harness. */
   if (auditing) return;
   try {
-    var had = JSON.parse(localStorage.getItem(STORE) || "[]") || [];
-    if (had.indexOf(id) < 0) { had.push(id); localStorage.setItem(STORE, JSON.stringify(had)); }
+    var had = MEM ? (JSON.parse(MEM.getItem(STORE) || "[]") || []) : [];
+    if (had.indexOf(id) < 0) { had.push(id); if (MEM) { MEM.setItem(STORE, JSON.stringify(had)); } }
     /* the total comes from the icon list, never from a literal. The counter this replaces
        hard-coded 4 in several places and a phone-only copy of itself; when the phone path
        lost its function the stamp sat at 0/4 through 24,674 px of scrolling and nothing
@@ -1159,7 +1168,11 @@ function record(id) {
 function note(s) { var n = cv("rvw-note"); if (n) { n.innerHTML = "<em>" + s + "</em>"; } }
 
 function show(id) {
-  setTimeout(function () { if (typeof window.__folderRedraw === "function") { window.__folderRedraw(); } if (typeof window.__mwOpened === "function") { window.__mwOpened(id); } }, 0);
+  /* the router is told at once; the FOLDER is not. Redrawing here would run before
+     record(id) does -- finish() is several hundred milliseconds downstream, behind the
+     zoom -- so the count it drew was always one open behind. It is redrawn in finish(),
+     immediately after the open is recorded, which is the only moment it can be right. */
+  setTimeout(function () { if (typeof window.__mwOpened === "function") { window.__mwOpened(id); } }, 0);
   if (openId === id) return;
   var btn = cv("mw-files").querySelector('[data-id="' + id + '"]') || cv("mw-files");
   var finish = function () {
@@ -1187,6 +1200,7 @@ function show(id) {
     refitSheets(secOf(id));                /* the section was hidden; its stage cached a zero */
     queueReveal();                         /* the counter moves on OPEN, not on DONE */
     record(id);
+    if (typeof window.__folderRedraw === "function") { window.__folderRedraw(); }
     cv("view").focus({ preventScroll: true });
   };
 
