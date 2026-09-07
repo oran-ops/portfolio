@@ -2048,12 +2048,16 @@ body.static .slipflip.turned .sf-back{opacity:1;pointer-events:auto}
 .an-t span{display:inline-block}
 .an-s{font-family:'Special Elite',monospace;font-size:10.5px;color:var(--dim,#6B6E76);margin-top:8px;text-align:right}
 .gen3{display:flex;flex-direction:column;gap:3px;text-align:center;border:1px dashed rgba(207,208,212,.26);
-  border-radius:4px;padding:11px 14px;max-width:430px;margin:22px auto 0}
+  /* 26, the rhythm every other block inside a folder is on. It was 22 -- close enough to
+     read as a slip rather than a decision, and the same stamp carries 34 in READ ME. */
+  border-radius:4px;padding:11px 14px;max-width:430px;margin:26px auto 0}
 .gen3 b{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:12px;letter-spacing:.16em;color:#CFD0D4;
   filter:blur(.45px) contrast(2.4);opacity:.78}
 .gen3 span{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.12em;color:#9CA0A8;
   filter:blur(.3px);opacity:.92}/*D:medcoin:30*//*D:medcoin:31*//*D:medcoin:32*/
-.gen3.vaultmark{margin:0 auto 34px;border-color:rgba(237,239,246,.2)}
+/* 26 for the same reason: this is the same stamp as .gen3 above, at the head of READ ME
+   instead of the foot of MEDCOIN, and one element should not measure two ways. */
+.gen3.vaultmark{margin:0 auto 26px;border-color:rgba(237,239,246,.2)}
 .gen3.vaultmark b{color:#B9BECC}
 @media (max-width:680px){.an-note{max-width:none;margin-left:2px;margin-right:2px}.an-t{font-size:13px}}
 
