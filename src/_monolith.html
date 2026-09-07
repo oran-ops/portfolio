@@ -463,10 +463,6 @@ opacity:0;transform:translateY(14px) rotate(-2deg);transition:opacity .5s var(--
 
 html.preopen #hero .hw{transform:perspective(1400px) translateY(11vh) rotateX(7deg) scale(.965);opacity:.4}
 #hero .hw{transition:transform 1.15s cubic-bezier(.16,1,.3,1),opacity .9s var(--ease)}
-#drawerlip{position:relative;height:22px;margin:-6px 12px 0;background:#16171C;border:1px solid var(--grid);border-top:0;border-radius:0 0 14px 14px}
-#drawerlip .dlh{position:absolute;left:50%;top:8px;transform:translateX(-50%);width:74px;height:5px;border-radius:3px;background:var(--grid2)}
-html.preopen #drawerlip{transform:translateY(-14px)}
-#drawerlip{transition:transform 1.15s cubic-bezier(.16,1,.3,1)}
 
 /* horizontal case index */
 .hwrap{height:330vh}
@@ -548,7 +544,7 @@ html.preopen body.static #hero .hw{transform:none;opacity:1}
  .frail,.tabrow .tB{opacity:1!important;transform:none!important}
  .rstampS{opacity:1!important;animation:none!important}
  .breathe,#boot .dots i{animation:none!important}
- html.preopen #hero .hw,html.preopen #drawerlip{transform:none;opacity:1}
+ html.preopen #hero .hw{transform:none;opacity:1}
  .hwrap{height:auto}.hpin{position:static;height:auto}.htrack{transform:none!important;flex-wrap:wrap;width:auto}
 }
 body.failsafe .redct{display:none}
@@ -1020,7 +1016,7 @@ body.static #clearance,body.static #idlecue,body.failsafe #clearance,body.failsa
     <div class="sub">From Vision to Measurable Growth</div>
     <div class="by">BY <b>ORAN CARMON</b></div> <div class="ident"><span class="idr"><i>COMMERCIAL GROWTH&nbsp;<b>&middot;</b></i> <i>CROSS-FUNCTIONAL EXECUTION&nbsp;<b>&middot;</b></i> <i>CEO&nbsp;<b>&middot;</b></i> <i>FOUNDER</i></span></div>
   </div>
-  <div id="drawerlip" aria-hidden="true"><span class="dlh"></span></div></div>
+  </div>
   <div class="cue"><span class="ar"></span>SCROLL TO OPEN</div>
 </div>
 </section>
@@ -1562,8 +1558,7 @@ body.static .hfolder,body.static #hero .mfold{--sx:-320px}
      card project differently under rotateX). Open fast, then the scrub owns
      the transform (engine kills the transition at first scroll). */
   #hero .hw{transition:transform .45s cubic-bezier(.16,1,.3,1),opacity .35s var(--ease)}
-  #drawerlip{transition:transform .45s cubic-bezier(.16,1,.3,1)}
-  /* R3-1: hfloat levitates the CARD +-13px while the name tab stays put -
+    /* R3-1: hfloat levitates the CARD +-13px while the name tab stays put -
      desktop ambience, but at 390px the card fills the screen and the pair
      reads as broken apart. Phones keep the sweep sheen, drop the float. */
   #hero .mfold.on{animation:sweepx 7.5s ease-in-out 1.2s infinite}
@@ -1628,16 +1623,23 @@ body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:214748
 @media (prefers-reduced-motion:reduce){.redx::after{animation:none}}/*D:medcoin:24*/
 #eventer .evslip,#medcoin .evslip{margin-top:10px}/*D:final:129*//*D:final:130*/
 #final>.wrap{position:relative;z-index:1}
-footer{background:#0A0B0D;border-top:none;margin-top:0;padding:70px 90px 34px;position:relative;
-  box-shadow:inset 0 -70px 90px rgba(0,0,0,.9),inset 0 0 60px rgba(0,0,0,.75)}
-footer b{color:#B9BECC}
-footer::before,footer::after{content:"";position:absolute;top:0;bottom:0;width:56px;background:#000;
-  background-image:radial-gradient(rgba(233,238,250,.9) 3.6px,transparent 4.1px);
-  background-size:15px 32px;background-position:center;background-repeat:repeat-y}
-footer::before{left:0}
-footer::after{right:0}
-@media (max-width:860px){footer{padding:56px 62px 28px}footer::before,footer::after{width:40px;background-size:11px 26px}}
-@media (max-width:560px){footer{padding:44px 46px 24px}footer::before,footer::after{width:30px;background-size:9px 22px}}
+/* THE FOOTER STOPS PRETENDING TO BE THE LAST PAGE.
+   Oran: "when you keep scrolling below the machine, suddenly there is a part, a piece of the last
+   page READ ME, that appears."
+
+   He is describing this block, exactly. It gave the footer FINAL's own ground -- #0A0B0D, the same
+   value as `#final` three lines above -- and then film rebates down both edges: 56px of black
+   carrying a repeating radial-gradient of white sprocket holes at 15 x 32px. Written when FINAL was
+   the last SECTION of a single scroll, the footer was its final frame, and the two read as one
+   continuous piece of film. That was right then.
+
+   FINAL now lives inside the machine's folder, and the footer sits under PAGE 3. So a strip of the
+   vault's black stock, with its sprocket holes, appears beneath the Macintosh attached to nothing --
+   which is precisely "a piece of READ ME appearing".
+
+   Removed, so the footer falls back to its own rule further up: a hairline top border, the page's
+   charcoal, and two lines of mono. The film belongs to the document, and the document is inside
+   the machine now. */
 /* film rebates — the physical edge of the stock */
 .vfilm{position:absolute;top:0;bottom:0;width:56px;background:#000;z-index:2;
   display:flex;flex-direction:column;justify-content:space-between;align-items:center;padding:18px 0}

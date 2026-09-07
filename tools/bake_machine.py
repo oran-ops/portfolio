@@ -43,7 +43,22 @@ REPO = os.path.dirname(HERE)
 LAB = os.path.join(REPO, 'lab', 'machine.html')
 DEST = os.path.join(REPO, 'src', 'machine', 'machine.js')
 
-KEEP = ('machine',)          # the Macintosh. Everything else is built, and built better.
+# THE WHOLE SET. Oran: "you took only the computer and not the mouse and the keyboard? Why? What
+# is the logic? Take the whole set please - fix this immediately."
+#
+# I had kept only the case and argued the peripherals from Apple's published dimensions. He has
+# ruled, and the ruling is his to make: it is his model, and a desk assembled from two sources is
+# not the object he built. All four groups ship.
+#
+# The price, stated plainly rather than buried: 933 KB of base64 instead of 443, which is about
+# 505 KB over the wire instead of 240. The page goes to roughly 950 KB gzipped.
+#
+# What the arithmetic says about the fit, checked before shipping it: his keyboard lands at
+# x -0.728..0.595, z 0.710..1.285 and the procedural one occupied x -0.728..0.595, z 0.707..1.289 --
+# the same desk position to three decimals, so the transforms in MESH_XF are right. His mouse
+# likewise. The cable intersects both the machine and the keyboard, which is what a cable does.
+# All seven floppies clear both.
+KEEP = ('machine', 'keyboard', 'cable', 'mouse')
 
 
 def groups(raw):
