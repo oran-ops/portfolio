@@ -1193,6 +1193,18 @@ function show(id) {
        are real. Order matters: re-arming after measuring would leave the old positions. */
     if (window.__mwRearm) window.__mwRearm(secOf(id));
     if (window.__mwMeasure) window.__mwMeasure();
+    /* AND THEN RUN ONE PASS, WHICH IS THE LINE THAT WAS MISSING.
+       __mwRearm has just taken .on off every unit in this document, and the engine's frame()
+       begins with `if (y !== lastY)` -- it does nothing at all until the scroll position
+       changes. show() has just set view.scrollTop = 0, and the engine's last run was also at
+       0, so y === lastY and no pass runs: the document opens with its title card and 225px of
+       empty window under it, and the first screen of content only appears once the reader
+       scrolls. Oran, exactly: "the reader sees only the title, and only when he starts
+       scrolling does he begin to see content."
+       __mwStep exists for this -- lastY = -1, then one frame -- and was called from nowhere
+       in the repository. Measured at 1366x784: 15 text items sit in the band below the card
+       at opacity 0, and all 15 resolve to 1 when the pass runs. */
+    if (window.__mwStep) window.__mwStep();
     /* NOT requestAnimationFrame: it does not fire at all in a hidden tab, and the whole open
        sequence silently stalls there. Every draw below measures first, so there is nothing
        to wait for. */

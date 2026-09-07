@@ -236,7 +236,10 @@
    eased, so the last frame of a 620 ms flight into the screen was followed by a white
    window appearing instantly on top of it. Six frames of fade is enough to read as the
    screen becoming the window rather than replacing it, and it costs nothing. */
-html.mw-on .mw{display:flex;animation:mw-arrive .19s ease-out both}
+/* 340ms, and the ease of a dolly coming to rest rather than a generic ease-out -- the camera
+   is still pushing underneath for exactly this long (see arrive() in router.js), and the two
+   have to land together or the handover is a cut again. */
+html.mw-on .mw{display:flex;animation:mw-arrive .34s cubic-bezier(.22,.61,.36,1) both}
 @keyframes mw-arrive{from{opacity:0}to{opacity:1}}
 @media (prefers-reduced-motion:reduce){html.mw-on .mw{animation:none}}
 html.mw-on{overflow:hidden}

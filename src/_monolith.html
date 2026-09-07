@@ -3079,7 +3079,11 @@ var isStatic=q.get('static')==='1';
 var frozen=reduced||isStatic;
 function clamp(v){return v<0?0:v>1?1:v}
 
-/* ---- ACT 2: preopen state until boot gate ---- */
+/* ---- ACT 2: preopen state until boot gate ----
+   DEAD, and kept for one more line only because removing the class is the smaller change than
+   proving nothing else reads it: every `html.preopen` rule in the stylesheet styles
+   `#hero .hw`, and #hero was cut. Three rules that cannot match, a class on <html>, and a
+   nine-second timer, all for an element that is not in the document. */
 var bootEl=document.getElementById('boot');
 if(bootEl&&!frozen){document.documentElement.classList.add('preopen');}
 window.__actOpen=function(){
@@ -3154,20 +3158,23 @@ function hx(c){return [parseInt(c.substr(1,2),16),parseInt(c.substr(3,2),16),par
 var curL=hx('#191A1F'),tgtL=hx('#191A1F');
 
 var hwTop=0,hwH=0,vh=window.innerHeight,maxX=0,hcC=[];
+/* the room card, resolved once. Its offsetLeft is read live every frame (see frame()); it is
+   only the querySelector that does not need repeating. */
+var roomC=htrack?htrack.querySelector('.hcard.hroom'):null;
 var dragOff=0,dragV=0,dragging=false,lastPX=0;
 function measure(){
   vh=window.innerHeight;
   if(hwrap&&hpin&&htrack){
     hwTop=hwrap.getBoundingClientRect().top+window.pageYOffset;
     hwH=hwrap.offsetHeight;
-    /* THE TRAVEL ENDS WITH THE ROOM CENTRED, not with the track's right edge flush against
-       the pin's. Those are not the same place: the room is 100vw and the pin is the section's
-       content width, so scrolling until the track ran out left the room 33px off centre and
-       the machine with it. Measured. Centring the room's own middle on the pin's middle is
-       what "the machine is exactly in the centre of the screen" means, and it is one line. */
-    var roomEl=htrack.querySelector('.hcard.hroom');
-    maxX=roomEl ? Math.max(0, roomEl.offsetLeft + roomEl.offsetWidth/2 - hpin.clientWidth/2)
-                : Math.max(0, htrack.scrollWidth-hpin.clientWidth);
+    /* maxX IS NO LONGER CACHED HERE, and neither is anything else the pan reads.
+       This function runs three times in the first 1.2 seconds and then only on a resize
+       event, and every number it took was a number the end position of the machine depended
+       on: hpin.clientWidth measured while the boot overlay still had scrolling locked and the
+       scrollbar gone, roomEl.offsetLeft measured before the cards ahead of the room had
+       finished reflowing, window.innerHeight standing in for a pin that is 100svh tall. The
+       pan reads all four live now, in frame(). hwTop/hwH/vh stay only because the room-relight
+       loop below still uses vh, and lights[] genuinely is a set of page offsets. */
   }
   lights.forEach(function(l){
     l.t=l.el.getBoundingClientRect().top+window.pageYOffset;
@@ -3203,14 +3210,38 @@ var mob=window.matchMedia('(max-width:860px)');
    same frame, which forces a synchronous style+layout pass; that is what put the
    recalc count at ~5 per frame. Every value below is now written only when its
    INPUT changed, so the pixels are identical and the work is not repeated. */
+/* ONE BAD FRAME MUST NOT END THE LOOP. Both of this page's permanent rAF loops re-arm on
+   their own last line, so a throw anywhere above it stops them for good -- which is precisely
+   what happened when a call into the removed sound layer threw inside loop(). __rafGuard puts
+   the work in a try and the re-arm in a finally, and reports the first failure of each loop
+   once so that a fault is still findable without printing sixty messages a second. */
+var __rafSaid={};
+function __rafGuard(name,body){
+  return function tick(){
+    try{ body(); }
+    catch(e){
+      if(!__rafSaid[name]){
+        __rafSaid[name]=1;
+        try{ console.error('['+name+'] threw; the frame was skipped and the loop kept running',e); }catch(e2){}
+      }
+    }
+    finally{ requestAnimationFrame(tick); }
+  };
+}
 var lastX=null,lastCW=0,lastBg='',lastHT='',hcPend=0;
-function frame(){
+function frameBody(){
   var y=window.pageYOffset;
   if(!frozen){
     /* horizontal drawer */
-    if(htrack&&!mob.matches){
-      var span=hwH-vh;
-      var hp=span>0?clamp((y-hwTop)/span):0;
+    if(htrack&&roomC&&!mob.matches){
+      /* MEASURED HERE, NOT CACHED. See the note on measure() below: every number this used to
+         read was taken at most 1.2 seconds after load and never again. -wr.top is the same
+         quantity as (y - hwTop) and is always current; wr.height - pr.height is the pin's real
+         travel, in the pin's own units, rather than 330vh minus a window height captured
+         before the scrollbar existed. Both rects are read before any write in this frame. */
+      var wr=hwrap.getBoundingClientRect(), pr=hpin.getBoundingClientRect();
+      var span=wr.height-pr.height;
+      var hp=span>0?clamp(-wr.top/span):0;
       /* SLOW START, SWEEP, SETTLE - and never a full stop, and never a dead zone either.
          Twice before, this ended early and left the last stretch of the pin doing nothing:
          at 80% that was 356px of scrolling in which the reader pushed and the screen did not
@@ -3224,9 +3255,22 @@ function frame(){
          f'(1)=0 exactly -- the same lead-in slope the old one had, a true zero at the end so
          the pan settles rather than stopping, and no dead zone at all because it uses the
          whole pin. f' > 0 throughout: its roots are at u=1 and u=-0.041. */
-      var hs=clamp(hp), hE=hs*(0.22+hs*(2.56-1.78*hs));
+      var hs=clamp(hp), hE=hs>=1?1:hs*(0.22+hs*(2.56-1.78*hs));
       if(!dragging){dragOff+=dragV;dragV*=.94;dragOff*=.90;if(Math.abs(dragOff)<.4)dragOff=0;}
-      var X=hE*maxX+dragOff;
+      /* AND AT THE END, NOTHING IS LEFT OVER. hE is pinned to exactly 1 above rather than
+         1.0000000000000002, and the drag residue -- which decays by 0.90 a frame and can still
+         be carrying a fraction of a pixel a second after the reader let go -- is cleared. Oran
+         asked for the machine to be exactly in the middle at the end of the scroll, and this is
+         the line that makes that an assignment instead of a limit. */
+      if(hs>=1){dragOff=0;dragV=0;}
+      /* AND THE TARGET IS THE MIDDLE OF THE SCREEN, NOT THE MIDDLE OF #hpin.
+         #hpin is the section's content box: at 1440 it sits 24px in from the left and 33px in
+         from the right, so centring the room on the pin left the machine 4.5px left of centre.
+         documentElement.clientWidth is the viewport WITHOUT the scrollbar -- the width of what
+         the reader can actually see -- and pr.left is where the pin starts inside it. */
+      var mx=Math.max(0, pr.left + roomC.offsetLeft + roomC.offsetWidth/2
+                         - document.documentElement.clientWidth/2);
+      var X=hE*mx+dragOff;
       var cw=window.innerWidth;
       /* PERF (round 5): the drawer's whole geometry follows X and the window
          width, and nothing else. With the track parked — which is true for all
@@ -3290,8 +3334,8 @@ function frame(){
     var bg='rgb('+Math.round(curL[0])+','+Math.round(curL[1])+','+Math.round(curL[2])+')';
     if(bg!==lastBg){lastBg=bg;document.body.style.backgroundColor=bg;}
   }
-  requestAnimationFrame(frame);
 }
+var frame=__rafGuard('track',frameBody);
 if(!frozen)requestAnimationFrame(frame);
 
 /* ---- ACT 9: dust canvas ---- */
@@ -3557,7 +3601,7 @@ function shear(y,skS){
     if(want)W.el.style.transform=want;else W.el.style.removeProperty('transform');
   }
 }
-function loop(){
+function loopBody(){
   var y=window.pageYOffset;
   var v=y-pv;pv=y;
   vs+=(v-vs)*.12;window.__vs=vs;
@@ -3630,8 +3674,8 @@ function loop(){
       }
     }
   }
-  requestAnimationFrame(loop);
 }
+var loop=__rafGuard('scroll-scenes',loopBody);
 if(!frozen)requestAnimationFrame(loop);
 
 /* THE STAMP THUNK ON FILE 07 was an IntersectionObserver whose entire body was thunk() -- one
@@ -4088,13 +4132,29 @@ function loop(){
     }
   }
   /* signature draws */
-  /* PERF (round 5): these two polled a rect on every frame from the top of the
-     document until the reader reached them. The trigger test is unchanged — it
-     is simply not asked until the section that holds the drawing is in play. */
-  if(evPrepped&&!evPlayed&&evSvg&&secs.eventer&&y+vh>secs.eventer.t&&y<secs.eventer.b){
-    var er=evSvg.getBoundingClientRect();if(er.top<vh*.78&&er.bottom>0)evPlay();}
-  if(mdPrepped&&!mdPlayed&&mdSvg&&secs.medcoin&&y+vh>secs.medcoin.t&&y<secs.medcoin.b){
-    var mr=mdSvg.getBoundingClientRect();if(mr.top<vh*.8&&mr.bottom>0)mdPlay();}
+  /* THE PAGE-OFFSET GATE IS GONE, AND IT IS WHY NEITHER DRAWING EVER APPEARED INSIDE THE
+     MACHINE. Round 5 added `y+vh>secs.eventer.t && y<secs.eventer.b` as a performance guard so
+     the rect below was not polled from the top of the document. Then the seven files moved
+     into a position:fixed window, and inside it html is overflow:hidden -- so window.pageYOffset
+     is a constant 0 while the reader scrolls #view, and secs.eventer.t is still the section's
+     old absolute page offset in the thousands. 0 + 900 > 6155 is false and stays false.
+
+     Measured with the shell open at 1440x900, EVENTER on screen, #view scrolled so the drawing
+     sat at top:394 of a 900px viewport: pageYOffset 0, gate two passing, <text> opacity 0.
+     Nine labels in EVENTER and six in MEDCOIN, plus every path, ring, node and arrowhead in
+     both drawings, primed to opacity:0 at load by the code just above and never lifted.
+
+     The rect test below is the real question -- is this drawing on the reader's screen -- and
+     it is asked in viewport coordinates, which do not care which box is scrolling. It costs two
+     getBoundingClientRect calls per frame and only until each drawing has played once, because
+     !evPlayed and !mdPlayed then short-circuit for the rest of the visit. innerHeight rather
+     than the cached vh, for the same reason the pan stopped trusting it. */
+  if(evPrepped&&!evPlayed&&evSvg){
+    var er=evSvg.getBoundingClientRect();
+    if(er.top<innerHeight*.78&&er.bottom>0)evPlay();}
+  if(mdPrepped&&!mdPlayed&&mdSvg){
+    var mr=mdSvg.getBoundingClientRect();
+    if(mr.top<innerHeight*.8&&mr.bottom>0)mdPlay();}
   /* whoosh */
   if(Math.abs(vs)>12&&now-whooshAt>280){whooshAt=now;
   }

@@ -76,6 +76,29 @@
 
   function ease(t) { return t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2; }
 
+  /* THE FRAMING THAT LEAVES NO ROOM SHOWING.
+     __camFill's argument is the fraction of the frame's HEIGHT the screen fills, so the 0.86
+     the flight lands on leaves a band of the machine's own cream case around the picture.
+     Measured at 1440x900 over a 192-point grid: at 0.86, 14.1% of the frame is case; at the
+     cover framing, 0.0%. To cover the frame instead of fitting inside it, the height
+     fraction has to be the viewport's aspect divided by the screen's own -- read from
+     __screen(), not assumed -- and a little over, so no seam survives rounding. Below 1 the
+     height is already the limiting axis (a portrait phone), and the clamp says so. */
+  function coverFill() {
+    var s = (typeof window.__screen === "function") ? window.__screen() : null;
+    if (!s || !s.hw || !s.hh) { return window.__camFill(1.22); }
+    var need = (window.innerWidth / window.innerHeight) / (s.hw / s.hh);
+    return window.__camFill(Math.max(1.02, need * 1.02));
+  }
+
+  /* where the camera goes on WITH the shell fading in over it: same aim, same angle, closer. */
+  function pushKeyframe() {
+    var s = (typeof window.__screen === "function") ? window.__screen() : null;
+    var k = { yaw: 0, pitch: 0.02, dist: coverFill() };
+    if (s) { k.aim = [s.x, s.y, s.z]; }
+    return k;
+  }
+
   /* the aim travels with the camera. A keyframe without one means the case centre, which is
      where the orbit sits when nobody is flying. */
   var HOME = null;
@@ -199,6 +222,16 @@
       html.classList.remove("mw-fly");
       html.classList.add("mw-on");
       if (typeof window.__shellInit === "function") { window.__shellInit(); }
+      /* AND THE CAMERA DOES NOT STOP HERE, which is the whole of the fix.
+         The shell fades in over 340ms; for those 340ms the machine is still visible underneath
+         it, and it goes on pushing from the 86% framing to one that covers the frame. Two
+         things follow. The cream border of the case -- 14.1% of the frame at the landing,
+         measured -- is gone before the window is opaque, so the shell arrives over the same
+         1-bit picture rather than over a band of beige. And the motion carries across the
+         handover, so the two pictures dissolve instead of cutting.
+         Matched to the fade, not longer: rendering the machine after the window is opaque is
+         work nobody can see. */
+      fly(inKeyframe(), pushKeyframe(), 340, function () { });
       /* put the machine back where it was, unseen behind the shell, so leaving it does not land
          the reader on a camera halfway inside a cathode ray tube. Oran: the machine resets its
          angle. */
