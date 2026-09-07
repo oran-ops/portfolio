@@ -1122,7 +1122,12 @@ display:flex;align-items:center;padding:0 13px;font-family:'JetBrains Mono',mono
   <div class="wrap"><div class="ticker rv" style="--i:5"><div class="tk"><span>FILE 01 <b>XTIX</b> &mdash; BUILT FROM ZERO <em>&#9670;</em> FILE 02 <b>OASIS</b> &mdash; LEADERSHIP <em>&#9670;</em> FILE 03 <b>EVENTER</b> &mdash; ALIGNMENT <em>&#9670;</em> FILE 04 <b>MEDCOIN</b> &mdash; FOUNDER <em>&#9670;</em> EXECUTIVE PORTFOLIO &middot; 04 DOSSIERS &middot; 2018&ndash;2026 <em>&#9670;</em> </span><span>FILE 01 <b>XTIX</b> &mdash; BUILT FROM ZERO <em>&#9670;</em> FILE 02 <b>OASIS</b> &mdash; LEADERSHIP <em>&#9670;</em> FILE 03 <b>EVENTER</b> &mdash; ALIGNMENT <em>&#9670;</em> FILE 04 <b>MEDCOIN</b> &mdash; FOUNDER <em>&#9670;</em> EXECUTIVE PORTFOLIO &middot; 04 DOSSIERS &middot; 2018&ndash;2026 <em>&#9670;</em> </span></div></div></div>
   <div class="hendflow"><div class="hcard hend rv" style="--i:5">
           <div class="hendt">04 FILES &middot; ONE SYSTEM</div>
-          <div class="hhint">CONTINUE &darr;</div>
+          <!-- "CONTINUE v" REMOVED. It sat under the machine and pointed DOWN, and after the
+     restructure there is nothing down there: page 3 is the last screen and the seven files are
+     behind the machine's folder. Oran called scrolling past the machine a critical error, and
+     this line was the page inviting exactly that, in words. The other .hhint - "KEEP SCROLLING /
+     THE ROOM IS THROUGH HERE", on the intro card - stays, because that one is still true: it
+     leads into the horizontal travel that brings the room. -->
         </div></div>
 </section>
 
@@ -2593,12 +2598,30 @@ function statement(y){
     /* r43 wrote this as a fraction of the span, which was right while the pin was 135px
        and would drag the scene 405px up the screen now that it is 675. Absolute distance,
        same eased profile: page-ish rate at both ends, a near-hold through the middle. */
-    var hold=-210*(p+0.106*Math.sin(6.2832*p));
+    /* THE SCENE HOLDS STILL UNTIL THE SENTENCE HAS FINISHED CHANGING.
+       This was -210*(p+0.106*sin(2pi*p)), which is 0 at p=0 and -210 at p=1 -- but its
+       DERIVATIVE at p=0 is -350 per unit p, and over a 615px pin that is -0.569 px per pixel
+       scrolled. So from the first pixel of the pin, before a single letter had moved, the
+       whole scene was already sliding up the screen at 57% of the scroll rate. The .pin
+       element is sticky and genuinely never moves; what was moving was everything inside it.
+       Measured, and it is the dominant cause of what Oran describes -- speed-independent,
+       every time, and it starts before the swap does.
+
+       "the scroll simply swaps the sentences and THEN the page starts descending."
+
+       So: nothing moves until p = 0.86, which is 529px into the 615px pin and past the
+       swap's worst-case settle. Then 46px of lift across the last 86px on a smoothstep --
+       zero velocity at both ends, 0.63 px/px at its fastest, which is under the page's own
+       rate, so the handover into real scrolling has no step in it either. */
+    var hp=clamp((p-0.86)/0.14), he=hp*hp*(3-2*hp);
+    var hold=-46*he;
     /* the filament's split used to be driven from here on its own schedule, which is
        exactly why it was never quite in step with the sentence. __stSwap above owns the
        single number both of them read. */
     if(stFil)stFil.style.transform='translateY('+hold.toFixed(1)+'px)';
-    if(stTxt)stTxt.style.transform='translateY('+(hold+(0.5-p)*26).toFixed(1)+'px)';
+    /* the sentence rides a little further than the filament, which is the depth between
+       them -- but only across the lead-out, so neither moves while the swap runs. */
+    if(stTxt)stTxt.style.transform='translateY('+(hold*1.22).toFixed(1)+'px)';
     for(var si=0;si<SPS.length;si++){var sq=eo(clamp((p-.02-si*.05)/.22));SPS[si].style.opacity=String(.2+.8*sq);SPS[si].style.transform='translateX(-50%) translateY('+((1-sq)*44)+'px)';}
   }
     /* THE SENTENCE OWNS ITSELF NOW. It is no longer assembled out of particles and no
@@ -3160,7 +3183,17 @@ function frame(){
       if(X!==lastX||cw!==lastCW){lastX=X;lastCW=cw;hcPend=1;}
       if(hcPend>0){
         hcPend--;
-        var ht='translateX('+(-X)+'px) skewY('+(window.__vskS||'0')+'deg)';
+        /* NO SHEAR ON THE TRACK. The page's velocity shear is part of its signature and it
+           stays everywhere else -- shear() still applies it to every .sec>.wrap. But #htrack
+           carries the machine, and skewY on the track does two things to it that nothing
+           should. It maps (x,y) to (x, y + x*tan(theta)) about the TRACK's origin, and the
+           room card starts more than a thousand pixels along that track, so 1.4 degrees of
+           shear translates the whole canvas 26 to 60 pixels vertically -- then snaps it back
+           to zero the moment scrolling stops. That is the machine visibly not staying where
+           it is put, which is Oran's first note. And it shears the canvas itself, so a
+           render made at 1.75x supersampling gets resampled through a skew matrix on the way
+           to the screen. A 3D object does not get sheared by how fast you are scrolling. */
+        var ht='translateX('+(-X)+'px)';
         if(ht!==lastHT){lastHT=ht;htrack.style.transform=ht;}
         var cx=cw/2;
         /* PERF (round 5): READ, then WRITE. This used to interleave
@@ -5012,17 +5045,36 @@ document.querySelectorAll('.redx').forEach(function(r){
 
        0.0006 is under a third of the smallest visible step: opacity is written to three
        decimals and the rise is 30px, so a residual of 0.0006 is 0.018px and 0.0006 alpha. */
+    /* AND THE WINDOW IT RUNS IN. Oran: "I want the sentences and the net FIXED during the scroll
+       that swaps them, so the page does not start descending and then the sentences swap -- the
+       scroll swaps the sentences and THEN the page starts descending."
+
+       Measured, the pin itself was already perfect: .pin is sticky top:0 inside a 175vh .pinh, and
+       from y=0 to y=615 the net and the text do not move by a pixel. The fault was the WINDOW the
+       swap ran in, and the follower I put in front of it:
+
+         swap 123..480px of a 615px pin  ->  123px of dead scroll at the start, 135px at the end.
+                                             42% of the pin was scrolling that changed nothing.
+         follower at 0.16/frame          ->  ~26 frames, ~430ms to settle. A brisk wheel covers the
+                                             whole pin in 400-600ms, so the swap was STILL FINISHING
+                                             as the pin released -- the page descending while the
+                                             letters moved, which is his sentence exactly.
+
+       0.03 puts the swap on the first pixel of scroll -- the reader's first movement changes the
+       sentence, which is what "the scroll swaps the sentences" means. 0.57 lands it at 369px,
+       leaving a 246px tail, and 0.26/frame settles in ~17 frames (~285ms). The swap is done, and
+       visibly done, well before anything descends. */
     var qT=0,qC=0,sraf=null;
     function sstep(){
       sraf=null;
       var d=qT-qC;
       if(d<0.0006&&d>-0.0006){qC=qT;drive(qC);return}
-      qC+=d*0.16;
+      qC+=d*0.26;
       drive(qC);
       sraf=requestAnimationFrame(sstep);
     }
     window.__stSwap=function(p){
-      qT=smeo((p-0.20)/0.58);
+      qT=smeo((p-0.03)/0.57);
       if(sraf===null)sraf=requestAnimationFrame(sstep);
     };
   }else{

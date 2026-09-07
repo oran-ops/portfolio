@@ -306,12 +306,30 @@ function statement(y){
     /* r43 wrote this as a fraction of the span, which was right while the pin was 135px
        and would drag the scene 405px up the screen now that it is 675. Absolute distance,
        same eased profile: page-ish rate at both ends, a near-hold through the middle. */
-    var hold=-210*(p+0.106*Math.sin(6.2832*p));
+    /* THE SCENE HOLDS STILL UNTIL THE SENTENCE HAS FINISHED CHANGING.
+       This was -210*(p+0.106*sin(2pi*p)), which is 0 at p=0 and -210 at p=1 -- but its
+       DERIVATIVE at p=0 is -350 per unit p, and over a 615px pin that is -0.569 px per pixel
+       scrolled. So from the first pixel of the pin, before a single letter had moved, the
+       whole scene was already sliding up the screen at 57% of the scroll rate. The .pin
+       element is sticky and genuinely never moves; what was moving was everything inside it.
+       Measured, and it is the dominant cause of what Oran describes -- speed-independent,
+       every time, and it starts before the swap does.
+
+       "the scroll simply swaps the sentences and THEN the page starts descending."
+
+       So: nothing moves until p = 0.86, which is 529px into the 615px pin and past the
+       swap's worst-case settle. Then 46px of lift across the last 86px on a smoothstep --
+       zero velocity at both ends, 0.63 px/px at its fastest, which is under the page's own
+       rate, so the handover into real scrolling has no step in it either. */
+    var hp=clamp((p-0.86)/0.14), he=hp*hp*(3-2*hp);
+    var hold=-46*he;
     /* the filament's split used to be driven from here on its own schedule, which is
        exactly why it was never quite in step with the sentence. __stSwap above owns the
        single number both of them read. */
     if(stFil)stFil.style.transform='translateY('+hold.toFixed(1)+'px)';
-    if(stTxt)stTxt.style.transform='translateY('+(hold+(0.5-p)*26).toFixed(1)+'px)';
+    /* the sentence rides a little further than the filament, which is the depth between
+       them -- but only across the lead-out, so neither moves while the swap runs. */
+    if(stTxt)stTxt.style.transform='translateY('+(hold*1.22).toFixed(1)+'px)';
     for(var si=0;si<SPS.length;si++){var sq=eo(clamp((p-.02-si*.05)/.22));SPS[si].style.opacity=String(.2+.8*sq);SPS[si].style.transform='translateX(-50%) translateY('+((1-sq)*44)+'px)';}
   }
     /* THE SENTENCE OWNS ITSELF NOW. It is no longer assembled out of particles and no

@@ -22,8 +22,10 @@ ARCHITECTURE.md §11.4 is for the steps where the output is *supposed* to change
 """
 import hashlib
 import io
+import json
 import re
 import os
+import subprocess
 import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -159,6 +161,52 @@ def main():
                          'whichever came first:\n    ' + ', '.join(dupes))
 
     html = head + body + '\n</body>\n</html>'
+
+    # CHECK 12: every <script> block in the output must parse as JavaScript.
+    #
+    # The machine's fragment shader is a single-quoted JS string a couple of thousand
+    # characters long, and the GLSL comments inside it escape their apostrophes because they
+    # have to. I wrote a comment in that said "the monitor's footprint"; the apostrophe closed
+    # the literal, and the whole machine stopped existing -- no parts, no camera, nothing on
+    # the page where the Macintosh had been. The build still succeeded. Every other check
+    # still passed. It shipped 1.9 MB with a hole in it.
+    #
+    # A syntax error is the cheapest thing in the world to detect and one of the most
+    # expensive to ship, so the build asks a parser now instead of trusting the author. Each
+    # block is wrapped in a function body -- which is what a <script> effectively is -- so a
+    # top-level return is legal and declarations in one block cannot collide with another.
+    #
+    # If node is not installed the check says it was skipped rather than passing quietly. It
+    # does not fail the build for a missing tool, but a check that can silently not run is
+    # not a check.
+    blocks = [m.group(1) for m in re.finditer(
+        r'<script(?![^>]*\bsrc=)[^>]*>(.*?)</script>', html, re.S) if m.group(1).strip()]
+    probe = os.path.join(HERE, '.syntax_probe.js')
+    try:
+        io.open(probe, 'w', encoding='utf-8', newline='').write(
+            'const b=' + json.dumps(blocks) + ';\n'
+            'for(let i=0;i<b.length;i++){\n'
+            '  try{ new Function(b[i]) }catch(e){\n'
+            '    console.log("FAIL block "+i+": "+e.message);\n'
+            '    console.log("   it begins: "+b[i].replace(/\\s+/g," ").slice(0,110));\n'
+            '    process.exit(3); } }\n'
+            'console.log("OK "+b.length);\n')
+        r = subprocess.run(['node', probe], capture_output=True, text=True)
+        out = (r.stdout or '').strip()
+        if r.returncode == 3:
+            raise SystemExit('a <script> block in the output is not valid JavaScript:\n    '
+                             + out.replace('\n', '\n    '))
+        if r.returncode != 0:
+            print('  note: the JavaScript syntax check could not run')
+        else:
+            print('  %s script blocks parse' % out.split()[-1])
+    except FileNotFoundError:
+        print('  note: node is not installed, so the JavaScript syntax check was skipped')
+    finally:
+        try:
+            os.remove(probe)
+        except OSError:
+            pass
 
     io.open(OUT, 'w', encoding='utf-8', newline='').write(html)
     got = md5(html)
