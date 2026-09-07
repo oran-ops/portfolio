@@ -1352,7 +1352,14 @@ function decodeMach(b64, xform){
       size(); frame();
     }).observe(cv);
   }
-  cv.style.touchAction='none';
+  /* AND THE FINGER IS THE PAGE'S TOO, VERTICALLY. touchAction 'none' told the browser this
+     canvas handles every touch gesture itself -- which on a phone means a finger laid on the
+     machine scrolls nothing at all, and on a phone the cards are stacked so the machine is a
+     full-width block sitting in the middle of the reader's way. Same trap as the wheel handler
+     above, one input device over. 'pan-y' gives the vertical axis back to the page, so a swipe
+     scrolls past the machine, and keeps the horizontal axis here, which is the axis the drag
+     turns it on. */
+  cv.style.touchAction='pan-y';
   cv.addEventListener('pointerdown',function(e){
     /* ONE GESTURE, ONE MEANING -- and this is the wheel bug again, wearing a different coat.
        #hpin carries a drag-inertia handler that pans the whole horizontal track: pointerdown
@@ -1393,21 +1400,27 @@ function decodeMach(b64, xform){
   function release(){ if(drag){ drag=false; kick() } }
   cv.addEventListener('pointerup',release);
   cv.addEventListener('pointercancel',release);
-  cv.addEventListener('wheel',function(e){
-    /* ONE NOTCH, ONE MEANING. preventDefault stops the BROWSER scrolling; it does not stop
-       the page's own window-level wheel listener, which is a second scroller written in
-       JavaScript and which was still running on every notch over this canvas. So one notch
-       dollied the camera 6% AND drove the page 0.92 x deltaY -- and the page scroll is what
-       slides the horizontal pin, which carries the machine sideways. Zoom and travel were
-       welded to the same input with no relationship between them, which is the plainest
-       reading of "the zoom in relation to the scroll is not right". stopPropagation is the
-       whole fix: over the machine, the wheel is the machine's. */
-    e.preventDefault();
-    e.stopPropagation();
-    dist*=(1+Math.sign(e.deltaY)*0.06);
-    if(dist<2.6)dist=2.6; if(dist>11)dist=11;
-    frame();
-  },{passive:false});
+  /* THE WHEEL BELONGS TO THE PAGE. ALWAYS.
+     A wheel handler stood here that did preventDefault, stopPropagation, and dollied the
+     camera 6% a notch. preventDefault stops the browser scrolling; stopPropagation stops the
+     page's own inertia scroller from ever seeing the notch. This canvas is the full width of
+     the room card -- 1920px on a 1920px screen -- so from the moment the horizontal pan brings
+     it under the reader's pointer, THE PAGE CANNOT SCROLL AT ALL.
+
+     That is the whole of "the machine is stuck to the side at the end of the scroll", reported
+     five times. Measured from his own screen with the readout on: scroll 3956 of 4729, 773px
+     short, hp 0.63091, machine 613px right of centre, no drag, no error. At hp 0.63 the canvas
+     spans x 609 to 2529 and his cursor was at 1505 -- on it. Every notch after that went into
+     the camera instead of the page, and the pan stopped exactly where his pointer first met
+     the canvas.
+
+     The comment I wrote over it argued that over the machine the wheel is the machine's. That
+     is a fair rule for a machine you have arrived at and a trap for one you are still
+     travelling towards -- and at the end it would be a worse trap, because Oran's own
+     instruction for the end of the travel is "there is only scrolling up to go back".
+     Zoom-by-wheel was never in anything he asked for. Turning it by dragging was, and that is
+     untouched: pointerdown below still stops propagation so a drag turns the machine instead
+     of panning the room. */
 
   size(); frame();
 
