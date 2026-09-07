@@ -1718,7 +1718,17 @@ body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:214748
 .case .folder .vfilm.r{width:36px;border-radius:0 18px 18px 0}
 .case .folder .vfilm.r::before,.case .folder .vfilm.r::after{width:13px;background-size:13px 28px}
 /* a film rebate is film language and has no business under a UV lamp */
-.case .folder.lampon .vfilm{opacity:0}
+/* 1, NOT 0 -- and every line around this one says so. The film edge is built by the UV lamp's
+   own code (see liveLayer in shell/frame.js: "the film edge - the vault's own .vfilm"), it
+   carries transition:opacity .7s waiting for a state that never arrived, it is absolutely
+   positioned at left:0 with width:56px and z-index:3 -- exactly on top of .frail, the binder
+   rail, which is 56px at left:0 -- and the rule immediately above dims that rail to .34 when
+   the lamp comes on, which is only worth doing if something is about to cover it.
+   The paper file becomes film when it is developed. That is the whole idea, and this rule was
+   holding it at 0 in the one state where it was meant to show: with the base rule at 1710 also
+   0, the strip and its four labels were invisible in EVERY state, which is the definition of a
+   rule that means nothing. Default view unchanged; the lamp gains its ending. */
+.case .folder.lampon .vfilm{opacity:1}
 /* solid silver on near-black - the inversion the tab and the band are asked for.
    --fc does the work everywhere it is read; medcoin hard-codes its band, so it
    is the one case that needs to be told twice. */
