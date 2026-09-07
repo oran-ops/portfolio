@@ -55,8 +55,11 @@
    * mid-flight means re-uploading it, which is a piece of work of its own. The beat is honoured
    * so the sequence reads correctly; what fills it is a smaller thing than it will be.
    */
-  var REST = { yaw: -0.46, pitch: 0.20, dist: 5.60 };
-  var FLAT = { yaw: 0, pitch: 0.06, dist: 5.20 };
+  /* REST must BE the machine's resting camera and not a copy of an older one: the flight
+     starts by snapping to `from`, so a stale REST makes the first frame of the entry a jump.
+     These match the defaults in machine.js exactly. */
+  var REST = { yaw: -0.52, pitch: 0.26, dist: 7.20 };
+  var FLAT = { yaw: 0, pitch: 0.08, dist: 6.40 };
   var IN = { yaw: 0, pitch: 0.02, dist: 1.15 };
 
   function ease(t) { return t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2; }
@@ -126,7 +129,20 @@
     }
     setTimeout(arrive, 1600);                   /* the flight is 480 + 260 + 620 = 1360 */
 
-    fly(REST, FLAT, 480, function () {          /* 1. the machine straightens */
+    /* FROM WHERE THE CAMERA IS, NOT FROM WHERE IT STARTED.
+       This flew from REST, and REST is only where the camera sits if the reader has not
+       touched it. Turn the machine round to look at its back -- which the whole orbit exists
+       to invite -- then click the screen, and the first frame SNAPPED the view back to the
+       resting angle before any of the movement began. Oran: "clicking the screen produces an
+       unclear jump". That jump is this line, and it fired for anyone who used the machine as
+       a machine before going into it.
+
+       Reading the camera back costs nothing -- __cam with no arguments is already the getter
+       the harness uses -- and it makes the first beat what it was always described as: the
+       machine STRAIGHTENING, from wherever the reader left it. */
+    var now = (typeof window.__cam === "function") ? window.__cam(null, null, null, null) : null;
+    var from = now ? { yaw: now[0], pitch: now[1], dist: now[2] } : REST;
+    fly(from, FLAT, 480, function () {          /* 1. the machine straightens */
       if (arrived) { return; }
       setTimeout(function () {                  /* 2. the folder opens */
         if (arrived) { return; }
