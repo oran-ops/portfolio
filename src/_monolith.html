@@ -1011,21 +1011,25 @@ body.static #clearance,body.static #idlecue,body.failsafe #clearance,body.failsa
     </div>
   </div></div></div>
 
-<div id="hero" class="harvested">
-  <div class="idx rv" style="--i:0">
-    <span class="k">ARCHIVE N&deg;</span> 2026-Present<br>
-    <span class="k">STATUS:</span> <span class="br2 blink">ACTIVE</span>
-  </div>
-  <div class="hw"><div class="mflip rv" style="--i:2" aria-hidden="true"></div>
-  <div class="mfold center rv" style="--i:2">
-    <span class="hole" style="top:60px"></span><span class="hole" style="top:104px"></span>
-    <h1 class="rv" style="--i:3">THE COMMERCIAL<br>SYSTEMS BUILDER</h1>
-    <div class="sub">From Vision to Measurable Growth</div>
-    <div class="by">BY <b>ORAN CARMON</b></div> <div class="ident"><span class="idr"><i>COMMERCIAL GROWTH&nbsp;<b>&middot;</b></i> <i>CROSS-FUNCTIONAL EXECUTION&nbsp;<b>&middot;</b></i> <i>CEO&nbsp;<b>&middot;</b></i> <i>FOUNDER</i></span></div>
-  </div>
-  </div>
-  <div class="cue"><span class="ar"></span>SCROLL TO OPEN</div>
-</div>
+<!-- THE HARVESTED HERO IS GONE, and this is the fourth time it has been raised.
+     "between page 1 and page 2 the folder from page 1 still appears — it is not clear why it
+     is there, throw it out." I read that as the dead space around it and fixed the space.
+     Then I found the card was painting at 5% opacity because its fade was keyed to the
+     absolute page scroll, and made it opaque — which is the opposite of what he asked for,
+     twice. He sent a photograph of the result.
+
+     What left with it, so it can be put back somewhere if he wants it:
+        ARCHIVE No 2026-Present . STATUS: ACTIVE
+        THE COMMERCIAL SYSTEMS BUILDER
+        From Vision to Measurable Growth
+        BY ORAN CARMON
+        COMMERCIAL GROWTH . CROSS-FUNCTIONAL EXECUTION . CEO . FOUNDER
+        SCROLL TO OPEN
+
+     Page 1 is the pinned statement and nothing else now: the neural net, the two sentences,
+     and then page 2. The #hero rules stay in the stylesheet -- cutting CSS for an element
+     that no longer exists buys nothing and has broken things here before. -->
+
 </section>
 
 <section class="sec" id="philosophy">
@@ -2652,12 +2656,19 @@ function statement(y){
 }
 
 /* ---------- hero scene ---------- */
+/* #hero was removed from page 1 -- see the note where it used to be. Everything below is
+   guarded rather than deleted: heroFx is called from the master loop on every scroll frame,
+   and a null dereference there would take the whole engine down with it, which is a much
+   larger failure than a scene that has nothing to animate. */
 var hero=document.getElementById('hero');
-var hc=hero.querySelector('.hw')||hero.querySelector('.center'),hd=hero.querySelector('.drawer'),
-    hx=hero.querySelector('.idx'),hb=hero.querySelector('.barc'),hcue=hero.querySelector('.cue'),
+var hc=hero&&(hero.querySelector('.hw')||hero.querySelector('.center')),
+    hd=hero&&hero.querySelector('.drawer'),
+    hx=hero&&hero.querySelector('.idx'),hb=hero&&hero.querySelector('.barc'),
+    hcue=hero&&hero.querySelector('.cue'),
     htabs=hd?[].slice.call(hd.children):[];
 var hcKill=false,heroB=0,heroT=0,heroFar=false;
 function heroFx(y){
+  if(!hc)return;                       /* the hero is not on the page any more */
   /* phones: the moment real scrolling starts, the scrub owns the transform -
      otherwise the boot-open transition retargets every frame write and the
      folder lags/shears behind the finger (tab and card visibly part) */
@@ -2710,7 +2721,7 @@ function measure(){
   units.forEach(function(u){u.t=top0(u.el)});
   SEC.forEach(function(x){x.t=top0(x.el);x.b=x.t+x.el.offsetHeight});
   if(stWrap){stTop=top0(stWrap);stH=stWrap.offsetHeight}
-  heroT=top0(hero);heroB=heroT+hero.offsetHeight;heroFar=false;
+  if(hero){heroT=top0(hero);heroB=heroT+hero.offsetHeight;}heroFar=false;
 }
 
 /* ---------- master loop ---------- */
