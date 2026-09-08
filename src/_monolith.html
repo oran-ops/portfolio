@@ -1011,7 +1011,14 @@ body.static #clearance,body.static #idlecue,body.failsafe #clearance,body.failsa
    goes 56 to 121 against 118. Below 861 the head stacks differently and EVENTER already
    clears by 107px, so the rule stands down rather than adding 65px of nothing to a phone
    -- verified 187 before and 187 after at 700. */
-.case .smeta+.uvmount{margin-top:65px}
+/* 52, not the 65 V7 shipped: with the PART label's own margins now on the 26/52 scale (V9),
+   65 overshot. Measured with transforms neutralised so all four are on equal footing --
+   meta line to folder, and the plate's clearance below the head:
+       at 900    XTIX/OASIS 107 +29     EVENTER/MEDCOIN  65 -> 117 +39   52 -> 104 +26
+       at 1024   XTIX/OASIS 108 +35     EVENTER/MEDCOIN  65 -> 117 +44   52 -> 104 +31
+   52 brings the four within 3-4px of each other instead of 10, keeps the clearance well clear,
+   and is the same 26 x 2 the folder's own top margin uses. */
+.case .smeta+.uvmount{margin-top:52px}
 @media (max-width:860px){.case .smeta+.uvmount{margin-top:0}}
 .case .uvmount .lampband{--lift:0px;margin:0!important;
   transform:translateY(calc(-100% - 10px + var(--lift)));
@@ -1049,21 +1056,22 @@ body.static #clearance,body.static #idlecue,body.failsafe #clearance,body.failsa
   font-size:clamp(14px,1.45vw,18.5px)!important;font-weight:400!important;
   letter-spacing:.045em!important;line-height:1.15;
   color:var(--fc,var(--emb))!important;
-  margin:30px 0 16px!important;white-space:nowrap}
+  /* 26 and 13, on the scale. */
+  margin:26px 0 13px!important;white-space:nowrap}
 .case .plabel::before{content:"";flex:0 0 34px;height:2px;border-radius:1px;
   background:var(--fc,var(--emb))}
 .case .plabel::after{content:"";flex:1 1 auto;height:1px;min-width:20px;
   background:linear-gradient(90deg,var(--fc,var(--emb)),transparent);opacity:.55}
 /* part two is the seam the reader must not cross blind */
-.case .plabel.pl2{margin-top:58px!important;padding-top:26px;
+.case .plabel.pl2{margin-top:52px!important;padding-top:26px;
   border-top:1px solid var(--hair,#31333A);
   font-size:clamp(16px,1.75vw,22px)!important;letter-spacing:.055em!important}
 .case .plabel.pl2::before{flex:0 0 52px;height:3px;
   box-shadow:0 0 12px var(--fc,var(--emb))}
 @media (max-width:680px){
-  .case .plabel{gap:10px;margin:22px 0 13px!important;white-space:normal}
+  .case .plabel{gap:10px;margin:26px 0 13px!important;white-space:normal}
   .case .plabel::before{flex:0 0 22px}
-  .case .plabel.pl2{margin-top:40px!important;padding-top:19px}
+  .case .plabel.pl2{margin-top:39px!important;padding-top:19px}
   .case .plabel.pl2::before{flex:0 0 32px}
 }
 </style>
@@ -1164,7 +1172,10 @@ body.static #clearance,body.static #idlecue,body.failsafe #clearance,body.failsa
    in the same order, three different numbers. The two odd ones were inline attributes typed
    into doc/leadership.html and doc/final.html, so no stylesheet could see them and nothing
    could keep them in step. This selector is now the only place the measurement exists. */
-.case .folder,#philosophy .folder,#leadership .folder,#final .folder{margin-top:56px}
+/* 52, NOT 56 -- 26 x 2, the scale Oran asked for. This one number sets the distance from a
+   document's head to its folder in all seven files and on page 2, which makes it the most
+   repeated vertical measurement on the site and the last place a stray value should sit. */
+.case .folder,#philosophy .folder,#leadership .folder,#final .folder{margin-top:52px}
 .case .cols2{display:grid;grid-template-columns:1fr 1fr;gap:34px}
 @media (max-width:900px){.case .cols2{grid-template-columns:1fr}}
 .case .z{margin-bottom:22px}
@@ -1520,13 +1531,19 @@ body.static .hfolder,body.static #hero .mfold{--sx:-320px}
 @media (max-width:680px){#heromq .r1,#heromq .r2{font-size:62px!important}}
 
 
-/* corrections p05 (xtix part 1) */
-#xtix .plabel,#oasis .plabel{margin-top:10px;font-family:'JetBrains Mono',monospace;font-weight:700;
-  font-size:9.5px;letter-spacing:.26em;color:var(--fc,var(--emb))}/*D:xtix:4*/
+/* corrections p05 (xtix part 1) -- REMOVED, because not one of its declarations ever
+   applied. It asked for JetBrains Mono 9.5px/700 at .26em with a 10px top margin; every
+   one of those is beaten by an !important in `.case .plabel` 480 lines above, and the
+   element measures Special Elite 18.5px/400 at 0.83px with a 26px top margin. Two
+   descriptions of the PART label lived in this file and the one a reader finds first by
+   searching for `#xtix .plabel` was the one that has never painted a pixel. */
+/*D:xtix:4*/
 
 
-/* corrections p06 (xtix part 2) */
-#xtix .pl2,#oasis .pl2{margin:0 0 14px}/*D:xtix:5*//*D:xtix:6*/
+/* corrections p06 (xtix part 2) -- REMOVED for the same reason: `margin:0 0 14px` against
+   `.case .plabel{margin:...!important}` and `.case .plabel.pl2{margin-top:...!important}`,
+   so its only surviving declaration was a margin-left of 0 that was the default anyway. */
+/*D:xtix:5*//*D:xtix:6*/
 @media (max-width:900px){/*D:xtix:7*/}/*D:eventer:0*/
 @media (max-width:860px){/*D:eventer:1*//*D:eventer:2*/}
 
