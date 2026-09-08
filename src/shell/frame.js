@@ -91,6 +91,92 @@ function drawBar() {
   blit(el, b, w, h);
 }
 
+/* ---------------------------------------------------------------- and connected to something
+   drawBar() computed a whole Macintosh scroll bar and threw two thirds of it away.
+
+   It ran twice in the life of a document -- show()'s finish and relayout() -- and never on
+   scroll, so the box was painted where the document stood when it opened and stayed there.
+   Measured in XTIX at 1440: 2117px of scrolling to the DONE button, box still at the top.
+   And the finish() draw is too early to be right anyway: the section is marked .mw-show in the
+   same tick, so scrollHeight equals clientHeight, `live` is false, and vscroll returns before
+   drawing a track at all -- 780 rows of plain white on a document with 2117px of travel.
+
+   `hit` -- the arrow, track and box rectangles vscroll hands back -- was assigned on every draw
+   and READ NOWHERE. One write, no reads, and #c-bar carried no listener. The one control on the
+   window was a picture of a control.
+
+   The redraw is rAF-coalesced: a fast scroll costs one buffer and one blit per frame and never
+   queues. The control is the real thing -- arrows that repeat while held, a track that pages,
+   a box that drags -- and the bottom 15 logical pixels stay the inactive grow box vscroll
+   already draws. None of it exists below 860, where the bar is display:none and a finger
+   scrolls the document directly. */
+var barRaf = null;
+function barTick() { barRaf = null; drawBar(); }
+function barSync() { if (barRaf === null) { barRaf = requestAnimationFrame(barTick); } }
+
+function wireBar() {
+  var el = cv("c-bar"), v = cv("view");
+  if (!el || !v || el.getAttribute("data-wired") === "1") { return; }
+  el.setAttribute("data-wired", "1");
+
+  v.addEventListener("scroll", barSync, { passive: true });
+
+  /* the pointer, in the bar's OWN logical pixels. Taken from the canvas's measured scale
+     rather than an assumed ratio, so it survives a re-blit at another size. */
+  function ly(e) {
+    var r = el.getBoundingClientRect();
+    if (!r.height) { return -1; }
+    return (e.clientY - r.top) * (el.height / r.height) / S;
+  }
+
+  var LINE = 52, rep = null, hold = null, drag = null;
+
+  function stop() {
+    if (rep) { clearInterval(rep); rep = null; }
+    if (hold) { clearTimeout(hold); hold = null; }
+    drag = null;
+  }
+  function by(d) { v.scrollTop += d; }
+  function page(d) { v.scrollTop += d * Math.max(40, v.clientHeight - 24); }
+
+  el.addEventListener("pointerdown", function (e) {
+    if (!hit) { return; }
+    var y = ly(e);
+    if (y < 0) { return; }
+    var sizeTop = Math.floor(el.height / S) - 15;   /* the inactive grow box, as vscroll draws it */
+    var step = null;
+    if (y < hit.up) { step = function () { by(-LINE); }; }
+    else if (y >= sizeTop) { return; }
+    else if (y >= hit.down) { step = function () { by(LINE); }; }
+    else if (y < hit.thumbTop) { step = function () { page(-1); }; }
+    else if (y > hit.thumbTop + hit.thumbH) { step = function () { page(1); }; }
+    else {
+      var range = v.scrollHeight - v.clientHeight;
+      var travel = (hit.trackBot - hit.trackTop + 1) - hit.thumbH;
+      drag = { y0: y, top0: v.scrollTop, k: travel > 0 ? range / travel : 0 };
+      try { el.setPointerCapture(e.pointerId); } catch (err) { }
+      e.preventDefault();
+      return;
+    }
+    step();
+    hold = setTimeout(function () { rep = setInterval(step, 50); }, 300);
+    try { el.setPointerCapture(e.pointerId); } catch (err) { }
+    e.preventDefault();
+  });
+
+  el.addEventListener("pointermove", function (e) {
+    if (!drag) { return; }
+    var y = ly(e);
+    if (y < 0) { return; }
+    v.scrollTop = drag.top0 + (y - drag.y0) * drag.k;
+    e.preventDefault();
+  });
+
+  el.addEventListener("pointerup", stop);
+  el.addEventListener("pointercancel", stop);
+  el.addEventListener("lostpointercapture", stop);
+}
+
 /* ---------------------------------------------------------------- DONE */
 function drawDone() {
   var w = 120, h = 28, b = new Buf(w, h);
@@ -1208,6 +1294,10 @@ function show(id) {
        sequence silently stalls there. Every draw below measures first, so there is nothing
        to wait for. */
     drawTitle(); drawDone(); drawBar();
+    /* and again once the document has a height. The line above runs in the same tick that
+       marks the section .mw-show, so scrollHeight still equals clientHeight and vscroll
+       draws the empty "nothing to scroll" bar. */
+    barSync();
     /* and the title card, for the same reason as refitSheets on the next line: #win is
        [hidden] until a file opens, so #view measured 0 x 0 on entry and the card was drawn
        against the SCREEN's height instead of the window's. This is the first moment the
@@ -1451,6 +1541,7 @@ window.__shellInit = function () {
      living in the window and nowhere else. Done once, and idempotent. */
   adopt();
   relayout();
+  wireBar();
   /* The folder is screen.js's window, not the frame's loose icons on a desk. See
      src/shell/folder.js: the frame keeps the document window, screen.js keeps the
      folder, and the same layout function draws the CRT texture the camera flies into. */
