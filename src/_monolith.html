@@ -996,6 +996,29 @@ body.static #clearance,body.static #idlecue,body.failsafe #clearance,body.failsa
    the line height, which is zero, and the plate collapsed 102px -> 30px. */
 .case .uvmount{position:relative;height:0;display:flex;justify-content:flex-end;
   align-items:flex-start;z-index:6}
+/* AND THE PLATE NEEDS ROOM THAT height:0 DOES NOT ASK FOR. The mount is a zero-height row
+   and the plate is lifted out of flow above it, so 101px of plate occupies space the
+   layout does not know about. Whatever sits above the folder has to absorb it -- and in
+   XTIX and OASIS something does, a PART label, while EVENTER and MEDCOIN have none
+   because those two documents are not in two parts. Measured, the distance from the meta
+   line to the folder in four files built to the same template:
+       XTIX / OASIS       123 at 1440, 119 at 1024, 118 at 900
+       EVENTER / MEDCOIN   56           56           56
+   and the plate landed 18 to 26px INSIDE the head, printing its OFF indicator across
+   'FILE 03 . SYNC' and 'FILE 04 . ORIGIN' -- 16 x 7px of ink on ink at 900.
+
+   The selector is the structure, not a number typed per file: the mount follows the meta
+   line directly in exactly the two documents that have no PART label, and follows the
+   label in the two that do. It cannot pick the wrong file, and if a PART label is ever
+   added to one of these two it stops matching by itself.
+
+   65 is 5 x 13, and it lands them on their siblings: clearance below the head goes -18 to
+   +47 at 1440 and -26 to +39 at 900, against +49 and +36 for XTIX; meta to folder at 900
+   goes 56 to 121 against 118. Below 861 the head stacks differently and EVENTER already
+   clears by 107px, so the rule stands down rather than adding 65px of nothing to a phone
+   -- verified 187 before and 187 after at 700. */
+.case .smeta+.uvmount{margin-top:65px}
+@media (max-width:860px){.case .smeta+.uvmount{margin-top:0}}
 .case .uvmount .lampband{--lift:0px;margin:0!important;
   transform:translateY(calc(-100% - 10px + var(--lift)));
   background:linear-gradient(180deg,#2A2C36,#1D1E25)!important;

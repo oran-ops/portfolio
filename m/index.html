@@ -1037,6 +1037,29 @@ body.static #clearance,body.static #idlecue,body.failsafe #clearance,body.failsa
    the line height, which is zero, and the plate collapsed 102px -> 30px. */
 .case .uvmount{position:relative;height:0;display:flex;justify-content:flex-end;
   align-items:flex-start;z-index:6}
+/* AND THE PLATE NEEDS ROOM THAT height:0 DOES NOT ASK FOR. The mount is a zero-height row
+   and the plate is lifted out of flow above it, so 101px of plate occupies space the
+   layout does not know about. Whatever sits above the folder has to absorb it -- and in
+   XTIX and OASIS something does, a PART label, while EVENTER and MEDCOIN have none
+   because those two documents are not in two parts. Measured, the distance from the meta
+   line to the folder in four files built to the same template:
+       XTIX / OASIS       123 at 1440, 119 at 1024, 118 at 900
+       EVENTER / MEDCOIN   56           56           56
+   and the plate landed 18 to 26px INSIDE the head, printing its OFF indicator across
+   'FILE 03 . SYNC' and 'FILE 04 . ORIGIN' -- 16 x 7px of ink on ink at 900.
+
+   The selector is the structure, not a number typed per file: the mount follows the meta
+   line directly in exactly the two documents that have no PART label, and follows the
+   label in the two that do. It cannot pick the wrong file, and if a PART label is ever
+   added to one of these two it stops matching by itself.
+
+   65 is 5 x 13, and it lands them on their siblings: clearance below the head goes -18 to
+   +47 at 1440 and -26 to +39 at 900, against +49 and +36 for XTIX; meta to folder at 900
+   goes 56 to 121 against 118. Below 861 the head stacks differently and EVENTER already
+   clears by 107px, so the rule stands down rather than adding 65px of nothing to a phone
+   -- verified 187 before and 187 after at 700. */
+.case .smeta+.uvmount{margin-top:65px}
+@media (max-width:860px){.case .smeta+.uvmount{margin-top:0}}
 .case .uvmount .lampband{--lift:0px;margin:0!important;
   transform:translateY(calc(-100% - 10px + var(--lift)));
   background:linear-gradient(180deg,#2A2C36,#1D1E25)!important;
@@ -3304,6 +3327,34 @@ loop, so `animation:none` had nothing to cancel. One static frame, then nothing.
    document the reader opens. #docs makes this an id too, so it wins, and it will keep winning
    for any document that grows its own inset later. */
 .mw-view #docs>section{padding-left:0;padding-right:0}
+/* AND READ ME GETS ITS CLEARANCE BACK, because the inset the rule above removes is the
+   only thing holding READ ME's own film off READ ME's own words.
+
+   FILE 07 is the one file whose rebates are on the SECTION rather than inside the folder
+   -- full bleed down the vault, which is the point of it -- and .vfilm is absolute at
+   left:0/right:0 with z-index:2 over a .wrap at z-index:1. The note above is about width
+   and does not mention the film; with the inset gone, measured at 1100, the document read
+
+       L THOUGHTS  /  e Builder's Principles  /  PRINCIPLES . ONE OPERATING SYSTEM
+
+   -- the rubric, the title, the meta line, the folder tab and the token all missing their
+   first characters under a black strip, in the last document the reader opens.
+
+   74 is 56px of rebate plus the 18px of clearance the case files use (see the folder
+   padding note in the monolith). At 1440 it changes nothing: .wrap is max-width 1120 with
+   67px of slack either side already. */
+.mw-view #docs>section#final{padding-left:74px;padding-right:74px}
+@media (max-width:860px){
+  /* AND THE REBATE NARROWS LIKE EVERY OTHER FILE'S. This is what makes the fix nearly
+     free on a phone: every case file's film is already 15px at this width, and READ ME's
+     was still 40 -- so the clearance it needed was almost three times what it should have
+     been. 15px of rebate and 17px of inset. Measured at 375, READ ME's text column goes
+     291 -> 257 against 291 for XTIX, instead of the 231 the old 40px inset would cost. */
+  .mw-view #docs>section#final{padding-left:17px;padding-right:17px}
+  .mw-view #final>.vfilm{width:15px;padding:10px 0;border-radius:0}
+  .mw-view #final>.vfilm::before,.mw-view #final>.vfilm::after{width:9px;background-size:9px 20px;margin:5px 0}
+  .mw-view #final>.vfilm span{display:none}
+}
 /* ALL SEVEN, NOT JUST THE FOUR CASE FILES. .sec carries padding:110px 24px from the
    scrolling page; line 161 above zeroes left and right inside the window and this line
    reduced the top -- but only for .case, so LEADERSHIP, TECH and READ ME kept all 110.
