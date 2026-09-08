@@ -98,6 +98,10 @@ display:flex;align-items:center;gap:13px;padding:0 18px}
 .mi .o{flex:none;width:15px;height:15px;border:1.5px solid var(--fc,var(--emb));border-radius:50%;position:relative}
 .mi .o::after{content:"";position:absolute;left:3px;right:3px;top:50%;height:1.5px;margin-top:-1px;background:var(--fc,var(--emb))}
 .lessq{border-left:2px solid var(--fc,var(--emb));padding:4px 0 4px 22px}
+/* the quotes balance too. FILE 05's ran 695/217 at 768 and 263/284/172 at 375; it is
+   460/451 and 219/248/252 now, and every other .qx on the site is unchanged at every
+   width. */
+.qx{text-wrap:balance}
 .lessq .qx{font-family:'Fraunces',serif;font-style:italic;font-weight:500;font-size:19px;line-height:1.5;color:var(--ink)}
 .lessq .qx b{color:var(--fc,var(--emb));font-weight:600}
 .lessq .who{margin-top:8px;font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.24em;color:var(--dim)}
@@ -162,6 +166,15 @@ padding:9px 17px;font-family:'JetBrains Mono',monospace;font-weight:700;font-siz
 #philosophy .sigp::before,#philosophy .sigp::after{content:"";position:absolute;width:17px;height:17px;border:0 solid var(--emb)}
 #philosophy .sigp::before{top:0;left:0;border-top-width:2px;border-left-width:2px}
 #philosophy .sigp::after{bottom:0;right:0;border-bottom-width:2px;border-right-width:2px}
+/* AND THE BALANCER HAS TO BE ABLE TO SEE THE SECOND SENTENCE. Page 2's title is two .ln
+   spans with a <br> between them, and Chrome's balancer does not cross a forced break:
+   at 375 it measured 302/313/44 -- "Not." alone on a third line -- with balance on and
+   off alike. One block each gives it something to balance, and the <br> then has to go
+   or it adds a blank line between two block siblings.
+       302 / 313 / 44   ->   302 / 185 / 172
+   Verified a no-op at 1440, 1024 and 768: same widths, same box height, same top. */
+#philosophy .sttl .ln{display:block;text-wrap:balance}
+#philosophy .sttl br{display:none}
 #philosophy .sigp .qx{font-family:'Fraunces',serif;font-style:italic;font-weight:500;font-size:clamp(16px,2.2vw,21px)}
 #philosophy .sigp .qx b{color:var(--emb);font-weight:600}
 #philosophy .sigp .who{margin-top:7px;font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.26em;color:var(--dim)}
@@ -378,13 +391,7 @@ transform-origin:bottom;transition:transform .4s var(--ease)}
 @media (max-width:820px){#hero .tagl{display:none}#hero .inner{left:8px;right:8px;flex-wrap:wrap;justify-content:flex-end}#hero .itab{padding:0 10px;height:32px}#hero .itab .fl2{display:none}}
 #hero .mfold .w>i{color:#191A1F}
 
-#statement .spine{position:absolute;top:0;bottom:0;left:0;width:96px;display:flex;flex-direction:column}
-#statement .sp{flex:1;position:relative}
-#statement .sp span{position:absolute;top:16px;left:50%;transform:translateX(-50%);writing-mode:vertical-rl;
-font-family:'JetBrains Mono',monospace;font-weight:700;font-size:9px;letter-spacing:.3em;color:#191A1F}
 #statement .pin{position:sticky}
-#statement .in{padding-left:96px}
-@media (max-width:760px){#statement .spine{width:34px}#statement .sp span{display:none}#statement .in{padding-left:34px}}
 
 .case .folder,#philosophy .folder,#leadership .folder,#final .folder{padding-left:92px}
 .tabrow{position:absolute;top:-37px;left:0;display:flex;gap:9px;align-items:flex-end;z-index:4}
@@ -1033,11 +1040,17 @@ body.static #clearance,body.static #idlecue,body.failsafe #clearance,body.failsa
 
 
 <section class="sec" id="statement">
-  <div class="pinh"><div class="pin"><div class="spine" aria-hidden="true"><div class="sp" style="background:var(--emb)"><span>FILE 01 &mdash; XTIX</span></div><div class="sp" style="background:var(--brass)"><span>FILE 02 &mdash; OASIS</span></div><div class="sp" style="background:var(--ice)"><span>FILE 03 &mdash; EVENTER</span></div><div class="sp" style="background:var(--ink)"><span>FILE 04 &mdash; MEDCOIN</span></div></div><div class="in">
+  <!-- THE LEFT STRIP IS GONE, not hidden. Four coloured tabs reading FILE 01 XTIX,
+       FILE 02 OASIS, FILE 03 EVENTER, FILE 04 MEDCOIN stood down the left edge of page 1
+       until Oran took them off ("owner: page-2 left strip removed"). That was carried out
+       with `#statement .spine{display:none!important}`, so all eight elements and six
+       rules still shipped and statement() still wrote opacity and transform onto the four
+       spans on every frame the reader moved -- into boxes measuring 0x0. -->
+  <div class="pinh"><div class="pin"><div class="in">
     <div class="stfil" aria-hidden="true"><canvas id="stnf"></canvas></div>
     <div class="sttxt">
       <div class="l1" id="stmt1">One intelligence built the world.</div>
-      <div class="l2" id="stmt2">Two will build the next.</div>
+      <div class="l2" id="stmt2">Two will build the&nbsp;next.</div>
     </div>
   </div></div></div>
 
@@ -1240,9 +1253,10 @@ footer b{color:var(--mut);font-weight:600}
  #hero .itab{min-width:44%;height:34px;justify-content:center;border-radius:8px 12px 8px 8px}
  #hero .idx{display:none}
  /* --- statement --- */
- #statement .spine{width:20px}
- #statement .sp span{display:none}
- #statement .in{padding-left:26px!important;padding-right:6px}
+ /* AND THE SCENE IS CENTRED ON A PHONE. These two paddings were the strip's: 26px of
+    gutter on the left and 6px of optical counterweight on the right. The display:none
+    patch cancelled the 26 and left the 6, so the scene ran from 24px on the left edge to
+    30px on the right -- measured at 375. .pin's own 24px does the inset on both sides. */
  #statement .l1,#statement .l2{font-size:clamp(22px,7.2vw,28px)!important;line-height:1.22}
  .memo{font-size:8px;letter-spacing:.16em;padding:7px 12px;margin-bottom:22px}
  /* --- section headers --- */
@@ -1678,9 +1692,9 @@ body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:214748
 .es-stamp{position:absolute;right:13px;bottom:11px;font-family:'JetBrains Mono',monospace;font-weight:800;font-size:8.5px;letter-spacing:.24em;color:#1A5C40;border:2px solid #1A5C40;border-radius:4px;padding:3px 7px;transform:rotate(5deg)}
 
 
-/* owner: page-2 left strip removed */
-#statement .spine{display:none!important}
-#statement .in{padding-left:0!important}
+/* owner: page-2 left strip removed -- and now it actually is. The markup, the six rules
+   that drew it and the eight style writes a frame that animated it are all out of the
+   file; see the note where the strip stood in the markup. */
 
 
 @media (prefers-reduced-motion:reduce){.redx::after{animation:none}}/*D:medcoin:24*/
@@ -2093,8 +2107,14 @@ body.static .slipflip.turned .sf-back{opacity:1;pointer-events:auto}
    Every chapter opens the same way: the words are barely there, and the act of
    reading them (scrolling) presses them into the page. Weight and tracking are
    scrubbed per word; the existing .tw reveal still owns opacity/transform. */
+/* A TITLE PICKS ITS OWN BEST BREAK. Measured at 375 across all seven files, balance
+   improves four and touches none of the others: MEDCOIN 275/68 -> 212/131, OASIS
+   285/132 -> 191/226 (at its own comma), LEADERSHIP 275/97/264 -> 178/195/264, TECH
+   257/90/239 -> 230/117/239. At 768 and 1366 it is a no-op on all seven -- it only acts
+   where the greedy break was bad. */
 .sttl{font-family:'Fraunces',serif;font-optical-sizing:none;font-weight:400;
-  font-size:clamp(25px,3.35vw,37px);letter-spacing:-.012em;line-height:1.16}
+  font-size:clamp(25px,3.35vw,37px);letter-spacing:-.012em;line-height:1.16;
+  text-wrap:balance}
 .sttl .w>i{font-variation-settings:'wght' var(--kw,720);letter-spacing:var(--kt,0em)}
 @media (max-width:680px){.sttl{font-size:clamp(19px,5.6vw,25px)!important;letter-spacing:-.008em}}
 @media (prefers-reduced-motion:reduce){.sttl .w>i{font-variation-settings:'wght' 780;letter-spacing:0}}
@@ -2637,7 +2657,6 @@ var stWrap=document.querySelector('#statement .pinh');
 var stTxt=document.querySelector('#statement .sttxt');
 var stFil=document.querySelector('#statement .stfil');
 var stTop=0,stH=0;
-var SPS=[].slice.call(document.querySelectorAll('#statement .sp span'));
 var lastSTP=-1;
 function statement(y){
   if(!stWrap||frozen)return;
@@ -2698,7 +2717,6 @@ function statement(y){
     /* the sentence rides a little further than the filament, which is the depth between
        them -- but only across the lead-out, so neither moves while the swap runs. */
     if(stTxt)stTxt.style.transform='translateY('+(hold*1.22).toFixed(1)+'px)';
-    for(var si=0;si<SPS.length;si++){var sq=eo(clamp((p-.02-si*.05)/.22));SPS[si].style.opacity=String(.2+.8*sq);SPS[si].style.transform='translateX(-50%) translateY('+((1-sq)*44)+'px)';}
   }
     /* THE SENTENCE OWNS ITSELF NOW. It is no longer assembled out of particles and no
        longer raised word by word: the two lines share one line and migrate into each
@@ -5217,7 +5235,19 @@ document.querySelectorAll('.redx').forEach(function(r){
   var reduced=matchMedia('(prefers-reduced-motion: reduce)').matches
     ||document.body.classList.contains('static')
     ||document.body.classList.contains('failsafe');
-  var A='One intelligence built the world.',B='Two will build the next.';
+  /* ONE CHARACTER, AND THE SENTENCE STOPS ORPHANING ITS LAST WORD.
+     This line wants 677px at 60px Fraunces Black and the column is 607 at every desktop
+     width, so it has always broken -- and it broke on "the", leaving "next." alone:
+         Two will build the / next.        519 / 148 at 1440,  260 / 74 at 375
+     The U+00A0 binds "the next." into one unit, so the break can only fall before it:
+         Two will build / the next.        413 / 254 at 1440,  207 / 127 at 375
+     layer() splits on U+0020 alone, so the pair arrives as ONE .sm-wd -- which already
+     carries white-space:nowrap -- and the <i> holding the nbsp measures 10.53px against
+     the 10px text space it replaces. Measured in the page, at both widths.
+     Do NOT add text-wrap:balance to .l1 as well: balance minimises the longest line, so
+     with the pair bound it prefers "Two will / build the next." (250/407) to
+     "Two will build / the next." (413/254). The two disagree here and the nbsp is right. */
+  var A='One intelligence built the world.',B='Two will build the next.';
   var MOBST=innerWidth<861;
 
   /* q IS THE ONE NUMBER. It is declared here, above everything that reads it, because the
@@ -5249,7 +5279,9 @@ document.querySelectorAll('.redx').forEach(function(r){
   el.textContent='';
   var LA=layer(A,'slA'),LB=layer(B,'slB');
   el.appendChild(LA.el);el.appendChild(LB.el);
-  el.setAttribute('aria-label',A+' '+B);
+  /* the nbsp is a typesetting instruction, not part of the sentence: the label a screen
+     reader announces gets ordinary spaces back. */
+  el.setAttribute('aria-label',(A+' '+B).replace(/\u00A0/g,' '));
 
   /* ---- the schedule ----
      A leaves on a ripple and B arrives on a ripple that begins while A is still going, so

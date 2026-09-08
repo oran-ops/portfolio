@@ -278,7 +278,6 @@ var stWrap=document.querySelector('#statement .pinh');
 var stTxt=document.querySelector('#statement .sttxt');
 var stFil=document.querySelector('#statement .stfil');
 var stTop=0,stH=0;
-var SPS=[].slice.call(document.querySelectorAll('#statement .sp span'));
 var lastSTP=-1;
 function statement(y){
   if(!stWrap||frozen)return;
@@ -339,7 +338,6 @@ function statement(y){
     /* the sentence rides a little further than the filament, which is the depth between
        them -- but only across the lead-out, so neither moves while the swap runs. */
     if(stTxt)stTxt.style.transform='translateY('+(hold*1.22).toFixed(1)+'px)';
-    for(var si=0;si<SPS.length;si++){var sq=eo(clamp((p-.02-si*.05)/.22));SPS[si].style.opacity=String(.2+.8*sq);SPS[si].style.transform='translateX(-50%) translateY('+((1-sq)*44)+'px)';}
   }
     /* THE SENTENCE OWNS ITSELF NOW. It is no longer assembled out of particles and no
        longer raised word by word: the two lines share one line and migrate into each
