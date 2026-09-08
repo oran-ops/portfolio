@@ -142,8 +142,6 @@ font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.3em;color:v
 /* ============ STATEMENT ============ */
 #statement{padding:150px 24px}
 #statement .in{text-align:center;max-width:1050px;margin:0 auto}
-#statement .memo{display:inline-flex;background:var(--emb);color:#191A1F;border-radius:7px 16px 0 0;
-padding:9px 17px;font-family:'JetBrains Mono',monospace;font-weight:700;font-size:9.5px;letter-spacing:.22em;margin-bottom:34px}
 #statement .l1{font-weight:800;font-size:clamp(26px,4.6vw,50px);letter-spacing:-.03em;line-height:1.18}
 #statement .l2{font-weight:800;font-size:clamp(26px,4.6vw,50px);letter-spacing:-.03em;line-height:1.18;color:var(--emb);margin-top:26px}
 
@@ -265,7 +263,6 @@ body.static .tk,body.static #heromq .row,body.static .crawlp,body.static #hero .
 #statement .pin{position:sticky;top:0;min-height:100svh;display:flex;align-items:center;justify-content:center;padding:0 24px}
 #statement .in{width:100%}
 #statement .w>i{transition:none;opacity:0}
-#statement .memo{opacity:0}
 .rv{transform:translateY(36px)}
 .st{transform:translateY(26px)}
 .u .zr{transform:translateX(-26px)}
@@ -280,14 +277,12 @@ body.static .tk,body.static #heromq .row,body.static .crawlp,body.static #hero .
 .tk{font-size:10px;animation-duration:26s}
 .tk b{color:var(--ink)}
 body.static .w>i,body.static .tw .w>i{transform:none!important;opacity:1!important}
-body.static #statement .memo{opacity:1!important;transform:none!important}
 body.static #statement .pinh{height:auto}
 body.static #statement .pin{position:static;padding:150px 24px}
 body.static .case .folder,body.static #philosophy .folder,body.static #leadership .folder,body.static #final .folder{opacity:1!important;transform:none!important}
 body.static .folder .flip{opacity:1!important;transform:none!important}
 @media (prefers-reduced-motion:reduce){
  .w>i{transform:none!important;opacity:1!important}
- #statement .memo{opacity:1!important;transform:none!important}
  #statement .pinh{height:auto}
  #statement .pin{position:static;padding:150px 24px}
  .case .folder,#philosophy .folder,#leadership .folder,#final .folder{opacity:1!important;transform:none!important}
@@ -491,7 +486,6 @@ body.static #boot{display:none}
 
 body.failsafe .rv,body.failsafe .st,body.failsafe .rvs,body.failsafe .folder,body.failsafe .folder .flip,body.failsafe .u .zr,body.failsafe .bignum{opacity:1!important;transform:none!important}
 body.failsafe .w>i{opacity:1!important;transform:none!important}
-body.failsafe #statement .memo{opacity:1!important;transform:none!important}
 body.failsafe #statement .pinh{height:auto}
 body.failsafe #statement .pin{position:static;padding:150px 24px}
 body.failsafe .bar0{transform:scaleY(1)!important}
@@ -1308,7 +1302,6 @@ footer b{color:var(--mut);font-weight:600}
     patch cancelled the 26 and left the 6, so the scene ran from 24px on the left edge to
     30px on the right -- measured at 375. .pin's own 24px does the inset on both sides. */
  #statement .l1,#statement .l2{font-size:clamp(22px,7.2vw,28px)!important;line-height:1.22}
- .memo{font-size:8px;letter-spacing:.16em;padding:7px 12px;margin-bottom:22px}
  /* --- section headers --- */
  .sttl{font-size:clamp(18px,6vw,24px)!important;letter-spacing:-.02em;overflow-wrap:break-word}
  .smeta{font-size:8px;letter-spacing:.1em}
@@ -1695,7 +1688,11 @@ body.static .hfolder,body.static #hero .mfold{--sx:-320px}
 /* ===== EMERALD II phase 1 ===== */
 /* film grain - the document was scanned in a dark room */
 body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:2147480000;opacity:.22;background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="220" height="220"><filter id="g"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/><feComponentTransfer><feFuncA type="linear" slope="0.10"/></feComponentTransfer></filter><rect width="220" height="220" filter="url(%23g)"/></svg>')}
-/* owner: cover memo removed - the cover carries the title alone */
+/* owner: cover memo removed - the cover carries the title alone. And now it IS removed:
+   the six rules that styled and restored #statement .memo, the getElementById('memoStamp')
+   that has returned null ever since, and the two branches that read it are all out of the
+   file, in both copies. The same shape as the left strip in V4 -- a ruling recorded in a
+   comment while the thing it removed stayed behind to be read, matched and measured. */
 /* classification grammar - case colors via each section's --fc */
 .clsband{background:var(--fc,var(--emb));color:#141519;font-family:'JetBrains Mono',monospace;font-weight:800;font-size:9.5px;letter-spacing:.4em;text-align:center;padding:7px 8px 6px;border-radius:4px;margin:14px 0 0}
 .clsctl{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:.07em;color:var(--dim,#6B6E76);padding:7px 2px;border-bottom:1px solid rgba(107,110,118,.28);margin-bottom:6px}/*D:medcoin:21*//*D:medcoin:22*/
@@ -2621,7 +2618,6 @@ function split(el){
 document.querySelectorAll('.sttl,#files .bigt,#hero h1').forEach(function(t){if(split(t)){t.classList.add('tw');return}var any=false;[].forEach.call(t.querySelectorAll('.ln'),function(l){if(split(l))any=true});if(any)t.classList.add('tw');});
 var W1=split(document.getElementById('stmt1'))||[];
 var W2=split(document.getElementById('stmt2'))||[];
-var memo=document.getElementById('memoStamp');
 
 /* ---------- counters ---------- */
 var cnts=[].slice.call(document.querySelectorAll('.cnt')).map(function(el){
@@ -2772,11 +2768,6 @@ function statement(y){
        longer raised word by word: the two lines share one line and migrate into each
        other, character by character. The particle field it replaced is gone from the
        file entirely - round 35 proved it unreachable and removed all 390 lines. */
-  if(moved&&memo){
-    var qq=eo(clamp((p-.70)/.14));
-    memo.style.opacity=String(qq);
-    memo.style.transform='scale('+(1.65-.65*qq)+') rotate('+(-5+5*qq)+'deg)';
-  }
 }
 
 /* ---------- hero scene ---------- */
@@ -2903,7 +2894,6 @@ function init(){
     scenes.forEach(function(x){x.fn(x.el,1)});
     cnts.forEach(function(c){setCnt(c,1)});
     W1.concat(W2).forEach(function(w){w.style.transform='none';w.style.opacity='1'});
-    if(memo){memo.style.opacity='1';memo.style.transform='none'}
     var pb=function(){var se=document.scrollingElement||document.documentElement;pbar.style.width=(window.pageYOffset/Math.max(1,se.scrollHeight-window.innerHeight)*100)+'%'};
     window.addEventListener('scroll',pb,{passive:true});pb();
   }else{

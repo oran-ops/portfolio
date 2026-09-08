@@ -191,7 +191,6 @@ function split(el){
 document.querySelectorAll('.sttl,#files .bigt,#hero h1').forEach(function(t){if(split(t)){t.classList.add('tw');return}var any=false;[].forEach.call(t.querySelectorAll('.ln'),function(l){if(split(l))any=true});if(any)t.classList.add('tw');});
 var W1=split(document.getElementById('stmt1'))||[];
 var W2=split(document.getElementById('stmt2'))||[];
-var memo=document.getElementById('memoStamp');
 
 /* ---------- counters ---------- */
 var cnts=[].slice.call(document.querySelectorAll('.cnt')).map(function(el){
@@ -343,11 +342,6 @@ function statement(y){
        longer raised word by word: the two lines share one line and migrate into each
        other, character by character. The particle field it replaced is gone from the
        file entirely - round 35 proved it unreachable and removed all 390 lines. */
-  if(moved&&memo){
-    var qq=eo(clamp((p-.70)/.14));
-    memo.style.opacity=String(qq);
-    memo.style.transform='scale('+(1.65-.65*qq)+') rotate('+(-5+5*qq)+'deg)';
-  }
 }
 
 /* ---------- hero scene ---------- */
@@ -462,7 +456,6 @@ function init(){
     scenes.forEach(function(x){x.fn(x.el,1)});
     cnts.forEach(function(c){setCnt(c,1)});
     W1.concat(W2).forEach(function(w){w.style.transform='none';w.style.opacity='1'});
-    if(memo){memo.style.opacity='1';memo.style.transform='none'}
     var pb=function(){pbar.style.width=(SC.scrollTop/Math.max(1,SC.scrollHeight-SC.clientHeight)*100)+'%'};
     SC.addEventListener('scroll',pb,{passive:true});pb();
   }else{
