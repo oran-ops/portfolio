@@ -1211,10 +1211,36 @@ function zoomOpen(fromEl, then) {
   var a = fromEl.getBoundingClientRect();
   var z = cv("zoom");
   var cs = getComputedStyle(document.documentElement);
-  var from = { l: a.left - d.left, t: a.top - d.top, w: a.width, h: a.height };
-  var to = { l: parseInt(cs.getPropertyValue("--mw-in")),
-             t: parseInt(cs.getPropertyValue("--mw-gap")) };
-  to.w = d.width - to.l * 2; to.h = d.height - to.t - to.l;
+  /* WHERE IT GROWS FROM. folder.js publishes the hit box of the icon the reader actually
+     clicked, because the element this function is handed -- a button inside #mw-files -- is
+     display:none from __folderInit and measures 0 x 0 at the desk's corner. Measured. */
+  var from = window.__mwZoomFrom ||
+             { l: a.left - d.left, t: a.top - d.top, w: a.width, h: a.height };
+  window.__mwZoomFrom = null;
+
+  /* AND WHERE IT GROWS TO, WITHOUT PARSING A CUSTOM PROPERTY.
+     `to.t` used to be parseInt(getPropertyValue("--mw-gap")). --mw-gap is
+     calc(var(--mw-menu) + 16px), and an UNREGISTERED custom property computes to its
+     substituted token stream rather than to a length: getPropertyValue returns the literal
+     string "calc(40px + 16px)" and parseInt of that is NaN. to.h was then NaN as well, and
+     every frame below wrote top:"NaNpx" and height:"NaNpx" -- which CSSOM drops in silence,
+     leaving #zoom at top:auto and height:auto for the whole sequence. So the Macintosh zoom,
+     the one gesture this page is built around, was a black hairline pinned at the top of the
+     desk that widened from 0 to the full screen. Only left and width ever animated.
+
+     Verified with controls: --mw-in returns "20px" and parses to 20, so the method itself
+     works; and writing '5px' to z.style.top takes while 'NaNpx' leaves the previous value.
+
+     These four numbers come off the WINDOW ITSELF -- the element the stylesheet positions --
+     which resolve to used lengths even while #win is hidden: 20 / 56 / 20 / 20 against a
+     1440x900 desk, giving exactly the {20, 56, 1400, 824} the window really occupies. It
+     cannot drift from the CSS, because it is the CSS's own answer. */
+  var wcs = getComputedStyle(cv("win"));
+  var num = function (v, alt) { var q = parseInt(v); return isFinite(q) ? q : alt; };
+  var inset = num(cs.getPropertyValue("--mw-in"), 20);
+  var to = { l: num(wcs.left, inset), t: num(wcs.top, inset) };
+  to.w = d.width - to.l - num(wcs.right, inset);
+  to.h = d.height - to.t - num(wcs.bottom, inset);
   var N = 5;
   /* Nobody is watching a hidden tab, and animating one is worse than pointless: a browser
      clamps timers there to whole seconds, so the sequence stalls and the window never opens. */
@@ -1240,7 +1266,15 @@ function zoomOpen(fromEl, then) {
 }
 
 /* ---------------------------------------------------------------- open and close */
-var openId = null, auditing = false;
+/* `opening` is openId's stand-in for the 216ms the zoom is in flight. show() guards
+   re-entry on openId, and openId is not assigned until finish() -- behind the whole
+   animation -- while show()'s FIRST statement schedules __mwOpened(id) on a 0ms timeout.
+   The router hears that, calls go("doc", id) -> render() -> show(id) again
+   (router.js:299), and arrives while the guard is still unarmed. Measured with a
+   MutationObserver on #zoom: two five-frame sequences per click, 18ms out of phase. It
+   has always done this; before the zoom was fixed both were invisible hairlines at the
+   desk corner, so there was nothing to see. */
+var openId = null, auditing = false, opening = null;
 function record(id) {
   /* The audit button opens all six to measure them. Those are not a reader opening a file,
      and counting them made the status line read "6 of 7 opened" after one real open. A
@@ -1264,11 +1298,13 @@ function show(id) {
      zoom -- so the count it drew was always one open behind. It is redrawn in finish(),
      immediately after the open is recorded, which is the only moment it can be right. */
   setTimeout(function () { if (typeof window.__mwOpened === "function") { window.__mwOpened(id); } }, 0);
-  if (openId === id) return;
+  if (openId === id || opening === id) return;
+  opening = id;
   var btn = cv("mw-files").querySelector('[data-id="' + id + '"]') || cv("mw-files");
   var finish = function () {
     IDS.forEach(function (x) { secOf(x).classList.toggle("mw-show", x === id); });
     openId = id;
+    opening = null;
     prepare(id);
     /* NOTHING. The engine owns every reveal -- .rv, .rvs, .u and the folder, which has its own
        scene. This list used to include the SECTION, and `.sec.on .rv{opacity:1}` reveals every
@@ -1331,7 +1367,7 @@ function show(id) {
     liveBuilt = true;
     setTimeout(function () { cv("docs").classList.remove("mw-all"); finish(); }, 150);
   };
-  if (openId) { go(); refitSheets(secOf(id)); return; }   /* swap documents, no zoom */
+  if (openId) { opening = null; go(); refitSheets(secOf(id)); return; }   /* swap documents, no zoom */
   cv("mw-files").style.visibility = "hidden";
   zoomOpen(btn, go);
 }
@@ -1339,6 +1375,7 @@ function shut() {
   setTimeout(function () { if (typeof window.__folderRedraw === "function") { window.__folderRedraw(); } if (typeof window.__mwClosed === "function") { window.__mwClosed(); } }, 0);
   if (!openId) return;
   openId = null;
+  opening = null;
   cv("win").hidden = true;
   cv("mw-files").style.visibility = "";
   IDS.forEach(function (x) { secOf(x).classList.remove("mw-show"); });

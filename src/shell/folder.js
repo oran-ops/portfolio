@@ -76,20 +76,39 @@
     x.drawImage(off, 0, 0, canvas.width, canvas.height);
   }
 
+  /* THE WHOLE HIT, not just its id. The rectangle screen.js returns is the only record of
+     where the icon the reader clicked actually is -- the frame's own #mw-files buttons are
+     display:none from __folderInit below, so they measure 0 x 0 -- and the zoom needs it to
+     grow out of the right place. Callers that only want the name read .id. */
   function at(e) {
     var r = canvas.getBoundingClientRect();
     var x = (e.clientX - r.left) * (W / r.width);
     var y = (e.clientY - r.top) * (H / r.height);
     for (var i = 0; i < hits.length; i++) {
       var h = hits[i];
-      if (x >= h.x0 && x <= h.x1 && y >= h.y0 && y <= h.y1) { return h.id; }
+      if (x >= h.x0 && x <= h.x1 && y >= h.y0 && y <= h.y1) { return h; }
     }
     return null;
   }
 
+  /* the hit box in DESK-LOCAL CSS pixels, through the canvas's own measured scale rather than
+     an assumed device ratio, so it stays right if the folder is ever drawn at another size. */
+  function zoomFrom(h) {
+    var desk = document.getElementById("desk");
+    if (!desk || !canvas || !h) { return null; }
+    var r = canvas.getBoundingClientRect(), d = desk.getBoundingClientRect();
+    if (!r.width || !r.height) { return null; }
+    var kx = r.width / W, ky = r.height / H;
+    return { l: (r.left - d.left) + h.x0 * kx,
+             t: (r.top - d.top) + h.y0 * ky,
+             w: (h.x1 - h.x0) * kx,
+             h: (h.y1 - h.y0) * ky };
+  }
+
   /* ONE CLICK opens a document, never two. A phone cannot do two. */
-  function act(id) {
-    if (!id) { return; }
+  function act(h) {
+    if (!h) { return; }
+    var id = h.id || h;                 /* a hit from at(), or a bare id from anywhere else */
     if (id === "close") {
       /* the folder's own close box leaves the machine entirely. The router owns what that
          means; until it exists this is simply inert rather than wrong. */
@@ -100,6 +119,15 @@
     if (id === "docclose") { if (typeof shut === "function") { shut(); } return; }
     if (!K.labels[id]) { return; }
     state.sel = id;
+    /* AND THE ICON IS LIT BEFORE THE WINDOW COVERS IT. This used to set state.sel and call
+       show() with no draw() between them, so the 50% dim and the inverted label that
+       screen.js:201-206 already draw were not painted until __folderRedraw() ran from the
+       frame's finish() -- about 216ms later, behind the window that by then covers the grid.
+       The reader clicked a file and the Finder never acknowledged which one. */
+    draw();
+    /* and the zoom grows out of THIS icon. show() takes its start element from #mw-files,
+       which __folderInit sets to display:none, so it measures 0 x 0 at the desk's corner. */
+    window.__mwZoomFrom = zoomFrom(h.id ? h : null);
     /* the frame owns opening: it moves the section into the window, runs the reveal, starts
        the engine on the container, and records the open. */
     if (typeof show === "function") { show(id); }
