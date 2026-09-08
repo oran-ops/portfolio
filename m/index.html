@@ -424,7 +424,34 @@ transform-origin:bottom;transition:transform .4s var(--ease)}
 
 #statement .pin{position:sticky}
 
-.case .folder,#philosophy .folder,#leadership .folder,#final .folder{padding-left:92px}
+/* THE DOCUMENT SITS IN THE MIDDLE OF ITS OWN FRAME. One rule used to give all four of
+   these the same 92px gutter, and only one of them has anything to put in it.
+
+   A CASE FILE's frame is the two film rebates. Measured at 1440, identically in XTIX,
+   OASIS, EVENTER and MEDCOIN: the rebates end at 202 and begin again at 1228, and the
+   text ran 237 to 1227 -- 35px of air on the left and ONE pixel on the right, the whole
+   990px block sitting 17px right of the centre of the strip it is printed on. The gutters
+   were 92 and 38 against rebates of 56 and 36: the left was sized as rebate plus a
+   generous clearance and the right as rebate plus nothing. The frame is 1026 wide and the
+   document is 990, so the leftover is 36 and it splits 18 a side. Both rebates keep their
+   designed widths -- they differ on purpose, the left carries more perforation -- and
+   1120-75-55 is 990, the measure to the pixel.
+
+   FILE 05 and FILE 07 have NO rebate and no rail inside the folder at all: READ ME's film
+   is on the section, full bleed down the vault and symmetric, and LEADERSHIP has none. So
+   both were insetting 92 left and 38 right for a decoration that is not there, and their
+   text sat 27px right of the centre of its own folder. 65/65 centres it, again at 990.
+
+   #philosophy keeps the 92: its folder really does carry a 56px punch rail in that gutter,
+   which leaves clearances of 36 and 38 -- two pixels apart, less than the rail's own
+   dashed border. Measured.
+
+   None of this reaches a phone. The 860 block below sets padding-left AND padding-right to
+   16px on this same group, and at that width the rebates are 15px and the clearance is
+   already 0 on both sides -- which is why the fault only ever showed on a desktop. */
+.case .folder{padding-left:75px;padding-right:55px}
+#philosophy .folder{padding-left:92px}
+#leadership .folder,#final .folder{padding-left:65px;padding-right:65px}
 .tabrow{position:absolute;top:-37px;left:0;display:flex;gap:9px;align-items:flex-end;z-index:4}
 .tabrow .tA{height:38px;background:var(--fc,var(--emb));border-radius:9px 20px 0 0;display:flex;align-items:center;gap:13px;padding:0 18px}
 .tabrow .tA .nm{font-family:'Fraunces',serif;font-weight:500;font-size:17px;color:#191A1F}
