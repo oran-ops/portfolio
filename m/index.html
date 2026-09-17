@@ -3384,8 +3384,16 @@ loop, so `animation:none` had nothing to cancel. One static frame, then nothing.
    thinner than a pixel. Measured on a 390 phone: 78 runs of document text under 8.5px. They
    come up to 8.5, which is the smallest size the page itself already uses for its own labels
    (M2-1 in the monolith). #docs outranks every rule they came from, including the ones that
-   shrank them further on a phone. SVG labels are left alone: they scale with their drawing. */
-@media (max-width:680px){
+   shrank them further on a phone. SVG labels are left alone: they scale with their drawing.
+   Any touch screen, not only a narrow one: a phone on its side is 750 wide and a tablet 768,
+   and both were still reading these at 7 and 7.5px. */
+@media (max-width:680px),(pointer:coarse){
+  /* and the sheet's own control is a full 44 for a finger (it measured 43) */
+  #docs .sf-tab{min-height:44px}
+  /* the UV lamp plate's three small lines, which the monolith raises only under 680 */
+  #docs .lampband .lampcall{font-size:9.5px!important}
+  #docs .lampband .lampsub{font-size:8.5px!important;letter-spacing:.14em}
+  #docs .lampband .lampstate{font-size:8px!important}
   #docs .es-h,#docs .es-k,#docs .an-h,#docs .dv-k,#docs .lampsig,#docs .ms-stamp,
   #docs .gen3 span,#docs .sf-tab .sf-sub,#docs #final .vseal .vsig{font-size:8.5px}
   /* and the key column holds its longest key. CONCLUSION is 68px at this size; the column was
