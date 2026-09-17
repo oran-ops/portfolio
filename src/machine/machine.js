@@ -1016,7 +1016,12 @@ function decodeMach(b64, xform){
     if(typeof window.drawScreen!=='function' || typeof window.Buf!=='function'){ crtTitle(); return }
     SCR_REAL=true;
     var b=new window.Buf(SCR_W,SCR_H);
-    window.drawScreen(b, SCR_W, SCR_H, 4, {open:true, sel:null, doc:null, opened:0});
+    /* the count and the selection come from the folder the reader is about to land on -- see
+       __folderState in shell/folder.js. It is expanded after this file, but this runs on the
+       click, by which time it exists; if it somehow does not, the old literals stand. */
+    var st=(typeof window.__folderState==='function') ? window.__folderState()
+          : {open:true, sel:null, doc:null, opened:0};
+    window.drawScreen(b, SCR_W, SCR_H, 4, st);
     paint(b);
   }
 

@@ -261,6 +261,19 @@
     window.__folderFocus(null);
   };
 
+  /* WHAT THE FOLDER LOOKS LIKE RIGHT NOW, for the CRT the camera flies into.
+     machine.js crtFolder() drew the folder on the screen with a literal `opened:0` and
+     `sel:null`, while the folder the reader lands on reads the session store and keeps the file
+     they last opened selected. So a reader who opened three files, stepped out and clicked back
+     in watched the screen say "0 of 7 opened" for the whole zoom, then dissolve into a folder
+     saying "3 of 7" with an icon suddenly inverted -- across the one handover this file's own
+     header says cannot drift apart. One source now, read fresh at the moment of the click.
+     (The column count is deliberately NOT shared: the CRT is cropped to its middle third on a
+     phone, and two columns there would put both icons outside the visible band.) */
+  window.__folderState = function () {
+    return { open: true, sel: state.sel, doc: null, opened: loadOpened().length };
+  };
+
   /* after a document is opened or shut the count has moved, so the folder is redrawn from
      storage rather than from anything this file was told. */
   window.__folderRedraw = function () {
