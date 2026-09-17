@@ -3192,7 +3192,7 @@ loop, so `animation:none` had nothing to cancel. One static frame, then nothing.
 @media (max-width:860px){
   .doctitle{min-height:var(--dth,100vh);gap:15px;padding-bottom:32px}
   .doctitle .dt-no{font-size:9.5px;letter-spacing:.26em;margin-right:-.26em}
-  .doctitle .dt-cue{font-size:8px;letter-spacing:.2em;margin-right:-.2em}
+  .doctitle .dt-cue{font-size:9px;letter-spacing:.2em;margin-right:-.2em}
 }
 /* the same height under reduced motion: the card is not an animation, it is a screen. */
 
@@ -3366,6 +3366,26 @@ loop, so `animation:none` had nothing to cancel. One static frame, then nothing.
    only -- on the scrolling page, where there is no card, the number is untouched and still the
    210 px ghost it has always been. */
 .mw-view .secnum{display:none}
+
+/* A READING FLOOR ON A PHONE. The archive's form labels -- the slip's keys and header, the
+   analyst's margin head, FINDING OF FACT, the reviewing desk's signature, the method slip's
+   stamp, the vault's seal -- were set at 7 to 8px, and at those sizes a phone draws strokes
+   thinner than a pixel. Measured on a 390 phone: 78 runs of document text under 8.5px. They
+   come up to 8.5, which is the smallest size the page itself already uses for its own labels
+   (M2-1 in the monolith). #docs outranks every rule they came from, including the ones that
+   shrank them further on a phone. SVG labels are left alone: they scale with their drawing. */
+@media (max-width:680px){
+  #docs .es-h,#docs .es-k,#docs .an-h,#docs .dv-k,#docs .lampsig,#docs .ms-stamp,
+  #docs .gen3 span,#docs .sf-tab .sf-sub,#docs #final .vseal .vsig{font-size:8.5px}
+  /* and the key column holds its longest key. CONCLUSION is 68px at this size; the column was
+     allowed to shrink to 56, so the word ran into the value beside it. */
+  #docs .es-k{flex:none}
+  #docs .mslip .es-k{min-width:70px}
+}
+/* THE NOTE AND THE STAMP. Below 1580 the analyst note sits in the file again (M3a), and in
+   MEDCOIN it lands directly above the outcomes card, whose FOUNDER stamp stands 16px proud of
+   the card's top edge -- across the note's signature. The card steps down clear of it. */
+#docs #medcoin .an-note+.outs{margin-top:30px}
 
 /* THE REVEAL. Elements start at opacity 0 and are revealed against the PAGE viewport.
    Scrolling now happens inside the window, so opened cold a document rendered blank. The pass
