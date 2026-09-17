@@ -1064,7 +1064,8 @@ function decodeMach(b64, xform){
   function screenTexture(){
     SCR_CV=document.createElement('canvas');
     SCR_CV.width=SCR_W; SCR_CV.height=512;      /* padded to a power of two, see above */
-    SCR_X=SCR_CV.getContext('2d');
+    /* read back on every upload (crtUpload), so the context is asked for as a CPU one */
+    SCR_X=SCR_CV.getContext('2d',{willReadFrequently:true});
     SCR_TEXTURE=gl.createTexture();
     crtTitle(); crtUpload(); SCR_MODE='title';
     /* screen.js is expanded after this file, so the paint above necessarily used the fallback.

@@ -109,7 +109,9 @@
   border:var(--mw-edge) solid #000;border-top:0}
 .mw-win[hidden]{display:none}
 .mw-title{flex:none;width:100%;height:var(--mw-bar)}
-.mw-x{position:absolute;left:6px;top:0;width:44px;height:var(--mw-bar);padding:0;border:0;
+/* 44 x 44: the title bar is 38 tall, so the box reaches 6px up into the desk above the
+   window -- never down into the document, where a tap must not close it. */
+.mw-x{position:absolute;left:6px;top:-6px;width:44px;height:calc(var(--mw-bar) + 6px);padding:0;border:0;
   background:transparent;cursor:pointer}
 .mw-x:focus-visible{outline:2px solid #000;outline-offset:-4px}
 .mw-body{flex:1;min-height:0;display:flex}
@@ -178,6 +180,17 @@
    document the reader opens. #docs makes this an id too, so it wins, and it will keep winning
    for any document that grows its own inset later. */
 .mw-view #docs>section{padding-left:0;padding-right:0}
+/* AND THE WINDOW GETS A GUTTER BACK WHERE IT HAS NO SLACK. With the section's page padding
+   zeroed above, the only side inset left was the phone rule (.wrap 16px !important, <=680) and
+   the slack either side of .wrap's 1120px -- so from 681 to about 1190 every document ran
+   flush into the window's edges: measured at 768, TECH's paragraph started at 0 and its
+   FILE 06 tag was cut by the frame. The padding is added to max-width as well (border-box),
+   so wherever the window already had slack the text column is exactly the 1120 it was.
+   READ ME is left out: its section already carries the inset its film needs. Phones keep
+   their own rule, which is !important and wins. */
+.mw-view #docs>section:not(#final)>.wrap{
+  padding-left:clamp(20px,3vw,36px);padding-right:clamp(20px,3vw,36px);
+  max-width:calc(1120px + 2 * clamp(20px,3vw,36px))}
 /* AND READ ME GETS ITS CLEARANCE BACK, because the inset the rule above removes is the
    only thing holding READ ME's own film off READ ME's own words.
 

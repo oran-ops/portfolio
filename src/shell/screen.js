@@ -347,9 +347,16 @@ function vscroll(b, x0, y0, x1, y1, pos, vis, live) {
 
 /* A System 1 push button. The default button carries a second border outside the first --
    that doubled outline is how the machine said "this is what Return does". */
-function pushbutton(b, x0, y0, x1, y1, label, isDefault) {
+function pushbutton(b, x0, y0, x1, y1, label, isDefault, ring) {
   function round(a, c, d, e, col, fill) {
-    if (fill) b.rect(a, c, d, e, fill);
+    if (fill) {
+      b.rect(a, c, d, e, fill);
+      /* and the corner pixels outside the outline's step are left clear, not white */
+      [[a, c], [a + 1, c], [a, c + 1], [d, c], [d - 1, c], [d, c + 1],
+       [a, e], [a + 1, e], [a, e - 1], [d, e], [d - 1, e], [d, e - 1]].forEach(function (p) {
+        if (p[0] >= 0 && p[1] >= 0 && p[0] < b.w && p[1] < b.h) b.d[(p[1] * b.w + p[0]) * 4 + 3] = 0;
+      });
+    }
     b.hl(c, a + 2, d - 2, col);
     b.hl(e, a + 2, d - 2, col);
     b.vl(a, c + 2, e - 2, col);
@@ -357,7 +364,23 @@ function pushbutton(b, x0, y0, x1, y1, label, isDefault) {
     b.set(a + 1, c + 1, col); b.set(d - 1, c + 1, col);
     b.set(a + 1, e - 1, col); b.set(d - 1, e - 1, col);
   }
-  if (isDefault) round(x0, y0, x1, y1, BLACK, null);
+  /* the default button's ring is three pixels thick, one pixel clear of the button -- the
+     Finder's own. `ring` colours it, for a button that sits on a dark ground. */
+  if (isDefault) {
+    /* one solid ring, not three nested outlines -- those left the bends full of holes */
+    var inR = function (x, y, inset, r) {
+      var dx = Math.min(x - x0, x1 - x) - inset, dy = Math.min(y - y0, y1 - y) - inset;
+      if (dx < 0 || dy < 0) return false;
+      if (dx >= r || dy >= r) return true;
+      var cx = r - dx - 0.5, cy = r - dy - 0.5;
+      return cx * cx + cy * cy <= r * r;
+    };
+    for (var yy = y0; yy <= y1; yy++) {
+      for (var xx = x0; xx <= x1; xx++) {
+        if (inR(xx, yy, 0, 6) && !inR(xx, yy, 3, 3)) b.set(xx, yy, ring || BLACK);
+      }
+    }
+  }
   var i = isDefault ? 4 : 0;
   round(x0 + i, y0 + i, x1 - i, y1 - i, BLACK, WHITE);
   var w = tw(label);

@@ -189,7 +189,9 @@ function wireBar() {
 /* ---------------------------------------------------------------- DONE */
 function drawDone() {
   var w = 120, h = 28, b = new Buf(w, h);
-  pushbutton(b, 0, 0, w - 1, h - 1, "DONE", true);
+  /* the ring is white: this button sits on the document's dark ground, where the black
+     ring the Finder drew on a white dialog was invisible -- DONE looked like any button. */
+  pushbutton(b, 0, 0, w - 1, h - 1, "DONE", true, WHITE);
   blit(cv("c-done"), b, w, h);
 }
 
@@ -591,10 +593,16 @@ if(MOB&&!frozen){
 }
 
 /* ---------- mobile: swipe cues on sideways-scrolling charts ---------- */
-if(MOB){
-  setTimeout(function(){
+/* AND IN EVERY DOCUMENT, not only the first one opened. This ran once, 700ms after the engine
+   started -- by which time only the document being opened was on screen, so the other two
+   charts measured 0 wide and never got a cue. It is now safe to run again (one cue per chart)
+   and the frame runs it each time a document opens. */
+function swipeCues(){
+  if(!MOB)return;
     [].forEach.call(document.querySelectorAll('#eventer .convwrap,#medcoin .mzorg,#tech .archw'),function(sc){
-      if(sc.scrollWidth<=sc.clientWidth+12)return;
+      var nx=sc.nextElementSibling;
+      if(nx&&nx.classList.contains('swcue'))return;
+      if(!sc.clientWidth||sc.scrollWidth<=sc.clientWidth+12)return;
       /* owner spec (round 3): the cue is PERSISTENT - the arrow must be
          visible at all times, so there is no dismiss path at all (the old
          one-shot fade could half-die in iOS webviews: composited animated
@@ -604,8 +612,9 @@ if(MOB){
       cue.innerHTML='<span>SWIPE</span><b class="swar">&#10230;</b>';
       sc.parentNode.insertBefore(cue,sc.nextSibling);
     });
-  },700);
 }
+window.__mwSwipeCues=swipeCues;
+setTimeout(swipeCues,700);
 
 /* ---------- magnetic tabs ---------- */
 if(!frozen&&window.matchMedia('(pointer:fine)').matches){
@@ -1357,6 +1366,7 @@ function show(id) {
        scroller has a size. */
     paintCards();
     refitSheets(secOf(id));                /* the section was hidden; its stage cached a zero */
+    setTimeout(function () { if (window.__mwSwipeCues) { window.__mwSwipeCues(); } }, 60);
     queueReveal();                         /* the counter moves on OPEN, not on DONE */
     record(id);
     if (typeof window.__folderRedraw === "function") { window.__folderRedraw(); }

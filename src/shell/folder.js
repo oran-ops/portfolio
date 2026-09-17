@@ -168,10 +168,18 @@
         keys.appendChild(b);
       }
       seen[h.id] = true;
-      b.style.left = Math.round(h.x0 * kx) + "px";
-      b.style.top = Math.round(h.y0 * ky) + "px";
-      b.style.width = Math.round((h.x1 - h.x0) * kx) + "px";
-      b.style.height = Math.round((h.y1 - h.y0) * ky) + "px";
+      var bl = h.x0 * kx, bt = h.y0 * ky, bw = (h.x1 - h.x0) * kx, bh = (h.y1 - h.y0) * ky;
+      /* the close box is drawn 14 logical px square -- 28 CSS px, under a finger's 44. Its
+         key grows about its centre to 44; the icons around it are well clear. */
+      if (!file) {
+        var gx = Math.max(0, 44 - bw) / 2, gy = Math.max(0, 44 - bh) / 2;
+        bl = Math.max(0, bl - gx); bt = Math.max(0, bt - gy);
+        bw = Math.max(bw, 44); bh = Math.max(bh, 44);
+      }
+      b.style.left = Math.round(bl) + "px";
+      b.style.top = Math.round(bt) + "px";
+      b.style.width = Math.round(bw) + "px";
+      b.style.height = Math.round(bh) + "px";
       if (file) { order.push(h.id); }
     }
     for (var k in btns) {

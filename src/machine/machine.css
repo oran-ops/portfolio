@@ -60,6 +60,12 @@
    second, well before the zoom. Held out afterwards rather than removed: leaving the machine
    restores it, because then it is true again. */
 html.mw-fly .machcue,html.mw-on .machcue{opacity:0}
+/* a phone has no click: the instruction says what the finger does */
+.machcue .mc-touch{display:none}
+@media (hover:none) and (pointer:coarse){
+  .machcue .mc-fine{display:none}
+  .machcue .mc-touch{display:inline}
+}
 @media (prefers-reduced-motion:reduce){.machcue{transition:none}}
 /* the short room on a phone is 360-470px tall, so the same 11% is only ~50px down and the
    machine sits higher in a narrower frame. 7% keeps the same clear air in a third of the
