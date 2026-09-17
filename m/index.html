@@ -8931,7 +8931,16 @@ function drawBar() {
    already draws. None of it exists below 860, where the bar is display:none and a finger
    scrolls the document directly. */
 var barRaf = null;
-function barTick() { barRaf = null; drawBar(); }
+/* AND THE SAME FRAME LIFTS THE SEALED LINES. queueReveal() -- which drives each document's
+   .rxs bars, the purple strips that retract as the reader passes them -- was called exactly once,
+   when a file opened, and never on scroll. A bar is `scaleX(var(--sp,1))`, so one that was below
+   the fold at that moment was never written and stayed shut for good. Measured with real wheel
+   and touch scrolling to the end of the document: every .rxs still unset, which left eight lines
+   covered in six files -- among them LEADERSHIP's "Great leaders build people who no longer depend
+   on them", TECH's "Technology should amplify commercial thinking", EVENTER's "Customer insights
+   became business decisions" and all three of XTIX's reflections. Same coalesced frame as the
+   scroll bar, so it costs one pass per frame at most; the bars' own done flags make it one-way. */
+function barTick() { barRaf = null; drawBar(); if (openId) { queueReveal(); } }
 function barSync() { if (barRaf === null) { barRaf = requestAnimationFrame(barTick); } }
 
 function wireBar() {
