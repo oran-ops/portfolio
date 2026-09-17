@@ -3071,6 +3071,17 @@ loop, so `animation:none` had nothing to cancel. One static frame, then nothing.
   #statement .slA{font-size:clamp(19px,5.4vw,26px)}
   #statement .slB{font-size:clamp(27px,8vw,40px)}
 }
+/* A PHONE ON ITS SIDE is under 860 wide but only ~340 tall, and the stacked arrangement above
+   needs a filament of 300px AND the sentences under it: the filament was cut off at the top of
+   the screen while the sentence sat alone. Side by side, as the desktop sets it, both fit. */
+@media (max-width:860px) and (orientation:landscape) and (max-height:500px){
+  #statement .in{flex-direction:row;gap:18px}
+  #statement .stfil{flex:0 0 44%;width:auto;height:min(78svh,380px)}
+  #statement .sttxt{flex:1 1 auto;width:auto;text-align:left;min-height:clamp(104px,40svh,180px)}
+  #statement .l1{min-height:clamp(92px,36svh,160px)}
+  #statement .slA{font-size:clamp(17px,3vw,24px)}
+  #statement .slB{font-size:clamp(24px,4.6vw,36px)}
+}
 
 /* ================= THE RING'S LANGUAGE ON THE CASE FOLDERS =================
    The same design as the cards on the turntable, in each case's own colour on the
@@ -11104,8 +11115,27 @@ if (window.console && document.body) {
    * The scroller already reads a flag for exactly this, so this is the flag and not a patch. */
   function wheelToPage(on) { window.__wheelOff = !on; }
 
+  /* THE PAGE STAYS WHERE THE READER LEFT IT. Inside the machine the page is hidden and
+     html.mw-on is overflow:hidden -- which iOS Safari has not always honoured for a finger: a
+     swipe on the folder, where nothing scrolls, can chain to the document behind it. The page
+     is at the machine when the reader goes in, so it is put back there on the way out. */
+  var pageY = null, pageW = 0;
+  function holdPage() { pageY = window.pageYOffset; pageW = window.innerWidth; }
+  function returnPage() {
+    if (pageY === null) { return; }
+    var y = pageY;
+    pageY = null;
+    /* a phone turned while inside has a different page: the old offset means nothing there */
+    if (window.innerWidth !== pageW || Math.abs(window.pageYOffset - y) < 2) { return; }
+    var se = document.documentElement, was = se.style.scrollBehavior;
+    se.style.scrollBehavior = "auto";
+    window.scrollTo(0, y);
+    se.style.scrollBehavior = was;
+  }
+
   function enterShell(animate) {
     if (html.classList.contains("mw-on")) { return; }
+    holdPage();
     wheelToPage(false);
     if (!animate || flying || typeof window.__cam !== "function") {
       html.classList.add("mw-on");
@@ -11191,6 +11221,7 @@ if (window.console && document.body) {
     var inside = document.activeElement && document.getElementById("mw") &&
                  document.getElementById("mw").contains(document.activeElement);
     html.classList.remove("mw-on");
+    returnPage();
     wheelToPage(true);
     if (inside) {
       setTimeout(function () {

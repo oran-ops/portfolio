@@ -195,8 +195,27 @@
    * The scroller already reads a flag for exactly this, so this is the flag and not a patch. */
   function wheelToPage(on) { window.__wheelOff = !on; }
 
+  /* THE PAGE STAYS WHERE THE READER LEFT IT. Inside the machine the page is hidden and
+     html.mw-on is overflow:hidden -- which iOS Safari has not always honoured for a finger: a
+     swipe on the folder, where nothing scrolls, can chain to the document behind it. The page
+     is at the machine when the reader goes in, so it is put back there on the way out. */
+  var pageY = null, pageW = 0;
+  function holdPage() { pageY = window.pageYOffset; pageW = window.innerWidth; }
+  function returnPage() {
+    if (pageY === null) { return; }
+    var y = pageY;
+    pageY = null;
+    /* a phone turned while inside has a different page: the old offset means nothing there */
+    if (window.innerWidth !== pageW || Math.abs(window.pageYOffset - y) < 2) { return; }
+    var se = document.documentElement, was = se.style.scrollBehavior;
+    se.style.scrollBehavior = "auto";
+    window.scrollTo(0, y);
+    se.style.scrollBehavior = was;
+  }
+
   function enterShell(animate) {
     if (html.classList.contains("mw-on")) { return; }
+    holdPage();
     wheelToPage(false);
     if (!animate || flying || typeof window.__cam !== "function") {
       html.classList.add("mw-on");
@@ -282,6 +301,7 @@
     var inside = document.activeElement && document.getElementById("mw") &&
                  document.getElementById("mw").contains(document.activeElement);
     html.classList.remove("mw-on");
+    returnPage();
     wheelToPage(true);
     if (inside) {
       setTimeout(function () {

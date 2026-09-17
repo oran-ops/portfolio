@@ -2446,6 +2446,17 @@ loop, so `animation:none` had nothing to cancel. One static frame, then nothing.
   #statement .l1{min-height:clamp(92px,15svh,142px)}
   #statement .slA{font-size:clamp(19px,5.4vw,26px)}
   #statement .slB{font-size:clamp(27px,8vw,40px)}
+}
+/* A PHONE ON ITS SIDE is under 860 wide but only ~340 tall, and the stacked arrangement above
+   needs a filament of 300px AND the sentences under it: the filament was cut off at the top of
+   the screen while the sentence sat alone. Side by side, as the desktop sets it, both fit. */
+@media (max-width:860px) and (orientation:landscape) and (max-height:500px){
+  #statement .in{flex-direction:row;gap:18px}
+  #statement .stfil{flex:0 0 44%;width:auto;height:min(78svh,380px)}
+  #statement .sttxt{flex:1 1 auto;width:auto;text-align:left;min-height:clamp(104px,40svh,180px)}
+  #statement .l1{min-height:clamp(92px,36svh,160px)}
+  #statement .slA{font-size:clamp(17px,3vw,24px)}
+  #statement .slB{font-size:clamp(24px,4.6vw,36px)}
 }/*D:xtix:14*//*D:oasis:2*//*D:eventer:3*//*D:medcoin:33*/
 .case .folder{position:relative}
 .case .folder::after{content:var(--cn,"");position:absolute;right:14px;bottom:-8px;z-index:-1;
