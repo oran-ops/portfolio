@@ -34,7 +34,7 @@
     catch (e) { return null; }          /* private windows can refuse it; then nothing is kept */
   })();
   var S = 2;                         /* logical pixel -> CSS pixel. Whole, always. */
-  var canvas = null, hits = [], W = 0, H = 0, cols = 4;
+  var canvas = null, scroller = null, hits = [], W = 0, H = 0, cols = 4;
 
   function loadOpened() {
     try { return MEM ? (JSON.parse(MEM.getItem(STORE) || "[]") || []) : []; }
@@ -49,8 +49,12 @@
     if (!desk) { return false; }
     var r = desk.getBoundingClientRect();
     if (r.width < 8 || r.height < 8) { return false; }
-    W = Math.max(320, Math.floor(r.width / S));
-    H = Math.max(200, Math.floor(r.height / S));
+    /* SQUARE PIXELS. This was max(320, width/2) with the canvas stretched to 100% of the desk,
+       so under 640 CSS px the Finder was drawn 1.17 px across and 2 px down -- every icon and
+       every bitmap letter squeezed sideways. The raster is the desk halved, and draw() sizes the
+       canvas to exactly W*2 x H*2, so one logical pixel is two screen pixels on both axes. */
+    W = Math.max(150, Math.floor(r.width / S));
+    H = Math.max(150, Math.floor(r.height / S));
     return true;
   }
 
@@ -59,9 +63,13 @@
     /* four columns on a wide screen, two on a narrow one. The break is not decoration: it puts
        the four case files on the first row and the notepad, the suitcase and the sealed letter
        on the second, which is the distinction between a company and everything else. */
-    cols = W < 380 ? 2 : 4;
+    cols = (typeof folderCols === "function") ? folderCols(W, H) : (W < 380 ? 2 : 4);
+    /* a desk too short for the grid gets the folder at the height the grid needs, and scrolls */
+    if (typeof folderNeedH === "function") { H = folderNeedH(H, cols); }
     canvas.width = W * S;
     canvas.height = H * S;
+    canvas.style.width = (W * S) + "px";
+    canvas.style.height = (H * S) + "px";
     var b = new Buf(W, H);
     hits = drawScreen(b, W, H, cols, state);
     var off = document.createElement("canvas");
@@ -135,7 +143,7 @@
       keys.id = "mw-keys";
       keys.setAttribute("role", "group");
       keys.setAttribute("aria-label", "Oran Carmon \u2014 Master File");
-      desk.insertBefore(keys, canvas.nextSibling);
+      canvas.parentNode.insertBefore(keys, canvas.nextSibling);
     }
     var r = canvas.getBoundingClientRect();
     if (!r.width || !r.height) { return; }
@@ -249,7 +257,14 @@
       canvas.className = "mw-folder";
       canvas.id = "c-folder";
       canvas.setAttribute("aria-hidden", "true");
-      desk.insertBefore(canvas, desk.firstChild);
+      /* the folder and its keys live in a scroller of their own, so a folder drawn taller
+         than a short desk scrolls, while the document window and the zoom -- which stay on
+         the desk -- do not move with it. */
+      scroller = document.createElement("div");
+      scroller.className = "mw-fscroll";
+      scroller.id = "mw-fscroll";
+      desk.insertBefore(scroller, desk.firstChild);
+      scroller.appendChild(canvas);
       canvas.addEventListener("click", function (e) { act(at(e)); });
       canvas.addEventListener("mousemove", function (e) {
         canvas.style.cursor = at(e) ? "pointer" : "default";

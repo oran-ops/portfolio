@@ -102,8 +102,16 @@ function titlebar(b, x0, y0, x1, title, active, closebox) {
 
 /* present, but with nothing to scroll: the track is drawn and left empty, and the arrow boxes
    are drawn without their triangles. In 1-bit there is no greying -- the absence IS the state. */
-function scrollbars(b, x0, y0, x1, y1) {
+function scrollbars(b, x0, y0, x1, y1, noH) {
   var S = 15;
+  if (noH) {
+    /* a window too short to spare the horizontal bar keeps only the vertical one, full height */
+    b.rect(x1 - S + 1, y0, x1, y1, WHITE);
+    b.vl(x1 - S, y0, y1, BLACK);
+    b.hl(y0 + S, x1 - S, x1, BLACK);
+    b.hl(y1 - S, x1 - S, x1, BLACK);
+    return;
+  }
   b.rect(x1 - S + 1, y0, x1, y1, WHITE);
   b.rect(x0, y1 - S + 1, x1, y1, WHITE);
   b.vl(x1 - S, y0, y1, BLACK);
@@ -144,6 +152,75 @@ function fits(opts, room) {
   return opts[opts.length - 1];
 }
 
+/* HOW MANY COLUMNS a folder window of W x H logical px should use. Four on anything wide. On a
+   narrow window, two -- unless the four rows two columns need would have to close up past a
+   comfortable pitch, in which case three, provided no two labels in a row would touch. The white
+   boxes behind the labels may overlap (white on a white window); only the letters may not. */
+function folderCols(W, H) {
+  if (W >= 380) return 4;
+  var L = LAYOUT, n = K.order.length;
+  var x0 = L.inset, x1 = W - 1 - L.inset, y0 = MENU + L.gap, y1 = H - 1 - L.inset;
+  var top = y0 + BAR + 14 + 16, lastTop = y1 - 16 - (33 + L.labelGap + 9);
+  function letters(c) {                       /* no two labels in a row closer than 4 px */
+    var cw = ((x1 - 15) - (x0 + 1) + 1) / c;
+    for (var i = 0; i < n; i += c) {
+      for (var k = 0; k < c - 1 && i + k + 1 < n; k++) {
+        var a = tw(K.labels[K.order[i + k]]), z = tw(K.labels[K.order[i + k + 1]]);
+        if (cw - (a + z) / 2 < 4) return false;
+      }
+    }
+    return true;
+  }
+  function pitch(c) { var r = Math.ceil(n / c); return r > 1 ? (lastTop - top) / (r - 1) : 999; }
+  var best = 2, bestP = -1;
+  for (var c = 2; c <= 4; c++) {
+    if (!letters(c)) continue;
+    if (pitch(c) >= 56) return c;              /* the fewest columns that stand comfortably */
+    if (pitch(c) > bestP) { best = c; bestP = pitch(c); }
+  }
+  return best;                                 /* else the one whose rows fit best */
+}
+
+/* WHERE THE ROWS GO, for a folder window H logical px tall. One function, read by drawScreen
+   and by the folder that decides how tall to draw itself, so the two cannot disagree. */
+function gridFit(H, cols) {
+  var L = LAYOUT, y1 = H - 1 - L.inset, cy0 = MENU + L.gap + BAR + 14;
+  var nrow = Math.ceil(K.order.length / cols);
+  var top = cy0 + 16;
+  var pitch = Math.max(66, Math.min(120, (((y1 - 15 - top - 52) / (nrow - 1)) | 0)));
+  /* AND IF THAT RUNS INTO THE SCROLL BAR, the rows close up. The floor of 66 above drew the last
+     row whether there was room or not, and on a short phone window READ ME's label landed inside
+     the horizontal scroll strip. Only an overrunning grid is touched, so every layout that
+     already fitted -- the desktop folder, the CRT -- is drawn exactly as before. 46 is one icon
+     and its label; the icons carry blank rows above them, so rows still read apart. */
+  var lastTop = y1 - 16 - (33 + L.labelGap + 9);
+  var noH = false;
+  if (nrow > 1 && top + (nrow - 1) * pitch > lastTop) {
+    top = cy0 + 2;
+    pitch = Math.max(46, ((lastTop - top) / (nrow - 1)) | 0);
+    /* and a window a little too short even for that gives up the horizontal scroll bar, which
+       scrolls nothing here, rather than draw labels across it */
+    if (top + (nrow - 1) * pitch > lastTop) {
+      noH = true;
+      lastTop += 15;
+      pitch = Math.max(46, ((lastTop - top) / (nrow - 1)) | 0);
+    }
+  }
+  return { top: top, pitch: pitch, noH: noH, fits: nrow < 2 || top + (nrow - 1) * pitch <= lastTop };
+}
+
+/* HOW TALL to draw the folder. H itself whenever the grid fits in it. Otherwise -- a phone on
+   its side, ~300 CSS px under the browser's bars -- the height at which the ORDINARY layout
+   stands (pitch 66, both scroll bars), and the desk scrolls it, as the Finder scrolled a window
+   too short for its icons. The 72 is the last row's icon and label (16 + 33 + gap + 9), the
+   window's bottom edge (1) and the inset (10): gridFit's lastTop solved for H. */
+function folderNeedH(H, cols) {
+  if (gridFit(H, cols).fits) return H;
+  var nrow = Math.ceil(K.order.length / cols);
+  return (MENU + LAYOUT.gap + BAR + 14 + 16) + (nrow - 1) * 66 +
+         (16 + 33 + LAYOUT.labelGap + 9 + 1 + LAYOUT.inset);
+}
+
 /* ONE layout function. The 512x342 CRT texture and the phone are the same code with different
    arguments -- two copies of a layout drift, one cannot. Returns the hit boxes. */
 function drawScreen(b, W, H, cols, st) {
@@ -166,7 +243,7 @@ function drawScreen(b, W, H, cols, st) {
   var y0 = MENU + L.gap, y1 = H - 1 - L.inset;
   b.rect(x0, y0, x1, y1, WHITE);
   b.frame(x0, y0, x1, y1, BLACK);
-  var title = fits([K.labels.folder, "Master File"], (x1 - x0) - 52);
+  var title = fits([K.labels.folder, "Oran Carmon", "Master File"], (x1 - x0) - 52);
   var close = titlebar(b, x0, y0, x1, title, true, true);
   if (close) hits.push({ id: "close", x0: close[0] - 2, y0: close[1] - 2, x1: close[2] + 2, y1: close[3] + 2 });
 
@@ -187,14 +264,15 @@ function drawScreen(b, W, H, cols, st) {
   }
   b.hl(sy + 13, x0, x1, BLACK);
 
-  scrollbars(b, x0, y0 + BAR, x1, y1);
 
   /* the icon grid, packed to the top of the window as the Finder packed it */
   var cx0 = x0 + 1, cx1 = x1 - 15, cy0 = sy + 14;
   var cw = (cx1 - cx0 + 1) / cols;
-  var nrow = Math.ceil(K.order.length / cols);
-  var top = cy0 + 16;
-  var pitch = Math.max(66, Math.min(120, (((y1 - 15 - top - 52) / (nrow - 1)) | 0)));
+  var g = gridFit(H, cols), top = g.top, pitch = g.pitch;
+  scrollbars(b, x0, y0 + BAR, x1, y1, g.noH);
+  /* the frame AGAIN, last: titlebar() and scrollbars() both paint white over the edges they sit
+     on, which left this window with no right or bottom edge and a title bar open at both ends. */
+  b.frame(x0, y0, x1, y1, BLACK);
   for (var i = 0; i < K.order.length; i++) {
     var id = K.order[i], r = (i / cols) | 0, c = i % cols;
     var ix = (cx0 + cw * (c + 0.5)) | 0, iy = top + r * pitch;
@@ -293,6 +371,7 @@ if (typeof module !== "undefined" && module.exports)
                      pushbutton: pushbutton, BAR: BAR, MENU: MENU };
 if (typeof window !== "undefined") {
   window.Buf = Buf; window.drawScreen = drawScreen; window.dither = dither;
+  window.folderCols = folderCols; window.folderNeedH = folderNeedH;
   window.ico = ico; window.txt = txt; window.tw = tw;
   window.titlebar = titlebar; window.menubar = menubar; window.vscroll = vscroll;
   window.pushbutton = pushbutton; window.BAR = BAR; window.MENU = MENU;

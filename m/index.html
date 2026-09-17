@@ -3496,6 +3496,11 @@ html.mw-on .mw,html.mw-on .mw *{visibility:visible}
    one machine is one too many. */
 .mw-folder{position:absolute;inset:0;width:100%;height:100%;display:block;
   image-rendering:pixelated}
+/* the folder's own scroller: it only ever scrolls when the folder is drawn taller than the
+   desk (a phone on its side); everywhere else it is the desk's size and inert. */
+.mw-fscroll{position:absolute;inset:0;overflow-x:hidden;overflow-y:auto;
+  overscroll-behavior:contain;scrollbar-width:none}
+.mw-fscroll::-webkit-scrollbar{display:none}
 html.mw-on .mw-menu{display:none}
 
 /* The document window clears the folder's menu bar. --mw-gap was 16px, measured
@@ -7880,6 +7885,8 @@ function decodeMach(b64, xform){
     b.rect(x0,y0,x1,y1,window.WHITE);
     b.frame(x0,y0,x1,y1,window.BLACK);
     window.titlebar(b,x0,y0,x1,'Oran Carmon',true,true);
+    /* titlebar() paints its white band over the side lines; the frame goes back on top */
+    b.frame(x0,y0,x1,y1,window.BLACK);
     var t=y0+window.BAR;
     window.txt(b,'THE ARCHIVE', cx-(window.tw('THE ARCHIVE')>>1), t+13, window.BLACK);
     b.hl(t+27, x0+34, x1-34, window.BLACK);
@@ -7919,6 +7926,7 @@ function decodeMach(b64, xform){
       b.rect(x0,y0,x1,y1,window.WHITE);
       b.frame(x0,y0,x1,y1,window.BLACK);
       window.titlebar(b,x0,y0,x1,'Oran Carmon',true,true);
+      b.frame(x0,y0,x1,y1,window.BLACK);
     }
     for(k=0;k<3;k++){
       var u=t-k*0.17; if(u<=0) continue;
@@ -8614,8 +8622,16 @@ function titlebar(b, x0, y0, x1, title, active, closebox) {
 
 /* present, but with nothing to scroll: the track is drawn and left empty, and the arrow boxes
    are drawn without their triangles. In 1-bit there is no greying -- the absence IS the state. */
-function scrollbars(b, x0, y0, x1, y1) {
+function scrollbars(b, x0, y0, x1, y1, noH) {
   var S = 15;
+  if (noH) {
+    /* a window too short to spare the horizontal bar keeps only the vertical one, full height */
+    b.rect(x1 - S + 1, y0, x1, y1, WHITE);
+    b.vl(x1 - S, y0, y1, BLACK);
+    b.hl(y0 + S, x1 - S, x1, BLACK);
+    b.hl(y1 - S, x1 - S, x1, BLACK);
+    return;
+  }
   b.rect(x1 - S + 1, y0, x1, y1, WHITE);
   b.rect(x0, y1 - S + 1, x1, y1, WHITE);
   b.vl(x1 - S, y0, y1, BLACK);
@@ -8656,6 +8672,75 @@ function fits(opts, room) {
   return opts[opts.length - 1];
 }
 
+/* HOW MANY COLUMNS a folder window of W x H logical px should use. Four on anything wide. On a
+   narrow window, two -- unless the four rows two columns need would have to close up past a
+   comfortable pitch, in which case three, provided no two labels in a row would touch. The white
+   boxes behind the labels may overlap (white on a white window); only the letters may not. */
+function folderCols(W, H) {
+  if (W >= 380) return 4;
+  var L = LAYOUT, n = K.order.length;
+  var x0 = L.inset, x1 = W - 1 - L.inset, y0 = MENU + L.gap, y1 = H - 1 - L.inset;
+  var top = y0 + BAR + 14 + 16, lastTop = y1 - 16 - (33 + L.labelGap + 9);
+  function letters(c) {                       /* no two labels in a row closer than 4 px */
+    var cw = ((x1 - 15) - (x0 + 1) + 1) / c;
+    for (var i = 0; i < n; i += c) {
+      for (var k = 0; k < c - 1 && i + k + 1 < n; k++) {
+        var a = tw(K.labels[K.order[i + k]]), z = tw(K.labels[K.order[i + k + 1]]);
+        if (cw - (a + z) / 2 < 4) return false;
+      }
+    }
+    return true;
+  }
+  function pitch(c) { var r = Math.ceil(n / c); return r > 1 ? (lastTop - top) / (r - 1) : 999; }
+  var best = 2, bestP = -1;
+  for (var c = 2; c <= 4; c++) {
+    if (!letters(c)) continue;
+    if (pitch(c) >= 56) return c;              /* the fewest columns that stand comfortably */
+    if (pitch(c) > bestP) { best = c; bestP = pitch(c); }
+  }
+  return best;                                 /* else the one whose rows fit best */
+}
+
+/* WHERE THE ROWS GO, for a folder window H logical px tall. One function, read by drawScreen
+   and by the folder that decides how tall to draw itself, so the two cannot disagree. */
+function gridFit(H, cols) {
+  var L = LAYOUT, y1 = H - 1 - L.inset, cy0 = MENU + L.gap + BAR + 14;
+  var nrow = Math.ceil(K.order.length / cols);
+  var top = cy0 + 16;
+  var pitch = Math.max(66, Math.min(120, (((y1 - 15 - top - 52) / (nrow - 1)) | 0)));
+  /* AND IF THAT RUNS INTO THE SCROLL BAR, the rows close up. The floor of 66 above drew the last
+     row whether there was room or not, and on a short phone window READ ME's label landed inside
+     the horizontal scroll strip. Only an overrunning grid is touched, so every layout that
+     already fitted -- the desktop folder, the CRT -- is drawn exactly as before. 46 is one icon
+     and its label; the icons carry blank rows above them, so rows still read apart. */
+  var lastTop = y1 - 16 - (33 + L.labelGap + 9);
+  var noH = false;
+  if (nrow > 1 && top + (nrow - 1) * pitch > lastTop) {
+    top = cy0 + 2;
+    pitch = Math.max(46, ((lastTop - top) / (nrow - 1)) | 0);
+    /* and a window a little too short even for that gives up the horizontal scroll bar, which
+       scrolls nothing here, rather than draw labels across it */
+    if (top + (nrow - 1) * pitch > lastTop) {
+      noH = true;
+      lastTop += 15;
+      pitch = Math.max(46, ((lastTop - top) / (nrow - 1)) | 0);
+    }
+  }
+  return { top: top, pitch: pitch, noH: noH, fits: nrow < 2 || top + (nrow - 1) * pitch <= lastTop };
+}
+
+/* HOW TALL to draw the folder. H itself whenever the grid fits in it. Otherwise -- a phone on
+   its side, ~300 CSS px under the browser's bars -- the height at which the ORDINARY layout
+   stands (pitch 66, both scroll bars), and the desk scrolls it, as the Finder scrolled a window
+   too short for its icons. The 72 is the last row's icon and label (16 + 33 + gap + 9), the
+   window's bottom edge (1) and the inset (10): gridFit's lastTop solved for H. */
+function folderNeedH(H, cols) {
+  if (gridFit(H, cols).fits) return H;
+  var nrow = Math.ceil(K.order.length / cols);
+  return (MENU + LAYOUT.gap + BAR + 14 + 16) + (nrow - 1) * 66 +
+         (16 + 33 + LAYOUT.labelGap + 9 + 1 + LAYOUT.inset);
+}
+
 /* ONE layout function. The 512x342 CRT texture and the phone are the same code with different
    arguments -- two copies of a layout drift, one cannot. Returns the hit boxes. */
 function drawScreen(b, W, H, cols, st) {
@@ -8678,7 +8763,7 @@ function drawScreen(b, W, H, cols, st) {
   var y0 = MENU + L.gap, y1 = H - 1 - L.inset;
   b.rect(x0, y0, x1, y1, WHITE);
   b.frame(x0, y0, x1, y1, BLACK);
-  var title = fits([K.labels.folder, "Master File"], (x1 - x0) - 52);
+  var title = fits([K.labels.folder, "Oran Carmon", "Master File"], (x1 - x0) - 52);
   var close = titlebar(b, x0, y0, x1, title, true, true);
   if (close) hits.push({ id: "close", x0: close[0] - 2, y0: close[1] - 2, x1: close[2] + 2, y1: close[3] + 2 });
 
@@ -8699,14 +8784,15 @@ function drawScreen(b, W, H, cols, st) {
   }
   b.hl(sy + 13, x0, x1, BLACK);
 
-  scrollbars(b, x0, y0 + BAR, x1, y1);
 
   /* the icon grid, packed to the top of the window as the Finder packed it */
   var cx0 = x0 + 1, cx1 = x1 - 15, cy0 = sy + 14;
   var cw = (cx1 - cx0 + 1) / cols;
-  var nrow = Math.ceil(K.order.length / cols);
-  var top = cy0 + 16;
-  var pitch = Math.max(66, Math.min(120, (((y1 - 15 - top - 52) / (nrow - 1)) | 0)));
+  var g = gridFit(H, cols), top = g.top, pitch = g.pitch;
+  scrollbars(b, x0, y0 + BAR, x1, y1, g.noH);
+  /* the frame AGAIN, last: titlebar() and scrollbars() both paint white over the edges they sit
+     on, which left this window with no right or bottom edge and a title bar open at both ends. */
+  b.frame(x0, y0, x1, y1, BLACK);
   for (var i = 0; i < K.order.length; i++) {
     var id = K.order[i], r = (i / cols) | 0, c = i % cols;
     var ix = (cx0 + cw * (c + 0.5)) | 0, iy = top + r * pitch;
@@ -8805,6 +8891,7 @@ if (typeof module !== "undefined" && module.exports)
                      pushbutton: pushbutton, BAR: BAR, MENU: MENU };
 if (typeof window !== "undefined") {
   window.Buf = Buf; window.drawScreen = drawScreen; window.dither = dither;
+  window.folderCols = folderCols; window.folderNeedH = folderNeedH;
   window.ico = ico; window.txt = txt; window.tw = tw;
   window.titlebar = titlebar; window.menubar = menubar; window.vscroll = vscroll;
   window.pushbutton = pushbutton; window.BAR = BAR; window.MENU = MENU;
@@ -10536,7 +10623,7 @@ if (window.console && document.body) {
     catch (e) { return null; }          /* private windows can refuse it; then nothing is kept */
   })();
   var S = 2;                         /* logical pixel -> CSS pixel. Whole, always. */
-  var canvas = null, hits = [], W = 0, H = 0, cols = 4;
+  var canvas = null, scroller = null, hits = [], W = 0, H = 0, cols = 4;
 
   function loadOpened() {
     try { return MEM ? (JSON.parse(MEM.getItem(STORE) || "[]") || []) : []; }
@@ -10551,8 +10638,12 @@ if (window.console && document.body) {
     if (!desk) { return false; }
     var r = desk.getBoundingClientRect();
     if (r.width < 8 || r.height < 8) { return false; }
-    W = Math.max(320, Math.floor(r.width / S));
-    H = Math.max(200, Math.floor(r.height / S));
+    /* SQUARE PIXELS. This was max(320, width/2) with the canvas stretched to 100% of the desk,
+       so under 640 CSS px the Finder was drawn 1.17 px across and 2 px down -- every icon and
+       every bitmap letter squeezed sideways. The raster is the desk halved, and draw() sizes the
+       canvas to exactly W*2 x H*2, so one logical pixel is two screen pixels on both axes. */
+    W = Math.max(150, Math.floor(r.width / S));
+    H = Math.max(150, Math.floor(r.height / S));
     return true;
   }
 
@@ -10561,9 +10652,13 @@ if (window.console && document.body) {
     /* four columns on a wide screen, two on a narrow one. The break is not decoration: it puts
        the four case files on the first row and the notepad, the suitcase and the sealed letter
        on the second, which is the distinction between a company and everything else. */
-    cols = W < 380 ? 2 : 4;
+    cols = (typeof folderCols === "function") ? folderCols(W, H) : (W < 380 ? 2 : 4);
+    /* a desk too short for the grid gets the folder at the height the grid needs, and scrolls */
+    if (typeof folderNeedH === "function") { H = folderNeedH(H, cols); }
     canvas.width = W * S;
     canvas.height = H * S;
+    canvas.style.width = (W * S) + "px";
+    canvas.style.height = (H * S) + "px";
     var b = new Buf(W, H);
     hits = drawScreen(b, W, H, cols, state);
     var off = document.createElement("canvas");
@@ -10637,7 +10732,7 @@ if (window.console && document.body) {
       keys.id = "mw-keys";
       keys.setAttribute("role", "group");
       keys.setAttribute("aria-label", "Oran Carmon \u2014 Master File");
-      desk.insertBefore(keys, canvas.nextSibling);
+      canvas.parentNode.insertBefore(keys, canvas.nextSibling);
     }
     var r = canvas.getBoundingClientRect();
     if (!r.width || !r.height) { return; }
@@ -10751,7 +10846,14 @@ if (window.console && document.body) {
       canvas.className = "mw-folder";
       canvas.id = "c-folder";
       canvas.setAttribute("aria-hidden", "true");
-      desk.insertBefore(canvas, desk.firstChild);
+      /* the folder and its keys live in a scroller of their own, so a folder drawn taller
+         than a short desk scrolls, while the document window and the zoom -- which stay on
+         the desk -- do not move with it. */
+      scroller = document.createElement("div");
+      scroller.className = "mw-fscroll";
+      scroller.id = "mw-fscroll";
+      desk.insertBefore(scroller, desk.firstChild);
+      scroller.appendChild(canvas);
       canvas.addEventListener("click", function (e) { act(at(e)); });
       canvas.addEventListener("mousemove", function (e) {
         canvas.style.cursor = at(e) ? "pointer" : "default";

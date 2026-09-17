@@ -956,6 +956,8 @@ function decodeMach(b64, xform){
     b.rect(x0,y0,x1,y1,window.WHITE);
     b.frame(x0,y0,x1,y1,window.BLACK);
     window.titlebar(b,x0,y0,x1,'Oran Carmon',true,true);
+    /* titlebar() paints its white band over the side lines; the frame goes back on top */
+    b.frame(x0,y0,x1,y1,window.BLACK);
     var t=y0+window.BAR;
     window.txt(b,'THE ARCHIVE', cx-(window.tw('THE ARCHIVE')>>1), t+13, window.BLACK);
     b.hl(t+27, x0+34, x1-34, window.BLACK);
@@ -995,6 +997,7 @@ function decodeMach(b64, xform){
       b.rect(x0,y0,x1,y1,window.WHITE);
       b.frame(x0,y0,x1,y1,window.BLACK);
       window.titlebar(b,x0,y0,x1,'Oran Carmon',true,true);
+      b.frame(x0,y0,x1,y1,window.BLACK);
     }
     for(k=0;k<3;k++){
       var u=t-k*0.17; if(u<=0) continue;

@@ -332,6 +332,11 @@ html.mw-on .mw,html.mw-on .mw *{visibility:visible}
    one machine is one too many. */
 .mw-folder{position:absolute;inset:0;width:100%;height:100%;display:block;
   image-rendering:pixelated}
+/* the folder's own scroller: it only ever scrolls when the folder is drawn taller than the
+   desk (a phone on its side); everywhere else it is the desk's size and inert. */
+.mw-fscroll{position:absolute;inset:0;overflow-x:hidden;overflow-y:auto;
+  overscroll-behavior:contain;scrollbar-width:none}
+.mw-fscroll::-webkit-scrollbar{display:none}
 html.mw-on .mw-menu{display:none}
 
 /* The document window clears the folder's menu bar. --mw-gap was 16px, measured
