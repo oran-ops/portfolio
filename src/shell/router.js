@@ -278,8 +278,17 @@
       window.__cam(REST.yaw, REST.pitch, REST.dist, null);
       if (typeof window.__camAim === "function") { window.__camAim(null); }
     }
+    /* a keyboard reader who was inside goes back to the door they came in by */
+    var inside = document.activeElement && document.getElementById("mw") &&
+                 document.getElementById("mw").contains(document.activeElement);
     html.classList.remove("mw-on");
     wheelToPage(true);
+    if (inside) {
+      setTimeout(function () {
+        var door = document.getElementById("mach-gl");
+        if (door) { try { door.focus({ preventScroll: true }); } catch (err) { door.focus(); } }
+      }, 0);
+    }
     /* the machine goes back to showing its title, so the next reader through -- or the same
        one, coming back -- gets the whole sequence rather than a screen already open. */
     if (typeof window.__crt === "function") { window.__crt("title"); }
@@ -366,6 +375,19 @@
 
   /* out of it — the folder's own close box */
   window.__mwExit = function () { go("pages", null); };
+
+  /* ESCAPE, the way out a keyboard expects. Bound on the document and guarded on mw-on --
+     not beside the Enter handler on #mach-gl, which is visibility:hidden for the whole time
+     the shell is up and so can never receive a key there. An open document closes back to
+     the folder, exactly as DONE does; with none open, the reader leaves the machine. */
+  document.addEventListener("keydown", function (e) {
+    if (e.key !== "Escape" && e.key !== "Esc") { return; }
+    if (!html.classList.contains("mw-on")) { return; }
+    e.preventDefault();
+    var win = document.getElementById("win");
+    if (win && !win.hidden && typeof shut === "function") { shut(); }
+    else { window.__mwExit(); }
+  });
 
   /* a file opens. The folder calls show() directly, so this is how the router hears about it
      rather than being the thing that did it: one state object, updated from wherever the open

@@ -1248,6 +1248,14 @@ function zoomOpen(fromEl, then) {
     then();
     return;
   }
+  /* the START rectangle first, in the same statement that shows it. This used to set
+     display:block with no coordinates and wait 36ms for the first frame, so the outline sat
+     at its static position for one step -- and because that first frame is already 20% of
+     the way to the window, the rectangle was never actually drawn around the icon. */
+  z.style.left = Math.round(from.l) + "px";
+  z.style.top = Math.round(from.t) + "px";
+  z.style.width = Math.round(from.w) + "px";
+  z.style.height = Math.round(from.h) + "px";
   z.style.display = "block";
   /* Every frame is scheduled from HERE, at an absolute offset. Chaining them -- each timeout
      starting the next -- is what a browser throttles once the nesting passes five deep. */
@@ -1343,6 +1351,12 @@ function show(id) {
     queueReveal();                         /* the counter moves on OPEN, not on DONE */
     record(id);
     if (typeof window.__folderRedraw === "function") { window.__folderRedraw(); }
+    /* THE PANE IS NAMED FOR THE FILE. It was a hard-coded "Case file" for all seven -- a
+       noun this source reserves for FILES 01-04 -- and it never changed, so every document
+       announced the same thing. K is the list the title bar and the icons already read. */
+    var fi = IDS.indexOf(id);
+    cv("view").setAttribute("aria-label",
+      (fi >= 0 ? "FILE " + (fi < 9 ? "0" : "") + (fi + 1) + " \u00b7 " : "") + K.labels[id]);
     cv("view").focus({ preventScroll: true });
   };
 
@@ -1369,13 +1383,21 @@ function show(id) {
   };
   if (openId) { opening = null; go(); refitSheets(secOf(id)); return; }   /* swap documents, no zoom */
   cv("mw-files").style.visibility = "hidden";
+  /* and the key layer with it, so Tab cannot wander behind the open window */
+  if (cv("mw-keys")) { cv("mw-keys").style.visibility = "hidden"; }
   zoomOpen(btn, go);
 }
 function shut() {
   setTimeout(function () { if (typeof window.__folderRedraw === "function") { window.__folderRedraw(); } if (typeof window.__mwClosed === "function") { window.__mwClosed(); } }, 0);
   if (!openId) return;
+  var was = openId;
   openId = null;
   opening = null;
+  if (cv("mw-keys")) { cv("mw-keys").style.visibility = ""; }
+  cv("view").setAttribute("aria-label", "Document");
+  /* back on the file that was open, once the folder has redrawn -- not on <body>, which
+     is where hiding the focused window used to leave a keyboard reader. */
+  setTimeout(function () { if (typeof window.__folderFocus === "function") { window.__folderFocus(was); } }, 0);
   cv("win").hidden = true;
   cv("mw-files").style.visibility = "";
   IDS.forEach(function (x) { secOf(x).classList.remove("mw-show"); });

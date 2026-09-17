@@ -2447,6 +2447,9 @@ loop, so `animation:none` had nothing to cancel. One static frame, then nothing.
 #statement .slB{font-size:clamp(30px,5vw,60px);line-height:1.08;letter-spacing:-.028em;
   font-weight:900;font-variation-settings:'opsz' 9,'SOFT' 0,'WONK' 1}
 #statement .sttxt{min-height:clamp(150px,26vh,250px);display:flex;flex-direction:column;justify-content:center}
+/* the sentence, for a screen reader only -- see the note where it is written */
+#statement .st-said{position:absolute;width:1px;height:1px;margin:-1px;padding:0;border:0;
+  overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap}
 #statement .l1 .sm-wd{display:inline-block;white-space:nowrap}
 #statement .l1 i{font-style:normal;display:inline-block}
 /* AND LIGHT TRAVELS THROUGH THE WORDS. One keyframe per character with a negative delay
@@ -5325,9 +5328,17 @@ document.querySelectorAll('.redx').forEach(function(r){
   el.textContent='';
   var LA=layer(A,'slA'),LB=layer(B,'slB');
   el.appendChild(LA.el);el.appendChild(LB.el);
-  /* the nbsp is a typesetting instruction, not part of the sentence: the label a screen
-     reader announces gets ordinary spaces back. */
-  el.setAttribute('aria-label',(A+' '+B).replace(/\u00A0/g,' '));
+  /* THE SENTENCE IS TEXT FOR A SCREEN READER, not a label on a plain div.
+     Both layers above are aria-hidden, and this used to set aria-label on #stmt1 -- a bare
+     div, role generic, where ARIA prohibits a name. Chromium honours it anyway; an engine
+     that follows the rule reads NOTHING from page 1, because #stmt2, the fallback copy, is
+     display:none. One visually hidden span holds the sentence instead: it reads as text,
+     not as "image", and it is the only source, so it cannot be announced twice.
+     The nbsp is a typesetting instruction, not part of the sentence: it goes. */
+  var said=document.createElement('span');
+  said.className='st-said';
+  said.textContent=(A+' '+B).replace(/\u00A0/g,' ');
+  el.appendChild(said);
 
   /* ---- the schedule ----
      A leaves on a ripple and B arrives on a ripple that begins while A is still going, so

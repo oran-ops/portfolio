@@ -122,6 +122,15 @@
 #docs>section{display:none}
 #docs>section.mw-show,#docs.mw-all>section{display:block}
 
+/* THE KEYS -- one transparent button over each drawn icon (see folder.js place()). The
+   layer lets the pointer through everywhere except the buttons themselves, so the canvas
+   still gets every click that is not on a file. The ring is a 2px dotted black outline:
+   a 1-bit marquee, which is what this machine had, not a soft web focus glow. */
+.mw-keys{position:absolute;inset:0;pointer-events:none}
+.mw-key{position:absolute;margin:0;padding:0;border:0;background:transparent;
+  cursor:pointer;pointer-events:auto;-webkit-tap-highlight-color:transparent}
+.mw-key:focus{outline:none}
+.mw-key:focus-visible{outline:2px dotted #000;outline-offset:2px}
 /* the zoom rectangle: what the machine drew when a file opened */
 .mw-zoom{position:absolute;border:2px solid #000;pointer-events:none;display:none}
 

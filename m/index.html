@@ -3071,6 +3071,9 @@ loop, so `animation:none` had nothing to cancel. One static frame, then nothing.
 #statement .slB{font-size:clamp(30px,5vw,60px);line-height:1.08;letter-spacing:-.028em;
   font-weight:900;font-variation-settings:'opsz' 9,'SOFT' 0,'WONK' 1}
 #statement .sttxt{min-height:clamp(150px,26vh,250px);display:flex;flex-direction:column;justify-content:center}
+/* the sentence, for a screen reader only -- see the note where it is written */
+#statement .st-said{position:absolute;width:1px;height:1px;margin:-1px;padding:0;border:0;
+  overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap}
 #statement .l1 .sm-wd{display:inline-block;white-space:nowrap}
 #statement .l1 i{font-style:normal;display:inline-block}
 /* AND LIGHT TRAVELS THROUGH THE WORDS. One keyframe per character with a negative delay
@@ -3283,6 +3286,15 @@ loop, so `animation:none` had nothing to cancel. One static frame, then nothing.
 #docs>section{display:none}
 #docs>section.mw-show,#docs.mw-all>section{display:block}
 
+/* THE KEYS -- one transparent button over each drawn icon (see folder.js place()). The
+   layer lets the pointer through everywhere except the buttons themselves, so the canvas
+   still gets every click that is not on a file. The ring is a 2px dotted black outline:
+   a 1-bit marquee, which is what this machine had, not a soft web focus glow. */
+.mw-keys{position:absolute;inset:0;pointer-events:none}
+.mw-key{position:absolute;margin:0;padding:0;border:0;background:transparent;
+  cursor:pointer;pointer-events:auto;-webkit-tap-highlight-color:transparent}
+.mw-key:focus{outline:none}
+.mw-key:focus-visible{outline:2px dotted #000;outline-offset:2px}
 /* the zoom rectangle: what the machine drew when a file opened */
 .mw-zoom{position:absolute;border:2px solid #000;pointer-events:none;display:none}
 
@@ -6444,9 +6456,17 @@ document.querySelectorAll('.redx').forEach(function(r){
   el.textContent='';
   var LA=layer(A,'slA'),LB=layer(B,'slB');
   el.appendChild(LA.el);el.appendChild(LB.el);
-  /* the nbsp is a typesetting instruction, not part of the sentence: the label a screen
-     reader announces gets ordinary spaces back. */
-  el.setAttribute('aria-label',(A+' '+B).replace(/\u00A0/g,' '));
+  /* THE SENTENCE IS TEXT FOR A SCREEN READER, not a label on a plain div.
+     Both layers above are aria-hidden, and this used to set aria-label on #stmt1 -- a bare
+     div, role generic, where ARIA prohibits a name. Chromium honours it anyway; an engine
+     that follows the rule reads NOTHING from page 1, because #stmt2, the fallback copy, is
+     display:none. One visually hidden span holds the sentence instead: it reads as text,
+     not as "image", and it is the only source, so it cannot be announced twice.
+     The nbsp is a typesetting instruction, not part of the sentence: it goes. */
+  var said=document.createElement('span');
+  said.className='st-said';
+  said.textContent=(A+' '+B).replace(/\u00A0/g,' ');
+  el.appendChild(said);
 
   /* ---- the schedule ----
      A leaves on a ripple and B arrives on a ripple that begins while A is still going, so
@@ -6887,7 +6907,7 @@ else{
       <canvas class="mw-title" id="c-title" aria-hidden="true"></canvas>
       <button class="mw-x" id="xbtn" type="button" aria-label="Close this file"></button>
       <div class="mw-body">
-        <div class="mw-view" id="view" tabindex="0" role="document" aria-label="Case file">
+        <div class="mw-view" id="view" tabindex="0" role="document" aria-label="Document">
           <div id="docs"></div>
           <div class="mw-end">
             <button class="mw-done" id="done" type="button" aria-label="Done">
@@ -10043,6 +10063,14 @@ function zoomOpen(fromEl, then) {
     then();
     return;
   }
+  /* the START rectangle first, in the same statement that shows it. This used to set
+     display:block with no coordinates and wait 36ms for the first frame, so the outline sat
+     at its static position for one step -- and because that first frame is already 20% of
+     the way to the window, the rectangle was never actually drawn around the icon. */
+  z.style.left = Math.round(from.l) + "px";
+  z.style.top = Math.round(from.t) + "px";
+  z.style.width = Math.round(from.w) + "px";
+  z.style.height = Math.round(from.h) + "px";
   z.style.display = "block";
   /* Every frame is scheduled from HERE, at an absolute offset. Chaining them -- each timeout
      starting the next -- is what a browser throttles once the nesting passes five deep. */
@@ -10138,6 +10166,12 @@ function show(id) {
     queueReveal();                         /* the counter moves on OPEN, not on DONE */
     record(id);
     if (typeof window.__folderRedraw === "function") { window.__folderRedraw(); }
+    /* THE PANE IS NAMED FOR THE FILE. It was a hard-coded "Case file" for all seven -- a
+       noun this source reserves for FILES 01-04 -- and it never changed, so every document
+       announced the same thing. K is the list the title bar and the icons already read. */
+    var fi = IDS.indexOf(id);
+    cv("view").setAttribute("aria-label",
+      (fi >= 0 ? "FILE " + (fi < 9 ? "0" : "") + (fi + 1) + " \u00b7 " : "") + K.labels[id]);
     cv("view").focus({ preventScroll: true });
   };
 
@@ -10164,13 +10198,21 @@ function show(id) {
   };
   if (openId) { opening = null; go(); refitSheets(secOf(id)); return; }   /* swap documents, no zoom */
   cv("mw-files").style.visibility = "hidden";
+  /* and the key layer with it, so Tab cannot wander behind the open window */
+  if (cv("mw-keys")) { cv("mw-keys").style.visibility = "hidden"; }
   zoomOpen(btn, go);
 }
 function shut() {
   setTimeout(function () { if (typeof window.__folderRedraw === "function") { window.__folderRedraw(); } if (typeof window.__mwClosed === "function") { window.__mwClosed(); } }, 0);
   if (!openId) return;
+  var was = openId;
   openId = null;
   opening = null;
+  if (cv("mw-keys")) { cv("mw-keys").style.visibility = ""; }
+  cv("view").setAttribute("aria-label", "Document");
+  /* back on the file that was open, once the folder has redrawn -- not on <body>, which
+     is where hiding the focused window used to leave a keyboard reader. */
+  setTimeout(function () { if (typeof window.__folderFocus === "function") { window.__folderFocus(was); } }, 0);
   cv("win").hidden = true;
   cv("mw-files").style.visibility = "";
   IDS.forEach(function (x) { secOf(x).classList.remove("mw-show"); });
@@ -10480,7 +10522,7 @@ if (window.console && document.body) {
     catch (e) { return null; }          /* private windows can refuse it; then nothing is kept */
   })();
   var S = 2;                         /* logical pixel -> CSS pixel. Whole, always. */
-  var canvas = null, hits = [], W = 0, H = 0;
+  var canvas = null, hits = [], W = 0, H = 0, cols = 4;
 
   function loadOpened() {
     try { return MEM ? (JSON.parse(MEM.getItem(STORE) || "[]") || []) : []; }
@@ -10505,7 +10547,7 @@ if (window.console && document.body) {
     /* four columns on a wide screen, two on a narrow one. The break is not decoration: it puts
        the four case files on the first row and the notepad, the suitcase and the sealed letter
        on the second, which is the distinction between a company and everything else. */
-    var cols = W < 380 ? 2 : 4;
+    cols = W < 380 ? 2 : 4;
     canvas.width = W * S;
     canvas.height = H * S;
     var b = new Buf(W, H);
@@ -10520,7 +10562,110 @@ if (window.console && document.body) {
     x.imageSmoothingEnabled = false;
     x.clearRect(0, 0, canvas.width, canvas.height);
     x.drawImage(off, 0, 0, canvas.width, canvas.height);
+    place();
   }
+
+  /* ---------------------------------------------------------------- the keys
+     THE MACHINE WORKS FROM A KEYBOARD. The canvas above is the only thing on the desk and it is
+     aria-hidden -- rightly, it is a PICTURE of controls -- while the frame's own buttons in
+     #mw-files are display:none (see __folderInit). So on this screen the whole document had
+     zero focusable elements: a reader who pressed Enter on the machine arrived and could not
+     open a file, could not Tab to anything, and could not Tab back out.
+
+     One transparent button per drawn file, plus the close box, laid over the picture from the
+     same hit rectangles the pointer already uses. Built once, repositioned on every draw, never
+     rebuilt -- a redraw must not take focus off the button the reader is on. */
+  var keys = null, btns = {}, order = [];
+
+  function hitOf(id) {
+    for (var i = 0; i < hits.length; i++) { if (hits[i].id === id) { return hits[i]; } }
+    return id;
+  }
+
+  function onFocus() {
+    var id = this.getAttribute("data-id");
+    if (!K.labels[id]) { return; }
+    /* a Macintosh showed which icon the keys were on by inverting it. Keyboard focus only: a
+       programmatic focus after a mouse entry is not :focus-visible, and a folder that arrives
+       with XTIX already selected is not what the reader did. */
+    var kb = false;
+    try { kb = this.matches(":focus-visible"); } catch (e) { }
+    if (kb && state.sel !== id) { state.sel = id; draw(); }
+  }
+
+  function onKey(e) {
+    /* Enter and Space open, on keydown, the way this page's other button-like controls already
+       answer (the machine canvas in router.js, the ring cards on page 3). A native <button>
+       does activate on its own -- but Chromium does it on the KEYPRESS, and an input path that
+       delivers keydown and keyup without one (measured: exactly what an automation harness
+       sends) never gets there. preventDefault stops the native activation doubling it; act()
+       is guarded against re-entry regardless. */
+    if (e.key === "Enter" || e.key === " " || e.key === "Spacebar") {
+      e.preventDefault();
+      act(hitOf(this.getAttribute("data-id")));
+      return;
+    }
+    var step = { ArrowLeft: -1, ArrowRight: 1, ArrowUp: -cols, ArrowDown: cols }[e.key];
+    if (!step || !order.length) { return; }
+    e.preventDefault();
+    var i = order.indexOf(this.getAttribute("data-id"));
+    var j = i < 0 ? 0 : Math.max(0, Math.min(order.length - 1, i + step));
+    var t = btns[order[j]];
+    if (t) { t.focus(); }
+  }
+
+  function place() {
+    var desk = document.getElementById("desk");
+    if (!desk || !canvas) { return; }
+    if (!keys) {
+      keys = document.createElement("div");
+      keys.className = "mw-keys";
+      keys.id = "mw-keys";
+      keys.setAttribute("role", "group");
+      keys.setAttribute("aria-label", "Oran Carmon \u2014 Master File");
+      desk.insertBefore(keys, canvas.nextSibling);
+    }
+    var r = canvas.getBoundingClientRect();
+    if (!r.width || !r.height) { return; }
+    /* the canvas's OWN scale. W is max(320, floor(width / 2)), so a constant 2 drifts. */
+    var kx = r.width / W, ky = r.height / H;
+    var seen = {};
+    order = [];
+    for (var i = 0; i < hits.length; i++) {
+      var h = hits[i], file = !!K.labels[h.id];
+      if (!file && h.id !== "close") { continue; }
+      var b = btns[h.id];
+      if (!b) {
+        b = document.createElement("button");
+        b.type = "button";
+        b.className = "mw-key";
+        b.setAttribute("data-id", h.id);
+        b.setAttribute("aria-label", file ? "Open " + K.labels[h.id] : "Close the folder");
+        b.addEventListener("click", function () { act(hitOf(this.getAttribute("data-id"))); });
+        b.addEventListener("focus", onFocus);
+        b.addEventListener("keydown", onKey);
+        btns[h.id] = b;
+        keys.appendChild(b);
+      }
+      seen[h.id] = true;
+      b.style.left = Math.round(h.x0 * kx) + "px";
+      b.style.top = Math.round(h.y0 * ky) + "px";
+      b.style.width = Math.round((h.x1 - h.x0) * kx) + "px";
+      b.style.height = Math.round((h.y1 - h.y0) * ky) + "px";
+      if (file) { order.push(h.id); }
+    }
+    for (var k in btns) {
+      if (btns.hasOwnProperty(k) && !seen[k]) { btns[k].parentNode.removeChild(btns[k]); delete btns[k]; }
+    }
+  }
+
+  /* focus is never dropped on the floor: the frame calls this when a document closes, so the
+     reader is back on the file they had open rather than on <body>. */
+  window.__folderFocus = function (id) {
+    var b = (id && btns[id]) || btns[order[0]];
+    if (!b) { return; }
+    try { b.focus({ preventScroll: true }); } catch (e) { b.focus(); }
+  };
 
   /* THE WHOLE HIT, not just its id. The rectangle screen.js returns is the only record of
      where the icon the reader clicked actually is -- the frame's own #mw-files buttons are
@@ -10600,6 +10745,8 @@ if (window.console && document.body) {
     }
     state.opened = loadOpened().length;
     draw();
+    /* and the reader lands on the first file, not on <body>. */
+    window.__folderFocus(null);
   };
 
   /* after a document is opened or shut the count has moved, so the folder is redrawn from
@@ -10609,10 +10756,24 @@ if (window.console && document.body) {
     draw();
   };
 
-  window.addEventListener("resize", function () {
-    var mw = document.getElementById("mw");
-    if (mw && mw.offsetParent !== null) { draw(); }
-  });
+  /* THE FOLDER REDRAWS WHEN THE SCREEN CHANGES SIZE -- which it never did.
+     The guard here was `mw.offsetParent !== null`, and #mw is position:fixed, whose offsetParent
+     is null by specification whether or not it is on screen. frame.js found and fixed exactly
+     this in its own resize handler (see the note there); this copy kept the broken test. So a
+     reader who rotated a phone or resized the window on the folder screen got the old raster
+     stretched over the new size -- measured at 375x812 after starting at 1440x900: a
+     1440x900 canvas squeezed into 375 CSS pixels -- and, now that the folder carries keyboard
+     buttons laid over its icons, those buttons would sit where the icons used to be.
+     mw-on is the right question: is the shell up. A ResizeObserver on the desk covers the size
+     changes no resize event reports, such as a phone's toolbar collapsing. */
+  function resized() {
+    if (document.documentElement.classList.contains("mw-on")) { draw(); }
+  }
+  window.addEventListener("resize", resized);
+  if (typeof ResizeObserver === "function") {
+    var deskEl = document.getElementById("desk");
+    if (deskEl) { new ResizeObserver(resized).observe(deskEl); }
+  }
 })();
 </script>
 <script>"use strict";
@@ -10895,8 +11056,17 @@ if (window.console && document.body) {
       window.__cam(REST.yaw, REST.pitch, REST.dist, null);
       if (typeof window.__camAim === "function") { window.__camAim(null); }
     }
+    /* a keyboard reader who was inside goes back to the door they came in by */
+    var inside = document.activeElement && document.getElementById("mw") &&
+                 document.getElementById("mw").contains(document.activeElement);
     html.classList.remove("mw-on");
     wheelToPage(true);
+    if (inside) {
+      setTimeout(function () {
+        var door = document.getElementById("mach-gl");
+        if (door) { try { door.focus({ preventScroll: true }); } catch (err) { door.focus(); } }
+      }, 0);
+    }
     /* the machine goes back to showing its title, so the next reader through -- or the same
        one, coming back -- gets the whole sequence rather than a screen already open. */
     if (typeof window.__crt === "function") { window.__crt("title"); }
@@ -10983,6 +11153,19 @@ if (window.console && document.body) {
 
   /* out of it — the folder's own close box */
   window.__mwExit = function () { go("pages", null); };
+
+  /* ESCAPE, the way out a keyboard expects. Bound on the document and guarded on mw-on --
+     not beside the Enter handler on #mach-gl, which is visibility:hidden for the whole time
+     the shell is up and so can never receive a key there. An open document closes back to
+     the folder, exactly as DONE does; with none open, the reader leaves the machine. */
+  document.addEventListener("keydown", function (e) {
+    if (e.key !== "Escape" && e.key !== "Esc") { return; }
+    if (!html.classList.contains("mw-on")) { return; }
+    e.preventDefault();
+    var win = document.getElementById("win");
+    if (win && !win.hidden && typeof shut === "function") { shut(); }
+    else { window.__mwExit(); }
+  });
 
   /* a file opens. The folder calls show() directly, so this is how the router hears about it
      rather than being the thing that did it: one state object, updated from wherever the open
