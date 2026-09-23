@@ -2156,14 +2156,25 @@ body.static .sttl .w>i{font-variation-settings:'wght' 780;letter-spacing:0}
    The SEALED bars ask to be opened. These do not: they lift as the page moves
    past them, so the reader declassifies the file simply by reading it. One-way
    — once lifted, they stay lifted. */
-.rxs{position:relative;display:inline;color:inherit}
-.rxs::after{content:"";position:absolute;inset:-1px -2px;background:#7C4A8A;border-radius:2px;
+/* ONE BAR PER LINE OF TEXT, and the bars are elements, not a pseudo-element on the span.
+   `.rxs` is inline and a sentence wraps; an absolutely positioned child of a multi-line inline
+   box is laid out in the box spanning the first fragment's start to the last fragment's end,
+   which is not the text -- 91px of EVENTER's 287px sentence, and in XTIX (a flex parent, so the
+   span blockifies) a 288px slab hanging 148px past a short line. With transform-origin:right
+   the residue then sat to the RIGHT of the words, which is what Oran reported.
+   The bars are laid out by redactionBars() in frame.js against `.rxhost`, the block that holds
+   the sentence. Colour, radius, shadow and the right-to-left lift are exactly as approved.
+   NO TRANSITION: the scroll is the timeline, and a transition made every frame's write start a
+   new 180ms animation -- the bar trailed the finger and kept sliding after it lifted. */
+.rxs{display:inline;color:inherit}
+.rxhost{position:relative}
+.rxb{position:absolute;background:#7C4A8A;border-radius:2px;
   box-shadow:0 1px 4px rgba(0,0,0,.3),inset 0 1px 0 rgba(255,255,255,.45);
-  transform:scaleX(var(--sp,1));transform-origin:right center;
-  transition:transform .18s linear;pointer-events:none}
+  transform:scaleX(var(--rxp,1));transform-origin:right center;
+  pointer-events:none;z-index:2}
 
-@media (prefers-reduced-motion:reduce){.rxs::after{transform:scaleX(0)}}
-body.static .rxs::after{transform:scaleX(0)}/*D:final:166*//*D:final:167*//*D:final:168*//*D:final:169*//*D:final:170*//*D:final:171*/
+@media (prefers-reduced-motion:reduce){.rxb{transform:scaleX(0)}}
+body.static .rxb{transform:scaleX(0)}/*D:final:166*//*D:final:167*//*D:final:168*//*D:final:169*//*D:final:170*//*D:final:171*/
 
 
 /* ---- UV INVARIANT ----
@@ -5129,10 +5140,16 @@ document.querySelectorAll('.redx').forEach(function(r){
 (function(){
   'use strict';
   var reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var els=[].slice.call(document.querySelectorAll('.rxs'));
+  /* THE PAGE'S COPY KEEPS ITS HANDS OFF THE MACHINE. adopt() moves every document into the
+     window at load, so all seven documents' sealed lines live inside .mw and belong to the
+     window's own engine (frame.js). This copy stays for the frozen paths -- ?static=1, reduced
+     motion, a page whose shell never came up -- where the bars must simply be open. */
+  var els=[].slice.call(document.querySelectorAll('.rxs')).filter(function(e){
+    return !(e.closest&&e.closest('.mw'));
+  });
   if(!els.length){window.__rxsUpd=function(){};return}
   if(reduced||document.body.classList.contains('static')){
-    els.forEach(function(e){e.style.setProperty('--sp',0)});
+    els.forEach(function(e){(e.parentElement||e).style.setProperty('--rxp',0)});
     window.__rxsUpd=function(){};return;
   }
   var st=els.map(function(e){return {el:e,done:false,last:1,top:0}}),live=st.length;
