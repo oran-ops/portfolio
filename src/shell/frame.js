@@ -598,12 +598,41 @@ if(MOB&&!frozen){
   });
 }
 
+/* ---------- the edge fade follows the scroll ----------
+   The mask that says "there is more to swipe" is painted in the scroller's own box, so it stayed
+   over the right-hand 14% at every scroll position and hid the END of every wide chart once the
+   reader got there -- TECH's CRM node, MEDCOIN's REVENUE arrowhead, EVENTER's last label.
+   --mr is the far stop's alpha: 0 while there is a screenful still to come, rising to 1 over the
+   width of the faded band itself, so the fade lifts exactly as the last element arrives.
+   Passive listener, no rAF: this is one style write per scroll event. */
+var EDGE_SEL='#eventer .convwrap,#medcoin .mzorg,#tech .archw';
+function edgeFade(sc){
+  var max=sc.scrollWidth-sc.clientWidth, rem=max-sc.scrollLeft;
+  var band=Math.max(1,sc.clientWidth*0.13);        /* the band is 86%..99% of the box */
+  var a=(max<=1||rem<=1)?1:Math.max(0,Math.min(1,1-rem/band));
+  sc.style.setProperty('--mr',a.toFixed(3));
+}
+function edgeAll(){
+  [].forEach.call(document.querySelectorAll(EDGE_SEL),function(sc){
+    if(!sc.__edge){sc.__edge=1;sc.addEventListener('scroll',function(){edgeFade(sc)},{passive:true})}
+    edgeFade(sc);
+  });
+}
+window.__mwEdgeAll=edgeAll;
+/* width only: a phone's toolbar sliding changes the height on every scroll, and nothing here
+   depends on the height. A rotation across 860 or 680 does change these boxes. */
+var edgeW=window.innerWidth;
+window.addEventListener('resize',function(){
+  if(window.innerWidth!==edgeW){edgeW=window.innerWidth;edgeAll()}
+});
+
 /* ---------- mobile: swipe cues on sideways-scrolling charts ---------- */
 /* AND IN EVERY DOCUMENT, not only the first one opened. This ran once, 700ms after the engine
    started -- by which time only the document being opened was on screen, so the other two
    charts measured 0 wide and never got a cue. It is now safe to run again (one cue per chart)
    and the frame runs it each time a document opens. */
 function swipeCues(){
+  edgeAll();                       /* not gated on MOB: the mask exists at every width it is set */
   if(!MOB)return;
     [].forEach.call(document.querySelectorAll('#eventer .convwrap,#medcoin .mzorg,#tech .archw'),function(sc){
       var nx=sc.nextElementSibling;
@@ -1372,6 +1401,8 @@ function show(id) {
        scroller has a size. */
     paintCards();
     refitSheets(secOf(id));                /* the section was hidden; its stage cached a zero */
+    /* the fade's state in the same tick the section becomes measurable, not 60ms later */
+    if (window.__mwEdgeAll) { window.__mwEdgeAll(); }
     setTimeout(function () { if (window.__mwSwipeCues) { window.__mwSwipeCues(); } }, 60);
     queueReveal();                         /* the counter moves on OPEN, not on DONE */
     record(id);

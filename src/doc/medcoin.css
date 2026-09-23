@@ -22,8 +22,8 @@ padding:6px 13px;font-family:'JetBrains Mono',monospace;font-weight:700;font-siz
   /* medcoin origin line: scaled to 390px its labels rendered ~3px. Swipe
      like the other wide charts, with larger type and an edge-fade hint. */
   #medcoin .mzorg{overflow-x:auto;-webkit-overflow-scrolling:touch;
-    -webkit-mask-image:linear-gradient(90deg,#000 88%,transparent 99%);
-    mask-image:linear-gradient(90deg,#000 88%,transparent 99%)}/*--17--*/
+    -webkit-mask-image:linear-gradient(90deg,#000 88%,rgba(0,0,0,var(--mr,1)) 99%);
+    mask-image:linear-gradient(90deg,#000 88%,rgba(0,0,0,var(--mr,1)) 99%)}/*--17--*/
   /* item 6 - medcoin outcomes: one left rail, key over value, calm rhythm */
   #medcoin .outs{padding:4px 18px 6px}/*--18--*/
   #medcoin .outs tr{padding:10px 0 11px}/*--19--*/

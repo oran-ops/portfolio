@@ -1553,11 +1553,17 @@ body.static .hfolder,body.static #hero .mfold{--sx:-320px}
   #hwrap .hhint .hs,.hhint .hs{display:none!important}
   .hhint::after{content:"THE ROOM IS THROUGH HERE";font-family:'JetBrains Mono',monospace;
     font-size:8.5px;letter-spacing:.22em;color:var(--lbl)}
-  /* M2-4 wide diagrams: edge fade signals there is more to swipe */
+  /* M2-4 wide diagrams: the edge fade signals there is more to swipe -- AND ONLY WHILE THERE IS.
+     A mask is painted in the element's own box and does not travel with the content, so this
+     faded the last 14% of the visible width at every scroll position, including the end, where
+     it hid the last thing in the chart. The far stop's alpha is --mr, written by edgeFade() in
+     frame.js from the scroll position: 0 is this fade, 1 is no fade. The default is 1, so a
+     scroller no script reaches -- #tech .archw between 681 and 860 cannot scroll at all -- never
+     hides anything. */
   #eventer .convwrap,#tech .archw{
     -webkit-overflow-scrolling:touch;
-    -webkit-mask-image:linear-gradient(90deg,#000 86%,transparent 99%);
-    mask-image:linear-gradient(90deg,#000 86%,transparent 99%)}
+    -webkit-mask-image:linear-gradient(90deg,#000 86%,rgba(0,0,0,var(--mr,1)) 99%);
+    mask-image:linear-gradient(90deg,#000 86%,rgba(0,0,0,var(--mr,1)) 99%)}
 }
 
 
