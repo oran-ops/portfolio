@@ -1237,6 +1237,12 @@ function decodeMach(b64, xform){
      velocity and the camera keeps it, shedding it over about a second. Snapping to a stop the
      instant a finger lifts is the thing that makes a viewer feel like a widget. */
   var W=0,H=0,DPR=1,PROJ=null;
+  /* THE LENS AND THE LOCK, for the flight (see router.js enterShell).
+     LENS is an off-centre frustum in CSS pixels -- what a view camera does on a bellows: the
+     picture is shifted without the camera turning, so moving the canvas to a bigger box does not
+     move the machine inside the picture. FIT_LOCK freezes the aspect-driven distance multiplier
+     so that resizing the canvas mid-flight cannot re-frame the shot. */
+  var LENS=[0,0], FIT_LOCK=0;
   /* the camera is settable from the query string so the render can be put at the reference
      photograph's exact viewpoint and the two compared pixel for pixel. Comparing a model to a
      reference from a different angle compares the angles, not the models. */
@@ -1334,7 +1340,7 @@ function decodeMach(b64, xform){
        resolution and filtering down touches those. */
     DPR=Math.min((window.devicePixelRatio||1)*1.75, 2.6);
     W=cv.clientWidth;H=cv.clientHeight;
-    FIT=fitFor(W/Math.max(1,H));
+    FIT=FIT_LOCK||fitFor(W/Math.max(1,H));
     var wasHome=(AIMX===AIMX0 && AIMY===CY && AIMZ===CZ);
     /* AND IT STAYS 0 ON A PHONE TOO. This slid to -0.25 on a narrow room so the whole pile
        came into frame, trading the mouse for the labels. That was the right trade while the
@@ -1348,6 +1354,8 @@ function decodeMach(b64, xform){
     cv.width=Math.round(W*DPR);cv.height=Math.round(H*DPR);
     gl.viewport(0,0,cv.width,cv.height);
     PROJ=persp(FOV,W/H,0.05,60);
+    /* the principal point, in NDC: 2 CSS px of shift is 2/W of the clip cube */
+    PROJ[8]=-2*LENS[0]/Math.max(1,W); PROJ[9]=2*LENS[1]/Math.max(1,H);
   }
 
   function frame(){
@@ -1593,6 +1601,19 @@ function decodeMach(b64, xform){
      FIT is a multiplier applied to dist inside frame(), so a caller that wants a framing
      rather than a distance has to undo it -- otherwise the same keyframe frames the screen
      on a laptop and stands a third too far back on a phone. */
+  /* the flight's instruments: the lens, the lock, and the two numbers it needs to keep the
+     first frame identical when the canvas changes size under it. */
+  window.__camLens=function(dx,dy){
+    LENS[0]=dx||0; LENS[1]=dy||0;
+    if(PROJ){ PROJ[8]=-2*LENS[0]/Math.max(1,W); PROJ[9]=2*LENS[1]/Math.max(1,H); frame(); }
+    return [LENS[0],LENS[1]];
+  };
+  window.__camFitLock=function(v){ FIT_LOCK=v||0; size(); frame(); return FIT; };
+  window.__camFit=function(){ return FIT; };
+  /* the focal length in CSS pixels: half the canvas height over the tangent of half the field.
+     Hold this across a canvas resize and nothing in the picture changes size. */
+  window.__camFocal=function(){ return (H/2)/Math.tan(FOV*Math.PI/360); };
+  window.__camFov=function(deg){ if(deg!=null){ FOV=deg; size(); frame(); } return FOV; };
   window.__camFill=function(frac){
     var L=SCR_RECT[3]/(Math.max(0.05,frac)*Math.tan(FOV*Math.PI/360));
     return L/FIT;

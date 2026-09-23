@@ -213,6 +213,56 @@
     se.style.scrollBehavior = was;
   }
 
+  /* ---------------------------------------------------------------- the flight's own layer
+     THE CAMERA CANNOT DRAW OUTSIDE ITS CANVAS, and on a phone the canvas is the machine's zone:
+     two thirds of the screen. So the zoom could never fill the screen, the cover framing -- which
+     divides the VIEWPORT's aspect by the screen's -- was computed against the CANVAS's height and
+     landed short, and everything around that zone (the page above it, the ground beside it) was
+     the black border Oran reports, inside the screen, over the zoom.
+     The canvas moves into a full-screen layer at the tap. To make the first frame identical:
+     the focal length in pixels is held, by re-deriving the field of view from the new height;
+     and the lens is shifted by the offset between the old box's centre and the screen's, which
+     is an off-centre frustum -- the picture moves, the camera does not turn. The lens then eases
+     to zero as the machine straightens, so it glides to the middle of the screen. */
+  var flyLayer = null, flyHome = null, lens0 = [0, 0];
+  function takeOff() {
+    var cv = document.getElementById("mach-gl");
+    if (!cv || flyLayer || typeof window.__camFocal !== "function") { return false; }
+    var R = cv.getBoundingClientRect();
+    if (!R.width || !R.height) { return false; }
+    var fpx = window.__camFocal();
+    if (!fpx) { return false; }
+    window.__camFitLock(window.__camFit());          /* the shot cannot re-frame under itself */
+    flyLayer = document.createElement("div");
+    flyLayer.id = "mach-fly";
+    flyLayer.setAttribute("aria-hidden", "true");
+    document.body.appendChild(flyLayer);
+    flyHome = { parent: cv.parentNode, next: cv.nextSibling };
+    flyLayer.appendChild(cv);
+    /* a finger must not scroll the page through the flight */
+    flyLayer.addEventListener("touchmove", function (e) { e.preventDefault(); }, { passive: false });
+    var V = { w: flyLayer.clientWidth, h: flyLayer.clientHeight };
+    window.__camFov(2 * Math.atan((V.h / 2) / fpx) * 180 / Math.PI);
+    /* MEASURED, not assumed: a lens of +30 moves the picture 30px LEFT and 30px UP (lens2.py),
+       so to hold the machine where it stood -- the old box's centre -- the lens is the offset
+       from that centre to the screen's, not the other way round. */
+    lens0 = [ V.w / 2 - (R.left + R.width / 2), V.h / 2 - (R.top + R.height / 2) ];
+    window.__camLens(lens0[0], lens0[1]);
+    return true;
+  }
+  function land() {
+    var cv = document.getElementById("mach-gl");
+    if (typeof window.__camLens === "function") { window.__camLens(0, 0); }
+    if (typeof window.__camFitLock === "function") { window.__camFitLock(0); }
+    if (cv && flyHome && flyHome.parent) {
+      flyHome.parent.insertBefore(cv, flyHome.next || null);
+      if (typeof window.__camFov === "function") { window.__camFov(FOV0); }
+    }
+    if (flyLayer && flyLayer.parentNode) { flyLayer.parentNode.removeChild(flyLayer); }
+    flyLayer = null; flyHome = null; lens0 = [0, 0];
+  }
+  var FOV0 = 21;
+
   function enterShell(animate) {
     if (html.classList.contains("mw-on")) { return; }
     holdPage();
@@ -224,6 +274,8 @@
     }
     flying = true;
     html.classList.add("mw-fly");          /* the cue stands down -- see .machcue in machine.css */
+    if (typeof window.__camFov === "function") { FOV0 = window.__camFov(); }
+    var flew = takeOff();
 
     /* AN ANIMATION MUST NEVER BE THE ONLY WAY IN.
      *
@@ -241,6 +293,9 @@
       html.classList.remove("mw-fly");
       html.classList.add("mw-on");
       if (typeof window.__shellInit === "function") { window.__shellInit(); }
+      /* the layer stays up UNDER the shell until the shell is opaque, so the handover is a
+         dissolve rather than a cut to whatever is behind it */
+      if (flew) { setTimeout(land, 520); }
       /* AND THE CAMERA DOES NOT STOP HERE, which is the whole of the fix.
          The shell fades in over 340ms; for those 340ms the machine is still visible underneath
          it, and it goes on pushing from the 86% framing to one that covers the frame. Two
@@ -250,7 +305,11 @@
          handover, so the two pictures dissolve instead of cutting.
          Matched to the fade, not longer: rendering the machine after the window is opaque is
          work nobody can see. */
-      fly(inKeyframe(), pushKeyframe(), 340, function () { });
+      /* THE ZOOM ALREADY ENDED ON THE COVERING FRAME (beat 3 below), so there is nothing left
+         to push: the shell fades in over the same picture it is replacing. This used to fly the
+         last 14% of the case border away while the window arrived, which on a phone -- where the
+         canvas was two thirds of the screen -- is where "black borders inside the screen" came
+         from, and on a landscape phone left the ground showing either side to the very last. */
       /* put the machine back where it was, unseen behind the shell, so leaving it does not land
          the reader on a camera halfway inside a cathode ray tube. Oran: the machine resets its
          angle. */
@@ -279,11 +338,27 @@
        machine STRAIGHTENING, from wherever the reader left it. */
     var now = (typeof window.__cam === "function") ? window.__cam(null, null, null, null) : null;
     var from = now ? { yaw: now[0], pitch: now[1], dist: now[2] } : REST;
+    /* THE LENS COMES BACK TO CENTRE WHILE THE MACHINE STRAIGHTENS. Same length as the beat, same
+       easing: the picture slides from where the machine stood on the page to the middle of the
+       screen, and by the time the folder opens on the CRT the shot is centred. */
+    if (flew && (lens0[0] || lens0[1])) {
+      (function () {
+        var t0 = performance.now(), ms = 480;
+        (function step(t) {
+          if (arrived || !flyLayer) { return; }
+          var k = Math.min(1, (t - t0) / ms), e = ease(k);
+          window.__camLens(lens0[0] * (1 - e), lens0[1] * (1 - e));
+          if (k < 1) { requestAnimationFrame(step); }
+        })(t0);
+      })();
+    }
     fly(from, FLAT, 480, function () {          /* 1. the machine straightens */
       if (arrived) { return; }
       openOnScreen(440, function () {           /* 2. THE FOLDER OPENS, on the screen itself */
         if (arrived) { return; }
-        fly(FLAT, inKeyframe(), 620, arrive);   /* 3. and only then, the zoom */
+        /* 3. and only then, the zoom -- all the way to the framing that COVERS the screen, so
+              the last frame of the flight is the first frame of the folder. */
+        fly(FLAT, pushKeyframe(), 620, arrive);
       });
     });
   }
@@ -294,6 +369,7 @@
     /* put the machine back BEFORE uncovering it: the reset that used to run at the end of the
        flight, moved to the one moment at which it cannot be seen. */
     if (typeof window.__cam === "function") {
+      land();                                  /* the canvas goes home, the lens goes to zero */
       window.__cam(REST.yaw, REST.pitch, REST.dist, null);
       if (typeof window.__camAim === "function") { window.__camAim(null); }
     }
