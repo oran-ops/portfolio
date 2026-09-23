@@ -386,7 +386,13 @@ function statement(y){
      Nothing here is exempt any more: the particle field that used to need driving
      even at a dead p was removed in round 35. */
   var moved=(p!==lastSTP);lastSTP=p;
-  if(window.__stSwap)window.__stSwap(p);
+  /* AND THIS COPY DOES NOT DRIVE PAGE 1's SENTENCE. This function is the page's, lifted whole
+     into the window with its clock swapped to #view -- so its p is the DOCUMENT's scroll, and
+     calling __stSwap with it wrote page 1's statement from inside the machine. Measured after
+     one trip in and out: page 1 left permanently half-swapped, the first eleven characters of
+     "One intelligence built the world." at opacity 0.58..0.99, never recovering, because two
+     callers were alternating at 60Hz and this one won the frame. The page-1 scene has one
+     owner: the page. */
   /* words() lived here and raised the headline a word at a time. Nothing has called it
      since the morph took the sentence over; removed. */
   if(moved){
