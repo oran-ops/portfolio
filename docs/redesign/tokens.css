@@ -1,0 +1,187 @@
+/* ===========================================================================================
+   PAPER UNDER GLASS — the token file for the seven documents.
+   Ready to paste at the head of the document CSS in src/_monolith.html.
+
+   THREE THINGS THIS FILE IS:
+   1. The ground and the ink, UNCHANGED from the current build. Nothing here re-points
+      --bg, --card, --card2, --ink, --lbl, --mut, --grid or --grid2. The dark room stays.
+   2. THE CLUT. Each document declares the colour table the machine already uses to draw that
+      file's icon on the desktop (window.KIT.colour in src/shell/kit.js). A folder's colour is
+      not one accent any more, it is five entries: keyline, base, light, shade, white. Every
+      coloured pixel in that document is an entry from ITS table and nothing hand-picks a hue.
+   3. The geometry, taken from the machine rather than invented: --u is frame.css's own
+      "1 logical pixel = 2 CSS pixels", --bar is screen.js's BAR = 19, --strip is its S = 15.
+
+   THE ONE TRAP, and it is the reason section 3 exists at all:
+      A custom property is substituted where it is DECLARED, not where it is used. Declaring
+      --fc-light on :root and re-pointing --c1 on a .sec leaves --fc-light holding emerald,
+      so OASIS renders brass chips on emerald keylines. EVERY DERIVED TONE IS RE-DECLARED ON
+      THE SAME ELEMENT THAT SETS THE TABLE — which is .sec, and .sec already carries an inline
+      --fc. Do not lift the .sec block into :root. It was rendered wrong once to prove it.
+   =========================================================================================== */
+
+:root{
+
+  /* --------------------------------------------------------------- 1. THE GROUND (unchanged) */
+  --bg:#191A1F;              /* the matte charcoal room */
+  --card:#202127;            /* a window's field, a leaf's tint */
+  --card2:#25262D;           /* a bar's field, a plaque's ground, a rack cell */
+
+  /* THE DESK. Two values one step either side of the ground, painted as a true 2x2
+     checkerboard at the machine's own scale — the same construction .mw-desk uses, in
+     charcoal instead of black and white. It shows between windows and behind the archive's
+     own furniture, and it is the only thing in the system that is a pattern by default. */
+  --dk:#141519;
+  --dl:#1E2027;
+  --desk:conic-gradient(var(--dk) 25%,var(--dl) 0 50%,var(--dk) 0 75%,var(--dl) 0);
+  --desk-size:4px 4px;       /* = 2 logical px, one dither cell */
+
+  /* --------------------------------------------------------------- 2. THE INK (unchanged) */
+  --ink:#F2F1ED;             /* a heading, a built item, a figure */
+  --lbl:#CFD0D4;             /* a label, a key, a caption */
+  --mut:#B6B7BB;             /* body copy */
+  --dim:#8A8D95;             /* small print, the folio, the imprint */
+  --grid:#33353C;            /* a rule inside a block: table rows, list rows */
+  --grid2:#4B4E55;           /* the edge of an inactive window, a leader, a track */
+
+  /* THE KEYLINE. The single re-point that makes a 1984 icon work in a dark room: Kare's
+     icons assume a white page and close every silhouette in black, which disappears on
+     #191A1F. One step UNDER the desk, so the keyline reads as a dark edge and not as a hole.
+     Used for: every icon outline, every plaque inset, every stamp die, every chart bar. */
+  --kl:#0B0C0F;
+
+  /* WINDOW EDGES. Three, and the difference between them IS the hierarchy. */
+  --we:#E7E6E1;              /* ACTIVE: the document window, the one block you are in */
+  --we2:#9DA0A8;             /* ACTIVE, secondary: a zone window inside it */
+  --we3:#4B4E55;             /* INACTIVE: every other window (= --grid2, on purpose) */
+
+  /* --------------------------------------------------------------- 3. THE UNIT AND THE GRID */
+  /* ONE LOGICAL PIXEL. frame.css already fixes the machine at 1 logical px = 2 CSS px; the
+     documents adopt the same number, so a keyline in a document and a keyline in the Finder
+     behind it are the same thickness. Every rule, stripe, gap, inset and plaque height in
+     the system is a whole multiple of --u. Nothing is ever 1px, 1.5px or 3px. */
+  --u:2px;
+
+  --bar:38px;                /* 19 logical: screen.js BAR. 1 rule, 3 clear, 11 striped, 3, 1 */
+  --barz:26px;               /* 13 logical: a zone window's short bar, four stripes */
+  --status:26px;             /* 13 logical: the status line under a document window's bar */
+  --strip:30px;              /* 15 logical: screen.js scrollbars() S */
+  --marg:104px;              /* 8 x 13: the apparatus gutter. Numerals and figure numbers. */
+  --base:13px;               /* the baseline. Vertical rhythm is 13 / 26 / 39 / 52. */
+  --measure:64ch;            /* body copy never runs wider than this */
+
+  /* THE SHADOW LADDER. A countable vocabulary, not a continuum. Always `Npx Npx 0 0 #000`:
+     black, hard, no blur, no alpha. The current build's 0 24px 60px rgba(0,0,0,.7) is the
+     most 2024 thing in these files and it is the first thing that dies. */
+  --shd:#000;
+  --sh-btn:3px 3px 0 0 var(--shd);    /* a control */
+  --sh-leaf:4px 4px 0 0 var(--shd);   /* a slip, a plaque, a figure dialog */
+  --sh-win:6px 6px 0 0 var(--shd);    /* a window */
+  --sh-pile:10px 10px 0 0 var(--shd); /* the document window itself */
+
+  /* --------------------------------------------------------------- 4. THE LAMP (unchanged) */
+  --uvv:#9E7BFF;             /* armed: the keyline, the ring, the developed window's edge */
+  --uvc:#7C4A8A;             /* the cover over a sealed line */
+  --uvc2:#A972BD;            /* the cover's own keyline */
+  --uvbg:#1B1726;            /* a developed window's field */
+  --uvi:#D8C9FF;             /* type on violet */
+  --uvg:#57F5C4;             /* the fluorescing green of a developed finding (unchanged) */
+
+  /* --------------------------------------------------------------- 5. MOTION */
+  /* THE LAW: the machine steps, the paper eases. Anything drawn in pixels changes state in
+     steps(); anything printed, and anything the reader's own hand drives, keeps a curve. */
+  --step2:steps(2,end);
+  --step4:steps(4,end);
+  --step6:steps(6,end);
+  --step8:steps(8,end);
+  --step12:steps(12,end);
+  --ease:cubic-bezier(.2,0,0,1);      /* the repo's own, kept for printed things */
+  --t-press:90ms;
+  --t-state:260ms;
+  --t-arrive:140ms;
+  --t-rule:1040ms;                    /* a printed rule drawing left to right */
+}
+
+/* =========================================================================================== */
+/* 6. THE COLOUR TABLES.                                                                       */
+/*    Straight out of window.KIT.colour. Do not round, do not "improve", do not add a sixth    */
+/*    entry. c0 keyline / c1 base / c2 light / c3 shade / cw specular.                         */
+/*                                                                                             */
+/*    WHY THIS AND NOT AN ACCENT: light comes from the top left and never moves, so a bar's    */
+/*    top face is entry 2 and its right face is entry 3. One accent cannot do that; a table    */
+/*    can. It is also why an icon, a chart bar and a plaque in the same document look like     */
+/*    one hand — they are literally the same five numbers, and the same five the Finder uses   */
+/*    to draw that file's icon one level up.                                                   */
+/* =========================================================================================== */
+
+/* --- THE BLOCK THAT MUST STAY ON .sec. Read the trap at the head of this file. --- */
+.sec{
+  /* every document sets --c1..--c3 below; these are the derived tones, re-declared here so
+     they resolve against THIS section's table and not against :root's */
+  --fc:var(--c1);                                   /* back-compatible with the current build */
+  --fc-wash:color-mix(in srgb,var(--c3) 40%,transparent);   /* the selection behind a <b> */
+  --fc-tint:color-mix(in srgb,var(--c1) 12%,var(--card));   /* a tint block, a chip ground */
+  --fc-quiet:color-mix(in srgb,var(--c1) 55%,var(--bg));    /* an inactive plaque's field */
+  --fc-rule:var(--c3);                                      /* a dividing rule, a stripe */
+}
+
+/* EMERALD — XTIX, LEADERSHIP, TECH, READ ME */
+#xtix,#leadership,#tech,#final,
+.sec[data-clut="emb"]{
+  --c0:#000000; --c1:#2FB380; --c2:#8DD5B9; --c3:#207A57; --cw:#FFFFFF;
+}
+/* BRASS — OASIS */
+#oasis,.sec[data-clut="brass"]{
+  --c0:#000000; --c1:#E0A458; --c2:#EECDA3; --c3:#98703C; --cw:#FFFFFF;
+}
+/* ICE — EVENTER */
+#eventer,.sec[data-clut="ice"]{
+  --c0:#000000; --c1:#5E8FBF; --c2:#A6C1DC; --c3:#406182; --cw:#FFFFFF;
+}
+/* BONE — MEDCOIN. The file with no second press run: its base IS the ink, so its hierarchy
+   is structural, never chromatic. See the MEDCOIN note in SYSTEM.md before changing this. */
+#medcoin,.sec[data-clut="ink"]{
+  --c0:#000000; --c1:#F2F1ED; --c2:#F8F7F5; --c3:#A5A4A1; --cw:#FFFFFF;
+  --chrome:var(--lbl);       /* furniture drops one step so content still reads brighter */
+  --fc-quiet:#A5A4A1;
+}
+/* THE VAULT — READ ME's #final, after the lamp. The same one-line re-point the lit folder
+   performs, so "this file has gone to silver" is one mechanism and not two. */
+#final .vault,#final.vault{
+  --c1:#E6EAF6; --c2:#F4F6FB; --c3:#8D93A2;
+}
+/* THE LIT FOLDER. Arming the lamp re-points the table, so stripes, plaques, numerals, rules,
+   icons and charts all go violet in ONE move — exactly as the current build goes silver. */
+.folder.lampon{
+  --c1:var(--uvv); --c2:#C9B8F5; --c3:var(--uvc); --fc:var(--uvv);
+}
+
+/* FURNITURE vs CONTENT. The machine's ink draws the chrome; the folder's table draws the
+   meaning. This is what lets four folders be violently distinct while the machine stays one
+   machine. --chrome is only ever re-pointed by MEDCOIN, above. */
+:root{ --chrome:var(--ink); }
+
+/* =========================================================================================== */
+/* 7. THE PATTERNS. Six, each with exactly one job, and there is no seventh.                    */
+/*    A pattern is never chosen because it looks good. If a chart uses the ramp it publishes    */
+/*    the five-cell legend underneath it; SPRAY belongs to the lamp and never appears in a      */
+/*    chart. Cells are 4px = 2 logical px, so a pattern is the machine's own dither at the      */
+/*    machine's own scale and does not resample on a 3x screen.                                 */
+/* =========================================================================================== */
+:root{
+  /* VOID — absent. Not a fill at all: a keyline box with nothing in it. */
+  --p-void:none;
+  /* GRAIN — 25%. An estimate, a range, anything approximate. */
+  --p-grain:conic-gradient(currentColor 25%,transparent 0);
+  --p-grain-size:4px 4px;
+  /* HALF — 50%. The machine's own checkerboard: the desk, a cover, a masked region. */
+  --p-half:conic-gradient(currentColor 25%,transparent 0 50%,currentColor 0 75%,transparent 0);
+  --p-half-size:4px 4px;
+  /* DENSE — 75%. Nearly. The checkerboard's negative. */
+  --p-dense:conic-gradient(transparent 25%,currentColor 0);
+  --p-dense-size:4px 4px;
+  /* SOLID — 100%. Built, on record, selected. No pattern; the colour itself. */
+  /* SPRAY — the light, and the light only. A stipple, so nothing in the archive blurs. */
+  --p-spray:radial-gradient(currentColor .5px,transparent .8px);
+  --p-spray-size:5px 5px;
+}
