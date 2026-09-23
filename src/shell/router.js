@@ -235,7 +235,11 @@
     window.__camFitLock(window.__camFit());          /* the shot cannot re-frame under itself */
     flyLayer = document.createElement("div");
     flyLayer.id = "mach-fly";
-    flyLayer.setAttribute("aria-hidden", "true");
+    /* NOT aria-hidden: the canvas it is about to hold is the door into the machine -- a real
+       control, with a role and a name, and it holds focus when a reader opens it from the
+       keyboard. aria-hidden on its ancestor is blocked by the browser and warns, which is
+       exactly the fault M3 fixed on the boot screen. The layer is scenery; the canvas speaks
+       for itself. */
     document.body.appendChild(flyLayer);
     flyHome = { parent: cv.parentNode, next: cv.nextSibling };
     flyLayer.appendChild(cv);

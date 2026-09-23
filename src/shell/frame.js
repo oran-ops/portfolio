@@ -669,33 +669,98 @@ if(!frozen&&window.matchMedia('(pointer:fine)').matches){
 }
 })();
 }
+/* every document's stickers, in one list: redaction() runs once per document, and a resize has to
+   find the stickers of whichever document is open -- not only the last one prepared. */
+var REDX = [];
 function redaction(root) {
-  root.querySelectorAll('.redx').forEach(function(r){
-  var sx=null,dx=0,W=0,dragging=false;
-  function reveal(){r.classList.add('open');r.style.removeProperty('--dx');
-    try{if(navigator.vibrate)navigator.vibrate(8)}catch(e){}}
-  r.addEventListener('pointerdown',function(e){
-    if(r.classList.contains('open'))return;
-    sx=e.clientX;dx=0;W=r.getBoundingClientRect().width;dragging=false;
-    try{r.setPointerCapture(e.pointerId)}catch(err){}
-  });
-  r.addEventListener('pointermove',function(e){
-    if(sx===null||r.classList.contains('open'))return;
-    dx=Math.max(0,e.clientX-sx);
-    if(dx>6)dragging=true;
-    if(dragging)r.style.setProperty('--dx',dx.toFixed(0)+'px');
-  });
-  function up(){
-    if(sx===null)return;
-    if(r.classList.contains('open')){sx=null;return}
-    if(dragging&&dx>W*0.38){reveal()}
-    else if(!dragging){reveal()}
-    else{r.style.setProperty('--dx','0px')}
-    sx=null;dragging=false;
+  var LABEL='SEALED \u00b7 TAP TO REVEAL \u25b8';
+  var items=REDX;
+  /* the same line boxes the sealed bars use: rects merged when their vertical ranges overlap by
+     more than half the shorter one, so a <b> on the same line does not split it */
+  function lineBoxes(el){
+    var rg=document.createRange();rg.selectNodeContents(el);
+    var rs=[].slice.call(rg.getClientRects()).filter(function(r){return r.width>1&&r.height>1});
+    rs.sort(function(a,b){return a.top-b.top||a.left-b.left});
+    var out=[];
+    for(var i=0;i<rs.length;i++){
+      var r=rs[i],m=out.length?out[out.length-1]:null;
+      var ov=m?Math.min(m.bottom,r.bottom)-Math.max(m.top,r.top):0;
+      if(m&&ov>Math.min(m.bottom-m.top,r.height)*0.5){
+        m.top=Math.min(m.top,r.top);m.bottom=Math.max(m.bottom,r.bottom);
+        m.left=Math.min(m.left,r.left);m.right=Math.max(m.right,r.right);
+      }else out.push({top:r.top,bottom:r.bottom,left:r.left,right:r.right});
+    }
+    return out;
   }
-  r.addEventListener('pointerup',up);
-  r.addEventListener('pointercancel',function(){if(!r.classList.contains('open'))r.style.setProperty('--dx','0px');sx=null;dragging=false});
-});
+  function layout(o){
+    if(!o.host)return;
+    var boxes=lineBoxes(o.el);
+    if(!boxes.length)return;
+    o.host.classList.add('rxkhost');
+    var hr=o.host.getBoundingClientRect();
+    while(o.keys.length>boxes.length){o.host.removeChild(o.keys.pop())}
+    while(o.keys.length<boxes.length){
+      var k=document.createElement('i');
+      k.className='rxk';k.setAttribute('aria-hidden','true');
+      if(o.open)k.classList.add('open');
+      o.host.appendChild(k);o.keys.push(k);
+    }
+    /* the label rides the widest line; a short line only gets the colour */
+    var wide=0;
+    for(var j=1;j<boxes.length;j++){
+      if(boxes[j].right-boxes[j].left>boxes[wide].right-boxes[wide].left)wide=j;
+    }
+    for(var i=0;i<boxes.length;i++){
+      var b=boxes[i],s=o.keys[i].style;
+      s.left=(b.left-hr.left-3)+'px';
+      s.top=(b.top-hr.top-1)+'px';
+      s.width=(b.right-b.left+6)+'px';
+      s.height=(b.bottom-b.top+2)+'px';
+      o.keys[i].textContent=(i===wide&&b.right-b.left>120)?LABEL:'';
+    }
+  }
+  root.querySelectorAll('.redx').forEach(function(r){
+    var o={el:r,host:r.parentElement,keys:[],open:false};
+    items.push(o);
+    var sx=null,dx=0,W=0,dragging=false;
+    function reveal(){
+      o.open=true;
+      r.classList.add('open');
+      o.keys.forEach(function(k){k.classList.add('open')});
+      o.host.style.removeProperty('--dx');
+      try{if(navigator.vibrate)navigator.vibrate(8)}catch(e){}
+    }
+    r.addEventListener('pointerdown',function(e){
+      if(o.open)return;
+      if(!o.keys.length)layout(o);
+      sx=e.clientX;dx=0;W=r.getBoundingClientRect().width;dragging=false;
+      try{r.setPointerCapture(e.pointerId)}catch(err){}
+    });
+    r.addEventListener('pointermove',function(e){
+      if(sx===null||o.open)return;
+      dx=Math.max(0,e.clientX-sx);
+      if(dx>6)dragging=true;
+      if(dragging)o.host.style.setProperty('--dx',dx.toFixed(0)+'px');
+    });
+    function up(){
+      if(sx===null)return;
+      if(o.open){sx=null;return}
+      if(dragging&&dx>W*0.38){reveal()}
+      else if(!dragging){reveal()}
+      else{o.host.style.setProperty('--dx','0px')}
+      sx=null;dragging=false;
+    }
+    r.addEventListener('pointerup',up);
+    r.addEventListener('pointercancel',function(){
+      if(!o.open)o.host.style.setProperty('--dx','0px');
+      sx=null;dragging=false;
+    });
+  });
+  /* the stickers are geometry, like the bars: a reflow moves the lines under them. Each item
+     carries the layout that closes over its own document, so one call measures them all. */
+  items.forEach(function(o){ if(!o.layout){ o.layout=layout; } });
+  window.__redxMeasure=function(){ REDX.forEach(function(o){ if(o.layout){ o.layout(o); } }); };
+  window.__redxMeasure();
 }
 function redactionBars(root) {
   (function(){
@@ -1548,6 +1613,7 @@ function relayout() {
      re-lays them out and re-anchors whatever is mid-reveal so it does not jump. */
   var rx = openId && RXS[openId];
   if (rx && rx.measure) { rx.measure(); }
+  if (window.__redxMeasure) { window.__redxMeasure(); }
 }
 /* The shell draws when the reader enters the machine, not when the page loads. A
    canvas sized while its container is display:none measures zero and paints nothing,
@@ -1709,6 +1775,7 @@ if (document.fonts && document.fonts.ready) {
     /* the sentence's line boxes move when Fraunces and JetBrains Mono swap in */
     var rx = openId && RXS[openId];
     if (rx && rx.measure) { rx.measure(); }
+    if (window.__redxMeasure) { window.__redxMeasure(); }
   });
 }
 

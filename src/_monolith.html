@@ -1688,15 +1688,21 @@ body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:214748
 
 /* ===== EMERALD II phase 2 ===== */
 
-.redx{position:relative;display:inline-block;max-width:100%;vertical-align:bottom;color:transparent;border-radius:2px;transition:color .5s .25s;cursor:pointer;touch-action:pan-y}
-.redx::after{content:"SEALED · TAP TO REVEAL ▸";position:absolute;inset:-1px -3px;display:flex;align-items:center;justify-content:center;overflow:hidden;white-space:nowrap;font-family:'JetBrains Mono',monospace;font-size:7.5px;font-weight:700;letter-spacing:.16em;background:#7C4A8A;color:#F2E9F6;border:1px solid rgba(20,21,25,.35);border-bottom-color:rgba(20,21,25,.5);border-radius:3px;box-shadow:0 2px 6px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.5);transform:translateX(var(--dx,0px));transform-origin:left center;transition:transform .55s cubic-bezier(.7,0,.2,1),opacity .4s;background-image:linear-gradient(110deg,transparent 32%,rgba(255,255,255,.55) 50%,transparent 68%);background-size:230% 100%;animation:rxsheen 3.4s linear infinite}
+/* ONE STICKER PER LINE, like the scroll bars in R4. This was an inline-BLOCK with a single
+   ::after over its whole box, so a sentence that wraps put the sticker across the rectangle
+   around every line -- hanging past the end of a short last line (measured in MEDCOIN: the box
+   ran to 349 on a line whose words stop far earlier). Inline, its line boxes ARE the words, and
+   redaction() in frame.js lays one .rxk over each of them. */
+.redx{position:relative;display:inline;color:transparent;border-radius:2px;transition:color .5s .25s;cursor:pointer;touch-action:pan-y}
+.rxkhost{position:relative}
+.rxk{position:absolute;display:flex;align-items:center;justify-content:center;overflow:hidden;white-space:nowrap;font-family:'JetBrains Mono',monospace;font-size:7.5px;font-weight:700;letter-spacing:.16em;background:#7C4A8A;color:#F2E9F6;border:1px solid rgba(20,21,25,.35);border-bottom-color:rgba(20,21,25,.5);border-radius:3px;box-shadow:0 2px 6px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.5);transform:translateX(var(--dx,0px));transform-origin:left center;transition:transform .55s cubic-bezier(.7,0,.2,1),opacity .4s;background-image:linear-gradient(110deg,transparent 32%,rgba(255,255,255,.55) 50%,transparent 68%);background-size:230% 100%;animation:rxsheen 3.4s linear infinite;pointer-events:none;z-index:2}
 
 .redx.open{color:inherit;animation:rxflash 1.4s ease-out .35s}
 @keyframes rxsheen{0%{background-position:135% 0}100%{background-position:-95% 0}}
 @keyframes rxflash{0%{background:rgba(47,179,128,.32)}100%{background:rgba(47,179,128,0)}}
-.redx.open::after{transform:translateX(calc(100% + 14px));opacity:0;pointer-events:none}
+.rxk.open{transform:translateX(calc(100% + 14px));opacity:0}
 
-@media (prefers-reduced-motion:reduce){.redx{color:inherit}.redx::after{transform:scaleX(0)}
+@media (prefers-reduced-motion:reduce){.redx{color:inherit}.rxk{transform:scaleX(0)}
   
   /* the impression is shown, so the prompt that asked for it must go - otherwise
      "REVIEWED" prints straight on top of "PRESS & HOLD TO STAMP" */
