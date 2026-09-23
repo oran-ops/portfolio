@@ -1242,6 +1242,10 @@ padding:6px 13px;font-family:'JetBrains Mono',monospace;font-weight:700;font-siz
           <h2 class="bigt">THE CASE<br>FILES</h2>
           <div class="fmeta">SEVEN FILES &middot; ONE MACHINE &middot; 2018&ndash;2026</div>
           <div class="hhint"><span class="hk">KEEP SCROLLING</span><span class="har">&#8595;</span><span class="hs">THE ROOM IS THROUGH HERE</span></div>
+          <!-- THE INSTRUCTION LIVES IN THE PAGE'S THIRD on the stage (R3). Inside the machine's
+               picture it sat over the machine at every angle; here it has its own air, and it
+               says what the finger does -- see .mc-fine/.mc-touch in machine.css. -->
+          <p class="stagecue" aria-hidden="true"><span class="mc-fine">Click on the Screen</span><span class="mc-touch">Tap the Screen</span></p>
         </div>
 <div class="hcard hroom">
           <div id="mach-wrap">
@@ -2842,6 +2846,53 @@ body.static .rxs::after{transform:scaleX(0)}
      keeps the softening and gives the desk back. */
   linear-gradient(180deg,transparent 0,rgba(0,0,0,.34) 3%,#000 10%,#000 95%,rgba(0,0,0,.34) 99%,transparent 100%);
           mask-composite:intersect}
+/* ===================== THE STAGE (R3) =====================
+   Page 3 on a phone is one screen with two parts: the page's third and the machine's zone.
+   Written with #files/#htrack so it wins wherever it sits in the cascade. THE STAGE IS FOR
+   PHONES (Oran, 2026-09-23): a tablet keeps the page-3 layout. Width alone cannot tell them
+   apart -- a Pro Max on its side is 932 wide and an iPad Mini is 768 -- so the test is the SHORT
+   side of the screen: 540px covers every phone in either orientation and no tablet.
+   The ZONE is dvh -- two thirds of what the reader sees in either toolbar state -- and the
+   CANVAS inside it keeps a fixed svh box, so the machine never re-fits while the toolbar
+   slides. Portrait pins the canvas to the bottom of the zone; landscape fills it. */
+@media (max-width:540px),(max-height:540px) and (orientation:landscape){
+  #files{padding-left:0;padding-right:0}
+  #files .secnum{display:none}
+  #htrack{width:100%;padding:0;gap:0;flex-wrap:nowrap}
+  #files .hintro{box-sizing:border-box;padding:0 18px;display:flex;flex-direction:column;
+    justify-content:center}
+  /* "KEEP SCROLLING - THE ROOM IS THROUGH HERE" is not true on one screen: the room is here */
+  #files .hintro .hhint{display:none}
+  #files .hintro .fmeta{margin-top:10px}
+  /* the instruction moves out of the machine's picture and into the page's third */
+  #files .machcue{display:none}
+  #files .stagecue{display:block}
+  #files .hcard.hroom{margin:0;position:relative;display:flex;
+    -webkit-mask-image:none;mask-image:none}
+  /* THE ZONE IS DRAWN, in the machine's own idiom: the four corners of a selection rectangle.
+     One bordered box, masked by two bands that only overlap at the corners -- so the frame is
+     painted there and nowhere else, at any zone size, with no extra elements. */
+  #files .hcard.hroom::before{content:"";position:absolute;inset:0;pointer-events:none;z-index:2;
+    border:1px solid rgba(233,231,223,.38);
+    -webkit-mask-image:linear-gradient(90deg,#000 0 18px,transparent 18px calc(100% - 18px),#000 calc(100% - 18px) 100%),
+                       linear-gradient(180deg,#000 0 18px,transparent 18px calc(100% - 18px),#000 calc(100% - 18px) 100%);
+    mask-image:linear-gradient(90deg,#000 0 18px,transparent 18px calc(100% - 18px),#000 calc(100% - 18px) 100%),
+               linear-gradient(180deg,#000 0 18px,transparent 18px calc(100% - 18px),#000 calc(100% - 18px) 100%);
+    -webkit-mask-composite:source-in;mask-composite:intersect}
+}
+@media (max-width:540px) and (orientation:portrait){
+  #files .hintro{height:33.333vh;height:33.333dvh}
+  #files .hcard.hroom{width:100%;height:66.667vh;height:66.667dvh;align-items:flex-end}
+  #files .hcard.hroom>*{width:100%;height:66.667vh;height:calc(200svh / 3)}
+}
+@media (max-height:540px) and (orientation:landscape){
+  #htrack{flex-direction:row;align-items:stretch}
+  #files .hintro{flex:0 0 33.333%;width:auto;height:100vh;height:100dvh;padding:0 16px}
+  #files .hintro .bigt{font-size:clamp(24px,4.4vw,40px)}
+  #files .hcard.hroom{flex:0 0 66.667%;width:auto;height:100vh;height:100dvh;align-items:stretch}
+  #files .hcard.hroom>*{width:100%;height:100vh;height:100svh}
+}
+/* the old card, kept for anything between 861 and 960 in a shape the stage does not cover */
 @media (max-width:860px){
   .hcard.hroom{width:100%;height:clamp(360px,58svh,470px);margin:14px 0}
 }
@@ -3566,7 +3617,16 @@ html.mw-on{--mw-gap:calc(var(--mw-menu) + 16px)}
    is 100svh anyway; below 860 the room sets the height and the wrap follows it. */
 #mach-wrap{position:relative;width:100%;height:100%;min-height:52svh;
   background:#191A1F;overflow:hidden}
-#mach-gl{display:block;width:100%;height:100%;cursor:grab;touch-action:none}
+/* THE FINGER. pan-y until the reader arrives, so a swipe on the way down still scrolls the
+   page; html.mach-armed (machine.js) takes both axes the moment the zone is fully on screen.
+   This value lives HERE and not in the page's own style block: that block is emitted 719 lines
+   earlier in the build, so at equal specificity it loses the source-order tie. */
+#mach-gl{display:block;width:100%;height:100%;cursor:grab;touch-action:pan-y;
+  -webkit-tap-highlight-color:transparent;-webkit-touch-callout:none;
+  -webkit-user-select:none;user-select:none}
+html.mach-armed .hcard.hroom,html.mach-armed #mach-gl{touch-action:none}
+/* and no rubber band under the zone once the reader has arrived: the scroll stops here */
+html.mach-armed{overscroll-behavior-y:none}
 #mach-gl:active{cursor:grabbing}
 /* "CLICK ON THE SCREEN" — and why no top: value on its own can work.
    Oran: "it is not in a good position. If I move the machine and play with it there are
@@ -3617,11 +3677,21 @@ html.mw-on{--mw-gap:calc(var(--mw-menu) + 16px)}
    restores it, because then it is true again. */
 html.mw-fly .machcue,html.mw-on .machcue{opacity:0}
 /* a phone has no click: the instruction says what the finger does */
-.machcue .mc-touch{display:none}
+.machcue .mc-touch,.stagecue .mc-touch{display:none}
 @media (hover:none) and (pointer:coarse){
-  .machcue .mc-fine{display:none}
-  .machcue .mc-touch{display:inline}
+  .machcue .mc-fine,.stagecue .mc-fine{display:none}
+  .machcue .mc-touch,.stagecue .mc-touch{display:inline}
 }
+/* THE STAGE'S CUE, in the page's third above the zone (see #files .stagecue in the page).
+   display:none by default so it exists nowhere but the stage. */
+.stagecue{display:none;margin:22px 0 0;text-align:center;text-indent:.26em;
+  font-family:'JetBrains Mono',ui-monospace,monospace;font-size:11px;font-weight:700;
+  letter-spacing:.26em;text-transform:uppercase;color:#E7ECE9;
+  transition:opacity .26s ease-out}
+.stagecue::after{content:"";display:block;width:24px;height:2px;margin:8px auto 0;
+  background:var(--emb);opacity:.85;text-indent:0}
+html.mw-fly .stagecue,html.mw-on .stagecue{opacity:0}
+@media (prefers-reduced-motion:reduce){.stagecue{transition:none}}
 @media (prefers-reduced-motion:reduce){.machcue{transition:none}}
 /* the short room on a phone is 360-470px tall, so the same 11% is only ~50px down and the
    machine sits higher in a narrower frame. 7% keeps the same clear air in a third of the
@@ -8236,9 +8306,21 @@ function decodeMach(b64, xform){
      It is a MULTIPLIER, not a write to dist, so the reader's own wheel zoom survives a
      resize and the router's keyframes stay in one set of units. */
   var FIT=1;
+  /* THE STAGE FRAMES THE MACHINE AS THE SUBJECT, not as a picture on a page. In the zone the
+     machine is what the two thirds are FOR, so the camera comes in until the case fills about
+     85% of the zone's height (Oran's choice, 2026-09-23). STAGE_FILL is a multiplier on the
+     fit distance -- smaller is closer -- and it is the only thing the stage changes about the
+     camera: the aim stays on the case, which is what keeps the machine in the same place at
+     every angle. */
+  /* the same test the stylesheet uses for the stage: the SHORT side of the screen, which is
+     what separates a phone from a tablet in either orientation (a Pro Max on its side is 932
+     wide, an iPad Mini 768). Kept in step with the @media blocks in the page. */
+  var STAGE=window.matchMedia('(max-width:540px),(max-height:540px) and (orientation:landscape)'),
+      STAGE_FILL=0.70;
   function fitFor(A){
     var d = 7.2 + 2.746 * (1 / Math.max(0.35, A) - 0.641);
-    return Math.max(6.6, Math.min(10.2, d)) / 7.2;
+    var f = Math.max(6.6, Math.min(10.2, d)) / 7.2;
+    return STAGE.matches ? f * STAGE_FILL : f;
   }
 
   function size(){
@@ -8370,15 +8452,52 @@ function decodeMach(b64, xform){
       size(); frame();
     }).observe(cv);
   }
-  /* AND THE FINGER IS THE PAGE'S TOO, VERTICALLY. touchAction 'none' told the browser this
-     canvas handles every touch gesture itself -- which on a phone means a finger laid on the
-     machine scrolls nothing at all, and on a phone the cards are stacked so the machine is a
-     full-width block sitting in the middle of the reader's way. Same trap as the wheel handler
-     above, one input device over. 'pan-y' gives the vertical axis back to the page, so a swipe
-     scrolls past the machine, and keeps the horizontal axis here, which is the axis the drag
-     turns it on. */
-  cv.style.touchAction='pan-y';
-  cv.addEventListener('pointerdown',function(e){
+  /* AND THE FINGER IS THE PAGE'S UNTIL THE READER ARRIVES.
+     touch-action lives in machine.css now (pan-y at rest, none under html.mach-armed): the
+     page's own style block is emitted first in the build, so a value written here as an inline
+     style could not be beaten by a stylesheet rule, and a value written in the page's block
+     lost the source-order tie to machine.css. One place, one value.
+
+     ARMING is what makes the zone the machine's. The page ends at the room, so "the room is
+     fully on screen" is exactly "the reader has arrived": until then a swipe over the machine
+     scrolls the page, as it must, and from then on both axes turn the machine and the page
+     does not move under the finger. The scrollY pre-test keeps a rect read off every momentum
+     tick. */
+  var ROOM=cv.closest? cv.closest('.hcard.hroom') : null, armed=false;
+  function arm(){
+    var on=false;
+    if(STAGE.matches && ROOM &&
+       window.scrollY > document.documentElement.scrollHeight - window.innerHeight*2){
+      var de=document.documentElement;
+      var atEnd = window.scrollY >= de.scrollHeight - window.innerHeight - 2;
+      var r=ROOM.getBoundingClientRect();
+      /* arrived = the zone is wholly on screen, OR the reader is at the end of the document and
+         the zone fills the lower part of it. The second clause is for iOS: the toolbar slides as
+         the reader comes down, the viewport grows by ~86px, and for a moment the zone -- which is
+         sized in dvh -- is taller than the space left under the scroll position. The room is the
+         last thing on the page, so the end of the document IS the machine. */
+      on = r.height>0 && ((r.top>=-2 && r.bottom<=window.innerHeight+2) ||
+                          (atEnd && r.top < window.innerHeight*0.6));
+    }
+    if(on!==armed){ armed=on; document.documentElement.classList.toggle('mach-armed',on); }
+  }
+  window.__machArm=arm;
+  window.__machArmed=function(){ return armed; };
+  addEventListener('scroll',arm,{passive:true});
+  addEventListener('scrollend',arm,{passive:true});
+  addEventListener('resize',arm,{passive:true});
+  addEventListener('orientationchange',arm,{passive:true});
+  if(STAGE.addEventListener)STAGE.addEventListener('change',arm);
+  addEventListener('load',function(){setTimeout(arm,60)});
+  arm();
+
+  /* THE WHOLE ZONE TURNS IT, not only the canvas: in the taller toolbar state the zone is
+     deeper than the canvas's fixed box, and a finger landing in that strip meant nothing. */
+  var GRIP=ROOM||cv;
+  GRIP.addEventListener('pointerdown',function(e){
+    if(e.isPrimary===false)return;
+    /* the approach belongs to the page: a touch before the reader has arrived scrolls */
+    if(e.pointerType==='touch' && STAGE.matches && !armed)return;
     /* ONE GESTURE, ONE MEANING -- and this is the wheel bug again, wearing a different coat.
        #hpin carries a drag-inertia handler that pans the whole horizontal track: pointerdown
        anywhere inside it sets dragging=true, and a window-level pointermove then adds
@@ -8400,11 +8519,15 @@ function decodeMach(b64, xform){
        -- a synthetic event, or a real one whose pointer was released between dispatch and
        handler -- and an uncaught throw here aborts the rest of the handler. drag is already
        true by this line, so the turn survives either way; the try is so the console does. */
-    try{ cv.setPointerCapture(e.pointerId); }catch(err){}
+    try{ GRIP.setPointerCapture(e.pointerId); }catch(err){}
   });
-  cv.addEventListener('pointermove',function(e){
-    if(!drag)return;
-    var dx=(e.clientX-lx)*0.0062, dy=(e.clientY-ly)*0.0052;
+  GRIP.addEventListener('pointermove',function(e){
+    if(!drag||e.isPrimary===false)return;
+    /* a finger is a coarser instrument than a mouse and the zone is smaller than a desktop
+       frame: 0.0085 rad/px both ways turns the machine 95 degrees of yaw for a 150px drag,
+       which is the "move it with your finger" of the brief. The mouse keeps its own numbers. */
+    var touch=(e.pointerType==='touch');
+    var dx=(e.clientX-lx)*(touch?0.0085:0.0062), dy=(e.clientY-ly)*(touch?0.0085:0.0052);
     /* IT STOPS WHERE IT IS PUT. "the machine goes wild" -- it did: a release handed the
        glide 55% of the pointer's last velocity and decayed it at 0.92 a frame, which is a
        ninety-frame coast. A flick spun it most of a turn on its own and then hit the limit
@@ -8416,8 +8539,8 @@ function decodeMach(b64, xform){
     frame();
   });
   function release(){ if(drag){ drag=false; kick() } }
-  cv.addEventListener('pointerup',release);
-  cv.addEventListener('pointercancel',release);
+  GRIP.addEventListener('pointerup',release);
+  GRIP.addEventListener('pointercancel',release);
   /* THE WHEEL BELONGS TO THE PAGE. ALWAYS.
      A wheel handler stood here that did preventDefault, stopPropagation, and dollied the
      camera 6% a notch. preventDefault stops the browser scrolling; stopPropagation stops the
@@ -11284,6 +11407,9 @@ if (window.console && document.body) {
                  document.getElementById("mw").contains(document.activeElement);
     html.classList.remove("mw-on");
     returnPage();
+    /* the zone is the machine's again the moment the reader is back on the page: nothing
+       scrolls on the way out, so no scroll event would re-arm it */
+    if (typeof window.__machArm === "function") { window.__machArm(); }
     wheelToPage(true);
     if (inside) {
       setTimeout(function () {
@@ -11351,17 +11477,27 @@ if (window.console && document.body) {
   (function () {
     var cv = document.getElementById("mach-gl");
     if (!cv) { return; }
+    /* THE LISTENERS SIT ON THE ZONE, NOT ON THE CANVAS. machine.js takes pointer capture on the
+       room while the reader turns the machine, and capture RETARGETS pointerup to the capturing
+       element -- so a listener on the canvas stopped hearing the end of its own gesture and the
+       door never opened. Measured: tapping the screen did nothing. The door is still the canvas:
+       the tap only counts if it started inside it. */
+    var grip = cv.closest ? (cv.closest(".hcard.hroom") || cv) : cv;
     var x0 = 0, y0 = 0, down = false;
-    cv.addEventListener("pointerdown", function (e) {
+    grip.addEventListener("pointerdown", function (e) {
+      var r = cv.getBoundingClientRect();
+      if (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom) { return; }
       down = true; x0 = e.clientX; y0 = e.clientY;
     }, { passive: true });
-    cv.addEventListener("pointerup", function (e) {
+    grip.addEventListener("pointerup", function (e) {
       if (!down) { return; }
       down = false;
       var moved = Math.abs(e.clientX - x0) + Math.abs(e.clientY - y0);
-      if (moved < 6) { window.__enterMachine(); }
+      /* a finger is coarser than a mouse, and on the stage it is now turning the machine on
+         both axes -- 6px called a deliberate turn a tap often enough to matter */
+      if (moved < (e.pointerType === "touch" ? 10 : 6)) { window.__enterMachine(); }
     }, { passive: true });
-    cv.addEventListener("pointercancel", function () { down = false; }, { passive: true });
+    grip.addEventListener("pointercancel", function () { down = false; }, { passive: true });
     /* AND THE SAME DOOR, FOR SOMEBODY WHO IS NOT HOLDING A MOUSE. The canvas carries
        role="button" and a name (see machine/machine.html); a thing that announces itself as a
        button has to answer Enter and Space, or it is a lie told to a screen reader. Space is

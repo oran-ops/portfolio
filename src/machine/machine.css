@@ -10,7 +10,16 @@
    is 100svh anyway; below 860 the room sets the height and the wrap follows it. */
 #mach-wrap{position:relative;width:100%;height:100%;min-height:52svh;
   background:#191A1F;overflow:hidden}
-#mach-gl{display:block;width:100%;height:100%;cursor:grab;touch-action:none}
+/* THE FINGER. pan-y until the reader arrives, so a swipe on the way down still scrolls the
+   page; html.mach-armed (machine.js) takes both axes the moment the zone is fully on screen.
+   This value lives HERE and not in the page's own style block: that block is emitted 719 lines
+   earlier in the build, so at equal specificity it loses the source-order tie. */
+#mach-gl{display:block;width:100%;height:100%;cursor:grab;touch-action:pan-y;
+  -webkit-tap-highlight-color:transparent;-webkit-touch-callout:none;
+  -webkit-user-select:none;user-select:none}
+html.mach-armed .hcard.hroom,html.mach-armed #mach-gl{touch-action:none}
+/* and no rubber band under the zone once the reader has arrived: the scroll stops here */
+html.mach-armed{overscroll-behavior-y:none}
 #mach-gl:active{cursor:grabbing}
 /* "CLICK ON THE SCREEN" — and why no top: value on its own can work.
    Oran: "it is not in a good position. If I move the machine and play with it there are
@@ -61,11 +70,21 @@
    restores it, because then it is true again. */
 html.mw-fly .machcue,html.mw-on .machcue{opacity:0}
 /* a phone has no click: the instruction says what the finger does */
-.machcue .mc-touch{display:none}
+.machcue .mc-touch,.stagecue .mc-touch{display:none}
 @media (hover:none) and (pointer:coarse){
-  .machcue .mc-fine{display:none}
-  .machcue .mc-touch{display:inline}
+  .machcue .mc-fine,.stagecue .mc-fine{display:none}
+  .machcue .mc-touch,.stagecue .mc-touch{display:inline}
 }
+/* THE STAGE'S CUE, in the page's third above the zone (see #files .stagecue in the page).
+   display:none by default so it exists nowhere but the stage. */
+.stagecue{display:none;margin:22px 0 0;text-align:center;text-indent:.26em;
+  font-family:'JetBrains Mono',ui-monospace,monospace;font-size:11px;font-weight:700;
+  letter-spacing:.26em;text-transform:uppercase;color:#E7ECE9;
+  transition:opacity .26s ease-out}
+.stagecue::after{content:"";display:block;width:24px;height:2px;margin:8px auto 0;
+  background:var(--emb);opacity:.85;text-indent:0}
+html.mw-fly .stagecue,html.mw-on .stagecue{opacity:0}
+@media (prefers-reduced-motion:reduce){.stagecue{transition:none}}
 @media (prefers-reduced-motion:reduce){.machcue{transition:none}}
 /* the short room on a phone is 360-470px tall, so the same 11% is only ~50px down and the
    machine sits higher in a narrower frame. 7% keeps the same clear air in a third of the

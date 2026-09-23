@@ -302,6 +302,9 @@
                  document.getElementById("mw").contains(document.activeElement);
     html.classList.remove("mw-on");
     returnPage();
+    /* the zone is the machine's again the moment the reader is back on the page: nothing
+       scrolls on the way out, so no scroll event would re-arm it */
+    if (typeof window.__machArm === "function") { window.__machArm(); }
     wheelToPage(true);
     if (inside) {
       setTimeout(function () {
@@ -369,17 +372,27 @@
   (function () {
     var cv = document.getElementById("mach-gl");
     if (!cv) { return; }
+    /* THE LISTENERS SIT ON THE ZONE, NOT ON THE CANVAS. machine.js takes pointer capture on the
+       room while the reader turns the machine, and capture RETARGETS pointerup to the capturing
+       element -- so a listener on the canvas stopped hearing the end of its own gesture and the
+       door never opened. Measured: tapping the screen did nothing. The door is still the canvas:
+       the tap only counts if it started inside it. */
+    var grip = cv.closest ? (cv.closest(".hcard.hroom") || cv) : cv;
     var x0 = 0, y0 = 0, down = false;
-    cv.addEventListener("pointerdown", function (e) {
+    grip.addEventListener("pointerdown", function (e) {
+      var r = cv.getBoundingClientRect();
+      if (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom) { return; }
       down = true; x0 = e.clientX; y0 = e.clientY;
     }, { passive: true });
-    cv.addEventListener("pointerup", function (e) {
+    grip.addEventListener("pointerup", function (e) {
       if (!down) { return; }
       down = false;
       var moved = Math.abs(e.clientX - x0) + Math.abs(e.clientY - y0);
-      if (moved < 6) { window.__enterMachine(); }
+      /* a finger is coarser than a mouse, and on the stage it is now turning the machine on
+         both axes -- 6px called a deliberate turn a tap often enough to matter */
+      if (moved < (e.pointerType === "touch" ? 10 : 6)) { window.__enterMachine(); }
     }, { passive: true });
-    cv.addEventListener("pointercancel", function () { down = false; }, { passive: true });
+    grip.addEventListener("pointercancel", function () { down = false; }, { passive: true });
     /* AND THE SAME DOOR, FOR SOMEBODY WHO IS NOT HOLDING A MOUSE. The canvas carries
        role="button" and a name (see machine/machine.html); a thing that announces itself as a
        button has to answer Enter and Space, or it is a lie told to a screen reader. Space is

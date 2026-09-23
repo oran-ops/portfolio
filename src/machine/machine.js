@@ -1311,9 +1311,21 @@ function decodeMach(b64, xform){
      It is a MULTIPLIER, not a write to dist, so the reader's own wheel zoom survives a
      resize and the router's keyframes stay in one set of units. */
   var FIT=1;
+  /* THE STAGE FRAMES THE MACHINE AS THE SUBJECT, not as a picture on a page. In the zone the
+     machine is what the two thirds are FOR, so the camera comes in until the case fills about
+     85% of the zone's height (Oran's choice, 2026-09-23). STAGE_FILL is a multiplier on the
+     fit distance -- smaller is closer -- and it is the only thing the stage changes about the
+     camera: the aim stays on the case, which is what keeps the machine in the same place at
+     every angle. */
+  /* the same test the stylesheet uses for the stage: the SHORT side of the screen, which is
+     what separates a phone from a tablet in either orientation (a Pro Max on its side is 932
+     wide, an iPad Mini 768). Kept in step with the @media blocks in the page. */
+  var STAGE=window.matchMedia('(max-width:540px),(max-height:540px) and (orientation:landscape)'),
+      STAGE_FILL=0.70;
   function fitFor(A){
     var d = 7.2 + 2.746 * (1 / Math.max(0.35, A) - 0.641);
-    return Math.max(6.6, Math.min(10.2, d)) / 7.2;
+    var f = Math.max(6.6, Math.min(10.2, d)) / 7.2;
+    return STAGE.matches ? f * STAGE_FILL : f;
   }
 
   function size(){
@@ -1445,15 +1457,52 @@ function decodeMach(b64, xform){
       size(); frame();
     }).observe(cv);
   }
-  /* AND THE FINGER IS THE PAGE'S TOO, VERTICALLY. touchAction 'none' told the browser this
-     canvas handles every touch gesture itself -- which on a phone means a finger laid on the
-     machine scrolls nothing at all, and on a phone the cards are stacked so the machine is a
-     full-width block sitting in the middle of the reader's way. Same trap as the wheel handler
-     above, one input device over. 'pan-y' gives the vertical axis back to the page, so a swipe
-     scrolls past the machine, and keeps the horizontal axis here, which is the axis the drag
-     turns it on. */
-  cv.style.touchAction='pan-y';
-  cv.addEventListener('pointerdown',function(e){
+  /* AND THE FINGER IS THE PAGE'S UNTIL THE READER ARRIVES.
+     touch-action lives in machine.css now (pan-y at rest, none under html.mach-armed): the
+     page's own style block is emitted first in the build, so a value written here as an inline
+     style could not be beaten by a stylesheet rule, and a value written in the page's block
+     lost the source-order tie to machine.css. One place, one value.
+
+     ARMING is what makes the zone the machine's. The page ends at the room, so "the room is
+     fully on screen" is exactly "the reader has arrived": until then a swipe over the machine
+     scrolls the page, as it must, and from then on both axes turn the machine and the page
+     does not move under the finger. The scrollY pre-test keeps a rect read off every momentum
+     tick. */
+  var ROOM=cv.closest? cv.closest('.hcard.hroom') : null, armed=false;
+  function arm(){
+    var on=false;
+    if(STAGE.matches && ROOM &&
+       window.scrollY > document.documentElement.scrollHeight - window.innerHeight*2){
+      var de=document.documentElement;
+      var atEnd = window.scrollY >= de.scrollHeight - window.innerHeight - 2;
+      var r=ROOM.getBoundingClientRect();
+      /* arrived = the zone is wholly on screen, OR the reader is at the end of the document and
+         the zone fills the lower part of it. The second clause is for iOS: the toolbar slides as
+         the reader comes down, the viewport grows by ~86px, and for a moment the zone -- which is
+         sized in dvh -- is taller than the space left under the scroll position. The room is the
+         last thing on the page, so the end of the document IS the machine. */
+      on = r.height>0 && ((r.top>=-2 && r.bottom<=window.innerHeight+2) ||
+                          (atEnd && r.top < window.innerHeight*0.6));
+    }
+    if(on!==armed){ armed=on; document.documentElement.classList.toggle('mach-armed',on); }
+  }
+  window.__machArm=arm;
+  window.__machArmed=function(){ return armed; };
+  addEventListener('scroll',arm,{passive:true});
+  addEventListener('scrollend',arm,{passive:true});
+  addEventListener('resize',arm,{passive:true});
+  addEventListener('orientationchange',arm,{passive:true});
+  if(STAGE.addEventListener)STAGE.addEventListener('change',arm);
+  addEventListener('load',function(){setTimeout(arm,60)});
+  arm();
+
+  /* THE WHOLE ZONE TURNS IT, not only the canvas: in the taller toolbar state the zone is
+     deeper than the canvas's fixed box, and a finger landing in that strip meant nothing. */
+  var GRIP=ROOM||cv;
+  GRIP.addEventListener('pointerdown',function(e){
+    if(e.isPrimary===false)return;
+    /* the approach belongs to the page: a touch before the reader has arrived scrolls */
+    if(e.pointerType==='touch' && STAGE.matches && !armed)return;
     /* ONE GESTURE, ONE MEANING -- and this is the wheel bug again, wearing a different coat.
        #hpin carries a drag-inertia handler that pans the whole horizontal track: pointerdown
        anywhere inside it sets dragging=true, and a window-level pointermove then adds
@@ -1475,11 +1524,15 @@ function decodeMach(b64, xform){
        -- a synthetic event, or a real one whose pointer was released between dispatch and
        handler -- and an uncaught throw here aborts the rest of the handler. drag is already
        true by this line, so the turn survives either way; the try is so the console does. */
-    try{ cv.setPointerCapture(e.pointerId); }catch(err){}
+    try{ GRIP.setPointerCapture(e.pointerId); }catch(err){}
   });
-  cv.addEventListener('pointermove',function(e){
-    if(!drag)return;
-    var dx=(e.clientX-lx)*0.0062, dy=(e.clientY-ly)*0.0052;
+  GRIP.addEventListener('pointermove',function(e){
+    if(!drag||e.isPrimary===false)return;
+    /* a finger is a coarser instrument than a mouse and the zone is smaller than a desktop
+       frame: 0.0085 rad/px both ways turns the machine 95 degrees of yaw for a 150px drag,
+       which is the "move it with your finger" of the brief. The mouse keeps its own numbers. */
+    var touch=(e.pointerType==='touch');
+    var dx=(e.clientX-lx)*(touch?0.0085:0.0062), dy=(e.clientY-ly)*(touch?0.0085:0.0052);
     /* IT STOPS WHERE IT IS PUT. "the machine goes wild" -- it did: a release handed the
        glide 55% of the pointer's last velocity and decayed it at 0.92 a frame, which is a
        ninety-frame coast. A flick spun it most of a turn on its own and then hit the limit
@@ -1491,8 +1544,8 @@ function decodeMach(b64, xform){
     frame();
   });
   function release(){ if(drag){ drag=false; kick() } }
-  cv.addEventListener('pointerup',release);
-  cv.addEventListener('pointercancel',release);
+  GRIP.addEventListener('pointerup',release);
+  GRIP.addEventListener('pointercancel',release);
   /* THE WHEEL BELONGS TO THE PAGE. ALWAYS.
      A wheel handler stood here that did preventDefault, stopPropagation, and dollied the
      camera 6% a notch. preventDefault stops the browser scrolling; stopPropagation stops the

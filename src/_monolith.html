@@ -1189,6 +1189,10 @@ display:flex;align-items:center;padding:0 13px;font-family:'JetBrains Mono',mono
           <h2 class="bigt">THE CASE<br>FILES</h2>
           <div class="fmeta">SEVEN FILES &middot; ONE MACHINE &middot; 2018&ndash;2026</div>
           <div class="hhint"><span class="hk">KEEP SCROLLING</span><span class="har">&#8595;</span><span class="hs">THE ROOM IS THROUGH HERE</span></div>
+          <!-- THE INSTRUCTION LIVES IN THE PAGE'S THIRD on the stage (R3). Inside the machine's
+               picture it sat over the machine at every angle; here it has its own air, and it
+               says what the finger does -- see .mc-fine/.mc-touch in machine.css. -->
+          <p class="stagecue" aria-hidden="true"><span class="mc-fine">Click on the Screen</span><span class="mc-touch">Tap the Screen</span></p>
         </div>
 <div class="hcard hroom">
           <!--MACHINE:html-->
@@ -2218,6 +2222,53 @@ body.static .rxs::after{transform:scaleX(0)}/*D:final:166*//*D:final:167*//*D:fi
      keeps the softening and gives the desk back. */
   linear-gradient(180deg,transparent 0,rgba(0,0,0,.34) 3%,#000 10%,#000 95%,rgba(0,0,0,.34) 99%,transparent 100%);
           mask-composite:intersect}
+/* ===================== THE STAGE (R3) =====================
+   Page 3 on a phone is one screen with two parts: the page's third and the machine's zone.
+   Written with #files/#htrack so it wins wherever it sits in the cascade. THE STAGE IS FOR
+   PHONES (Oran, 2026-09-23): a tablet keeps the page-3 layout. Width alone cannot tell them
+   apart -- a Pro Max on its side is 932 wide and an iPad Mini is 768 -- so the test is the SHORT
+   side of the screen: 540px covers every phone in either orientation and no tablet.
+   The ZONE is dvh -- two thirds of what the reader sees in either toolbar state -- and the
+   CANVAS inside it keeps a fixed svh box, so the machine never re-fits while the toolbar
+   slides. Portrait pins the canvas to the bottom of the zone; landscape fills it. */
+@media (max-width:540px),(max-height:540px) and (orientation:landscape){
+  #files{padding-left:0;padding-right:0}
+  #files .secnum{display:none}
+  #htrack{width:100%;padding:0;gap:0;flex-wrap:nowrap}
+  #files .hintro{box-sizing:border-box;padding:0 18px;display:flex;flex-direction:column;
+    justify-content:center}
+  /* "KEEP SCROLLING - THE ROOM IS THROUGH HERE" is not true on one screen: the room is here */
+  #files .hintro .hhint{display:none}
+  #files .hintro .fmeta{margin-top:10px}
+  /* the instruction moves out of the machine's picture and into the page's third */
+  #files .machcue{display:none}
+  #files .stagecue{display:block}
+  #files .hcard.hroom{margin:0;position:relative;display:flex;
+    -webkit-mask-image:none;mask-image:none}
+  /* THE ZONE IS DRAWN, in the machine's own idiom: the four corners of a selection rectangle.
+     One bordered box, masked by two bands that only overlap at the corners -- so the frame is
+     painted there and nowhere else, at any zone size, with no extra elements. */
+  #files .hcard.hroom::before{content:"";position:absolute;inset:0;pointer-events:none;z-index:2;
+    border:1px solid rgba(233,231,223,.38);
+    -webkit-mask-image:linear-gradient(90deg,#000 0 18px,transparent 18px calc(100% - 18px),#000 calc(100% - 18px) 100%),
+                       linear-gradient(180deg,#000 0 18px,transparent 18px calc(100% - 18px),#000 calc(100% - 18px) 100%);
+    mask-image:linear-gradient(90deg,#000 0 18px,transparent 18px calc(100% - 18px),#000 calc(100% - 18px) 100%),
+               linear-gradient(180deg,#000 0 18px,transparent 18px calc(100% - 18px),#000 calc(100% - 18px) 100%);
+    -webkit-mask-composite:source-in;mask-composite:intersect}
+}
+@media (max-width:540px) and (orientation:portrait){
+  #files .hintro{height:33.333vh;height:33.333dvh}
+  #files .hcard.hroom{width:100%;height:66.667vh;height:66.667dvh;align-items:flex-end}
+  #files .hcard.hroom>*{width:100%;height:66.667vh;height:calc(200svh / 3)}
+}
+@media (max-height:540px) and (orientation:landscape){
+  #htrack{flex-direction:row;align-items:stretch}
+  #files .hintro{flex:0 0 33.333%;width:auto;height:100vh;height:100dvh;padding:0 16px}
+  #files .hintro .bigt{font-size:clamp(24px,4.4vw,40px)}
+  #files .hcard.hroom{flex:0 0 66.667%;width:auto;height:100vh;height:100dvh;align-items:stretch}
+  #files .hcard.hroom>*{width:100%;height:100vh;height:100svh}
+}
+/* the old card, kept for anything between 861 and 960 in a shape the stage does not cover */
 @media (max-width:860px){
   .hcard.hroom{width:100%;height:clamp(360px,58svh,470px);margin:14px 0}
 }
