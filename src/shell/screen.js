@@ -152,6 +152,14 @@ function fits(opts, room) {
   return opts[opts.length - 1];
 }
 
+/* WHERE THE WINDOW IS inside a raster W x H: the same four numbers drawScreen() lays the
+   window out from. The camera flies at this rectangle, not at the whole screen, so the picture
+   the reader lands in is the one they were watching grow. */
+function folderWindowRect(W, H) {
+  var L = LAYOUT;
+  return [L.inset, MENU + L.gap, W - 1 - L.inset, H - 1 - L.inset];
+}
+
 /* HOW MANY COLUMNS a folder window of W x H logical px should use. Four on anything wide. On a
    narrow window, two -- unless the four rows two columns need would have to close up past a
    comfortable pitch, in which case three, provided no two labels in a row would touch. The white
@@ -395,6 +403,7 @@ if (typeof module !== "undefined" && module.exports)
 if (typeof window !== "undefined") {
   window.Buf = Buf; window.drawScreen = drawScreen; window.dither = dither;
   window.folderCols = folderCols; window.folderNeedH = folderNeedH;
+  window.folderWindowRect = folderWindowRect;
   window.ico = ico; window.txt = txt; window.tw = tw;
   window.titlebar = titlebar; window.menubar = menubar; window.vscroll = vscroll;
   window.pushbutton = pushbutton; window.BAR = BAR; window.MENU = MENU;

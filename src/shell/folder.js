@@ -299,6 +299,22 @@
 
   /* after a document is opened or shut the count has moved, so the folder is redrawn from
      storage rather than from anything this file was told. */
+  /* THE SAME FOLDER, AT ANY SIZE, WITHOUT TOUCHING THE SCREEN. The machine draws this onto
+     its own CRT while the camera flies in, so that the picture the reader watches grow IS the
+     one they land on. Same drawScreen, same live state, same column rule as the desk -- only
+     the raster it is drawn into is different. */
+  window.__folderRasterFor = function (w, h) {
+    if (typeof drawScreen !== "function" || typeof Buf !== "function") { return null; }
+    w = Math.max(150, w | 0); h = Math.max(150, h | 0);
+    var c = (typeof folderCols === "function") ? folderCols(w, h) : (w < 380 ? 2 : 4);
+    if (typeof folderNeedH === "function") { h = folderNeedH(h, c); }
+    var b = new Buf(w, h);
+    var st = { open: true, sel: state.sel, doc: null, opened: loadOpened().length };
+    drawScreen(b, w, h, c, st);
+    return { W: w, H: h, cols: c, buf: b,
+             win: (typeof folderWindowRect === "function") ? folderWindowRect(w, h) : null };
+  };
+
   window.__folderRedraw = function () {
     state.opened = loadOpened().length;
     draw();

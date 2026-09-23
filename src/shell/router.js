@@ -254,10 +254,37 @@
     window.__camLens(lens0[0], lens0[1]);
     return true;
   }
+  /* THE PICTURE THE READER IS FLYING INTO IS THE ONE THEY LAND ON.
+     The CRT's own raster is 512x342 with the desktop's four columns; the window that replaces it
+     is the phone's, portrait, two columns. The band draws THAT at the phone's own size inside a
+     3:2 field (machine.js crtBand), and this returns the camera pose at which it exactly covers
+     the viewport. Null means no band -- the flight then uses the framing that covers the screen,
+     as before. */
+  var bandPose = null;
+  function buildBand() {
+    bandPose = null;
+    if (typeof window.__folderRasterFor !== "function" ||
+        typeof window.__crtBand !== "function" || typeof window.__bandPose !== "function") { return null; }
+    var cv = document.getElementById("mach-gl");
+    if (!cv) { return null; }
+    var vw = cv.clientWidth, vh = cv.clientHeight;
+    if (vw < 8 || vh < 8) { return null; }
+    var g = window.__folderRasterFor(Math.floor(vw / 2), Math.floor(vh / 2));
+    if (!g) { return null; }
+    var band = window.__crtBand(g);
+    if (!band) { return null; }
+    bandPose = window.__bandPose(band, vw, vh);
+    return bandPose;
+  }
+
   function land() {
     var cv = document.getElementById("mach-gl");
     if (typeof window.__camLens === "function") { window.__camLens(0, 0); }
     if (typeof window.__camFitLock === "function") { window.__camFitLock(0); }
+    /* the tube goes back to being a tube: its own 512 raster, its own phosphor */
+    if (typeof window.__crtEnter === "function") { window.__crtEnter(0); }
+    if (typeof window.__crtPlain === "function") { window.__crtPlain(); }
+    bandPose = null;
     if (cv && flyHome && flyHome.parent) {
       flyHome.parent.insertBefore(cv, flyHome.next || null);
       if (typeof window.__camFov === "function") { window.__camFov(FOV0); }
@@ -360,6 +387,25 @@
       if (arrived) { return; }
       openOnScreen(440, function () {           /* 2. THE FOLDER OPENS, on the screen itself */
         if (arrived) { return; }
+        /* and it is the READER'S folder, at the reader's own size: see buildBand above */
+        var bp = flew ? buildBand() : null;
+        if (bp) {
+          /* the tint fades out over the last third of the zoom, so the glass arrives carrying
+             the picture's own pixels rather than phosphor */
+          (function () {
+            var t0 = performance.now(), ms = 620, from = 0.62;
+            (function step(t) {
+              if (arrived) { return; }
+              var k = Math.min(1, (t - t0) / ms);
+              if (typeof window.__crtEnter === "function") {
+                window.__crtEnter(k < from ? 0 : (k - from) / (1 - from));
+              }
+              if (k < 1) { requestAnimationFrame(step); }
+            })(t0);
+          })();
+          fly(FLAT, { yaw: bp.yaw, pitch: bp.pitch, dist: bp.dist, aim: bp.aim }, 620, arrive);
+          return;
+        }
         /* 3. and only then, the zoom -- all the way to the framing that COVERS the screen, so
               the last frame of the flight is the first frame of the folder. */
         fly(FLAT, pushKeyframe(), 620, arrive);
