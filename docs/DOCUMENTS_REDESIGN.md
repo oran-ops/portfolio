@@ -78,21 +78,42 @@ itself calls the hard case (§14.1), so it should be built first, before a line 
 6. **The focus ring is the machine's marquee** — a 2px dotted black-and-white outline, the one the
    Finder used for selection — on every control the redesign introduces.
 
-## WHAT ONLY ORAN CAN DECIDE
+## ORAN'S DECISIONS — 2026-09-24
 
-1. **Does the lamp stand at the head of the file or at its foot?** Both were built and both look
-   deliberate. It decides whether the lamp is the first thing a case file says or the last.
-2. **How far may the lamp reach?** As built it re-tints the whole page. The constraint says the
-   ground stays `#191A1F`. Whole room violet, or only the file on the desk?
-3. **Does XTIX keep its two columns?** One column gives the margin spine its full run; two columns
-   keep the absence panel and its answer facing each other, which is XTIX's own picture.
-4. **LEADERSHIP's ten tools:** commission ten new 16×16 icons, or give up the icons and let
-   `.tools` be a rack of named windows?
-5. **What closes LEADERSHIP, TECH and READ ME?** They are not case folders, so they have no lamp
-   and no developed zone, and nothing in the plan ends them.
-6. **Which chart legend is the truth** — the kit's five words (ABSENT / SPARSE / HALF / DENSE /
-   BUILT) or XTIX's bare numeral ranges? The words are clearer; four of them are not in the
-   document, and the rule is that new apparatus may only re-set words the document already owns.
+1. **The lamp stands at the HEAD of the file**, where it stood before. Settled.
+2. **Its violet reaches the FOLDER ONLY, never the whole room.** The ground stays `#191A1F` at all
+   times; `§9.3`'s licence to drop the bed to `#0A0B0D` applies inside the folder and nowhere else.
+3. **LEADERSHIP, TECH and READ ME need nothing to close them.** They are not case folders, they
+   have no lamp, and — Oran: *"they have the document itself when the reader enters them."* No new
+   closing device is to be invented for those three.
+4. **The numbering rule is his own text's rule.** Verified across all seven files: a NUMERAL marks
+   a point in the first part of a file, a LETTER marks a point in its evidence part. XTIX and OASIS
+   run 01–04 and then A · B · C; EVENTER and MEDCOIN are numerals only; TECH and LEADERSHIP are
+   letters only. Nothing is renumbered, and no marker is invented for a file that has none.
+
+   | file | first part | evidence part |
+   |---|---|---|
+   | XTIX | 01 02 03 04 | A B C |
+   | OASIS | 01 02 03 04 | A B C |
+   | EVENTER | 01 02 03 06 07 | — |
+   | MEDCOIN | 01 … 06 | — |
+   | TECH | — | A B C |
+   | LEADERSHIP | — | A B |
+   | READ ME | — | — |
+
+### Still open, and being measured now
+
+- **XTIX in one column or two.** Oran: *"one column is possible — it depends on the length it
+  creates. It has to be checked and decided."* Being measured: the height of the whole file in both
+  variants, in screens of the document window, at 1200 and at 390 (where two columns collapse to one
+  anyway), with both rendered side by side.
+- **LEADERSHIP's ten tools.** Oran: *"I need to see the new icons and/or the rack in order to
+  decide."* Both are being drawn: ten new 16×16 icons proved distinguishable at 1×, and the rack of
+  named windows, each rendered in emerald at 1200 and 390.
+- **The chart legend.** Oran prefers numerals, with the caveat that they must not compete with the
+  document's own numbering. XTIX's density ramp currently carries numeral ranges inside a file whose
+  zones are already 01–04; three candidates are being rendered, including one with no legend words
+  at all, since the chart's own axis already says `∅→10`.
 
 ## THE FILES
 
