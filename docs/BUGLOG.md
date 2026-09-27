@@ -2588,3 +2588,54 @@ wipe over each row of XTIX's `07 GAPS` list, which retracts as the block reveals
 it is not a cover the reader has to act on, and it is the same colour as the card under it, so it
 reads as the rows arriving rather than as something withheld. Named here so the decision is Oran's
 and not mine by omission.
+
+
+## R9 — the third cover, the one that did not look like one
+
+R8 removed the two purple systems and named a third that it had deliberately left alone:
+`.redct`, a near-black `#15161B` bar appended at runtime to each of the seven rows of XTIX's
+`07 GAPS` list, retracted with `scaleX(0)` when the block reveals. The argument for leaving it
+was that it is the same colour as the card under it, so it reads as the rows arriving rather
+than as something withheld. Oran: *"take that one out too."*
+
+**It was a cover, and the measurement says so plainly.** Brought on screen the way a reader
+meets it, the seven rows carried **20,247 pixels of `#15161B` and 0 pixels of text**. Half a
+second later the bars had retracted and the same band carried 5,705 pixels of text. The colour
+argument was about how it *reads*, not about what it *does*.
+
+Out: the span creator (`/* ---- declassify bars ---- */`), the rule that drew it, the rule that
+retracted it, its two timing rules in the motion block, the three kill-switch lines that had to
+undo it under `body.static`, `body.failsafe` and `prefers-reduced-motion`, and the
+`.reality .frow{position:relative}` that existed only to anchor it — confirmed as the only
+absolutely-positioned descendant of a row besides `.o::after`, which anchors to `.o`.
+
+`/*D:final:128*/` sat glued to the end of one of the deleted rules, exactly as two markers did
+in R8. The rule text was cut out from around it.
+
+| | before | after |
+|---|---|---|
+| `.redct` elements in the page | 7 | **0** |
+| `#15161B` pixels over the seven rows, as they come on screen | 20,247 | **0** |
+| text pixels over the seven rows, at that same moment | 0 | 1,420 (mid-stagger) |
+| text pixels once the block has revealed | 5,705 | **5,705** |
+
+The last row is the one that matters: the settled state is identical. What changed is the half
+second before it, where the rows now fade in on the block's own `.st` stagger — which was always
+running underneath the bars — instead of being unmasked.
+
+**And one thing the cut alone would have left behind.** The custom cursor carried
+`else if(t.closest('.reality .frow')) txt='DECLASSIFIED'` — a hover label announcing a state
+that no longer exists. It is chrome, not document text, and it went with the device it described.
+Found by a census lens, not by the build: no check in this repo can see a string that is merely
+now untrue.
+
+**Left alone, deliberately, and why.** `build/acts_build.py` still emits the whole apparatus, but
+it reads `site.html` and writes `site_standalone.html`, neither of which is in the tree — it is a
+July generator for an artefact that no longer exists and cannot be run. Copies of the bar also
+survive in `index.html` (the archived root, whose md5 `build.py` asserts), `src_site.html`,
+`docs/site_mobile_worktree.html` and three `lab/` pages. Those are archives of what was; editing
+them would only make them lie about their own date.
+
+The UV lamp was re-verified afterwards in all four case folders: OFF → ARMED, three developed
+zones each, 0 → 3 open, no page errors. Every document's text is unchanged; only
+`src/_monolith.html` was touched.

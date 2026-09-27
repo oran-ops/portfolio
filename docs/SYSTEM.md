@@ -728,6 +728,10 @@ sticker, and instructed the builder to keep `redactionBars()` intact. **All of t
 builder working from this plan must not reintroduce `.rxs`, `.rxb`, `.redx`, `.rxk` or `.rxkhost`
 in any dress.
 
+**And the third cover went with them, 2026-09-27.** `.redct` — the near-black bar over each row
+of XTIX's `07 GAPS` list — was removed the same day for the same reason. The rows arrive on the
+block's own stagger now. No cover of any colour remains over any word in the archive.
+
 **What this costs the lamp, and what it does not.** The lamp never depended on the covers: it
 toggles `.lampon` on its own `.uvmount` and opens the developed zones (§9.2), which are additions
 to the sheet rather than subtractions from it. Its one job that *was* shared — "the file has

@@ -598,10 +598,6 @@ border:2px solid var(--hink);border-radius:8px;padding:11px 18px;transition:tran
 
 .sec.case{position:relative}
 
-/* declassify field report */
-.reality .frow{position:relative}
-.reality .frow .redct{position:absolute;top:3px;bottom:3px;left:28px;right:52px;background:#15161B;transform-origin:right;z-index:2}
-.u.on .reality .frow .redct{transform:scaleX(0);transition:transform .6s var(--ease) calc(var(--i,0)*140ms + .45s)}
 .reality .frow:hover .st2{color:var(--emb)}
 .reality .frow{transition:transform .3s var(--ease)}
 .u.done .reality .frow:hover{transform:translateX(5px)}
@@ -632,20 +628,17 @@ body.static .hwrap,body.failsafe .hwrap{height:auto}
 body.static .hpin,body.failsafe .hpin{position:static;height:auto;overflow:visible}
 body.static .htrack,body.failsafe .htrack{flex-wrap:wrap;width:auto;padding:0 6vw;gap:70px 4vw;transform:none!important}
 
-body.static .redct{transform:scaleX(0)!important}
 body.static .frail,body.static .tabrow .tB{opacity:1!important;transform:none!important}
 body.static .rstampS{opacity:1!important;animation:none!important}
 body.static .breathe,body.static #boot .dots i{animation:none!important}
 html.preopen body.static #hero .hw{transform:none;opacity:1}
 @media (prefers-reduced-motion:reduce){
- .redct{transform:scaleX(0)!important}
  .frail,.tabrow .tB{opacity:1!important;transform:none!important}
  .rstampS{opacity:1!important;animation:none!important}
  .breathe,#boot .dots i{animation:none!important}
  html.preopen #hero .hw{transform:none;opacity:1}
  .hwrap{height:auto}.hpin{position:static;height:auto}.htrack{transform:none!important;flex-wrap:wrap;width:auto}
 }
-body.failsafe .redct{display:none}
 body.failsafe .frail,body.failsafe .tabrow .tB,body.failsafe .rstampS{opacity:1!important;transform:none!important;animation:none!important}
 
 /* ============== ARCHIVE ALIVE II ============== */
@@ -2096,7 +2089,7 @@ body.static .hfolder,body.static #hero .mfold{--sx:-320px}
   #philosophy .u.on .node svg *:not(.dsh){transition:stroke-dashoffset .5s var(--ease) calc(var(--i,0)*45ms + var(--pi,0)*36ms + .08s)}
   #philosophy .u.on .node svg .dsh{transition:opacity .4s var(--ease) calc(var(--i,0)*45ms + .3s)}
   .u.on .bignum{transition:opacity .4s var(--ease),transform .4s var(--ease)}
-  .u.on .reality .frow .redct{transition:transform .45s var(--ease) calc(var(--i,0)*70ms + .2s)}
+  
   #final .osmap .spine{transition:transform .6s var(--ease) .05s}
   /* M3-fast: units revealed during a fast flick (engine adds .fon before .on)
      drop their stagger so content is simply there when the eye lands */
@@ -2109,7 +2102,6 @@ body.static .hfolder,body.static #hero .mfold{--sx:-320px}
   .u.fon.on .tw .w>i,.fon.tw.on .w>i{transition-delay:calc(var(--wi,0)*12ms);transition-duration:.3s}
   #philosophy .u.fon.on .node svg *:not(.dsh){transition-delay:calc(var(--pi,0)*18ms);transition-duration:.38s}
   #philosophy .u.fon.on .node svg .dsh{transition-delay:.15s;transition-duration:.3s}
-  .u.fon.on .reality .frow .redct{transition-delay:calc(var(--i,0)*40ms + .1s)}
   .fon.folder.on .flip{transition-delay:0ms}
   .fon.folder.on .frail,.u.fon.on .frail{transition-delay:0ms;transition-duration:.3s}
 }
@@ -4453,11 +4445,6 @@ window.__actOpen=function(){
 };
 setTimeout(function(){document.documentElement.classList.remove('preopen')},9000);
 
-/* ---- declassify bars ---- */
-document.querySelectorAll('.reality .frow').forEach(function(r){
-  var b=document.createElement('span');b.className='redct';r.appendChild(b);
-});
-
 /* ---- breathing charts ---- */
 var BR=['#xtix .tech svg','#xtix .gaug','#oasis .cols2 svg','#eventer .cols2 svg','#medcoin .hairtop svg','#tech .archw svg'];
 var bi=0;
@@ -4487,7 +4474,6 @@ if(!frozen&&window.matchMedia('(pointer:fine)').matches){
     var txt='';
     if(t.closest&&t.closest('.hfolder'))txt='OPEN FILE';
     else if(t.closest&&t.closest('.hpin'))txt='DRAG / SCROLL';
-    else if(t.closest&&t.closest('.reality .frow'))txt='DECLASSIFIED';
     else if(t.closest&&t.closest('#hero .itab, #files a'))txt='OPEN';
     else if(t.closest&&t.closest('#final .crow'))txt='CONTACT';
     lbl.textContent=txt;
