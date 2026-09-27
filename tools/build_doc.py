@@ -355,23 +355,8 @@ engine = engine.replace(EXPORT_AT, EXPORT_AT + "window.__mwMeasure=measure;\n"
                         + "};\n")
 engine = "var SC=window.__mwScroller||document.scrollingElement||document.documentElement;\n" + engine
 
-# the swipe-to-reveal on "Zero commercial infrastructure.", which Oran's list KEEPS
-redx = lift("redaction handler", "document.querySelectorAll('.redx').forEach(function(r){")
-
-# The .rxs bars lift on SCROLL rather than on a tap, so pointed at the page they never lift
-# inside a window. Every document has at least one.
-rxs = iife_at("var els=[].slice.call(document.querySelectorAll('.rxs'));", "rxs scroll lift",
-              reroot=True)
-# Two substitutions, and only two. The block measures each bar as `rect.top + pageYOffset`, the
-# page-relative offset. Inside a scroll container the rect is still relative to the BROWSER
-# viewport, so that sum is out by wherever the container sits.
-for old, new in (("var y=pageYOffset;",
-                  "var y=root.scrollTop, rt=root.getBoundingClientRect().top;"),
-                 ("st[i].top=st[i].el.getBoundingClientRect().top+y;",
-                  "st[i].top=st[i].el.getBoundingClientRect().top-rt+y;")):
-    if old not in rxs:
-        raise SystemExit("rxs block changed shape -- re-check: %s" % old)
-    rxs = rxs.replace(old, new)
+# The two redaction engines -- the tap stickers and the scroll bars -- were removed from the
+# page on 2026-09-27, so there is nothing left here to lift.
 
 # ---------------------------------------------------------------- the LIVE LAYER
 # The documents do not end with their markup. Four IIFEs after the last </section> build a
@@ -469,8 +454,6 @@ def ascii_js(t):
 
 
 engine = ascii_js(engine)
-redx = ascii_js(redx)
-rxs = ascii_js(rxs)
 live = ascii_js(live)
 
 # ---------------------------------------------------------------- assemble
@@ -481,8 +464,6 @@ parts = {
     "/*SCREEN*/": read(os.path.join(HERE, "screen.js")).strip(),
     "/*DOCCSS*/": css,
     "/*ENGINE*/": engine,
-    "/*REDX*/": redx,
-    "/*RXS*/": rxs,
     "/*LIVE*/": live,
     "<!--DOCHTML-->": "\n".join(sections),
 }

@@ -34,8 +34,8 @@ REPO = os.path.dirname(HERE)
 # THE SOURCE IS THE BUILT LAB PAGE, NOT THE TEMPLATE.
 #
 # tools/doc_page.html carries four empty placeholders — /*ENGINE*/, /*REDX*/, /*RXS*/ and
-# /*LIVE*/ — which build_doc.py fills by lifting the scroll engine, the redaction handler, the
-# rxs lift and the whole live layer out of the page and swapping the engine's clock from the
+# /*LIVE*/ — which build_doc.py fills by lifting the scroll engine and the whole live layer
+# out of the page and swapping the engine's clock from the
 # window to the container. Extracting the template would have produced a frame whose functions
 # were all empty: the window would open, the chrome would draw, and the document inside it would
 # be blank. It did exactly that on the first attempt.

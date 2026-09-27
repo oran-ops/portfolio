@@ -107,8 +107,8 @@ five; the bright white chrome; **FatBits on `$9M+`**; the outline chip; cutting 
 3. **The ground stays matte charcoal.** `--bg #191A1F`, `--card #202127`, `--card2 #25262D`,
    untouched. This is a dark room with a Macintosh in it.
 4. **Every folder keeps its colour** — and gains two more tones of it, from the machine's own table.
-5. **The UV lamp stays**: the plate, the violet covers over sealed lines, the developed zones, the
-   signature. Re-dressed, never removed, and the existing `redactionBars()` mechanism is kept.
+5. **The UV lamp stays**: the plate, the developed zones, the signature. Re-dressed, never
+   removed. The **sealed covers are withdrawn** — see §9.4.
 6. **No network, no new fonts.** Four embedded faces plus one that is **drawn** from `kit.js`.
 7. **It survives a phone.** Nothing depends on hover. 44px tap targets. Verified at 390.
 8. **It is a CEO's case file.** The Macintosh here is an archive machine, not a nostalgia sticker.
@@ -276,7 +276,7 @@ break as two clean blocks.
 C proposed a 2px folder-colour underline under the defined term; E proposed the selection wash.
 Both put the folder's colour into every paragraph without colouring a word, and **shipping both
 would give the archive two ways to say the same thing.** The wash wins: it is the Macintosh's own
-way of saying *this one*, it is the same gesture the sealed cover and the developed plaque make,
+way of saying *this one*, it is the same gesture the developed plaque makes,
 and the printed register already has its own devices (the rules, the leaders, the margin). The
 underline is dropped.
 
@@ -662,7 +662,7 @@ tilt.
 
 ---
 
-## 9. THE UV LAMP AND THE SEALED COVERS
+## 9. THE UV LAMP
 
 **The mechanism does not change.** One plate per case folder, three developed zones, a class
 toggle, `aria-pressed`, the same strings: `UV LAMP` / `PRESS TO ARM` → `FLUORESCING` /
@@ -712,25 +712,27 @@ line; `.dv-b` items in Inter 13.5 with a 10×2 violet tick, `em` in mono 700, `b
 numerals, rules, icons, charts — goes violet in **one move**, exactly as the current build goes
 silver in one move. The bed drops to `#0A0B0D`; `.vfilm` still swings in.
 
-### 9.4 Sealed covers and stickers — `.rxs .rxb .redx .rxk .rxkhost`
+### 9.4 Sealed covers and stickers — WITHDRAWN, 2026-09-27
 
-**A Macintosh masked a region by filling it HALF**, so the cover is a **50% dither of `#673A75`
-and `#9159A4`** with a `--u` `#A972BD` keyline — never a gradient, never a sheen. Minimum 20px.
+**There are no covers over the text any more, and the redesign does not bring them back.**
 
-> **KEEP `redactionBars()` EXACTLY AS IT IS.** Direction A proposed deleting its measured
-> per-line DOM in favour of `box-decoration-break:clone`. I read the mechanism: `.rxb` are
-> absolutely positioned `<i>` elements, measured per line box by `lineBoxes()`, re-measured on
-> reflow, and revealed by a `--rxp` scaleX written onto the host (`frame.js:765–865`). **A
-> transform on a clone-background span moves the text with the cover**, so "the reveal stays a
-> transform on the same span" is false as written, and `__rxsUpd` would have to be rewritten — on
-> a mechanism whose measurement pass exists because of a scroll fault Oran already reported once.
-> Re-dress the bar; keep the machinery. If a wipe is wanted, use `clip-path` in `steps(6)` on the
-> existing `.rxb`.
+Oran, 2026-09-27: *"I would like you to remove the purple BARS that you have to press to reveal,
+and also those that are revealed by scrolling."* Both systems — the tap stickers
+(`.redx` / `.rxk`, `SEALED · TAP TO REVEAL`) and the scroll bars (`.rxs` / `.rxb`, `#7C4A8A`) —
+were removed from the live build the same day, with their two page-level copies, the dead runtime
+sealer and every rule that drew them. The twelve sentences they covered are ordinary print; not
+one word changed.
 
-`.redx` / `.rxk` → an **inverted plaque**: violet field, `#F2E9F6` archive face, `--u` `--kl`
-keyline and System 1's raised bevel (2px light inset top-left, 2px dark inset bottom-right). The
-CSS sheen sweep goes. `SEALED · TAP TO REVEAL ▸` unchanged, now set in the machine's own face,
-inside a **44px invisible hit pad** so a thumb cannot miss between two 26px line covers.
+This section previously specified a 50% violet dither for the cover, an inverted plaque for the
+sticker, and instructed the builder to keep `redactionBars()` intact. **All of that is void.** A
+builder working from this plan must not reintroduce `.rxs`, `.rxb`, `.redx`, `.rxk` or `.rxkhost`
+in any dress.
+
+**What this costs the lamp, and what it does not.** The lamp never depended on the covers: it
+toggles `.lampon` on its own `.uvmount` and opens the developed zones (§9.2), which are additions
+to the sheet rather than subtractions from it. Its one job that *was* shared — "the file has
+something withheld in it" — now rests entirely on the developed zones, which is where §9.2 already
+put the weight.
 
 ---
 
@@ -801,9 +803,9 @@ Breakpoint **860**, the repo's own. Every decision below has a precedent in `fra
 - `.cols2`, `.grid2c`, `.statrow`, `.chips`, `.fcontact`, `.osmap` all collapse to one column **in
   the same order**, so the reader's path is identical on both.
 - **The shadow ladder halves** (10→6, 7→4, 4→3, 3→2). The document's own shadow is the last to go.
-- **44px minimum** on the lamp plate, the sheet-turn bar, every contact row, every chip, and the
-  sealed sticker's hit pad. Mono floor 8.5px on `(pointer:coarse)`.
-- **Nothing depends on hover.** Active/inactive is authored; armed, sealed and pressed are all tap.
+- **44px minimum** on the lamp plate, the sheet-turn bar, every contact row and every chip.
+  Mono floor 8.5px on `(pointer:coarse)`.
+- **Nothing depends on hover.** Active/inactive is authored; armed and pressed are both tap.
 
 **Verified at 390: `document.documentElement.scrollWidth === 390`, no horizontal page scroll.**
 
@@ -913,8 +915,11 @@ side by side; both list idioms and the struck counterpart; the figure dialog wit
 density-ramp chart with its published legend; the counting dials; the orthogonal diagram; the chip
 row in brass; the slip overlapping its figure with the peel and the die; the sheet-turn button;
 the analyst note; the microfilm stamp; the lamp OFF and ARMED; the developed zone inside its
-marquee; a sealed line covered and revealed; the sixteen icons and marks; and the four folders in
-one row.
+marquee; the sixteen icons and marks; and the four folders in one row.
+
+**One thing they still show that the plan no longer specifies:** the two lamp pictures were
+rendered before 2026-09-27 and carry sealed covers over three lines of XTIX. §9.4 withdraws them;
+the pictures are re-rendered without them.
 
 **They do not prove:** seven whole documents. The per-document authoring pass — which block is a
 leaf, which is a window, which window is active — is real judgement work and it is where this

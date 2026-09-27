@@ -2524,3 +2524,67 @@ same-direction lane shows tails.
 n = (-t.y, t.x) points 90 degrees LEFT of travel, so the -n side carries the route direction.
 MEDCOIN is the last city on the route, so route traffic arrives on the south leg and leaves
 east -- the direction of increasing path parameter.
+
+
+## R8 — the purple bars come out, and what deleting two engines actually touches
+
+Oran, 2026-09-27: *"I would like you to remove the purple BARS that you have to press to reveal,
+and also those that are revealed by scrolling."*
+
+Two systems, each built **twice**. The tap system: `.redx` sentences under `<i class="rxk">`
+stickers reading `SEALED · TAP TO REVEAL`, opened by a tap or a drag. The scroll system: `.rxs`
+sentences under `<i class="rxb">` bars in `#7C4A8A` that retract as the reader passes them. Each
+had a page-level copy in the monolith and a copy lifted into the document window in `frame.js`.
+
+**What a census found that a search would not.**
+
+- **`.redx{color:transparent}` is what hides the four tapped sentences, not the JavaScript.**
+  Delete the engines and leave the rule and four sentences are permanently invisible with nothing
+  left to open them. The cut has to take the CSS, the JS and the markup class in one pass or it
+  is worse than no cut at all.
+- **`var RXS = {}, prepared = {}, liveBuilt = false;`** holds three unrelated things. `prepared`
+  gates `prepare()`; `liveBuilt` gates the one-shot build of the UV lamp. Deleting the line leaves
+  two undeclared names — and **check 13 inspects calls, never variable reads**, so the build would
+  have passed and the first file opened would have thrown.
+- **`queueReveal()` is not apparatus-only.** It also runs the `.rv` reveal pass and the
+  end-of-document sweep, behind `var root = cv("view"), r = RXS[openId]; if (!r) return;`. Empty
+  the registry and leave the guard and the bottom-of-document reveal stops on every frame, in
+  silence.
+- **Two apparatus lines double as build markers.** `/*D:medcoin:24*/` and six `/*D:final:166..171*/`
+  sit at the end of lines that had to be edited; `build.py` expands them in place and aborts if one
+  goes missing. The rules were cut out from around them.
+- **One reduced-motion block is shared with the lamp.** `@media (prefers-reduced-motion:reduce){`
+  opens with the two apparatus selectors and carries `.case .folder .lampband{display:none}` inside
+  it. Only the opening declarations were removed.
+- **`redact()` was dead already.** It split a text node and wrapped its last six words in a new
+  `.redx` span — the only code in the repo that mutated a document's text at runtime — and had had
+  no caller since R55 took the end-of-file ritual out. It is now gone, along with `openCase()`.
+- **The generator would have died.** `tools/build_doc.py` lifts both blocks out of the page to
+  build `lab/document.html`, with `raise SystemExit` if it cannot find them. The two lifts and the
+  `/*REDX*/` `/*RXS*/` shells in `tools/doc_page.html` went with the code they carried.
+
+**Measured, before and after, the same way on five devices** (iPhone SE 3, iPhone 13, iPhone 14
+Pro Max, Pixel 7, iPad Mini). Each of the twelve covered sentences is brought to the middle of the
+window and then read:
+
+| | before | after |
+|---|---|---|
+| apparatus elements in the page | 48 (phone) / 38 (tablet) | **0** |
+| purple pixels across the sentences | up to 28,190 in one view | **0** |
+| purple pixels anywhere on screen | up to 30,652 | **0** |
+| carriers of a covered sentence at full ink | 9 of 16 | **16 of 16** |
+| page errors / console / external requests | 0 / 0 / 0 | 0 / 0 / 0 |
+
+The old build was measured first **and failed every one of those checks**, which is the only
+reason to believe the new numbers.
+
+**Not one word moved.** Every document's text, tags stripped and whitespace normalised, is
+character-for-character what it was: 1,898 characters in XTIX, 1,624 in OASIS, 1,339 in EVENTER,
+1,246 in MEDCOIN, 1,257 in LEADERSHIP, 973 in TECH, 856 in FINAL. That check was then shown to
+fail by deleting a single full stop from a copy.
+
+**One thing deliberately left alone.** `.redct` — a third redaction device, a near-black `#15161B`
+wipe over each row of XTIX's `07 GAPS` list, which retracts as the block reveals. It is not purple,
+it is not a cover the reader has to act on, and it is the same colour as the card under it, so it
+reads as the rows arriving rather than as something withheld. Named here so the decision is Oran's
+and not mine by omission.

@@ -1688,21 +1688,10 @@ body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:214748
 
 /* ===== EMERALD II phase 2 ===== */
 
-/* ONE STICKER PER LINE, like the scroll bars in R4. This was an inline-BLOCK with a single
-   ::after over its whole box, so a sentence that wraps put the sticker across the rectangle
-   around every line -- hanging past the end of a short last line (measured in MEDCOIN: the box
-   ran to 349 on a line whose words stop far earlier). Inline, its line boxes ARE the words, and
-   redaction() in frame.js lays one .rxk over each of them. */
-.redx{position:relative;display:inline;color:transparent;border-radius:2px;transition:color .5s .25s;cursor:pointer;touch-action:pan-y}
-.rxkhost{position:relative}
-.rxk{position:absolute;display:flex;align-items:center;justify-content:center;overflow:hidden;white-space:nowrap;font-family:'JetBrains Mono',monospace;font-size:7.5px;font-weight:700;letter-spacing:.16em;background:#7C4A8A;color:#F2E9F6;border:1px solid rgba(20,21,25,.35);border-bottom-color:rgba(20,21,25,.5);border-radius:3px;box-shadow:0 2px 6px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.5);transform:translateX(var(--dx,0px));transform-origin:left center;transition:transform .55s cubic-bezier(.7,0,.2,1),opacity .4s;background-image:linear-gradient(110deg,transparent 32%,rgba(255,255,255,.55) 50%,transparent 68%);background-size:230% 100%;animation:rxsheen 3.4s linear infinite;pointer-events:none;z-index:2}
+/* the sealed stickers and the scroll bars were removed on 2026-09-27 at
+   Oran's request: the sentences they covered are ordinary print now. */
 
-.redx.open{color:inherit;animation:rxflash 1.4s ease-out .35s}
-@keyframes rxsheen{0%{background-position:135% 0}100%{background-position:-95% 0}}
-@keyframes rxflash{0%{background:rgba(47,179,128,.32)}100%{background:rgba(47,179,128,0)}}
-.rxk.open{transform:translateX(calc(100% + 14px));opacity:0}
-
-@media (prefers-reduced-motion:reduce){.redx{color:inherit}.rxk{transform:scaleX(0)}
+@media (prefers-reduced-motion:reduce){
   
   /* the impression is shown, so the prompt that asked for it must go - otherwise
      "REVIEWED" prints straight on top of "PRESS & HOLD TO STAMP" */
@@ -1734,7 +1723,7 @@ body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:214748
    file; see the note where the strip stood in the markup. */
 
 
-@media (prefers-reduced-motion:reduce){.redx::after{animation:none}}/*D:medcoin:24*/
+/*D:medcoin:24*/
 #eventer .evslip,#medcoin .evslip{margin-top:10px}/*D:final:129*//*D:final:130*/
 #final>.wrap{position:relative;z-index:1}
 /* THE FOOTER STOPS PRETENDING TO BE THE LAST PAGE.
@@ -2006,7 +1995,7 @@ body.static .lampband .lcone,body.failsafe .lampband .lcone{animation:none}
 
    The sheet's two sides carry different amounts of ink, so turning it over does
    change the object's height - on demand, once, by the reader's own hand, the way
-   the SEALED bars in this file already behave. That is the one honest cost and it
+   the SEALED bars in this file behaved at the time. That is the one honest cost and it
    is paid only by the reader who asked for it. */
 /* R21. Verdict from the live build: nobody notices the tab. So the sheet keeps
    its two faces and loses its silhouette control - the turn is now a full-width
@@ -2158,29 +2147,7 @@ body.static .slipflip.turned .sf-back{opacity:1;pointer-events:auto}
 body.static .sttl .w>i{font-variation-settings:'wght' 780;letter-spacing:0}
 
 
-/* ================= BIG BUILD 4 — SCROLL-REDACTION =================
-   The SEALED bars ask to be opened. These do not: they lift as the page moves
-   past them, so the reader declassifies the file simply by reading it. One-way
-   — once lifted, they stay lifted. */
-/* ONE BAR PER LINE OF TEXT, and the bars are elements, not a pseudo-element on the span.
-   `.rxs` is inline and a sentence wraps; an absolutely positioned child of a multi-line inline
-   box is laid out in the box spanning the first fragment's start to the last fragment's end,
-   which is not the text -- 91px of EVENTER's 287px sentence, and in XTIX (a flex parent, so the
-   span blockifies) a 288px slab hanging 148px past a short line. With transform-origin:right
-   the residue then sat to the RIGHT of the words, which is what Oran reported.
-   The bars are laid out by redactionBars() in frame.js against `.rxhost`, the block that holds
-   the sentence. Colour, radius, shadow and the right-to-left lift are exactly as approved.
-   NO TRANSITION: the scroll is the timeline, and a transition made every frame's write start a
-   new 180ms animation -- the bar trailed the finger and kept sliding after it lifted. */
-.rxs{display:inline;color:inherit}
-.rxhost{position:relative}
-.rxb{position:absolute;background:#7C4A8A;border-radius:2px;
-  box-shadow:0 1px 4px rgba(0,0,0,.3),inset 0 1px 0 rgba(255,255,255,.45);
-  transform:scaleX(var(--rxp,1));transform-origin:right center;
-  pointer-events:none;z-index:2}
-
-@media (prefers-reduced-motion:reduce){.rxb{transform:scaleX(0)}}
-body.static .rxb{transform:scaleX(0)}/*D:final:166*//*D:final:167*//*D:final:168*//*D:final:169*//*D:final:170*//*D:final:171*/
+/*D:final:166*//*D:final:167*//*D:final:168*//*D:final:169*//*D:final:170*//*D:final:171*/
 
 
 /* ---- UV INVARIANT ----
@@ -4513,34 +4480,8 @@ window.__acts3OK=true;
 /* ===== EMERALD II phase 2 module (__em2) ===== */
 (function(){
 'use strict';
-var reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
 var CASES=['xtix','oasis','eventer','medcoin'];
 var cleared={},clearedN=0;
-
-/* runtime redaction: wrap the tail words of one existing sentence per case */
-function redact(folder){
-  if(reduced)return;
-  var t=folder.querySelector('.sigq .qx')||folder.querySelector('.lead')||folder.closest('.sec').querySelector('.sigq .qx, .lead, .para');
-  if(!t)return;
-  var node=null;
-  for(var i=t.childNodes.length-1;i>=0;i--){
-    var c=t.childNodes[i];
-    if(c.nodeType===3&&c.textContent.trim().split(/\s+/).length>=4){node=c;break}
-  }
-  if(!node)return;
-  var words=node.textContent.split(' ');
-  if(words.length<6)return;
-  var keep=Math.max(2,words.length-6);
-  var head=words.slice(0,keep).join(' ')+' ';
-  var tail=words.slice(keep).join(' ');
-  var sp=document.createElement('span');sp.className='redx';sp.textContent=tail;
-  node.textContent=head;
-  node.parentNode.insertBefore(sp,node.nextSibling);
-}
-function openCase(id){
-  var sec=document.getElementById(id);if(!sec)return;
-  sec.querySelectorAll('.redx').forEach(function(r){r.classList.add('open')});
-}
 
 /* clearance gate per case folder */
 CASES.forEach(function(id){
@@ -4851,39 +4792,6 @@ CASES.forEach(function(id){
 </script>
 
 <script>
-(function(){
-'use strict';
-/* sealed bars: tap or drag aside to reveal (self-service) */
-document.querySelectorAll('.redx').forEach(function(r){
-  var sx=null,dx=0,W=0,dragging=false;
-  function reveal(){r.classList.add('open');r.style.removeProperty('--dx');
-    try{if(navigator.vibrate)navigator.vibrate(8)}catch(e){}}
-  r.addEventListener('pointerdown',function(e){
-    if(r.classList.contains('open'))return;
-    sx=e.clientX;dx=0;W=r.getBoundingClientRect().width;dragging=false;
-    try{r.setPointerCapture(e.pointerId)}catch(err){}
-  });
-  r.addEventListener('pointermove',function(e){
-    if(sx===null||r.classList.contains('open'))return;
-    dx=Math.max(0,e.clientX-sx);
-    if(dx>6)dragging=true;
-    if(dragging)r.style.setProperty('--dx',dx.toFixed(0)+'px');
-  });
-  function up(){
-    if(sx===null)return;
-    if(r.classList.contains('open')){sx=null;return}
-    if(dragging&&dx>W*0.38){reveal()}
-    else if(!dragging){reveal()}
-    else{r.style.setProperty('--dx','0px')}
-    sx=null;dragging=false;
-  }
-  r.addEventListener('pointerup',up);
-  r.addEventListener('pointercancel',function(){if(!r.classList.contains('open'))r.style.setProperty('--dx','0px');sx=null;dragging=false});
-});
-})();
-</script>
-
-<script>
 /* BIG BUILD 1 — vault film edges */
 (function(){
   var fin=document.getElementById('final');
@@ -5142,47 +5050,6 @@ document.querySelectorAll('.redx').forEach(function(r){
 </script>
 
 <script>
-/* BIG BUILD 4 — the scroll itself lifts them (cached geometry) */
-(function(){
-  'use strict';
-  var reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
-  /* THE PAGE'S COPY KEEPS ITS HANDS OFF THE MACHINE. adopt() moves every document into the
-     window at load, so all seven documents' sealed lines live inside .mw and belong to the
-     window's own engine (frame.js). This copy stays for the frozen paths -- ?static=1, reduced
-     motion, a page whose shell never came up -- where the bars must simply be open. */
-  var els=[].slice.call(document.querySelectorAll('.rxs')).filter(function(e){
-    return !(e.closest&&e.closest('.mw'));
-  });
-  if(!els.length){window.__rxsUpd=function(){};return}
-  if(reduced||document.body.classList.contains('static')){
-    els.forEach(function(e){(e.parentElement||e).style.setProperty('--rxp',0)});
-    window.__rxsUpd=function(){};return;
-  }
-  var st=els.map(function(e){return {el:e,done:false,last:1,top:0}}),live=st.length;
-  function measure(){
-    var y=pageYOffset;
-    for(var i=0;i<st.length;i++)st[i].top=st[i].el.getBoundingClientRect().top+y;
-  }
-  window.__rxsUpd=function(y,vh){
-    if(!live)return;
-    for(var i=0;i<st.length;i++){
-      var o=st[i];if(o.done)continue;
-      var rel=o.top-y;
-      if(rel>vh+120)continue;
-      var p=(vh*0.86-rel)/(vh*0.31);
-      p=p<0?0:p>1?1:p;
-      var sp=1-p;
-      if(Math.abs(o.last-sp)>0.02||sp===0){o.last=sp;o.el.style.setProperty('--sp',sp.toFixed(3))}
-      if(sp===0){o.done=true;live--}
-    }
-  };
-  window.__rxsMeasure=measure;
-  measure();
-})();
-</script>
-
-
-<script>
 /* PERF — a single rAF pass for the EMERALD II scroll devices */
 (function(){
   'use strict';
@@ -5191,7 +5058,6 @@ document.querySelectorAll('.redx').forEach(function(r){
     tick=false;
     var y=pageYOffset,vh=innerHeight;
     if(window.__kinUpd)window.__kinUpd(y,vh);
-    if(window.__rxsUpd)window.__rxsUpd(y,vh);
     if(window.__numUpd)window.__numUpd(y,vh);
   }
   function onScroll(){if(!tick){tick=true;requestAnimationFrame(frame)}}
@@ -5200,13 +5066,11 @@ document.querySelectorAll('.redx').forEach(function(r){
   addEventListener('resize',function(e){
     if(window.__mSoftRz&&window.__mSoftRz(e,onScroll))return;
     if(window.__kinMeasure)window.__kinMeasure();
-    if(window.__rxsMeasure)window.__rxsMeasure();
     if(window.__numMeasure)window.__numMeasure();
     onScroll();
   });
   setTimeout(function(){
     if(window.__kinMeasure)window.__kinMeasure();
-    if(window.__rxsMeasure)window.__rxsMeasure();
     if(window.__numMeasure)window.__numMeasure();
     frame();
   },220);

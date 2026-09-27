@@ -111,15 +111,10 @@ function drawBar() {
    already draws. None of it exists below 860, where the bar is display:none and a finger
    scrolls the document directly. */
 var barRaf = null;
-/* AND THE SAME FRAME LIFTS THE SEALED LINES. queueReveal() -- which drives each document's
-   .rxs bars, the purple strips that retract as the reader passes them -- was called exactly once,
-   when a file opened, and never on scroll. A bar is `scaleX(var(--sp,1))`, so one that was below
-   the fold at that moment was never written and stayed shut for good. Measured with real wheel
-   and touch scrolling to the end of the document: every .rxs still unset, which left eight lines
-   covered in six files -- among them LEADERSHIP's "Great leaders build people who no longer depend
-   on them", TECH's "Technology should amplify commercial thinking", EVENTER's "Customer insights
-   became business decisions" and all three of XTIX's reflections. Same coalesced frame as the
-   scroll bar, so it costs one pass per frame at most; the bars' own done flags make it one-way. */
+/* AND THE SAME FRAME RUNS THE REVEAL PASS. queueReveal() was called exactly once, when a file
+   opened, and never on scroll, so a block below the fold at that moment was never written. It
+   runs on the same coalesced frame as the scroll bar, so it costs one pass per frame at most,
+   and the pass is one-way: nothing already revealed is ever put back. */
 function barTick() { barRaf = null; drawBar(); if (openId) { queueReveal(); } }
 function barSync() { if (barRaf === null) { barRaf = requestAnimationFrame(barTick); } }
 
@@ -669,202 +664,6 @@ if(!frozen&&window.matchMedia('(pointer:fine)').matches){
 }
 })();
 }
-/* every document's stickers, in one list: redaction() runs once per document, and a resize has to
-   find the stickers of whichever document is open -- not only the last one prepared. */
-var REDX = [];
-function redaction(root) {
-  var LABEL='SEALED \u00b7 TAP TO REVEAL \u25b8';
-  var items=REDX;
-  /* the same line boxes the sealed bars use: rects merged when their vertical ranges overlap by
-     more than half the shorter one, so a <b> on the same line does not split it */
-  function lineBoxes(el){
-    var rg=document.createRange();rg.selectNodeContents(el);
-    var rs=[].slice.call(rg.getClientRects()).filter(function(r){return r.width>1&&r.height>1});
-    rs.sort(function(a,b){return a.top-b.top||a.left-b.left});
-    var out=[];
-    for(var i=0;i<rs.length;i++){
-      var r=rs[i],m=out.length?out[out.length-1]:null;
-      var ov=m?Math.min(m.bottom,r.bottom)-Math.max(m.top,r.top):0;
-      if(m&&ov>Math.min(m.bottom-m.top,r.height)*0.5){
-        m.top=Math.min(m.top,r.top);m.bottom=Math.max(m.bottom,r.bottom);
-        m.left=Math.min(m.left,r.left);m.right=Math.max(m.right,r.right);
-      }else out.push({top:r.top,bottom:r.bottom,left:r.left,right:r.right});
-    }
-    return out;
-  }
-  function layout(o){
-    if(!o.host)return;
-    var boxes=lineBoxes(o.el);
-    if(!boxes.length)return;
-    o.host.classList.add('rxkhost');
-    var hr=o.host.getBoundingClientRect();
-    while(o.keys.length>boxes.length){o.host.removeChild(o.keys.pop())}
-    while(o.keys.length<boxes.length){
-      var k=document.createElement('i');
-      k.className='rxk';k.setAttribute('aria-hidden','true');
-      if(o.open)k.classList.add('open');
-      o.host.appendChild(k);o.keys.push(k);
-    }
-    /* the label rides the widest line; a short line only gets the colour */
-    var wide=0;
-    for(var j=1;j<boxes.length;j++){
-      if(boxes[j].right-boxes[j].left>boxes[wide].right-boxes[wide].left)wide=j;
-    }
-    for(var i=0;i<boxes.length;i++){
-      var b=boxes[i],s=o.keys[i].style;
-      s.left=(b.left-hr.left-3)+'px';
-      s.top=(b.top-hr.top-1)+'px';
-      s.width=(b.right-b.left+6)+'px';
-      s.height=(b.bottom-b.top+2)+'px';
-      o.keys[i].textContent=(i===wide&&b.right-b.left>120)?LABEL:'';
-    }
-  }
-  root.querySelectorAll('.redx').forEach(function(r){
-    var o={el:r,host:r.parentElement,keys:[],open:false};
-    items.push(o);
-    var sx=null,dx=0,W=0,dragging=false;
-    function reveal(){
-      o.open=true;
-      r.classList.add('open');
-      o.keys.forEach(function(k){k.classList.add('open')});
-      o.host.style.removeProperty('--dx');
-      try{if(navigator.vibrate)navigator.vibrate(8)}catch(e){}
-    }
-    r.addEventListener('pointerdown',function(e){
-      if(o.open)return;
-      if(!o.keys.length)layout(o);
-      sx=e.clientX;dx=0;W=r.getBoundingClientRect().width;dragging=false;
-      try{r.setPointerCapture(e.pointerId)}catch(err){}
-    });
-    r.addEventListener('pointermove',function(e){
-      if(sx===null||o.open)return;
-      dx=Math.max(0,e.clientX-sx);
-      if(dx>6)dragging=true;
-      if(dragging)o.host.style.setProperty('--dx',dx.toFixed(0)+'px');
-    });
-    function up(){
-      if(sx===null)return;
-      if(o.open){sx=null;return}
-      if(dragging&&dx>W*0.38){reveal()}
-      else if(!dragging){reveal()}
-      else{o.host.style.setProperty('--dx','0px')}
-      sx=null;dragging=false;
-    }
-    r.addEventListener('pointerup',up);
-    r.addEventListener('pointercancel',function(){
-      if(!o.open)o.host.style.setProperty('--dx','0px');
-      sx=null;dragging=false;
-    });
-  });
-  /* the stickers are geometry, like the bars: a reflow moves the lines under them. Each item
-     carries the layout that closes over its own document, so one call measures them all. */
-  items.forEach(function(o){ if(!o.layout){ o.layout=layout; } });
-  window.__redxMeasure=function(){ REDX.forEach(function(o){ if(o.layout){ o.layout(o); } }); };
-  window.__redxMeasure();
-}
-function redactionBars(root) {
-  (function(){
-  'use strict';
-  var reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var els=[].slice.call(root.querySelectorAll('.rxs'));
-  if(!els.length){window.__rxsUpd=function(){};return}
-  if(reduced||document.body.classList.contains('static')){
-    els.forEach(function(e){(e.parentElement||e).style.setProperty('--rxp',0)});
-    window.__rxsUpd=function(){};return;
-  }
-  var view=document.getElementById('view');
-  var st=els.map(function(e){
-    return {el:e,host:e.parentElement,bars:[],p:0,last:-1,adj:0,band:0,done:false};
-  }),live=st.length;
-
-  /* THE LINE BOXES OF A SENTENCE. Two rects belong to the same line when their vertical ranges
-     overlap by more than half the shorter one -- not when their centres are close: a <b> inside
-     the sentence (oasis, leadership) sits on the same line with a different centre. */
-  function lineBoxes(el){
-    var rg=document.createRange();rg.selectNodeContents(el);
-    var rs=[].slice.call(rg.getClientRects()).filter(function(r){return r.width>1&&r.height>1});
-    rs.sort(function(a,b){return a.top-b.top||a.left-b.left});
-    var out=[];
-    for(var i=0;i<rs.length;i++){
-      var r=rs[i],m=out.length?out[out.length-1]:null;
-      var ov=m?Math.min(m.bottom,r.bottom)-Math.max(m.top,r.top):0;
-      if(m&&ov>Math.min(m.bottom-m.top,r.height)*0.5){
-        m.top=Math.min(m.top,r.top);m.bottom=Math.max(m.bottom,r.bottom);
-        m.left=Math.min(m.left,r.left);m.right=Math.max(m.right,r.right);
-      }else out.push({top:r.top,bottom:r.bottom,left:r.left,right:r.right});
-    }
-    return out;
-  }
-
-  /* one <i class="rxb"> per line box, positioned against the block that holds the sentence */
-  function layout(o){
-    if(!o.host)return;
-    var boxes=lineBoxes(o.el);
-    if(!boxes.length)return;
-    o.host.classList.add('rxhost');
-    var hr=o.host.getBoundingClientRect();
-    while(o.bars.length>boxes.length){o.host.removeChild(o.bars.pop())}
-    while(o.bars.length<boxes.length){
-      var b=document.createElement('i');
-      b.className='rxb';b.setAttribute('aria-hidden','true');
-      o.host.appendChild(b);o.bars.push(b);
-    }
-    for(var i=0;i<boxes.length;i++){
-      var x=boxes[i],s=o.bars[i].style;
-      s.left=(x.left-hr.left-2)+'px';
-      s.top=(x.top-hr.top-1)+'px';
-      s.width=(x.right-x.left+4)+'px';
-      s.height=(x.bottom-x.top+2)+'px';
-    }
-  }
-
-  function scroller(){ return view&&view.clientHeight?view:null; }
-
-  window.__rxsUpd=function(){
-    if(!live)return;
-    var sc=scroller();if(!sc)return;
-    var vh=sc.clientHeight;if(!vh)return;                 /* never latch in a sizeless scroller */
-    var vt=sc.getBoundingClientRect().top;
-    for(var i=0;i<st.length;i++){
-      var o=st[i];if(o.done)continue;
-      if(!o.bars.length)layout(o);
-      if(!o.bars.length)continue;
-      /* the band is captured once per open, so the reveal keeps today's feel and cannot change
-         under a viewport that moves while the reader is inside it */
-      if(!o.band)o.band=Math.max(120,Math.round(vh*0.31));
-      var rel=o.el.getBoundingClientRect().top-vt;
-      if(rel>vh*0.86)continue;
-      var p=(vh*0.86-rel+o.adj)/o.band;
-      p=p<0?0:p>1?1:p;
-      /* ONE WAY. This is the fault Oran reports as jumping: p was a pure function of position
-         and free to fall, so scrolling back up re-covered lines the reader had already read --
-         6 documents out of 6, four of them fully. The only latch was at the very end. */
-      if(p<o.p)p=o.p;
-      o.p=p;
-      var v=+(1-p).toFixed(3);
-      if(Math.abs(v-o.last)>0.002||v===0){o.last=v;o.host.style.setProperty('--rxp',v)}
-      if(v===0){o.done=true;live--}
-    }
-  };
-
-  /* RE-MEASURE, AND RE-ANCHOR WHAT IS IN FLIGHT. rel is a live measurement, and it moves by the
-     whole viewport delta when iOS's toolbar slides: the title card is one window tall, so it
-     regrows and pushes the document down while scrollTop stays put. Without this a bar in flight
-     jumps by 83px of progress. adj holds each bar where it was. */
-  window.__rxsMeasure=function(){
-    var sc=scroller();
-    for(var i=0;i<st.length;i++){
-      var o=st[i];
-      layout(o);
-      if(!sc||o.done||!o.p)continue;
-      var vh=sc.clientHeight;if(!vh)continue;
-      var rel=o.el.getBoundingClientRect().top-sc.getBoundingClientRect().top;
-      o.adj=o.p*(o.band||Math.max(120,Math.round(vh*0.31)))-(vh*0.86-rel);
-    }
-  };
-  window.__rxsMeasure();
-})();
-}
 /* The whole live layer: evidence slip, UV lamp and its zones, analyst note, method slip and
    the sheet flip. It runs ONCE, with every section on screen, because the sheet flip measures
    both faces and a measurement taken while display is none is zero. Only the four CASE files
@@ -1332,16 +1131,11 @@ function refitSheets(sec) {
   });
 }
 
-/* ---------------------------------------------------------------- per-document state
-   The .rxs bar-lifter keeps its own `done` flags in a closure, so one instance covering all
-   six documents would mark another document's bars finished while that document was hidden
-   and measuring zero. One instance per document, captured as it is built. */
-var RXS = {}, prepared = {}, liveBuilt = false;
+/* ---------------------------------------------------------------- per-document state */
+var prepared = {}, liveBuilt = false;
 function prepare(id) {
   if (prepared[id]) return;
   var sec = secOf(id);
-  redaction(sec);
-  redactionBars(sec);
   /* Once the frame sizes the stage at all, it has to size it in BOTH states. Sizing only the
      front left the component's own fit() and this one disagreeing: the front was right and the
      back overflowed its stage by 200-330 px. Half-owning a measurement is worse than not
@@ -1349,8 +1143,6 @@ function prepare(id) {
   sec.querySelectorAll(".sf-tab").forEach(function (tab) {
     tab.addEventListener("click", function () { setTimeout(function () { refitSheets(sec); }, 60); });
   });
-  RXS[id] = { upd: window.__rxsUpd || function () {},
-              measure: window.__rxsMeasure || function () {} };
   prepared[id] = true;
 }
 
@@ -1373,24 +1165,19 @@ function passReveal() {
 }
 function queueReveal() {
   passReveal();
-  var root = cv("view"), r = RXS[openId];
-  if (!r) return;
-  /* NOT re-measured here any more. The engine reads live rects, so the pass has nothing to
-     cache; and a re-measure inside the pass re-anchors a bar against its own progress, which
-     freezes it shut while every geometry check still passes. measure() now runs only where the
-     geometry can really have changed: a resize, the fonts landing, the window's ResizeObserver. */
-  var y = root.scrollTop;
-  /* THE END OF THE DOCUMENT IS A CASE OF ITS OWN. On the scrolling page these bars finished
-     lifting because the next section kept coming; in a window the document simply stops, and
-     the last lines were left part-covered with nowhere further to scroll. Reaching the bottom
-     means the reader has finished it, so nothing may still be hidden. */
-  if (root.scrollHeight > root.clientHeight && y + root.clientHeight >= root.scrollHeight - 2) {
-    y += root.clientHeight;
+  var root = cv("view");
+  if (!root) return;
+  /* THE END OF THE DOCUMENT IS A CASE OF ITS OWN. On the scrolling page a block's entrance
+     came round because the next section kept coming; in a window the document simply stops,
+     and a block whose gate had not been crossed would be left unrevealed with nowhere further
+     to scroll. Reaching the bottom means the reader has finished it, so nothing may still be
+     hidden. */
+  if (root.scrollHeight > root.clientHeight &&
+      root.scrollTop + root.clientHeight >= root.scrollHeight - 2) {
     for (var i = 0; i < pend.length; i++) {
       if (pend[i]) { pend[i].classList.add("on"); pend[i] = null; }
     }
   }
-  r.upd(y, root.clientHeight);          /* the engine takes its own measurements now */
 }
 
 /* ---------------------------------------------------------------- the zoom rectangle
@@ -1608,12 +1395,6 @@ cv("done").onclick = shut;
 function relayout() {
   drawMenu(); drawFiles(); drawDone(); paintCards();
   if (openId) { drawTitle(); drawBar(); }
-  /* THE SEALED BARS ARE GEOMETRY TOO. One bar per line box, so a reflow -- the toolbar sliding,
-     a rotation, the reader's text size, the fonts landing -- moves every line under them. This
-     re-lays them out and re-anchors whatever is mid-reveal so it does not jump. */
-  var rx = openId && RXS[openId];
-  if (rx && rx.measure) { rx.measure(); }
-  if (window.__redxMeasure) { window.__redxMeasure(); }
 }
 /* The shell draws when the reader enters the machine, not when the page loads. A
    canvas sized while its container is display:none measures zero and paints nothing,
@@ -1772,10 +1553,6 @@ function paintCards() {
 if (document.fonts && document.fonts.ready) {
   document.fonts.ready.then(function () {
     if (CARDS.length) { paintCards(); }
-    /* the sentence's line boxes move when Fraunces and JetBrains Mono swap in */
-    var rx = openId && RXS[openId];
-    if (rx && rx.measure) { rx.measure(); }
-    if (window.__redxMeasure) { window.__redxMeasure(); }
   });
 }
 
