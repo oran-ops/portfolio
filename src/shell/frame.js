@@ -669,6 +669,38 @@ if(!frozen&&window.matchMedia('(pointer:fine)').matches){
 }
 })();
 }
+/* MEASURED FLAT. A document's folder arrives tilted -- perspective, 92px of drop and up to 1.4deg
+   of turn, written frame by frame from the scroll -- and a range's client rects are the tilted
+   picture of the words, not the words. Anything laid over a line (the stickers, the sealed bars)
+   is placed in its host's own coordinates, where the tilt then carries it along with the text, so
+   it has to be measured in those coordinates. Measured in the tilt, a line 350px into the folder
+   read 8.5px low (350 x sin 1.4deg): EVENTER's sealed sentence showed the top 42% of its letters
+   above the sticker that was meant to hide them, and XTIX's and MEDCOIN's first lines 32-42%.
+   So every ancestor that turns, scales or projects is set flat for the measurement and put back in
+   the same task, before a frame can paint. A pure translation moves the host and its words
+   together and is left alone. The transition is held at none across the swap and restored only
+   after a style flush, so nothing starts animating toward the value it already had. */
+function measureFlat(el, fn) {
+  var stop = document.getElementById('view'), held = [];
+  for (var e = el; e && e !== stop && e !== document.body; e = e.parentElement) {
+    var t = getComputedStyle(e).transform;
+    if (!t || t === 'none') continue;
+    var m = /^matrix\(([^)]*)\)$/.exec(t);
+    if (m) { var v = m[1].split(','); if (+v[0] === 1 && +v[1] === 0 && +v[2] === 0 && +v[3] === 1) continue; }
+    var s = e.style;
+    held.push([e, s.getPropertyValue('transform'), s.getPropertyPriority('transform'),
+                  s.getPropertyValue('transition'), s.getPropertyPriority('transition')]);
+    s.setProperty('transition', 'none', 'important');
+    s.setProperty('transform', 'none', 'important');
+  }
+  try { return fn(); }
+  finally {
+    var i;
+    for (i = 0; i < held.length; i++) { held[i][0].style.setProperty('transform', held[i][1], held[i][2]); }
+    for (i = 0; i < held.length; i++) { void getComputedStyle(held[i][0]).transform; }
+    for (i = 0; i < held.length; i++) { held[i][0].style.setProperty('transition', held[i][3], held[i][4]); }
+  }
+}
 /* every document's stickers, in one list: redaction() runs once per document, and a resize has to
    find the stickers of whichever document is open -- not only the last one prepared. */
 var REDX = [];
@@ -694,6 +726,9 @@ function redaction(root) {
   }
   function layout(o){
     if(!o.host)return;
+    measureFlat(o.host,function(){place(o)});
+  }
+  function place(o){
     var boxes=lineBoxes(o.el);
     if(!boxes.length)return;
     o.host.classList.add('rxkhost');
@@ -796,9 +831,36 @@ function redactionBars(root) {
     return out;
   }
 
+  /* WHERE EACH WORD ENDS, as a fraction of the bar over its line. The lift used to run
+     continuously, so a bar stopped wherever the scroll stopped -- "Position for enterpri", "scaling
+     outb" -- which reads as a fault in the drawing rather than as a line being uncovered. A bar now
+     only ever stops at the end of a word: the machine steps, one whole word at a time. A word
+     split at a hyphen is two fragments, and each fragment ends where it ends. */
+  function wordEnds(el,boxes){
+    var ends=boxes.map(function(){return []});
+    var tw=document.createTreeWalker(el,NodeFilter.SHOW_TEXT),n,m,re=/\S+/g,rg=document.createRange();
+    while((n=tw.nextNode())){
+      re.lastIndex=0;
+      while((m=re.exec(n.data))){
+        rg.setStart(n,m.index);rg.setEnd(n,m.index+m[0].length);
+        [].forEach.call(rg.getClientRects(),function(r){
+          if(r.width<1)return;
+          for(var i=0;i<boxes.length;i++){
+            var ov=Math.min(boxes[i].bottom,r.bottom)-Math.max(boxes[i].top,r.top);
+            if(ov>r.height*0.5){ends[i].push(r.right);return}
+          }
+        });
+      }
+    }
+    return ends;
+  }
+
   /* one <i class="rxb"> per line box, positioned against the block that holds the sentence */
   function layout(o){
     if(!o.host)return;
+    measureFlat(o.host,function(){place(o)});
+  }
+  function place(o){
     var boxes=lineBoxes(o.el);
     if(!boxes.length)return;
     o.host.classList.add('rxhost');
@@ -809,18 +871,37 @@ function redactionBars(root) {
       b.className='rxb';b.setAttribute('aria-hidden','true');
       o.host.appendChild(b);o.bars.push(b);
     }
+    var ends=wordEnds(o.el,boxes);
+    o.stops=[];
     for(var i=0;i<boxes.length;i++){
-      var x=boxes[i],s=o.bars[i].style;
-      s.left=(x.left-hr.left-2)+'px';
+      var x=boxes[i],s=o.bars[i].style,L=x.left-2,W=x.right-x.left+4;
+      s.left=(L-hr.left)+'px';
       s.top=(x.top-hr.top-1)+'px';
-      s.width=(x.right-x.left+4)+'px';
+      s.width=W+'px';
       s.height=(x.bottom-x.top+2)+'px';
+      /* the last word of a line takes the whole bar with it, so no 2px residue is left behind */
+      var f=ends[i].map(function(r){return (r-L)/W}).sort(function(a,c){return a-c});
+      if(f.length)f[f.length-1]=1;else f=[1];
+      o.stops.push(f);
+      o.bars[i].__v=null;
+    }
+    if(o.last>=0)snap(o,o.last);
+  }
+  /* v is the share of every line still covered, as before; each bar shows the nearest whole word
+     at or behind it. Written to the bar itself, so the host's --rxp still stands for the sentence. */
+  function snap(o,v){
+    var u=1-v;
+    for(var i=0;i<o.bars.length;i++){
+      var f=o.stops&&o.stops[i]||[1],w=0;
+      for(var k=0;k<f.length&&f[k]<=u+1e-4;k++)w=f[k];
+      var sv=+(1-w).toFixed(4);
+      if(o.bars[i].__v!==sv){o.bars[i].__v=sv;o.bars[i].style.setProperty('--rxp',sv)}
     }
   }
 
   function scroller(){ return view&&view.clientHeight?view:null; }
 
-  window.__rxsUpd=function(){
+  window.__rxsUpd=function(y,h,finish){
     if(!live)return;
     var sc=scroller();if(!sc)return;
     var vh=sc.clientHeight;if(!vh)return;                 /* never latch in a sizeless scroller */
@@ -833,16 +914,20 @@ function redactionBars(root) {
          under a viewport that moves while the reader is inside it */
       if(!o.band)o.band=Math.max(120,Math.round(vh*0.31));
       var rel=o.el.getBoundingClientRect().top-vt;
-      if(rel>vh*0.86)continue;
+      if(rel>vh*0.86&&!finish)continue;
       var p=(vh*0.86-rel+o.adj)/o.band;
       p=p<0?0:p>1?1:p;
       /* ONE WAY. This is the fault Oran reports as jumping: p was a pure function of position
          and free to fall, so scrolling back up re-covered lines the reader had already read --
          6 documents out of 6, four of them fully. The only latch was at the very end. */
       if(p<o.p)p=o.p;
+      /* THE END OF THE WINDOW. queueReveal() says so when the reader reaches the bottom, and this
+         engine used to ignore it: the last lines of a file have no page after them to push them
+         through the band, so XTIX's reflection stayed a third covered with nowhere left to go. */
+      if(finish)p=1;
       o.p=p;
       var v=+(1-p).toFixed(3);
-      if(Math.abs(v-o.last)>0.002||v===0){o.last=v;o.host.style.setProperty('--rxp',v)}
+      if(Math.abs(v-o.last)>0.002||v===0){o.last=v;o.host.style.setProperty('--rxp',v);snap(o,v)}
       if(v===0){o.done=true;live--}
     }
   };
@@ -1384,13 +1469,14 @@ function queueReveal() {
      lifting because the next section kept coming; in a window the document simply stops, and
      the last lines were left part-covered with nowhere further to scroll. Reaching the bottom
      means the reader has finished it, so nothing may still be hidden. */
-  if (root.scrollHeight > root.clientHeight && y + root.clientHeight >= root.scrollHeight - 2) {
+  var finish = root.scrollHeight > root.clientHeight && y + root.clientHeight >= root.scrollHeight - 2;
+  if (finish) {
     y += root.clientHeight;
     for (var i = 0; i < pend.length; i++) {
       if (pend[i]) { pend[i].classList.add("on"); pend[i] = null; }
     }
   }
-  r.upd(y, root.clientHeight);          /* the engine takes its own measurements now */
+  r.upd(y, root.clientHeight, finish);  /* the engine takes its own measurements now */
 }
 
 /* ---------------------------------------------------------------- the zoom rectangle

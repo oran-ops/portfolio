@@ -2524,3 +2524,32 @@ same-direction lane shows tails.
 n = (-t.y, t.x) points 90 degrees LEFT of travel, so the -n side carries the route direction.
 MEDCOIN is the last city on the route, so route traffic arrives on the south leg and leaves
 east -- the direction of increasing path parameter.
+
+## The sealed lines, inside the window — three faults (2026-09-27)
+
+**1. The sticker showed the line it was sealing.** `redaction()` measured each line with
+`Range.getClientRects()` while the folder was still arriving -- `perspective(1200px)`, 92 px of
+drop and up to 1.4 deg of turn, written frame by frame from the scroll. Client rects are the
+tilted picture of the words, so every sticker landed low by (distance into the folder) x sin
+1.4 deg: 8.5 px for a line 350 px in. EVENTER's "influence, collaboration and better decisions"
+was readable above its sticker before anyone tapped. The bars had the same fault.
+**Fix:** `measureFlat()` in `frame.js` -- every ancestor that turns, scales or projects is set
+flat for the measurement and restored in the same task (transition held at none across the
+swap, flushed before it is restored); pure translations are left alone.
+**Measured, desktop, worst line per sticker: XTIX 0.69, EVENTER 0.60, MEDCOIN 0.58 of the letter
+height covered -> 1.00 on all four files, at 1440, 1024 and 390, while the folder is still tilted
+and after it settles.**
+
+**2. The scroll lift stopped mid-word.** `.rxb` lifted with `scaleX(--rxp)` continuously, so a bar
+stopped wherever the scroll stopped: "Position for enterpri", "scaling outb". Separately, the
+window engine ignored the end-of-file signal `queueReveal()` sends, so XTIX's reflection -- the
+last thing in the file -- stayed a third covered with nowhere left to scroll.
+**Fix:** each bar knows where every word on its line ends and only ever stops there (the last
+word takes the whole bar, no residue); `__rxsUpd(y, h, finish)` finishes every bar at the bottom.
+**Measured over a 40 px scroll sweep of every file: 108 half-covered words in XTIX, 6 in EVENTER
+-> 0 in all six files at all three widths; bars left at the end of XTIX 6 -> 0.**
+
+**3. The folder said its number a third time.** `frame.css` already hid `.secnum` in the window
+because the title card carries FILE 01, but `.case .folder::after` (144 px Fraunces, `--cn`)
+stayed, bottom right -- over the last line of XTIX's reflection and behind EVENTER's THE
+CUSTOMER node. **Fix:** it stands down inside `.mw-view` only; the scrolling page is untouched.

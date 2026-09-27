@@ -231,6 +231,13 @@
    only -- on the scrolling page, where there is no card, the number is untouched and still the
    210 px ghost it has always been. */
 .mw-view .secnum{display:none}
+/* AND THE FOLDER SAID IT A THIRD TIME. The rule above stood the 210 px .secnum down, but each
+   case folder carries the same number again as its own watermark -- `.case .folder::after`, 144 px
+   Fraunces at the folder's bottom right, fed by --cn "01" to "04". Inside the window it is the
+   same fact in a third voice, and the bottom right is where the files end: it sat over the last
+   line of XTIX's reflection and behind EVENTER's THE CUSTOMER node. The card carries the number;
+   this one stands down inside the window only, like its twin. */
+.mw-view .case .folder::after{content:none}
 
 /* A READING FLOOR ON A PHONE. The archive's form labels -- the slip's keys and header, the
    analyst's margin head, FINDING OF FACT, the reviewing desk's signature, the method slip's
