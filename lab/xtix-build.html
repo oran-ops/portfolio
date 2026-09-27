@@ -75,6 +75,7 @@ main,.labbar{position:relative;z-index:1}
 main{max-width:1120px;margin:0 auto;padding:clamp(64px,12vh,140px) clamp(18px,4vw,56px) 0}
 .kick{display:flex;align-items:center;gap:10px;font:500 11.5px/1 var(--f-mono);letter-spacing:.12em;color:var(--label);text-transform:uppercase}
 .kick b{color:var(--c1);font-weight:500}
+.kick .tok{margin-left:auto;padding:6px 10px;border:1px solid var(--line2);border-radius:999px;color:var(--c1)}
 .kick .dot{width:6px;height:6px;border-radius:50%;background:var(--c1);box-shadow:0 0 12px var(--glow)}
 h1{font:400 clamp(44px,7vw,92px)/.96 var(--f-display);letter-spacing:-.012em;margin:22px 0 18px;max-width:17ch;color:var(--ink);text-wrap:balance}
 h1 em{font-style:italic;color:var(--c2)}
@@ -174,7 +175,6 @@ h1 em{font-style:italic;color:var(--c2)}
 .bars .z{height:18%;border:1px dashed var(--line2);border-radius:7px;position:relative}
 .bars .z::after{content:"∅";position:absolute;left:50%;bottom:-22px;transform:translateX(-50%);font:500 11px/1 var(--f-mono);color:var(--muted)}
 .bars .gapline{height:100%;justify-self:center;width:1px;background:linear-gradient(180deg,transparent,var(--line2))}
-.figcap{margin-top:12px;font:500 10px/1.4 var(--f-mono);letter-spacing:.1em;color:var(--muted);text-transform:uppercase}
 
 /* ---------------------------------------------------------------- THE LAMP, AS A BEAM
    The live site's lamp is a switch: the whole folder turns violet at once. Here it is a light the
@@ -244,7 +244,6 @@ h1 em{font-style:italic;color:var(--c2)}
   .bars .b::after{font-size:9px;bottom:-17px}.bars .z::after{bottom:-18px}
   .row{height:clamp(28px,3.8vh,36px);font-size:15px;padding:0 14px}
   .winbar{padding:11px 14px}
-  .figcap{display:none}
   .stagehead .n{font-size:28px}
   .lampbtn{padding:7px 12px 7px 10px;gap:8px}.lampbtn .sub{display:none}
   .dev .note{white-space:normal;max-width:52vw}.dev .sig{display:none}
@@ -254,6 +253,11 @@ h1 em{font-style:italic;color:var(--c2)}
 .payoff{padding:12vh 0 26vh}
 .hero{display:flex;align-items:flex-start;gap:4px;font:400 clamp(120px,22vw,280px)/.8 var(--f-display);letter-spacing:-.035em;
   font-variant-numeric:tabular-nums;color:var(--ink);margin:26px 0 18px;text-shadow:0 0 80px color-mix(in srgb,var(--c1) 18%,transparent)}
+.hero>span{display:inline-block;clip-path:inset(0 0 100% 0);transform:translateY(.18em);
+  transition:clip-path 1.1s var(--ease),transform 1.1s var(--ease)}
+.hero .cur{transition-delay:.12s}.hero .arr{transition-delay:.5s}
+.hero.in>span{clip-path:inset(-.2em -.2em -.2em -.2em);transform:none}
+.still .hero>span{clip-path:none;transform:none}
 .hero .cur{font-style:italic;font-size:.44em;color:var(--c1);margin-top:.08em}
 .hero .arr{font:500 .1em/1 var(--f-mono);color:var(--muted);letter-spacing:.1em;align-self:flex-end;margin:0 0 .6em 14px;text-shadow:none}
 .biglbl{font:500 12px/1.8 var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--label)}
@@ -281,7 +285,7 @@ h1 em{font-style:italic;color:var(--c2)}
 </div>
 
 <main>
-  <div class="kick"><i class="dot"></i>CASE STUDY 01 &nbsp;·&nbsp; FILE 01 · INTAKE</div>
+  <div class="kick"><i class="dot"></i>CASE STUDY 01<span class="tok">FILE 01 · INTAKE</span></div>
   <h1>Building a Commercial Function <em>From Zero</em></h1>
   <div class="meta">XTIX · B2B SAAS · TECH · E-TICKETS PLATFORM · 2026–PRESENT</div>
   <div class="part">PART 1 OF 2 — THE BUILD</div>
@@ -357,7 +361,6 @@ h1 em{font-style:italic;color:var(--c2)}
           <div class="bars" id="bars">
             <i class="z"></i><i class="z"></i><i class="z"></i><i class="gapline"></i>
           </div>
-          <figcaption class="figcap">FIG. 01 &nbsp; FROM ZERO — INFRASTRUCTURE BUILD-UP</figcaption>
         </figure>
       </div>
       <div class="beam" aria-hidden="true"></div>
@@ -443,7 +446,7 @@ h1 em{font-style:italic;color:var(--c2)}
     stage.classList.toggle("has-new", n >= 5);
     stage.classList.toggle("done", n >= 10);
     stage.classList.toggle("shut", open === 0);
-    count.innerHTML = n ? pad(n) + "<small>/10</small>" : "∅";
+    count.textContent = n ? pad(n) : "∅";
     cap.innerHTML = n ? "<span><i>" + pad(n) + "</i>" + SYS[n - 1] + "</span>" : "";
     if (grew && !quiet) tick(n === 10);
   }
@@ -473,22 +476,13 @@ h1 em{font-style:italic;color:var(--c2)}
   else { addEventListener("scroll", onScroll, { passive: true }); addEventListener("resize", onScroll); frame(); }
 
   /* ---------------------------------------------------------------- the payoff counts in */
-  var bigv = document.getElementById("bigv"), counted = false;
-  function countIn() {
-    if (counted || reduced || html.classList.contains("still")) return;
-    counted = true;
-    var t0 = performance.now(), D = 1400;
-    (function run(t) {
-      var q = Math.min(1, (t - t0) / D), e = 1 - Math.pow(1 - q, 4);
-      bigv.textContent = q < 1 ? (9 * e).toFixed(1) + "M" : "9M+";
-      if (q < 1) requestAnimationFrame(run);
-    })(t0);
-  }
-  if ("IntersectionObserver" in window) {
-    bigv.textContent = reduced ? "9M+" : "0.0M";
-    new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) countIn(); }); },
-      { threshold: .6 }).observe(document.getElementById("big"));
-  }
+  /* THE FIGURE LANDS WHOLE. A count-up would print 0.0M, 4.5M... -- numbers the file never says.
+     So "$9M+" arrives as itself: it rises out of a mask, once, the moment it is in view. */
+  var big = document.getElementById("big"), counted = false;
+  function countIn() { if (counted) return; counted = true; big.classList.add("in"); }
+  if (reduced || !("IntersectionObserver" in window)) big.classList.add("in");
+  else new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) countIn(); }); },
+    { threshold: .5 }).observe(big);
 
   /* ---------------------------------------------------------------- the lab bar */
   var sb = document.getElementById("snd"), stb = document.getElementById("still");
@@ -497,7 +491,7 @@ h1 em{font-style:italic;color:var(--c2)}
   document.getElementById("again").onclick = function () {
     html.classList.remove("still"); stb.setAttribute("aria-pressed", "false");
     built = 0; apply(0, true); B.forEach(function (b) { b.classList.remove("on", "now"); });
-    counted = false; bigv.textContent = "0.0M";
+    counted = false; big.classList.remove("in");
     scrollTo(0, build.offsetTop - innerHeight * .25);
   };
   /* ---------------------------------------------------------------- the lamp
