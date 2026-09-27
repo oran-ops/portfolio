@@ -45,7 +45,9 @@ standing on the desk above its own window; the desk dither between blocks; the s
 printed on paper; the lamp plate as a push button whose ring *arrives*; the whole-scale law and
 the mono-twin contract.
 *Dropped from A:* making every block a window (that was its failure mode); replacing
-`redactionBars()` with `box-decoration-break:clone` — a transform on a clone-background span moves
+`redactionBars()` with `box-decoration-break:clone` — which is moot since §9.4 withdrew the covers
+altogether, but the reading stands as a record of why the mechanism was read before it was judged:
+a transform on a clone-background span moves
 the text with the cover, so the claim does not hold and the repo's measured per-line mechanism is
 kept; a live scroll thumb on every block; `.secnum` at scale 24 inside the machine, where
 `frame.css:233` hides it outright.
@@ -906,7 +908,8 @@ doubled keyline, no bar — and then on `DONE`.
 3. **`min-width:0`** on every grid and flex item that can hold a drawn string or a wide figure.
 4. **`.wbar.z` outranks `.wbar`** — name both in the phone rule. §12.
 5. **SVG and CSS versions of a pattern must be the same density.** §6.3.
-6. **Do not touch `redactionBars()`.** §9.4.
+6. **There is no cover apparatus left to preserve.** `redactionBars()`, `redaction()` and
+   `.redct` were all removed on 2026-09-27; §9.4. Do not reintroduce any of them.
 7. **`frame.css:233` hides `.secnum` inside the machine.** Do not spend time there. §5.1.
 8. **Measure the page width before the screenshot, not after.** §12.
 
