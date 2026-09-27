@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>PAPER UNDER GLASS — סקירת העיצוב מחדש</title>
+<style>
+  /* the archive's own ground and labels; no network, no fonts to fetch */
+  :root{
+    --bg:#191A1F; --card:#202127; --card2:#25262D; --grid:#33353C; --grid2:#4B4E55;
+    --ink:#F2F1ED; --lbl:#CFD0D4; --mut:#B6B7BB;
+    --emb:#2FB380; --brass:#E0A458; --ice:#5E8FBF; --uv:#9E7BFF;
+    --mono:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    --sans:Inter,system-ui,-apple-system,'Segoe UI',sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.65;
+    -webkit-text-size-adjust:100%}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 20px 96px}
+
+  header{padding:64px 0 34px;border-bottom:1px solid var(--grid)}
+  .kick{font-family:var(--mono);font-size:11px;letter-spacing:.32em;color:var(--emb)}
+  h1{font-size:clamp(28px,5vw,46px);letter-spacing:-.02em;line-height:1.1;margin-top:14px;font-weight:800}
+  .sub{margin-top:14px;color:var(--lbl);max-width:60ch}
+  .meta{margin-top:20px;font-family:var(--mono);font-size:11px;letter-spacing:.16em;color:var(--mut)}
+  .meta b{color:var(--emb);font-weight:700}
+
+  section{margin-top:64px}
+  h2{font-size:clamp(19px,3vw,25px);letter-spacing:-.01em;font-weight:800}
+  h2 .n{font-family:var(--mono);font-size:12px;letter-spacing:.2em;color:var(--emb);
+    display:block;margin-bottom:8px;font-weight:700}
+  .lead{margin-top:10px;color:var(--lbl);max-width:66ch}
+
+  figure{margin-top:26px;background:var(--card);border:1px solid var(--grid);border-radius:0 12px 12px 12px;
+    overflow:hidden}
+  figure img{display:block;width:100%;height:auto;background:var(--bg)}
+  figcaption{padding:13px 16px;border-top:1px solid var(--grid);background:var(--card2);
+    font-size:14px;color:var(--lbl)}
+  figcaption b{color:var(--ink);font-weight:700}
+  figcaption .t{display:block;font-family:var(--mono);font-size:10.5px;letter-spacing:.18em;
+    color:var(--mut);margin-bottom:5px}
+  figcaption a{color:var(--emb)}
+
+  .two{display:grid;gap:20px}
+  @media(min-width:900px){.two{grid-template-columns:1fr 1fr}}
+
+  .card{margin-top:22px;background:var(--card);border:1px solid var(--grid);
+    border-right:3px solid var(--emb);border-radius:0 10px 10px 0;padding:16px 18px}
+  .card h3{font-family:var(--mono);font-size:11.5px;letter-spacing:.2em;color:var(--emb);font-weight:700}
+  .card ul{margin:10px 22px 0 0;color:var(--lbl)}
+  .card li{margin-top:6px}
+  .card li b{color:var(--ink)}
+  .q{border-right-color:var(--brass)} .q h3{color:var(--brass)}
+
+  table{width:100%;border-collapse:collapse;margin-top:18px;font-size:14px}
+  th,td{text-align:right;padding:9px 12px;border-bottom:1px solid var(--grid)}
+  th{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;color:var(--mut);font-weight:700}
+  td b{color:var(--emb)}
+
+  footer{margin-top:80px;padding-top:26px;border-top:1px solid var(--grid);
+    font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--mut)}
+  footer a{color:var(--lbl)}
+  a{color:var(--emb)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="kick">PAPER UNDER GLASS</div>
+  <h1>העיצוב מחדש של שבעת המסמכים</h1>
+  <p class="sub">תכנית מלאה ודוגמאות ויזואליות בנויות. האתר עצמו עדיין לא שונה — כל מה שכאן הוא הצעה,
+     והבנייה מתחילה רק אחרי אישור.</p>
+  <p class="meta">חמישה כיווני עיצוב · שלושה שופטים · מערכת אחת · <b>המלל לא משתנה באף מקום</b></p>
+</header>
+
+<section>
+  <h2><span class="n">הרעיון</span>כל בלוק הוא או עלה או חלון</h2>
+  <p class="lead"><b>עלה</b> מודפס: בלי מסגרת, בלי סרגל, והמספר שלו תלוי בשוליים לצדו.
+     <b>חלון</b> הוא זכוכית: קו מתאר, סרגל כותרת, שלטים, ו<b>מצב</b> — פעיל או לא פעיל.
+     המסמך מודפס; הארכיון שמחזיק אותו הוא מכונה; הקורא רואה את שניהם בו-זמנית.
+     ההיררכיה נוצרת מהמצב, לא מהגודל — ולכן אף מילה לא זזה ממקומה.</p>
+</section>
+
+<section>
+  <h2><span class="n">01 · המסמך</span>XTIX, מלמעלה למטה</h2>
+  <figure>
+    <img src="01_xtix_whole.png" alt="XTIX בעיצוב החדש, המסמך כולו">
+    <figcaption><span class="t">התיק כולו · 1200px · שלושה טורים של אותו מסמך</span>
+      האייקון עומד על השולחן מעל החלון שלו; הכותרת ב-Fraunces; המספרים תלויים בשוליים;
+      רשימת החוסרים היא <b>חלון לא פעיל</b> עם פס גלילה אמיתי; $9M+ יושב בתוך דיאלוג עם הקו הכפול
+      של System 1; פתק הראיה חופף אותו — חפיפה אחת למסמך.</figcaption>
+  </figure>
+  <figure>
+    <img src="02_xtix_lamp_armed.png" alt="XTIX עם מנורת ה-UV דלוקה">
+    <figcaption><span class="t">אותו תיק · המנורה דלוקה</span>
+      המנורה עומדת <b>בראש התיק</b> והסגול נוגע <b>בתיקייה בלבד</b> — הרקע נשאר פחם. האזורים נפתחים
+      והשורות החתומות נחשפות.</figcaption>
+  </figure>
+  <figure>
+    <img src="03_xtix_phone.png" alt="XTIX בטלפון">
+    <figcaption><span class="t">390px · שלוש רצועות של אותו מסמך</span>
+      בטלפון העלה מאבד את השוליים והמספר עולה לשורה שמעליו; החלונות נשארים חלונות.</figcaption>
+  </figure>
+</section>
+
+<section>
+  <h2><span class="n">02 · המשפחה</span>אותה מערכת, שבע זהויות</h2>
+  <div class="two">
+    <figure><img src="04_oasis.png" alt="OASIS בפליז">
+      <figcaption><span class="t">OASIS · פליז #E0A458</span>טבעת ה-CEO וחמשת הכפתורים של מודל הניהול.</figcaption></figure>
+    <figure><img src="05_medcoin.png" alt="MEDCOIN בלבן">
+      <figcaption><span class="t">MEDCOIN · לבן #F2F1ED</span>הקובץ היחיד בלי דיו שני — הכל נבנה מגוונים של אותו לבן.</figcaption></figure>
+  </div>
+  <figure>
+    <img src="07_family_four_colours.png" alt="ארבעת צבעי התיקיות על אותם רכיבים">
+    <figcaption><span class="t">אותם שלושה רכיבים בארבעת הצבעים</span>
+      ירוק, פליז, קרח, לבן. אותו אייקון מצויר פעם אחת ונצבע לכל תיקייה — האייקון של EVENTER
+      <b>הוא</b> זה של XTIX, בקרח.</figcaption>
+  </figure>
+</section>
+
+<section>
+  <h2><span class="n">03 · הערכה</span>מאיפה כל דבר מגיע</h2>
+  <div class="two">
+    <figure><img src="06a_kit_patterns_and_icons.png" alt="סולם התבניות וחוק האובייקט">
+      <figcaption><span class="t">התבניות וחוק ארבעת הקווים</span>
+        סולם צפיפות לפי כיסוי דיו מדוד (0 · 25 · 50 · 75 · 100), ואחריו הכלל שכל אייקון בנוי ממנו.</figcaption></figure>
+    <figure><img src="06c_kit_paper_and_stamps.png" alt="הנייר והחותמות">
+      <figcaption><span class="t">הנייר והחותמות</span>
+        פתק הראיה הוא <b>חלון מודפס על נייר</b>; החותמת נשארת נטויה כי יד לחצה אותה.</figcaption></figure>
+  </div>
+  <div class="two">
+    <figure><img src="06b_kit_icons.png" alt="מפת האייקונים">
+      <figcaption><span class="t">מפת האייקונים · 32×32 עם הרשת</span>
+        אותה מפה אחת לכל שבעת הקבצים, נצבעת מחדש לפי צבע התיקייה.</figcaption></figure>
+    <figure><img src="06d_kit_lamp.png" alt="המנורה">
+      <figcaption><span class="t">המנורה · כבויה, נדלקת, דלוקה</span>
+        אותו אפקט UV שקיים היום, בתוך המערכת החדשה.</figcaption></figure>
+  </div>
+</section>
+
+<section>
+  <h2><span class="n">04 · שלוש ההחלטות</span>מה שנמדד כדי שתוכל להכריע</h2>
+
+  <div class="card q">
+    <h3>א · עשרת הכלים ב-LEADERSHIP</h3>
+    <ul>
+      <li><b>A</b> — אייקונים ב-16px: עדין מדי, שניים-שלושה נקראים כערימת קווים.</li>
+      <li><b>B</b> — מדף חלונות בשמות: נקי, אבל עשרה גופים ריקים נראים כמו תקלה.</li>
+      <li><b>C</b> — אייקונים ב-32px: <b>ההמלצה</b>. מובחנים, קומפקטיים, ובגודל שכל שאר המערכת כבר עובדת בו.</li>
+      <li><b>D</b> — מדף עם אייקון בכל חלון: הכי כבד והכי ארוך.</li>
+    </ul>
+  </div>
+  <figure><img src="08_leadership_four_options.png" alt="ארבע אפשרויות לכלים">
+    <figcaption><span class="t">ארבע האפשרויות · 1200px · כל עשרת השמות אומתו מילה במילה מול המסמך</span>
+      A ו-C משמאל, B ו-D מימין.</figcaption></figure>
+  <figure><img src="10_leadership_options_phone.png" alt="אותן אפשרויות בטלפון">
+    <figcaption><span class="t">390px · אותן ארבע אפשרויות</span>
+      בטלפון הפער בין האפשרויות גדל: המדף בשמות נמתח על גובה כפול מזה של האייקונים.</figcaption></figure>
+  <figure><img src="09_leadership_icons_at_16px.png" alt="מבחן האייקונים בגודל אמיתי">
+    <figcaption><span class="t">מבחן הגודל האמיתי</span>עשרת הסימנים ב-16 פיקסלים, ממוספרים, ועל שדה חלון — המקרה הגרוע.</figcaption></figure>
+
+  <div class="card q" style="border-right-color:var(--ice)">
+    <h3 style="color:var(--ice)">ב · XTIX — עמודה אחת או שתיים</h3>
+    <table>
+      <tr><th></th><th>עמודה אחת</th><th>שתי עמודות</th></tr>
+      <tr><td>המסמך כולו</td><td><b>4243px · 5.41 מסכים</b></td><td>3893px · 4.97 מסכים</td></tr>
+      <tr><td>החיסכון</td><td>—</td><td>350px · 8% · 0.44 מסך</td></tr>
+      <tr><td>תווים בשורה</td><td><b>72</b></td><td>52</td></tr>
+      <tr><td>רוחב החלונות בחלק א׳</td><td><b>858px</b></td><td>407px</td></tr>
+    </table>
+    <ul><li>בטלפון זה ממילא עמודה אחת. גם בגרסת "עמודה אחת" — חלק ב׳ עדיין עומד בשתי עמודות.</li></ul>
+  </div>
+  <figure><img src="11_xtix_one_vs_two_columns.png" alt="אותו קטע בשתי הגרסאות">
+    <figcaption><span class="t">אותם 1000 פיקסלים של המסמך · 1:1 · עמודה אחת למעלה</span>
+      כאן רואים את עמוד השדרה של השוליים עם 01 · 02 · 03 תלויים עליו, מול שדרה שנשארו עליה שניים.</figcaption></figure>
+
+  <figure><img src="12_xtix_whole_file_both.png" alt="המסמך כולו בשתי הגרסאות">
+    <figcaption><span class="t">המסמך כולו · שתי הגרסאות זו לצד זו · מוקטן פי 3.5</span>
+      אותו תוכן בדיוק, מהכותרת ועד החתימה — מימין עמודה אחת, משמאל שתיים.</figcaption></figure>
+
+  <div class="card q">
+    <h3 style="color:var(--uv)">ג · המקרא של הגרף</h3>
+    <ul>
+      <li>הציר כבר מדפיס <b>∅ ∅ ∅ 01…10</b> — במסמך שהנקודות שלו הן 01–04.</li>
+      <li>המפתח כפי שבנוי היום סוטה <b>206px</b> מהעמודות שהוא מתאר בדסקטופ ו-<b>792px</b> בטלפון.</li>
+      <li>ההמלצה: חמש רצועות בתוך הציור, בלי מילים. סטייה <b>0</b>.</li>
+    </ul>
+  </div>
+  <figure><img src="14_legend_ramp.png" alt="המקרא המומלץ">
+    <figcaption><span class="t">ההמלצה · רצועות בתוך הציור, בלי מילה אחת</span>כל רצועה בדיוק מתחת לעמודות שהיא מתארת.</figcaption></figure>
+  <figure><img src="14_legend_ranges.png" alt="המקרא כפי שבנוי היום">
+    <figcaption><span class="t">לשם השוואה · המפתח עם טווחי המספרים</span>שתי מערכות מספור בקובץ אחד.</figcaption></figure>
+
+  <figure><img src="13_numbering_census.png" alt="מפקד המספור">
+    <figcaption><span class="t">מפקד המספור · שבעת הקבצים</span>
+      ספרה = נקודה בחלק הראשון, אות = נקודה בחלק הראיות — בדיוק הכלל שהגדרת. אין פערים:
+      כל רצף ספרות מתחיל ב-01 ורץ ברצף, כל רצף אותיות מתחיל ב-A.</figcaption></figure>
+</section>
+
+<section>
+  <h2><span class="n">05 · הקריאה המלאה</span>התכנית עצמה</h2>
+  <div class="card">
+    <h3>המסמכים</h3>
+    <ul>
+      <li><a href="../DOCUMENTS_REDESIGN.md">DOCUMENTS_REDESIGN.md</a> — התקציר: מה נבנה, מה חסר,
+        ההחלטות שקיבלת וההחלטות שקיבלתי.</li>
+      <li><a href="../SYSTEM.md">SYSTEM.md</a> — התכנית המלאה: טוקנים, טיפוגרפיה, גריד,
+        כל 110 מחלקות הרכיבים, האייקונים, הגרפים, הפתקים, המנורה, התנועה, והטלפון.</li>
+      <li><a href="tokens.css">tokens.css</a> — המשתנים עצמם, מוכנים להדבקה.</li>
+    </ul>
+  </div>
+  <div class="card q">
+    <h3>מה עוד לא צויר</h3>
+    <ul>
+      <li>EVENTER, LEADERSHIP, TECH ו-READ ME טרם נבנו. הבנייה מתחילה ב-<b>TECH</b> — המסמך הקשה ביותר.</li>
+      <li>מצבי פוקוס ולחיצה לכל הפקדים החדשים.</li>
+    </ul>
+  </div>
+</section>
+
+<footer>
+  ORAN CARMON · ARCHIVE · העיצוב מחדש של המסמכים ·
+  <a href="https://oran-ops.github.io/portfolio/m/">האתר החי (לא שונה)</a>
+</footer>
+
+</div>
+</body>
+</html>
