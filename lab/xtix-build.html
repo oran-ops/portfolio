@@ -1,0 +1,568 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>XTIX — the build (prototype)</title>
+<!-- PROTOTYPE, LAB ONLY. Nothing in src/ reads this file.
+     One signature moment for XTIX: the seven absences of STARTING POINT turn, in the same window,
+     into the ten systems of WHAT I BUILT, while the ∅→10 chart rises beside them -- "Filled in
+     order, ∅→10, never in one pass", the file's own words from its UV layer. When the last gap
+     closes the UV lamp becomes a beam the reader holds, and it develops the file's THE METHOD zone.
+     Then PART 2 opens on the number.
+
+     THE WORDS: every string inside <main> exists in src/doc/xtix.html or in the XTIX lamp zones in
+     src/shell/frame.js, and each is shown whole. STARTING POINT and its seven gaps are RE-SET here
+     from zone 01, which SYSTEM.md 0.3 allows ("re-set a string the document already carries").
+
+     OPEN FOR ORAN:
+       1. The pairing of each gap with the system that answers it (the data-k on each row). Six
+          pairs share a word in both lists. One does not: "No sales methodology" -> Commercial
+          Strategy (marked data-decide="pairing").
+       2. Which three "only measure": read here as KPI Framework, Forecasting Structure and
+          Reporting Dashboards, from the lamp note "07 of them do the work; 03 exist to watch it".
+       3. Whether the figure should be seen before the build rather than after it (the executive
+          research: the number within the first seconds). That would move a PART 2 string forward.
+       4. Sound is opt-in (the lab bar), a soft tick per system and a two-note close.
+
+     THE LOOK is "Swiss Archive" from the design research: Instrument Serif / Geist / Geist Mono,
+     all SIL OFL 1.1, Latin subsets in fonts_swiss.css (117 KB against 722 KB today). -->
+<link rel="stylesheet" href="fonts_swiss.css">
+<style>
+/* ================================================================ SWISS ARCHIVE
+   The direction the research recommends as a default: the computer is quoted, not re-drawn.
+   Type does the work -- Instrument Serif for titles and figures, Geist for reading, Geist Mono
+   only for labels -- and the machine is present as LIGHT: the emerald of the screen falling on
+   the charcoal, a rim of light along the top of every window, a phosphor bloom on the bar being
+   built. All three faces are SIL OFL 1.1, subset to Latin: 117 KB against today's 722 KB.
+   The ground, the folder colours and the lamp are unchanged. */
+:root{
+  --bg:#191A1F;
+  --ink:rgba(242,241,237,.94); --text:rgba(242,241,237,.80); --label:rgba(242,241,237,.62); --muted:rgba(242,241,237,.42);
+  --line:rgba(255,255,255,.07); --line2:rgba(255,255,255,.12);
+  --c1:#2FB380; --c2:#8DD5B9; --c3:#207A57;
+  --glow:color-mix(in srgb,var(--c1) 55%,transparent);
+  --uv:#9B7BFF;
+  --f-display:'Instrument Serif',Georgia,serif;
+  --f-text:'Geist',system-ui,sans-serif;
+  --f-mono:'Geist Mono',ui-monospace,monospace;
+  --ease:cubic-bezier(.2,.7,.1,1);
+  --spring:cubic-bezier(.34,1.3,.5,1);
+  --card:linear-gradient(180deg,rgba(255,255,255,.045),rgba(255,255,255,.012) 38%,rgba(255,255,255,.02));
+}
+*{box-sizing:border-box}
+html{background:var(--bg);color:var(--ink);-webkit-text-size-adjust:100%}
+body{margin:0;font:400 17px/1.62 var(--f-text);color:var(--text);background:var(--bg);overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;font-feature-settings:"ss01","tnum" 0}
+/* the screen is a light source: its emerald falls on the charcoal from above, and a fine grain
+   keeps the dark from reading as a flat fill */
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:radial-gradient(90% 60% at 50% -12%,color-mix(in srgb,var(--c1) 11%,transparent),transparent 62%),
+             radial-gradient(60% 50% at 50% 120%,rgba(0,0,0,.45),transparent 70%)}
+body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:60;opacity:.55;
+  background:url(data:image/png;base64,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) repeat;background-size:96px 96px}
+main,.labbar{position:relative;z-index:1}
+
+/* ---------------------------------------------------------------- the lab bar (not the document) */
+.labbar{position:absolute;inset:14px auto auto 14px;z-index:70;display:flex;gap:6px;direction:rtl;opacity:.8;
+  font:500 12px/1 var(--f-text)}
+.labbar button{all:unset;cursor:pointer;padding:8px 12px;border-radius:999px;color:var(--label);
+  background:rgba(25,26,31,.8);border:1px solid var(--line2);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.labbar button[aria-pressed="true"]{color:var(--bg);background:var(--c1);border-color:var(--c1)}
+.labbar button:focus-visible{outline:2px solid var(--c1);outline-offset:2px}
+
+/* ---------------------------------------------------------------- the document */
+main{max-width:1120px;margin:0 auto;padding:clamp(64px,12vh,140px) clamp(18px,4vw,56px) 0}
+.kick{display:flex;align-items:center;gap:10px;font:500 11.5px/1 var(--f-mono);letter-spacing:.12em;color:var(--label);text-transform:uppercase}
+.kick b{color:var(--c1);font-weight:500}
+.kick .tok{margin-left:auto;padding:6px 10px;border:1px solid var(--line2);border-radius:999px;color:var(--c1)}
+.kick .dot{width:6px;height:6px;border-radius:50%;background:var(--c1);box-shadow:0 0 12px var(--glow)}
+h1{font:400 clamp(44px,7vw,92px)/.96 var(--f-display);letter-spacing:-.012em;margin:22px 0 18px;max-width:17ch;color:var(--ink);text-wrap:balance}
+h1 em{font-style:italic;color:var(--c2)}
+.meta{font:500 11.5px/1.7 var(--f-mono);letter-spacing:.1em;color:var(--muted);text-transform:uppercase}
+.part{display:flex;align-items:center;gap:16px;margin:64px 0 44px;font:500 12px/1 var(--f-mono);
+  letter-spacing:.14em;color:var(--c1);text-transform:uppercase}
+.part::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,color-mix(in srgb,var(--c1) 45%,transparent),transparent)}
+.zone{display:grid;grid-template-columns:72px 1fr;gap:0 20px;margin:0 0 56px}
+.zone .n{font:italic 400 34px/1 var(--f-display);color:var(--c1);text-align:right;padding-top:2px}
+.zone h2{font:500 11.5px/1.9 var(--f-mono);letter-spacing:.12em;color:var(--label);margin:0 0 10px;text-transform:uppercase}
+.zone p{margin:0;max-width:34em;font-size:clamp(18px,1.6vw,21px);line-height:1.5}
+.zone p b{color:var(--ink);font-weight:500}
+.dash{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 32px;max-width:640px}
+.dash li{position:relative;padding-left:18px}
+.dash li::before{content:"";position:absolute;left:0;top:.8em;width:8px;height:1px;background:var(--c1)}
+.then{font:italic 400 clamp(22px,2.2vw,28px)/1.3 var(--f-display)!important;color:var(--c2)!important;margin-top:18px!important}
+@media (max-width:700px){.zone{grid-template-columns:1fr}.zone .n{text-align:left;margin-bottom:8px;font-size:30px}.dash{grid-template-columns:1fr}}
+
+/* ---------------------------------------------------------------- THE BUILD: the track and the stage */
+.build{position:relative;height:400vh;margin:0 calc(-1*clamp(18px,4vw,56px))}
+.stage{position:sticky;top:0;height:100vh;height:100svh;display:grid;align-content:center;
+  padding:clamp(14px,3vh,34px) clamp(18px,4vw,56px)}
+.stagehead{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:clamp(12px,2.6vh,24px)}
+.stagehead .l{display:flex;align-items:baseline;gap:16px}
+.stagehead .n{font:italic 400 34px/1 var(--f-display);color:var(--c1)}
+.stagehead h2{margin:0;font:500 11.5px/1 var(--f-mono);letter-spacing:.12em;color:var(--label);text-transform:uppercase}
+.grid{display:grid;grid-template-columns:minmax(0,.95fr) minmax(0,1.05fr);gap:clamp(14px,2.4vw,32px);align-items:stretch}
+
+/* a window is a pane of dark glass: a rim of light along its top edge, a deep soft shadow tinted
+   by nothing but the dark, and no controls drawn that would not work */
+.win,.fig{position:relative;background:var(--card),#1C1D23;border:1px solid var(--line);border-radius:18px;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.07),0 1px 0 rgba(0,0,0,.5),0 40px 90px -40px rgba(0,0,0,.85)}
+.win::before,.fig::before{content:"";position:absolute;left:18%;right:18%;top:-1px;height:1px;border-radius:1px;
+  background:linear-gradient(90deg,transparent,color-mix(in srgb,var(--c2) 70%,transparent),transparent);opacity:.55}
+.win{overflow:hidden}
+.winbar{display:flex;justify-content:space-between;align-items:center;padding:14px 20px;border-bottom:1px solid var(--line);
+  font:500 11px/1 var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--label)}
+.winbar .cnt{color:var(--ink)}
+.winbar s{text-decoration:none;position:relative;transition:color .6s var(--ease)}
+.winbar s::after{content:"";position:absolute;left:-2px;right:-2px;top:50%;height:1px;background:var(--c1);box-shadow:0 0 6px var(--glow);
+  transform:scaleX(0);transform-origin:left;transition:transform .6s var(--ease) .2s}
+.shut .winbar s{color:var(--muted)}.shut .winbar s::after{transform:scaleX(1)}
+.rows{list-style:none;margin:0;padding:6px 0 8px}
+.row{position:relative;display:grid;grid-template-columns:24px 1fr auto;align-items:center;gap:12px;
+  padding:0 20px;height:clamp(33px,5.2vh,50px);font-size:clamp(15px,1.2vw,17px)}
+.row+.row{box-shadow:inset 0 1px 0 rgba(255,255,255,.035)}
+.row .mk{width:18px;height:18px;border-radius:50%;border:1px solid var(--line2);position:relative;transition:all .5s var(--ease)}
+.row .mk::after{content:"";position:absolute;left:50%;top:50%;width:20px;height:1px;background:var(--muted);transform:translate(-50%,-50%) rotate(-45deg);transition:opacity .3s}
+.row .tx{position:relative;height:1.6em;overflow:hidden}
+.row .tx span{position:absolute;left:0;top:0;white-space:nowrap;transition:transform .7s var(--ease),opacity .5s var(--ease),color .5s}
+.row .gap{color:var(--muted)}
+.row .gap::after{content:"";position:absolute;left:0;top:54%;height:1px;width:100%;background:var(--c1);box-shadow:0 0 8px var(--glow);transform:scaleX(0);transform-origin:left;transition:transform .4s var(--ease)}
+.row .sys{color:var(--ink);transform:translateY(105%);opacity:0}
+.row .no{font:500 11px/1 var(--f-mono);color:var(--c1);letter-spacing:.06em;opacity:0;transform:translateX(-4px);transition:all .5s var(--ease) .2s}
+.row.new{display:none}
+.row.on .mk{border-color:transparent;background:radial-gradient(circle at 35% 30%,var(--c2),var(--c1) 55%,var(--c3));
+  box-shadow:0 0 0 4px color-mix(in srgb,var(--c1) 14%,transparent),0 0 14px -2px var(--glow)}
+.row.on .mk::after{opacity:0}
+.row.on .mk::before{content:"";position:absolute;left:6px;top:3.5px;width:4px;height:8px;border:solid #0E1512;border-width:0 1.8px 1.8px 0;transform:rotate(45deg)}
+.row.on .gap::after{transform:scaleX(1)}
+.row.on .gap{transform:translateY(-105%);opacity:0;transition-delay:.32s}
+.row.on .sys{transform:none;opacity:1;transition-delay:.32s}
+.row.on .no{opacity:1;transform:none}
+.row.new.on{display:grid;animation:rowin .7s var(--ease) both}
+@keyframes rowin{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.row::before{content:"";position:absolute;inset:3px 8px;border-radius:10px;opacity:0;transition:opacity .5s var(--ease);
+  background:linear-gradient(90deg,color-mix(in srgb,var(--c1) 16%,transparent),transparent 75%)}
+.row.now::before{opacity:1}
+.sep{height:1px;margin:6px 20px;background:linear-gradient(90deg,transparent,var(--line2),transparent);opacity:0;transition:opacity .5s}
+.has-new .sep{opacity:1}
+
+/* the chart that rises beside it */
+.fig{display:flex;flex-direction:column;padding:18px 22px 16px}
+.fighead{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.fighead .t{font:500 11px/1.5 var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--label);padding-top:10px}
+.fighead .t b{display:block;font:italic 400 26px/1 var(--f-display);color:var(--c1);letter-spacing:0;text-transform:none;margin-bottom:8px}
+.count{font:400 clamp(64px,8vw,112px)/.82 var(--f-display);letter-spacing:-.02em;font-variant-numeric:tabular-nums;color:var(--ink);
+  text-shadow:0 0 40px color-mix(in srgb,var(--c1) 25%,transparent)}
+.count small{font:500 .16em/1 var(--f-mono);color:var(--muted);letter-spacing:.08em;margin-left:6px;vertical-align:.4em;text-shadow:none}
+.now-cap{min-height:1.6em;margin:10px 0 12px;font:400 clamp(17px,1.5vw,20px)/1.3 var(--f-text);color:var(--ink)}
+.now-cap i{font:500 11px/1 var(--f-mono);font-style:normal;color:var(--c1);letter-spacing:.08em;margin-right:12px}
+.now-cap span{display:inline-block;animation:capin .55s var(--ease) both}
+@keyframes capin{from{opacity:0;transform:translateY(8px);filter:blur(4px)}to{opacity:1;transform:none;filter:none}}
+.bars{position:relative;flex:1;min-height:clamp(120px,30vh,340px);display:grid;grid-template-columns:repeat(3,.8fr) 14px repeat(10,1fr);
+  gap:clamp(5px,.8vw,10px);align-items:end;padding-bottom:24px}
+.bars::after{content:"";position:absolute;left:0;right:0;bottom:24px;height:1px;background:linear-gradient(90deg,transparent,var(--line2) 12%,var(--line2) 88%,transparent)}
+.bars .b{position:relative;height:calc(var(--h)*1%);border-radius:7px 7px 2px 2px;
+  background:linear-gradient(180deg,color-mix(in srgb,var(--c2) 90%,white),var(--c1) 30%,color-mix(in srgb,var(--c3) 80%,var(--bg)));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.45),inset 0 0 0 1px rgba(0,0,0,.18);
+  transform:scaleY(0);transform-origin:bottom;transition:transform .8s var(--spring),box-shadow .6s var(--ease),filter .6s}
+.bars .b::after{content:attr(data-n);position:absolute;left:50%;bottom:-21px;transform:translateX(-50%);
+  font:500 10px/1 var(--f-mono);color:var(--muted);letter-spacing:.04em}
+.bars .b.on{transform:none}
+.bars .b.now{box-shadow:inset 0 1px 0 rgba(255,255,255,.6),0 0 34px -4px var(--glow),0 0 90px -20px var(--glow)}
+.bars .b.on::after{color:var(--label)}
+.bars .b.now::after{color:var(--c2)}
+.bars .z{height:18%;border:1px dashed var(--line2);border-radius:7px;position:relative}
+.bars .z::after{content:"∅";position:absolute;left:50%;bottom:-22px;transform:translateX(-50%);font:500 11px/1 var(--f-mono);color:var(--muted)}
+.bars .gapline{height:100%;justify-self:center;width:1px;background:linear-gradient(180deg,transparent,var(--line2))}
+
+/* ---------------------------------------------------------------- THE LAMP, AS A BEAM
+   The live site's lamp is a switch: the whole folder turns violet at once. Here it is a light the
+   reader holds. Armed, a 365nm pool follows the pointer (or the finger), and only what it falls
+   on fluoresces -- the file's own THE METHOD zone, written over the ten rows. Nothing new is said:
+   every word under the beam is in frame.js's XTIX lamp table. */
+.lit{position:relative}
+.lampbtn{all:unset;box-sizing:border-box;cursor:pointer;display:grid;grid-template-columns:auto auto auto;align-items:center;gap:12px;
+  padding:9px 16px 9px 12px;border-radius:999px;border:1px solid var(--line2);background:rgba(255,255,255,.03);min-height:44px;
+  opacity:0;transform:translateY(6px);pointer-events:none;transition:opacity .6s var(--ease),transform .6s var(--ease),border-color .3s,background .3s,box-shadow .3s}
+.done .lampbtn{opacity:1;transform:none;pointer-events:auto}
+.lampbtn:focus-visible{outline:2px solid var(--uv);outline-offset:3px}
+.lampbtn .bulb{width:12px;height:12px;border-radius:50%;border:1px solid var(--label);transition:all .3s}
+.lampbtn .nm{font:500 11px/1.2 var(--f-mono);letter-spacing:.12em;color:var(--ink)}
+.lampbtn .call{display:block;font:500 10px/1.3 var(--f-mono);letter-spacing:.1em;color:var(--c1)}
+.lampbtn .sub{font:500 10px/1 var(--f-mono);letter-spacing:.06em;color:var(--muted)}
+.lampbtn[aria-pressed="true"]{border-color:color-mix(in srgb,var(--uv) 60%,transparent);background:color-mix(in srgb,var(--uv) 12%,transparent);
+  box-shadow:0 0 30px -6px color-mix(in srgb,var(--uv) 70%,transparent)}
+.lampbtn[aria-pressed="true"] .bulb{border-color:var(--uv);background:var(--uv);box-shadow:0 0 14px var(--uv)}
+.lampbtn[aria-pressed="true"] .call{color:#C9B8FF}
+
+/* the bed darkens inside the stage only -- Oran: the violet reaches the folder, never the room */
+.lit::before{content:"";position:absolute;inset:-16px;border-radius:26px;background:#07080C;opacity:0;transition:opacity .7s var(--ease);pointer-events:none;z-index:0}
+.uvon .lit::before{opacity:.6}
+.lit>.grid{position:relative;z-index:1;transition:filter .7s var(--ease)}
+.uvon .lit>.grid{filter:saturate(.5) brightness(.58)}
+.beam{position:absolute;inset:0;z-index:2;pointer-events:none;opacity:0;transition:opacity .4s var(--ease);
+  background:radial-gradient(circle at var(--x,50%) var(--y,50%),color-mix(in srgb,var(--uv) 36%,transparent),color-mix(in srgb,var(--uv) 12%,transparent) var(--r1,150px),transparent var(--r2,260px));
+  mix-blend-mode:screen}
+.uvon .beam{opacity:1}
+.dev{position:absolute;inset:0;z-index:3;pointer-events:none;opacity:0;transition:opacity .4s var(--ease);
+  -webkit-mask-image:radial-gradient(circle at var(--x,50%) var(--y,50%),#000 0 var(--r1,150px),transparent var(--r2,260px));
+          mask-image:radial-gradient(circle at var(--x,50%) var(--y,50%),#000 0 var(--r1,150px),transparent var(--r2,260px))}
+.uvon .dev{opacity:1}
+.dev .mark{position:absolute;border-radius:10px;border:1px solid color-mix(in srgb,var(--uv) 85%,white);
+  background:color-mix(in srgb,var(--uv) 14%,transparent);box-shadow:0 0 22px -2px var(--uv),inset 0 0 14px -4px var(--uv)}
+.dev .mark.watch{border-style:dashed}
+.dev .note{position:absolute;font:400 13px/1.35 var(--f-text);color:#EEE6FF;text-shadow:0 0 14px var(--uv);white-space:nowrap}
+.dev .note em{font-style:normal;font-weight:600;color:#fff}
+.dev .note .k{display:block;font:500 10px/1.4 var(--f-mono);letter-spacing:.12em;color:#B9A4FF;text-shadow:none;margin-bottom:6px}
+.dev .note.tag{transform:translateY(-50%);font:500 11px/1 var(--f-mono);letter-spacing:.02em;
+  padding:6px 10px;border-radius:999px;background:color-mix(in srgb,var(--uv) 22%,#07080C);border:1px solid color-mix(in srgb,var(--uv) 55%,transparent)}
+.dev .note.big{font:italic 400 clamp(26px,2.8vw,40px)/1.08 var(--f-display);white-space:normal;max-width:12ch}
+/* on a phone the notes develop as a card over the chart, so no line of theirs crosses a bar */
+.dev .panel{position:absolute;display:flex;flex-direction:column;justify-content:center;gap:10px;padding:16px 18px;border-radius:14px;
+  background:radial-gradient(120% 90% at 30% 20%,color-mix(in srgb,var(--uv) 26%,#0B0A14),#08080E 70%);
+  border:1px solid color-mix(in srgb,var(--uv) 50%,transparent);box-shadow:0 0 30px -8px var(--uv)}
+.dev .panel .note{position:static;white-space:normal;max-width:none}
+.dev .sig{position:absolute;font:500 9.5px/1.4 var(--f-mono);letter-spacing:.1em;color:color-mix(in srgb,var(--uv) 75%,white);white-space:nowrap}
+@media (prefers-reduced-motion:reduce){.dev{-webkit-mask-image:none;mask-image:none}.beam{display:none}}
+.still .dev{-webkit-mask-image:none;mask-image:none}.still .beam{display:none}
+
+.hint{position:absolute;left:50%;bottom:20px;transform:translateX(-50%);width:1px;height:34px;
+  background:linear-gradient(180deg,transparent,var(--c1));transition:opacity .4s;animation:drip 1.8s var(--ease) infinite}
+@keyframes drip{0%{transform:translateX(-50%) scaleY(0);transform-origin:top}50%{transform:translateX(-50%) scaleY(1);transform-origin:top}51%{transform-origin:bottom}100%{transform:translateX(-50%) scaleY(0);transform-origin:bottom}}
+.started .hint{opacity:0}
+
+@media (max-width:760px){
+  .build{height:460vh}
+  .grid{grid-template-columns:1fr;gap:12px}
+  .fig{order:-1;padding:12px 16px 10px}
+  .fighead .t{padding-top:4px;font-size:10px}.fighead .t b{font-size:22px;margin-bottom:4px}
+  .count{font-size:58px}
+  .now-cap{min-height:1.4em;margin:4px 0 6px;font-size:16px}
+  .bars{min-height:84px;height:clamp(84px,13vh,130px);flex:none;padding-bottom:20px}
+  .bars::after{bottom:20px}
+  .bars .b::after{font-size:9px;bottom:-17px}.bars .z::after{bottom:-18px}
+  .row{height:clamp(28px,3.8vh,36px);font-size:15px;padding:0 14px}
+  .winbar{padding:11px 14px}
+  .stagehead .n{font-size:28px}
+  .lampbtn{padding:7px 12px 7px 10px;gap:8px}.lampbtn .sub{display:none}
+  .dev .note{white-space:normal;max-width:52vw}.dev .sig{display:none}
+}
+
+/* ---------------------------------------------------------------- the payoff: PART 2 opens on the number */
+.payoff{padding:12vh 0 26vh}
+.hero{display:flex;align-items:flex-start;gap:4px;font:400 clamp(120px,22vw,280px)/.8 var(--f-display);letter-spacing:-.035em;
+  font-variant-numeric:tabular-nums;color:var(--ink);margin:26px 0 18px;text-shadow:0 0 80px color-mix(in srgb,var(--c1) 18%,transparent)}
+.hero>span{display:inline-block;clip-path:inset(0 0 100% 0);transform:translateY(.18em);
+  transition:clip-path 1.1s var(--ease),transform 1.1s var(--ease)}
+.hero .cur{transition-delay:.12s}.hero .arr{transition-delay:.5s}
+.hero.in>span{clip-path:inset(-.2em -.2em -.2em -.2em);transform:none}
+.still .hero>span{clip-path:none;transform:none}
+.hero .cur{font-style:italic;font-size:.44em;color:var(--c1);margin-top:.08em}
+.hero .arr{font:500 .1em/1 var(--f-mono);color:var(--muted);letter-spacing:.1em;align-self:flex-end;margin:0 0 .6em 14px;text-shadow:none}
+.biglbl{font:500 12px/1.8 var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--label)}
+.biglbl.c{color:var(--c1)}
+
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* STILLNESS. No pinning, no travel: the finished state, all at once. */
+@media (prefers-reduced-motion:reduce){
+  .build{height:auto}.stage{position:static;height:auto;padding-top:0}
+  *,*::before,*::after{transition:none!important;animation:none!important}
+  .hint{display:none}
+}
+.still .build{height:auto}.still .stage{position:static;height:auto}
+.still *,.still *::before,.still *::after{transition:none!important;animation:none!important}
+.still .hint{display:none}
+</style>
+</head>
+<body>
+
+<div class="labbar" role="toolbar" aria-label="lab">
+  <button id="snd" aria-pressed="false">צליל</button>
+  <button id="still" aria-pressed="false">בלי תנועה</button>
+  <button id="again">שוב מההתחלה</button>
+</div>
+
+<main>
+  <div class="kick"><i class="dot"></i>CASE STUDY 01<span class="tok">FILE 01 · INTAKE</span></div>
+  <h1>Building a Commercial Function <em>From Zero</em></h1>
+  <div class="meta">XTIX · B2B SAAS · TECH · E-TICKETS PLATFORM · 2026–PRESENT</div>
+  <div class="part">PART 1 OF 2 — THE BUILD</div>
+
+  <section class="zone">
+    <div class="n">01</div>
+    <div>
+      <h2>THE SITUATION</h2>
+      <p>Strong vision. Strong product. <b>Zero commercial infrastructure.</b></p>
+    </div>
+  </section>
+  <section class="zone">
+    <div class="n">02</div>
+    <div>
+      <h2>MISSION OBJECTIVE</h2>
+      <p>Build a <b>commercial operating system</b> for predictable growth — Domestic &amp; International.</p>
+    </div>
+  </section>
+  <section class="zone">
+    <div class="n">03</div>
+    <div>
+      <h2>MY APPROACH</h2>
+      <p style="margin-bottom:12px"><b>Understanding before outbound:</b></p>
+      <ul class="dash">
+        <li>Business &amp; product analysis</li><li>Market research</li>
+        <li>Competitive analysis</li><li>ICP definition</li>
+        <li>Customer segmentation</li><li>Commercial positioning</li>
+      </ul>
+      <p class="then">Only then did execution begin.</p>
+    </div>
+  </section>
+
+  <!-- THE BUILD ------------------------------------------------------------------------------ -->
+  <section class="build" id="build" aria-labelledby="bh">
+    <div class="stage" id="stage">
+      <div class="stagehead">
+        <div class="l"><span class="n">04</span><h2 id="bh">WHAT I BUILT · (AFTER)</h2></div>
+        <button class="lampbtn" id="lamp" type="button" aria-pressed="false">
+          <i class="bulb"></i>
+          <span><span class="nm">UV LAMP</span><span class="call" id="lampcall">PRESS TO ARM</span></span>
+          <span class="sub">365nm · LONG WAVE</span>
+        </button>
+      </div>
+      <div class="lit" id="lit">
+      <div class="grid">
+        <div class="win" id="win">
+          <div class="winbar">
+            <span class="t"><s>STARTING POINT</s></span>
+            <span class="cnt"><s>07 GAPS</s></span>
+          </div>
+          <ol class="rows" id="rows">
+            <!-- gap order is the file's; data-k is the build step that answers it -->
+            <li class="row" data-k="2"><i class="mk"></i><span class="tx"><span class="gap">No CRM</span><span class="sys">HubSpot CRM Infrastructure</span></span><b class="no">02</b></li>
+            <li class="row" data-k="3"><i class="mk"></i><span class="tx"><span class="gap">No Business Development function</span><span class="sys">Business Development Process</span></span><b class="no">03</b></li>
+            <li class="row" data-k="1" data-decide="pairing"><i class="mk"></i><span class="tx"><span class="gap">No sales methodology</span><span class="sys">Commercial Strategy</span></span><b class="no">01</b></li>
+            <li class="row" data-k="6"><i class="mk"></i><span class="tx"><span class="gap">No outbound process</span><span class="sys">Outbound Sequences</span></span><b class="no">06</b></li>
+            <li class="row" data-k="4"><i class="mk"></i><span class="tx"><span class="gap">No pipeline management</span><span class="sys">Sales Pipeline</span></span><b class="no">04</b></li>
+            <li class="row" data-k="7"><i class="mk"></i><span class="tx"><span class="gap">No KPI framework</span><span class="sys">KPI Framework</span></span><b class="no">07</b></li>
+            <li class="row" data-k="9"><i class="mk"></i><span class="tx"><span class="gap">No reporting structure</span><span class="sys">Reporting Dashboards</span></span><b class="no">09</b></li>
+            <li class="sep" aria-hidden="true"></li>
+            <li class="row new" data-k="5"><i class="mk"></i><span class="tx"><span class="gap"></span><span class="sys">ICP Framework</span></span><b class="no">05</b></li>
+            <li class="row new" data-k="8"><i class="mk"></i><span class="tx"><span class="gap"></span><span class="sys">Forecasting Structure</span></span><b class="no">08</b></li>
+            <li class="row new" data-k="10"><i class="mk"></i><span class="tx"><span class="gap"></span><span class="sys">AI-Powered Outbound Engine</span></span><b class="no">10</b></li>
+          </ol>
+        </div>
+
+        <figure class="fig" aria-hidden="true" style="margin:0">
+          <div class="fighead">
+            <div class="t"><b>∅→10</b>FROM ZERO — INFRASTRUCTURE BUILD-UP</div>
+            <div class="count" id="count">∅</div>
+          </div>
+          <div class="now-cap" id="cap"></div>
+          <div class="bars" id="bars">
+            <i class="z"></i><i class="z"></i><i class="z"></i><i class="gapline"></i>
+          </div>
+        </figure>
+      </div>
+      <div class="beam" aria-hidden="true"></div>
+      <!-- the developed layer: XTIX's own THE METHOD zone (frame.js LAMPS.xtix[1]) laid over the rows -->
+      <div class="dev" id="dev" aria-hidden="true"></div>
+      </div>
+      <div class="hint" aria-hidden="true"></div>
+    </div>
+    <!-- what a screen reader gets: the finished list, in the file's own order -->
+    <ul class="sr">
+      <li>Commercial Strategy</li><li>HubSpot CRM Infrastructure</li><li>Business Development Process</li>
+      <li>Sales Pipeline</li><li>ICP Framework</li><li>Outbound Sequences</li><li>KPI Framework</li>
+      <li>Forecasting Structure</li><li>Reporting Dashboards</li><li>AI-Powered Outbound Engine</li>
+    </ul>
+  </section>
+
+  <!-- THE PAYOFF: the next thing the file says is the number -------------------------------- -->
+  <section class="payoff" id="payoff">
+    <div class="part" style="margin-top:0">PART 2 OF 2 — THE EVIDENCE</div>
+    <div class="kick"><b>A</b>&nbsp; EVIDENCE — FROM INFRASTRUCTURE TO EXECUTION</div>
+    <div class="hero" id="big"><span class="cur">$</span><span id="bigv">9M+</span><span class="arr">ARR</span></div>
+    <div class="biglbl">PIPELINE MANAGED</div>
+    <div class="biglbl c">COMMERCIAL OPERATING SYSTEM — BUILT</div>
+  </section>
+</main>
+
+<script>
+(function () {
+  "use strict";
+  /* the ten, in the file's order -- which is also the order the chart numbers them */
+  var SYS = ["Commercial Strategy", "HubSpot CRM Infrastructure", "Business Development Process",
+    "Sales Pipeline", "ICP Framework", "Outbound Sequences", "KPI Framework",
+    "Forecasting Structure", "Reporting Dashboards", "AI-Powered Outbound Engine"];
+  var html = document.documentElement;
+  var build = document.getElementById("build"), stage = document.getElementById("stage");
+  var bars = document.getElementById("bars"), count = document.getElementById("count");
+  var cap = document.getElementById("cap");
+  var rows = [].slice.call(document.querySelectorAll("#rows .row"));
+  var reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* the chart's own heights: the file draws 16 + 5k of 61, a straight build-up */
+  var B = [];
+  for (var k = 1; k <= 10; k++) {
+    var b = document.createElement("i");
+    b.className = "b"; b.dataset.n = (k < 10 ? "0" : "") + k;
+    b.style.setProperty("--h", (16 + 5 * (k - 1)) / 61 * 100);
+    bars.appendChild(b); B.push(b);
+  }
+
+  /* ---------------------------------------------------------------- sound, opt-in */
+  var ac = null, sound = false;
+  function tick(final) {
+    if (!sound) return;
+    try {
+      ac = ac || new (window.AudioContext || window.webkitAudioContext)();
+      var t = ac.currentTime, notes = final ? [659.25, 987.77] : [1318.5];
+      notes.forEach(function (f, i) {
+        var o = ac.createOscillator(), g = ac.createGain();
+        o.type = "sine"; o.frequency.value = f;
+        g.gain.setValueAtTime(0, t + i * .09);
+        g.gain.linearRampToValueAtTime(final ? .08 : .05, t + i * .09 + .004);
+        g.gain.exponentialRampToValueAtTime(.0001, t + i * .09 + (final ? .6 : .09));
+        o.connect(g).connect(ac.destination); o.start(t + i * .09); o.stop(t + i * .09 + .7);
+      });
+    } catch (e) {}
+  }
+
+  /* ---------------------------------------------------------------- the state */
+  var built = 0;
+  function pad(n) { return (n < 10 ? "0" : "") + n; }
+  function apply(n, quiet) {
+    if (n === built) return;
+    var grew = n > built;
+    built = n;
+    B.forEach(function (b, i) { b.classList.toggle("on", i < n); b.classList.toggle("now", i === n - 1 && n < 10); });
+    var open = 7;
+    rows.forEach(function (r) {
+      var k = +r.dataset.k, on = k <= n;
+      r.classList.toggle("on", on);
+      r.classList.toggle("now", k === n && n < 10);
+      if (on && !r.classList.contains("new")) open--;
+    });
+    stage.classList.toggle("has-new", n >= 5);
+    stage.classList.toggle("done", n >= 10);
+    stage.classList.toggle("shut", open === 0);
+    count.textContent = n ? pad(n) : "∅";
+    cap.innerHTML = n ? "<span><i>" + pad(n) + "</i>" + SYS[n - 1] + "</span>" : "";
+    if (grew && !quiet) tick(n === 10);
+  }
+
+  /* ---------------------------------------------------------------- the scroll is the timeline
+     ONE WAY, like the sealed lines: a system once built stays built. Scrolling back up does not
+     un-build the file; "again" does, on purpose. */
+  function progress() {
+    var r = build.getBoundingClientRect(), total = build.offsetHeight - innerHeight;
+    return total > 0 ? Math.min(1, Math.max(0, -r.top / total)) : 1;
+  }
+  var raf = 0;
+  function frame() {
+    raf = 0;
+    var p = progress();
+    stage.classList.toggle("started", p > 0.02);
+    var step = p < 0.07 ? 0 : Math.min(10, Math.floor((p - 0.07) / 0.075) + 1);
+    if (step > built) apply(step);
+  }
+  function onScroll() { if (!raf) raf = requestAnimationFrame(frame); }
+
+  function still(on) {
+    html.classList.toggle("still", on);
+    if (on) { apply(10, true); }
+  }
+  if (reduced) { apply(10, true); }
+  else { addEventListener("scroll", onScroll, { passive: true }); addEventListener("resize", onScroll); frame(); }
+
+  /* ---------------------------------------------------------------- the payoff counts in */
+  /* THE FIGURE LANDS WHOLE. A count-up would print 0.0M, 4.5M... -- numbers the file never says.
+     So "$9M+" arrives as itself: it rises out of a mask, once, the moment it is in view. */
+  var big = document.getElementById("big"), counted = false;
+  function countIn() { if (counted) return; counted = true; big.classList.add("in"); }
+  if (reduced || !("IntersectionObserver" in window)) big.classList.add("in");
+  else new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) countIn(); }); },
+    { threshold: .5 }).observe(big);
+
+  /* ---------------------------------------------------------------- the lab bar */
+  var sb = document.getElementById("snd"), stb = document.getElementById("still");
+  sb.onclick = function () { sound = !sound; sb.setAttribute("aria-pressed", sound); if (sound) tick(false); };
+  stb.onclick = function () { var on = !html.classList.contains("still"); stb.setAttribute("aria-pressed", on); still(on); };
+  document.getElementById("again").onclick = function () {
+    html.classList.remove("still"); stb.setAttribute("aria-pressed", "false");
+    built = 0; apply(0, true); B.forEach(function (b) { b.classList.remove("on", "now"); });
+    counted = false; big.classList.remove("in");
+    scrollTo(0, build.offsetTop - innerHeight * .25);
+  };
+  /* ---------------------------------------------------------------- the lamp
+     WHICH THREE ONLY MEASURE is read from the file, not decided here: of the ten, KPI Framework,
+     Forecasting Structure and Reporting Dashboards are the ones whose names are about watching
+     the work -- the lamp note says "07 of them do the work; 03 exist to watch it". The one with a
+     vendor's name is HubSpot's. */
+  var lit = document.getElementById("lit"), dev = document.getElementById("dev");
+  var lamp = document.getElementById("lamp"), lampcall = document.getElementById("lampcall");
+  var WATCH = [7, 8, 9], VENDOR = 2;
+  function rowOf(k) { for (var i = 0; i < rows.length; i++) if (+rows[i].dataset.k === k) return rows[i]; return null; }
+  function rel(el) {
+    var a = el.getBoundingClientRect(), b = lit.getBoundingClientRect();
+    return { l: a.left - b.left, t: a.top - b.top, w: a.width, h: a.height, r: a.right - b.left, b: a.bottom - b.top };
+  }
+  function layoutDev() {
+    var win = rel(document.getElementById("win")), fig = rel(document.querySelector(".fig"));
+    var narrow = fig.t < win.t;                       /* the phone stacks the chart first */
+    var h = "";
+    WATCH.forEach(function (k) {
+      var r = rowOf(k); if (!r) return; var q = rel(r);
+      h += '<i class="mark watch" style="left:' + (q.l + 6) + 'px;top:' + (q.t + 2) + 'px;width:' + (q.w - 12) + 'px;height:' + (q.h - 4) + 'px"></i>';
+    });
+    var v = rel(rowOf(VENDOR));
+    h += '<i class="mark" style="left:' + (v.l + 6) + 'px;top:' + (v.t + 2) + 'px;width:' + (v.w - 12) + 'px;height:' + (v.h - 4) + 'px"></i>';
+    var w7 = rel(rowOf(7)), w9 = rel(rowOf(9));
+    /* the notes sit on the rows they are about, right-aligned before the build number, so the
+       light that finds a row finds its note with it */
+    /* whole sentences only, each said once -- a fragment of Oran's line would be a new line */
+    var VEND = 'Only one of the ten carries a vendor&rsquo;s name';
+    var WORK = '<em>07</em> of them do the work; <em>03</em> exist to watch it';
+    if (!narrow) {
+      var inset = lit.getBoundingClientRect().width - win.r + 52;
+      h += '<span class="note tag" style="right:' + inset + 'px;top:' + (v.t + v.h / 2) + 'px">' + VEND + '</span>';
+      h += '<span class="note tag" style="right:' + inset + 'px;top:' + (w7.t + (w9.b - w7.t) / 2) + 'px">' + WORK + '</span>';
+      h += '<span class="note big" style="left:' + (fig.l + 22) + 'px;top:' + (fig.t + fig.h * 0.34) + 'px"><span class="k">THE METHOD</span>Ten systems. Three of them only measure.</span>';
+      h += '<span class="sig" style="left:' + win.l + 'px;top:' + (win.b + 12) + 'px">— REVIEWING DESK, 2026 · DEVELOPED UNDER THE LAMP — NOT PRESENT IN THE PRINTED COPY</span>';
+    } else {
+      /* a phone stacks the chart above the rows: the notes live in the chart, clear of the words */
+      h += '<span class="panel" style="left:' + (fig.l + 6) + 'px;top:' + (fig.t + 6) + 'px;width:' + (fig.w - 12) + 'px;height:' + (fig.h - 12) + 'px">' +
+           '<span class="note big"><span class="k">THE METHOD</span>Ten systems. Three of them only measure.</span>' +
+           '<span class="note">' + WORK + '</span><span class="note">' + VEND + '</span></span>';
+    }
+    dev.innerHTML = h;
+  }
+  function aim(x, y) { lit.style.setProperty("--x", x + "px"); lit.style.setProperty("--y", y + "px"); dev.style.setProperty("--x", x + "px"); dev.style.setProperty("--y", y + "px"); }
+  function pointAt(e) { var b = lit.getBoundingClientRect(); aim(e.clientX - b.left, e.clientY - b.top); }
+  var sweeping = 0;
+  function sweep() {                                   /* one pass on arming, so a finger knows what it holds */
+    if (reduced || html.classList.contains("still")) return;
+    var b = lit.getBoundingClientRect(), t0 = performance.now(), D = 1700;
+    cancelAnimationFrame(sweeping);
+    (function run(t) {
+      var q = Math.min(1, (t - t0) / D), e = q < .5 ? 2 * q * q : 1 - Math.pow(-2 * q + 2, 2) / 2;
+      aim(b.width * (.12 + .76 * e), b.height * (.25 + .5 * Math.sin(e * Math.PI)));
+      if (q < 1) sweeping = requestAnimationFrame(run);
+    })(t0);
+  }
+  lamp.onclick = function () {
+    var on = lamp.getAttribute("aria-pressed") !== "true";
+    lamp.setAttribute("aria-pressed", on);
+    lampcall.textContent = on ? "FLUORESCING" : "PRESS TO ARM";
+    stage.classList.toggle("uvon", on);
+    if (on) { layoutDev(); sweep(); }
+  };
+  lit.addEventListener("pointermove", function (e) { if (stage.classList.contains("uvon")) { cancelAnimationFrame(sweeping); pointAt(e); } });
+  lit.addEventListener("pointerdown", function (e) { if (stage.classList.contains("uvon")) { cancelAnimationFrame(sweeping); pointAt(e); } });
+  addEventListener("resize", function () { if (stage.classList.contains("uvon")) layoutDev(); });
+
+  window.__build = { apply: apply, progress: progress };
+})();
+</script>
+</body>
+</html>

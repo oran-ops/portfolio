@@ -1,0 +1,663 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>XTIX — the moment, in place (lab)</title>
+<!-- LAB ONLY. Nothing in src/ reads this file, and nothing here ships.
+
+     THE SAME MOMENT AS lab/xtix-build.html, WITH THE FILE'S STRUCTURE UNTOUCHED.
+     Oran's two rules: not one word changes, and the points keep their structure and order. The
+     prototype broke the second in three places, and this page is the answer to each:
+
+       1. It set STARTING POINT · 07 GAPS a second time, inside 04.
+          Here the window stands once, in 01, where the file puts it. The link between the seven
+          absences and the ten systems is made in the file's own words, where the file hangs them:
+          the UV zone under THE SITUATION -- "Seven absences in. Ten systems out." / "Filled in
+          order, ∅→10, never in one pass". The printed page does not make that link, so neither
+          does this one.
+       2. It stood the list and the chart side by side.
+          Here XTIX is one column. 04 is followed by the ∅→10 chart in its own band, as in the file.
+       3. It moved the UV lamp from the head of the file into 04, and hid it until the build ended.
+          Here the lamp hangs where it hangs today, above the folder, and is there from the start.
+          Armed, it is a beam the reader holds, and it develops the zones where the file hangs them.
+
+     THE MOMENT, THEREFORE: the ∅→10 chart builds itself in place, one bar at a time, as the reader
+     brings it up the screen, and $9M+ lands when PART 2 opens. 04 is printed exactly as the file
+     prints it, at every moment. The basis is the live file itself: its printed chart ALREADY rises
+     bar by bar, in order, on scroll (frame.js staggers each .bar0 by i x .045 of the scroll). What
+     this adds is only that the rise is one-way and paced -- never in one pass, even on a fling. So
+     the default is a refinement of what ships today, not a new beat; the beat is the pairing.
+
+     REVISED AFTER THREE INDEPENDENT REVIEWS (2026-09-28). A first draft started 04's ten under a
+     struck circle and turned each as "its" bar rose. Two rulings against it: it showed WHAT I BUILT
+     · (AFTER) as not built for 200-590px of scroll, and it asserted that bar k IS item k, which the
+     file never says -- the same kind of claim as the prototype's gap-to-system pairing. Both are
+     gone from the default. The pairing survives only behind the lab switch "קישור לרשימה", for
+     Oran to see and decide: only he can say whether bar 03 is Business Development Process --
+     and, since the chart is filled in order, whether the ten were built in the order the list
+     prints them, Commercial Strategy first and AI-Powered Outbound Engine last.
+
+     Also not carried over from the prototype: the gap-to-system pairing, the marks that picked out
+     "the three that only measure", the caption that repeated each name under the chart, the 400vh
+     pinned stage, and the sound. And not carried over from the live file: the film edges along the
+     folder under the lamp (KODAK SAFETY FILM 5063 / EMERALD ARCHIVE · REEL 04) and the ghost
+     numeral -- both decoration, aria-hidden, no part of the document's text.
+
+     ONE COLUMN is the redesign's decision (Oran, 2026-09-28). The live site today sets 01-02 and
+     03-04 in two columns on a desktop; this page shows the decided layout, not the current one.
+
+     This page ends where the prototype ends, at the number. The plate's "365nm · 03 ZONES" is the
+     file's own string for the whole file; the third zone hangs under C REFLECTION, below the end.
+
+     THE LOOK is the prototype's, unchanged -- Instrument Serif / Geist / Geist Mono from
+     fonts_swiss.css -- so the two pages differ only in the moment. The look is its own decision,
+     and it carries two emphases the file does not have: "From Zero" set in italic, and "Only then
+     did execution begin." set at display size. -->
+
+<link rel="stylesheet" href="fonts_swiss.css">
+<style>
+:root{
+  --bg:#191A1F;
+  --ink:rgba(242,241,237,.94); --text:rgba(242,241,237,.80); --label:rgba(242,241,237,.62); --muted:rgba(242,241,237,.42);
+  --line:rgba(255,255,255,.07); --line2:rgba(255,255,255,.12);
+  --c1:#2FB380; --c2:#8DD5B9; --c3:#207A57;
+  --glow:color-mix(in srgb,var(--c1) 55%,transparent);
+  --uv:#9B7BFF; --uvi:#EEE6FF; --uvk:#B9A4FF;
+  --f-display:'Instrument Serif',Georgia,serif;
+  --f-text:'Geist',system-ui,sans-serif;
+  --f-mono:'Geist Mono',ui-monospace,monospace;
+  --ease:cubic-bezier(.2,.7,.1,1);
+  --spring:cubic-bezier(.34,1.3,.5,1);
+  --card:linear-gradient(180deg,rgba(255,255,255,.045),rgba(255,255,255,.012) 38%,rgba(255,255,255,.02));
+  --gut:clamp(18px,4vw,56px);
+}
+*{box-sizing:border-box}
+html{background:var(--bg);color:var(--ink);-webkit-text-size-adjust:100%}
+body{margin:0;font:400 17px/1.62 var(--f-text);color:var(--text);background:var(--bg);overflow-x:hidden;
+  -webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:radial-gradient(90% 60% at 50% -12%,color-mix(in srgb,var(--c1) 11%,transparent),transparent 62%),
+             radial-gradient(60% 50% at 50% 120%,rgba(0,0,0,.45),transparent 70%)}
+body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:60;opacity:.55;
+  background:url(data:image/png;base64,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) repeat;background-size:96px 96px}
+main,.labbar{position:relative;z-index:1}
+
+/* ---------------------------------------------------------------- the lab bar (not the document) */
+.labbar{position:absolute;inset:14px auto auto 14px;z-index:70;display:flex;gap:6px;direction:rtl;opacity:.85;
+  font:500 12px/1 var(--f-text)}
+.labbar button{all:unset;cursor:pointer;padding:8px 12px;border-radius:999px;color:var(--label);
+  background:rgba(25,26,31,.8);border:1px solid var(--line2);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.labbar button[aria-pressed="true"]{color:var(--bg);background:var(--c1);border-color:var(--c1)}
+.labbar button:focus-visible{outline:2px solid var(--c1);outline-offset:2px}
+
+/* ---------------------------------------------------------------- the head of the file */
+main{max-width:920px;margin:0 auto;padding:clamp(64px,12vh,140px) var(--gut) 18vh}
+.kick{display:flex;align-items:center;gap:10px;font:500 11.5px/1 var(--f-mono);letter-spacing:.12em;color:var(--label);text-transform:uppercase}
+.kick .tok{margin-left:auto;padding:6px 10px;border:1px solid var(--line2);border-radius:999px;color:var(--c1)}
+.kick .dot{width:6px;height:6px;border-radius:50%;background:var(--c1);box-shadow:0 0 12px var(--glow)}
+h1{font:400 clamp(44px,7vw,84px)/.96 var(--f-display);letter-spacing:-.012em;margin:22px 0 18px;max-width:17ch;color:var(--ink);text-wrap:balance}
+h1 em{font-style:italic;color:var(--c2)}
+.meta{font:500 11.5px/1.7 var(--f-mono);letter-spacing:.1em;color:var(--muted);text-transform:uppercase}
+.nw{white-space:nowrap}
+.part{display:flex;align-items:center;gap:16px;margin:56px 0 0;font:500 12px/1 var(--f-mono);
+  letter-spacing:.14em;color:var(--c1);text-transform:uppercase}
+.part::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,color-mix(in srgb,var(--c1) 45%,transparent),transparent)}
+
+/* ---------------------------------------------------------------- the lamp, where it hangs today
+   R59's zero-height mount: the plate hangs above the folder's top edge and costs no height. */
+/* The mount is a zero-height marker between PART 1 and the folder, as it is in the live file. The
+   plate hangs DOWN from it into the band above the folder, at the right; the folder's tab stands in
+   the same band at the left -- the arrangement the live file has. (Hanging it UP from the mount, as
+   a first draft did, laid the plate and the tab over the PART 1 line.) */
+.uvmount{position:relative;height:0;z-index:3}
+.lampbtn{all:unset;box-sizing:border-box;cursor:pointer;position:absolute;right:0;bottom:-88px;
+  display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:12px;
+  padding:10px 14px 10px 12px;border-radius:14px;border:1px solid var(--line2);min-height:48px;
+  background:rgba(28,29,35,.92);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 18px 40px -22px rgba(0,0,0,.9);
+  transition:border-color .3s,background .3s,box-shadow .3s}
+.lampbtn:hover{border-color:rgba(255,255,255,.2)}
+.lampbtn:focus-visible{outline:2px solid var(--uv);outline-offset:3px}
+.lampbtn .bulb{width:12px;height:12px;border-radius:50%;border:1px solid var(--label);transition:all .3s}
+.lampbtn .nm{display:block;font:500 11px/1.2 var(--f-mono);letter-spacing:.12em;color:var(--ink)}
+.lampbtn .call{display:block;font:500 10px/1.3 var(--f-mono);letter-spacing:.1em;color:var(--c1)}
+.lampbtn .sub{display:block;font:500 9.5px/1.3 var(--f-mono);letter-spacing:.06em;color:var(--muted)}
+.lampbtn .st{font:500 9.5px/1 var(--f-mono);letter-spacing:.12em;color:var(--muted);padding:4px 7px;border:1px solid var(--line2);border-radius:999px}
+.lampbtn[aria-pressed="true"]{border-color:color-mix(in srgb,var(--uv) 60%,transparent);background:color-mix(in srgb,var(--uv) 14%,#15141C);
+  box-shadow:0 0 30px -6px color-mix(in srgb,var(--uv) 70%,transparent)}
+.lampbtn[aria-pressed="true"] .bulb{border-color:var(--uv);background:var(--uv);box-shadow:0 0 14px var(--uv)}
+.lampbtn[aria-pressed="true"] .call{color:#C9B8FF}
+.lampbtn[aria-pressed="true"] .st{color:var(--uv);border-color:color-mix(in srgb,var(--uv) 60%,transparent)}
+
+/* ---------------------------------------------------------------- the folder: the file itself.
+   The violet reaches this and nothing else -- Oran, 2026-09-24: "only the folder, not the room". */
+.folder{position:relative;margin-top:88px;border-radius:0 22px 22px 22px;border:1px solid var(--line);
+  background:var(--card),#1C1D23;padding:clamp(26px,4vw,48px) clamp(18px,3.4vw,44px) clamp(28px,4vw,48px);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 50px 110px -50px rgba(0,0,0,.9);transition:background .7s var(--ease)}
+.folder::before{content:"";position:absolute;left:14%;right:14%;top:-1px;height:1px;
+  background:linear-gradient(90deg,transparent,color-mix(in srgb,var(--c2) 70%,transparent),transparent);opacity:.5}
+.tab{position:absolute;left:-1px;bottom:100%;display:flex;align-items:baseline;gap:12px;padding:10px 18px 8px;
+  border:1px solid var(--line);border-bottom:0;border-radius:14px 14px 0 0;background:#1E1F25}
+.tab .nm{font:italic 400 22px/1 var(--f-display);color:var(--c1)}
+.tab .fl{font:500 10.5px/1 var(--f-mono);letter-spacing:.12em;color:var(--label)}
+.folder>.inner{position:relative;z-index:1}
+
+.zone{display:grid;grid-template-columns:64px 1fr;gap:0 20px;margin:0 0 50px}
+.zone .n{font:italic 400 34px/1 var(--f-display);color:var(--c1);text-align:right;padding-top:2px;white-space:nowrap}
+.zone .n.w{font-size:24px;padding-top:7px}
+.zone h2{font:500 11.5px/1.9 var(--f-mono);letter-spacing:.12em;color:var(--label);margin:0 0 10px;text-transform:uppercase}
+.zone p{margin:0;max-width:34em;font-size:clamp(18px,1.6vw,21px);line-height:1.5}
+.zone p b{color:var(--ink);font-weight:500}
+.dash{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 32px;max-width:640px}
+.dash li{position:relative;padding-left:18px}
+.dash li::before{content:"";position:absolute;left:0;top:.8em;width:8px;height:1px;background:var(--c1)}
+.then{font:italic 400 clamp(22px,2.2vw,28px)/1.3 var(--f-display)!important;color:var(--c2)!important;margin-top:18px!important}
+.part.p2{margin:4px 0 40px}
+
+/* the STARTING POINT window -- once, in 01, as the file sets it */
+.win{position:relative;margin-top:22px;max-width:520px;background:var(--card),#1B1C22;border:1px solid var(--line);border-radius:16px;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.07),0 30px 70px -40px rgba(0,0,0,.85);overflow:hidden}
+.winbar{display:flex;justify-content:space-between;align-items:center;padding:13px 18px;border-bottom:1px solid var(--line);
+  font:500 11px/1 var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--label)}
+.winbar b{font-weight:500;color:var(--c1)}
+.gaps{list-style:none;margin:0;padding:4px 0 6px}
+.gaps li{display:grid;grid-template-columns:22px 1fr;align-items:center;gap:12px;padding:0 18px;height:40px;font-size:15.5px;color:var(--text)}
+.gaps li+li{box-shadow:inset 0 1px 0 rgba(255,255,255,.035)}
+
+/* THE GAP MARK, as the live file draws it: an emerald ring with a bar through it. It is 01's alone.
+   (A draft drew it as a struck grey circle and put the same glyph on 04's ten while they waited
+   to be built -- a link the printed file does not make; it makes it only under the lamp.) */
+.o{position:relative;display:block;width:14px;height:14px;border:1.5px solid var(--c1);border-radius:50%}
+.o::after{content:"";position:absolute;left:3px;right:3px;top:50%;height:1.5px;margin-top:-.75px;background:var(--c1)}
+
+/* 04: the ten, printed as the file prints them -- each under its check, at full ink, always.
+   "WHAT I BUILT · (AFTER)" is never shown as not built: a draft did that for 200-590px of scroll,
+   and a reader who paused there read the opposite of the file. */
+.mk{position:relative;display:block;width:18px;height:18px;border-radius:50%;
+  background:radial-gradient(circle at 35% 30%,var(--c2),var(--c1) 55%,var(--c3));
+  box-shadow:0 0 0 4px color-mix(in srgb,var(--c1) 14%,transparent),0 0 14px -2px var(--glow);transition:box-shadow .4s var(--ease),transform .4s var(--spring)}
+.mk .c{position:absolute;inset:0;display:grid;place-items:center;font:700 11px/1 var(--f-text);color:#0E1512}
+.built{list-style:none;margin:4px 0 0 -10px;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:2px 26px;max-width:730px}
+.built li{position:relative;display:grid;grid-template-columns:22px 1fr;align-items:center;gap:12px;min-height:40px;padding:0 10px;
+  font-size:16px;color:var(--ink)}
+.built li::before{content:"";position:absolute;inset:3px 0;border-radius:10px;opacity:0;transition:opacity .45s var(--ease);
+  background:linear-gradient(90deg,color-mix(in srgb,var(--c1) 17%,transparent),transparent 80%)}
+.built li>*{position:relative}
+/* the PAIRING, lab switch only: the item whose bar is rising takes the same accent as the bar.
+   It asserts that bar k of the chart is item k of the list -- Oran's call, not the page's. */
+.pair .built li.now::before{opacity:1}
+.pair .built li.now .mk{transform:scale(1.12);box-shadow:0 0 0 5px color-mix(in srgb,var(--c1) 22%,transparent),0 0 22px 0 var(--glow)}
+
+/* ∅→10 and PART 2 each stand in their own band under a hairline, as the file's .hairtop bands do */
+.band{border-top:1px solid var(--line2);padding-top:44px;margin-top:6px}
+.band>.zone:last-child{margin-bottom:44px}
+
+/* ∅→10 -- the file's chart: three empty slots, a break, ten bars at 16 + 5k of 61. It builds itself
+   in place as the reader brings it up the screen: "Filled in order, ∅→10, never in one pass". */
+.chart{position:relative;margin-top:6px;max-width:760px}
+.bars{position:relative;display:grid;grid-template-columns:repeat(3,.8fr) 14px repeat(10,1fr);gap:clamp(5px,.9vw,11px);
+  align-items:end;height:clamp(120px,19vh,190px);padding-bottom:26px}
+.bars::after{content:"";position:absolute;left:0;right:0;bottom:26px;height:1px;background:linear-gradient(90deg,transparent,var(--line2) 10%)}
+.bars .col{position:relative;height:100%;display:flex;align-items:flex-end}
+.bars .lab{position:absolute;left:50%;bottom:-21px;transform:translateX(-50%);font:500 10px/1 var(--f-mono);letter-spacing:.04em;color:var(--muted);transition:color .5s}
+.bars .z{width:100%;height:26%;border:1px dashed var(--line2);border-radius:7px}
+.bars .gl{height:100%;justify-self:center;width:0;border-left:1px dashed var(--line2)}
+.bars::before{content:"";position:absolute;right:-2px;bottom:22px;border:5px solid transparent;border-left:8px solid var(--line2);border-right:0}
+.bars .b{width:100%;height:calc(var(--h)*1%);border-radius:7px 7px 2px 2px;
+  background:linear-gradient(180deg,#9FDCC4,#2FB380 30%,#1E6A4D);
+  background:linear-gradient(180deg,color-mix(in srgb,var(--c2) 90%,white),var(--c1) 30%,color-mix(in srgb,var(--c3) 80%,var(--bg)));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.45),inset 0 0 0 1px rgba(0,0,0,.18);transform-origin:bottom;
+  transition:transform .8s var(--spring),box-shadow .6s var(--ease)}
+.armed .bars .col:not(.on) .b{transform:scaleY(0)}
+.bars .col.on .lab{color:var(--label)}
+.bars .col.now .b{box-shadow:inset 0 1px 0 rgba(255,255,255,.6),0 0 34px -4px var(--glow),0 0 90px -20px var(--glow)}
+.bars .col.now .lab{color:var(--c2)}
+
+/* ---------------------------------------------------------------- the payoff: PART 2 opens on the number */
+.hero{display:flex;align-items:flex-start;gap:4px;font:400 clamp(110px,20vw,240px)/.8 var(--f-display);letter-spacing:-.035em;
+  font-variant-numeric:tabular-nums;color:var(--ink);margin:18px 0 18px;text-shadow:0 0 80px color-mix(in srgb,var(--c1) 18%,transparent)}
+.hero>span{display:inline-block}
+.js .hero>span{clip-path:inset(0 0 100% 0);transform:translateY(.18em);transition:clip-path 1.1s var(--ease),transform 1.1s var(--ease)}
+.js .hero .cur{transition-delay:.12s}.js .hero .arr{transition-delay:.5s}
+.js .hero.in>span{clip-path:inset(-.2em -.2em -.2em -.2em);transform:none}
+.hero .cur{font-style:italic;font-size:.44em;color:var(--c1);margin-top:.08em}
+.hero .arr{font:500 .1em/1 var(--f-mono);color:var(--muted);letter-spacing:.1em;align-self:flex-end;margin:0 0 .6em 14px;text-shadow:none}
+.biglbl{font:500 12px/1.8 var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--label)}
+.biglbl.c{color:var(--c1)}
+
+/* ---------------------------------------------------------------- THE LAMP, AS A BEAM
+   Armed, the folder's bed drops toward #0A0B0D (SYSTEM.md 9.3, inside the folder only), ordinary
+   ink falls back, and a 365nm pool is held over the paper. Hidden ink shows only where it falls.
+   The zones open where the file hangs them -- under THE SITUATION and under WHAT I BUILT. */
+/* hidden means hidden: while the lamp is off, the developed ink is out of the accessibility tree
+   and out of find-in-page too, not merely transparent (visibility waits for the fade to finish) */
+.devz{display:grid;grid-template-rows:0fr;opacity:0;visibility:hidden;
+  transition:grid-template-rows .6s var(--ease),opacity .4s var(--ease),margin .6s var(--ease),visibility 0s .6s}
+.devz>.dz{overflow:hidden;min-height:0}
+.dz .in{padding:16px 18px 14px;border:1px dashed rgba(155,123,255,.55);border:1px dashed color-mix(in srgb,var(--uv) 55%,transparent);border-radius:14px;
+  background:rgba(155,123,255,.07);background:color-mix(in srgb,var(--uv) 7%,transparent)}
+.dz .k{display:block;font:500 10px/1.4 var(--f-mono);letter-spacing:.14em;color:var(--uvk);margin-bottom:6px}
+.dz .t{display:block;font:italic 400 clamp(24px,2.6vw,32px)/1.12 var(--f-display);color:var(--uvi);text-shadow:0 0 18px var(--uv)}
+.dz ul{list-style:none;margin:10px 0 0;padding:0}
+.dz li{position:relative;padding-left:18px;font:400 14.5px/1.5 var(--f-text);color:#E6DCFF;text-shadow:0 0 12px color-mix(in srgb,var(--uv) 70%,transparent)}
+.dz li::before{content:"";position:absolute;left:0;top:.75em;width:9px;height:1px;background:var(--uv)}
+.dz li em,.dz li b{font-style:normal;font-weight:600;color:#fff}
+.lampsig{display:block;max-height:0;overflow:hidden;opacity:0;visibility:hidden;font:500 9.5px/1.5 var(--f-mono);letter-spacing:.1em;color:#C3B0FF;
+  transition:max-height .6s var(--ease),opacity .6s var(--ease),margin .6s var(--ease),visibility 0s .6s}
+
+.uvon .devz{grid-template-rows:1fr;opacity:1;visibility:visible;margin-top:16px;transition-delay:0s}
+.uvon .lampsig{max-height:4em;opacity:1;visibility:visible;margin-top:28px;transition-delay:0s}
+.folder.uvon{background:#0B0C10}
+/* inherited text must READ the dimmed values, or plain words stay bright while bold ones fall back
+   -- which is what a draft did, reversing the file's own emphasis under the lamp */
+.folder .inner{color:var(--text)}
+.folder.uvon .inner{--ink:rgba(242,241,237,.46);--text:rgba(242,241,237,.36);--label:rgba(242,241,237,.30);--muted:rgba(242,241,237,.22)}
+.folder.uvon .chart,.folder.uvon .built .mk,.folder.uvon .hero .cur,.folder.uvon .o{filter:saturate(.45) brightness(.55)}
+.folder.uvon .tab .nm,.folder.uvon .zone .n,.folder.uvon .winbar b,.folder.uvon .biglbl.c,.folder.uvon .then,.folder.uvon .part{opacity:.45}
+
+/* the pool of light, clipped to the folder */
+.beamclip{position:absolute;inset:0;border-radius:inherit;overflow:hidden;pointer-events:none;z-index:2}
+.beam{position:absolute;inset:0;opacity:0;transition:opacity .4s var(--ease);mix-blend-mode:screen;
+  background:radial-gradient(circle at var(--bx,50%) var(--by,30%),rgba(155,123,255,.32),rgba(155,123,255,.10) var(--r1,150px),transparent var(--r2,270px));
+  background:radial-gradient(circle at var(--bx,50%) var(--by,30%),color-mix(in srgb,var(--uv) 32%,transparent),
+    color-mix(in srgb,var(--uv) 10%,transparent) var(--r1,150px),transparent var(--r2,270px))}
+.uvon .beam{opacity:1}
+.uvon.flick .beam{animation:flick .62s linear both}
+@keyframes flick{0%{opacity:0}12%{opacity:.85}30%{opacity:.12}46%{opacity:.5}100%{opacity:1}}
+/* hidden ink: invisible outside the pool, a faint ghost at its rim so the eye knows where to go */
+.uvon:not(.uvall) .devz>.dz,.uvon:not(.uvall) .lampsig{
+  -webkit-mask-image:radial-gradient(circle at var(--mx,-999px) var(--my,-999px),#000 0 var(--r1,150px),rgba(0,0,0,.07) var(--r2,270px));
+          mask-image:radial-gradient(circle at var(--mx,-999px) var(--my,-999px),#000 0 var(--r1,150px),rgba(0,0,0,.07) var(--r2,270px))}
+.uvall .beam{display:none}
+
+/* ---------------------------------------------------------------- the phone */
+@media (max-width:700px){
+  main{padding-top:84px}
+  .zone{grid-template-columns:1fr;margin-bottom:40px}
+  .zone .n{text-align:left;margin-bottom:8px;font-size:30px}.zone .n.w{font-size:24px;padding-top:0}
+  .dash,.built{grid-template-columns:1fr}
+  .built li{min-height:38px;font-size:15.5px}
+  .gaps li{height:38px;font-size:15px}
+  .bars{height:clamp(96px,15vh,140px);gap:4px}
+  .bars .lab{font-size:9px;bottom:-18px}
+  .uvmount{height:auto;margin-top:26px}
+  .lampbtn{position:relative;right:auto;bottom:auto;width:100%;margin-bottom:50px}
+  .folder{margin-top:0;padding:28px 18px 30px}
+  .beam{--r1:110px;--r2:200px}
+  .uvon:not(.uvall) .devz>.dz,.uvon:not(.uvall) .lampsig{--r1:110px;--r2:200px}
+  /* the numeral shares its heading's line, as the live file sets it ("01 ◆ THE SITUATION"); a
+     heading that wraps stays beside it rather than running back under it */
+  .zone{display:block}
+  .zone .n,.zone .n.w{float:left;font-size:22px;line-height:22px;margin:0 10px 0 0;padding:0;text-align:left}
+  .zone h2{line-height:22px;min-height:22px;overflow:hidden}
+  .zone h2+*{clear:left}
+  .band{padding-top:34px}.band>.zone:last-child{margin-bottom:34px}
+}
+@media (max-width:360px){
+  main{padding-left:12px;padding-right:12px}
+  .folder{padding-left:14px;padding-right:14px}
+  .built li{font-size:15px;gap:10px}
+}
+/* a phone on its side: the chart alone must fit the screen while it builds */
+@media (max-height:520px) and (orientation:landscape){
+  .zone{margin-bottom:30px}
+  .built li{min-height:30px;font-size:14.5px}
+  .bars{height:64px;padding-bottom:22px}.bars::after{bottom:22px}.bars::before{bottom:18px}
+  .bars .lab{bottom:-17px;font-size:9px}
+}
+
+/* STILLNESS: no build, no beam. The finished state, and every developed zone open and plain. */
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important}}
+.still *,.still *::before,.still *::after{transition:none!important;animation:none!important}
+</style>
+</head>
+<body>
+
+<div class="labbar" role="toolbar" aria-label="lab">
+  <button id="pair" aria-pressed="false">קישור לרשימה</button>
+  <button id="still" aria-pressed="false">בלי תנועה</button>
+  <button id="again">שוב מההתחלה</button>
+</div>
+
+<main>
+  <div class="kick"><i class="dot"></i>CASE STUDY 01<span class="tok">FILE 01 · INTAKE</span></div>
+  <h1>Building a Commercial Function <em>From Zero</em></h1>
+  <div class="meta">XTIX <span class="nw">· B2B SAAS</span> <span class="nw">· TECH</span> <span class="nw">· E-TICKETS PLATFORM</span> <span class="nw">· 2026–PRESENT</span></div>
+  <div class="part">PART 1 OF 2 — THE BUILD</div>
+
+  <!-- the lamp: at the head of the file, above the folder, from the first moment -->
+  <div class="uvmount">
+    <button class="lampbtn" id="lamp" type="button" aria-pressed="false" aria-label="UV LAMP">
+      <i class="bulb"></i>
+      <span><span class="nm">UV LAMP</span><span class="call" id="lampcall">PRESS TO ARM</span><span class="sub" id="lampsub">365nm · LONG WAVE</span></span>
+      <span class="st" id="lampst" aria-hidden="true">OFF</span>
+    </button>
+  </div>
+
+  <div class="folder" id="folder">
+    <div class="tab"><span class="nm">XTIX</span><span class="fl">▸ FILE 01</span></div>
+    <div class="beamclip" aria-hidden="true"><div class="beam" id="beam"></div></div>
+    <div class="inner">
+
+      <section class="zone">
+        <div class="n">01</div>
+        <div>
+          <h2>THE SITUATION</h2>
+          <p>Strong vision. Strong product. <b>Zero commercial infrastructure.</b></p>
+          <div class="devz"><div class="dz"><div class="in">
+            <span class="k">FINDING OF FACT</span>
+            <span class="t">Seven absences in. Ten systems out.</span>
+            <ul>
+              <li><em>07</em> gaps counted at intake — <em>10</em> systems standing after</li>
+              <li>Filled in order, <em>∅→10</em>, never in one pass</li>
+              <li>Downstream of that list: <b>$9M+</b> in pipeline</li>
+            </ul>
+          </div></div></div>
+          <div class="win">
+            <div class="winbar"><span><b>STARTING POINT</b></span><span>07 GAPS</span></div>
+            <ol class="gaps">
+              <li><i class="o"></i>No CRM</li>
+              <li><i class="o"></i>No Business Development function</li>
+              <li><i class="o"></i>No sales methodology</li>
+              <li><i class="o"></i>No outbound process</li>
+              <li><i class="o"></i>No pipeline management</li>
+              <li><i class="o"></i>No KPI framework</li>
+              <li><i class="o"></i>No reporting structure</li>
+            </ol>
+          </div>
+        </div>
+      </section>
+
+      <section class="zone">
+        <div class="n">02</div>
+        <div>
+          <h2>MISSION OBJECTIVE</h2>
+          <p>Build a <b>commercial operating system</b> for predictable growth — Domestic &amp; International.</p>
+        </div>
+      </section>
+
+      <section class="zone">
+        <div class="n">03</div>
+        <div>
+          <h2>MY APPROACH</h2>
+          <p style="margin-bottom:12px"><b>Understanding before outbound:</b></p>
+          <ul class="dash">
+            <li>Business &amp; product analysis</li><li>Market research</li>
+            <li>Competitive analysis</li><li>ICP definition</li>
+            <li>Customer segmentation</li><li>Commercial positioning</li>
+          </ul>
+          <p class="then">Only then did execution begin.</p>
+        </div>
+      </section>
+
+        <section class="zone">
+          <div class="n">04</div>
+          <div>
+            <h2>WHAT I BUILT · (AFTER)</h2>
+            <ul class="built" id="built">
+              <li><i class="mk"><span class="c">✓</span></i>Commercial Strategy</li>
+              <li><i class="mk"><span class="c">✓</span></i>HubSpot CRM Infrastructure</li>
+              <li><i class="mk"><span class="c">✓</span></i>Business Development Process</li>
+              <li><i class="mk"><span class="c">✓</span></i>Sales Pipeline</li>
+              <li><i class="mk"><span class="c">✓</span></i>ICP Framework</li>
+              <li><i class="mk"><span class="c">✓</span></i>Outbound Sequences</li>
+              <li><i class="mk"><span class="c">✓</span></i>KPI Framework</li>
+              <li><i class="mk"><span class="c">✓</span></i>Forecasting Structure</li>
+              <li><i class="mk"><span class="c">✓</span></i>Reporting Dashboards</li>
+              <li><i class="mk"><span class="c">✓</span></i>AI-Powered Outbound Engine</li>
+            </ul>
+            <div class="devz"><div class="dz"><div class="in">
+              <span class="k">THE METHOD</span>
+              <span class="t">Ten systems. Three of them only measure.</span>
+              <ul>
+                <li><em>07</em> of them do the work; <em>03</em> exist to watch it</li>
+                <li>Only one of the ten carries a vendor’s name</li>
+              </ul>
+            </div></div></div>
+          </div>
+        </section>
+
+      <!-- ∅→10: its own band under a hairline, after the 01-04 block, as the file sets it -->
+      <div class="band" id="chartband">
+        <section class="zone">
+          <div class="n w">∅→10</div>
+          <div>
+            <h2>FROM ZERO — INFRASTRUCTURE BUILD-UP</h2>
+            <figure class="chart" style="margin:0">
+              <div class="bars" id="bars">
+                <span class="col"><i class="z"></i><span class="lab">∅</span></span>
+                <span class="col"><i class="z"></i><span class="lab">∅</span></span>
+                <span class="col"><i class="z"></i><span class="lab">∅</span></span>
+                <i class="gl"></i>
+              </div>
+            </figure>
+          </div>
+        </section>
+      </div>
+
+      <div class="band">
+        <div class="part p2">PART 2 OF 2 — THE EVIDENCE</div>
+        <section class="zone" id="payoff">
+          <div class="n">A</div>
+          <div>
+            <h2>EVIDENCE — FROM INFRASTRUCTURE TO EXECUTION</h2>
+            <div class="hero" id="big"><span class="cur">$</span><span>9M+</span><span class="arr">ARR</span></div>
+            <div class="biglbl">PIPELINE MANAGED</div>
+            <div class="biglbl c">COMMERCIAL OPERATING SYSTEM — BUILT</div>
+          </div>
+        </section>
+      </div>
+
+      <span class="lampsig">— REVIEWING DESK, 2026 · DEVELOPED UNDER THE LAMP — NOT PRESENT IN THE PRINTED COPY</span>
+    </div>
+  </div>
+</main>
+
+<script>
+(function () {
+  "use strict";
+  var html = document.documentElement;
+  html.classList.add("js");
+  var reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var fine = matchMedia("(pointer: fine)").matches;
+  function stillNow() { return reduced || html.classList.contains("still"); }
+
+  /* ---------------------------------------------------------------- the chart's ten bars */
+  var bars = document.getElementById("bars"), COLS = [];
+  for (var k = 1; k <= 10; k++) {
+    var c = document.createElement("span"); c.className = "col";
+    c.innerHTML = '<i class="b" style="--h:' + ((16 + 5 * (k - 1)) / 61 * 100).toFixed(2) + '"></i><span class="lab">' + (k < 10 ? "0" : "") + k + "</span>";
+    bars.appendChild(c); COLS.push(c);
+  }
+  var ITEMS = [].slice.call(document.querySelectorAll("#built li"));
+  var list = document.getElementById("built"), band = document.getElementById("chartband");
+
+  /* ---------------------------------------------------------------- THE BUILD
+     What the file says, and nothing more.
+       - The chart is "Filled in order, ∅→10, never in one pass" -- the file's own words, in the UV
+         zone under THE SITUATION. So its ten bars rise one at a time, in place, as the reader
+         brings the chart up the screen. ONE WAY: a bar once risen stays risen.
+       - 04's ten are printed exactly as the file prints them: each under its check, full ink, always.
+       - WHICH bar is which system, the file never says. The PAIRING switch in the lab bar shows it
+         anyway -- the item whose bar is rising takes the bar's accent -- so Oran can judge it. It
+         asserts that bar k is item k of the list. The default makes no such claim. */
+  var built = 0, target = 0, stepper = 0, nowTimer = 0;
+  function paint(n) {
+    built = n;
+    for (var i = 0; i < 10; i++) {
+      var now = i === n - 1;
+      COLS[i].classList.toggle("on", i < n); COLS[i].classList.toggle("now", now);
+      ITEMS[i].classList.toggle("now", now && html.classList.contains("pair"));
+    }
+    /* the tenth arrives with the same accent as the nine before it, and then settles */
+    clearTimeout(nowTimer);
+    if (n === 10) nowTimer = setTimeout(function () {
+      COLS[9].classList.remove("now"); ITEMS[9].classList.remove("now");
+    }, 1300);
+  }
+  /* NEVER IN ONE PASS, even when the reader flings past or a tall screen loads with the chart
+     already in view: the bars owed are paid one at a time, 90ms apart. */
+  function toward(n) {
+    if (n > target) target = n;
+    if (stepper || built >= target) return;
+    (function step() {
+      stepper = 0;
+      if (built >= target) return;
+      paint(built + 1);
+      if (built < target) stepper = setTimeout(step, 90);
+    })();
+  }
+  function finish() {
+    clearTimeout(stepper); stepper = 0; target = 10;
+    if (built < 10) { paint(10); return; }
+    clearTimeout(nowTimer);
+    for (var i = 0; i < 10; i++) { COLS[i].classList.remove("now"); ITEMS[i].classList.remove("now"); }
+  }
+
+  /* WHEN. The build starts the moment the chart is wholly on screen and ends while its top is
+     still below the upper fifth, so every bar rises in view. Paired, it also keeps item k on
+     screen when bar k rises, where the page's geometry allows it -- where it does not (a phone on
+     its side), it falls back to the chart alone: an item that is always printed built can go
+     unhighlighted, but it can never be shown unbuilt. */
+  var LEAD = 6, EDGE = 12;
+  function schedule() {
+    var vh = innerHeight, C = bars.getBoundingClientRect();
+    var d = Math.min(48, Math.max(18, (vh * 0.80 - C.height - LEAD) / 9));
+    if (html.classList.contains("pair")) {
+      var L = list.getBoundingClientRect(), slack = vh - (C.bottom - L.top) - LEAD - EDGE;
+      if (slack >= 0) {
+        var di = 56;
+        for (var k = 2; k <= 10; k++) di = Math.min(di, (slack + ITEMS[k - 1].getBoundingClientRect().top - L.top) / (k - 1));
+        d = Math.min(d, Math.max(18, di));
+      }
+    }
+    return { t: vh - C.bottom, d: d };
+  }
+  var raf = 0;
+  function frame() {
+    raf = 0;
+    if (!html.classList.contains("armed")) return;
+    var s = schedule(), step = s.t < LEAD ? 0 : Math.min(10, 1 + Math.floor((s.t - LEAD) / s.d));
+    /* the end of the page is a case of its own, as it is in the live window */
+    if (step > 0 && innerHeight + pageYOffset >= document.documentElement.scrollHeight - 2) step = 10;
+    if (step > target) toward(step);
+  }
+  function onScroll() { if (!raf) raf = requestAnimationFrame(frame); kick(); }
+  /* the bars start down only if the moment can run; otherwise the chart is printed whole */
+  function arm() {
+    clearTimeout(stepper); stepper = 0;
+    if (stillNow() || lit) { html.classList.remove("armed"); finish(); return; }
+    html.classList.add("armed"); target = 0; paint(0); frame();
+  }
+
+  /* ---------------------------------------------------------------- the payoff lands whole, once */
+  var big = document.getElementById("big"), io = null;
+  function heroWatch() {
+    if (stillNow() || !("IntersectionObserver" in window)) { big.classList.add("in"); return; }
+    if (!io) io = new IntersectionObserver(function (es) {
+      es.forEach(function (e) { if (e.isIntersecting) big.classList.add("in"); });
+    }, { threshold: .5 });
+    io.unobserve(big); io.observe(big);        /* re-observing makes it report where it is now */
+  }
+
+  /* ---------------------------------------------------------------- THE LAMP, HELD
+     The pool is held in the VIEWPORT, like a lamp in the hand: on a desktop it follows the pointer;
+     on a phone it stays where the reader last touched -- a little ABOVE the finger, so the finger
+     does not cover what it finds -- while the paper scrolls under it. It has weight: 18% of the way
+     to its aim each frame, and it sleeps when it has arrived. Arming it shows the finished file,
+     since the lamp examines the file rather than watching it being built. Keyboard, reduced motion
+     and "still" get every developed zone plain and whole: a beam needs a pointer to aim it. */
+  var folder = document.getElementById("folder"), lamp = document.getElementById("lamp");
+  var ZONES = [].slice.call(folder.querySelectorAll(".devz>.dz, .lampsig"));
+  var lit = false, plain = false, plainByKey = false, loop = 0, ax = 0, ay = 0, bx = null, by = null, fl = null, ft = null;
+  function aimInside() {
+    var f = folder.getBoundingClientRect(), vh = innerHeight;
+    ax = f.left + f.width * 0.42;
+    ay = Math.min(Math.max(vh * 0.42, f.top + 150), Math.max(f.top + 150, f.bottom - 80));
+  }
+  function aimAtZone() {                          /* once the zones have opened: the first one in view */
+    for (var i = 0; i < ZONES.length - 1; i++) {
+      var z = ZONES[i].getBoundingClientRect();
+      if (z.bottom > 60 && z.top < innerHeight - 60) { ax = z.left + z.width * 0.34; ay = z.top + z.height * 0.5; kick(); return; }
+    }
+  }
+  function tick() {
+    loop = 0;
+    if (!lit || plain) return;
+    if (bx === null) { bx = ax; by = ay; }
+    bx += (ax - bx) * 0.18; by += (ay - by) * 0.18;
+    var f = folder.getBoundingClientRect();
+    folder.style.setProperty("--bx", (bx - f.left).toFixed(1) + "px");
+    folder.style.setProperty("--by", (by - f.top).toFixed(1) + "px");
+    for (var i = 0; i < ZONES.length; i++) {
+      var z = ZONES[i].getBoundingClientRect();
+      ZONES[i].style.setProperty("--mx", (bx - z.left).toFixed(1) + "px");
+      ZONES[i].style.setProperty("--my", (by - z.top).toFixed(1) + "px");
+    }
+    var rest = Math.abs(ax - bx) < 0.3 && Math.abs(ay - by) < 0.3 && f.left === fl && f.top === ft;
+    fl = f.left; ft = f.top;
+    if (!rest) loop = requestAnimationFrame(tick);
+  }
+  function kick() { if (lit && !plain && !loop) loop = requestAnimationFrame(tick); }
+  function setLamp(on, flat) {
+    lit = on; plain = on && flat;
+    lamp.setAttribute("aria-pressed", on ? "true" : "false");
+    document.getElementById("lampcall").textContent = on ? "FLUORESCING" : "PRESS TO ARM";
+    document.getElementById("lampsub").textContent = on ? "365nm · 03 ZONES" : "365nm · LONG WAVE";
+    document.getElementById("lampst").textContent = on ? "ON" : "OFF";
+    folder.classList.toggle("uvon", on);
+    folder.classList.toggle("uvall", plain);
+    cancelAnimationFrame(loop); loop = 0; fl = ft = null;
+    if (on) { html.classList.remove("armed"); finish(); }
+    if (on && !plain) {
+      aimInside(); bx = null;
+      folder.classList.remove("flick"); void folder.offsetWidth; folder.classList.add("flick");
+      setTimeout(function () { folder.classList.remove("flick"); }, 700);
+      setTimeout(aimAtZone, 650);
+      kick();
+    }
+  }
+  lamp.addEventListener("click", function (e) {
+    var on = lamp.getAttribute("aria-pressed") !== "true";
+    plainByKey = on && e.detail === 0;              /* detail === 0 is a keyboard press */
+    setLamp(on, stillNow() || plainByKey);
+  });
+  if (fine) addEventListener("pointermove", function (e) { if (lit) { ax = e.clientX; ay = e.clientY; kick(); } }, { passive: true });
+  folder.addEventListener("pointerdown", function (e) {
+    if (!lit) return;
+    ax = e.clientX; ay = e.clientY - (e.pointerType === "touch" ? 120 : 0); kick();
+  });
+
+  addEventListener("scroll", onScroll, { passive: true });
+  addEventListener("resize", onScroll);
+  arm();
+  heroWatch();
+
+  /* ---------------------------------------------------------------- the lab bar */
+  var stb = document.getElementById("still"), pb = document.getElementById("pair");
+  stb.onclick = function () {
+    var on = !html.classList.contains("still");
+    html.classList.toggle("still", on); stb.setAttribute("aria-pressed", on);
+    if (lit) setLamp(true, stillNow() || plainByKey); else arm();
+    heroWatch();
+  };
+  pb.onclick = function () {
+    var on = !html.classList.contains("pair");
+    html.classList.toggle("pair", on); pb.setAttribute("aria-pressed", on);
+    onScroll();
+  };
+  document.getElementById("again").onclick = function () {
+    html.classList.remove("still"); stb.setAttribute("aria-pressed", "false");
+    if (lit) setLamp(false, false);
+    arm();
+    big.classList.remove("in"); heroWatch();
+    scrollTo(0, band.getBoundingClientRect().top + pageYOffset - innerHeight * 1.05);
+  };
+
+  window.__moment = { apply: function (n) { html.classList.add("armed"); clearTimeout(stepper); stepper = 0; target = n; paint(n); },
+                      setLamp: setLamp, built: function () { return built; } };
+})();
+</script>
+</body>
+</html>
