@@ -109,7 +109,10 @@ def main():
                        ('/*SHELL:js*/', 'frame.js'),
                        ('/*SHELL:folder*/', 'folder.js'),
                        ('/*SHELL:router*/', 'router.js'),
-                       ('/*SHELL:cursor*/', 'cursor.css')):
+                       ('/*SHELL:cursor*/', 'cursor.css'),
+                       ('/*SHELL:fonts*/', 'fonts_swiss.css'),
+                       ('/*SHELL:xtix*/', 'xtix.css'),
+                       ('/*SHELL:xtixjs*/', 'xtix.js')):
         if body.count(mark) != 1:
             raise SystemExit('shell marker %s appears %d times, expected 1'
                              % (mark, body.count(mark)))

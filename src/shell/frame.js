@@ -285,7 +285,9 @@ var W1=split(document.getElementById('stmt1'))||[];
 var W2=split(document.getElementById('stmt2'))||[];
 
 /* ---------- counters ---------- */
-var cnts=[].slice.call(document.querySelectorAll('.cnt')).map(function(el){
+/* a figure marked data-whole is printed as itself and never counted: counting it up prints numbers
+   the file does not say ("0M+", "7M+", "~13%"). XTIX's $9M+ and its three dials, 2026-09-29. */
+var cnts=[].slice.call(document.querySelectorAll('.cnt:not([data-whole])')).map(function(el){
   return {el:el,n:parseFloat(el.dataset.n||'0'),pre:el.dataset.pre||'',suf:el.dataset.suf||'',fin:el.dataset.final||''};
 });
 function setCnt(c,p){

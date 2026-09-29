@@ -2639,3 +2639,102 @@ them would only make them lie about their own date.
 The UV lamp was re-verified afterwards in all four case folders: OFF → ARMED, three developed
 zones each, 0 → 3 open, no page errors. Every document's text is unchanged; only
 `src/_monolith.html` was touched.
+
+## R10 — XTIX goes live in the approved look, and the seven faults its checks found first
+
+Oran, 2026-09-29, on `lab/xtix-moment.html`: *"1 — yes, it's correct & ok; 2 — it's ok, agreed;
+3 — approve."* That is: bar k of the ∅→10 chart IS item k of 04's list, built in the list's
+order; the look (Instrument Serif / Geist / Geist Mono, `From Zero` in italic, `Only then did
+execution begin.` at display size) is approved; put it on the live site. **XTIX only** — the
+other six documents were not to move, and did not (below).
+
+**What went in.** `src/shell/xtix.css` (every selector `#docs #xtix`), `src/shell/xtix.js`,
+`src/shell/fonts_swiss.css` (faces as data URIs), three build markers. In `src/doc/xtix.html`
+drawing only — the text, tags stripped, is identical (1,975 characters): the chart redrawn in
+HTML, the meta line held together per token, and `data-whole` on `$9M+` and the three dial
+figures, which **both** scroll engines now skip (the page engine in `_monolith.html` and
+`scrollEngine()` in `frame.js` each had their own copy of the counter list). SYSTEM.md §15.
+
+**The faults, each found by a check before anyone saw it:**
+
+1. **The folder left the page when the lamp came on.** The folder's "beam on" state class and the
+   beam element were both called `.x-beam`, so arming the lamp gave the FOLDER the beam's
+   `position:absolute; inset:0`. It collapsed to 266px and the window jumped 480px. Renamed the
+   state `.x-beamon`. Found by reading the folder's box before and after the press.
+2. **`$9M+` read as `$ 9M+`.** Set as a flex row, each span became a block, and `innerText` — what
+   a copy, a find or a screen reader's line gets — gained a space. The DOM was identical; the
+   rendered words were not. Now inline spans in a `font-size:0` row (so the source's one space
+   before `ARR` opens no gap). Found by comparing rendered words, not DOM words.
+3. **Violet in the room.** The lit plate's outer glow put violet on the page around it — against
+   "the violet reaches the folder only" (2026-09-24) — and a shared rule
+   (`.lampband::before` resting at `translateX(-14px)`) hung the bulb half over the plate's edge.
+   The glow now turns inward, the bulb is seated, and the plate keeps its drop-shadow lit (dropping
+   it lightened the room below it by a few levels, which also counted). The check is a pixel diff
+   lamp-off vs lamp-on of everything outside the folder, its tab and the plate. **Its first two
+   versions were wrong:** the first counted blue text-antialiasing fringes (the text rasterizer
+   switches mode when the beam composites) as violet; the fix to that went blind to a faint glow.
+   The third requires a true violet shift, and was proven with the old glow planted back in:
+   6,772 / 16,474 / 36,516 pixels (desk / phone / phone on its side), against 0 for the build.
+   The first plant did not even apply — the page's stylesheet comes later in the document and won
+   the tie — so that run proved nothing until the plant was made to win.
+4. **Item 10 slipped out as bar 10 rose.** The pairing kept item k 12px inside the window at the
+   exact threshold; a 24px scroll step carried it out. The margin is now half the spare room, up
+   to 48px.
+5. **Fast readers outran the build.** Owed bars were paid 90ms apart; above ~700px/s the chart
+   left the top of the window before bar 10 rose. Now a frame apart (16ms) while more than one is
+   owed — still one bar per change. At reading speed bars never queue, so only fast scrolls take
+   this path.
+6. **A phone on its side had no room to spare.** Its chart has ~200px of travel and the 18px
+   minimum bar spacing used 164px of it. The minimum is now 12px; only short windows reach it.
+7. **The speed checks were measuring the browser.** Three fixes, in the order they were found.
+   (a) The fling check sampled every 30ms and failed when a fast catch-up and a delayed sample
+   coincided; it now timestamps each bar in the page (one bar per change, never under 10ms apart).
+   (b) The tool opened XTIX after fixed waits; on a cold browser the first pages called
+   `show('xtix')` before the shell was up and every check after it measured a closed file ("at
+   open: armed=False built=10"). It now waits for each state it needs — shell up, file shown,
+   faces loaded, file armed — and refuses to measure otherwise. (c) Results at the fast end still
+   swung from run to run (a phone on its side at 700px/s: 3/10 to 10/10 bars on screen). A
+   per-frame readout settled it, after two guesses about pacing that the numbers did not bear
+   out: the bars were paid on time and the browser **stopped painting** for one frame of
+   150–300ms while the chart was up for ~300ms. That is this headless, software-rendered Chrome,
+   not the port: scrolling XTIX before and after at 700px/s on three sizes, median frame 20ms
+   both, the same handful over 50ms, a lower worst frame after. So the speed check now records the
+   longest frame while the chart is on screen: a miss with no frame over 60ms FAILS the page; a
+   miss inside a stall is reported INCONCLUSIVE and run again, up to three times — never passed.
+   With stalls set aside, what is left is the real limit, and it is stated rather than tuned
+   away: the build ends as the chart's top reaches the upper fifth of the window (the approved
+   lab's rule), ~160px of margin on a desktop, ~58px on a phone on its side, and two frames of
+   scroll-to-paint latency eat that at ~1500px/s and ~700px/s — one bar in ten rose just past
+   the top there. **Guaranteed and checked: every bar on screen up to 1000px/s on desktop and
+   phone, 300px/s on a phone on its side**; faster speeds are measured and printed.
+
+**The other six documents did not move.** Before (the R9 build) vs after, lamp armed where there
+is one: the DOM words and the rendered words of all seven documents identical, XTIX's rendered
+words differing only by the four film-edge labels, which the approved look does not draw (a named
+exemption, proven used). Reduced-motion screenshots of the desktop and the six other documents at
+six scroll points each: identical pixel for pixel on three runs; on a fourth, OASIS and EVENTER
+differed by **one level in 255** on 25–44 pixels. That is the renderer's own floor, measured: the
+unchanged R9 build shot three times differs from itself by exactly that (EVENTER, 5 of 6 pairs).
+Nothing above one level, anywhere, on any run.
+
+**The eight-device matrix** (`rig2`, on a frozen copy of the final build): 0 page errors, 0
+console errors, 0 external requests, 0 sideways scroll, 0 elements past the screen edge, 0 targets
+under size, all seven documents opened, read to the end and closed on every device. Its collision
+count went from 0 to 3–6 on six devices, all in XTIX: the title's two lines, and on the iPhone 13
+`$9M+` against `PIPELINE MANAGED`. The rig compares text BOXES, and the approved title is set at
+display leading (.98), where boxes overlap though letters do not. Measured as ink — each side drawn
+alone, `opacity:0` on the other, the inked pixels intersected — **0 shared pixels on all seven
+sizes**; the title's lowest descender and its tallest capital keep 1–5px anywhere across the line,
+and `$9M+` stands 32–87px clear of its label. The first version of that ink test hid with
+`visibility`, which the title's children set back to visible: it saw no ink at all and reported
+0 by construction. It now refuses to report when either side has no ink. The leading stays as
+approved.
+
+**The lab checker changed its mind with Oran.** `tools/check_lab_order.py` required the pairing to
+be OFF at load. It now requires nothing accented at load and exempts the accent by name — only on
+the item carrying it, and for the 0.7s its wash takes to fade. Its first run under the new rule
+caught the LAB page itself: under reduced motion `finish()` called `paint(10)`, which lit item
+10's accent for 1.3s where nothing was rising. The lab now prints the chart whole, as the live
+port always did. Live and lab read the same 263 words in the same order.
+
+**Guarded from here by** `tools/check_xtix_moment.py`.

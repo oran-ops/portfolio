@@ -1,6 +1,12 @@
 # PAPER UNDER GLASS
 ### The redesign of all seven documents. One system, built to be executed without asking a question.
 
+> **XTIX HAS LEFT THIS PLAN, 2026-09-29.** Oran approved a different look for XTIX — Instrument
+> Serif, Geist and Geist Mono, Part 1 in one column, the ∅→10 chart built bar by bar with its
+> paired item lit, the lamp held as a beam — and it is live. §15 records it. Everything below
+> still describes the plan for the other six documents, and for XTIX only where §15 is silent.
+> Whether the other six move to the XTIX look is Oran's open decision; do not start it unasked.
+
 ---
 
 ## 0. WHAT THIS IS, AND WHAT IT IS MADE OF
@@ -941,3 +947,51 @@ lightness and vanishes entirely in a downscaled screenshot; in the real build it
 one more step of contrast. The drawn `%` and `~` are the weakest of the thirty added glyphs and
 are only legible in context. And a specimen flatters any system more than a real document will:
 these plates are isolated, and a live file is 8,000px of continuous reading.
+
+---
+
+## 15. XTIX, LIVE IN THE APPROVED LOOK — 2026-09-29
+
+**Oran's three decisions, 2026-09-29, on `lab/xtix-moment.html`:** (1) the pairing is right — bar
+k of the ∅→10 chart IS item k of 04's list, and the ten were built in the order the list prints
+them; (2) the look is approved; (3) put it on the live site, XTIX only.
+
+**Where it lives.** `src/shell/xtix.css` (every selector starts `#docs #xtix`), `src/shell/xtix.js`
+(does nothing if `#xtix` is absent; writes classes and custom properties, never a word),
+`src/shell/fonts_swiss.css` (the three faces as data URIs — no request leaves the page). Markers
+`/*SHELL:fonts*/`, `/*SHELL:xtix*/`, `/*SHELL:xtixjs*/`. Markup changes in `src/doc/xtix.html`
+are drawing only — the file's text, tags stripped, is identical: the chart is HTML (`.xchart
+.xbars .xcol .xz .xgl .xb .xbar .xlab`, bars at 16 + 5k of 61), the meta line holds each
+`· TOKEN` together, and `$9M+` and the three dial figures carry `data-whole`, which both scroll
+engines skip — they are printed as themselves and never counted up through numbers the file
+does not say.
+
+**Faces by role.** Instrument Serif (400 only; roman and italic) for the title, the zone
+numerals, `$9M+`, the tab name, `.then`, `.bigtxt`, the developed zones' titles and the analyst
+note; Geist for reading; Geist Mono for every label. The title's `From Zero` is italic in `--x-c2`.
+
+**The folder.** Part 1 in one column, zone numerals hung in an 84px margin (inline beside their
+label below 861px). STARTING POINT appears once, in 01, as the file sets it. 04's ten are printed
+at full ink under their emerald checks **before, during and after** the build — the accent adds,
+it never withholds. Part 2 keeps its two columns.
+
+**The moment.** The bars start down only while the moment can run (`#xtix.x-armed`). They rise
+one at a time as the reader brings the chart up the window: the build starts when the chart is
+wholly in view and paces itself so every bar rises in view and item k is in the window as bar k
+rises, wherever the geometry allows (a phone on its side falls back to the chart alone). One way:
+a bar once risen stays risen. Owed bars are paid 90ms apart, a frame (16ms) apart while more than one is owed —
+never in one pass. The end of the document completes it. Every opening of the file re-arms it.
+`$9M+` rises whole out of a clip, once per opening. Reduced motion, `?static=1` and failsafe get
+the finished chart and the finished figure at once.
+
+**The lamp, held.** The live layer still owns the switch, `.lampon` and the plate's words.
+`xtix.js` adds a beam: a pool held in the window (follows a mouse; stays a little above the last
+touch), 18% of the way to its aim per frame, asleep once arrived. Developed ink shows only inside
+the pool (a mask per zone), a 7% ghost elsewhere. Arming finishes the build. A keyboard press,
+reduced motion, `?static=1` and failsafe get every zone plain and whole. **The violet reaches the
+folder and the plate only**: the plate glows inward, and a pixel diff (lamp off vs on) of
+everything outside the folder, its tab and the plate must be zero. The film-edge labels are not
+drawn in XTIX (the approved look has none) — the one rendered-text difference, named in the check.
+
+**Guarded by** `tools/check_xtix_moment.py` (build, pairing, never-unbuilt fingerprint, speed,
+fling, reopen, lamp, violet, stillness, faces, network). Every bar rises on screen up to 1000px/s on a desktop or phone and 300px/s on a phone on its side; faster, one bar in ten can rise just past the top.

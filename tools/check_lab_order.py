@@ -22,7 +22,7 @@ said twice. On lab/xtix-moment.html: 109/109, and the same 263 words in the same
 
 Python Playwright driving the INSTALLED Chrome (channel="chrome"); nothing is downloaded.
 """
-import io, os, re, sys, json, difflib
+import io, os, re, sys, json, difflib, time
 from playwright.sync_api import sync_playwright
 
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__))).replace(chr(92), '/') + '/'
@@ -78,7 +78,7 @@ with sync_playwright() as pw:
     lp.evaluate("window.__enterMachine()"); lp.wait_for_timeout(2800)
     lp.evaluate("show('xtix')"); lp.wait_for_timeout(900)
     lp.evaluate("document.querySelector('#xtix .lampband').click()"); lp.wait_for_timeout(900)
-    # the live file counts $9M+ up from 0 when it comes into view; read it once it has landed
+    # the live file lands $9M+ whole as it comes into view (it once counted up from 0); scroll through it
     for _ in range(40):
         lp.evaluate("()=>{const v=document.getElementById('view'); v.scrollTop += v.clientHeight*0.5}")
         lp.wait_for_timeout(120)
@@ -125,7 +125,8 @@ print('PLATE  %s' % ' | '.join(plate_runs))
 #           and again every 16px from top to bottom; any difference fails. That sees an absent state,
 #           a strike-through, a greyed or filtered check, and a pairing accent. It runs lamp off, lamp
 #           armed (by a real click, so the beam is live) and under reduced motion. The load state must
-#           show every name and check at full ink, and the lab's pairing switch must be off at load.
+#           show every name and check at full ink, and nothing accented. (Until 2026-09-29 the pairing
+#           had to be OFF at load; Oran confirmed it that day, and its accent is exempted by name.)
 #           (A second ruling proved the first version of STATE -- ink only, lamp off only -- could
 #           not fail on pairing-on-by-default, strike-through or greyed checks. This one is built to.)
 #   LAYOUT  the points stand one above the other -- each heading below the last -- and the whole of
@@ -150,7 +151,8 @@ PROBE = r"""([ten, heads])=>{
   function rowOf(e){ let x=e; while(x.parentElement && x.parentElement!==main){
       const p=x.parentElement; if(ten.filter(u=>p.textContent.includes(u)).length>=10) return x; x=p; } return x; }
   const items=ten.map(t=>{const e=holder(t); if(!e) return {t, a:-1, sig:''}; const row=rowOf(e);
-    return {t, a:ink(e), sig:sig(row), r:row.getBoundingClientRect().toJSON()}});
+    return {t, a:ink(e), sig:sig(row), r:row.getBoundingClientRect().toJSON(),
+            now:row.classList.contains('now')||row.classList.contains('x-now')}});
   const checks=[]; const w=document.createTreeWalker(main,NodeFilter.SHOW_TEXT); let n;
   while((n=w.nextNode())){ if(n.data.trim()==='✓') checks.push(ink(n.parentElement)); }
   const hs=heads.map(t=>{const e=holder(t); return e?e.getBoundingClientRect().top+pageYOffset:null});
@@ -175,16 +177,25 @@ with sync_playwright() as pw:
         s0 = pg.evaluate(PROBE, [TEN, HEADS])
         base = [i['sig'] for i in s0['items']]
         problems = []
-        if s0['pair']: problems.append('the pairing switch is ON at load')
+        # Oran, 2026-09-29: the pairing is right (bar k IS item k), so it is ON by default now. What
+        # must still hold: nothing is accented before its bar rises.
+        if any(i.get('now') for i in s0['items']): problems.append('an item is accented at load')
         # under the lamp the whole folder's ink falls back by design; the bar is lower there
         floor = 0.4 if mode == 'lamp armed' else 0.9
         lowinit = [i['t'] for i in s0['items'] if i['a'] < floor]
         if lowinit: problems.append('at load, %d of the ten names below full ink (%s...)' % (len(lowinit), lowinit[0]))
         if s0['checks'] and min(s0['checks']) < floor: problems.append('at load, check marks at ink %.2f' % min(s0['checks']))
-        y, changed = 0, None
+        y, changed, lastnow = 0, None, {}
         while True:
             s = pg.evaluate(PROBE, [TEN, HEADS])
-            diff = [i['t'] for i, b0 in zip(s['items'], base) if i['sig'] != b0]
+            # the ONE exemption, by name: the item carrying the approved accent (.now in the lab,
+            # .x-now live) while its bar rises, and for the 0.7s its wash takes to fade (a .45s
+            # transition) once it has passed the accent on. Every other item must be unchanged.
+            t_now = time.time()
+            for i in s['items']:
+                if i.get('now'): lastnow[i['t']] = t_now
+            diff = [i['t'] for i, b0 in zip(s['items'], base)
+                    if i['sig'] != b0 and t_now - lastnow.get(i['t'], -9) > 0.7]
             if diff and not changed: changed = (s['y'], diff)
             if s['y'] + s['vh'] >= s['H'] - 2: break
             y += 16; pg.evaluate('(y)=>scrollTo(0,y)', y); pg.wait_for_timeout(22)

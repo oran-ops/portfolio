@@ -1,0 +1,268 @@
+/* THE XTIX LOOK -- scoped to #xtix; nothing here may reach another document.
+   Approved by Oran on 2026-09-29 as shown in lab/xtix-moment.html: Instrument Serif for titles and
+   figures, Geist for reading, Geist Mono for labels; Part 1 in one column; the ∅→10 moment; the lamp
+   held as a beam. Every selector starts #docs #xtix (specificity 2,0,0+), and this file expands last in
+   the last <style>, so ties go to it. !important appears only where an existing !important rule or a
+   script-written inline style has to be met -- each such place is named. The text is not touched. */
+
+#docs #xtix{
+  --x-ink:rgba(242,241,237,.94); --x-text:rgba(242,241,237,.80); --x-label:rgba(242,241,237,.62); --x-muted:rgba(242,241,237,.42);
+  --x-line:rgba(255,255,255,.07); --x-line2:rgba(255,255,255,.12);
+  --x-c1:#2FB380; --x-c2:#8DD5B9; --x-c3:#207A57;
+  --x-glow:rgba(47,179,128,.55); --x-glow:color-mix(in srgb,#2FB380 55%,transparent);
+  --x-uv:#9B7BFF;
+  --x-display:'Instrument Serif',Georgia,serif;
+  --x-read:'Geist',system-ui,sans-serif;
+  --x-mono:'Geist Mono',ui-monospace,monospace;
+  --x-ease:cubic-bezier(.2,.7,.1,1); --x-spring:cubic-bezier(.34,1.3,.5,1);
+  --x-hang:84px;
+  font-family:var(--x-read);color:var(--x-text);
+  -webkit-font-smoothing:antialiased;
+}
+/* the column: one reading measure, as the approved page sets it (frame.css:191 is 2,2,1) */
+#win #docs>#xtix>.wrap{max-width:calc(920px + 2*clamp(20px,3vw,36px))}
+
+/* ---------------------------------------------------------------- the head of the file */
+#docs #xtix .shead{align-items:center}
+#docs #xtix .rub{font:500 11.5px/1 var(--x-mono);letter-spacing:.12em;color:var(--x-label);gap:10px;align-items:center}
+#docs #xtix .rub .d{width:6px;height:6px;border-radius:50%;transform:none;background:var(--x-c1);box-shadow:0 0 12px var(--x-glow);animation:none}
+#docs #xtix .tok{font:500 11.5px/1 var(--x-mono);letter-spacing:.12em;padding:6px 10px;border:1px solid var(--x-line2);border-radius:999px;color:var(--x-c1)}
+#docs #xtix .sttl{font-family:var(--x-display);font-weight:400;font-size:clamp(44px,6vw,80px);line-height:.98;letter-spacing:-.012em;
+  color:var(--x-ink);margin:22px 0 18px;max-width:17ch}
+/* Instrument Serif has no weight axis; the kinetic script's --kw/--kt must not reach it */
+#docs #xtix .sttl .w>i{font-variation-settings:normal!important;letter-spacing:0!important}
+#docs #xtix .sttl .w{padding-right:.08em;margin-right:-.08em}
+#docs #xtix .sttl .w.x-em>i{font-style:italic;color:var(--x-c2)}
+#docs #xtix .smeta{font:500 11.5px/1.7 var(--x-mono);letter-spacing:.1em;color:var(--x-muted);text-transform:uppercase}
+#docs #xtix .smeta .nw{white-space:nowrap}
+/* PART labels: .case .plabel is !important throughout (monolith 1011-1032) */
+#docs #xtix .plabel{font-family:var(--x-mono)!important;font-size:12px!important;font-weight:500!important;letter-spacing:.14em!important;
+  color:var(--x-c1)!important;text-transform:uppercase;gap:16px!important;margin-top:56px!important}
+#docs #xtix .plabel::before{display:none!important}
+#docs #xtix .plabel::after{background:linear-gradient(90deg,rgba(47,179,128,.45),transparent)!important;height:1px!important}
+#docs #xtix .plabel.pl2{border-top:0!important;padding-top:0!important;margin:0 0 40px calc(-1*var(--x-hang))!important;font-size:12px!important}
+
+/* ---------------------------------------------------------------- the lamp plate, where it hangs today
+   The builder is shared by four folders; only XTIX's plate is re-dressed here. Its sizes are
+   !important in the shared rules (monolith 884-926, frame.css 248-250), so they are met here. */
+#docs #xtix .uvmount .lampband{display:grid!important;grid-template-columns:auto 1fr auto;grid-template-rows:auto auto auto;column-gap:12px;
+  align-items:center;text-align:left;width:auto!important;min-width:0;min-height:48px;padding:10px 14px 10px 12px!important;border-radius:14px!important;
+  border:1px solid var(--x-line2)!important;background:rgba(28,29,35,.92)!important;background-image:none!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 18px 40px -22px rgba(0,0,0,.9)!important;
+  transform:translateY(calc(-100% + 64px + var(--lift,0px)))!important;transition:border-color .3s,background .3s,box-shadow .3s!important}
+#docs #xtix .uvmount .lampband::before{content:""!important;position:static!important;inset:auto!important;grid-column:1;grid-row:1/span 3;
+  width:12px!important;height:12px!important;border-radius:50%!important;border:1px solid var(--x-label)!important;background:none!important;
+  opacity:1!important;animation:none!important;transform:none!important;margin:0!important;transition:all .3s!important}
+#docs #xtix .uvmount .lampband .lamp,#docs #xtix .uvmount .lampband .lampedge{display:none!important}
+#docs #xtix .uvmount .lampband .lampnm{grid-column:2;grid-row:1;font:500 11px/1.2 var(--x-mono)!important;letter-spacing:.12em!important;color:var(--x-ink)!important}
+#docs #xtix .uvmount .lampband .lampwords{grid-column:2;grid-row:2/span 2;display:block!important;text-align:left!important;margin:0!important}
+#docs #xtix .uvmount .lampband .lampcall{display:block;font:500 10px/1.3 var(--x-mono)!important;letter-spacing:.1em!important;color:var(--x-c1)!important;white-space:nowrap}
+#docs #xtix .uvmount .lampband .lampsub{display:block;font:500 9.5px/1.3 var(--x-mono)!important;letter-spacing:.06em!important;color:var(--x-muted)!important;
+  margin:0!important;white-space:nowrap}
+#docs #xtix .uvmount .lampband .lampstate{position:static!important;grid-column:3;grid-row:1/span 3;font:500 9.5px/1 var(--x-mono)!important;letter-spacing:.12em;
+  color:var(--x-muted)!important;padding:4px 7px!important;border:1px solid var(--x-line2)!important;border-radius:999px;background:none!important}
+#docs #xtix .uvmount .lampband:hover{border-color:rgba(255,255,255,.2)!important}
+#docs #xtix .uvmount .lampband:focus-visible{outline:2px solid var(--x-uv);outline-offset:3px}
+/* lit, the plate glows INWARD: an outer glow put violet on the room around it, and the violet
+   reaches the folder and the instrument only (Oran, 2026-09-24) -- measured, 2026-09-29 */
+#docs #xtix .uvmount.lampon .lampband{border-color:rgba(155,123,255,.6)!important;background:#1C1826!important;
+  box-shadow:inset 0 0 22px -4px rgba(155,123,255,.5),inset 0 1px 0 rgba(255,255,255,.06),0 18px 40px -22px rgba(0,0,0,.9)!important}
+#docs #xtix .uvmount.lampon .lampband::before{border-color:var(--x-uv)!important;background:var(--x-uv)!important;box-shadow:0 0 8px var(--x-uv)}
+#docs #xtix .uvmount.lampon .lampband .lampcall{color:#C9B8FF!important}
+#docs #xtix .uvmount.lampon .lampband .lampstate{color:var(--x-uv)!important;border-color:rgba(155,123,255,.6)!important}
+
+/* ---------------------------------------------------------------- the folder: the file itself.
+   The violet reaches this and nothing else -- Oran, 2026-09-24. */
+#docs #xtix .folder{--cn:"";position:relative;margin-top:64px;border-radius:0 22px 22px 22px;border:1px solid var(--x-line);
+  background:linear-gradient(180deg,rgba(255,255,255,.045),rgba(255,255,255,.012) 38%,rgba(255,255,255,.02)),#1C1D23;
+  padding:44px 44px 48px;box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 50px 110px -50px rgba(0,0,0,.9)}
+#docs #xtix .folder::before,#docs #xtix .folder::after{content:none!important}
+#docs #xtix .folder .vfilm{display:none!important}
+#docs #xtix .tabrow{top:-43px}
+#docs #xtix .tabrow .tA{height:43px;display:flex;align-items:baseline;gap:12px;padding:12px 18px 8px;background:#1E1F25;border:1px solid var(--x-line);
+  border-bottom:0;border-radius:14px 14px 0 0;box-shadow:none}
+#docs #xtix .tabrow .tA .nm{font:italic 400 22px/1 var(--x-display);color:var(--x-c1)}
+#docs #xtix .tabrow .tA .fl{font:500 10.5px/1 var(--x-mono);letter-spacing:.12em;color:var(--x-label);opacity:1}
+
+/* Part 1 in ONE column (the 45fr 55fr split at monolith 1379 goes) */
+#docs #xtix .folder>.cols2{grid-template-columns:1fr;gap:0}
+
+/* the zones: the numeral hangs in the margin, the heading is a label */
+#docs #xtix .folder>.cols2>div,#docs #xtix .folder .hairtop{padding-left:var(--x-hang)}
+#docs #xtix .z{margin-bottom:50px}
+#docs #xtix .folder>.cols2>div:last-child>.z:last-child{margin-bottom:6px}
+#docs #xtix .zr{position:relative;display:block;font:500 11.5px/1.9 var(--x-mono);letter-spacing:.12em;color:var(--x-label);margin:0 0 10px}
+#docs #xtix .zr b{position:absolute;right:calc(100% + 20px);top:-9px;width:auto;text-align:right;white-space:nowrap;
+  font:italic 400 34px/1 var(--x-display);letter-spacing:0;color:var(--x-c1)}
+#docs #xtix .zr .d2{display:none}
+#docs #xtix .para{font-size:clamp(18px,1.6vw,21px);line-height:1.5;color:var(--x-text);max-width:34em}
+#docs #xtix .para b{color:var(--x-ink);font-weight:500}
+
+/* STARTING POINT -- once, in 01 */
+#docs #xtix .reality{margin:-28px 0 50px;max-width:520px;padding:0;border:1px solid var(--x-line);border-radius:16px;overflow:hidden;
+  background:linear-gradient(180deg,rgba(255,255,255,.045),rgba(255,255,255,.012) 38%,rgba(255,255,255,.02)),#1B1C22;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.07),0 30px 70px -40px rgba(0,0,0,.85)}
+#docs #xtix .reality .fh{padding:13px 18px;margin:0;border-bottom:1px solid var(--x-line);font:500 11px/1 var(--x-mono);letter-spacing:.12em;color:var(--x-label)}
+#docs #xtix .reality .fh b{font-weight:500;color:var(--x-c1)}
+#docs #xtix .reality .frow{display:grid;grid-template-columns:22px 1fr;align-items:center;gap:12px;padding:0 18px;min-height:40px;
+  border-bottom:0;box-shadow:inset 0 1px 0 rgba(255,255,255,.035);font-size:15.5px;color:var(--x-text)}
+#docs #xtix .reality .frow:first-of-type{box-shadow:none}
+
+/* 03 */
+#docs #xtix .grid2c.apl{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 32px;max-width:640px;margin-top:12px}
+#docs #xtix .dash{position:relative;display:block;padding-left:18px;font-size:16.5px;line-height:1.5;color:var(--x-text)}
+#docs #xtix .dash::before{position:absolute;left:0;top:.78em;width:8px;height:1px;background:var(--x-c1)}
+#docs #xtix .then{font:italic 400 clamp(22px,2.2vw,28px)/1.3 var(--x-display);color:var(--x-c2);margin-top:18px}
+
+/* 04: the ten, each under its check, full ink, always */
+#docs #xtix .grid2c:not(.apl){grid-template-columns:repeat(2,minmax(0,1fr));gap:2px 26px;max-width:730px;margin:4px 0 0 -10px}
+#docs #xtix .lg{position:relative;display:grid;grid-template-columns:22px 1fr;align-items:center;gap:12px;min-height:40px;padding:0 10px;
+  font-size:16px;font-weight:400;color:var(--x-ink)}
+#docs #xtix .lg::before{content:"";position:absolute;inset:3px 0;border-radius:10px;opacity:0;pointer-events:none;transition:opacity .45s var(--x-ease);
+  background:linear-gradient(90deg,rgba(47,179,128,.17),transparent 80%)}
+#docs #xtix .lg>*{position:relative}
+#docs #xtix .lg .c{width:18px;height:18px;border-radius:50%;display:grid;place-items:center;font:700 11px/1 var(--x-read);color:#0E1512;
+  background:radial-gradient(circle at 35% 30%,var(--x-c2),var(--x-c1) 55%,var(--x-c3));
+  box-shadow:0 0 0 4px rgba(47,179,128,.14),0 0 14px -2px var(--x-glow)}
+/* the pairing (Oran, 2026-09-29: bar k IS item k, built in the list's order): the item whose bar is
+   rising takes the bar's accent. Colour and shadow only -- the reveal owns transform and opacity. */
+#docs #xtix .lg.x-now::before{opacity:1}
+#docs #xtix .lg.x-now .c{box-shadow:0 0 0 5px rgba(47,179,128,.26),0 0 22px 0 var(--x-glow)}
+
+/* ∅→10 -- three empty slots, a dashed break, ten bars at 16 + 5k of 61, an axis to its arrowhead */
+#docs #xtix .xchart{position:relative;margin-top:6px;max-width:760px}
+#docs #xtix .xbars{position:relative;display:grid;grid-template-columns:repeat(3,.8fr) 14px repeat(10,1fr);gap:clamp(5px,.9vw,11px);
+  align-items:end;height:clamp(120px,19vh,190px);padding-bottom:26px}
+#docs #xtix .xbars::after{content:"";position:absolute;left:0;right:0;bottom:26px;height:1px;background:linear-gradient(90deg,transparent,var(--x-line2) 10%)}
+#docs #xtix .xbars::before{content:"";position:absolute;right:-2px;bottom:22px;border:5px solid transparent;border-left:8px solid var(--x-line2);border-right:0}
+#docs #xtix .xcol{position:relative;height:100%;display:flex;align-items:flex-end}
+#docs #xtix .xlab{position:absolute;left:50%;bottom:-21px;transform:translateX(-50%);font:500 10px/1 var(--x-mono);letter-spacing:.04em;
+  color:var(--x-muted);transition:color .5s}
+#docs #xtix .xz{width:100%;height:26%;border:1px dashed var(--x-line2);border-radius:7px}
+#docs #xtix .xgl{height:100%;justify-self:center;width:0;border-left:1px dashed var(--x-line2)}
+#docs #xtix .xbar{display:block;width:100%;height:calc(var(--h)*1%);border-radius:7px 7px 2px 2px;transform-origin:bottom;
+  background:linear-gradient(180deg,#9FDCC4,#2FB380 30%,#1E6A4D);
+  background:linear-gradient(180deg,color-mix(in srgb,var(--x-c2) 90%,white),var(--x-c1) 30%,color-mix(in srgb,var(--x-c3) 80%,#191A1F));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.45),inset 0 0 0 1px rgba(0,0,0,.18);
+  transition:transform .8s var(--x-spring),box-shadow .6s var(--x-ease)}
+/* the bars start down only while the moment can run (src/shell/xtix.js adds x-armed); without it,
+   and in every frozen state, the chart is printed whole */
+#docs #xtix.x-armed .xb:not(.on) .xbar{transform:scaleY(0)}
+#docs #xtix .xb.on .xlab{color:var(--x-label)}
+#docs #xtix .xb.x-now .xbar{box-shadow:inset 0 1px 0 rgba(255,255,255,.6),0 0 34px -4px var(--x-glow),0 0 90px -20px var(--x-glow)}
+#docs #xtix .xb.x-now .xlab{color:var(--x-c2)}
+
+/* ---------------------------------------------------------------- the bands and PART 2 */
+#docs #xtix .hairtop{margin-top:44px;padding-top:44px}
+#docs #xtix .hairtop::before{background:var(--x-line2)}
+#docs #xtix .hairtop .zr b{top:-9px}
+#docs #xtix .hairtop.rv>.zr b{font-size:24px;top:-4px}
+#docs #xtix .statrow{grid-template-columns:1fr;gap:26px}
+/* $9M+ is printed as itself and lands whole, once (never counted: data-whole).
+   INLINE, NOT FLEX. A flex row turns each span into a block, and the page's own text then reads
+   "$ 9M+" -- in a copy, a find, a screen reader's line. Measured with innerText, 2026-09-29.
+   font-size:0 on the row keeps the source's one space (before ARR) from opening a 50px gap. */
+#docs #xtix .bignum{--bn:clamp(96px,14vw,200px);display:block;white-space:nowrap;font:400 0/.8 var(--x-display);
+  color:var(--x-ink);margin:10px 0 18px;opacity:1!important;transform:none!important;text-shadow:0 0 80px rgba(47,179,128,.18)}
+#docs #xtix .bignum>span{display:inline-block;vertical-align:baseline;font-size:var(--bn);line-height:.8;letter-spacing:-.035em}
+#docs #xtix .bignum .cur{font-style:italic;font-size:calc(var(--bn)*.44);vertical-align:top;color:var(--x-c1);margin:.08em 4px 0 0}
+/* the ARR span carries inline styles (xtix.html) */
+#docs #xtix .bignum>span:not(.cur):not(.cnt){font:500 calc(var(--bn)*.1)/1 var(--x-mono)!important;color:var(--x-muted)!important;letter-spacing:.1em;
+  margin:0 0 0 14px;text-shadow:none}
+#docs #xtix.x-js .bignum>span{clip-path:inset(0 0 100% 0);transform:translateY(.18em);transition:clip-path 1.1s var(--x-ease),transform 1.1s var(--x-ease)}
+#docs #xtix.x-js .bignum>.cnt{transition-delay:.12s}
+#docs #xtix.x-js .bignum>span:not(.cur):not(.cnt){transition-delay:.5s}
+#docs #xtix.x-js .bignum.x-in>span{clip-path:inset(-.2em -.2em -.2em -.2em);transform:none}
+#docs #xtix .biglbl{font:500 12px/1.8 var(--x-mono);letter-spacing:.12em;color:var(--x-label);text-transform:uppercase}
+#docs #xtix .perfrows{gap:16px}
+#docs #xtix .prow{border-left:2px solid var(--x-c1);padding-left:16px}
+#docs #xtix .bigtxt{font:400 clamp(24px,2.4vw,30px)/1.15 var(--x-display);letter-spacing:0;color:var(--x-ink)}
+#docs #xtix .g1 .gl{font:500 10.5px/1.7 var(--x-mono);letter-spacing:.12em;color:var(--x-label)}
+#docs #xtix svg text{font-family:var(--x-mono)}
+#docs #xtix .tech{border:1px solid var(--x-line);border-radius:16px;
+  background:linear-gradient(180deg,rgba(255,255,255,.045),rgba(255,255,255,.012) 38%,rgba(255,255,255,.02)),#1B1C22;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.07)}
+#docs #xtix .pur{font:500 10px/1.7 var(--x-mono);letter-spacing:.12em;color:var(--x-c1)}
+#docs #xtix .refl3{gap:12px 30px}
+#docs #xtix .refl3 .dash{font-size:16px}
+
+/* the live layer inside XTIX: slip, sheet, note -- faces only, the paper stays paper */
+#docs #xtix .es-h,#docs #xtix .es-row,#docs #xtix .es-stamp,#docs #xtix .ms-fig,#docs #xtix .ms-stamp,#docs #xtix .ms-t,
+#docs #xtix .sf-tab,#docs #xtix .an-h,#docs #xtix .an-s,#docs #xtix .lampsig{font-family:var(--x-mono)}
+#docs #xtix .an-t{font:italic 400 17px/1.55 var(--x-display);color:#E4E0D6}
+
+/* ---------------------------------------------------------------- the lamp, as a beam
+   Armed: the bed drops toward #0A0B0D (SYSTEM.md 9.3, inside the folder only), ordinary ink falls
+   back, and a 365nm pool is held over the paper. Hidden ink shows only where it falls. */
+#docs #xtix .devz .dv-k{font:500 10px/1.4 var(--x-mono);letter-spacing:.14em;color:#B9A4FF}
+#docs #xtix .devz .dv-t{display:block;font:italic 400 clamp(22px,2.4vw,30px)/1.12 var(--x-display);color:#EEE6FF;text-shadow:0 0 18px var(--x-uv)}
+#docs #xtix .devz .dv-b li{font:400 14.5px/1.5 var(--x-read);color:#E6DCFF;text-shadow:0 0 12px rgba(155,123,255,.7)}
+#docs #xtix .devz .dv-b li::before{background:var(--x-uv)}
+#docs #xtix .devz .dv-b li em,#docs #xtix .devz .dv-b li b{font:600 inherit/inherit var(--x-read);font-style:normal;color:#fff}
+#docs #xtix .folder.lampon .devz{padding:16px 18px 14px;border:1px dashed rgba(155,123,255,.55);border-radius:14px;background:rgba(155,123,255,.07)}
+#docs #xtix .folder.lampon .lampsig{font:500 9.5px/1.5 var(--x-mono);letter-spacing:.1em;color:#C3B0FF}
+
+/* the dimmed folder. .case .folder.lampon (monolith 1754) is shared; this meets it for XTIX only.
+   --rx/--ry pinned: the folder's pointer tilt would skew the pool it holds. */
+#docs #xtix .folder.lampon{background:#0B0C10!important;background-image:none!important;--rx:0deg!important;--ry:0deg!important;
+  --x-ink:rgba(242,241,237,.46);--x-text:rgba(242,241,237,.36);--x-label:rgba(242,241,237,.30);--x-muted:rgba(242,241,237,.22)}
+#docs #xtix .folder.lampon .xchart,#docs #xtix .folder.lampon .lg .c,#docs #xtix .folder.lampon .reality .o,
+#docs #xtix .folder.lampon .bignum .cur,#docs #xtix .folder.lampon .gaug,#docs #xtix .folder.lampon .tech svg{filter:saturate(.45) brightness(.55)}
+#docs #xtix .folder.lampon .tabrow .tA .nm,#docs #xtix .folder.lampon .zr b,#docs #xtix .folder.lampon .reality .fh b,
+#docs #xtix .folder.lampon .then,#docs #xtix .folder.lampon .plabel,#docs #xtix .folder.lampon .pur,#docs #xtix .folder.lampon .prow{opacity:.45}
+#docs #xtix .x-beamclip{position:absolute;inset:0;border-radius:inherit;overflow:hidden;pointer-events:none;z-index:3}
+#docs #xtix .x-beam{position:absolute;inset:0;opacity:0;transition:opacity .4s var(--x-ease);mix-blend-mode:screen;
+  background:radial-gradient(circle at var(--bx,50%) var(--by,30%),rgba(155,123,255,.32),rgba(155,123,255,.10) var(--r1,150px),transparent var(--r2,270px))}
+#docs #xtix .folder.lampon.x-beamon .x-beam{opacity:1}
+#docs #xtix .folder.lampon.x-beamon.x-flick .x-beam{animation:xtix-flick .62s linear both}
+@keyframes xtix-flick{0%{opacity:0}12%{opacity:.85}30%{opacity:.12}46%{opacity:.5}100%{opacity:1}}
+#docs #xtix .folder.lampon.x-beamon .devz,#docs #xtix .folder.lampon.x-beamon .lampsig{
+  -webkit-mask-image:radial-gradient(circle at var(--mx,-999px) var(--my,-999px),#000 0 var(--r1,150px),rgba(0,0,0,.07) var(--r2,270px));
+          mask-image:radial-gradient(circle at var(--mx,-999px) var(--my,-999px),#000 0 var(--r1,150px),rgba(0,0,0,.07) var(--r2,270px))}
+
+/* ---------------------------------------------------------------- the window at tablet and phone widths */
+@media (max-width:860px){
+  #docs #xtix{--x-hang:0px}
+  #docs #xtix .folder{padding:30px 18px 32px;margin-top:52px}
+  #docs #xtix .uvmount .lampband{width:100%!important;transform:none!important;margin-bottom:10px!important}
+  #docs #xtix .zr{display:flex;align-items:baseline;gap:10px}
+  #docs #xtix .zr b{position:static;width:auto;text-align:left;font-size:22px;top:auto}
+  #docs #xtix .plabel.pl2{margin-left:0!important}
+  #docs #xtix .x-beam{--r1:110px;--r2:200px}
+  #docs #xtix .folder.lampon.x-beamon .devz,#docs #xtix .folder.lampon.x-beamon .lampsig{--r1:110px;--r2:200px}
+}
+@media (max-width:680px){
+  /* the shared phone rules here are !important (monolith 1245, 1271, 1282, 1542, 2137) */
+  #docs #xtix .sttl{font-size:clamp(36px,11vw,46px)!important;letter-spacing:-.01em!important}
+  #docs #xtix .shead .tok{font-size:10px!important;padding:5px 9px}
+  #docs #xtix .smeta{font-size:10px;letter-spacing:.08em}
+  #docs #xtix .grid2c.apl,#docs #xtix .grid2c:not(.apl){grid-template-columns:1fr!important}
+  #docs #xtix .lg{min-height:38px;font-size:15.5px}
+  #docs #xtix .reality .frow{min-height:38px;font-size:15px}
+  #docs #xtix .para{font-size:18px}
+  #docs #xtix .xbars{height:clamp(96px,15vh,140px);gap:4px}
+  #docs #xtix .xlab{font-size:9px;bottom:-18px}
+  #docs #xtix .bignum{--bn:clamp(84px,26vw,110px)}
+}
+@media (max-width:360px){
+  #docs #xtix .lg{font-size:15px;gap:10px}
+}
+/* a phone on its side: the chart alone must fit the window while it builds */
+@media (max-height:520px) and (orientation:landscape){
+  #docs #xtix .lg{min-height:30px;font-size:14.5px}
+  #docs #xtix .xbars{height:64px;padding-bottom:22px}
+  #docs #xtix .xbars::after{bottom:22px}#docs #xtix .xbars::before{bottom:18px}
+  #docs #xtix .xlab{bottom:-17px;font-size:9px}
+}
+
+/* ---------------------------------------------------------------- stillness: everything whole, nothing moving */
+@media (prefers-reduced-motion:reduce){
+  #docs #xtix .xbar{transform:none!important}
+  #docs #xtix .bignum>span{clip-path:none!important;transform:none!important}
+  #docs #xtix .x-beam{display:none}
+  #docs #xtix .folder.lampon .devz,#docs #xtix .folder.lampon .lampsig{-webkit-mask-image:none!important;mask-image:none!important}
+}
+body.static #docs #xtix .xbar,body.failsafe #docs #xtix .xbar{transform:none!important}
+body.static #docs #xtix .bignum>span,body.failsafe #docs #xtix .bignum>span{clip-path:none!important;transform:none!important}
+#docs #xtix .folder.lampon.x-plain .devz,#docs #xtix .folder.lampon.x-plain .lampsig{-webkit-mask-image:none;mask-image:none}
+#docs #xtix .folder.x-plain .x-beam{display:none}

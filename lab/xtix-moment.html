@@ -29,6 +29,10 @@
      this adds is only that the rise is one-way and paced -- never in one pass, even on a fling. So
      the default is a refinement of what ships today, not a new beat; the beat is the pairing.
 
+     CONFIRMED BY ORAN, 2026-09-29: bar k of the chart IS item k of the list, and the ten were
+     built in the order the list prints them. The pairing is therefore the file's own meaning, and
+     it is ON by default here; the switch turns it off for comparison.
+
      REVISED AFTER THREE INDEPENDENT REVIEWS (2026-09-28). A first draft started 04's ten under a
      struck circle and turned each as "its" bar rose. Two rulings against it: it showed WHAT I BUILT
      · (AFTER) as not built for 200-590px of scroll, and it asserted that bar k IS item k, which the
@@ -315,7 +319,7 @@ h1 em{font-style:italic;color:var(--c2)}
 <body>
 
 <div class="labbar" role="toolbar" aria-label="lab">
-  <button id="pair" aria-pressed="false">קישור לרשימה</button>
+  <button id="pair" aria-pressed="true">קישור לרשימה</button>
   <button id="still" aria-pressed="false">בלי תנועה</button>
   <button id="again">שוב מההתחלה</button>
 </div>
@@ -459,6 +463,7 @@ h1 em{font-style:italic;color:var(--c2)}
   "use strict";
   var html = document.documentElement;
   html.classList.add("js");
+  html.classList.add("pair");      /* Oran, 2026-09-29: bar k is item k, built in the list's order */
   var reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
   var fine = matchMedia("(pointer: fine)").matches;
   function stillNow() { return reduced || html.classList.contains("still"); }
@@ -510,7 +515,9 @@ h1 em{font-style:italic;color:var(--c2)}
   }
   function finish() {
     clearTimeout(stepper); stepper = 0; target = 10;
-    if (built < 10) { paint(10); return; }
+    /* printed whole, not painted: paint(10) lit item 10's accent for 1.3s under reduced motion,
+       where nothing is rising (caught by tools/check_lab_order.py, 2026-09-29) */
+    if (built < 10) { built = 10; for (var j = 0; j < 10; j++) COLS[j].classList.add("on"); }
     clearTimeout(nowTimer);
     for (var i = 0; i < 10; i++) { COLS[i].classList.remove("now"); ITEMS[i].classList.remove("now"); }
   }
