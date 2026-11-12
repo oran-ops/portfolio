@@ -43,7 +43,7 @@ svg text{font-family:'JetBrains Mono',monospace}
 .sec.on .rvs{opacity:1;transform:none}
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
-  .rv,.rvs{opacity:1!important;transform:none!important;transition:none!important}
+  .rv:where(:not(#docs>[data-file] *)),.rvs{opacity:1!important;transform:none!important;transition:none!important}
   *{animation:none!important;transition:none!important}
 }
 body.static .rv,body.static .rvs{opacity:1;transform:none;transition:none}
@@ -231,7 +231,7 @@ font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.26em;color:
 
 /* reduced-motion + static: everything visible, nothing moves */
 @media (prefers-reduced-motion:reduce){
- .st,.u .zr,.bignum,.rv,.rvs,.folder .flip{opacity:1!important;transform:none!important}
+ .st,.u .zr,.bignum,.rv:where(:not(#docs>[data-file] *)),.rvs,.folder .flip{opacity:1!important;transform:none!important}
  .wipe{clip-path:none!important}
  .pdraw,.garc,#philosophy .node svg *{stroke-dashoffset:0!important}
  #philosophy .node svg *:not(.dsh){stroke-dasharray:none!important}
@@ -242,7 +242,7 @@ font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.26em;color:
  .u .zr .d2{transform:rotate(45deg)!important}
  .tk,.crawlp{animation:none!important}
 }
-body.static .st,body.static .zr,body.static .bignum,body.static .rv,body.static .rvs,body.static .folder .flip{opacity:1!important;transform:none!important}
+body.static .st,body.static .zr,body.static .bignum,body.static .rv:where(:not(#docs>[data-file] *)),body.static .rvs,body.static .folder .flip{opacity:1!important;transform:none!important}
 body.static .wipe{clip-path:none!important}
 body.static .pdraw,body.static #philosophy .node svg *{stroke-dashoffset:0!important}
 body.static #philosophy .node svg *:not(.dsh){stroke-dasharray:none!important}
@@ -481,13 +481,13 @@ body.static #boot{display:none}
 #hero .mflip{margin:0}
 #hero .mfold{margin:0;max-width:none}
 
-body.failsafe .rv,body.failsafe .st,body.failsafe .rvs,body.failsafe .folder,body.failsafe .folder .flip,body.failsafe .u .zr,body.failsafe .bignum{opacity:1!important;transform:none!important}
+body.failsafe .rv:where(:not(#docs>[data-file] *)),body.failsafe .st,body.failsafe .rvs,body.failsafe .folder,body.failsafe .folder .flip,body.failsafe .u .zr,body.failsafe .bignum{opacity:1!important;transform:none!important}
 body.failsafe .w>i{opacity:1!important;transform:none!important}
 body.failsafe #statement .pinh{height:auto}
 body.failsafe #statement .pin{position:static;padding:150px 24px}
 body.failsafe .bar0{transform:scaleY(1)!important}
 body.failsafe .pdraw,body.failsafe .garc{stroke-dashoffset:0!important}
-body.failsafe .ndot{opacity:1!important;transform:scale(1)!important}
+body.failsafe .ndot:where(:not(#docs>[data-file] *)){opacity:1!important;transform:scale(1)!important}
 body.failsafe .st .c,body.failsafe .st .o{transform:none!important}
 
 .sttl .g2{color:var(--emb)}
@@ -710,7 +710,7 @@ body.failsafe .sec>.wrap{transform:none!important}
 html.jscur #bootgate,html.jscur button{cursor:none}
 
 @media (max-width:560px){
- .cols2,.grid2c{grid-template-columns:1fr!important}
+ .cols2:where(:not(#docs>[data-file] *)),.grid2c:where(:not(#docs>[data-file] *)){grid-template-columns:1fr!important}
  #hero .kick{font-size:8px;letter-spacing:.34em;white-space:nowrap}
  #hero .stampP{transform:rotate(6deg) scale(.82);right:8px}
  .etr{flex-wrap:wrap}
@@ -881,27 +881,27 @@ body.static #clearance,body.static #idlecue,body.failsafe #clearance,body.failsa
    right without either risk.
    The existing toggle queries .lampcall, .lampsub and .lampstate by class - all three keep
    those names, so no toggle logic changed. */
-.lampband{width:auto!important;margin:0 0 12px auto!important;
+.lampband:where(:not(#docs>[data-file] *)){width:auto!important;margin:0 0 12px auto!important;
   display:flex!important;flex-direction:column;align-items:center;justify-content:center;
   gap:5px;padding:13px 16px 12px!important;border-radius:5px;
   background:#1E1F25!important;border:1px solid var(--hair2,#3C3F47);
   transition:background .4s,border-color .4s,box-shadow .4s}
-.lampband .lamp{margin:0!important}
+.lampband .lamp:where(:not(#docs>[data-file] *)){margin:0!important}
 .lampband .lamp svg{width:38px!important;height:38px!important}
 .lampband .lampnm{font-family:'Special Elite',Courier,monospace;font-size:15.5px;
   letter-spacing:.05em;color:var(--ink,#F2F1ED);line-height:1}
 .lampband .lampwords{align-items:center;text-align:center}
-.lampband .lampcall{font-family:'JetBrains Mono',monospace;font-weight:800;font-size:8px!important;
+.lampband .lampcall:where(:not(#docs>[data-file] *)){font-family:'JetBrains Mono',monospace;font-weight:800;font-size:8px!important;
   letter-spacing:.2em;color:var(--mut,#85878D)!important}
-.lampband .lampsub{font-size:7px!important;letter-spacing:.18em;margin-top:2px!important}
-.lampband .lampstate{position:absolute;top:7px;right:8px;margin:0!important;font-size:6.5px!important;
+.lampband .lampsub:where(:not(#docs>[data-file] *)){font-size:7px!important;letter-spacing:.18em;margin-top:2px!important}
+.lampband .lampstate:where(:not(#docs>[data-file] *)){position:absolute;top:7px;right:8px;margin:0!important;font-size:6.5px!important;
   padding:2px 4px!important;color:var(--mut,#85878D);border-color:var(--hair2,#3C3F47)}
 .lampband .lampedge{display:none}
 .lampband .swp{fill:#2A2B33;stroke:#6E7178;stroke-width:1.5}
 .lampband .swscr{fill:#575A62}
 .lampband .swrock{fill:#3A3D45;stroke:#7A7E88;stroke-width:1.3;transition:transform .32s,fill .32s,stroke .32s}
 .lampband .swline{stroke:#9EA2AA;stroke-width:1.4;stroke-linecap:round;transition:stroke .32s}
-.lampband:hover{border-color:#5B5570;background:#232430!important}
+.lampband:hover:where(:not(#docs>[data-file] *)){border-color:#5B5570;background:#232430!important}
 /* armed: the violet arrives all at once, and the rocker throws */
 .case .uvmount.lampon .lampband{background:#221E33!important;border-color:var(--uvv,#9E7BFF);
   box-shadow:0 0 0 1px rgba(158,123,255,.28),0 12px 30px rgba(120,88,235,.26)}
@@ -916,14 +916,14 @@ body.static #clearance,body.static #idlecue,body.failsafe #clearance,body.failsa
   .case .uvmount.lampon .lampband .swrock{transform:none}
 }
 @media (max-width:680px){
-  .lampband{padding:11px 13px 10px!important}
+  .lampband:where(:not(#docs>[data-file] *)){padding:11px 13px 10px!important}
   .lampband .lamp svg{width:33px!important;height:33px!important}
   .lampband .lampnm{font-size:14px}
   /* the plate's three small lines were 8, 7 and 6.5px at every width -- below what a phone
      renders legibly. The same !important the desktop sizes carry, one step up. */
-  .lampband .lampcall{font-size:9.5px!important}
-  .lampband .lampsub{font-size:8.5px!important;letter-spacing:.14em}
-  .lampband .lampstate{font-size:8px!important}
+  .lampband .lampcall:where(:not(#docs>[data-file] *)){font-size:9.5px!important}
+  .lampband .lampsub:where(:not(#docs>[data-file] *)){font-size:8.5px!important;letter-spacing:.14em}
+  .lampband .lampstate:where(:not(#docs>[data-file] *)){font-size:8px!important}
 }
 
 /* ===== R59 - the slips are taped down ===== */
@@ -977,14 +977,14 @@ body.static #clearance,body.static #idlecue,body.failsafe #clearance,body.failsa
    and is the same 26 x 2 the folder's own top margin uses. */
 .case .smeta+.uvmount{margin-top:52px}
 @media (max-width:860px){.case .smeta+.uvmount{margin-top:0}}
-.case .uvmount .lampband{--lift:0px;margin:0!important;
+.case .uvmount .lampband:where(:not(#docs>[data-file] *)){--lift:0px;margin:0!important;
   transform:translateY(calc(-100% - 10px + var(--lift)));
   background:linear-gradient(180deg,#2A2C36,#1D1E25)!important;
   border:1px solid #4A4D58;
   box-shadow:0 6px 16px rgba(0,0,0,.5),0 1px 0 rgba(255,255,255,.09) inset,
              0 -1px 0 rgba(0,0,0,.5) inset;
   transition:transform .12s,box-shadow .2s,border-color .3s,background .35s}
-.case .uvmount .lampband:hover{border-color:#6A6280;
+.case .uvmount .lampband:hover:where(:not(#docs>[data-file] *)){border-color:#6A6280;
   background:linear-gradient(180deg,#31333F,#22232B)!important}
 .case .uvmount .lampband:active{--lift:2px;
   box-shadow:0 2px 7px rgba(0,0,0,.5),0 1px 0 rgba(255,255,255,.05) inset}
@@ -1008,7 +1008,7 @@ body.static #clearance,body.static #idlecue,body.failsafe #clearance,body.failsa
    carrying the extra weight because that is the one the reader has to notice - it is where
    the file stops describing what was built and starts producing evidence for it.
    Only XTIX and Oasis are two-part files; the other two carry no .plabel at all. */
-.case .plabel{display:flex!important;align-items:center;gap:15px;
+.case .plabel:where(:not(#docs>[data-file] *)){display:flex!important;align-items:center;gap:15px;
   font-family:'Special Elite',Courier,monospace!important;
   font-size:clamp(14px,1.45vw,18.5px)!important;font-weight:400!important;
   letter-spacing:.045em!important;line-height:1.15;
@@ -1020,15 +1020,15 @@ body.static #clearance,body.static #idlecue,body.failsafe #clearance,body.failsa
 .case .plabel::after{content:"";flex:1 1 auto;height:1px;min-width:20px;
   background:linear-gradient(90deg,var(--fc,var(--emb)),transparent);opacity:.55}
 /* part two is the seam the reader must not cross blind */
-.case .plabel.pl2{margin-top:52px!important;padding-top:26px;
+.case .plabel.pl2:where(:not(#docs>[data-file] *)){margin-top:52px!important;padding-top:26px;
   border-top:1px solid var(--hair,#31333A);
   font-size:clamp(16px,1.75vw,22px)!important;letter-spacing:.055em!important}
 .case .plabel.pl2::before{flex:0 0 52px;height:3px;
   box-shadow:0 0 12px var(--fc,var(--emb))}
 @media (max-width:680px){
-  .case .plabel{gap:10px;margin:26px 0 13px!important;white-space:normal}
+  .case .plabel:where(:not(#docs>[data-file] *)){gap:10px;margin:26px 0 13px!important;white-space:normal}
   .case .plabel::before{flex:0 0 22px}
-  .case .plabel.pl2{margin-top:39px!important;padding-top:19px}
+  .case .plabel.pl2:where(:not(#docs>[data-file] *)){margin-top:39px!important;padding-top:19px}
   .case .plabel.pl2::before{flex:0 0 32px}
 }
 </style>
@@ -1242,7 +1242,7 @@ footer b{color:var(--mut);font-weight:600}
     which cannot create a scroll container. */
  html{overflow-x:hidden}
  body{overflow-x:clip}
- .wrap{padding-left:16px!important;padding-right:16px!important}
+ .wrap:where(:not(#docs>[data-file] *)){padding-left:16px!important;padding-right:16px!important}
  #rail{display:none!important}
  svg{max-width:100%}
  /* --- hero --- */
@@ -1268,7 +1268,7 @@ footer b{color:var(--mut);font-weight:600}
     30px on the right -- measured at 375. .pin's own 24px does the inset on both sides. */
  #statement .l1,#statement .l2{font-size:clamp(22px,7.2vw,28px)!important;line-height:1.22}
  /* --- section headers --- */
- .sttl{font-size:clamp(18px,6vw,24px)!important;letter-spacing:-.02em;overflow-wrap:break-word}
+ .sttl:where(:not(#docs>[data-file] *)){font-size:clamp(18px,6vw,24px)!important;letter-spacing:-.02em;overflow-wrap:break-word}
  .smeta{font-size:8px;letter-spacing:.1em}
  .shead{flex-wrap:wrap;gap:8px}
  .shead .tok{font-size:7.5px;padding:5px 9px}
@@ -1279,7 +1279,7 @@ footer b{color:var(--mut);font-weight:600}
  .frail{display:none}
  .folder{border-radius:0 12px 10px 10px}
  /* --- grids collapse --- */
- .grid2c,.cols2,.tools,.bgrid,.pgrid,.stackr,#philosophy .grid{grid-template-columns:1fr!important}
+ .grid2c:where(:not(#docs>[data-file] *)),.cols2:where(:not(#docs>[data-file] *)),.tools:where(:not(#docs>[data-file] *)),.bgrid,.pgrid,.stackr:where(:not(#docs>[data-file] *)),#philosophy .grid{grid-template-columns:1fr!important}
  .chips{gap:7px}
  /* --- evidence & numbers --- */
  .bignum{font-size:clamp(34px,10.5vw,44px)}
@@ -1299,7 +1299,7 @@ footer b{color:var(--mut);font-weight:600}
  .hfolder .hdoss{font-size:10.5px;line-height:1.7}
  .hfolder .hcta{left:18px;bottom:22px;font-size:9.5px;padding:9px 13px}
  /* --- quotes --- */
- .sigq .qx,.lessq .qx,.lessq2 .qx,.quote2 .qx{font-size:13.5px!important;line-height:1.45}/*D:final:37*/
+ .sigq .qx:where(:not(#docs>[data-file] *)),.lessq .qx,.lessq2 .qx,.quote2 .qx{font-size:13.5px!important;line-height:1.45}/*D:final:37*/
  .crow{gap:8px}
  .crow b,.crow span{font-size:10.5px;letter-spacing:.06em;overflow-wrap:anywhere}
  footer{flex-wrap:wrap;gap:6px;font-size:7.5px;letter-spacing:.14em;padding:14px 16px}
@@ -1328,13 +1328,13 @@ body.static .hhint .har,body.failsafe .hhint .har{animation:none!important}
 
 /* R7 — the closing line of every section sits at the very bottom, full width */
 #xtix .lessq,#oasis .insight,#oasis .lessq,#eventer .lessq,#medcoin .lessq,
-#leadership .sigq,#tech .lessq,.lessq,.insight,.sigq{
+#leadership .sigq:where(:not(#docs>[data-file] *)),#tech .lessq,.lessq,.insight,.sigq:where(:not(#docs>[data-file] *)){
   grid-column:1/-1!important;order:9;width:100%;
   border-left:none!important;border-right:none!important;
   border-top:1px solid var(--fc,var(--emb))!important;
   margin-top:30px!important;padding:16px 0 0!important;text-align:center}
-.lessq .qx,.insight .qx,.sigq .qx{font-size:19px!important;line-height:1.5;color:var(--ink)}
-@media (max-width:680px){.lessq .qx,.insight .qx,.sigq .qx{font-size:15px!important}}/*D:final:46*//*D:final:47*//*D:final:48*//*D:final:49*//*D:final:50*//*D:final:51*//*D:final:52*//*D:final:53*//*D:final:54*//*D:final:55*//*D:final:56*//*D:final:57*//*D:final:58*//*D:final:59*//*D:final:60*//*D:final:61*//*D:final:62*/
+.lessq .qx,.insight .qx,.sigq .qx:where(:not(#docs>[data-file] *)){font-size:19px!important;line-height:1.5;color:var(--ink)}
+@media (max-width:680px){.lessq .qx,.insight .qx,.sigq .qx:where(:not(#docs>[data-file] *)){font-size:15px!important}}/*D:final:46*//*D:final:47*//*D:final:48*//*D:final:49*//*D:final:50*//*D:final:51*//*D:final:52*//*D:final:53*//*D:final:54*//*D:final:55*//*D:final:56*//*D:final:57*//*D:final:58*//*D:final:59*//*D:final:60*//*D:final:61*//*D:final:62*/
 @media (max-width:680px){/*D:final:63*//*D:final:64*/
   #final .fbot>div+div{margin-top:26px}/*D:final:65*//*D:final:66*//*D:final:67*/
 }
@@ -1342,14 +1342,14 @@ body.static .hhint .har,body.failsafe .hhint .har{animation:none!important}
 
 /* R7h — closing band typography (id-scoped to beat the per-section rules) */
 #xtix .lessq .qx,#oasis .lessq .qx,#oasis .insight .qx,#eventer .lessq .qx,
-#medcoin .lessq .qx,#leadership .sigq .qx,#tech .lessq .qx{
+#medcoin .lessq .qx,#leadership .sigq .qx:where(:not(#docs>[data-file] *)),#tech .lessq .qx{
   font-size:19px!important;line-height:1.5!important;color:var(--ink)}
 #xtix .lessq,#oasis .lessq,#oasis .insight,#eventer .lessq,
-#medcoin .lessq,#leadership .sigq,#tech .lessq{padding:16px 0 0!important;margin-top:30px!important}
-.lessq::before,.insight::before,.sigq::before{display:none!important}
+#medcoin .lessq,#leadership .sigq:where(:not(#docs>[data-file] *)),#tech .lessq{padding:16px 0 0!important;margin-top:30px!important}
+.lessq::before,.insight::before,.sigq:where(:not(#docs>[data-file] *))::before{display:none!important}
 @media (max-width:680px){
   #xtix .lessq .qx,#oasis .lessq .qx,#oasis .insight .qx,#eventer .lessq .qx,
-  #medcoin .lessq .qx,#leadership .sigq .qx,#tech .lessq .qx{font-size:15px!important}
+  #medcoin .lessq .qx,#leadership .sigq .qx:where(:not(#docs>[data-file] *)),#tech .lessq .qx{font-size:15px!important}
 }/*D:final:68*//*D:final:69*//*D:final:70*/
 
 
@@ -1539,12 +1539,12 @@ body.static .hfolder,body.static #hero .mfold{--sx:-320px}
 /* ================= MOBILE TRACK - M2: legibility & content fit ================= */
 @media (max-width:860px){
   /* M2-1 micro-type floor: nothing chrome-critical below ~8.5px on a phone */
-  .sec .tok,#hero .tok,.shead .tok{font-size:9px!important}
+  .sec .tok:where(:not(#docs>[data-file] *)),#hero .tok,.shead .tok:where(:not(#docs>[data-file] *)){font-size:9px!important}
   .smeta{font-size:9px;letter-spacing:.18em}
   #hero .crumb,.crumb{font-size:8.5px!important}
   #hero .kick{font-size:8.5px!important;letter-spacing:.3em}
   #hero .cue,.cue{font-size:8.5px!important}
-  .stat .slip,.slip{font-size:8.5px!important}
+  .stat .slip:where(:not(#docs>[data-file] *)),.slip:where(:not(#docs>[data-file] *)){font-size:8.5px!important}
   .ticker .tk{font-size:8.5px!important}/*D:medcoin:10*//*D:medcoin:11*//*D:medcoin:12*//*D:medcoin:13*//*D:medcoin:14*//*D:medcoin:15*/
   /* M2-3 the drawer hint tells the truth on phones (the files stack downward) */
   #hwrap .hhint .hs,.hhint .hs{display:none!important}
@@ -2079,7 +2079,7 @@ body.static .lampband .lcone,body.failsafe .lampband .lcone{animation:none}
    a blank card. */
 @media (prefers-reduced-motion:reduce){
   .slipflip,.sf-stage,.sf-in,.sf-tab,.sf-tab i{transition:none}
-  .sf-in{transform:none!important}
+  .sf-in:where(:not(#docs>[data-file] *)){transform:none!important}
   .sf-tab:active{transform:none}
   .sf-face{-webkit-backface-visibility:visible;backface-visibility:visible}
   .sf-back{transform:none;opacity:0;pointer-events:none}
@@ -2087,7 +2087,7 @@ body.static .lampband .lcone,body.failsafe .lampband .lcone{animation:none}
   .slipflip.turned .sf-back{opacity:1;pointer-events:auto}
 }
 body.static .slipflip,body.static .sf-stage,body.static .sf-in{transition:none}
-body.static .sf-in{transform:none!important}
+body.static .sf-in:where(:not(#docs>[data-file] *)){transform:none!important}
 body.static .sf-face{-webkit-backface-visibility:visible;backface-visibility:visible}
 body.static .sf-back{transform:none;opacity:0;pointer-events:none}
 body.static .slipflip.turned .sf-front{opacity:0;pointer-events:none}
@@ -2134,7 +2134,7 @@ body.static .slipflip.turned .sf-back{opacity:1;pointer-events:auto}
   font-size:clamp(25px,3.35vw,37px);letter-spacing:-.012em;line-height:1.16;
   text-wrap:balance}
 .sttl .w>i{font-variation-settings:'wght' var(--kw,720);letter-spacing:var(--kt,0em)}
-@media (max-width:680px){.sttl{font-size:clamp(19px,5.6vw,25px)!important;letter-spacing:-.008em}}
+@media (max-width:680px){.sttl:where(:not(#docs>[data-file] *)){font-size:clamp(19px,5.6vw,25px)!important;letter-spacing:-.008em}}
 @media (prefers-reduced-motion:reduce){.sttl .w>i{font-variation-settings:'wght' 780;letter-spacing:0}}
 body.static .sttl .w>i{font-variation-settings:'wght' 780;letter-spacing:0}
 
@@ -2556,7 +2556,7 @@ body.static #statement .l2,body.failsafe #statement .l2{display:block}
 
 /*SHELL:cursor*/
 /*SHELL:fonts*/
-/*SHELL:xtix*/
+/*SHELL:fgfaces*//*SHELL:fgcss*//*SHELL:fgleadership*//*SHELL:fgfinal*//*SHELL:fgtech*//*SHELL:fgoasis*//*SHELL:fgeventer*//*SHELL:fgmedcoin*//*SHELL:fgxtix*/
 </style>
 <!--DOC:leadership-->
 
@@ -2565,6 +2565,7 @@ body.static #statement .l2,body.failsafe #statement .l2{display:block}
 <!--DOC:final-->
 
 
+<script>window.__fgPorted=function(el){return !!(el&&el.closest&&el.closest('section[data-file]'))};</script>
 <script>
 (function(){
 "use strict";
@@ -2610,18 +2611,21 @@ function eo(p){return 1-Math.pow(1-p,3)}
 })();
 
 /* ---------- entrance tagging ---------- */
-document.querySelectorAll('.rv').forEach(function(u){u.classList.add('u')});
-document.querySelectorAll('.folder>div').forEach(function(u){if(!u.classList.contains('flip'))u.classList.add('u')});
-[].forEach.call(document.querySelectorAll('#tech .archw,#tech .bot'),function(u){u.classList.add('u')});
+document.querySelectorAll('.rv').forEach(function(u){if(window.__fgPorted(u))return;u.classList.add('u')});
+document.querySelectorAll('.folder>div').forEach(function(u){if(window.__fgPorted(u))return;if(!u.classList.contains('flip'))u.classList.add('u')});
+[].forEach.call(document.querySelectorAll('#tech .archw,#tech .bot'),function(u){if(window.__fgPorted(u))return;u.classList.add('u')});
 document.querySelectorAll('.list,.grid2c,.tools,.pgrid,.chips,#tech .stackr,#philosophy .grid').forEach(function(grp){
+  if(window.__fgPorted(grp))return;
   [].forEach.call(grp.children,function(c,i){c.classList.add('st');c.style.setProperty('--i',i)});
 });
 ['.outs','#final .card'].forEach(function(sel){
   document.querySelectorAll(sel).forEach(function(par){
+    if(window.__fgPorted(par))return;
     [].forEach.call(par.querySelectorAll('tr,.crow'),function(r,i){r.classList.add('st');r.style.setProperty('--i',i)});
   });
 });
 document.querySelectorAll('.para,.then,.insight,.reality,.tech .pur,#tech .phil,.sigq').forEach(function(el){
+  if(window.__fgPorted(el))return;
   if(!el.classList.contains('st')){el.classList.add('st');if(!el.style.getPropertyValue('--i'))el.style.setProperty('--i',1)}
 });
 document.querySelectorAll('#philosophy .node svg').forEach(function(sv){
@@ -2645,14 +2649,14 @@ function split(el){
   el.innerHTML=out.join(' ');
   return [].slice.call(el.querySelectorAll('.w>i'));
 }
-document.querySelectorAll('.sttl,#files .bigt,#hero h1').forEach(function(t){if(split(t)){t.classList.add('tw');return}var any=false;[].forEach.call(t.querySelectorAll('.ln'),function(l){if(split(l))any=true});if(any)t.classList.add('tw');});
+document.querySelectorAll('.sttl,#files .bigt,#hero h1').forEach(function(t){if(window.__fgPorted(t))return;if(split(t)){t.classList.add('tw');return}var any=false;[].forEach.call(t.querySelectorAll('.ln'),function(l){if(split(l))any=true});if(any)t.classList.add('tw');});
 var W1=split(document.getElementById('stmt1'))||[];
 var W2=split(document.getElementById('stmt2'))||[];
 
 /* ---------- counters ---------- */
 /* a figure marked data-whole is printed as itself and never counted: counting it up prints numbers
    the file does not say ("0M+", "7M+", "~13%"). XTIX's $9M+ and its three dials, 2026-09-29. */
-var cnts=[].slice.call(document.querySelectorAll('.cnt:not([data-whole])')).map(function(el){
+var cnts=[].slice.call(document.querySelectorAll('.cnt:not([data-whole])')).filter(function(el){return !window.__fgPorted(el)}).map(function(el){
   return {el:el,n:parseFloat(el.dataset.n||'0'),pre:el.dataset.pre||'',suf:el.dataset.suf||'',fin:el.dataset.final||''};
 });
 function setCnt(c,p){
@@ -2669,16 +2673,18 @@ function top0(el){var r=el.getBoundingClientRect();return r.top+window.pageYOffs
 function add(el,fn,travel,lead){if(!el)return;scenes.push({el:el,fn:fn,tv:travel||.55,ld:lead||.9,t:0,lp:-1})}
 
 [].forEach.call(document.querySelectorAll('.pdraw'),function(p){
+  if(window.__fgPorted(p))return;
   p.style.transition='none';
   add(p,function(el,pr){el.style.strokeDashoffset=String(1-eo(pr))},.5);
 });
 [].forEach.call(document.querySelectorAll('.garc'),function(cir){
+  if(window.__fgPorted(cir))return;
   var seg=parseFloat(cir.style.getPropertyValue('--seg'))||0;
   cir.style.transition='none';
   add(cir,function(el,pr){el.style.strokeDashoffset=String(seg*(1-eo(pr)))},.5);
 });
 (function(){
-  var bars=[].slice.call(document.querySelectorAll('.bar0'));
+  var bars=[].slice.call(document.querySelectorAll('.bar0')).filter(function(b){return !window.__fgPorted(b)});
   if(bars.length){
     bars.forEach(function(b){b.style.transition='none'});
     var host=bars[0].ownerSVGElement||bars[0];
@@ -2695,6 +2701,7 @@ cnts.forEach(function(c){
   add(host,function(el,pr){setCnt(c,pr)},.5);
 });
 [].forEach.call(document.querySelectorAll('.case .folder,#philosophy .folder,#leadership .folder,#final .folder'),function(f){
+  if(window.__fgPorted(f))return;
   f.style.transition='none';
   var flip=f.querySelector('.flip');
   if(flip)flip.style.transition='none';
@@ -2708,7 +2715,7 @@ cnts.forEach(function(c){
 if(MOB){scenes.forEach(function(x){if(x.ld<1.06)x.ld=1.06})}
 
 /* ---------- reveal units ---------- */
-var units=[].slice.call(document.querySelectorAll('.u')).map(function(el){return {el:el,t:0,done:false}});
+var units=[].slice.call(document.querySelectorAll('.u')).filter(function(el){return !window.__fgPorted(el)}).map(function(el){return {el:el,t:0,done:false}});
 function reveal(u){
   if(MOB&&vel>2.2)u.el.classList.add('fon');
   u.el.classList.add('on');u.done=true;
@@ -2968,6 +2975,7 @@ if(MOB&&!frozen){
 if(MOB){
   setTimeout(function(){
     [].forEach.call(document.querySelectorAll('#eventer .convwrap,#medcoin .mzorg,#tech .archw'),function(sc){
+      if(window.__fgPorted(sc))return;
       if(sc.scrollWidth<=sc.clientWidth+12)return;
       /* owner spec (round 3): the cue is PERSISTENT - the arrow must be
          visible at all times, so there is no dismiss path at all (the old
@@ -3043,6 +3051,7 @@ if(fine){
   }
   curKick();
   [].forEach.call(document.querySelectorAll('.folder,#hero .mfold'),function(f){
+    if(window.__fgPorted(f))return;
     f.addEventListener('mousemove',function(e){
       var r=f.getBoundingClientRect();
       var dx=(e.clientX-r.left)/r.width-.5, dy=(e.clientY-r.top)/r.height-.5;
@@ -3173,7 +3182,7 @@ if(!reduced&&!isStatic){
   /* PERF: was an always-on rAF reading a rect per section every frame. Now it
      rides the shared scroll pass on cached document positions and writes only
      when the value actually moves. */
-  var nums=[].slice.call(document.querySelectorAll('.secnum')).map(function(el){
+  var nums=[].slice.call(document.querySelectorAll('.secnum')).filter(function(el){return !window.__fgPorted(el)}).map(function(el){
     return {el:el,host:el.parentElement,top:0,h:0,last:1e9};
   });
   function nmeasure(){
@@ -3214,6 +3223,7 @@ setTimeout(function chk(){
     var cs=document.querySelectorAll('.cnt');
     for(var i=0;i<cs.length;i++){
       var el=cs[i],n=el.getAttribute('data-n')||'0',pre=el.getAttribute('data-pre')||'',suf=el.getAttribute('data-suf')||'',fin=el.getAttribute('data-final');
+      if(window.__fgPorted(el))continue;
       el.textContent=fin?fin:(pre+n+suf);
     }
   }catch(e){}
@@ -3247,7 +3257,7 @@ var BR=['#xtix .tech svg','#xtix .gaug','#oasis .cols2 svg','#eventer .cols2 svg
 var bi=0;
 BR.forEach(function(sel){
   var el=document.querySelector(sel);
-  if(el&&!frozen){el.classList.add('breathe');el.style.animationDelay=(bi*0.9)+'s';bi++;}
+  if(el&&!frozen){if(!window.__fgPorted(el)){el.classList.add('breathe');el.style.animationDelay=(bi*0.9)+'s';}bi++;}
 });
 
 /* ---- ACT 9: live archive clock ---- */
@@ -3709,6 +3719,7 @@ if(!frozen&&'IntersectionObserver' in window){
     });
   },{threshold:.4});
   [].forEach.call(document.querySelectorAll('.tok,.smeta,.hcat,.vlab'),function(el){
+    if(window.__fgPorted(el))return;
     if(el.children.length)return;
     el.dataset.dorig=el.textContent;
     dio.observe(el);
@@ -3946,7 +3957,7 @@ window.__acts2OK=true;
     document.documentElement.style.setProperty('--vsk','0deg');
     /* the shear now lives on the wraps themselves — unshear them too, or the
        last frame before the fault would stay frozen into the page */
-    [].forEach.call(document.querySelectorAll('.sec>.wrap'),function(w){w.style.removeProperty('transform')});
+    [].forEach.call(document.querySelectorAll('.sec>.wrap'),function(w){if(!window.__fgPorted(w))w.style.removeProperty('transform')});
   }catch(e){}
 }
 })();
@@ -4214,7 +4225,7 @@ var evPrepped=false,evPlayed=false,evSvg=null;
 (function(){
   var i=-1,svgs=[].slice.call(document.querySelectorAll('#eventer svg'));
   svgs.some(function(sv){if(sv.textContent.indexOf('CUSTOMER INSIGHT')>-1){evSvg=sv;return true}return false;});
-  if(!evSvg)return;
+  if(!evSvg||window.__fgPorted(evSvg))return;
   var paths=[].slice.call(evSvg.querySelectorAll('path')).filter(function(pp){return pp.getAttribute('fill')==='none'||!pp.getAttribute('fill')});
   var rings=[].slice.call(evSvg.querySelectorAll('circle'));
   var boxes=[].slice.call(evSvg.querySelectorAll('rect,text'));
@@ -4240,7 +4251,7 @@ var mdPrepped=false,mdPlayed=false,mdSvg=null;
 (function(){
   var svgs=[].slice.call(document.querySelectorAll('#medcoin svg'));
   svgs.some(function(sv){if(sv.textContent.indexOf('FOUNDED')>-1){mdSvg=sv;return true}return false;});
-  if(!mdSvg)return;
+  if(!mdSvg||window.__fgPorted(mdSvg))return;
   var lines=[].slice.call(mdSvg.querySelectorAll('line'));
   var dashp=[].slice.call(mdSvg.querySelectorAll('path')).filter(function(pp){return (pp.getAttribute('stroke-dasharray')||pp.style.strokeDasharray)});
   var nodes=[].slice.call(mdSvg.querySelectorAll('circle'));
@@ -4425,6 +4436,7 @@ window.__acts3OK=true;
   try{
     ['casemeter','teaser','evtag'].forEach(function(id){var el=document.getElementById(id);if(el)el.remove()});
     [].slice.call(document.querySelectorAll('svg')).forEach(function(sv){
+      if(window.__fgPorted(sv))return;
       [].slice.call(sv.querySelectorAll('*')).forEach(function(el){
         if(el.style){el.style.opacity='';el.style.strokeDashoffset='';el.style.strokeDasharray='';}
       });
@@ -4442,7 +4454,7 @@ window.__acts3OK=true;
   if(!matchMedia('(pointer:fine)').matches)return;
   var layers=[];
   [['#heromq',18],['.secnum',30]].forEach(function(p){
-    [].forEach.call(document.querySelectorAll(p[0]),function(el){layers.push({el:el,d:p[1],x:0,y:0})});
+    [].forEach.call(document.querySelectorAll(p[0]),function(el){if(window.__fgPorted(el))return;layers.push({el:el,d:p[1],x:0,y:0})});
   });
   if(!layers.length)return;
   var tx=0,ty=0,run=false;
@@ -4663,6 +4675,7 @@ CASES.forEach(function(id){
   Object.keys(LAMPS).forEach(function(id){
     var sec=document.getElementById(id);if(!sec)return;
     var folder=sec.querySelector('.folder');if(!folder)return;
+    var ported=window.__fgPorted(sec);
     /* This also required `.clsband`, the RESTRICTED strip, as a proxy for "is this one of the
        four case folders". That strip was archive dressing which said nothing and has been cut,
        and the proxy went with it — taking the UV lamp and all twelve developed zones down
@@ -4706,6 +4719,7 @@ CASES.forEach(function(id){
       '<span class="lampsub">'+OFFS+'</span></span>'+
       '<span class="lampstate" aria-hidden="true">OFF</span>'+
       '<span class="lampedge" aria-hidden="true"></span>';
+    if(ported){b.querySelector('.lamp').innerHTML='';b.removeChild(b.querySelector('.lampedge'));}
     var mount;
     (function(){
         /* R59: outside the folder, not inside it. In flow inside the folder the plate cost
@@ -4717,10 +4731,11 @@ CASES.forEach(function(id){
         mount.appendChild(b);
         folder.parentNode.insertBefore(mount,folder);
       })();
-    BANDS.push(b);
+    if(!window.__fgPorted(folder))BANDS.push(b);
 
     var call=b.querySelector('.lampcall'),sub=b.querySelector('.lampsub'),
         st=b.querySelector('.lampstate'),lit=false;
+        if(ported)return;
         b.addEventListener('click',function(){
       lit=!lit;
       folder.classList.toggle('lampon',lit);
@@ -4815,6 +4830,7 @@ CASES.forEach(function(id){
        reader handed ninety one-character spans will spell them out. */
     var txt=el.textContent;el.textContent='';
     el.setAttribute('aria-label',txt);
+    var ported=window.__fgPorted(el);
     function pr(i,s2){var x=Math.sin(i*127.1+s2*311.7)*43758.5453;return x-Math.floor(x)}
     var words=txt.split(' '),idx=0;
     words.forEach(function(word,wi){
@@ -4823,11 +4839,15 @@ CASES.forEach(function(id){
         for(var i=0;i<word.length;i++){
           var sp=document.createElement('span');sp.textContent=word[i];
           var dy=(pr(idx,1)-.5)*1.5,rot=(pr(idx,2)-.5)*2.1,op=.78+pr(idx,3)*.22;idx++;
-          sp.style.transform='translateY('+dy.toFixed(2)+'px) rotate('+rot.toFixed(2)+'deg)';
-          sp.style.opacity=op.toFixed(2);
+          if(!ported){sp.style.transform='translateY('+dy.toFixed(2)+'px) rotate('+rot.toFixed(2)+'deg)';
+          sp.style.opacity=op.toFixed(2);}
           w.appendChild(sp);
         }
-        el.appendChild(w);
+        if(ported&&word==='—'&&el.lastChild&&el.lastChild.previousSibling){
+          var nw=document.createElement('span');nw.className='nw';
+          var gap=el.lastChild,prev=gap.previousSibling;
+          el.insertBefore(nw,prev);nw.appendChild(prev);nw.appendChild(gap);nw.appendChild(w);
+        }else el.appendChild(w);
       }
       if(wi<words.length-1)el.appendChild(document.createTextNode(' '));
     });
@@ -4950,6 +4970,7 @@ CASES.forEach(function(id){
     /* the STAGE owns the height because both faces are out of flow. Measured,
        never guessed - the two sides of a sheet are not the same length. */
     var lbl=tab.querySelector('b'),sublbl=tab.querySelector('.sf-sub');
+    if(window.__fgPorted(sec))return;
     function face(){return wrap.classList.contains('turned')?back:slip}
     /* PERF (round 5): read, compare, and only then write. An unconditional write
        of the height it already has is a layout invalidation for nothing. */
@@ -5004,6 +5025,7 @@ CASES.forEach(function(id){
   if(reduced||document.body.classList.contains('static'))return;
   var titles=[];
   document.querySelectorAll('.sttl').forEach(function(t){
+    if(window.__fgPorted(t))return;
     var ws=[].slice.call(t.querySelectorAll('.w>i'));
     if(ws.length)titles.push({el:t,ws:ws,last:[],top:0,h:0});
   });
@@ -5624,6 +5646,7 @@ else{
     try{
       var sec=document.getElementById(id); if(!sec)return;
       var wrap=sec.querySelector('.wrap'); if(!wrap)return;
+      if(window.__fgPorted(sec))return;
       var folder=null;
       for(var i=0;i<wrap.children.length;i++){
         if(wrap.children[i].classList.contains('folder')){folder=wrap.children[i];break}
@@ -5653,4 +5676,12 @@ else{
 <script>/*SHELL:js*/</script>
 <script>/*SHELL:folder*/</script>
 <script>/*SHELL:router*/</script>
-<script>/*SHELL:xtixjs*/</script>
+<script>/*SHELL:fgrough*/</script>
+<script>/*SHELL:fgjs*/</script>
+<script>/*SHELL:fgleadershipjs*/</script>
+<script>/*SHELL:fgfinaljs*/</script>
+<script>/*SHELL:fgtechjs*/</script>
+<script>/*SHELL:fgoasisjs*/</script>
+<script>/*SHELL:fgeventerjs*/</script>
+<script>/*SHELL:fgmedcoinjs*/</script>
+<script>/*SHELL:fgwrap*/</script>

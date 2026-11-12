@@ -186,7 +186,7 @@ function drawDone() {
   var w = 120, h = 28, b = new Buf(w, h);
   /* the ring is white: this button sits on the document's dark ground, where the black
      ring the Finder drew on a white dialog was invisible -- DONE looked like any button. */
-  pushbutton(b, 0, 0, w - 1, h - 1, "DONE", true, WHITE);
+  pushbutton(b, 0, 0, w - 1, h - 1, "DONE", true, cv("mw").classList.contains("fg-paper") ? BLACK : WHITE);
   blit(cv("c-done"), b, w, h);
 }
 
@@ -245,18 +245,21 @@ function eo(p){return 1-Math.pow(1-p,3)}
 })();
 
 /* ---------- entrance tagging ---------- */
-document.querySelectorAll('.rv').forEach(function(u){u.classList.add('u')});
-document.querySelectorAll('.folder>div').forEach(function(u){if(!u.classList.contains('flip'))u.classList.add('u')});
-[].forEach.call(document.querySelectorAll('#tech .archw,#tech .bot'),function(u){u.classList.add('u')});
+document.querySelectorAll('.rv').forEach(function(u){if(window.__fgPorted(u))return;u.classList.add('u')});
+document.querySelectorAll('.folder>div').forEach(function(u){if(window.__fgPorted(u))return;if(!u.classList.contains('flip'))u.classList.add('u')});
+[].forEach.call(document.querySelectorAll('#tech .archw,#tech .bot'),function(u){if(window.__fgPorted(u))return;u.classList.add('u')});
 document.querySelectorAll('.list,.grid2c,.tools,.pgrid,.chips,#tech .stackr,#philosophy .grid').forEach(function(grp){
+  if(window.__fgPorted(grp))return;
   [].forEach.call(grp.children,function(c,i){c.classList.add('st');c.style.setProperty('--i',i)});
 });
 ['.outs','#final .card'].forEach(function(sel){
   document.querySelectorAll(sel).forEach(function(par){
+    if(window.__fgPorted(par))return;
     [].forEach.call(par.querySelectorAll('tr,.crow'),function(r,i){r.classList.add('st');r.style.setProperty('--i',i)});
   });
 });
 document.querySelectorAll('.para,.then,.insight,.reality,.tech .pur,#tech .phil,.sigq').forEach(function(el){
+  if(window.__fgPorted(el))return;
   if(!el.classList.contains('st')){el.classList.add('st');if(!el.style.getPropertyValue('--i'))el.style.setProperty('--i',1)}
 });
 document.querySelectorAll('#philosophy .node svg').forEach(function(sv){
@@ -280,14 +283,14 @@ function split(el){
   el.innerHTML=out.join(' ');
   return [].slice.call(el.querySelectorAll('.w>i'));
 }
-document.querySelectorAll('.sttl,#files .bigt,#hero h1').forEach(function(t){if(split(t)){t.classList.add('tw');return}var any=false;[].forEach.call(t.querySelectorAll('.ln'),function(l){if(split(l))any=true});if(any)t.classList.add('tw');});
+document.querySelectorAll('.sttl,#files .bigt,#hero h1').forEach(function(t){if(window.__fgPorted(t))return;if(split(t)){t.classList.add('tw');return}var any=false;[].forEach.call(t.querySelectorAll('.ln'),function(l){if(split(l))any=true});if(any)t.classList.add('tw');});
 var W1=split(document.getElementById('stmt1'))||[];
 var W2=split(document.getElementById('stmt2'))||[];
 
 /* ---------- counters ---------- */
 /* a figure marked data-whole is printed as itself and never counted: counting it up prints numbers
    the file does not say ("0M+", "7M+", "~13%"). XTIX's $9M+ and its three dials, 2026-09-29. */
-var cnts=[].slice.call(document.querySelectorAll('.cnt:not([data-whole])')).map(function(el){
+var cnts=[].slice.call(document.querySelectorAll('.cnt:not([data-whole])')).filter(function(el){return !window.__fgPorted(el)}).map(function(el){
   return {el:el,n:parseFloat(el.dataset.n||'0'),pre:el.dataset.pre||'',suf:el.dataset.suf||'',fin:el.dataset.final||''};
 });
 function setCnt(c,p){
@@ -305,16 +308,18 @@ function top0(el){var r=el.getBoundingClientRect();
 function add(el,fn,travel,lead){if(!el)return;scenes.push({el:el,fn:fn,tv:travel||.55,ld:lead||.9,t:0,lp:-1})}
 
 [].forEach.call(document.querySelectorAll('.pdraw'),function(p){
+  if(window.__fgPorted(p))return;
   p.style.transition='none';
   add(p,function(el,pr){el.style.strokeDashoffset=String(1-eo(pr))},.5);
 });
 [].forEach.call(document.querySelectorAll('.garc'),function(cir){
+  if(window.__fgPorted(cir))return;
   var seg=parseFloat(cir.style.getPropertyValue('--seg'))||0;
   cir.style.transition='none';
   add(cir,function(el,pr){el.style.strokeDashoffset=String(seg*(1-eo(pr)))},.5);
 });
 (function(){
-  var bars=[].slice.call(document.querySelectorAll('.bar0'));
+  var bars=[].slice.call(document.querySelectorAll('.bar0')).filter(function(b){return !window.__fgPorted(b)});
   if(bars.length){
     bars.forEach(function(b){b.style.transition='none'});
     var host=bars[0].ownerSVGElement||bars[0];
@@ -331,6 +336,7 @@ cnts.forEach(function(c){
   add(host,function(el,pr){setCnt(c,pr)},.5);
 });
 [].forEach.call(document.querySelectorAll('.case .folder,#philosophy .folder,#leadership .folder,#final .folder'),function(f){
+  if(window.__fgPorted(f))return;
   f.style.transition='none';
   var flip=f.querySelector('.flip');
   if(flip)flip.style.transition='none';
@@ -344,7 +350,7 @@ cnts.forEach(function(c){
 if(MOB){scenes.forEach(function(x){if(x.ld<1.06)x.ld=1.06})}
 
 /* ---------- reveal units ---------- */
-var units=[].slice.call(document.querySelectorAll('.u')).map(function(el){return {el:el,t:0,done:false}});
+var units=[].slice.call(document.querySelectorAll('.u')).filter(function(el){return !window.__fgPorted(el)}).map(function(el){return {el:el,t:0,done:false}});
 function reveal(u){
   if(MOB&&vel>2.2)u.el.classList.add('fon');
   u.el.classList.add('on');u.done=true;
@@ -495,6 +501,7 @@ function measure(){
 window.__mwMeasure=measure;
 window.__mwStep=function(){lastY=-1;frame();};
 window.__mwRearm=function(root){
+  if(window.__fgPorted(root))return;
   units.forEach(function(u){if(root.contains(u.el)){u.done=false;
     u.el.classList.remove('on');u.el.classList.remove('done');}});
   scenes.forEach(function(x){if(root.contains(x.el))x.lp=-1});
@@ -611,6 +618,7 @@ function edgeFade(sc){
 }
 function edgeAll(){
   [].forEach.call(document.querySelectorAll(EDGE_SEL),function(sc){
+    if(window.__fgPorted(sc))return;
     if(!sc.__edge){sc.__edge=1;sc.addEventListener('scroll',function(){edgeFade(sc)},{passive:true})}
     edgeFade(sc);
   });
@@ -632,8 +640,12 @@ function swipeCues(){
   edgeAll();                       /* not gated on MOB: the mask exists at every width it is set */
   if(!MOB)return;
     [].forEach.call(document.querySelectorAll('#eventer .convwrap,#medcoin .mzorg,#tech .archw'),function(sc){
+      if(window.__fgPorted(sc)&&!sc.closest('section[data-fitted]'))return;
       var nx=sc.nextElementSibling;
-      if(nx&&nx.classList.contains('swcue'))return;
+      if(nx&&nx.classList.contains('swcue')){
+        if(window.__fgPorted(sc)&&(!sc.clientWidth||sc.scrollWidth<=sc.clientWidth+12))nx.parentNode.removeChild(nx);
+        return;
+      }
       if(!sc.clientWidth||sc.scrollWidth<=sc.clientWidth+12)return;
       /* owner spec (round 3): the cue is PERSISTENT - the arrow must be
          visible at all times, so there is no dismiss path at all (the old
@@ -1123,6 +1135,7 @@ function liveLayer() {
    report its own content height; writing it back leaves the component exactly where its own
    fit() would have left it. */
 function refitSheets(sec) {
+  if (window.__fgPorted(sec)) return;
   sec.querySelectorAll(".sf-stage").forEach(function (st) {
     var wrap = st.closest(".slipflip");
     var face = st.querySelector(wrap && wrap.classList.contains("turned") ? ".mslip" : ".evslip");
@@ -1142,7 +1155,7 @@ function prepare(id) {
      front left the component's own fit() and this one disagreeing: the front was right and the
      back overflowed its stage by 200-330 px. Half-owning a measurement is worse than not
      owning it -- so the flip re-fits through here too. */
-  sec.querySelectorAll(".sf-tab").forEach(function (tab) {
+  if (!window.__fgPorted(sec)) sec.querySelectorAll(".sf-tab").forEach(function (tab) {
     tab.addEventListener("click", function () { setTimeout(function () { refitSheets(sec); }, 60); });
   });
   prepared[id] = true;
@@ -1279,6 +1292,34 @@ function record(id) {
 }
 function note(s) { var n = cv("rvw-note"); if (n) { n.innerHTML = "<em>" + s + "</em>"; } }
 
+/* THE FIELD GUIDE'S HOOKS. Each does nothing for an unported section, and with no section ported nothing at all. The ground follows
+   the target from the first frame after the window unhides, and again in the tick that shows the section, so on the swap path the two
+   change together. The faces start before the window unhides. A width that did not change draws nothing, which is __mSoftRz's soft case and more:
+   a height-only change (the address bar) redraws nothing. */
+var fgW = -1;
+function fgGround(id) {
+  var s = secOf(id), p = window.__fgPorted(s);
+  cv("mw").classList.toggle("fg-paper", p);
+  if (p && window.__fgFaces) { window.__fgFaces(s); }
+}
+function fgOpen(id) {
+  var s = secOf(id);
+  if (!window.__fgPorted(s) || !window.__fgOpen) { return; }
+  fgW = cv("docs").clientWidth;
+  window.__fgOpen(s);
+}
+function fgClose(id) {
+  var s = secOf(id);
+  if (window.__fgPorted(s) && window.__fgClose) { window.__fgClose(s); }
+}
+function fgResized() {
+  if (!openId || !window.__fgResize || !window.__fgPorted(secOf(openId))) { return; }
+  var w = cv("docs").clientWidth;
+  if (w === fgW) { return; }
+  fgW = w;
+  window.__fgResize();
+}
+
 function show(id) {
   /* the router is told at once; the FOLDER is not. Redrawing here would run before
      record(id) does -- finish() is several hundred milliseconds downstream, behind the
@@ -1289,6 +1330,8 @@ function show(id) {
   opening = id;
   var btn = cv("mw-files").querySelector('[data-id="' + id + '"]') || cv("mw-files");
   var finish = function () {
+    if (openId && openId !== id) { fgClose(openId); }
+    fgGround(id);
     IDS.forEach(function (x) { secOf(x).classList.toggle("mw-show", x === id); });
     openId = id;
     opening = null;
@@ -1327,6 +1370,7 @@ function show(id) {
        scroller has a size. */
     paintCards();
     refitSheets(secOf(id));                /* the section was hidden; its stage cached a zero */
+    fgOpen(id);
     /* the fade's state in the same tick the section becomes measurable, not 60ms later */
     if (window.__mwEdgeAll) { window.__mwEdgeAll(); }
     setTimeout(function () { if (window.__mwSwipeCues) { window.__mwSwipeCues(); } }, 60);
@@ -1343,6 +1387,7 @@ function show(id) {
   };
 
   var go = function () {
+    fgGround(id);
     cv("win").hidden = false;
     if (liveBuilt) { finish(); return; }
     /* One pass with every section laid out. The live layer goes first; the scroll engine
@@ -1373,6 +1418,7 @@ function shut() {
   setTimeout(function () { if (typeof window.__folderRedraw === "function") { window.__folderRedraw(); } if (typeof window.__mwClosed === "function") { window.__mwClosed(); } }, 0);
   if (!openId) return;
   var was = openId;
+  fgClose(was);
   openId = null;
   opening = null;
   if (cv("mw-keys")) { cv("mw-keys").style.visibility = ""; }
@@ -1381,6 +1427,7 @@ function shut() {
      is where hiding the focused window used to leave a keyboard reader. */
   setTimeout(function () { if (typeof window.__folderFocus === "function") { window.__folderFocus(was); } }, 0);
   cv("win").hidden = true;
+  cv("mw").classList.remove("fg-paper");
   cv("mw-files").style.visibility = "";
   IDS.forEach(function (x) { secOf(x).classList.remove("mw-show"); });
   note("closed — click a file to open it");
@@ -1526,14 +1573,16 @@ function titleCards() {
                   '<div class="dt-rule"></div>' +
                   '<div class="dt-cue">scroll to read the file</div>';
     d.querySelector(".dt-no").textContent = "FILE " + (i < 9 ? "0" : "") + (i + 1);
-    d.querySelector(".dt-no").style.color = css;
-    d.querySelector(".dt-rule").style.background = css;
+    if (!window.__fgPorted(sec)) {
+      d.querySelector(".dt-no").style.color = css;
+      d.querySelector(".dt-rule").style.background = css;
+    }
     /* the canvas is decoration; the NAME still has to reach a screen reader */
     d.setAttribute("role", "heading");
     d.setAttribute("aria-level", "1");
     d.setAttribute("aria-label", K.labels[id]);
     sec.insertBefore(d, sec.firstChild);
-    CARDS.push({ el: d, id: id, rgb: rgb });
+    if (!window.__fgPorted(sec)) { CARDS.push({ el: d, id: id, rgb: rgb }); }
   });
   paintCards();
 }
@@ -1609,7 +1658,7 @@ window.addEventListener("resize", function () {
      The right question is the one the shell actually answers: is the reader inside the
      machine. That is a class on <html>, it is what puts .mw on the screen in the first place,
      and it needs no layout to read. */
-  if (document.documentElement.classList.contains("mw-on")) { relayout(); }
+  if (document.documentElement.classList.contains("mw-on")) { relayout(); fgResized(); }
 });
 
 /* AND THE BOX IS WATCHED AS WELL AS THE EVENT.
@@ -1639,6 +1688,7 @@ window.addEventListener("resize", function () {
     if (w === lastW && h === lastH) { return; }
     lastW = w; lastH = h;
     relayout();
+    fgResized();
   });
   ro.observe(target);
 })();

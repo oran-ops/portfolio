@@ -1,0 +1,175 @@
+#mw #win #view #docs>section#oasis:where([data-file]){--c-fill:#E0A458;--c-line:#C98A3A;--c-text:#7E5416;--c-light:#F2C98E;--c-tint:#F6E9D4}
+#mw #win #view #docs>section#oasis:where([data-file]) .shead .d{background:var(--c-line)}
+#mw #win #view #docs>section#oasis#oasis.uv:where([data-file]) .folder{--c-text:rgba(242,201,142,.72);--c-fill:rgba(242,201,142,.52);--c-line:rgba(242,201,142,.52)}
+#mw #win #view #docs>section#oasis:where([data-file]) .folder{will-change:transform}
+@container docs (min-width:1100px){
+  #mw #win #view #docs>section#oasis#oasis:where([data-file]) .folder{display:grid;grid-template-columns:minmax(0,1fr) 392px;column-gap:56px;align-items:start}
+  #mw #win #view #docs>section#oasis#oasis:where([data-file]) .folder>.cols2:not(.hairtop),#mw #win #view #docs>section#oasis#oasis:where([data-file]) .folder>.cols2:not(.hairtop)>div,#mw #win #view #docs>section#oasis#oasis:where([data-file]) .folder .z,#mw #win #view #docs>section#oasis#oasis:where([data-file]) .folder>.hairtop:has(>.chips){display:contents}
+  #mw #win #view #docs>section#oasis#oasis:where([data-file]) .z[data-zone="01"]>.zr{grid-area:1/1/2/-1}
+  #mw #win #view #docs>section#oasis#oasis:where([data-file]) .z[data-zone="01"]>.para{grid-area:2/1/3/2}
+  #mw #win #view #docs>section#oasis#oasis:where([data-file]) .z[data-zone="01"]>.devz{grid-area:2/2/3/3;align-self:start;margin-top:2px;min-height:190px}
+  #mw #win #view #docs>section#oasis#oasis:where([data-file]) .z[data-zone="02"]>.zr{grid-area:3/1/4/-1;margin-top:72px}
+  #mw #win #view #docs>section#oasis#oasis:where([data-file]) .z[data-zone="02"]>.grid2c{grid-area:4/1/5/-1}
+  #mw #win #view #docs>section#oasis#oasis:where([data-file]) .folder>.cols2:not(.hairtop)>div:nth-child(2)>.zr{grid-area:5/1/6/2;margin-top:96px}
+  #mw #win #view #docs>section#oasis#oasis:where([data-file]) .folder>.cols2:not(.hairtop)>div:nth-child(2)>.list{grid-area:6/1/7/2}
+  #mw #win #view #docs>section#oasis#oasis:where([data-file]) .folder>.hairtop:has(>.chips)>.zr{grid-area:5/2/6/3;margin-top:96px}
+  #mw #win #view #docs>section#oasis#oasis:where([data-file]) .folder>.hairtop:has(>.chips)>.chips{grid-area:6/2/8/3;align-self:stretch;display:flex;flex-direction:column}
+  #mw #win #view #docs>section#oasis#oasis:where([data-file]) .folder>.hairtop:has(>.chips)>.chips>.chip{flex:1 1 0;justify-content:center}
+  #mw #win #view #docs>section#oasis#oasis:where([data-file]) .folder>.hairtop:has(>.chips)>.devz{grid-area:7/1/8/2;align-self:start;min-height:190px}
+  #mw #win #view #docs>section#oasis#oasis:where([data-file]) .folder>.hairtop:has(>.plabel){grid-area:8/1/9/-1;margin-top:calc(var(--fg-foot) + var(--fg-gap) + var(--fg-padt))}
+  #mw #win #view #docs>section#oasis#oasis:where([data-file]) .folder>.hairtop[data-block="reflection"]{grid-area:9/1/10/-1;margin-top:120px}
+  #mw #win #view #docs>section#oasis#oasis:where([data-file]) .folder>.lampsig{grid-area:10/1/11/-1}
+  #mw #win #view #docs>section#oasis#oasis:where([data-file]) .hairtop[data-block="reflection"] .devz{align-content:start}
+}
+#mw #win #view #docs>section#oasis#oasis:where([data-file]) .z[data-zone="01"]>.para{font:500 50px/1.06 var(--serif);font-variation-settings:'opsz' 72;letter-spacing:-.02em;max-width:880px;text-wrap:balance}
+#mw #win #view #docs>section#oasis#oasis:where([data-file]) .z>.para b,#mw #win #view #docs>section#oasis#oasis:where([data-file]) .hairtop .para b{font-style:italic;font-weight:440;font-variation-settings:'opsz' 144;letter-spacing:-.01em;color:var(--c-text)}
+#mw #win #view #docs>section#oasis#oasis:where([data-file]) .grid2c{position:relative;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0}
+#mw #win #view #docs>section#oasis#oasis:where([data-file]) .grid2c .dash{display:flex;align-items:center;min-height:76px;padding:14px 18px;background:none;border:0;box-shadow:none;font:500 16px/1.3 var(--sans);color:var(--ink)}
+#mw #win #view #docs>section#oasis#oasis:not(.js):where([data-file]) .grid2c{outline:1.3px solid var(--ink);outline-offset:-1px}
+#mw #win #view #docs>section#oasis#oasis:not(.js):where([data-file]) .grid2c .dash{box-shadow:-1px -1px 0 rgba(26,23,20,.45)}
+@container docs (max-width:1099px){
+  #mw #win #view #docs>section#oasis#oasis:where([data-file]) .z[data-zone="02"]{container-type:inline-size}
+}
+@container (max-width:699px){
+  #mw #win #view #docs>section#oasis#oasis:where([data-file]) .grid2c{grid-template-columns:repeat(2,minmax(0,1fr))}
+  #mw #win #view #docs>section#oasis#oasis:where([data-file]) .grid2c .dash{min-height:58px;padding:10px 12px;font-size:15px}
+}
+@container (max-width:299px){
+  #mw #win #view #docs>section#oasis#oasis:where([data-file]) .grid2c{grid-template-columns:minmax(0,1fr)}
+}
+#mw #win #view #docs>section#oasis#oasis:where([data-file]) .folder .list{columns:1}
+#mw #win #view #docs>section#oasis#oasis:where([data-file]) .folder .list .lg{display:block;position:relative;height:auto;min-height:46px;padding:12px 0 12px 36px;font:400 17px/1.35 var(--sans);text-wrap:pretty}
+#mw #win #view #docs>section#oasis#oasis:where([data-file]) .lg .c{top:12px;line-height:1.35}
+#mw #win #view #docs>section#oasis#oasis:not(.js):where([data-file]) .lg .c{color:var(--c-line)}
+#mw #win #view #docs>section#oasis.uv.oas-lit:where([data-file]) .lg::highlight(oasis-cite){color:#c39bff;text-shadow:0 0 10px rgba(155,123,255,.75)}
+#mw #win #view #docs>section#oasis#oasis:where([data-file]) .chips{position:relative;isolation:isolate;display:block;padding:28px 34px;border-radius:3px;background:linear-gradient(135deg,#F1DFB9 0%,#EAD3A6 48%,#E6CC9A 100%);box-shadow:inset 1px 1px 0 rgba(255,250,236,.75),inset -1px -1px 0 rgba(126,84,22,.42),0 1px 1px rgba(26,23,20,.18),2px 4px 6px -2px rgba(60,40,10,.30)}
+#mw #win #view #docs>section#oasis#oasis:where([data-file]) .chips::before{content:"";position:absolute;inset:0;z-index:-1;border-radius:3px;opacity:.10;mix-blend-mode:multiply;pointer-events:none;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.004 .9' numOctaves='2' seed='3'/%3E%3CfeColorMatrix values='0 0 0 0 .45 0 0 0 0 .3 0 0 0 0 .08 0 0 0 1.6 -.2'/%3E%3C/filter%3E%3Crect width='400' height='200' filter='url(%23f)'/%3E%3C/svg%3E")}
+#mw #win #view #docs>section#oasis#oasis:where([data-file]) .chip{display:flex;flex-direction:column;gap:6px;padding:12px 0 13px;background:none;border:0;box-shadow:none;font:500 11.5px/1.45 var(--mono);letter-spacing:.15em;color:rgba(26,23,20,.86);text-shadow:.6px .7px 0 rgba(255,248,228,.75)}
+#mw #win #view #docs>section#oasis#oasis:where([data-file]) .chip+.chip{background:linear-gradient(rgba(126,84,22,.40),rgba(126,84,22,.40)) 0 0/100% 1px no-repeat,
+  linear-gradient(rgba(255,250,236,.70),rgba(255,250,236,.70)) 0 1px/100% 1px no-repeat}
+#mw #win #view #docs>section#oasis#oasis:where([data-file]) .chip b{font:italic 440 25px/1 var(--serif);font-variation-settings:'opsz' 144;letter-spacing:-.005em;color:#1a1714}
+#mw #win #view #docs>section#oasis#oasis.uv:where([data-file]) .chips{background:rgba(242,201,142,.10);box-shadow:none}
+#mw #win #view #docs>section#oasis#oasis.uv:where([data-file]) .chips::before{opacity:0}
+#mw #win #view #docs>section#oasis#oasis.uv:where([data-file]) .chip{color:var(--ink);text-shadow:none}
+#mw #win #view #docs>section#oasis#oasis.uv:where([data-file]) .chip b{color:var(--ink)}
+#mw #win #view #docs>section#oasis#oasis.uv:where([data-file]) .chip+.chip{background:linear-gradient(rgba(232,226,214,.14),rgba(232,226,214,.14)) 0 0/100% 1px no-repeat}
+#mw #win #view #docs>section#oasis#oasis:where([data-file]) .stat{display:grid;grid-template-columns:minmax(0,1fr) 500px;grid-template-rows:auto auto auto 1fr auto;column-gap:36px;align-items:start;margin-top:30px}
+#mw #win #view #docs>section#oasis#oasis:where([data-file]) .stat>.slip{grid-area:1/1/2/2;margin-top:24px}
+#mw #win #view #docs>section#oasis#oasis:where([data-file]) .stat>.bignum{grid-area:2/1/3/2}
+#mw #win #view #docs>section#oasis#oasis:where([data-file]) .stat>.biglbl{grid-area:3/1/4/2}
+#mw #win #view #docs>section#oasis#oasis:where([data-file]) .stat>.slipflip{grid-area:1/2/5/3}
+#mw #win #view #docs>section#oasis#oasis:where([data-file]) .stat>.an-note{grid-area:5/2/6/3}
+#mw #win #view #docs>section#oasis#oasis:where([data-file]) .stat .slip{display:block;padding:0;border:0;background:none;box-shadow:none;font:500 11px/1.4 var(--mono);letter-spacing:.22em;color:var(--body)}
+#mw #win #view #docs>section#oasis#oasis:where([data-file]) .stat .bignum{margin-top:14px}
+#mw #win #view #docs>section#oasis#oasis:where([data-file]) .stat .biglbl{margin-top:22px;font:700 13px/1.5 var(--mono);letter-spacing:.22em;color:var(--ink)}
+#mw #win #view #docs>section#oasis#oasis:where([data-file]) .stat+.list:empty{display:none}
+@container docs (min-width:1100px){
+  #mw #win #view #docs>section#oasis#oasis:where([data-file]) .stat{grid-template-rows:1fr auto auto auto 1fr auto auto}
+  #mw #win #view #docs>section#oasis#oasis:where([data-file]) .stat>.slip{grid-area:2/1/3/2;margin-top:0}
+  #mw #win #view #docs>section#oasis#oasis:where([data-file]) .stat>.bignum{grid-area:3/1/4/2}
+  #mw #win #view #docs>section#oasis#oasis:where([data-file]) .stat>.biglbl{grid-area:4/1/5/2}
+  #mw #win #view #docs>section#oasis#oasis:where([data-file]) .stat>.slipflip{grid-area:1/2/7/3;display:grid;grid-template-rows:subgrid;margin-top:0}
+  #mw #win #view #docs>section#oasis#oasis:where([data-file]) .stat>.slipflip>.sf-stage{grid-row:1/6;margin-top:2px}
+  #mw #win #view #docs>section#oasis#oasis:where([data-file]) .stat>.slipflip>.sf-tab{grid-row:6/7;align-self:start}
+  #mw #win #view #docs>section#oasis#oasis:where([data-file]) .stat>.an-note{grid-area:7/2/8/3}
+  #mw #win #view #docs>section#oasis#oasis:where([data-file]) .stat .bignum{font-size:min(236px,calc((100cqw - 782px) / 1.58));line-height:.86;letter-spacing:-.045em;margin-left:-10px}
+}
+@container docs (max-width:1099px){
+  #mw #win #view #docs>section#oasis#oasis:where([data-file]) .stat .bignum{font-size:min(236px,calc((100cqw - 72px) / 1.72))}
+}
+@container docs (min-width:1100px){
+  #mw #win #view #docs>section#oasis#oasis:where([data-file]) .stat .bignum{margin-top:calc(.191em + 1px);margin-bottom:calc(.184em - 15px)}
+}
+@container docs (max-width:1099px){
+  #mw #win #view #docs>section#oasis#oasis:where([data-file]) .stat .bignum{margin-top:calc(.119em + 1px);margin-bottom:calc(.117em - 15px)}
+}
+#mw #win #view #docs>section#oasis#oasis:where([data-file]) .es-stamp{color:rgba(126,84,22,.94);-webkit-mask:linear-gradient(to top right,#000,rgba(0,0,0,.90));mask:linear-gradient(to top right,#000,rgba(0,0,0,.90))}
+#mw #win #view #docs>section#oasis#oasis.uv:where([data-file]) .es-stamp{color:rgba(242,201,142,.84)}
+#mw #win #view #docs>section#oasis#oasis:where([data-file]) .ms-stamp{color:#5a4f3f;-webkit-mask:linear-gradient(to top right,#000,rgba(0,0,0,.90));mask:linear-gradient(to top right,#000,rgba(0,0,0,.90))}
+#mw #win #view #docs>section#oasis#oasis.uv:where([data-file]) .ms-stamp{color:rgba(232,226,214,.8)}
+#mw #win #view #docs>section#oasis#oasis.uv:where([data-file]) .vfilm{opacity:1}
+#mw #win #view #docs>section#oasis#oasis.uv:where([data-file]) .vfilm{color:rgba(232,226,214,.62)}
+#mw #win #view #docs>section#oasis#oasis:where([data-file]) .folder>.hairtop:has(>.plabel)>.cols2>div:nth-child(2){position:relative;isolation:isolate;display:grid;grid-template-columns:minmax(0,1fr);margin-top:120px;text-align:left}
+#mw #win #view #docs>section#oasis#oasis:where([data-file]) .folder>.hairtop:has(>.plabel)>.cols2>div:nth-child(2)::before{content:"";grid-area:2/1/4/2;z-index:-1;border-radius:2px;background:var(--card);box-shadow:0 14px 30px -14px rgba(60,40,10,.30),0 1px 0 rgba(26,23,20,.06)}
+#mw #win #view #docs>section#oasis#oasis.uv:where([data-file]) .folder>.hairtop:has(>.plabel)>.cols2>div:nth-child(2)::before{box-shadow:none}
+#mw #win #view #docs>section#oasis#oasis:where([data-file]) .folder>.hairtop:has(>.plabel)>.cols2>div:nth-child(2)>.zr{grid-area:1/1/2/2;margin-top:0}
+#mw #win #view #docs>section#oasis#oasis:where([data-file]) .folder>.hairtop:has(>.plabel)>.cols2>div:nth-child(2)>svg:not(.fg-svg){grid-area:2/1/3/2}
+#mw #win #view #docs>section#oasis#oasis.js:where([data-file]) .folder>.hairtop:has(>.plabel)>.cols2>div:nth-child(2)>svg:not(.fg-svg){display:block;width:100%;max-width:none;height:auto;margin:0;overflow:visible}
+#mw #win #view #docs>section#oasis#oasis:not(.js):where([data-file]) .folder>.hairtop:has(>.plabel)>.cols2>div:nth-child(2)>svg:not(.fg-svg){padding:24px 0 8px}
+#mw #win #view #docs>section#oasis#oasis.js:where([data-file]) .hairtop svg:not(.fg-svg)>circle,#mw #win #view #docs>section#oasis#oasis.js:where([data-file]) .hairtop svg:not(.fg-svg)>line{display:none}
+#mw #win #view #docs>section#oasis#oasis.js:where([data-file]) .hairtop svg:not(.fg-svg) text{font-family:var(--mono);font-weight:700;font-size:12.5px;letter-spacing:.18em}
+#mw #win #view #docs>section#oasis#oasis:where([data-file]) .folder>.hairtop:has(>.plabel)>.cols2>div:nth-child(2)>.ringlbl{grid-area:3/1/4/2;position:relative;margin:0;padding:20px 24px 22px;text-align:center;font:400 12px/1.6 var(--mono);letter-spacing:.2em;color:var(--body)}
+#mw #win #view #docs>section#oasis#oasis:where([data-file]) .ringlbl::before{content:"";position:absolute;left:14px;right:14px;top:0;height:.9px;background:var(--rule)}
+#mw #win #view #docs>section#oasis#oasis:where([data-file]) .ringlbl .cite-word{white-space:nowrap}
+#mw #win #view #docs>section#oasis:where([data-file]) .oas-plate path{fill:none;stroke-linecap:round;stroke-linejoin:round}
+#mw #win #view #docs>section#oasis:where([data-file]) .oas-plate .oas-hatch{stroke:#C98A3A}
+#mw #win #view #docs>section#oasis:where([data-file]) .oas-plate .oas-gr{stroke:rgba(52,46,38,.75)}
+#mw #win #view #docs>section#oasis:where([data-file]) .oas-plate .oas-ink{stroke:#1a1714}
+#mw #win #view #docs>section#oasis:where([data-file]) .oas-plate path.oas-hub{fill:#fffdf8;stroke:none}
+#mw #win #view #docs>section#oasis:where([data-file]) .oas-plate path.oas-node{fill:#E0A458;stroke:none}
+#mw #win #view #docs>section#oasis:where([data-file]) .oas-plate .oas-rim{stroke:#7E5416}
+#mw #win #view #docs>section#oasis.uv:where([data-file]) .oas-plate .oas-hatch{stroke:rgba(242,201,142,.40)}
+#mw #win #view #docs>section#oasis.uv:where([data-file]) .oas-plate .oas-gr{stroke:rgba(232,226,214,.30)}
+#mw #win #view #docs>section#oasis.uv:where([data-file]) .oas-plate .oas-ink{stroke:rgba(232,226,214,.56)}
+#mw #win #view #docs>section#oasis.uv:where([data-file]) .oas-plate path.oas-hub{fill:#1b1d20}
+#mw #win #view #docs>section#oasis.uv:where([data-file]) .oas-plate path.oas-node{fill:#917C5E}
+#mw #win #view #docs>section#oasis.uv:where([data-file]) .oas-plate .oas-rim{stroke:rgba(242,201,142,.64)}
+#mw #win #view #docs>section#oasis:where([data-file]) .oas-plate path.oas-dot{fill:rgba(52,46,38,.75);stroke:none}
+#mw #win #view #docs>section#oasis.uv:where([data-file]) .oas-plate path.oas-dot{fill:rgba(232,226,214,.30)}
+#mw #win #view #docs>section#oasis:where([data-file]) .oas-plate *{transition:stroke .42s,fill .42s}
+#mw #win #view #docs>section#oasis.still:where([data-file]) .oas-plate *{transition:none}
+#mw #win #view #docs>section#oasis.oas-inkonly:where([data-file]) .oas-plate .oas-hatch{display:none}
+#mw #win #view #docs>section#oasis#oasis:where([data-file]) .folder>.hairtop[data-block="reflection"]{display:block}
+#mw #win #view #docs>section#oasis#oasis:where([data-file]) .folder>.hairtop[data-block="reflection"] .zr{margin-top:0;margin-bottom:26px}
+#mw #win #view #docs>section#oasis#oasis:where([data-file]) .folder>.hairtop[data-block="reflection"] .para{font:500 42px/1.14 var(--serif);font-variation-settings:'opsz' 72;letter-spacing:-.02em;max-width:900px;text-wrap:pretty}
+@container docs (max-width:1099px){
+  #mw #win #view #docs>section#oasis#oasis:where([data-file]) .folder>.hairtop:has(>.chips){margin-top:72px}
+  #mw #win #view #docs>section#oasis#oasis:where([data-file]) .folder>.hairtop:has(>.chips)>.chips{max-width:560px}
+  #mw #win #view #docs>section#oasis#oasis:where([data-file]) .folder>.hairtop:has(>.plabel){margin-top:calc(var(--fg-foot) + var(--fg-gap) + var(--fg-padt))}
+  #mw #win #view #docs>section#oasis#oasis:where([data-file]) .folder>.hairtop:has(>.plabel)>.cols2>div:nth-child(2){margin-top:88px}
+  #mw #win #view #docs>section#oasis#oasis:where([data-file]) .folder>.hairtop[data-block="reflection"]{margin-top:96px}
+  #mw #win #view #docs>section#oasis#oasis:where([data-file]) .z[data-zone="01"]>.para{font-size:44px}
+  #mw #win #view #docs>section#oasis#oasis:where([data-file]) .stat{grid-template-columns:minmax(0,1fr);grid-template-rows:none}
+  #mw #win #view #docs>section#oasis#oasis:where([data-file]) .stat>.slip,#mw #win #view #docs>section#oasis#oasis:where([data-file]) .stat>.bignum,#mw #win #view #docs>section#oasis#oasis:where([data-file]) .stat>.biglbl,#mw #win #view #docs>section#oasis#oasis:where([data-file]) .stat>.slipflip,#mw #win #view #docs>section#oasis#oasis:where([data-file]) .stat>.an-note{grid-area:auto}
+  #mw #win #view #docs>section#oasis#oasis:where([data-file]) .stat>.slipflip{margin-top:36px}
+}
+@container docs (max-width:760px){
+  #mw #win #view #docs>section#oasis#oasis:where([data-file]) .z[data-zone="01"]>.para{font-size:30px;line-height:1.18}
+  #mw #win #view #docs>section#oasis#oasis:where([data-file]) .folder>.hairtop[data-block="reflection"] .para{font-size:30px;line-height:1.18}
+  #mw #win #view #docs>section#oasis#oasis:where([data-file]) .folder .list .lg{font-size:16px}
+  #mw #win #view #docs>section#oasis#oasis:where([data-file]) .chips{padding:22px}
+  #mw #win #view #docs>section#oasis#oasis:where([data-file]) .folder>.hairtop:has(>.plabel)>.cols2>div:nth-child(2)>.ringlbl{padding:18px 16px 20px}
+}
+@container docs (max-width:600px){
+  #mw #win #view #docs>section#oasis#oasis:where([data-file]) .sttl{font-size:min(44px,calc((100cqw - 32px) / 8.8))}
+  #mw #win #view #docs>section#oasis#oasis:where([data-file]) .folder>.hairtop:has(>.plabel)>.cols2>div:nth-child(2)::before{margin-inline:-20px}
+  #mw #win #view #docs>section#oasis#oasis.js:where([data-file]) .folder>.hairtop:has(>.plabel)>.cols2>div:nth-child(2)>svg:not(.fg-svg){width:calc(100% + 40px);margin-inline:-20px}
+}
+@container docs (max-width:360px){
+  #mw #win #view #docs>section#oasis#oasis:where([data-file]) .chip b{font-size:22px}
+  #mw #win #view #docs>section#oasis#oasis:where([data-file]) .stat>.slipflip{margin-left:-8px;margin-right:-8px}
+  #mw #win #view #docs>section#oasis#oasis:where([data-file]) .evslip .es-h>b{white-space:nowrap}
+  #mw #win #view #docs>section#oasis#oasis:where([data-file]) .evslip .es-v .seg{white-space:nowrap}
+  #mw #win #view #docs>section#oasis#oasis:where([data-file]) .mslip .es-h>b{white-space:nowrap;letter-spacing:.1em}
+}
+@container docs (max-width:339px){
+  #mw #win #view #docs>section#oasis#oasis:where([data-file]) .evslip .es-h>b{letter-spacing:.11em}
+}
+#mw #win #view #docs>section#oasis#oasis:where([data-file]) .devz .dv-b li{line-height:26px}
+#mw #win #view #docs>section#oasis#oasis:where([data-file]) .devz .dv-b li::before{top:12px;height:2px}
+#mw #win #view #docs>section#oasis#oasis:where([data-file]) .lg>.fg-svg.uv-ring{z-index:-1}
+#mw #win #view #docs>section#oasis#oasis.oas-noplate:where([data-file]) .chips{background:none;box-shadow:none;padding:4px 0 0}
+#mw #win #view #docs>section#oasis#oasis.oas-noplate:where([data-file]) .chips::before{display:none}
+#mw #win #view #docs>section#oasis#oasis.oas-noplate:where([data-file]) .chip{color:var(--body);text-shadow:none}
+#mw #win #view #docs>section#oasis#oasis.oas-noplate:where([data-file]) .chip+.chip{background:linear-gradient(var(--rule),var(--rule)) 0 0/100% 1px no-repeat}
+#mw #win #view #docs>section#oasis#oasis.oas-noplate:where([data-file]) .chip b{color:var(--c-text)}
+#mw #win #view #docs>section#oasis#oasis.oas-tag:where([data-file]) .stat .slip{justify-self:start;padding:6px 10px;border:1.3px solid var(--ink);background:var(--card);box-shadow:3px 3px 0 var(--ink);font-weight:700;color:var(--ink)}
+@container docs (max-width:279px){
+  #mw #win #view #docs>section#oasis#oasis:where([data-file]) .sf-tab{grid-template-columns:auto minmax(0,1fr) auto;column-gap:7px;min-width:0}
+  #mw #win #view #docs>section#oasis#oasis:where([data-file]) .sf-tab b,#mw #win #view #docs>section#oasis#oasis:where([data-file]) .sf-tab .sf-sub{white-space:normal;min-width:0;line-height:1.3}
+  #mw #win #view #docs>section#oasis#oasis:where([data-file]) .ms-stamp{right:14px;width:128px}
+  #mw #win #view #docs>section#oasis#oasis:where([data-file]) .shead .rub{flex:1 1 100%;min-width:0;flex-wrap:wrap;row-gap:4px;white-space:normal}
+  #mw #win #view #docs>section#oasis#oasis:where([data-file]) .smeta .nw,#mw #win #view #docs>section#oasis#oasis:where([data-file]) .plabel,#mw #win #view #docs>section#oasis#oasis:where([data-file]) .zr .zl,#mw #win #view #docs>section#oasis#oasis:where([data-file]) .evslip .nw,#mw #win #view #docs>section#oasis#oasis:where([data-file]) .mslip .nw,#mw #win #view #docs>section#oasis#oasis:where([data-file]) .mslip .es-h>b,#mw #win #view #docs>section#oasis#oasis:where([data-file]) .gen3 .nw{white-space:normal}
+  #mw #win #view #docs>section#oasis#oasis:where([data-file]) .zr .zl{min-width:0}
+  #mw #win #view #docs>section#oasis#oasis:where([data-file]) .zr{flex-wrap:wrap;row-gap:4px}
+}

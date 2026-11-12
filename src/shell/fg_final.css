@@ -1,0 +1,149 @@
+#mw #win #view #docs>section#final:where([data-file]){--pl-bg:#101214;--pl-ink:#f4ecd8;--pl-quiet:#b5ad9e;--pl-b:#7FE3B8;--pl-mark:#2FB380;--pl-hair:rgba(244,236,216,.14);--pl-sep:rgba(244,236,216,.10);--pl-dash:rgba(244,236,216,.22);--pl-rule:rgba(244,236,216,.035);--pl-cut:#2a2e33;--pl-g1:rgba(47,179,128,.26);--pl-g2:rgba(47,179,128,.09);--pl-gx:84%;--pl-gy:16%;--pl-r1:230px;--pl-r2:470px;--pl-px:64px;--pl-pt:44px}
+#mw #win #view #docs>section#final.fin-paperplate:where([data-file]){--pl-bg:#fffdf8;--pl-ink:#1a1714;--pl-quiet:#6b6052;--pl-b:#1C6E4E;--pl-mark:#1C6E4E;--pl-hair:rgba(26,23,20,.14);--pl-sep:rgba(26,23,20,.10);--pl-dash:rgba(26,23,20,.22);--pl-rule:rgba(26,23,20,.035);--pl-cut:#e6dcc6;--pl-g1:rgba(47,179,128,.10);--pl-g2:rgba(47,179,128,.035)}
+@container docs (min-width:1100px){
+  #mw #win #view #docs>section#final:where([data-file]){grid-template-columns:minmax(0,1fr) 380px}
+}
+#mw #win #view #docs>section#final:where([data-file]) .sttl .x-em i{font-style:italic}
+#mw #win #view #docs>section#final:not(.fin-nostamp):where([data-file]) .gen3{position:relative;box-sizing:border-box;width:340px;max-width:calc(100% - 12px);margin:40px 0 0;padding:20px 22px 18px;border:2.2px solid var(--c-text);border-radius:10px;outline:1px solid var(--c-text);outline-offset:-7px;transform:rotate(-4deg);color:var(--c-text);text-align:center;font:700 10.5px/1.75 var(--mono);letter-spacing:.2em}
+#mw #win #view #docs>section#final.js:not(.fin-nostamp):where([data-file]) .gen3{border-color:transparent;outline:0;filter:url(#fg-stamp)}
+#mw #win #view #docs>section#final:not(.fin-nostamp):where([data-file]) .gen3 b{display:block;margin:0 0 6px;font:700 17px/1.3 var(--mono);letter-spacing:.16em;color:var(--c-text)}
+#mw #win #view #docs>section#final:not(.fin-nostamp):where([data-file]) .gen3>span{display:flex;flex-wrap:wrap;justify-content:center;column-gap:.55em;white-space:nowrap}
+@container docs (min-width:1100px){
+  #mw #win #view #docs>section#final:not(.fin-nostamp):where([data-file])>.wrap>.gen3{grid-column:2;grid-row:2/8;align-self:center;justify-self:end;margin:56px 20px 0 0}
+}
+@container docs (max-width:1099px){
+  #mw #win #view #docs>section#final:not(.fin-nostamp):where([data-file])>.wrap>.gen3{justify-self:start;margin-left:4px}
+}
+#mw #win #view #docs>section#final:where([data-file]) .vfilm{opacity:1;top:var(--fin-film-top,150px);z-index:1}
+#mw #win #view #docs>section#final:where([data-file]) .folder{padding:0 56px 72px}
+#mw #win #view #docs>section#final:where([data-file]) .folder .tA{width:auto;min-width:260px;gap:14px;padding:0 28px}
+#mw #win #view #docs>section#final:where([data-file]) .folder .tA .nm{font-weight:400}
+@container docs (min-width:761px) and (max-width:1099px){
+  #mw #win #view #docs>section#final:where([data-file]) .folder{padding:0 32px 40px}
+}
+#mw #win #view #docs>section#final:where([data-file]) .osmap{display:grid;grid-template-columns:minmax(0,1fr) 60px minmax(0,1fr);grid-template-rows:repeat(10,76px);gap:0;padding:88px 0 56px}
+#mw #win #view #docs>section#final:where([data-file]) .osmap .node{grid-row:span 2;display:flex;align-items:baseline;gap:14px;width:100%;max-width:420px;padding:0;background:none;border:0;box-shadow:none}
+#mw #win #view #docs>section#final:where([data-file]) .osmap .node.l{grid-column:1;justify-self:end;flex-direction:row-reverse;text-align:right}
+#mw #win #view #docs>section#final:where([data-file]) .osmap .node.r{grid-column:3;justify-self:start}
+#mw #win #view #docs>section#final:where([data-file]) .osmap .node:nth-child(2){grid-row:1/3}
+#mw #win #view #docs>section#final:where([data-file]) .osmap .node:nth-child(3){grid-row:2/4}
+#mw #win #view #docs>section#final:where([data-file]) .osmap .node:nth-child(4){grid-row:3/5}
+#mw #win #view #docs>section#final:where([data-file]) .osmap .node:nth-child(5){grid-row:4/6}
+#mw #win #view #docs>section#final:where([data-file]) .osmap .node:nth-child(6){grid-row:5/7}
+#mw #win #view #docs>section#final:where([data-file]) .osmap .node:nth-child(7){grid-row:6/8}
+#mw #win #view #docs>section#final:where([data-file]) .osmap .node:nth-child(8){grid-row:7/9}
+#mw #win #view #docs>section#final:where([data-file]) .osmap .node:nth-child(9){grid-row:8/10}
+#mw #win #view #docs>section#final:where([data-file]) .osmap .node:nth-child(10){grid-row:9/11}
+#mw #win #view #docs>section#final.fin-pairs:where([data-file]) .osmap .node:nth-child(3){grid-row:1/3}
+#mw #win #view #docs>section#final.fin-pairs:where([data-file]) .osmap .node:nth-child(4),#mw #win #view #docs>section#final.fin-pairs:where([data-file]) .osmap .node:nth-child(5){grid-row:3/5}
+#mw #win #view #docs>section#final.fin-pairs:where([data-file]) .osmap .node:nth-child(6),#mw #win #view #docs>section#final.fin-pairs:where([data-file]) .osmap .node:nth-child(7){grid-row:5/7}
+#mw #win #view #docs>section#final.fin-pairs:where([data-file]) .osmap .node:nth-child(8),#mw #win #view #docs>section#final.fin-pairs:where([data-file]) .osmap .node:nth-child(9){grid-row:7/9}
+#mw #win #view #docs>section#final:where([data-file]) .osmap .nn{flex:none;width:40px;font:400 italic 34px/1 var(--serif);font-variation-settings:'opsz' 144;letter-spacing:-.01em;color:var(--c-text)}
+#mw #win #view #docs>section#final:where([data-file]) .osmap .node.l .nn{text-align:right}
+#mw #win #view #docs>section#final:where([data-file]) .osmap .nt{font:500 22px/1.3 var(--serif);font-variation-settings:'opsz' 36;letter-spacing:-.005em;color:var(--ink);text-wrap:pretty}
+@container docs (min-width:761px){
+  #mw #win #view #docs>section#final:where([data-file]) .osmap .nt{text-wrap:balance}
+}
+#mw #win #view #docs>section#final:where([data-file]) .osmap .spine{width:1.1px;top:40px;bottom:96px;background:var(--ink)}
+#mw #win #view #docs>section#final.js:where([data-file]) .osmap .spine{background:transparent}
+#mw #win #view #docs>section#final:where([data-file]) .osmap .tipd{display:none}
+#mw #win #view #docs>section#final.js:where([data-file]) .osmap .tipd{display:block;position:absolute;pointer-events:none}
+@container docs (max-width:899px){
+  #mw #win #view #docs>section#final:where([data-file]) .osmap{grid-template-columns:minmax(0,1fr);grid-template-rows:none;row-gap:30px;padding:78px 0 130px 46px}
+  #mw #win #view #docs>section#final:where([data-file]) .osmap .node,#mw #win #view #docs>section#final:where([data-file]) .osmap .node:nth-child(n),#mw #win #view #docs>section#final.fin-pairs:where([data-file]) .osmap .node:nth-child(n){grid-row:auto;grid-column:1;justify-self:stretch;max-width:none;flex-direction:row;text-align:left}
+  #mw #win #view #docs>section#final:where([data-file]) .osmap .node.l .nn{text-align:left}
+  #mw #win #view #docs>section#final:where([data-file]) .osmap .spine{left:16px;transform:none}
+}
+#mw #win #view #docs>section#final:where([data-file]) .vseal,#mw #win #view #docs>section#final:where([data-file]) .fcontact{background-color:var(--pl-bg);color:var(--pl-ink);background-repeat:no-repeat;-webkit-print-color-adjust:exact;print-color-adjust:exact;box-shadow:2px 2px 0 var(--pl-cut),0 18px 30px -18px rgba(60,40,10,.45),0 2px 6px rgba(60,40,10,.14)}
+#mw #win #view #docs>section#final:where([data-file]) .vseal{margin:24px 0 0;max-width:none;padding:var(--pl-pt) var(--pl-px) 0;text-align:left;border-radius:6px 6px 0 0;background-image:radial-gradient(circle at var(--pl-gx) var(--pl-gy),var(--pl-g1) 0,var(--pl-g2) var(--pl-r1),rgba(47,179,128,0) var(--pl-r2)),
+    repeating-linear-gradient(180deg,rgba(0,0,0,0) 0 95px,var(--pl-rule) 95px 96px);background-size:100% var(--fin-bh,100%),100% var(--fin-bh,100%);background-position:0 var(--fin-by,0px),0 calc(var(--fin-by,0px) + var(--fin-rp,0px))}
+#mw #win #view #docs>section#final:where([data-file]) .vseal .vmark{display:flex;align-items:center;gap:18px;font:400 24px/1 var(--mono);color:var(--pl-mark)}
+#mw #win #view #docs>section#final:where([data-file]) .vseal .vmark::after{content:"";flex:1;height:1px;background:repeating-linear-gradient(90deg,var(--pl-dash) 0 3px,rgba(0,0,0,0) 3px 5px)}
+#mw #win #view #docs>section#final:where([data-file]) .vseal .vq{margin-top:56px;max-width:820px;font:500 40px/1.2 var(--serif);font-variation-settings:'opsz' 72;letter-spacing:-.015em;color:var(--pl-ink);text-wrap:pretty}
+#mw #win #view #docs>section#final:where([data-file]) .vseal .vq b{font-style:italic;font-weight:440;font-variation-settings:'opsz' 144;color:var(--pl-b)}
+@container docs (min-width:430px){
+  #mw #win #view #docs>section#final:where([data-file]) .vseal .vq b{white-space:nowrap}
+}
+#mw #win #view #docs>section#final:where([data-file]) .vseal .vsig{margin-top:56px;display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-start;gap:12px 14px;white-space:nowrap;font:700 12px/1 var(--mono);letter-spacing:.26em;color:var(--pl-ink)}
+#mw #win #view #docs>section#final:where([data-file]) .vseal .vsig .dot{color:var(--pl-mark)}
+#mw #win #view #docs>section#final:where([data-file]) .vseal .vd{flex:none;width:56px;height:4px;background:none}
+#mw #win #view #docs>section#final:where([data-file]) .vseal .vd:last-child{display:none}
+#mw #win #view #docs>section#final:where([data-file]) .fcontact{display:grid;grid-template-columns:repeat(3,minmax(max-content,1fr));column-gap:24px;row-gap:0;margin:0;padding:calc(var(--pl-pt) + 1px) var(--pl-px) 8px;border-radius:0 0 6px 6px;background-image:linear-gradient(var(--pl-hair),var(--pl-hair)),
+    radial-gradient(circle at var(--pl-gx) var(--pl-gy),var(--pl-g1) 0,var(--pl-g2) var(--pl-r1),rgba(47,179,128,0) var(--pl-r2)),
+    repeating-linear-gradient(180deg,rgba(0,0,0,0) 0 95px,var(--pl-rule) 95px 96px);background-size:calc(100% - 2 * var(--pl-px)) 1px,100% var(--fin-bh,100%),100% var(--fin-bh,100%);background-position:var(--pl-px) var(--pl-pt),0 var(--fin-by,0px),0 calc(var(--fin-by,0px) + var(--fin-rp,0px))}
+#mw #win #view #docs>section#final:where([data-file]) .fcontact .cc{display:block;min-height:64px;padding:20px 0 26px;background:none;border:0;box-shadow:none;text-decoration:none;color:var(--pl-ink)}
+#mw #win #view #docs>section#final:where([data-file]) .fcontact .k{display:block;font:700 11px/1 var(--mono);letter-spacing:.24em;color:var(--pl-quiet)}
+#mw #win #view #docs>section#final:where([data-file]) .fcontact .v{display:block;margin-top:10px;font:400 14px/1.3 var(--mono);letter-spacing:.02em;color:var(--pl-ink);word-break:normal;overflow-wrap:anywhere}
+@media (hover:hover) and (pointer:fine){
+  #mw #win #view #docs>section#final:where([data-file]) .fcontact .cc:hover .v{text-decoration:underline;text-decoration-color:#2FB380;text-decoration-thickness:1.5px;text-underline-offset:4px}
+}
+#mw #win #view #docs>section#final.js:where([data-file]) .fcontact .cc:focus-visible{outline:0}
+#mw #win #view #docs>section#final:where([data-file]) .fcontact .cc>.fin-focus{opacity:0}
+#mw #win #view #docs>section#final:where([data-file]) .fcontact .cc:focus-visible>.fin-focus{opacity:1}
+@container docs (max-width:1099px){
+  #mw #win #view #docs>section#final:where([data-file]){--pl-px:40px;--pl-pt:40px}
+  #mw #win #view #docs>section#final:where([data-file]) .vseal .vq{font-size:34px}
+}
+@container docs (max-width:1023px){
+  #mw #win #view #docs>section#final:where([data-file]) .fcontact{grid-template-columns:minmax(0,1fr)}
+  #mw #win #view #docs>section#final:where([data-file]) .fcontact .cc{min-height:56px;padding:16px 0}
+  #mw #win #view #docs>section#final:where([data-file]) .fcontact .cc:not(:last-child){border-bottom:1px solid var(--pl-sep)}
+}
+@media (max-width:860px){
+  #mw #win #view #docs>section#final:where([data-file]) .vseal .vd:first-child{flex-basis:100%}
+}
+@container docs (max-width:760px){
+  #mw #win #view #docs>section#final:where([data-file]) .dt-rule{width:44px}
+  #mw #win #view #docs>section#final:not(.fin-nostamp):where([data-file]) .gen3{width:300px;padding:18px 18px 16px}
+  #mw #win #view #docs>section#final:not(.fin-nostamp):where([data-file]) .gen3 b{font-size:15px}
+  #mw #win #view #docs>section#final:not(.fin-nostamp):where([data-file]) .gen3>span{font-size:10px}
+  #mw #win #view #docs>section#final:where([data-file]) .folder{padding:0 12px 12px}
+  #mw #win #view #docs>section#final:where([data-file]) .folder .tA{min-width:0;height:48px;padding:0 20px}
+  #mw #win #view #docs>section#final:where([data-file]) .folder .tA .nm{font-size:22px}
+  #mw #win #view #docs>section#final:where([data-file]) .osmap{padding:80px 0 130px 46px}
+  #mw #win #view #docs>section#final:where([data-file]) .osmap .nn{font-size:28px}
+  #mw #win #view #docs>section#final:where([data-file]) .osmap .nt{font-size:19px}
+  #mw #win #view #docs>section#final:where([data-file]){--pl-px:24px;--pl-pt:28px;--pl-gx:80%;--pl-gy:10%;--pl-r1:150px;--pl-r2:300px}
+  #mw #win #view #docs>section#final:where([data-file]) .vseal .vmark{font-size:20px}
+  #mw #win #view #docs>section#final:where([data-file]) .vseal .vq{margin-top:36px;font-size:26px;line-height:1.34}
+  #mw #win #view #docs>section#final:where([data-file]) .vseal .vsig{font-size:11px}
+  #mw #win #view #docs>section#final:where([data-file]) .fcontact{padding-top:33px;background-position:var(--pl-px) 32px,0 var(--fin-by,0px),0 calc(var(--fin-by,0px) + var(--fin-rp,0px))}
+}
+@container docs (max-width:360px){
+  #mw #win #view #docs>section#final:where([data-file]){--pl-px:18px}
+  #mw #win #view #docs>section#final:where([data-file]) .vseal .vsig{letter-spacing:.2em;white-space:normal}
+  #mw #win #view #docs>section#final:not(.fin-nostamp):where([data-file]) .gen3{padding:16px 14px 14px}
+  #mw #win #view #docs>section#final:where([data-file]) .osmap .node,#mw #win #view #docs>section#final:where([data-file]) .osmap .node:nth-child(n){flex-direction:column;gap:4px}
+  #mw #win #view #docs>section#final:where([data-file]) .osmap .nn{width:auto}
+}
+#mw #win #view #docs>section#final.fin-card:where([data-file]){--card-w:600px;--cc-px:46px;--cc-pt:48px;--cc-pb:46px;--cc-gap:56px;--cc-rule:34px;--cc-r2:32px;--cc-row:10px;--cc-below:84px;--cc-leg:34px;--cc-stock:#f2ead8;--cc-ink:#1a1714;--cc-key:#5c5244;--cc-tooth:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='t' x='0' y='0' width='1' height='1'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' seed='11' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .32 0 0 0 0 .27 0 0 0 0 .2 0 0 0 .1 0'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23t)'/%3E%3C/svg%3E")}
+#mw #win #view #docs>section#final.fin-card:where([data-file]) .vseal{padding-bottom:1px}
+#mw #win #view #docs>section#final.fin-card:where([data-file]) .vseal .vsig,#mw #win #view #docs>section#final.fin-card:where([data-file]) .fcontact .cc{position:relative;z-index:3;box-sizing:border-box;width:calc(var(--card-w) - 2px);max-width:calc(100% - 2px);margin-left:1px;background:var(--cc-tooth) var(--fin-tx,0px) var(--fin-ty,0px)/240px 240px repeat,var(--cc-stock)}
+#mw #win #view #docs>section#final.fin-card:where([data-file]) .vseal .vsig{margin-top:calc(var(--cc-gap) + var(--cc-pt));padding:0 calc(var(--cc-px) - 1px);color:var(--cc-ink);text-shadow:0 1px 0 rgba(255,255,255,.6)}
+#mw #win #view #docs>section#final.fin-card:where([data-file]) .vseal .vsig .dot{color:#1C6E4E}
+#mw #win #view #docs>section#final.fin-card:where([data-file]) .fcontact{position:relative;display:block;padding:1px var(--pl-px) calc(var(--cc-pb) + var(--cc-below));background-size:0 0,100% var(--fin-bh,100%),100% var(--fin-bh,100%)}
+#mw #win #view #docs>section#final.fin-card:where([data-file]) .fcontact .cc{display:grid;grid-template-columns:120px minmax(0,1fr);gap:0;align-items:baseline;min-height:0;margin-top:0;margin-bottom:0;padding:var(--cc-row) calc(var(--cc-px) - 1px);border:0;color:var(--cc-ink)}
+#mw #win #view #docs>section#final.fin-card:where([data-file]) .fcontact .cc:first-child{margin-top:calc(var(--cc-rule) + var(--cc-r2) - 2px - var(--cc-row))}
+#mw #win #view #docs>section#final.fin-card:where([data-file]) .fcontact .cc:last-child{padding-bottom:0}
+#mw #win #view #docs>section#final.fin-card:where([data-file]) .fcontact .cc:focus-visible{z-index:4}
+#mw #win #view #docs>section#final.fin-card:where([data-file]) .fcontact .k{color:var(--cc-key)}
+#mw #win #view #docs>section#final.fin-card:where([data-file]) .fcontact .v{margin-top:0;font-size:15px;line-height:20px;color:var(--cc-ink)}
+#mw #win #view #docs>section#final.fin-card:where([data-file]) .vseal>svg.fin-card-sh{z-index:2;filter:blur(2.4px)}
+#mw #win #view #docs>section#final.fin-card:where([data-file]) .vseal>svg.fin-card-p{z-index:2;background:linear-gradient(135deg,rgba(0,0,0,.31) calc(var(--cc-leg) * .7071),rgba(0,0,0,.39) calc(var(--cc-leg) * .7071 + 1.4px),
+      rgba(0,0,0,.35) calc(var(--cc-leg) * .7071 + 2.4px),rgba(0,0,0,.25) calc(var(--cc-leg) * .7071 + 3.4px),rgba(0,0,0,.13) calc(var(--cc-leg) * .7071 + 4.4px),
+      rgba(0,0,0,.05) calc(var(--cc-leg) * .7071 + 5.4px),rgba(0,0,0,0) calc(var(--cc-leg) * .7071 + 7.4px)) 0 0/100% 100% no-repeat,
+    var(--cc-tooth) 0 0/240px 240px repeat,var(--cc-stock)}
+#mw #win #view #docs>section#final.fin-card:where([data-file]) .vseal>svg.fin-card-s{z-index:2}
+@container docs (max-width:760px){
+  #mw #win #view #docs>section#final.fin-card:where([data-file]){--cc-px:22px;--cc-pt:34px;--cc-pb:30px;--cc-gap:40px;--cc-rule:30px;--cc-r2:24px;--cc-below:60px;--cc-leg:24px}
+  #mw #win #view #docs>section#final.fin-card:where([data-file]) .fcontact .cc{grid-template-columns:minmax(0,1fr);row-gap:6px}
+  #mw #win #view #docs>section#final.fin-card:where([data-file]) .fcontact .v{font-size:14px;line-height:18px}
+}
+@container docs (max-width:384px){
+  #mw #win #view #docs>section#final.fin-card:where([data-file]){--cc-px:15px}
+  #mw #win #view #docs>section#final.fin-card:where([data-file]) .vseal .vsig,#mw #win #view #docs>section#final.fin-card:where([data-file]) .fcontact .cc{width:calc(100% + 2 * var(--pl-px) - 18px);max-width:none;margin-left:calc(9px - var(--pl-px))}
+  #mw #win #view #docs>section#final.fin-card:where([data-file]) .fcontact .v{font-size:13px;line-height:17px}
+}
+@media print{
+  #mw #win #view #docs>section#final:where([data-file]) .fin-plumb *{opacity:1!important;stroke-dasharray:none!important;stroke-dashoffset:0!important}
+}

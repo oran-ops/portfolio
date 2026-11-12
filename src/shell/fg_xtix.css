@@ -1,0 +1,13 @@
+@container docs (max-width:339px){
+  #mw #win #view #docs>section#xtix:where([data-file]) .shead .rub{letter-spacing:.22em}
+  #mw #win #view #docs>section#xtix:where([data-file]) .gl{letter-spacing:.15em}
+  #mw #win #view #docs>section#xtix:where([data-file]) .xlab{letter-spacing:-.05em}
+  #mw #win #view #docs>section#xtix:where([data-file]) .bignum>span:not(.cur):not(.cnt){letter-spacing:.09em}
+}
+@container docs (max-width:310px){
+  #mw #win #view #docs>section#xtix:where([data-file]) .face{width:144px;height:144px}
+  #mw #win #view #docs>section#xtix:where([data-file]) .g1{gap:10px}
+  #mw #win #view #docs>section#xtix:where([data-file]) .gl{letter-spacing:.1em}
+  #mw #win #view #docs>section#xtix:where([data-file]) .bignum{font-size:86px}
+}
+#mw #win #view #docs>section#xtix:where([data-file]) [visibility="hidden"]{visibility:hidden}

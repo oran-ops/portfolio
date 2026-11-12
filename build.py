@@ -111,8 +111,24 @@ def main():
                        ('/*SHELL:router*/', 'router.js'),
                        ('/*SHELL:cursor*/', 'cursor.css'),
                        ('/*SHELL:fonts*/', 'fonts_swiss.css'),
-                       ('/*SHELL:xtix*/', 'xtix.css'),
-                       ('/*SHELL:xtixjs*/', 'xtix.js')):
+                       ('/*SHELL:fgfaces*/', 'fg_faces.css'),
+                       ('/*SHELL:fgcss*/', 'fg.css'),
+                       ('/*SHELL:fgleadership*/', 'fg_leadership.css'),
+                       ('/*SHELL:fgfinal*/', 'fg_final.css'),
+                       ('/*SHELL:fgtech*/', 'fg_tech.css'),
+                       ('/*SHELL:fgoasis*/', 'fg_oasis.css'),
+                       ('/*SHELL:fgeventer*/', 'fg_eventer.css'),
+                       ('/*SHELL:fgmedcoin*/', 'fg_medcoin.css'),
+                       ('/*SHELL:fgxtix*/', 'fg_xtix.css'),
+                       ('/*SHELL:fgrough*/', 'fg_rough.js'),
+                       ('/*SHELL:fgjs*/', 'fg.js'),
+                       ('/*SHELL:fgleadershipjs*/', 'fg_leadership.js'),
+                       ('/*SHELL:fgfinaljs*/', 'fg_final.js'),
+                       ('/*SHELL:fgtechjs*/', 'fg_tech.js'),
+                       ('/*SHELL:fgoasisjs*/', 'fg_oasis.js'),
+                       ('/*SHELL:fgeventerjs*/', 'fg_eventer.js'),
+                       ('/*SHELL:fgmedcoinjs*/', 'fg_medcoin.js'),
+                       ('/*SHELL:fgwrap*/', 'fg_wrap.js')):
         if body.count(mark) != 1:
             raise SystemExit('shell marker %s appears %d times, expected 1'
                              % (mark, body.count(mark)))
@@ -237,6 +253,7 @@ def main():
         URL URLSearchParams Blob FileReader TextDecoder TextEncoder Intl Proxy Reflect
         structuredClone queueMicrotask AbortController DOMParser XMLHttpRequest WebSocket
         addEventListener removeEventListener dispatchEvent scrollTo scrollBy getSelection
+        Highlight DOMMatrix DOMPoint
         if for while switch return typeof new delete void in of instanceof do else try catch
         finally throw break continue case default class extends super this function var let
         const yield await async static get set eval arguments

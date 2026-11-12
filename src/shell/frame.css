@@ -121,6 +121,7 @@
 .mw-bar{flex:none;width:var(--mw-scroll);cursor:default}
 
 /* one document at a time; the id gives these the specificity to beat the site's own .sec */
+#docs.mw-all:has(>section[data-file]),#docs:has(>section[data-file].mw-show){container-type:inline-size;container-name:docs}
 #docs>section{display:none}
 #docs>section.mw-show,#docs.mw-all>section{display:block}
 
@@ -245,9 +246,9 @@
   /* and the sheet's own control is a full 44 for a finger (it measured 43) */
   #docs .sf-tab{min-height:44px}
   /* the UV lamp plate's three small lines, which the monolith raises only under 680 */
-  #docs .lampband .lampcall{font-size:9.5px!important}
-  #docs .lampband .lampsub{font-size:8.5px!important;letter-spacing:.14em}
-  #docs .lampband .lampstate{font-size:8px!important}
+  #docs .lampband .lampcall:where(:not(#docs>[data-file] *)){font-size:9.5px!important}
+  #docs .lampband .lampsub:where(:not(#docs>[data-file] *)){font-size:8.5px!important;letter-spacing:.14em}
+  #docs .lampband .lampstate:where(:not(#docs>[data-file] *)){font-size:8px!important}
   #docs .es-h,#docs .es-k,#docs .an-h,#docs .dv-k,#docs .lampsig,#docs .ms-stamp,
   #docs .gen3 span,#docs .sf-tab .sf-sub,#docs #final .vseal .vsig{font-size:8.5px}
   /* and the key column holds its longest key. CONCLUSION is 68px at this size; the column was

@@ -1,0 +1,678 @@
+#mw #win #view #docs>section:where([data-file]) :where(:not(svg,svg *,.swcue,.swcue *,.rt-eof)){all:revert}
+#mw #win #view #docs>section:where([data-file]) :where(:not(svg,svg *,.swcue,.swcue *,.rt-eof))::before,#mw #win #view #docs>section:where([data-file]) :where(:not(svg,svg *,.swcue,.swcue *,.rt-eof))::after,#mw #win #view #docs>section:where([data-file])::before,#mw #win #view #docs>section:where([data-file])::after{all:revert}
+#mw #win #view #docs>section:where([data-file]) svg{max-width:none;min-width:auto;transition:none}
+#mw #win #view #docs>section:where([data-file]) :where(svg .ndot){opacity:1;transform:none;transform-box:view-box;transform-origin:0 0;transition:none}
+#mw #win #view #docs>section:where([data-file]) :where(svg .pdraw){stroke-dasharray:none;stroke-dashoffset:0;transition:none}
+#mw #win #view #docs>section:where([data-file]) :where(svg .hop){opacity:1;animation:none}
+#mw #win #view #docs>section:where([data-file]) :where(svg .crawlp){animation:none}
+#mw #win #view #docs>section:where([data-file]) .rt-eof{position:absolute;left:0;bottom:0;width:1px;height:1px}
+#mw #win #view #docs>section:where([data-file]){--table:#ede2c4;--gridline:rgba(26,23,20,.07);--paper:#faf7f0;--card:#fffdf8;--ink:#1a1714;--body:#5a4f3f;--muted:#6b6052;--rule:rgba(26,23,20,.18);--cut:#e6dcc6;--rust:#b4532f;--c-fill:#2FB380;--c-text:#1C6E4E;--c-light:#7FE3B8;--c-tint:#e3f3ea;--uv:#9B7BFF;--uv-rim:#7a5be0;--uv-on:#c39bff;--dark:#101214;--serif:'FG Symbols','FG Fraunces',Georgia,serif;--sans:'FG Symbols','Geist',system-ui,sans-serif;--mono:'FG Symbols','JetBrains Mono',ui-monospace,monospace;--hand:'FG Symbols','FG Caveat','Segoe Print',cursive;--garamond:'FG Symbols','EB Garamond',Georgia,serif;--col:1056px;--gut:72px}
+#mw #win #view #docs>section:where([data-file]),#mw #win #view #docs>section:where([data-file]) *{box-sizing:border-box}
+#mw.fg-paper #view,#mw.fg-paper .mw-end{background-color:#ede2c4;background-image:linear-gradient(rgba(26,23,20,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(26,23,20,.07) 1px,transparent 1px);background-size:32px 32px;background-position:-1px -1px;background-attachment:local}
+#mw.fg-paper{color-scheme:light}
+#mw #win #view #docs>section:where([data-file]){color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased}
+#mw #win #view #docs>section:where([data-file]) .fg-svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none}
+#mw #win #view #docs>section[data-file]{position:relative;grid-template-columns:minmax(0,1fr) 380px;column-gap:76px;width:min(var(--col),calc(100% - 2*var(--gut)));margin:0 auto;padding:44px 0 120px}
+#mw #win #view #docs>section[data-file].mw-show{display:grid}
+#mw #win #view #docs>section[data-file]>.wrap{display:contents}
+#mw #win #view #docs>section[data-file] .secnum{display:none}
+#mw #win #view #docs>section[data-file] .shead{grid-column:1/-1;grid-row:1;display:flex;align-items:center;gap:24px}
+#mw #win #view #docs>section[data-file] .doctitle{grid-column:1;grid-row:2/8;display:grid;grid-template-rows:subgrid;align-content:start}
+#mw #win #view #docs>section[data-file] .dt-no{grid-row:1}
+#mw #win #view #docs>section[data-file] .dt-art{grid-row:2}
+#mw #win #view #docs>section[data-file] .dt-rule{grid-row:5}
+#mw #win #view #docs>section[data-file] .dt-cue{grid-row:6}
+#mw #win #view #docs>section[data-file] .smeta{grid-column:1;grid-row:4}
+#mw #win #view #docs>section[data-file] .sttl{grid-column:1;grid-row:5}
+#mw #win #view #docs>section[data-file] .uvmount{grid-column:2;grid-row:2/8;align-self:start;margin-top:20px}
+#mw #win #view #docs>section[data-file] .plabel{grid-column:1/-1;grid-row:8}
+#mw #win #view #docs>section[data-file] .folder{grid-column:1/-1;grid-row:9}
+#mw #win #view #docs>section:where([data-file]) .shead .rub{flex:1;display:flex;align-items:center;gap:12px;font:700 12px/1 var(--mono);letter-spacing:.22em;color:var(--ink)}
+#mw #win #view #docs>section:where([data-file]) .shead .rub::after{content:"";flex:1;height:1px;margin:0 0 0 12px;background:repeating-linear-gradient(90deg,var(--rule) 0 3px,transparent 3px 5px)}
+#mw #win #view #docs>section:where([data-file]) .shead .d{width:5px;height:5px;border-radius:50%;background:var(--c-fill);flex:none}
+#mw #win #view #docs>section:where([data-file]) .shead .tok{font:400 12px/1 var(--mono);letter-spacing:.22em;color:var(--muted)}
+#mw #win #view #docs>section[data-file] .dot{color:var(--c-text)}
+#mw #win #view #docs>section:where([data-file]) .dt-no{margin-top:64px;font:700 11px/1 var(--mono);letter-spacing:.34em;color:var(--c-text)}
+#mw #win #view #docs>section:where([data-file]) .dt-art{display:block;margin-top:18px;height:auto}
+#mw #win #view #docs>section:where([data-file]) .smeta{margin-top:34px;font:400 13px/1.7 var(--mono);letter-spacing:.17em;color:var(--body)}
+#mw #win #view #docs>section:where([data-file]) .smeta .nw{white-space:nowrap}
+#mw #win #view #docs>section[data-file] .nw{white-space:nowrap}
+#mw #win #view #docs>section:where([data-file]) .sttl{margin:18px 0 0;font:500 66px/1.0 var(--serif);font-variation-settings:'opsz' 72;letter-spacing:-.02em;color:var(--ink);text-wrap:balance}
+#mw #win #view #docs>section:where([data-file]) .sttl i{font-style:normal}
+#mw #win #view #docs>section:where([data-file]) .sttl .x-em i{font-style:italic;font-weight:440;font-variation-settings:'opsz' 144;color:var(--c-text);letter-spacing:-.01em}
+#mw #win #view #docs>section:where([data-file]) .dt-rule{position:relative;width:52px;height:8px;margin-top:40px}
+#mw #win #view #docs>section:where([data-file]) .dt-cue{margin-top:24px;font:700 11px/1 var(--mono);letter-spacing:.28em;color:var(--muted);text-transform:uppercase}
+#mw #win #view #docs>section:where([data-file]) .plabel{margin:72px 0 0;font:400 13px/1 var(--mono);letter-spacing:.22em;color:var(--muted)}
+#mw #win #view #docs>section:where([data-file]) .lampband{position:relative;display:grid;grid-template-columns:1fr auto;grid-template-rows:44px 1fr 44px;width:380px;height:440px;padding:12px 24px 30px;margin:0;border:0;border-radius:1px;cursor:pointer;background:var(--card);color:var(--ink);text-align:left;font:inherit;box-shadow:2px 2px 0 var(--cut),0 18px 30px -18px rgba(60,40,10,.35),0 2px 6px rgba(60,40,10,.10)}
+#mw #win #view #docs>section:where([data-file]) .lampband:focus{outline:none}
+#mw #win #view #docs>section:where([data-file]) .lampband:focus-visible{outline:2px solid var(--c-text);outline-offset:4px}
+#mw #win #view #docs>section:where([data-file]) .lampband .lampwords{display:contents}
+#mw #win #view #docs>section:where([data-file]) .lampnm{grid-row:1;grid-column:1;align-self:center;padding-left:4px;font:700 12px/1 var(--mono);letter-spacing:.22em}
+#mw #win #view #docs>section:where([data-file]) .lampsub{grid-row:1;grid-column:2;align-self:center;padding-right:4px;white-space:nowrap;font:400 12px/1 var(--mono);letter-spacing:.16em}
+#mw #win #view #docs>section:where([data-file]) .lampsub .dot{color:#6b47d6!important}
+#mw #win #view #docs>section:where([data-file]) .lamp{grid-row:2;grid-column:1/-1;position:relative}
+#mw #win #view #docs>section:where([data-file]) .lampcall{grid-row:3;grid-column:1/-1;align-self:center;justify-self:start;position:relative;display:flex;align-items:center;justify-content:center;width:190px;height:44px;background:var(--card);font:700 13px/1 var(--mono);letter-spacing:.2em;box-shadow:3px 3px 0 var(--ink);transition:box-shadow .08s,transform .08s}
+#mw #win #view #docs>section:where([data-file]) .lampstate{grid-row:3;grid-column:2;align-self:center;justify-self:end;display:flex;align-items:center;justify-content:center;width:60px;height:30px;border-radius:2px;background:#efe7d6;font:700 13px/1 var(--mono);letter-spacing:.2em;padding-left:.2em;box-shadow:inset 0 2px 3px rgba(26,23,20,.25)}
+#mw #win #view #docs>section:where([data-file]) .lampband[aria-pressed="true"] .lampcall{box-shadow:inset 1px 1px 2px rgba(26,23,20,.18);transform:translate(3px,3px)}
+#mw #win #view #docs>section:where([data-file]) .lampband[aria-pressed="true"] .lampstate{background:var(--dark);color:var(--uv-on)}
+#mw #win #view #docs>section:where([data-file]) .lampband .refl{stroke-dasharray:5 4;transition:stroke-dasharray .32s cubic-bezier(.3,.6,.3,1),stroke-width .32s,opacity .32s}
+#mw #win #view #docs>section:where([data-file]) .lampband[aria-pressed="true"] .refl{stroke-dasharray:9 0;stroke-width:1.6;opacity:1;filter:drop-shadow(0 0 3px rgba(155,123,255,.8))}
+#mw #win #view #docs>section:where([data-file]) .lampband .halo{opacity:0;transition:opacity .22s .12s}
+#mw #win #view #docs>section:where([data-file]) .lampband[aria-pressed="true"] .halo{opacity:1}
+#mw #win #view #docs>section:where([data-file]) .lampband .fres{transition:stroke .3s}
+#mw #win #view #docs>section:where([data-file]) .lampband[aria-pressed="true"] .fres.inner{stroke:var(--uv)}
+#mw #win #view #docs>section:where([data-file]) .lampband .warm{opacity:0;transition:opacity .2s}
+@media (hover:hover) and (pointer:fine){
+  #mw #win #view #docs>section:where([data-file]) .lampband:hover .warm{opacity:.25}
+  #mw #win #view #docs>section:where([data-file]) .lampband:hover .key2{opacity:1}
+}
+#mw #win #view #docs>section:where([data-file]) .lampband .key2{opacity:.55;transition:opacity .2s}
+#mw #win #view #docs>section:where([data-file]) .folder{position:relative;margin-top:84px;background:var(--paper);border-radius:2px;padding:56px 56px 72px;box-shadow:0 1px 0 rgba(26,23,20,.08),0 24px 28px -14px rgba(26,23,20,.28)}
+#mw #win #view #docs>section:where([data-file]) .folder .tabrow{position:absolute;left:0;top:-52px;height:52px}
+#mw #win #view #docs>section:where([data-file]) .folder .tA{position:relative;display:flex;align-items:center;gap:16px;height:52px;width:260px;padding:0 0 0 28px;background:var(--paper);border-radius:6px 6px 0 0;box-shadow:0 -1px 0 rgba(26,23,20,.05)}
+#mw #win #view #docs>section:where([data-file]) .folder .tA::before{content:"";position:absolute;left:0;right:0;top:0;height:7px;border-radius:6px 6px 0 0;background:linear-gradient(rgba(255,255,255,.55),rgba(255,255,255,.18));border-bottom:.5px solid rgba(26,23,20,.12)}
+#mw #win #view #docs>section:where([data-file]) .folder .tA .nm{font:500 italic 26px/1 var(--serif);font-variation-settings:'opsz' 144;color:var(--ink)}
+#mw #win #view #docs>section:where([data-file]) .folder .tA .fl{font:400 13px/1 var(--mono);letter-spacing:.22em;color:var(--muted)}
+#mw #win #view #docs>section[data-file]{--tab-ref:260px}
+@container docs (max-width:760px){
+  #mw #win #view #docs>section[data-file]{--tab-ref:252px}
+}
+#mw #win #view #docs>section:where([data-file]) .folder>.tabrow{width:max-content;left:calc((100% - var(--tab-ref)) * var(--tabk,0) / 6);transform:none}
+#mw #win #view #docs>section:where([data-file]) .folder{display:grid;grid-template-columns:380px minmax(0,1fr) 440px;column-gap:44px;align-items:start}
+#mw #win #view #docs>section:where([data-file]) .folder>.cols2,#mw #win #view #docs>section:where([data-file]) .folder>.cols2>div,#mw #win #view #docs>section:where([data-file]) .folder .z{display:contents}
+#mw #win #view #docs>section:where([data-file]) .z[data-zone="01"]>.zr{grid-area:1/1/2/-1}
+#mw #win #view #docs>section:where([data-file]) .z[data-zone="01"]>.para{grid-area:2/1/3/3}
+#mw #win #view #docs>section:where([data-file]) .z[data-zone="01"]>.devz{grid-area:3/1/4/3}
+#mw #win #view #docs>section:where([data-file]) .folder .reality{grid-area:2/3/4/4}
+#mw #win #view #docs>section:where([data-file]) .z[data-zone="02"]>.zr{grid-area:4/1/5/-1;margin-top:72px}
+#mw #win #view #docs>section:where([data-file]) .z[data-zone="02"]>.para{grid-area:5/1/6/-1}
+#mw #win #view #docs>section:where([data-file]) .z[data-zone="03"]>.zr{grid-area:6/1/7/-1;margin-top:96px}
+#mw #win #view #docs>section:where([data-file]) .z[data-zone="03"]>.para{grid-area:7/1/8/-1}
+#mw #win #view #docs>section:where([data-file]) .z[data-zone="03"]>.apl{grid-area:8/1/9/-1}
+#mw #win #view #docs>section:where([data-file]) .z[data-zone="03"]>.then{grid-area:9/1/10/-1}
+#mw #win #view #docs>section:where([data-file]) .z[data-zone="04"]>.zr{grid-area:10/1/11/-1;margin-top:96px}
+#mw #win #view #docs>section:where([data-file]) .z[data-zone="04"]>.grid2c{grid-area:11/1/12/2}
+#mw #win #view #docs>section:where([data-file]) .z[data-zone="04"]>.devz{grid-area:12/1/13/2}
+#mw #win #view #docs>section:where([data-file]) .folder>.hairtop[data-block="chart"]{grid-area:11/2/13/4}
+#mw #win #view #docs>section:where([data-file]) .folder>.hairtop[data-block="evidence"]{grid-area:13/1/14/-1;margin-top:calc(var(--fg-foot) + var(--fg-gap) + var(--fg-padt))}
+#mw #win #view #docs>section:where([data-file]) .folder>.hairtop[data-block="reflection"]{grid-area:14/1/15/-1;margin-top:96px}
+#mw #win #view #docs>section:where([data-file]) .folder>.lampsig{grid-area:15/1/16/-1}
+#mw #win #view #docs>section:where([data-file]) .zr{display:flex;align-items:baseline;gap:18px;margin-bottom:26px;font:700 13px/1 var(--mono);letter-spacing:.22em;color:var(--ink)}
+#mw #win #view #docs>section:where([data-file]) .zr::after{content:"";flex:1;height:1px;align-self:center;background:repeating-linear-gradient(90deg,var(--rule) 0 3px,transparent 3px 5px)}
+#mw #win #view #docs>section:where([data-file]) .zr b{font:450 italic 40px/1 var(--serif);font-variation-settings:'opsz' 144;color:var(--c-text);letter-spacing:0;min-width:48px}
+#mw #win #view #docs>section:where([data-file]) .zr .d2{display:none}
+#mw #win #view #docs>section:where([data-file]) .z>.para{font:500 50px/1.05 var(--serif);font-variation-settings:'opsz' 72;letter-spacing:-.02em;color:var(--ink);text-wrap:balance;margin:0}
+#mw #win #view #docs>section:where([data-file]) .z>.para b{font-style:italic;font-weight:440;font-variation-settings:'opsz' 144;color:var(--c-text);letter-spacing:-.01em}
+#mw #win #view #docs>section:where([data-file]) .z[data-zone="02"]>.para{font-size:42px;line-height:1.14;max-width:900px}
+#mw #win #view #docs>section:where([data-file]) .z[data-zone="03"]>.para{font-size:40px}
+#mw #win #view #docs>section:where([data-file]) .z[data-zone="03"]>.para b{color:var(--c-text)}
+#mw #win #view #docs>section:where([data-file]) .folder .reality{position:relative;isolation:isolate;margin:6px 8px 0 0;background:none;border:0;box-shadow:none}
+#mw #win #view #docs>section:where([data-file]) .reality::before,#mw #win #view #docs>section:where([data-file]) .reality::after{content:"";position:absolute;inset:0;border-radius:2px;pointer-events:none}
+#mw #win #view #docs>section:where([data-file]) .reality::before{z-index:-1;background:var(--card);border:1.3px solid var(--ink);-webkit-mask:var(--holes,none);mask:var(--holes,none);-webkit-mask-composite:source-in;mask-composite:intersect}
+#mw #win #view #docs>section:where([data-file]) .reality::after{z-index:-2;transform:translate(8px,8px);background:var(--ink);-webkit-mask:var(--holes-sh,none);mask:var(--holes-sh,none);-webkit-mask-composite:source-in;mask-composite:intersect}
+#mw #win #view #docs>section:where([data-file]) .reality .fh{display:flex;justify-content:space-between;align-items:center;height:52px;padding:0 20px;font:700 12px/1 var(--mono);letter-spacing:.22em;background:repeating-linear-gradient(90deg,var(--rule) 0 3px,transparent 3px 5px) 1.3px 100%/calc(100% - 2.6px) 1px no-repeat}
+#mw #win #view #docs>section:where([data-file]) .reality .fh>span:last-child{color:var(--rust)}
+#mw #win #view #docs>section:where([data-file]) .frow{position:relative;display:flex;align-items:center;height:48px;padding:0 20px 0 50px;font:400 17px/1 var(--sans)}
+#mw #win #view #docs>section:where([data-file]) .frow+.frow{background:linear-gradient(#f1e6e0,#f1e6e0) 1.3px 0/calc(100% - 2.6px) 1px no-repeat}
+#mw #win #view #docs>section:where([data-file]) .frow .o{position:absolute;left:19px;top:17px;width:14px;height:14px}
+#mw #win #view #docs>section:where([data-file]) .folder{isolation:isolate;background:none}
+#mw #win #view #docs>section:where([data-file]) .folder::before{content:"";position:absolute;inset:0;z-index:-1;border-radius:2px;background:var(--paper);pointer-events:none;-webkit-mask:var(--sheet-holes,none);mask:var(--sheet-holes,none);-webkit-mask-composite:source-in;mask-composite:intersect}
+#mw #win #view #docs>section:where([data-file]) .z[data-zone="03"]>.apl{position:relative;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));column-gap:19px;margin-top:34px!important;padding-top:40px}
+#mw #win #view #docs>section:where([data-file]) .apl .dash{position:relative;display:flex;align-items:center;justify-content:center;text-align:center;height:80px;padding:0 10px;background:var(--card);font:400 15px/1.3 var(--sans);color:var(--ink)}
+#mw #win #view #docs>section:where([data-file]) .then{position:relative;justify-self:center;margin-top:56px;text-align:center;font:400 italic 32px/1.2 var(--serif);font-variation-settings:'opsz' 144;color:var(--ink)}
+#mw #win #view #docs>section:where([data-file]) .z[data-zone="04"]>.grid2c{display:block}
+#mw #win #view #docs>section:where([data-file]) .lg{position:relative;isolation:isolate;display:flex;align-items:center;height:46px;padding-left:36px;font:400 18px/1 var(--sans);color:var(--ink)}
+#mw #win #view #docs>section:where([data-file]) .lg .c{position:absolute;left:4px;top:13px;width:20px;-webkit-text-fill-color:transparent;text-shadow:none}
+#mw #win #view #docs>section:where([data-file]) .lg>.fg-svg{z-index:0}
+#mw #win #view #docs>section:where([data-file]) .lg.on-accent,#mw #win #view #docs>section:where([data-file]) .lg.hl{text-shadow:0 0 2px var(--paper),0 0 2px var(--paper),0 0 2px var(--paper)}
+#mw #win #view #docs>section:where([data-file]) .lg .sw{transition:opacity .2s}
+#mw #win #view #docs>section:where([data-file]) .hairtop[data-block="chart"]{position:relative;background:var(--card);border-radius:2px;padding:26px 30px 30px;margin-top:-6px;box-shadow:0 14px 30px -14px rgba(60,40,10,.30),0 1px 0 rgba(26,23,20,.06)}
+#mw #win #view #docs>section:where([data-file]) .hairtop[data-block="chart"] .zr{justify-content:space-between;align-items:center;margin-bottom:0;padding:0 4px 14px;font:400 12px/1 var(--mono);letter-spacing:.2em;color:var(--body)}
+#mw #win #view #docs>section:where([data-file]) .hairtop[data-block="chart"] .zr::after{display:none}
+#mw #win #view #docs>section:where([data-file]) .hairtop[data-block="chart"] .zr b{font:700 13px/1 var(--mono);letter-spacing:.12em;color:var(--ink);min-width:0}
+#mw #win #view #docs>section:where([data-file]) .hairtop[data-block="chart"] .zr b{flex-shrink:0}
+#mw #win #view #docs>section:where([data-file]) .xchart{position:relative;margin-top:34px;--plot:440px}
+#mw #win #view #docs>section:where([data-file]) .xbars{position:relative;display:flex;height:calc(var(--plot) + 34px);padding:0 6px}
+#mw #win #view #docs>section:where([data-file]) .xcol{position:relative;flex:1 1 0;height:100%}
+#mw #win #view #docs>section:where([data-file]) .xbar,#mw #win #view #docs>section:where([data-file]) .xz,#mw #win #view #docs>section:where([data-file]) .xgl{display:none}
+#mw #win #view #docs>section:where([data-file]) .xlab{position:absolute;left:0;right:0;bottom:0;text-align:center;font:500 12px/1 var(--mono);color:var(--muted);transition:color .12s}
+#mw #win #view #docs>section:where([data-file]) .xcol.drawing .xlab{color:var(--c-text);font-weight:700}
+#mw #win #view #docs>section:where([data-file]) .xbars .bar .ol{transition:stroke .12s,stroke-width .12s}
+#mw #win #view #docs>section:where([data-file]) .xbars .bar.hl .ol{stroke:var(--ink);stroke-width:2}
+#mw #win #view #docs>section:where([data-file]) .plabel.pl2{margin:0 0 30px}
+#mw #win #view #docs>section[data-file]{--fg-padx:56px;--fg-padt:56px;--fg-foot:72px;--fg-gap:112px}
+@container docs (max-width:760px){
+  #mw #win #view #docs>section[data-file]{--fg-padx:20px;--fg-padt:40px;--fg-foot:56px;--fg-gap:72px}
+}
+#mw #win #view #docs>section:where([data-file]) .folder>.hairtop:has(>.plabel.pl2){position:relative}
+#mw #win #view #docs>section:where([data-file]) .folder>.hairtop:has(>.plabel.pl2)>.plabel.pl2{position:absolute;left:calc(-1*var(--fg-padx));top:calc(-1*(var(--fg-padt) + var(--fg-gap)/2));transform:translateY(-50%);margin:0;white-space:nowrap;color:#6b6052}
+#mw #win #view #docs>section[data-file].uv .folder .plabel.pl2{color:#6b6052}
+#mw #win #view #docs>section:where([data-file]) .folder>.hairtop:has(>.plabel.pl2)::before{content:"";position:absolute;left:calc(-1*var(--fg-padx));right:auto;width:min(var(--fg-sheetw,calc(100% + 2*var(--fg-padx))),calc(100% + 2*var(--fg-padx)));top:calc(-1*(var(--fg-padt) + var(--fg-gap)));height:26px;pointer-events:none;background:linear-gradient(rgba(26,23,20,.22),rgba(26,23,20,0));transform:none;transition:none}
+#mw #win #view #docs>section:where([data-file]) .folder>.hairtop:has(>.plabel.pl2)::after{content:"";position:absolute;left:calc(-1*var(--fg-padx));right:auto;width:min(var(--fg-sheetw,calc(100% + 2*var(--fg-padx))),calc(100% + 2*var(--fg-padx)));top:calc(-1*var(--fg-padt) - 1px);height:1px;pointer-events:none;background:rgba(26,23,20,.08);transform:none;transition:none}
+#mw #win #view #docs>section[data-file].uv .folder>.hairtop:has(>.plabel.pl2)::after{opacity:0}
+#mw #win #view #docs>section:where([data-file]) .statrow{display:grid;grid-template-columns:minmax(0,1fr) 408px;grid-template-rows:auto auto auto 1fr;column-gap:36px;align-items:start;margin-top:30px}
+#mw #win #view #docs>section:where([data-file]) .statrow>div:first-child{display:contents}
+#mw #win #view #docs>section:where([data-file]) .statrow .bignum{grid-area:1/1/2/2}
+#mw #win #view #docs>section:where([data-file]) .statrow .biglbl:nth-child(2){grid-area:2/1/3/2}
+#mw #win #view #docs>section:where([data-file]) .statrow .biglbl:nth-child(3){grid-area:3/1/4/2}
+#mw #win #view #docs>section:where([data-file]) .statrow .slipflip{grid-area:1/2/5/3}
+#mw #win #view #docs>section:where([data-file]) .statrow .an-note{grid-area:5/2/6/3}
+#mw #win #view #docs>section:where([data-file]) .statrow .perfrows{grid-area:4/1/6/2}
+#mw #win #view #docs>section:where([data-file]) .bignum{position:relative;display:block;white-space:nowrap;font:560 132px/1 var(--serif);font-variation-settings:'opsz' 144;letter-spacing:-.035em;color:var(--ink);margin-top:6px}
+#mw #win #view #docs>section:where([data-file]) .bignum .cur{display:inline-block;vertical-align:.5em;margin-right:.04em;font-size:.58em;font-style:italic;font-weight:440;color:var(--c-text);letter-spacing:0}
+#mw #win #view #docs>section:where([data-file]) .bignum .cur,#mw #win #view #docs>section:where([data-file]) .bignum .cnt{filter:drop-shadow(-.9px -.9px .6px rgba(26,23,20,.28)) drop-shadow(1.1px 1.3px .2px rgba(255,255,255,.95))}
+#mw #win #view #docs>section:where([data-file]) .bignum>span:not(.cur):not(.cnt){display:inline-block;margin-left:.1em;font:400 26px/1 var(--mono)!important;letter-spacing:.14em;color:var(--body);filter:drop-shadow(-.45px -.45px .3px rgba(26,23,20,.14)) drop-shadow(.55px .65px .1px rgba(255,255,255,.95))}
+#mw #win #view #docs>section:where([data-file]) .statrow .biglbl{margin-top:22px;font:700 13px/1.5 var(--mono);letter-spacing:.22em;color:var(--ink)}
+#mw #win #view #docs>section:where([data-file]) .statrow .biglbl+.biglbl{position:relative;margin-top:8px;font-weight:400;color:var(--c-text)}
+#mw #win #view #docs>section:where([data-file]) .statrow .perfrows{display:grid;grid-template-columns:1fr 1fr;column-gap:28px;margin-top:56px}
+#mw #win #view #docs>section:where([data-file]) .prow{position:relative;padding:18px 0 0}
+#mw #win #view #docs>section:where([data-file]) .prow .biglbl{margin:0;font:500 11px/1.5 var(--mono);letter-spacing:.2em;color:var(--body)}
+#mw #win #view #docs>section:where([data-file]) .bigtxt{margin-top:6px;font:400 20px/1.3 var(--sans);color:var(--ink)}
+#mw #win #view #docs>section:where([data-file]) .statrow{grid-template-columns:minmax(0,1fr) 438px}
+#mw #win #view #docs>section:where([data-file]) .slipflip{position:relative;margin:2px 0 0}
+#mw #win #view #docs>section:where([data-file]) .sf-stage{position:relative;perspective:1400px;height:var(--th,auto)}
+#mw #win #view #docs>section:where([data-file]) .sf-plate{position:absolute;left:0;top:0;width:100%;height:100%;background:var(--ink);transform:translate(8px,8px);-webkit-mask:var(--cut-plate-front) 0 0/100% 100% no-repeat;mask:var(--cut-plate-front) 0 0/100% 100% no-repeat}
+#mw #win #view #docs>section:where([data-file]) .sf-in{position:relative;display:grid;height:100%;transform-style:preserve-3d;z-index:1}
+#mw #win #view #docs>section:where([data-file]) .sf-face{grid-area:1/1;position:relative;height:var(--th,auto);backface-visibility:hidden;-webkit-backface-visibility:hidden}
+#mw #win #view #docs>section:where([data-file]) .evslip{-webkit-mask:var(--cut-front,none) 0 0/100% 100% no-repeat;mask:var(--cut-front,none) 0 0/100% 100% no-repeat}
+#mw #win #view #docs>section:where([data-file]) .mslip{-webkit-mask:var(--cut-back,none) 0 0/100% 100% no-repeat;mask:var(--cut-back,none) 0 0/100% 100% no-repeat}
+#mw #win #view #docs>section:where([data-file]) .sf-back{transform:rotateY(180deg)}
+#mw #win #view #docs>section:where([data-file]) .slipflip{--stub:72px}
+#mw #win #view #docs>section:where([data-file]) .evslip{display:grid;grid-template-columns:var(--stub) minmax(0,1fr);grid-template-rows:auto auto auto auto 1fr;background:var(--card)}
+#mw #win #view #docs>section:where([data-file]) .evslip .es-h{display:contents}
+#mw #win #view #docs>section:where([data-file]) .evslip .es-h>span{grid-column:1;grid-row:1/-1;display:flex;align-items:center;justify-content:center;writing-mode:vertical-rl;transform:rotate(180deg);font:700 12px/1 var(--mono);letter-spacing:.24em;color:var(--ink)}
+#mw #win #view #docs>section:where([data-file]) .evslip .es-h>b{grid-column:2;padding:22px 20px 14px 26px;font:500 10.5px/1.3 var(--mono);letter-spacing:.16em;color:var(--muted)}
+#mw #win #view #docs>section:where([data-file]) .evslip .es-row{grid-column:2;display:grid;grid-template-columns:78px minmax(0,1fr);align-items:baseline;padding:12px 20px 12px 26px;background:linear-gradient(#f1e6e0,#f1e6e0) 26px 0/calc(100% - 46px) 1px no-repeat}
+#mw #win #view #docs>section:where([data-file]) .es-k{font:500 11px/1.5 var(--mono);letter-spacing:.2em;color:var(--body)}
+#mw #win #view #docs>section:where([data-file]) .evslip .es-v{font:400 16px/1.35 var(--sans);color:var(--ink)}
+#mw #win #view #docs>section:where([data-file]) .mslip{display:grid;grid-template-columns:minmax(0,1fr) var(--stub);grid-template-rows:auto auto auto auto auto auto auto 1fr;background:#f3ead4;padding-bottom:70px}
+#mw #win #view #docs>section:where([data-file]) .mslip .es-h{grid-column:1;padding:20px 16px 12px 22px;font:700 11px/1.45 var(--mono);letter-spacing:.18em;color:var(--ink)}
+#mw #win #view #docs>section:where([data-file]) .mslip .es-h>b{display:block;margin-top:6px;font-weight:500;font-size:10px;letter-spacing:.16em;color:var(--muted)}
+#mw #win #view #docs>section:where([data-file]) .mslip .es-row{grid-column:1;display:grid;grid-template-columns:92px minmax(0,1fr);align-items:baseline;padding:7px 16px 7px 22px;background:linear-gradient(rgba(26,23,20,.08),rgba(26,23,20,.08)) 22px 0/calc(100% - 38px) 1px no-repeat}
+#mw #win #view #docs>section:where([data-file]) .mslip .es-k{font-size:10.5px}
+#mw #win #view #docs>section:where([data-file]) .mslip .es-v,#mw #win #view #docs>section:where([data-file]) .ms-t{font:400 14px/1.42 var(--sans);color:var(--ink)}
+#mw #win #view #docs>section:where([data-file]) .ms-fig{font:500 11px/1.55 var(--mono);letter-spacing:.08em;color:var(--c-text)}
+#mw #win #view #docs>section:where([data-file]) .es-stamp,#mw #win #view #docs>section:where([data-file]) .ms-stamp{position:absolute;display:flex;align-items:center;justify-content:center;width:140px;height:42px;border:2.2px solid currentColor;border-radius:6px;font:800 15px/1 var(--mono);letter-spacing:.24em;padding-left:.24em;filter:url(#fg-stamp);-webkit-mask:linear-gradient(to top right,#000,rgba(0,0,0,.9));mask:linear-gradient(to top right,#000,rgba(0,0,0,.9))}
+#mw #win #view #docs>section:where([data-file]) .es-stamp::before,#mw #win #view #docs>section:where([data-file]) .ms-stamp::before{content:"";position:absolute;inset:4px;border:.8px solid currentColor;border-radius:3px}
+#mw #win #view #docs>section:where([data-file]) .es-stamp{left:2px;bottom:30px;color:rgba(28,110,78,.88);transform:rotate(-5deg)}
+#mw #win #view #docs>section:where([data-file]) .ms-stamp{right:100px;bottom:16px;color:rgba(90,79,63,.97);transform:rotate(4deg)}
+#mw #win #view #docs>section:where([data-file]) .sf-ghost{position:absolute;right:2px;bottom:30px;width:140px;height:42px;border:2.2px solid var(--c-text);border-radius:6px;opacity:.06;transform:rotate(5deg)}
+#mw #win #view #docs>section:where([data-file]) .sf-tab{position:relative;display:grid;grid-template-columns:auto auto auto;grid-template-areas:"i b go" "i sub go";column-gap:12px;row-gap:5px;align-items:center;margin:24px 0 0 auto;padding:12px 16px 11px 14px;background:var(--card);border:0;border-radius:1px;box-shadow:3px 3px 0 var(--ink);color:var(--ink);cursor:pointer;text-align:left;transition:box-shadow .08s,transform .08s}
+#mw #win #view #docs>section:where([data-file]) .sf-tab:active{box-shadow:1px 1px 0 var(--ink);transform:translate(2px,2px)}
+#mw #win #view #docs>section:where([data-file]) .sf-tab:focus{outline:none}
+#mw #win #view #docs>section:where([data-file]) .sf-tab:focus-visible{outline:2px solid var(--c-text);outline-offset:4px}
+#mw #win #view #docs>section:where([data-file]) .sf-tab i{grid-area:i;font:400 18px/1 var(--mono);font-style:normal}
+#mw #win #view #docs>section:where([data-file]) .sf-tab b{grid-area:b;font:700 12px/1 var(--mono);letter-spacing:.2em}
+#mw #win #view #docs>section:where([data-file]) .sf-tab .sf-sub{grid-area:sub;font:400 10.5px/1 var(--mono);letter-spacing:.16em;color:var(--body)}
+#mw #win #view #docs>section:where([data-file]) .sf-tab .sf-go{grid-area:go;font:400 12px/1 var(--mono)}
+#mw #win #view #docs>section:where([data-file]) .slipflip{display:flex;flex-direction:column}
+#mw #win #view #docs>section:where([data-file]) .sf-front{clip-path:polygon(0 0,100% 0,100% 100%,0 100%,0 100%);transition:clip-path .16s}
+#mw #win #view #docs>section:where([data-file]) .slipflip:has(.sf-tab:hover,.sf-tab:focus-visible):not(.turned) .sf-front{clip-path:polygon(0 0,100% 0,100% calc(100% - 22px),calc(100% - 22px) 100%,0 100%)}
+#mw #win #view #docs>section:where([data-file]) .sf-ear{position:absolute;right:0;bottom:0;width:22px;height:22px;opacity:0;transition:opacity .16s;z-index:2;pointer-events:none;background:linear-gradient(135deg,transparent 50%,#f3ead4 50%);filter:drop-shadow(-1px -1px 1px rgba(26,23,20,.25))}
+#mw #win #view #docs>section:where([data-file]) .slipflip:has(.sf-tab:hover,.sf-tab:focus-visible):not(.turned):not(.busy) .sf-ear{opacity:1}
+#mw #win #view #docs>section:where([data-file]) .slipflip.busy .sf-front{clip-path:polygon(0 0,100% 0,100% 100%,0 100%,0 100%)}
+#mw #win #view #docs>section:where([data-file]) .an-note{position:relative;margin-top:30px;color:var(--rust);transform:rotate(-1deg);transform-origin:left top}
+#mw #win #view #docs>section:where([data-file]) .an-h{font:500 11px/1 var(--mono);letter-spacing:.22em}
+#mw #win #view #docs>section:where([data-file]) .an-t{margin-top:10px;font:600 28px/1.15 var(--hand);filter:url(#fg-felt)}
+#mw #win #view #docs>section:where([data-file]) .an-s{margin-top:10px;font:500 11px/1 var(--mono);letter-spacing:.22em}
+#mw #win #view #docs>section:where([data-file]) .hairtop[data-block="evidence"]>.cols2{display:block;margin-top:96px}
+#mw #win #view #docs>section:where([data-file]) .gaug{display:grid;grid-template-columns:repeat(3,1fr)}
+#mw #win #view #docs>section:where([data-file]) .g1{display:flex;flex-direction:column;align-items:center}
+#mw #win #view #docs>section:where([data-file]) .face{position:relative;width:260px;height:260px}
+#mw #win #view #docs>section:where([data-file]) .fig{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font:500 54px/1 var(--serif);font-variation-settings:'opsz' 72;letter-spacing:-.02em;color:var(--ink)}
+#mw #win #view #docs>section:where([data-file]) .gl{margin-top:18px;text-align:center;font:500 11px/1.75 var(--mono);letter-spacing:.2em;color:var(--body)}
+#mw #win #view #docs>section:where([data-file]) .tech{margin-top:96px}
+#mw #win #view #docs>section:where([data-file]) .tech{position:relative;isolation:isolate;display:grid;grid-template-columns:minmax(0,1fr)}
+#mw #win #view #docs>section:where([data-file]) .tech::before{content:"";grid-row:3/5;grid-column:1;z-index:-1;background:var(--card);border-radius:2px;box-shadow:0 14px 30px -14px rgba(60,40,10,.30),0 1px 0 rgba(26,23,20,.06)}
+#mw #win #view #docs>section:where([data-file]) .tech .para{margin:0 0 34px;font:500 42px/1.12 var(--serif);font-variation-settings:'opsz' 72;letter-spacing:-.02em;color:var(--ink)}
+#mw #win #view #docs>section:where([data-file]) .tech .para b{font-style:italic;font-weight:440;font-variation-settings:'opsz' 144;color:var(--c-text);letter-spacing:-.01em}
+#mw #win #view #docs>section:where([data-file]) .tech>.zr{grid-area:1/1}
+#mw #win #view #docs>section:where([data-file]) .tech>.para{grid-area:2/1}
+#mw #win #view #docs>section:where([data-file]) .eng{position:relative;isolation:isolate;grid-area:3/1;height:330px}
+#mw #win #view #docs>section:where([data-file]) .eng>.fg-svg{z-index:-1}
+#mw #win #view #docs>section:where([data-file]) .eng-row{position:absolute;left:36px;right:36px;top:92px;display:grid;grid-template-columns:repeat(6,1fr);column-gap:28px}
+#mw #win #view #docs>section:where([data-file]) .eng-n{display:flex;align-items:center;justify-content:center;height:64px;padding:0 8px;text-align:center;font:700 12.5px/1.35 var(--mono);letter-spacing:.18em;color:var(--ink)}
+#mw #win #view #docs>section:where([data-file]) .eng-n[data-k="2"]{-webkit-text-stroke:5px var(--card);paint-order:stroke fill}
+#mw #win #view #docs>section:where([data-file]) .eng-loop{position:absolute;left:0;top:0;transform:translate(-50%,0);white-space:nowrap;font:400 12px/1 var(--mono);letter-spacing:.3em;padding-left:.3em;color:var(--body);text-shadow:0 0 3px var(--card),0 0 3px var(--card),0 0 3px var(--card)}
+#mw #win #view #docs>section:where([data-file]) .pur{grid-area:4/1;position:relative;margin:0;padding:22px 24px 24px;text-align:center!important;font:400 13px/1.6 var(--mono);letter-spacing:.2em;color:var(--c-text)}
+#mw #win #view #docs>section:where([data-file]) .pur::before{content:"";position:absolute;left:14px;right:14px;top:0;height:.9px;background:var(--rule)}
+#mw #win #view #docs>section:where([data-file]) .hairtop[data-block="reflection"] .zr{margin-bottom:6px}
+#mw #win #view #docs>section:where([data-file]) .refl3{position:relative;margin:0 4px 0 0;padding:36px 40px 40px;transform:rotate(-.5deg);transform-origin:0 0;background:rgba(255,255,255,.52);-webkit-backdrop-filter:blur(1.1px) brightness(1.03) saturate(.9);backdrop-filter:blur(1.1px) brightness(1.03) saturate(.9);border:.5px solid rgba(26,23,20,.16);box-shadow:0 10px 18px -14px rgba(60,40,10,.28)}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
+  #mw #win #view #docs>section:where([data-file]) .refl3{background:rgba(255,253,248,.85)}
+}
+#mw #win #view #docs>section:where([data-file]) .refl3>.fibre{position:absolute;inset:0;pointer-events:none;opacity:.05;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='240'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.02 .9' numOctaves='2' seed='4'/%3E%3CfeColorMatrix values='0 0 0 0 .1 0 0 0 0 .09 0 0 0 0 .08 0 0 0 1.4 0'/%3E%3C/filter%3E%3Crect width='600' height='240' filter='url(%23f)'/%3E%3C/svg%3E")}
+#mw #win #view #docs>section:where([data-file]) .refl3::before,#mw #win #view #docs>section:where([data-file]) .refl3::after{content:"";position:absolute;width:92px;height:22px;background:rgba(233,220,184,.85);mix-blend-mode:multiply;pointer-events:none;clip-path:polygon(0 0,100% 0,98.3% 14%,100% 28%,98.3% 42%,100% 57%,98.3% 71%,100% 85%,98.3% 100%,0 100%,1.7% 86%,0 72%,1.7% 58%,0 43%,1.7% 29%,0 15%,1.7% 0)}
+#mw #win #view #docs>section:where([data-file]) .refl3::before{left:-20px;top:-1px;transform:rotate(-6deg)}
+#mw #win #view #docs>section:where([data-file]) .refl3::after{right:-20px;top:-30px;transform:rotate(4deg)}
+#mw #win #view #docs>section:where([data-file]) .refl3 .dash{position:relative;padding:0 0 0 26px;font:400 27px/1.3 var(--serif);font-variation-settings:'opsz' 72;letter-spacing:-.01em;color:var(--ink)}
+#mw #win #view #docs>section:where([data-file]) .refl3 .dash+.dash{margin-top:30px}
+#mw #win #view #docs>section:where([data-file]) .vfilm{display:none}
+@container docs (max-width:1099px){
+  #mw #win #view #docs>section[data-file]{grid-template-columns:minmax(0,1fr)}
+  #mw #win #view #docs>section[data-file] .uvmount{grid-column:1;grid-row:8;margin-top:40px}
+  #mw #win #view #docs>section[data-file] .plabel{grid-row:9}
+  #mw #win #view #docs>section[data-file] .folder{grid-row:10}
+  #mw #win #view #docs>section:where([data-file]) .lampband{width:min(100%,480px)}
+  #mw #win #view #docs>section:where([data-file]) .folder{grid-template-columns:minmax(0,1fr)}
+  #mw #win #view #docs>section:where([data-file]) .folder>*,#mw #win #view #docs>section:where([data-file]) .folder .z>*,#mw #win #view #docs>section:where([data-file]) .folder>.cols2>div>*{grid-area:auto!important;grid-column:1/-1!important}
+  #mw #win #view #docs>section:where([data-file]) .folder .reality{margin:28px 8px 0 0}
+  #mw #win #view #docs>section:where([data-file]) .z[data-zone="03"]>.apl{grid-template-columns:minmax(0,1fr);row-gap:12px;padding:20px 0 0 40px;margin-top:20px!important}
+  #mw #win #view #docs>section:where([data-file]) .apl .dash{height:56px}
+  #mw #win #view #docs>section:where([data-file]) .hairtop[data-block="chart"]{margin-top:32px}
+  #mw #win #view #docs>section:where([data-file]) .statrow{grid-template-columns:minmax(0,1fr);grid-template-rows:none}
+  #mw #win #view #docs>section:where([data-file]) .statrow>div:first-child>*,#mw #win #view #docs>section:where([data-file]) .statrow>.perfrows{grid-area:auto!important}
+  #mw #win #view #docs>section:where([data-file]) .gaug{grid-template-columns:1fr;row-gap:10px}
+  #mw #win #view #docs>section:where([data-file]) .g1{flex-direction:row;gap:18px}
+  #mw #win #view #docs>section:where([data-file]) .face{flex:none}
+  #mw #win #view #docs>section:where([data-file]) .gl{margin:0;text-align:left}
+  #mw #win #view #docs>section:where([data-file]) .eng{height:auto;padding:28px 0 28px}
+  #mw #win #view #docs>section:where([data-file]) .eng-row{position:relative;left:auto;right:auto;top:auto;grid-template-columns:minmax(0,min(220px,calc(100% - 92px)));row-gap:26px;justify-content:start;margin-left:22px}
+  #mw #win #view #docs>section:where([data-file]) .eng-n{height:44px}
+}
+@container docs (max-width:760px){
+  #mw #win #view #docs>section:where([data-file]){--gut:16px}
+  #mw #win #view #docs>section[data-file]{padding-top:28px}
+  #mw #win #view #docs>section:where([data-file]) .shead .tok{letter-spacing:.14em}
+  #mw #win #view #docs>section:where([data-file]) .dt-no{margin-top:40px}
+  #mw #win #view #docs>section:where([data-file]) .sttl{font-size:44px}
+  #mw #win #view #docs>section:where([data-file]) .smeta{font-size:11.5px;letter-spacing:.16em}
+  #mw #win #view #docs>section:where([data-file]) .lampband{width:100%;height:400px;padding:12px 18px 26px}
+  #mw #win #view #docs>section:where([data-file]) .lampnm{font-size:11px;letter-spacing:.18em}
+  #mw #win #view #docs>section:where([data-file]) .lampsub{font-size:11px;letter-spacing:.08em}
+  #mw #win #view #docs>section:where([data-file]) .folder{padding:40px 20px 56px}
+  #mw #win #view #docs>section:where([data-file]) .folder .tA{width:220px;height:48px}
+  #mw #win #view #docs>section:where([data-file]) .folder .tabrow{top:-48px;height:48px}
+  #mw #win #view #docs>section:where([data-file]) .z>.para,#mw #win #view #docs>section:where([data-file]) .z[data-zone="02"]>.para{font-size:30px;line-height:1.18}
+  #mw #win #view #docs>section:where([data-file]) .z[data-zone="03"]>.para{font-size:30px}
+  #mw #win #view #docs>section:where([data-file]) .then{font-size:26px}
+  #mw #win #view #docs>section:where([data-file]) .hairtop[data-block="chart"]{padding:20px 14px 24px}
+  #mw #win #view #docs>section:where([data-file]) .xchart{--plot:300px}
+  #mw #win #view #docs>section:where([data-file]) .xbars{padding:0}
+  #mw #win #view #docs>section:where([data-file]) .bignum{font-size:96px}
+  #mw #win #view #docs>section:where([data-file]) .face{width:176px;height:176px}
+  #mw #win #view #docs>section:where([data-file]) .fig{font-size:34px}
+  #mw #win #view #docs>section:where([data-file]) .tech .para{font-size:30px}
+  #mw #win #view #docs>section:where([data-file]) .refl3{transform:none;padding:28px 18px 30px}
+  #mw #win #view #docs>section:where([data-file]) .refl3::before,#mw #win #view #docs>section:where([data-file]) .refl3::after{width:64px;height:18px}
+  #mw #win #view #docs>section:where([data-file]) .refl3 .dash{font-size:22px}
+  #mw #win #view #docs>section:where([data-file]) .slipflip{--stub:56px}
+  #mw #win #view #docs>section:where([data-file]) .evslip .es-row,#mw #win #view #docs>section:where([data-file]) .mslip .es-row{grid-template-columns:minmax(0,1fr);row-gap:4px}
+  #mw #win #view #docs>section:where([data-file]) .evslip .es-h>b{padding:18px 14px 10px 18px}
+  #mw #win #view #docs>section:where([data-file]) .evslip .es-row{padding:10px 14px 10px 18px;background-position:18px 0;background-size:calc(100% - 32px) 1px}
+  #mw #win #view #docs>section:where([data-file]) .mslip .es-h,#mw #win #view #docs>section:where([data-file]) .mslip .es-row{padding-left:16px;padding-right:12px}
+  #mw #win #view #docs>section:where([data-file]) .statrow .perfrows{grid-template-columns:1fr;row-gap:22px}
+}
+@property --fg-glow{syntax:'<length>';inherits:false;initial-value:0px}
+#mw #win #view #docs>section:where([data-file]) .folder>.fg-dark{position:absolute;inset:0;z-index:-1;border-radius:2px;pointer-events:none;opacity:0;--fg-glow:0px;background:radial-gradient(circle var(--fg-glow) at 85% 640px,rgba(155,123,255,.28),rgba(155,123,255,0)),var(--dark);-webkit-mask:var(--sheet-holes,none);mask:var(--sheet-holes,none);-webkit-mask-composite:source-in;mask-composite:intersect;transition:opacity .36s .08s,--fg-glow .3s}
+#mw #win #view #docs>section[data-file].uv .folder>.fg-dark{opacity:1;--fg-glow:1300px;transition:opacity .42s,--fg-glow .7s .12s cubic-bezier(.2,.6,.3,1)}
+#mw #win #view #docs>section:where([data-file]){--uv-pool:rgba(118,74,236,.26);--uv-pool-30:rgba(118,74,236,.19);--uv-pool-62:rgba(118,74,236,.07);--uv-pool-0:rgba(118,74,236,0);--uv-fall:rgba(0,0,0,.58)}
+#mw #win #view #docs>section[data-file].fg-beam .folder>.fg-dark{background:var(--dark)}
+#mw #win #view #docs>section[data-file].fg-beam.uv .folder>.fg-dark{overflow:clip}
+#mw #win #view #docs>section[data-file].fg-beam .folder>.fg-dark::before{content:"";position:sticky;top:0;display:block;height:var(--fg-vh,100vh);pointer-events:none;opacity:0;background:radial-gradient(ellipse 42% 52% at 66% 46%,var(--uv-pool) 0,var(--uv-pool-30) 30%,var(--uv-pool-62) 62%,var(--uv-pool-0) 86%),
+    radial-gradient(ellipse 72% 80% at 66% 46%,rgba(0,0,0,0) 44%,var(--uv-fall) 100%)}
+@container docs (max-width:760px){
+  #mw #win #view #docs>section[data-file].fg-beam .folder>.fg-dark::before{background:radial-gradient(ellipse 94% 40% at 62% 44%,var(--uv-pool) 0,var(--uv-pool-30) 30%,var(--uv-pool-62) 62%,var(--uv-pool-0) 86%),
+    radial-gradient(ellipse 128% 68% at 62% 44%,rgba(0,0,0,0) 44%,var(--uv-fall) 100%)}
+}
+#mw #win #view #docs>section[data-file].fg-beam:not(.uv) .folder>.fg-dark::before{display:none}
+#mw #win #view #docs>section[data-file].fg-beam.uv .folder>.fg-dark::before{opacity:1;animation:fg-pool-in .5s 120ms both}
+@keyframes fg-pool-in{
+  from{opacity:0}
+  to{opacity:1}
+}
+#mw #win #view #docs>section[data-file].fg-beam-peak.uv .folder>.fg-dark{background:linear-gradient(var(--uv-pool),var(--uv-pool)),var(--dark)}
+#mw #win #view #docs>section[data-file] .folder .tA{transition:background-color .42s}
+#mw #win #view #docs>section[data-file].uv .folder .tA{background-color:var(--dark)}
+#mw #win #view #docs>section[data-file].uv .folder .tA::before{opacity:.15}
+#mw #win #view #docs>section[data-file] .folder *{transition-property:color,background-color,border-color,opacity,filter,text-shadow;transition-duration:.42s}
+#mw #win #view #docs>section[data-file] .folder{color:var(--ink)}
+#mw #win #view #docs>section[data-file].uv .folder{--ink:rgba(232,226,214,.8);--body:rgba(232,226,214,.74);--muted:rgba(232,226,214,.7);--rule:rgba(232,226,214,.14);--c-text:rgba(127,227,184,.84);--c-fill:rgba(127,227,184,.6);--card:rgba(255,253,248,.06);--paper:rgba(255,253,248,.06);--rust:rgba(240,140,100,.88)}
+#mw #win #view #docs>section[data-file].uv .folder .tA .nm{color:rgba(232,226,214,.8)}
+#mw #win #view #docs>section[data-file].uv .folder .fg-svg:not(.uv-layer):not(.fg-hole-sh){filter:invert(1) hue-rotate(180deg);opacity:.35}
+#mw #win #view #docs>section[data-file] .folder .fg-svg{transition:opacity .42s,filter .42s}
+#mw #win #view #docs>section[data-file].uv .reality::before{border-color:rgba(255,253,248,.30)}
+#mw #win #view #docs>section[data-file].uv .reality::after,#mw #win #view #docs>section[data-file].uv .sf-plate{opacity:0}
+#mw #win #view #docs>section:where([data-file]) .fg-hole-sh{display:none}
+#mw #win #view #docs>section[data-file].uv .fg-hole-sh{display:block}
+#mw #win #view #docs>section[data-file].uv .frow+.frow{background-image:linear-gradient(rgba(255,253,248,.08),rgba(255,253,248,.08))}
+#mw #win #view #docs>section[data-file].uv .reality .fh{background-image:repeating-linear-gradient(90deg,rgba(255,253,248,.18) 0 3px,transparent 3px 5px)}
+#mw #win #view #docs>section[data-file].uv .hairtop[data-block="chart"],#mw #win #view #docs>section[data-file].uv .tech::before{box-shadow:none}
+#mw #win #view #docs>section[data-file].uv .apl .dash{background:var(--card)}
+#mw #win #view #docs>section[data-file].uv .mslip{background:rgba(243,234,212,.10)}
+#mw #win #view #docs>section[data-file].uv .es-stamp{color:rgba(127,227,184,.86)}
+#mw #win #view #docs>section[data-file].uv .ms-stamp{color:rgba(232,226,214,.76)}
+#mw #win #view #docs>section[data-file].uv .sf-tab{box-shadow:3px 3px 0 rgba(232,226,214,.25)}
+#mw #win #view #docs>section[data-file].uv .refl3{background:rgba(16,18,20,.55);border-color:rgba(255,253,248,.12);box-shadow:none}
+#mw #win #view #docs>section[data-file].uv .refl3::before,#mw #win #view #docs>section[data-file].uv .refl3::after{background:rgba(0,0,0,.40);mix-blend-mode:normal}
+#mw #win #view #docs>section[data-file].uv .refl3>.fibre{opacity:.03}
+#mw #win #view #docs>section[data-file].uv .bignum .cur,#mw #win #view #docs>section[data-file].uv .bignum .cnt,#mw #win #view #docs>section[data-file].uv .bignum>span:not(.cur):not(.cnt){filter:none}
+#mw #win #view #docs>section[data-file].uv .eng-n[data-k="2"]{-webkit-text-stroke-color:transparent}
+#mw #win #view #docs>section[data-file].uv .an-t{filter:none}
+#mw #win #view #docs>section[data-file] .cite{transition:color .18s .42s,text-shadow .18s .42s}
+#mw #win #view #docs>section[data-file]:not(.uv) .cite{transition:none}
+#mw #win #view #docs>section[data-file].uv .cite{color:#c39bff!important;text-shadow:0 0 10px rgba(155,123,255,.75)}
+#mw #win #view #docs>section:where([data-file]) .devz{position:relative;opacity:0;pointer-events:none;margin-top:28px;padding:22px 24px 22px;transition:opacity .2s}
+#mw #win #view #docs>section:where([data-file]) .devz>*{transition:opacity .2s,filter .2s}
+#mw #win #view #docs>section[data-file].uv .devz{opacity:1;pointer-events:auto;transition:opacity .3s .5s}
+#mw #win #view #docs>section[data-file]:not(.uv) .devz>*{opacity:0}
+#mw #win #view #docs>section[data-file].uv .devz>*{opacity:1;filter:blur(0);transition:opacity .5s 1s,filter .5s 1s}
+#mw #win #view #docs>section[data-file]:not(.uv) .devz>*{filter:blur(2px)}
+#mw #win #view #docs>section:where([data-file]) .devz .dv-k{display:block;font:400 12px/1 var(--mono);letter-spacing:.22em;color:#c39bff}
+#mw #win #view #docs>section:where([data-file]) .devz .dv-t{display:block;margin:10px 0 12px;font:400 italic 30px/1.12 var(--serif);font-variation-settings:'opsz' 144;color:#f2eefe;text-shadow:0 0 12px rgba(155,123,255,.45)}
+#mw #win #view #docs>section:where([data-file]) .devz .dv-b{margin:0;padding:0;list-style:none}
+#mw #win #view #docs>section:where([data-file]) .devz .dv-b li{position:relative;padding-left:22px;font:400 17px/1.5 var(--sans);color:#e7e2f7}
+#mw #win #view #docs>section:where([data-file]) .devz .dv-b li+li{margin-top:6px}
+#mw #win #view #docs>section:where([data-file]) .devz .dv-b li::before{content:"";position:absolute;left:0;top:.75em;width:10px;height:1.6px;background:#9B7BFF}
+#mw #win #view #docs>section:where([data-file]) .devz .dv-b em,#mw #win #view #docs>section:where([data-file]) .devz .dv-b b{font-style:normal;font-weight:600;color:#fff}
+#mw #win #view #docs>section:where([data-file]) .hairtop[data-block="reflection"] .devz{display:grid;grid-template-columns:minmax(0,600px) 1fr;column-gap:40px}
+#mw #win #view #docs>section:where([data-file]) .hairtop[data-block="reflection"] .devz>*{grid-column:1}
+#mw #win #view #docs>section:where([data-file]) .lampsig{display:block;margin-top:40px;opacity:0;font:400 11px/1.6 var(--mono);letter-spacing:.2em;color:#c39bff;transition:opacity .2s}
+#mw #win #view #docs>section[data-file].uv .lampsig{opacity:1;transition:opacity .5s 1s}
+@container docs (max-width:1099px){
+  #mw #win #view #docs>section:where([data-file]) .devz{max-height:0;overflow:hidden;margin-top:0;padding-top:0;padding-bottom:0}
+  #mw #win #view #docs>section[data-file].uv .devz{max-height:none;margin-top:24px;padding:18px 16px}
+  #mw #win #view #docs>section:where([data-file]) .hairtop[data-block="reflection"] .devz{grid-template-columns:minmax(0,1fr)}
+}
+@media (prefers-reduced-motion:reduce){
+  #mw #win #view #docs>section[data-file] *,#mw #win #view #docs>section[data-file] *::before,#mw #win #view #docs>section[data-file] *::after{transition:none!important}
+}
+#mw #win #view #docs>section[data-file].still *,#mw #win #view #docs>section[data-file].still *::before,#mw #win #view #docs>section[data-file].still *::after{transition:none!important}
+#mw #win #view #docs>section:where([data-file]) .uv-ring{opacity:0}
+#mw #win #view #docs>section[data-file].uv .uv-ring{opacity:1;filter:drop-shadow(0 0 3px rgba(155,123,255,.8));transition:opacity .18s .42s}
+#mw #win #view #docs>section[data-file]:not(.uv) .uv-ring{transition:none}
+#mw #win #view #docs>section:where([data-file]) .uv-trace{filter:drop-shadow(0 0 4px rgba(155,123,255,.55))}
+#mw #win #view #docs>section:where([data-file]) .folder>.fg-threads{grid-column:auto!important;grid-row:auto!important;z-index:1;pointer-events:none;clip-path:inset(0);-webkit-mask:var(--sheet-holes,none);mask:var(--sheet-holes,none);-webkit-mask-composite:source-in;mask-composite:intersect;filter:drop-shadow(0 0 3px rgba(155,123,255,.85)) drop-shadow(0 0 9px rgba(155,123,255,.45));visibility:hidden;opacity:0}
+#mw #win #view #docs>section[data-file].uv .folder>.fg-threads{visibility:visible;opacity:1;animation:fg-threads-in .5s 1s both}
+#mw #win #view #docs>section[data-file]:not(.uv) .folder>.fg-threads{display:none}
+#mw #win #view #docs>section[data-file].still .folder>.fg-threads{animation:none}
+@media (prefers-reduced-motion:reduce){
+  #mw #win #view #docs>section[data-file] .folder>.fg-threads{animation:none}
+}
+@keyframes fg-threads-in{
+  from{opacity:0}
+  to{opacity:1}
+}
+@container docs (max-width:1099px){
+  #mw #win #view #docs>section:where([data-file]) .folder>.fg-threads path[data-p="t"]{stroke-dasharray:none;stroke-width:1.4px}
+}
+#mw #win #view #docs>section:where([data-file]) .hairtop[data-block="reflection"] .devz{min-height:300px}
+@container docs (max-width:1099px){
+  #mw #win #view #docs>section[data-file].uv .hairtop[data-block="reflection"] .devz{min-height:0;padding-bottom:250px}
+}
+#mw #win #view #docs>section:where([data-file]) .hairtop[data-block="reflection"] .devz>.fg-svg{grid-column:auto}
+#mw #win #view #docs>section[data-file].uv .evslip .es-row{background-image:linear-gradient(rgba(255,253,248,.10),rgba(255,253,248,.10))}
+#mw #win #view #docs>section[data-file].uv .mslip .es-row{background-image:linear-gradient(rgba(255,253,248,.08),rgba(255,253,248,.08))}
+#mw #win #view #docs>section:where([data-file]) .bigtxt,#mw #win #view #docs>section:where([data-file]) .refl3 .dash,#mw #win #view #docs>section:where([data-file]) .devz .dv-b li,#mw #win #view #docs>section:where([data-file]) .frow,#mw #win #view #docs>section:where([data-file]) .ms-t,#mw #win #view #docs>section:where([data-file]) .an-t,#mw #win #view #docs>section:where([data-file]) .z>.para,#mw #win #view #docs>section:where([data-file]) .tech .para,#mw #win #view #docs>section:where([data-file]) .devz .dv-t,#mw #win #view #docs>section:where([data-file]) .then{text-wrap:pretty}
+#mw #win #view #docs>section[data-file]:not(.js) .xcol{display:flex;align-items:flex-end;justify-content:center;padding-bottom:34px}
+#mw #win #view #docs>section[data-file]:not(.js) .xbar{display:block;width:72%;height:calc(var(--h) * 1% * .93);background:var(--c-fill);border:1.5px solid var(--c-text)}
+#mw #win #view #docs>section[data-file]:not(.js) .xz{display:block;width:72%;height:0;border-top:1.4px dashed rgba(26,23,20,.45)}
+#mw #win #view #docs>section[data-file]:not(.js) .lg .c{-webkit-text-fill-color:currentColor;color:var(--c-fill)}
+#mw #win #view #docs>section[data-file]:not(.js) .reality::before{-webkit-mask:none;mask:none}
+#mw #win #view #docs>section[data-file]:not(.js) .frow .o{border:1.3px solid var(--ink);border-radius:50%}
+#mw #win #view #docs>section:where([data-file]) .sf-tab .sf-sub{line-height:1.3}
+@container docs (max-width:1099px){
+  #mw #win #view #docs>section:where([data-file]) .sf-tab{z-index:2}
+}
+@container docs (max-width:760px){
+  #mw #win #view #docs>section:where([data-file]) .shead{flex-wrap:wrap;row-gap:12px}
+  #mw #win #view #docs>section:where([data-file]) .shead .rub{flex:1 0 auto;white-space:nowrap}
+}
+@container docs (max-width:1099px){
+  #mw #win #view #docs>section:where([data-file]) .folder>.fg-dark,#mw #win #view #docs>section:where([data-file]) .folder>.tabrow{grid-column:auto!important;grid-row:auto!important}
+  #mw #win #view #docs>section:where([data-file]) .refl3::after{top:-6px}
+}
+#mw #win #view #docs>section:where([data-file]) .hairtop[data-block="reflection"] .devz,#mw #win #view #docs>section:where([data-file]) .folder>.lampsig{max-height:0;overflow:hidden;margin-top:0;padding-top:0;padding-bottom:0;min-height:0}
+#mw #win #view #docs>section[data-file].uv .hairtop[data-block="reflection"] .devz{max-height:none;overflow:visible;margin-top:28px;padding:22px 24px 22px;min-height:300px}
+#mw #win #view #docs>section[data-file].uv .folder>.lampsig{max-height:none;overflow:visible;margin-top:40px}
+@container docs (max-width:1099px){
+  #mw #win #view #docs>section[data-file].uv .hairtop[data-block="reflection"] .devz{min-height:0;padding:18px 16px 250px}
+}
+#mw #win #view #docs>section[data-file].still:not(.uv) .devz,#mw #win #view #docs>section[data-file]:not(.js) .devz{opacity:1;padding-left:0;padding-right:0}
+#mw #win #view #docs>section[data-file].still:not(.uv) .devz>.dv-k,#mw #win #view #docs>section[data-file].still:not(.uv) .devz>.dv-t,#mw #win #view #docs>section[data-file].still:not(.uv) .devz>.dv-b,#mw #win #view #docs>section[data-file]:not(.js) .devz>.dv-k,#mw #win #view #docs>section[data-file]:not(.js) .devz>.dv-t,#mw #win #view #docs>section[data-file]:not(.js) .devz>.dv-b{opacity:1;filter:none}
+#mw #win #view #docs>section[data-file].still:not(.uv) .devz .dv-k,#mw #win #view #docs>section[data-file]:not(.js) .devz .dv-k,#mw #win #view #docs>section[data-file].still:not(.uv) .folder>.lampsig,#mw #win #view #docs>section[data-file]:not(.js) .folder>.lampsig{color:var(--c-text)}
+#mw #win #view #docs>section[data-file].still:not(.uv) .devz .dv-t,#mw #win #view #docs>section[data-file]:not(.js) .devz .dv-t{color:var(--ink);text-shadow:none}
+#mw #win #view #docs>section[data-file].still:not(.uv) .devz .dv-b li,#mw #win #view #docs>section[data-file]:not(.js) .devz .dv-b li{color:var(--body)}
+#mw #win #view #docs>section[data-file].still:not(.uv) .devz .dv-b em,#mw #win #view #docs>section[data-file].still:not(.uv) .devz .dv-b b,#mw #win #view #docs>section[data-file]:not(.js) .devz .dv-b em,#mw #win #view #docs>section[data-file]:not(.js) .devz .dv-b b{color:var(--ink)}
+#mw #win #view #docs>section[data-file].still:not(.uv) .devz .dv-b li::before,#mw #win #view #docs>section[data-file]:not(.js) .devz .dv-b li::before{background:var(--c-text)}
+#mw #win #view #docs>section[data-file].still:not(.uv) .folder>.lampsig,#mw #win #view #docs>section[data-file]:not(.js) .folder>.lampsig{opacity:1;max-height:none;overflow:visible;margin-top:40px}
+#mw #win #view #docs>section[data-file].still:not(.uv) .hairtop[data-block="reflection"] .devz,#mw #win #view #docs>section[data-file]:not(.js) .hairtop[data-block="reflection"] .devz{max-height:none;overflow:visible;margin-top:28px;padding:22px 0 22px;min-height:0}
+@container docs (max-width:1099px){
+  #mw #win #view #docs>section[data-file].still:not(.uv) .devz,#mw #win #view #docs>section[data-file]:not(.js) .devz{max-height:none;overflow:visible;margin-top:24px;padding:18px 0}
+  #mw #win #view #docs>section[data-file].still:not(.uv) .hairtop[data-block="reflection"] .devz,#mw #win #view #docs>section[data-file]:not(.js) .hairtop[data-block="reflection"] .devz{margin-top:24px;padding:18px 0;min-height:0}
+}
+@container docs (max-width:360px){
+  #mw #win #view #docs>section:where([data-file]) .evslip .es-v{font-size:15px}
+  #mw #win #view #docs>section:where([data-file]) .evslip .es-row{padding-right:8px}
+  #mw #win #view #docs>section[data-file] .evslip .es-v .seg{white-space:normal}
+}
+@container docs (max-width:339px){
+  #mw #win #view #docs>section[data-file] .face{width:160px;height:160px}
+  #mw #win #view #docs>section[data-file] .g1{gap:14px}
+}
+#mw #win #view #docs>section:where([data-file]) .zr::after{align-self:baseline;position:relative;top:-.32em}
+#mw #win #view #docs>section:where([data-file]) .evslip{grid-template-rows:auto repeat(3,minmax(0,1fr)) 76px}
+#mw #win #view #docs>section:where([data-file]) .evslip .es-row{align-content:center}
+@container docs (min-width:1100px){
+  #mw #win #view #docs>section[data-file] .xchart{--plot:590px}
+}
+@container docs (max-width:760px){
+  #mw #win #view #docs>section:where([data-file]) .an-t{font-size:24px}
+}
+#mw #win #view #docs>section:where([data-file]) .devz .dv-b li::before{height:2px;top:calc(.75em - 1px)}
+@container docs (max-width:760px){
+  #mw #win #view #docs>section:where([data-file]) .sf-tab{max-width:calc(100% - 44px)}
+  #mw #win #view #docs>section:where([data-file]) .sf-tab .sf-sub{font-size:10px;letter-spacing:.1em;white-space:nowrap}
+}
+@container docs (max-width:360px){
+  #mw #win #view #docs>section:where([data-file]) .sf-tab{column-gap:9px;padding:11px 12px 10px 11px}
+  #mw #win #view #docs>section:where([data-file]) .sf-tab .sf-sub{font-size:9.5px;letter-spacing:.08em}
+}
+#mw #win #view #docs>section:where([data-file]) .slipflip.fg-portrait{--band:46px}
+#mw #win #view #docs>section:where([data-file]) .slipflip.fg-portrait .sf-stage{height:var(--ths,auto)}
+#mw #win #view #docs>section:where([data-file]) .slipflip.fg-portrait .sf-face{align-self:start}
+#mw #win #view #docs>section:where([data-file]) .slipflip.fg-portrait .sf-front{height:var(--thf,auto)}
+#mw #win #view #docs>section:where([data-file]) .slipflip.fg-portrait .sf-back{height:var(--thb,auto)}
+#mw #win #view #docs>section:where([data-file]) .slipflip.fg-portrait .sf-plate{height:var(--thp,100%)}
+#mw #win #view #docs>section:where([data-file]) .slipflip.fg-portrait .evslip{grid-template-columns:minmax(0,1fr);grid-template-rows:var(--band) auto auto auto auto;padding-bottom:18px}
+#mw #win #view #docs>section:where([data-file]) .slipflip.fg-portrait .evslip .es-h>span{grid-column:1;grid-row:1;writing-mode:horizontal-tb;transform:none;justify-content:flex-start;padding:0 18px;font:700 12px/1 var(--mono);letter-spacing:.3em}
+#mw #win #view #docs>section:where([data-file]) .slipflip.fg-portrait .evslip .es-h>b{grid-column:1;grid-row:2;padding:32px 18px 10px}
+#mw #win #view #docs>section:where([data-file]) .slipflip.fg-portrait .evslip .es-row{grid-column:1;padding:10px 18px;background-position:18px 0;background-size:calc(100% - 36px) 1px}
+#mw #win #view #docs>section:where([data-file]) .slipflip.fg-portrait .es-stamp{left:auto;bottom:auto;right:30px;top:calc(var(--band) - 15px);width:122px;height:38px;font-size:14px;transform:rotate(-4deg)}
+#mw #win #view #docs>section:where([data-file]) .slipflip.fg-portrait .mslip{grid-template-columns:minmax(0,1fr);grid-template-rows:none;padding-top:var(--band);padding-bottom:18px}
+#mw #win #view #docs>section:where([data-file]) .slipflip.fg-portrait .mslip .es-h{grid-column:1;padding:30px 18px 12px}
+#mw #win #view #docs>section:where([data-file]) .slipflip.fg-portrait .mslip .es-row{grid-column:1;padding:8px 18px;background-position:18px 0;background-size:calc(100% - 36px) 1px}
+#mw #win #view #docs>section:where([data-file]) .slipflip.fg-portrait .ms-stamp{right:30px;bottom:auto;top:calc(var(--band) - 15px);width:122px;height:38px;font-size:14px;transform:rotate(3deg)}
+#mw #win #view #docs>section:where([data-file]) .slipflip.fg-portrait .sf-ghost{right:auto;left:30px;bottom:auto;top:calc(var(--band) - 15px);width:122px;height:38px;transform:rotate(4deg)}
+@container docs (max-width:359px){
+  #mw #win #view #docs>section:where([data-file]) .slipflip.fg-portrait .es-stamp,#mw #win #view #docs>section:where([data-file]) .slipflip.fg-portrait .ms-stamp{right:16px;width:108px;height:34px;font-size:12.5px}
+  #mw #win #view #docs>section:where([data-file]) .slipflip.fg-portrait .sf-ghost{left:16px;width:108px;height:34px}
+}
+#mw #win #view #docs>section[data-file] .slipflip.fg-portrait .evslip .es-v .seg{white-space:nowrap}
+@container docs (min-width:360px) and (max-width:1099px){
+  #mw #win #view #docs>section:where([data-file]) .gaug{grid-template-columns:repeat(3,minmax(0,1fr));column-gap:clamp(8px,2.6cqw,28px);row-gap:0}
+  #mw #win #view #docs>section:where([data-file]) .g1{flex-direction:column;gap:0;align-items:center}
+  #mw #win #view #docs>section:where([data-file]) .face{width:min(100%,240px);height:auto;aspect-ratio:1/1;container-type:inline-size}
+  #mw #win #view #docs>section:where([data-file]) .fig{font-size:clamp(18px,23cqw,44px)}
+  #mw #win #view #docs>section:where([data-file]) .gl{margin:12px 0 0;text-align:center;font-size:clamp(10.5px,2.8cqw,11px);letter-spacing:.13em;line-height:1.6}
+}
+@container docs (min-width:360px) and (max-width:379px){
+  #mw #win #view #docs>section:where([data-file]) .fig{font-size:clamp(18px,21.5cqw,44px)}
+}
+@container docs (max-width:1099px){
+  #mw #win #view #docs>section:where([data-file]) .eng-row{margin-left:max(22px,calc((100% - min(220px,100% - 92px) - 69px) / 2))}
+}
+#mw #win #view #docs>section:where([data-file]) .z[data-zone="01"]>.para .fg-pz{display:block}
+#mw #win #view #docs>section#oasis:where([data-file]):where(:not(#xtix)){--c-fill:#E0A458;--c-text:#86591A;--c-light:#F0C48A;--c-tint:#f6e9d4}
+#mw #win #view #docs>section#eventer:where([data-file]):where(:not(#xtix)){--c-fill:#5E8FBF;--c-text:#406182;--c-light:#A9C8E6;--c-tint:#e3ecf5}
+#mw #win #view #docs>section#medcoin:where([data-file]):where(:not(#xtix)){--c-fill:#3a342d;--c-text:#1a1714;--c-light:#F2F1ED;--c-tint:#ece6da}
+#mw #win #view #docs>section#leadership:where([data-file]):where(:not(#xtix)),#mw #win #view #docs>section#tech:where([data-file]):where(:not(#xtix)),#mw #win #view #docs>section#final:where([data-file]):where(:not(#xtix)){--c-fill:#2FB380;--c-text:#1C6E4E;--c-light:#7FE3B8;--c-tint:#e3f3ea}
+#mw #win #view #docs>section#oasis:where([data-file]):where(:not(#xtix)){--tabk:1}
+#mw #win #view #docs>section#eventer:where([data-file]):where(:not(#xtix)){--tabk:2}
+#mw #win #view #docs>section#medcoin:where([data-file]):where(:not(#xtix)){--tabk:3}
+#mw #win #view #docs>section#leadership:where([data-file]):where(:not(#xtix)){--tabk:4}
+#mw #win #view #docs>section#final:where([data-file]):where(:not(#xtix)){--tabk:6}
+#mw #win #view #docs>section#final:where([data-file]):where(:not(#xtix)) .folder>.tabrow{left:auto;right:0}
+#mw #win #view #docs>section#oasis:where([data-file]):where(:not(#xtix)) .folder::after{content:"02"}
+#mw #win #view #docs>section#eventer:where([data-file]):where(:not(#xtix)) .folder::after{content:"03"}
+#mw #win #view #docs>section#medcoin:where([data-file]):where(:not(#xtix)) .folder::after{content:"04"}
+#mw #win #view #docs>section#oasis:where([data-file]):where(:not(#xtix)) .folder::after,#mw #win #view #docs>section#eventer:where([data-file]):where(:not(#xtix)) .folder::after,#mw #win #view #docs>section#medcoin:where([data-file]):where(:not(#xtix)) .folder::after{position:absolute;right:30px;top:24px;pointer-events:none;font:700 13px/1 var(--mono);letter-spacing:.2em;color:var(--c-text)}
+#mw #win #view #docs>section[data-file]:not(:has(.uvmount)):where(:not(#xtix)){grid-template-columns:minmax(0,1fr)}
+#mw #win #view #docs>section[data-file]:where(:not(#xtix))>.wrap>*{grid-column:1/-1}
+#mw #win #view #docs>section[data-file]:where(:not(#xtix))>.wrap>.sttl,#mw #win #view #docs>section[data-file]:where(:not(#xtix))>.wrap>.smeta{grid-column:1}
+@container docs (min-width:1100px){
+  #mw #win #view #docs>section[data-file]:has(.uvmount):where(:not(#xtix))>.wrap>.uvmount{grid-column:2}
+}
+#mw #win #view #docs>section[data-file]:not(#xtix) .sttl br{display:block}
+#mw #win #view #docs>section[data-file]:not(#xtix) .folder{display:block}
+#mw #win #view #docs>section[data-file]:not(#xtix) .folder>.cols2,#mw #win #view #docs>section[data-file]:not(#xtix) .folder>.cols2>div,#mw #win #view #docs>section[data-file]:not(#xtix) .folder .z{display:block}
+#mw #win #view #docs>section[data-file]:not(#xtix) .folder .cols2,#mw #win #view #docs>section[data-file]:not(#xtix) .hairtop.cols2{display:block}
+#mw #win #view #docs>section[data-file]:not(#xtix) .z{margin:0 0 72px}
+#mw #win #view #docs>section[data-file]:not(#xtix) .hairtop{margin-top:88px}
+#mw #win #view #docs>section[data-file]:not(#xtix) .zr{margin-top:0}
+#mw #win #view #docs>section[data-file]:not(#xtix) .cols2>div>.zr,#mw #win #view #docs>section[data-file]:not(#xtix) .folder>.cols2 .zr+.list{margin-top:0}
+#mw #win #view #docs>section[data-file]:not(#xtix) .cols2>div>.zr{margin-top:72px}
+#mw #win #view #docs>section[data-file]:not(#xtix) .z>.para{font-size:46px;line-height:1.1;max-width:900px}
+#mw #win #view #docs>section[data-file]:not(#xtix) .plabel.pl2{margin:0 0 30px}
+#mw #win #view #docs>section[data-file]:not(#xtix) .list,#mw #win #view #docs>section[data-file]:not(#xtix) .tools{columns:2;column-gap:44px}
+#mw #win #view #docs>section[data-file]:not(#xtix) .lg{display:block;position:relative}
+#mw #win #view #docs>section[data-file]:not(#xtix) .lg .c{top:11px}
+#mw #win #view #docs>section[data-file]:not(#xtix) .hairtop svg:not(.fg-svg),#mw #win #view #docs>section[data-file]:not(#xtix) .mzorg svg:not(.fg-svg){display:block;width:100%;max-width:620px;height:auto;margin:20px auto 0;overflow:visible}
+#mw #win #view #docs>section[data-file]:not(#xtix) .list .lg,#mw #win #view #docs>section[data-file]:not(#xtix) .tools .lg{break-inside:avoid;height:auto;min-height:46px;padding:10px 0 10px 36px;line-height:1.3}
+#mw #win #view #docs>section[data-file]:not(#xtix) .tools .lg{padding-left:0;border-top:1px solid #efe6d8;font:400 17px/1.35 var(--sans)}
+#mw #win #view #docs>section[data-file]:not(#xtix) .grid2c{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+#mw #win #view #docs>section[data-file]:not(#xtix) .grid2c .dash{display:flex;align-items:center;min-height:64px;padding:12px 14px;background:var(--card);border:1.3px solid var(--ink);font:500 15px/1.3 var(--sans);color:var(--ink);box-shadow:4px 4px 0 var(--ink)}
+#mw #win #view #docs>section:where([data-file]:not(#xtix)) .chips{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+#mw #win #view #docs>section:where([data-file]:not(#xtix)) .chip{display:flex;flex-direction:column;gap:8px;padding:16px 16px 18px;background:var(--card);border:1.3px solid var(--ink);box-shadow:5px 5px 0 var(--ink);font:500 11.5px/1.45 var(--mono);letter-spacing:.14em;color:var(--body)}
+#mw #win #view #docs>section:where([data-file]:not(#xtix)) .chip b{font:400 italic 26px/1 var(--serif);font-variation-settings:'opsz' 144;letter-spacing:-.01em;color:var(--c-text)}
+#mw #win #view #docs>section:where([data-file]:not(#xtix)) .stat{position:relative}
+#mw #win #view #docs>section:where([data-file]:not(#xtix)) .stat .slip{display:inline-block;padding:6px 10px;border:1.3px solid var(--ink);font:700 11px/1 var(--mono);letter-spacing:.2em;background:var(--card);box-shadow:3px 3px 0 var(--ink)}
+#mw #win #view #docs>section:where([data-file]:not(#xtix)) .stat .bignum{margin-top:14px}
+#mw #win #view #docs>section:where([data-file]:not(#xtix)) .stat .biglbl{margin-top:16px;font:700 13px/1.5 var(--mono);letter-spacing:.22em}
+#mw #win #view #docs>section:where([data-file]:not(#xtix)) .ringlbl{margin-top:10px;font:500 11px/1.6 var(--mono);letter-spacing:.2em;color:var(--body);text-align:center}
+#mw #win #view #docs>section:where([data-file]:not(#xtix)) .etr{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin-bottom:72px}
+#mw #win #view #docs>section:where([data-file]:not(#xtix)) .et{padding:18px 18px 20px;background:var(--card);border:1.3px solid var(--ink);box-shadow:5px 5px 0 var(--ink)}
+#mw #win #view #docs>section:where([data-file]:not(#xtix)) .et .en{font:560 72px/1 var(--serif);font-variation-settings:'opsz' 144;letter-spacing:-.03em;color:var(--ink)}
+#mw #win #view #docs>section:where([data-file]:not(#xtix)) .et .el{margin-top:10px;font:500 11px/1.6 var(--mono);letter-spacing:.2em;color:var(--body)}
+#mw #win #view #docs>section:where([data-file]:not(#xtix)) .convwrap{max-width:720px;margin:0 auto}
+#mw #win #view #docs>section:where([data-file]:not(#xtix)) .outs{position:relative;margin:0 0 72px;padding:20px 24px;background:var(--card);border:1.3px solid var(--ink);box-shadow:8px 8px 0 var(--ink);max-width:720px}
+#mw #win #view #docs>section:where([data-file]:not(#xtix)) .outs table{width:100%;border-collapse:collapse}
+#mw #win #view #docs>section:where([data-file]:not(#xtix)) .outs td{padding:12px 0;border-top:1px solid #efe6d8;vertical-align:baseline}
+#mw #win #view #docs>section:where([data-file]:not(#xtix)) .outs tr:first-child td{border-top:0}
+#mw #win #view #docs>section:where([data-file]:not(#xtix)) .outs td.k{width:42%;font:500 11px/1.4 var(--mono);letter-spacing:.2em;color:var(--body)}
+#mw #win #view #docs>section:where([data-file]:not(#xtix)) .outs td.v{font:400 18px/1.35 var(--sans);color:var(--ink)}
+#mw #win #view #docs>section:where([data-file]:not(#xtix)) .outs td.v.em{font:400 italic 24px/1.2 var(--serif);font-variation-settings:'opsz' 144;color:var(--c-text)}
+#mw #win #view #docs>section:where([data-file]:not(#xtix)) .outs .stamp{position:absolute;right:20px;top:-18px;padding:8px 14px;border:2.2px solid currentColor;border-radius:6px;color:rgba(26,23,20,.8);font:800 14px/1 var(--mono);letter-spacing:.24em;transform:rotate(4deg);background:var(--card);filter:url(#fg-stamp)}
+#mw #win #view #docs>section[data-file]:where(:not(#xtix)) .lead{margin:0 0 72px;font:500 46px/1.1 var(--serif);font-variation-settings:'opsz' 72;letter-spacing:-.02em;color:var(--ink);max-width:900px;text-wrap:balance}
+#mw #win #view #docs>section[data-file]:where(:not(#xtix)) .lead b{font-style:italic;font-weight:440;font-variation-settings:'opsz' 144;color:var(--c-text)}
+#mw #win #view #docs>section:where([data-file]:not(#xtix)) .pr{display:grid;grid-template-columns:72px minmax(0,1fr);gap:0 8px;padding:22px 0;border-top:1px dashed var(--rule)}
+#mw #win #view #docs>section:where([data-file]:not(#xtix)) .pr .n{font:400 italic 40px/1 var(--serif);font-variation-settings:'opsz' 144;color:var(--c-text)}
+#mw #win #view #docs>section:where([data-file]:not(#xtix)) .pr .nm2{font:500 26px/1.2 var(--serif);font-variation-settings:'opsz' 72;color:var(--ink)}
+#mw #win #view #docs>section:where([data-file]:not(#xtix)) .pr .ds{margin-top:8px;font:400 17px/1.5 var(--sans);color:var(--body);max-width:720px}
+#mw #win #view #docs>section:where([data-file]:not(#xtix)) .sigq{margin-top:72px;padding:28px 32px;background:var(--card);border-left:3px solid var(--c-fill)}
+#mw #win #view #docs>section:where([data-file]:not(#xtix)) .sigq .qx{font:400 26px/1.35 var(--serif);font-variation-settings:'opsz' 72;color:var(--ink)}
+#mw #win #view #docs>section:where([data-file]:not(#xtix)) .sigq .qx b{font-style:italic;font-weight:440;font-variation-settings:'opsz' 144;color:var(--c-text)}
+#mw #win #view #docs>section#tech:where([data-file]):where(:not(#xtix)) .intb{display:inline-block;margin:28px 0 0;padding:10px 14px;border:1.3px solid var(--ink);background:var(--card);box-shadow:3px 3px 0 var(--ink);font:700 11.5px/1.5 var(--mono);letter-spacing:.18em;color:var(--ink)}
+#mw #win #view #docs>section#tech:where([data-file]):where(:not(#xtix)) .archw,#mw #win #view #docs>section#tech:where([data-file]):where(:not(#xtix)) .bot>div{margin-top:56px;padding:30px 34px;background:var(--card);border-radius:2px;box-shadow:0 14px 30px -14px rgba(60,40,10,.30),0 1px 0 rgba(26,23,20,.06)}
+#mw #win #view #docs>section#tech:where([data-file]):where(:not(#xtix)) .archw svg:not(.fg-svg){display:block;width:100%;height:auto;max-width:860px;margin:10px auto 0}
+#mw #win #view #docs>section#tech:where([data-file]):where(:not(#xtix)) .bot{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:28px}
+#mw #win #view #docs>section#tech:where([data-file]):where(:not(#xtix)) .phil{margin-top:22px;font:700 12px/1.6 var(--mono);letter-spacing:.18em;color:var(--c-text)}
+#mw #win #view #docs>section:where([data-file]:not(#xtix)) .stackr{display:flex;flex-wrap:wrap;gap:10px}
+#mw #win #view #docs>section:where([data-file]:not(#xtix)) .stackr>span{padding:8px 12px;border:1.3px solid var(--ink);background:var(--paper);font:400 14px/1.2 var(--sans);color:var(--body)}
+#mw #win #view #docs>section:where([data-file]:not(#xtix)) .stackr>span b{font-weight:600;color:var(--ink)}
+#mw #win #view #docs>section:where([data-file]:not(#xtix)) .osmap{position:relative;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px 60px;padding:8px 0 40px}
+#mw #win #view #docs>section:where([data-file]:not(#xtix)) .osmap .spine{position:absolute;left:50%;top:0;bottom:0;width:1.5px;background:var(--c-fill);transform:translateX(-50%)}
+#mw #win #view #docs>section:where([data-file]:not(#xtix)) .osmap .node{position:relative;display:grid;grid-template-columns:48px minmax(0,1fr);gap:10px;align-items:baseline;padding:16px 18px;background:var(--card);border:1.3px solid var(--ink);box-shadow:4px 4px 0 var(--ink)}
+#mw #win #view #docs>section:where([data-file]:not(#xtix)) .osmap .node.r{grid-column:2}
+#mw #win #view #docs>section:where([data-file]:not(#xtix)) .osmap .node.l{grid-column:1}
+#mw #win #view #docs>section:where([data-file]:not(#xtix)) .osmap .nn{font:400 italic 30px/1 var(--serif);font-variation-settings:'opsz' 144;color:var(--c-text)}
+#mw #win #view #docs>section:where([data-file]:not(#xtix)) .osmap .nt{font:500 20px/1.3 var(--serif);font-variation-settings:'opsz' 72;color:var(--ink)}
+#mw #win #view #docs>section:where([data-file]:not(#xtix)) .osmap .tipd{display:none}
+#mw #win #view #docs>section:where([data-file]:not(#xtix)) .vseal{margin:56px auto 0;max-width:760px;padding:36px 40px 30px;text-align:center;background:var(--dark);color:#e8e2d6;border-radius:2px}
+#mw #win #view #docs>section:where([data-file]:not(#xtix)) .vseal .vmark{font:400 28px/1 var(--serif);color:var(--c-light)}
+#mw #win #view #docs>section:where([data-file]:not(#xtix)) .vseal .vq{margin-top:14px;font:400 26px/1.4 var(--serif);font-variation-settings:'opsz' 72;color:#efe9dc}
+#mw #win #view #docs>section:where([data-file]:not(#xtix)) .vseal .vq b{font-style:italic;font-weight:440;font-variation-settings:'opsz' 144;color:var(--c-light)}
+#mw #win #view #docs>section:where([data-file]:not(#xtix)) .vseal .vsig{margin-top:22px;display:flex;align-items:center;justify-content:center;gap:12px;font:500 11px/1 var(--mono);letter-spacing:.22em;color:#c9c2b4}
+#mw #win #view #docs>section:where([data-file]:not(#xtix)) .vseal .vd{width:28px;height:1px;background:#c9c2b4}
+#mw #win #view #docs>section:where([data-file]:not(#xtix)) .fcontact{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:40px}
+#mw #win #view #docs>section:where([data-file]:not(#xtix)) .fcontact .cc{display:flex;flex-direction:column;gap:8px;padding:16px 18px;background:var(--card);border:1.3px solid var(--ink);box-shadow:4px 4px 0 var(--ink);text-decoration:none}
+#mw #win #view #docs>section:where([data-file]:not(#xtix)) .fcontact .k{font:700 11px/1 var(--mono);letter-spacing:.22em;color:var(--body)}
+#mw #win #view #docs>section:where([data-file]:not(#xtix)) .fcontact .v{font:400 16px/1.3 var(--sans);color:var(--c-text);word-break:break-all}
+#mw #win #view #docs>section:where([data-file]:not(#xtix)) .fcontact .cc:focus-visible{outline:2px solid var(--c-text);outline-offset:4px}
+#mw #win #view #docs>section[data-file]:not(#xtix) svg:not(.fg-svg) text{fill:var(--ink)!important}
+#mw #win #view #docs>section[data-file]:not(#xtix) svg:not(.fg-svg) rect,#mw #win #view #docs>section[data-file]:not(#xtix) svg:not(.fg-svg) circle:not([fill="none"]){fill:var(--card)!important;stroke:var(--ink)!important}
+#mw #win #view #docs>section[data-file]:not(#xtix) svg:not(.fg-svg) [stroke]:not(rect):not(circle){stroke:var(--c-text)!important}
+@container docs (max-width:1099px){
+  #mw #win #view #docs>section[data-file]:not(#xtix) .grid2c,#mw #win #view #docs>section:where([data-file]:not(#xtix)) .chips{grid-template-columns:repeat(2,minmax(0,1fr))}
+  #mw #win #view #docs>section#tech:where([data-file]):where(:not(#xtix)) .bot{grid-template-columns:minmax(0,1fr)}
+  #mw #win #view #docs>section:where([data-file]:not(#xtix)) .osmap{grid-template-columns:minmax(0,1fr);padding-left:28px}
+  #mw #win #view #docs>section:where([data-file]:not(#xtix)) .osmap .spine{left:10px;transform:none}
+  #mw #win #view #docs>section:where([data-file]:not(#xtix)) .osmap .node.r,#mw #win #view #docs>section:where([data-file]:not(#xtix)) .osmap .node.l{grid-column:1}
+  #mw #win #view #docs>section:where([data-file]:not(#xtix)) .fcontact{grid-template-columns:minmax(0,1fr)}
+}
+@container docs (max-width:760px){
+  #mw #win #view #docs>section[data-file]:not(#xtix) .list,#mw #win #view #docs>section[data-file]:not(#xtix) .tools{columns:1}
+  #mw #win #view #docs>section[data-file]:not(#xtix) .z>.para,#mw #win #view #docs>section[data-file]:where(:not(#xtix)) .lead{font-size:30px}
+  #mw #win #view #docs>section:where([data-file]:not(#xtix)) .etr{grid-template-columns:minmax(0,1fr)}
+  #mw #win #view #docs>section#oasis:where([data-file]):where(:not(#xtix)) .folder::after,#mw #win #view #docs>section#eventer:where([data-file]):where(:not(#xtix)) .folder::after,#mw #win #view #docs>section#medcoin:where([data-file]):where(:not(#xtix)) .folder::after{right:16px;top:16px}
+  #mw #win #view #docs>section#tech:where([data-file]):where(:not(#xtix)) .archw,#mw #win #view #docs>section#tech:where([data-file]):where(:not(#xtix)) .bot>div{padding:22px 16px}
+  #mw #win #view #docs>section:where([data-file]:not(#xtix)) .vseal{padding:28px 20px}
+}
+#mw #win #view #docs>section:where([data-file]:not(#xtix)) .gen3{margin-top:56px;padding-top:14px;border-top:1px dashed var(--rule);font:400 11px/1.7 var(--mono);letter-spacing:.18em;color:var(--muted)}
+#mw #win #view #docs>section:where([data-file]:not(#xtix)) .gen3 b{display:block;font-weight:700;color:var(--body)}
+#mw #win #view #docs>section[data-file]:not(#xtix) .hairtop .para{font:500 40px/1.15 var(--serif);font-variation-settings:'opsz' 72;letter-spacing:-.02em;color:var(--ink);max-width:900px;text-wrap:pretty}
+#mw #win #view #docs>section[data-file]:not(#xtix) .hairtop .para b{font-style:italic;font-weight:440;font-variation-settings:'opsz' 144;color:var(--c-text)}
+@container docs (max-width:760px){
+  #mw #win #view #docs>section[data-file]:not(#xtix) .hairtop .para{font-size:28px}
+}
+#mw #win #view #docs>section#tech:where([data-file]):where(:not(#xtix))>.wrap>.lead{margin-top:64px}
+#mw #win #view #docs>section#oasis:where([data-file]):where(:not(#xtix)) .vfilm,#mw #win #view #docs>section#eventer:where([data-file]):where(:not(#xtix)) .vfilm,#mw #win #view #docs>section#medcoin:where([data-file]):where(:not(#xtix)) .vfilm,#mw #win #view #docs>section#final:where([data-file]):where(:not(#xtix)) .vfilm{display:flex;gap:28px;position:absolute;top:150px;writing-mode:vertical-rl;pointer-events:none;font:500 9px/1 var(--mono);letter-spacing:.32em;color:var(--muted);opacity:.75}
+#mw #win #view #docs>section#oasis:where([data-file]):where(:not(#xtix)) .vfilm.l,#mw #win #view #docs>section#eventer:where([data-file]):where(:not(#xtix)) .vfilm.l,#mw #win #view #docs>section#medcoin:where([data-file]):where(:not(#xtix)) .vfilm.l,#mw #win #view #docs>section#final:where([data-file]):where(:not(#xtix)) .vfilm.l{left:18px;transform:rotate(180deg)}
+#mw #win #view #docs>section#oasis:where([data-file]):where(:not(#xtix)) .vfilm.r,#mw #win #view #docs>section#eventer:where([data-file]):where(:not(#xtix)) .vfilm.r,#mw #win #view #docs>section#medcoin:where([data-file]):where(:not(#xtix)) .vfilm.r,#mw #win #view #docs>section#final:where([data-file]):where(:not(#xtix)) .vfilm.r{right:18px}
+#mw #win #view #docs>section#xtix.uv:where([data-file]):where(:not(#xtix)) .vfilm,#mw #win #view #docs>section[data-file].uv:where(:not(#xtix)) .vfilm{color:rgba(232,226,214,.74)}
+@container docs (max-width:760px){
+  #mw #win #view #docs>section#oasis:where([data-file]):where(:not(#xtix)) .vfilm,#mw #win #view #docs>section#eventer:where([data-file]):where(:not(#xtix)) .vfilm,#mw #win #view #docs>section#medcoin:where([data-file]):where(:not(#xtix)) .vfilm{font-size:8px;letter-spacing:.24em}
+  #mw #win #view #docs>section#oasis:where([data-file]):where(:not(#xtix)) .vfilm.l,#mw #win #view #docs>section#eventer:where([data-file]):where(:not(#xtix)) .vfilm.l,#mw #win #view #docs>section#medcoin:where([data-file]):where(:not(#xtix)) .vfilm.l{left:5px}
+  #mw #win #view #docs>section#oasis:where([data-file]):where(:not(#xtix)) .vfilm.r,#mw #win #view #docs>section#eventer:where([data-file]):where(:not(#xtix)) .vfilm.r,#mw #win #view #docs>section#medcoin:where([data-file]):where(:not(#xtix)) .vfilm.r{right:5px}
+}
+#mw #win #view #docs>section[data-file]:not(#xtix) .bignum .cur{display:inline}
+@container docs (max-width:1099px){
+  #mw #win #view #docs>section[data-file]:not(#xtix) .list,#mw #win #view #docs>section[data-file]:not(#xtix) .tools{columns:1}
+  #mw #win #view #docs>section:where([data-file]:not(#xtix)) .etr{grid-template-columns:repeat(auto-fit,minmax(170px,1fr))}
+  #mw #win #view #docs>section:where([data-file]:not(#xtix)) .outs{margin-top:44px}
+}
+@container docs (max-width:600px){
+  #mw #win #view #docs>section[data-file]:not(#xtix) .grid2c,#mw #win #view #docs>section:where([data-file]:not(#xtix)) .chips{grid-template-columns:minmax(0,1fr)}
+  #mw #win #view #docs>section:where([data-file]:not(#xtix)) .chip b{font-size:22px}
+  #mw #win #view #docs>section:where([data-file]:not(#xtix)) .et .en{font-size:56px}
+  #mw #win #view #docs>section:where([data-file]:not(#xtix)) .outs .stamp{right:10px;top:-16px;font-size:12px;padding:6px 10px}
+}
+#mw #win #view #docs>section:where([data-file]:not(#xtix)) .chip,#mw #win #view #docs>section:where([data-file]:not(#xtix)) .chip b,#mw #win #view #docs>section[data-file]:not(#xtix) .grid2c .dash{overflow-wrap:anywhere;hyphens:manual}
+@container docs (max-width:380px){
+  #mw #win #view #docs>section:where([data-file]:not(#xtix)) .evslip .es-v .seg{white-space:normal}
+}
+#mw #win #view #docs>section:where([data-file]:not(#xtix)) .outs table{table-layout:fixed}
+#mw #win #view #docs>section:where([data-file]:not(#xtix)) .outs td.v{overflow-wrap:anywhere}
+@container docs (max-width:600px){
+  #mw #win #view #docs>section:where([data-file]:not(#xtix)) .outs{padding:16px 14px}
+  #mw #win #view #docs>section:where([data-file]:not(#xtix)) .outs td.k{width:44%;letter-spacing:.12em}
+}
+@media (max-width:860px){
+  #mw #win #view #docs>section#oasis:where([data-file]):where(:not(#xtix)) .vfilm,#mw #win #view #docs>section#eventer:where([data-file]):where(:not(#xtix)) .vfilm,#mw #win #view #docs>section#medcoin:where([data-file]):where(:not(#xtix)) .vfilm,#mw #win #view #docs>section#final:where([data-file]):where(:not(#xtix)) .vfilm{display:none}
+  #mw #win #view #docs>section#eventer:where([data-file]):where(:not(#xtix)) .convwrap,#mw #win #view #docs>section#medcoin:where([data-file]):where(:not(#xtix)) .mzorg,#mw #win #view #docs>section#tech:where([data-file]):where(:not(#xtix)) .archw{overflow-x:auto}
+  #mw #win #view #docs>section#eventer:where([data-file]):where(:not(#xtix)) .convwrap svg:not(.fg-svg),#mw #win #view #docs>section#medcoin:where([data-file]):where(:not(#xtix)) .mzorg svg:not(.fg-svg),#mw #win #view #docs>section#tech:where([data-file]):where(:not(#xtix)) .archw svg:not(.fg-svg){min-width:560px}
+}
+#mw #win #view #docs>section:where([data-file]:not(#xtix)) .swcue{display:flex;align-items:center;justify-content:flex-end;gap:8px;margin-top:8px;font:700 10px/1 var(--mono);letter-spacing:.22em;color:var(--muted)}
+#mw #win #view #docs>section#final:where([data-file]):where(:not(#xtix)) .vfilm{opacity:1}
+#mw #win #view #docs>section#oasis:where([data-file]):where(:not(#xtix)) .vfilm,#mw #win #view #docs>section#eventer:where([data-file]):where(:not(#xtix)) .vfilm,#mw #win #view #docs>section#medcoin:where([data-file]):where(:not(#xtix)) .vfilm{opacity:0}
+#mw #win #view #docs>section#oasis.uv:where([data-file]):where(:not(#xtix)) .vfilm,#mw #win #view #docs>section#eventer.uv:where([data-file]):where(:not(#xtix)) .vfilm,#mw #win #view #docs>section#medcoin.uv:where([data-file]):where(:not(#xtix)) .vfilm{opacity:1}
+#mw #win #view #docs>section:where([data-file]:not(#xtix)) .vfilm .dot,#mw #win #view #docs>section:where([data-file]:not(#xtix)) .gen3 .dot{color:inherit}
+@container docs (max-width:339px){
+  #mw #win #view #docs>section[data-file] .plabel.pl2,#mw #win #view #docs>section[data-file] .shead .rub,#mw #win #view #docs>section[data-file] .zr .zl{letter-spacing:.17em}
+  #mw #win #view #docs>section[data-file] .lampcall,#mw #win #view #docs>section[data-file] .sf-tab b{letter-spacing:.15em}
+  #mw #win #view #docs>section[data-file] .sf-tab .sf-sub{letter-spacing:.03em}
+  #mw #win #view #docs>section[data-file] .es-stamp,#mw #win #view #docs>section[data-file] .ms-stamp{letter-spacing:.19em;padding-left:.19em}
+}
+@container docs (max-width:279px){
+  #mw #win #view #docs>section[data-file] .lampcall{width:140px;letter-spacing:.12em}
+}

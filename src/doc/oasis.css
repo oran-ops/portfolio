@@ -4,7 +4,7 @@
      column does not. Cap the rendered size so the spill lands inside the
      zone instead of escaping its frame. */
   /* the svg carries an inline max-width:280px - the override must out-rank it */
-  #oasis svg[viewBox="0 0 260 210"]{max-width:215px!important}/*--1--*/
+  #oasis svg[viewBox="0 0 260 210"]:where(:not(#docs>[data-file] *)){max-width:215px!important}/*--1--*/
   /* the 420px cap stays at every width. The evidence slip has always carried it,
      and #oasis's slip sits in a container that is 967px wide on a 390 phone -
      lifting the cap here silently stretched the slip to 967px. */
