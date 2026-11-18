@@ -1008,14 +1008,14 @@ function liveLayer() {
     oasis:{
       rows:[['SOURCE','THIS FILE \u00b7 SECTIONS 01\u201304','k'],
             ['FACT','The mandate wasn\u2019t all about revenue \u2014 it was a profitable, scalable commercial organization.','t'],
-            ['ACTION','Recruited the entire sales team. Built the profitability-based pricing model from scratch, the commercial process and the company-wide KPI framework.','t'],
+            ['ACTION','Recruited the entire sales team. Replaced market pricing with the profitability-based model. Built the commercial process and the company-wide KPI framework.','t'],
             ['CONCLUSION','The more I managed everything myself, the less the organization scaled.','t'],
             ['CARRIES','$2M LARGEST DEAL CLOSED \u00b7 18 DIRECT REPORTS \u00b7 06 FUNCTIONS','f'],
             ['FILED','__F__ \u00b7 CLAIM OVERLEAF','k']]},
     eventer:{
       rows:[['SOURCE','THIS FILE \u00b7 SECTIONS 01\u201307','k'],
-            ['FACT','A commercial operation already existed. The job: sharpen execution, connect departments, find new growth.','t'],
-            ['ACTION','Connected business strategy with day-to-day execution across every function. Brought customer feedback directly into product discussions.','t'],
+            ['FACT','Daily operations already existed. The job: turn them into a commercial function, connect departments, find new growth.','t'],
+            ['ACTION','Managed ~1,000 active, tiered customers. Connected strategy with day-to-day execution across every function.','t'],
             ['CONCLUSION','Leadership doesn\u2019t require authority \u2014 influence, collaboration and better decisions move organizations.','t'],
             ['CARRIES','~20% COMPANY GROWTH \u00b7 05 DEPARTMENTS ALIGNED \u00b7 07 CONTRIBUTIONS','f'],
             ['FILED','__F__ \u00b7 CLAIM OVERLEAF','k']]},
