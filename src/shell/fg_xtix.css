@@ -1,13 +1,45 @@
+#mw #win #view #docs>section#xtix:where([data-file]) .pur .pur-why{display:inline-block}
 @container docs (max-width:339px){
   #mw #win #view #docs>section#xtix:where([data-file]) .shead .rub{letter-spacing:.22em}
   #mw #win #view #docs>section#xtix:where([data-file]) .gl{letter-spacing:.15em}
   #mw #win #view #docs>section#xtix:where([data-file]) .xlab{letter-spacing:-.05em}
   #mw #win #view #docs>section#xtix:where([data-file]) .bignum>span:not(.cur):not(.cnt){letter-spacing:.09em}
+  #mw #win #view #docs>section#xtix:where([data-file]) .pur{padding:18px 12px 20px;font-size:12px;letter-spacing:.12em}
+}
+@container docs (max-width:360px){
+  #mw #win #view #docs>section#xtix:where([data-file]) .sf-back .ms-fig .seg{display:inline-block;white-space:normal}
 }
 @container docs (max-width:310px){
-  #mw #win #view #docs>section#xtix:where([data-file]) .face{width:144px;height:144px}
-  #mw #win #view #docs>section#xtix:where([data-file]) .g1{gap:10px}
   #mw #win #view #docs>section#xtix:where([data-file]) .gl{letter-spacing:.1em}
   #mw #win #view #docs>section#xtix:where([data-file]) .bignum{font-size:86px}
 }
 #mw #win #view #docs>section#xtix:where([data-file]) [visibility="hidden"]{visibility:hidden}
+/* XTIX figures (DECISIONS_TONIGHT 3: the dials retired). Each entry: the 28px fact rule (fg.js promise(), drawn in the
+   18px top padding), the number, its mono label, one printed line. Nothing is drawn for a figure's size; the hero 13x
+   (132/96/86px) stays the largest figure */
+#mw #win #view #docs>section#xtix:where([data-file]) .gaug{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));column-gap:28px;row-gap:0;align-items:start}
+#mw #win #view #docs>section#xtix:where([data-file]) .g1{display:block;position:relative;padding-top:18px;text-align:left}
+#mw #win #view #docs>section#xtix:where([data-file]) .fig{position:static;display:block;white-space:nowrap;font:560 104px/1 var(--serif);font-variation-settings:'opsz' 144;letter-spacing:-.035em;color:var(--ink);filter:drop-shadow(-.9px -.9px .6px rgba(26,23,20,.28)) drop-shadow(1.1px 1.3px .2px rgba(255,255,255,.95))}
+#mw #win #view #docs>section#xtix:where([data-file]) .fig em{display:inline-block;vertical-align:.62em;margin-left:.03em;font-size:.46em;font-style:italic;font-weight:440;letter-spacing:0;color:var(--c-text)}
+#mw #win #view #docs>section#xtix:where([data-file]) .gl{margin:14px 0 0;text-align:left;line-height:1.6}
+#mw #win #view #docs>section#xtix:where([data-file]) .g1>.bigtxt{margin-top:12px;max-width:270px;font-size:19px;line-height:1.35}
+#mw #win #view #docs>section#xtix:where([data-file]) .gnote{margin-top:34px;font:400 10.5px/1 var(--mono);letter-spacing:.24em;color:var(--muted)}
+#mw #win #view #docs>section#xtix.uv .gaug .fig{filter:none}
+#mw #win #view #docs>section#xtix.uv .gaug .fig.cite em{color:inherit}
+@container docs (min-width:761px) and (max-width:1099px){
+  #mw #win #view #docs>section#xtix:where([data-file]) .fig{font-size:clamp(76px,9.5cqw,104px)}
+}
+@container docs (max-width:760px){
+  #mw #win #view #docs>section#xtix:where([data-file]) .gaug{grid-template-columns:minmax(0,1fr);row-gap:30px}
+  #mw #win #view #docs>section#xtix:where([data-file]) .fig{font-size:76px}
+  #mw #win #view #docs>section#xtix:where([data-file]) .g1>.bigtxt{max-width:none}
+}
+/* zone C draws nothing now, so it reserves no room (the 300px and the 250px were the tracing's); OASIS keeps its 250px */
+#mw #win #view #docs>section#xtix.uv .hairtop[data-block="reflection"] .devz{min-height:0}
+@container docs (max-width:1099px){
+  #mw #win #view #docs>section#xtix.uv .hairtop[data-block="reflection"] .devz{padding-bottom:18px}
+}
+/* armed lamp notes below docs 1100: the sketched violet frame draws past the note's box (as MEDCOIN, fg_medcoin.css:105) */
+@container docs (max-width:1099px){
+  #mw #win #view #docs>section#xtix.uv .devz{overflow:visible}
+}

@@ -54,6 +54,7 @@
   #mw #win #view #docs>section#eventer:where([data-file]) .folder .z[data-zone]>.para,#mw #win #view #docs>section#eventer:where([data-file]) .folder>.hairtop>div:has(>.devz)>.para{grid-column:1;grid-row:2}
   #mw #win #view #docs>section#eventer:where([data-file]) .folder .z[data-zone]>.devz,#mw #win #view #docs>section#eventer:where([data-file]) .folder>.hairtop>div:has(>.devz)>.devz{grid-column:2;grid-row:2;margin-top:4px}
   #mw #win #view #docs>section#eventer:where([data-file]) .folder .cols2 .z[data-zone="03"]>.para{max-width:482px}
+  #mw #win #view #docs>section#eventer:where([data-file]) .folder .cols2 .z[data-zone="03"]>.para .ev-nw{white-space:nowrap}
   #mw #win #view #docs>section#eventer:where([data-file]) .folder>.hairtop:has(.convwrap){margin-top:120px}
   #mw #win #view #docs>section#eventer:where([data-file]) .folder>.cols2>div:first-child{display:grid;grid-template-columns:minmax(0,440fr) minmax(0,456fr);column-gap:48px;align-items:start}
   #mw #win #view #docs>section#eventer:where([data-file]) .folder>.cols2>div:first-child>*{grid-column:1/-1}
@@ -67,6 +68,7 @@
 }
 @container docs (max-width:1099px){
   #mw #win #view #docs>section#eventer:where([data-file]) .etr{display:block;margin-top:40px}
+  #mw #win #view #docs>section#eventer.uv .devz{overflow:visible}
 }
 @container docs (max-width:760px){
   #mw #win #view #docs>section#eventer:where([data-file]) .folder .tA .nm{font-size:22px}
@@ -100,6 +102,7 @@
   #mw #win #view #docs>section#eventer:where([data-file]) .sf-tab .sf-sub{font-size:9.5px;letter-spacing:.08em}
   #mw #win #view #docs>section#eventer:where([data-file]) .zr .zl{font-size:11px;letter-spacing:.1em}
   #mw #win #view #docs>section#eventer:where([data-file]) .slipflip.fg-portrait .evslip .es-h>b{font-size:10.5px;letter-spacing:.16em;padding-left:18px;padding-right:18px}
+  #mw #win #view #docs>section#eventer:where([data-file]) .sf-back .ms-fig .seg{display:inline-block;white-space:normal}
 }
 @container docs (max-width:339px){
   #mw #win #view #docs>section#eventer:where([data-file]) .slipflip.fg-portrait .evslip .es-v .seg{white-space:normal}

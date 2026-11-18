@@ -289,7 +289,7 @@ var W2=split(document.getElementById('stmt2'))||[];
 
 /* ---------- counters ---------- */
 /* a figure marked data-whole is printed as itself and never counted: counting it up prints numbers
-   the file does not say ("0M+", "7M+", "~13%"). XTIX's $9M+ and its three dials, 2026-09-29. */
+   the file does not say ("0M+", "7M+", "~13%"). XTIX's hero figure and its three figures, 2026-09-29 (re-worded in the CV round, 2026-11). */
 var cnts=[].slice.call(document.querySelectorAll('.cnt:not([data-whole])')).filter(function(el){return !window.__fgPorted(el)}).map(function(el){
   return {el:el,n:parseFloat(el.dataset.n||'0'),pre:el.dataset.pre||'',suf:el.dataset.suf||'',fin:el.dataset.final||''};
 });
@@ -702,12 +702,12 @@ function liveLayer() {
     return null;
   }
   var DEFS=[
-    {get:function(){var el=document.querySelector('.cnt[data-n="9"]');return el&&el.closest('.bignum')},
+    {get:function(){var el=document.querySelector('.cnt[data-n="13"]');return el&&el.closest('.bignum')},
      rows:[['SOURCE','CRM PIPELINE RECORDS \u00B7 ON FILE'],['CLAIM','COMMERCIAL OS \u2014 BUILT FROM ZERO'],['FILED','__F__']]},
     {get:function(){var el=document.querySelector('.cnt[data-n="2"]');return el&&el.parentElement},
      rows:[['SOURCE','SIGNED AGREEMENT \u00B7 ON FILE'],['CLAIM','LARGEST CONTRACT \u2014 CLOSED AS CEO'],['FILED','__F__']]},
     {get:function(){return zoneHost('eventer','EVIDENCE')},
-     rows:[['SOURCE','CROSS-FUNCTIONAL RECORDS \u00B7 ON FILE'],['CLAIM','INSIGHT \u2192 DECISIONS \u00B7 GROWTH SHARED BY ALL TEAMS'],['FILED','__F__']]},
+     rows:[['SOURCE','CROSS-FUNCTIONAL RECORDS \u00B7 ON FILE'],['CLAIM','INSIGHT \u2192 DECISIONS \u00B7 05 DEPARTMENTS ALIGNED'],['FILED','__F__']]},
     {get:function(){return zoneHost('medcoin','BUSINESS OUTCOMES')},
      rows:[['SOURCE','FOUNDER RECORDS \u00B7 ON FILE'],['CLAIM','BUILT FROM ZERO \u2014 MODEL \u00B7 COMPLIANCE \u00B7 OPERATIONS'],['FILED','__F__']]}
   ];
@@ -718,7 +718,7 @@ function liveLayer() {
     slip.innerHTML='<div class="es-h"><span>EVIDENCE SLIP</span></div>'+rows+'<span class="es-stamp">VERIFIED</span>';
     /* A NUMBER MUST NEVER BE SEPARATED FROM ITS OWN CAPTION. For the two stat hosts the
        anchor IS the number, and inserting straight after it pushed 302px of slip and note
-       between "$9M+ ARR" and "PIPELINE MANAGED". Walk past any caption that immediately
+       between the hero figure and its first caption. Walk past any caption that immediately
        follows and land after the last of them; where a host has no caption after it -
        the two zone hosts - the anchor is unchanged and this is a no-op. */
     var anchor=host;
@@ -736,7 +736,7 @@ function liveLayer() {
        'Seven absences in. Ten systems out.',
        ['<em>07</em> gaps counted at intake &mdash; <em>10</em> systems standing after',
         'Filled in order, <em>&empty;&rarr;10</em>, never in one pass',
-        'Downstream of that list: <b>$9M+</b> in pipeline']],
+        'Downstream of that list: <b>13x</b> growth']],
       ['WHAT I BUILT','THE METHOD',
        'Ten systems. Three of them only measure.',
        ['<em>07</em> of them do the work; <em>03</em> exist to watch it',
@@ -744,9 +744,9 @@ function liveLayer() {
       /* the reflection can carry a zone now: the nesting repair brought
          "D REFLECTION" back inside .folder, where zoneHost can reach it. */
       ['REFLECTION','ON RE-EXAMINATION',
-       'The three dials, read against each other.',
-       ['Inbound converted several times better than outbound &mdash; <em>50%+</em> against <em>7&ndash;8%</em>',
-        '<em>~20%</em> replied: the loss sits after the reply, not before it',
+       'Three figures, three separate questions.',
+       ['<em>~25%</em> of company volume, <em>~40%</em> off the cycle, <em>~15%</em> via partners',
+        'Read one at a time: how much, how fast, through whom',
         'Enterprise appears once in this whole file &mdash; in the reflection, not the build']]
     ],
     oasis:[
@@ -757,29 +757,29 @@ function liveLayer() {
       ['LEADERSHIP MODEL','THE METHOD',
        'A calendar, not a personality.',
        ['Three fixed tempos and four standing habits &mdash; <em>07</em> rows in all',
-        'The same cadence returns in PART 2 as evidence, not intention',
-        '<em>06</em> functions alongside &mdash; <em>01</em> team actually reporting in']],
+        'The cross-functional habit returns in PART 2 as evidence, not intention',
+        '<em>06</em> functions in the ring &mdash; <em>18</em> direct reports on the list']],
       ['EXECUTIVE REFLECTION','ON RE-EXAMINATION',
        'Ten built. Seven installed to run them.',
        ['<em>10</em> systems in PART 1, then <em>07</em> standing cadences to hold them',
-        'Onboarding and documentation appear on both lists',
-        'Neither list contains a deal &mdash; the <b>$2M</b> sits outside the system']]
+        'Coaching and business reviews appear on both lists',
+        'Neither list contains a deal &mdash; the <b>$2M</b> is shown apart']]
     ],
     eventer:[
       ['THE SITUATION','FINDING OF FACT',
        'The fifth department is the commercial one.',
        ['Four functions are named by hand; <em>05</em> were aligned',
-        '<em>07</em> contributions, every one a change to something already running']],
+        '<em>07</em> contributions, built on daily operations that already existed']],
       ['CROSS-FUNCTIONAL IMPACT','THE METHOD',
        'Both claims carry a receipt.',
        ['The first rests on contribution <em>06</em> of <em>07</em>',
-        'The second rests on <em>05</em> departments carrying the number, not one team',
-        '<em>03</em> coached &mdash; and the reach was <em>05</em>']],
+        'The second rests on <em>05</em> departments, not one team',
+        '~<em>20</em>% is the whole company&rsquo;s growth in 2025']],
       ['WHAT I LEARNED','ON RE-EXAMINATION',
-       'Nothing here arrived by title.',
-       ['Recruiting was participation, not ownership &mdash; the pattern repeats',
-        'Every lever outside those three sat in another department',
-        'The word missing from all <em>07</em> contributions is &ldquo;owned&rdquo;']]
+       'One function was led. Four more were reached.',
+       ['Pricing is on the list as a model he introduced',
+        'Product, Marketing, Finance and R&amp;D sat outside it, named on the list',
+        'Three of the <em>07</em> contributions carry a figure']]
     ],
     medcoin:[
       ['THE VISION','FINDING OF FACT',
@@ -933,7 +933,7 @@ function liveLayer() {
   var NOTES={
     xtix:'Subject builds the machine before the team. Zero to a working commercial OS inside one file. Pattern holds.',
     oasis:'Rare profile: the CEO who still closes. The largest contract in this file carries his own signature.',
-    eventer:'No authority required. Influence moved four departments. Growth stopped being a sales target here.',
+    eventer:'Led the BD function. Influence moved four departments. Growth stopped being one team\u2019s target here.',
     medcoin:'Founder file. Model, compliance, operations \u2014 every call was his. Survival was the KPI.'
   };
   /* deterministic per-glyph strike variance: a real machine never hits twice the same */
@@ -1003,21 +1003,21 @@ function liveLayer() {
             ['FACT','Strong vision. Strong product. Zero commercial infrastructure \u2014 07 named gaps.','t'],
             ['ACTION','Understanding before outbound. Then \u2205\u219210: strategy, CRM, pipeline, ICP, KPIs, AI outbound engine.','t'],
             ['CONCLUSION','A commercial function is infrastructure before it is activity.','t'],
-            ['CARRIES','$9M+ ARR MANAGED \u00b7 ~20% REPLY \u00b7 7\u20138% OUTBOUND \u00b7 50%+ INBOUND','f'],
+            ['CARRIES','13x GROWTH \u00b7 ~25% OF COMPANY VOLUME \u00b7 ~40% CYCLE CUT \u00b7 ~15% VIA PARTNERS','f'],
             ['FILED','__F__ \u00b7 CLAIM OVERLEAF','k']]},
     oasis:{
       rows:[['SOURCE','THIS FILE \u00b7 SECTIONS 01\u201304','k'],
             ['FACT','The mandate wasn\u2019t all about revenue \u2014 it was a profitable, scalable commercial organization.','t'],
             ['ACTION','Recruited the entire sales team. Built the profitability-based pricing model from scratch, the commercial process and the company-wide KPI framework.','t'],
             ['CONCLUSION','The more I managed everything myself, the less the organization scaled.','t'],
-            ['CARRIES','$2M LARGEST DEAL CLOSED \u00b7 TEAM OF 5\u20136 \u00b7 06 FUNCTIONS','f'],
+            ['CARRIES','$2M LARGEST DEAL CLOSED \u00b7 18 DIRECT REPORTS \u00b7 06 FUNCTIONS','f'],
             ['FILED','__F__ \u00b7 CLAIM OVERLEAF','k']]},
     eventer:{
       rows:[['SOURCE','THIS FILE \u00b7 SECTIONS 01\u201307','k'],
             ['FACT','A commercial operation already existed. The job: sharpen execution, connect departments, find new growth.','t'],
             ['ACTION','Connected business strategy with day-to-day execution across every function. Brought customer feedback directly into product discussions.','t'],
             ['CONCLUSION','Leadership doesn\u2019t require authority \u2014 influence, collaboration and better decisions move organizations.','t'],
-            ['CARRIES','03 BD MEMBERS COACHED \u00b7 05 DEPARTMENTS ALIGNED \u00b7 07 CONTRIBUTIONS','f'],
+            ['CARRIES','~20% COMPANY GROWTH \u00b7 05 DEPARTMENTS ALIGNED \u00b7 07 CONTRIBUTIONS','f'],
             ['FILED','__F__ \u00b7 CLAIM OVERLEAF','k']]},
     medcoin:{
       rows:[['SOURCE','THIS FILE \u00b7 SECTIONS 01\u201306','k'],

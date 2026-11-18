@@ -301,71 +301,6 @@
   if (list) list.setAttribute("data-accent", 0);
 
   /* ==========================================================================================
-     THREE INKS, THREE TRUTHS (judge E7). Each dial is drawn from its own printed figure, read here:
-     '~' = about (the brush runs out across ±1 around the value, mean exactly the value), '–' = a
-     range (solid to the lower bound, a hatched cartouche from bound to bound, 3px proud), '+' = at
-     least (solid to the floor, a floor tick, an open chevron of fixed size: a direction, no ceiling).
-     The whole is a compass-drawn graphite circle; a zero tick at twelve; no graduations; no motion. */
-  function dials() {
-    FG.defs();
-    var TAU = Math.PI * 2, TOP = -Math.PI / 2, HB = "#6f6658";
-    var gg = X.querySelector(".gaug"), row = !!gg && getComputedStyle(gg).gridTemplateColumns.trim().split(/\s+/).length === 3;
-    [].forEach.call(X.querySelectorAll(".gaug .g1"), function (d, n) {
-      var face = d.querySelector(".face"), fig = face.querySelector(".fig"), txt = fig.textContent.trim();
-      var nums = (txt.match(/\d+(\.\d+)?/g) || []).map(Number);
-      var kind = txt.charAt(0) === "~" ? "approx" : (/[–-]/.test(txt) ? "range" : (/\+$/.test(txt) ? "floor" : "exact"));
-      var s = host(face), P = new FG.Pen("xtix-dial-" + n + "-" + kind), w = face.clientWidth, cx = w / 2, cy = w / 2, phone = w < 200;
-      var R = phone ? 72 : 110, hb = phone ? 5 : 6;
-      /* R2 XT1: in the one-row form the radius comes from the face's own width (desktop 110 and the phone stack's 72 as
-         before; 99px faces at 390: R 41); the stacked rows at 320-359 keep today's dials exactly */
-      if (row) { hb = w < 140 ? 4 : (w < 200 ? 5 : 6); R = w >= 240 ? 110 : Math.min(72, Math.round(w / 2 - hb - 5)); }
-      var r0 = R - hb, r1 = R + hb, tk = hb + 6;
-      function A(pct) { return TOP + TAU * pct / 100; }
-      function pt(a, r) { return [cx + Math.cos(a) * r, cy + Math.sin(a) * r]; }
-      function radial(a, ra, rb, col, wd) { var p = pt(a, ra), q = pt(a, rb); return FG.path(s, P.line(p[0], p[1], q[0], q[1], { rough: .25 }), col, wd); }
-      var j0 = A(-3.5);
-      FG.path(s, P.arc(cx, cy, R, j0, j0 + TAU + 6 * Math.PI / 180, { passes: 1, wobble: .35 }), HB, 1.2, { opacity: ".8", filter: "url(#fg-graphite)" });
-      function band(p0, p1, ends, edgeTo) {
-        FG.path(s, P.sector(cx, cy, r0, r1, A(p0), A(p1)), null, 0, { fill: FILL, class: "dial-band" });
-        var e1 = A(edgeTo == null ? p1 : edgeTo);
-        FG.path(s, P.arc(cx, cy, r1, A(p0), e1, { wobble: .3 }) + P.arc(cx, cy, r0, A(p0), e1, { wobble: .3 }), TXT, 1, { class: "dial-edge" });
-        ends.forEach(function (e) { radial(A(e), r0, r1, TXT, 1); });
-      }
-      if (kind === "approx") {
-        var v = nums[0];
-        band(0, v - 1.8, [0], v - 2.6);
-        var ends = [], k;
-        for (k = 0; k < 7; k++) ends.push((P.R() * 2 - 1) * .95);
-        var mean = ends.reduce(function (a, b) { return a + b; }, 0) / 7;
-        ends = ends.map(function (e) { return Math.max(-1, Math.min(1, e - mean)); });
-        mean = ends.reduce(function (a, b) { return a + b; }, 0) / 7; ends[3] -= mean * 7;
-        for (k = 0; k < 7; k++) {
-          var rr = r0 + .5 + k * (2 * hb - 1) / 6, lane = (2 * hb - 1) / 6, wd = lane + .4 + P.R() * .5;
-          FG.path(s, P.taperArc(cx, cy, rr, A(v - 3), A(v + ends[k]), wd, .12, { drift: .3 }), null, 0, { fill: FILL, opacity: k % 2 ? ".74" : ".92", class: "dial-band" });
-        }
-      } else if (kind === "range") {
-        var lo = nums[0], hi = nums[1];
-        band(0, lo, [0, lo]);
-        var c0 = r0 - 3, c1 = r1 + 3, poly = FG.wedge(cx, cy, c1, A(lo), A(hi), c0);
-        FG.path(s, P.hachure(poly, { gap: w < 140 ? 2.2 : 2.4, angle: 49, rough: .3 }).d, FILL, .9, { class: "dial-band" });
-        FG.path(s, P.arc(cx, cy, c1, A(lo), A(hi), { wobble: .2 }) + P.arc(cx, cy, c0, A(lo), A(hi), { wobble: .2 }), TXT, phone ? 1.2 : 1, { class: "dial-edge" });
-        radial(A(lo), c0, c1, TXT, phone ? 1.2 : 1); radial(A(hi), c0, c1, TXT, phone ? 1.2 : 1);
-      } else if (kind === "floor") {
-        var fl = nums[0];
-        band(0, fl, [0]);
-        radial(A(fl), R - tk, R + tk, TXT, 1.6);
-        var ca = A(fl + 2.5), c = pt(ca, R), tx = -Math.sin(ca), ty = Math.cos(ca), cs = w < 140 ? 6 : (phone ? 7 : 8), b = 35 * Math.PI / 180, dd = "";
-        [-1, 1].forEach(function (sg) {
-          var bx = -tx * Math.cos(b) + sg * Math.cos(ca) * Math.sin(b), by = -ty * Math.cos(b) + sg * Math.sin(ca) * Math.sin(b);
-          dd += P.line(c[0], c[1], c[0] + bx * cs, c[1] + by * cs, { rough: .2 });
-        });
-        FG.path(s, dd, TXT, 1.3);
-      }
-      radial(TOP, R - tk, R + tk, INK, 1.3);
-    });
-  }
-
-  /* ==========================================================================================
      PUNCHED THROUGH (judge E2): seven holes, d=14, at the seven empty .o marks — through the card,
      its shadow plate (offset 2.4px: a crescent, the card's thickness) and the sheet. A rough 0.8px
      cut edge rings each hole on the card. */
@@ -467,8 +402,9 @@
       while ((tn = tw.nextNode())) { var k2 = tn.nodeValue.indexOf(" —"); if (k2 >= 0) { end = [tn, k2]; break; } }
       if (end) { var r2 = document.createRange(); r2.setStart(cap.firstChild, 0); r2.setEnd(end[0], end[1]); underWords(cap, r2, "xtix-A-built", { below: 5, w: 2.2 }); }
     }
-    /* the facts' short emerald rules */
-    [].forEach.call(X.querySelectorAll(".statrow .prow"), function (p, i) {
+    /* the facts' short emerald rules: the two perf rows, then the three figures (document order keeps the perf rows at
+       i = 0 and 1, so their seeds and hands are unchanged; the figures take xtix-fact-2, -3, -4) */
+    [].forEach.call(X.querySelectorAll(".statrow .prow, .gaug .g1"), function (p, i) {
       var s = host(p), P = new FG.Pen("xtix-fact-" + i);
       FG.path(s, P.line(0, 1.5, 28, 1, { passes: 1, rough: .5 }), FILL, 2);
     });
@@ -822,14 +758,14 @@
   /* ==========================================================================================
      THE LAMP SHOWS ITS SOURCES (judge E11). What lights is a NAMED list — the strings the three
      developed notes quote verbatim — never a pattern (a regex for '07' would also catch bar 07):
-       note 1: '07 GAPS' (card), '∅→10' (chart header), '$9M+' (figure);
-       note 3: '~20%', '7–8%', '50%+' (the dials) and the word 'enterprise' (ringed).
-     Plus the tracing of the three dials beside 'The three dials, read against each other.' */
+       note 1: '07 GAPS' (card), '∅→10' (chart header), '13x' (figure);
+       note 3: '~25%', '~40%', '~15%' (the three figures, printed 25% 40% 15% under APPROX. FIGURES) and the
+       word 'enterprise' (ringed). */
   var UVC = "#9B7BFF";
   function hostUV(el) { var s = FG.svg(el, "uv-layer"); drawn.push(s); return s; }
-  var CITES = { xtix: [".reality .fh>span:last-child", '.hairtop[data-block="chart"] .zr b', ".bignum .cur", ".bignum .cnt", ".gaug .fig", ".cite-word"],
+  var CITES = { xtix: [".reality .fh>span:last-child", '.hairtop[data-block="chart"] .zr b', ".bignum .cnt", ".gaug .fig", ".cite-word"],
     oasis: [".bignum .cur", ".bignum .cnt", ".cite-word"],          /* note 3: '$2M'; note 2: '06 functions' */
-    eventer: [".et .en"],                                           /* notes 1–2: '05', '07', '03' */
+    eventer: [".et .en"],                                           /* notes 1–2: '05', '07', '20' */
     medcoin: [] };                                                  /* its notes quote no printed figure verbatim */
   function cites() {
     (CITES[DOC] || []).forEach(function (q) {
@@ -847,10 +783,10 @@
      clipped to it and masked by the sheet's own list (the holes and S2's gap), so no violet ever reaches
      the table: XTIX's thread is cut where it crosses the act break. Anchors are named (never a pattern)
      and resolved at every draw from the file's own boxes and Ranges.
-       xtix    note 1  'Downstream of that list: $9M+ in pipeline'      the ten systems of 04 (one bracket) -> $9M+
+       xtix    note 1  'Downstream of that list: 13x growth'            the ten systems of 04 (one bracket) -> 13x
        oasis   note 2  'Profitability sits twice'                       02 'Profitability' -> 03 'profitability-based ...'
        eventer note 3  'The first rests on contribution 06 of 07'       'Customer insights became business decisions.' -> 05's 6th of 7
-       eventer note 3  'The second rests on 05 departments'             'Growth became ... sales target.' -> the 05 figure
+       eventer note 3  'The second rests on 05 departments'             'Growth became ... one team's target.' -> the 05 figure
        medcoin note 1  'Two of them are regulation and providers — the compliant half'
                                                                          the line holding 'compliant' -> 03's 6th and 7th (one bracket) */
   function rectsOf(els) { return [].map.call(els || [], function (e) { return e.getBoundingClientRect(); }).filter(function (q) { return q.height > .5; }); }
@@ -964,7 +900,7 @@
     var films = [].map.call(folder.querySelectorAll(":scope>.vfilm"), function (v) { return getComputedStyle(v).display === "none" ? null : v.getBoundingClientRect(); }).filter(Boolean);
     var placed = [];
     /* what of the page reaches into the threads' margin: text runs (kept 4px clear) and boxes (3px). A string is
-       never drawn across them: where one would be (XTIX's '$9M+ ARR' runs 15px into a 320px phone's margin, where
+       never drawn across them: where one would be (XTIX's hero line, as measured on the old figure, ran 15px into a 320px phone's margin, where
        its bracket must stand), that thread is not drawn at that width. */
     var into = function (q) {        /* (what lies in S2's gap is on the table, where the sheet's mask cuts the string: the PART 2 label) */
       if (TURN && q.top - fb.top >= TURN.A - .5 && q.bottom - fb.top <= TURN.B + .5) return false;
@@ -1159,42 +1095,6 @@
       var fit = FG.ringFit(d, wr, { seed: "xtix-enterprise-ring", rx0: 2.5, ry0: 8, wobble: .025, steps: 20, stroke: 1.4, svg: s });
       FG.path(s, fit.d, UVC, 1.4);
     }
-    /* THE TRACING: the three dials laid one over another — one centre, one zero tick, file order
-       outside-in, each band carrying its own ending; remainder rings faint; no labels */
-    var z3 = DOC === "xtix" && X.querySelector('.hairtop[data-block="reflection"] .devz');
-    if (z3) {
-      var ts = hostUV(z3), TP = new FG.Pen("xtix-tracing"), W = z3.clientWidth, H = z3.clientHeight, phone = HOST.w < 1100;
-      var tw = phone ? 220 : 280, k = tw / 280, cx = phone ? W / 2 : 640 + (W - 640) / 2, cy = phone ? H - tw / 2 - 10 : H / 2;
-      var TAU = Math.PI * 2, TOP = -Math.PI / 2, hb = 3;
-      function A(p) { return TOP + TAU * p / 100; }
-      function pt(a, r) { return [cx + Math.cos(a) * r, cy + Math.sin(a) * r]; }
-      function rad(a, ra, rb, wd) { var p = pt(a, ra), q = pt(a, rb); FG.path(ts, TP.line(p[0], p[1], q[0], q[1], { rough: .2 }), UVC, wd); }
-      var dials = [].map.call(X.querySelectorAll(".gaug .fig"), function (f) { return f.textContent.trim(); });
-      [120, 100, 80].forEach(function (R0, n) {
-        var R = R0 * k, txt = dials[n] || "", nums = (txt.match(/\d+(\.\d+)?/g) || []).map(Number), r0 = R - hb, r1 = R + hb;
-        FG.path(ts, TP.arc(cx, cy, R, A(0), A(100), { passes: 1, wobble: .25 }), UVC, .8, { opacity: ".35" });
-        if (txt.charAt(0) === "~") {
-          var v = nums[0];
-          FG.path(ts, TP.sector(cx, cy, r0, r1, A(0), A(v - 1.8)), null, 0, { fill: UVC });
-          for (var b2 = 0; b2 < 4; b2++) FG.path(ts, TP.taperArc(cx, cy, r0 + .6 + b2 * (2 * hb - 1.2) / 3, A(v - 3), A(v + [.6, -.9, .9, -.6][b2]), 2, .1), null, 0, { fill: UVC, opacity: b2 % 2 ? ".74" : ".92" });
-        } else if (/[–-]/.test(txt)) {
-          var lo = nums[0], hi = nums[1];
-          FG.path(ts, TP.sector(cx, cy, r0, r1, A(0), A(lo)), null, 0, { fill: UVC });
-          FG.path(ts, TP.hachure(FG.wedge(cx, cy, r1 + 3, A(lo), A(hi), r0 - 3), { gap: 2, angle: 49, rough: .2 }).d, UVC, .8);
-          FG.path(ts, TP.arc(cx, cy, r1 + 3, A(lo), A(hi), { wobble: .1 }) + TP.arc(cx, cy, r0 - 3, A(lo), A(hi), { wobble: .1 }), UVC, .9);
-          rad(A(lo), r0 - 3, r1 + 3, .9); rad(A(hi), r0 - 3, r1 + 3, .9);
-        } else if (/\+$/.test(txt)) {
-          var fl = nums[0];
-          FG.path(ts, TP.sector(cx, cy, r0, r1, A(0), A(fl)), null, 0, { fill: UVC });
-          rad(A(fl), R - 9, R + 9, 1.4);
-          var ca = A(fl + 3.5), c = pt(ca, R), tx = -Math.sin(ca), ty = Math.cos(ca), bb = 35 * Math.PI / 180, dd = "";
-          [-1, 1].forEach(function (sg) { dd += TP.line(c[0], c[1], c[0] + (-tx * Math.cos(bb) + sg * Math.cos(ca) * Math.sin(bb)) * 7, c[1] + (-ty * Math.cos(bb) + sg * Math.sin(ca) * Math.sin(bb)) * 7, { rough: .2 }); });
-          FG.path(ts, dd, UVC, 1.2);
-        }
-      });
-      rad(TOP, 70 * k, 130 * k, 1.2);                              /* the one zero tick, shared */
-      ts.classList.add("uv-trace");
-    }
   }
   cites();
   /* phone: the developed zones open in the flow; keep the lamp key where the reader's finger is */
@@ -1236,7 +1136,7 @@
     SHEET = "";
     if (DOC === "xtix") holes();
     pageTurn();                                   /* S2: right after the holes (its cut joins their list) */
-    if (DOC === "xtix") { promise(); approach(); ticks(); chart(); dials(); engine(); vellum(); }
+    if (DOC === "xtix") { promise(); approach(); ticks(); chart(); engine(); vellum(); }
     else genericTicks();
     ticket(); developed();
     if (PL) PL.draw({ X: X, DOC: DOC, host: host, hostUV: hostUV, FG: FG, STILL: STILL, baselineOf: baselineOf, ink: INK, line: FILL, text: TXT, uv: UV, scroller: scroller() });   /* the document's own plates */

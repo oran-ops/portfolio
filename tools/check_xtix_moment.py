@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """THE XTIX MOMENT ON THE LIVE PAGE, MEASURED -- the permanent check for what Oran approved on
 2026-09-29 (lab/xtix-moment.html, ported by src/shell/xtix.js + xtix.css): the chart builds bar
-by bar with item k of 04 lit as bar k rises, $9M+ lands whole, the lamp is held as a beam.
+by bar with item k of 04 lit as bar k rises, 13x lands whole, the lamp is held as a beam.
 
   python -m http.server 8765        (from the repo root, in another terminal)
   python tools/check_xtix_moment.py [url] [check,check] [device,device]
@@ -28,7 +28,7 @@ Per device (desktop 1440x900, phone 390x844 touch, phone on its side 844x390 tou
             nothing outside the folder, its tab and the plate turns violet (pixel diff, off/on).
   SPEED     scrolled at 300/700/1000/1500 px/s on animation frames: every bar rises on screen up
             to LIMIT (desk and phone 1000px/s; a phone on its side 300px/s); faster is printed.
-  STILL     reduced motion and ?static=1: chart whole at open, $9M+ in, lamp plain.
+  STILL     reduced motion and ?static=1: chart whole at open, 13x in, lamp plain.
   FACES     title in Instrument Serif with From/Zero italic; reading in Geist; labels in Geist Mono.
   NETWORK   every request is to the local server or data:.
 Exit 1 on any failure.
@@ -254,7 +254,7 @@ async def fling(b, dev, w, h, touch):
     else:
         print('    reopened: re-armed at 0, hero waiting')
     await to(pg, '#xtix .bignum', 0.4); await pg.wait_for_timeout(1500)
-    if not (await pg.evaluate(STATE))['heroIn']: fail(dev, '$9M+ never landed after reopen')
+    if not (await pg.evaluate(STATE))['heroIn']: fail(dev, '13x never landed after reopen')
     await ctx.close()
     return reqs, errs
 

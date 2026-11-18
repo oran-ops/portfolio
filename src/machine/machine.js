@@ -584,12 +584,15 @@ function decodeMach(b64, xform){
     {x:-1.49, z: 0.54, rot:-0.26, lift:0.070, col:5},
     {x:-1.07, z: 0.68, rot: 0.12, lift:0.084, col:6}
   ];
-  /* the seven files in the folder's order and the folder's colours: XTIX emerald, OASIS
-     brass, EVENTER ice, MEDCOIN paper, and the three that share the page's emerald. */
+  /* the seven files in the folder's order, in their documents' tiers as the covers print them
+     (fg.css:506-509, fg_oasis.css:1): stripe, FILE 0N, rule, and the rule's pen */
   var NOTE_NAME=['XTIX','OASIS','EVENTER','MEDCOIN','LEADERSHIP','TECH','READ ME'];
-  var NOTE_RGB=[[0.184,0.702,0.502],[0.878,0.643,0.345],
-                [0.369,0.561,0.749],[0.914,0.906,0.874],
-                [0.184,0.702,0.502],[0.184,0.702,0.502],[0.184,0.702,0.502]];
+  var XR=['xtix-dt-rule',4.5,3.6,.7,1.4], NOTE_TIER=[
+    ['#2FB380','#1C6E4E','#2FB380',XR], ['#E0A458','#7E5416','#C98A3A',XR],
+    ['#5E8FBF','#406182','#5E8FBF',XR], ['#3a342d','#1a1714','#3a342d',XR],
+    ['#2FB380','#1C6E4E','#2FB380',XR],
+    ['#2FB380','#1C6E4E','#2FB380',['tech-cover-rule',4.5,3.6,.7,1.4]],
+    ['#2FB380','#1C6E4E','#2FB380',['final-dt-rule',4.4,3.8,.6,1.2]]];
   /* the handwriting atlas was a 2x2 for four names and is a 3x3 for seven. The fragment
      shader multiplies by 1.0/3.0 to step one tile, so this is not free to change on its own;
      the assertion below is what says so out loud. */
@@ -792,14 +795,16 @@ function decodeMach(b64, xform){
      15 degree camera is the half that had to carry the word. 1.6 mm keeps the corner
      lifted enough to read as paper on plastic and no more. */
   var NOTE=stickyNote(NOTE_HW, NOTE_HL, 1.6*MM, 0.5*MM, 14, 18);
+  /* body:0 -- lit as things on the desk, like the keyboard (0.93), not with the case's floor
+     ramp and bezel well (0.75), which sat the same plastic a quarter darker */
   function addPile(list){
     PILE.forEach(function(d){
       var c=Math.cos(d.rot), sn=Math.sin(d.rot), R=[c,0,-sn, 0,1,0, sn,0,c];
       var y=FLOOR+d.lift;
-      list.push({m:DISK, R:R, t:[d.x, y+DK_HT,          d.z], mat:0});
-      list.push({m:SHUT, R:R, t:[d.x, y+DK_HT*2+0.6*MM, d.z], mat:6, off:[2*MM,0,-33*MM]});
+      list.push({m:DISK, R:R, t:[d.x, y+DK_HT,          d.z], mat:0, body:0});
+      list.push({m:SHUT, R:R, t:[d.x, y+DK_HT*2+0.6*MM, d.z], mat:6, off:[2*MM,0,-33*MM], body:0});
       list.push({m:NOTE, R:R, t:[d.x, y+DK_HT*2+0.9*MM, d.z], mat:8, off:[0,0,NOTE_CZ],
-                 note:d.col});
+                 note:d.col, body:0});
     });
   }
 
@@ -1183,10 +1188,9 @@ function decodeMach(b64, xform){
   var SCR_TEX=screenTexture();
   var SCR_RECT=[ -0.0004, 0.0019+0.24762*SY, 0.35560*SX, 0.23750*SY ];
 
-  /* ---------------------------------------------------------------- the handwriting
-     Four names on one atlas. Caveat is inlined as a data URI so the page still makes no
-     request, and because a font arrives asynchronously the atlas is drawn twice: once now in
-     whatever face is available, and again when Caveat reports itself ready. */
+  /* ---------------------------------------------------------------- the labels
+     Seven labels on one atlas, set as each document sets its cover, in faces the page already
+     carries. The faces and the pen arrive after this script, so it is drawn now and at load. */
   var NOTE_TEX=gl.createTexture();
   function drawNotes(){
     /* 4 x 4 tiles of 256 makes the atlas 1024 x 1024, WHICH IS THE POINT. The old one was
@@ -1203,47 +1207,60 @@ function decodeMach(b64, xform){
     /* THE TILE IS SQUARE AND THE LABEL IS NOT. 256 x 256 is stretched across 76 x 60 mm, so
        anything drawn round comes out 27% wide. Every glyph is therefore drawn through a
        0.789 horizontal squeeze, which is 60/76 -- the inverse of the stretch. */
-    var SQ=(2*NOTE_HL)/(2*NOTE_HW);
+    var SQ=(2*NOTE_HL)/(2*NOTE_HW), UW=T/SQ, LM=24;
+    var LS=('letterSpacing' in x), PEN=!!(window.FG && window.Path2D);
 
+    /* THE SHADER SHOWS TILE PX 8..248 (frag 155-156), so all of it is laid out inside that:
+       stripe 0..38 (30 rows seen), name on 97, FILE 0N on 142, rule on 168. No frame. */
     for(var i=0;i<NOTE_NAME.length;i++){
-      var ox=(i%G)*T, oy=Math.floor(i/G)*T, nm=NOTE_NAME[i];
-      var c=NOTE_RGB[i];
-      var band='rgb('+Math.round(c[0]*255)+','+Math.round(c[1]*255)+','+Math.round(c[2]*255)+')';
+      var ox=(i%G)*T, oy=Math.floor(i/G)*T, nm=NOTE_NAME[i], tr=NOTE_TIER[i];
 
-      /* the paper. Warm and slightly grey, so a near-white file colour still reads as a band
-         laid on it rather than as the same sheet. */
-      x.fillStyle='#E9E6DC'; x.fillRect(ox,oy,T,T);
-
-      /* the colour band across the head of the label, and the rule under it. The rule is what
-         carries MEDCOIN, whose own colour is within a few values of the paper. */
-      x.fillStyle=band;      x.fillRect(ox,oy,T,Math.round(T*0.30));
-      x.fillStyle='#15171C'; x.fillRect(ox,oy+Math.round(T*0.30)-3,T,3);
-
-      /* a hairline inset, so the label reads as a rectangle of paper stuck on a shell rather
-         than as a printed area of the shell itself */
-      x.strokeStyle='rgba(21,23,28,.22)'; x.lineWidth=2;
-      x.strokeRect(ox+1,oy+1,T-2,T-2);
+      /* --paper, and the tier stripe across its head */
+      x.fillStyle='#faf7f0'; x.fillRect(ox,oy,T,T);
+      x.fillStyle=tr[0];     x.fillRect(ox,oy,T,38);
 
       x.save();
-      x.translate(ox+T/2, oy);
+      x.translate(ox,oy);
       x.scale(SQ,1);
-      x.textAlign='center';
+      x.textAlign='left';
+      x.textBaseline='alphabetic';
 
-      /* FILE 0N, in the band, in the mono the rest of the archive is set in */
-      x.textBaseline='middle';
-      x.fillStyle='rgba(20,22,26,.82)';
-      x.font='600 34px "JetBrains Mono", ui-monospace, monospace';
-      x.fillText('FILE 0'+(i+1), 0, Math.round(T*0.145));
+      /* the name as the cover's wordmark (fg.js wordmark), fitted, 72 px at most */
+      x.fillStyle='#1a1714';
+      var px=72;
+      do { x.font='italic 800 '+px+'px Geist, system-ui, sans-serif';
+           if(LS) x.letterSpacing=(-.04*px)+'px';
+           px-=2 }
+      while(x.measureText(nm).width > UW-2*LM && px > 24);
+      x.fillText(nm, LM, 97);
 
-      /* and the name, written by hand, sized to the widest one that fits */
-      x.fillStyle='#1B1D23';
-      var fs=112;
-      do { x.font='600 '+fs+'px Caveat, "Segoe Script", cursive'; fs-=3 }
-      while(x.measureText(nm).width*SQ > T*0.86 && fs > 24);
-      x.rotate((i%2 ? -1 : 1) * 0.022);       /* nobody writes perfectly level */
-      x.fillText(nm, 0, Math.round(T*0.66));
+      /* FILE 0N as the cover's .dt-no (fg.css:35) */
+      x.fillStyle=tr[1];
+      x.font='700 26px "JetBrains Mono", ui-monospace, monospace';
+      if(LS) x.letterSpacing='8.84px';
+      x.fillText('FILE 0'+(i+1), LM, 142);
+      if(LS) x.letterSpacing='0px';
+
+      /* the stroke its cover draws, moved here; without the pen, a straight 52 x 3 rule */
+      x.translate(LM, 164);
+      if(PEN){
+        var rp=tr[3];
+        x.strokeStyle=tr[2]; x.lineWidth=3; x.lineCap='round'; x.lineJoin='round';
+        x.stroke(new window.Path2D(new window.FG.Pen(rp[0]).line(1, rp[1], 51, rp[2],
+                 {passes:1, rough:rp[3], bow:rp[4]})));
+      } else {
+        x.fillStyle=tr[2]; x.fillRect(0,2.5,52,3);
+      }
       x.restore();
     }
+
+    /* THE LIGHT DIVISOR, LAST: an upward face on the desk gathers (1.092,1.071,1.023) of its
+       albedo (frag 300-361); divide by it, x.976 for the fibre (frag 158), and the screen
+       shows the documents' own paper and ink */
+    x.globalCompositeOperation='multiply';
+    x.fillStyle='rgb(228,232,243)';
+    for(i=0;i<NOTE_NAME.length;i++) x.fillRect((i%G)*T, Math.floor(i/G)*T, T, T);
+    x.globalCompositeOperation='source-over';
 
     gl.activeTexture(gl.TEXTURE1);
     gl.bindTexture(gl.TEXTURE_2D,NOTE_TEX);
@@ -1266,9 +1283,14 @@ function decodeMach(b64, xform){
     gl.activeTexture(gl.TEXTURE0);
   }
   drawNotes();
+  /* again at load (which guarantees window.FG) with both faces in; frame(), not kick():
+     glide() returns at once on a still machine and would leave the old atlas up */
   if(document.fonts && document.fonts.load){
-    document.fonts.load('64px Caveat').then(function(){ drawNotes(); kick() })
-      .catch(function(){});
+    Promise.all([new Promise(function(r){
+                   if(document.readyState==='complete') r(); else addEventListener('load', r, {once:true}) }),
+                 document.fonts.load('italic 800 72px Geist'),
+                 document.fonts.load('700 26px "JetBrains Mono"')])
+      .then(function(){ drawNotes(); frame() }).catch(function(){});
   }
 
   var TRIS=0;
@@ -1481,8 +1503,6 @@ function decodeMach(b64, xform){
       if(P.note!==undefined){
         gl.uniform2f(U.uNoteTile,(P.note%NOTE_COLS)/NOTE_COLS,
                                  Math.floor(P.note/NOTE_COLS)/NOTE_COLS);
-        gl.uniform3f(U.uNoteCol,NOTE_RGB[P.note][0],NOTE_RGB[P.note][1],
-                                NOTE_RGB[P.note][2]);
       }
       gl.uniform2f(U.uScrScale,SCR_SCALE[0],SCR_SCALE[1]);
       gl.uniform1f(U.uEnter,ENTER);

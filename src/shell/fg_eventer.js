@@ -60,21 +60,21 @@ window.FGDOC.eventer = function (X0, FG0, RT) {
     });
   }
 
-  /* ------------------------------------------------------------ E9/E12 · the ring on the word zone 3 quotes ('recruiting')
+  /* ------------------------------------------------------------ E9/E12 · the ring on the word zone 3 quotes ('pricing', the decision in contribution 4)
      The guide's ring (XTIX's): a narrow, tall hand ellipse, its ends inside the word spaces, the room
-     added vertically, so it never touches 'in' or 'commercial'. */
+     added vertically, so it never touches 'percentage-plus-fixed' or 'model:'. */
   function ring(ctx) {
     if (window.CSS && CSS.highlights) CSS.highlights.delete("ev-cite");
-    var row = [].filter.call(ctx.X.querySelectorAll(".list .lg"), function (l) { return /recruiting/.test(l.textContent); })[0]; if (!row) return;
-    var tn = [].filter.call(row.childNodes, function (n) { return n.nodeType === 3 && /recruiting/.test(n.data); })[0]; if (!tn) return;
-    var word = "recruiting", i = tn.data.indexOf(word);
+    var row = [].filter.call(ctx.X.querySelectorAll(".list .lg"), function (l) { return /pricing model/.test(l.textContent); })[0]; if (!row) return;
+    var tn = [].filter.call(row.childNodes, function (n) { return n.nodeType === 3 && /pricing/.test(n.data); })[0]; if (!tn) return;
+    var word = "pricing", i = tn.data.indexOf(word);
     var r = document.createRange(); r.setStart(tn, i); r.setEnd(tn, i + word.length);
     if (window.CSS && CSS.highlights && window.Highlight) CSS.highlights.set("ev-cite", new Highlight(r));
     var s = ctx.hostUV(row);
     s.classList.add("uv-ring");
     /* fitted (R2 D5): today's ellipse (rx w/2+1.8, ry h/2+8), brought in only as far as it must to keep
        2px off the wrapped next line and its neighbours (FG.ringFit; same seed, stroke and glow) */
-    var fit = ctx.FG.ringFit(row, r, { seed: "eventer-recruiting-ring", rx0: 1.8, ry0: 8, wobble: .012, steps: 24, stroke: 1.4, svg: s });
+    var fit = ctx.FG.ringFit(row, r, { seed: "eventer-pricing-ring", rx0: 1.8, ry0: 8, wobble: .012, steps: 24, stroke: 1.4, svg: s });
     if (fit.d) ctx.FG.path(s, fit.d, UVC, 1.4);
   }
 
